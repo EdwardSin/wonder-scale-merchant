@@ -5,6 +5,7 @@ import { UserService } from '@services/http/general/user.service';
 import { WsLoading } from '@components/elements/ws-loading/ws-loading';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { WsToastService } from '@components/elements/ws-toast/ws-toast.service';
 
 @Component({
   selector: 'activate',
@@ -53,6 +54,7 @@ export class ActivateComponent implements OnInit {
       }, (err) => {
         this.resend = false;
         this.resendLoading.stop();
+        WsToastService.toastSubject.next({ content: err.error.message, type: 'danger' });
       })
   }
 

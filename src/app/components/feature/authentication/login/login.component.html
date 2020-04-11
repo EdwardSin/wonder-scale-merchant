@@ -28,6 +28,11 @@
               (click)="login()">Login
             </ws-loading-button>
           </div>
+          <div *ngIf="resend" class="text-center center w-100">
+            <ws-loading-button [class]="'btn btn-block btn-second mb-2'" [loading]="resendLoading.isRunning()"
+              (click)="resendActiveLink()">Resend Activation
+            </ws-loading-button>
+          </div>
           <div class="text-center mt-1 mb-1" style="overflow: hidden">
             <span id="continueSpan" class="p-2 position-relative">
               <span class="innerSpan">
