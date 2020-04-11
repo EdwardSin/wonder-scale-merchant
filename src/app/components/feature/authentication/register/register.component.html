@@ -24,16 +24,10 @@
               formControlName="tel" />
           </div>
           <div class="ws-input">
-
             <mat-select placeholder="Gender" formControlName="gender">
               <mat-option [value]="'male'">male</mat-option>
               <mat-option [value]="'female'">female</mat-option>
             </mat-select>
-            <!-- <select name="gender" type="text" class="form-control form-control-sm nooutline" formControlName="gender">
-              <option value="">Select a gender</option>
-              <option value="male">male</option>
-              <option value="female">female</option>
-            </select> -->
           </div>
           <div formGroupName="passwordGroup">
             <div class="ws-input">
@@ -59,39 +53,23 @@
           </div>
           <label class="settings-label mt-3 mb-2">Birthday</label>
           <div class='input-group'>
-            <div class="ws-input col mt-0">
+            <div class="ws-input col mt-0 mr-1">
               <mat-select placeholder="Date" formControlName="date">
                 <mat-option [value]="n" *ngFor="let n of dateSelector.dates">{{n}}
                 </mat-option>
               </mat-select>
-
-              <!-- <select name="date" class="form-control form-control-sm nooutline" formControlName="date"
-                (input)="dateOfBirthValidator.reset()">
-                <option value="">Date</option>
-                <option *ngFor="" for="birthday_date" value={{n}}>{{n}}</option>
-              </select> -->
             </div>
-            <div class="ws-input col mt-0">
+            <div class="ws-input col mt-0 mr-1">
               <mat-select placeholder="Month" formControlName="month">
                 <mat-option [value]="n" *ngFor="let n of dateSelector.months">{{n}}
                 </mat-option>
               </mat-select>
-              <!-- <select name="month" class="form-control form-control-sm nooutline" formControlName="month"
-                (input)="dateOfBirthValidator.reset()">
-                <option value="">Month</option>
-                <option *ngFor="let n of dateSelector.months" for="birthday_month" value={{n}}>{{n}}</option>
-              </select> -->
             </div>
             <div class="ws-input col mt-0">
               <mat-select placeholder="Year" formControlName="year">
                 <mat-option [value]="n" *ngFor="let n of dateSelector.years">{{n}}
                 </mat-option>
               </mat-select>
-              <!-- <select name="year" class="form-control form-control-sm  nooutline" formControlName="year"
-                (input)="dateOfBirthValidator.reset()">
-                <option value="">Year</option>
-                <option *ngFor="let n of dateSelector.years" for="birthday_year" value={{n}}>{{n}}</option>
-              </select> -->
             </div>
           </div>
           <div class="center">
@@ -105,8 +83,6 @@
               <span class="checkmark"></span>
             </label>
           </div>
-
-
           <div class="text-center mb-2 center" style="width: 90%">
             <ws-loading-button [class]="'btn btn-md btn-block btn-second mb-2'" [loading]="loading.isRunning()">Sign
               up
@@ -122,16 +98,12 @@
 
 
 <ng-template #successContent>
-  <div class="modal-content">
-    <!-- <div class="modal-close">
-      <span class="fas fa-times" (click)="close(); "></span>
-    </div> -->
+  <div class="modal-content" style="max-width: 500px;">
     <h3 class="font-weight-bold">Sign up</h3>
-    <div class="text-center mt-4 mb-4">
+    <div class="text-center mt-5 mb-4">
       <span class="far fa-check-circle" style="font-size: 5rem; color:#68DC64"></span>
     </div>
-
-    <p class="text-center mb-3" style="font-size: .8rem">Account is created successfully.<br />
+    <p class="text-center mb-5">Account is created successfully.<br />
       Please check your email to activate.
     </p>
     <a href="javascript:void(0)" style="color: #000; font-size: 1.1rem; font-weight: 400"
