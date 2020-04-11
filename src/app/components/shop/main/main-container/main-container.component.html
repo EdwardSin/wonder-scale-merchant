@@ -1,0 +1,23 @@
+<div class="main-container">
+  <div class="container pb-5">
+    <div class="row no-gutters w-100 position-relative">
+      <span *ngIf="isMobileSize" class="text-center"
+        style="line-height: 47px; vertical-align: middle; border-bottom: 1px solid #e5e5e5"
+        (click)="isNavOpen = !isNavOpen">
+        <span class="fas fa-bars d-inline-block pr-3 pl-3"></span>
+      </span>
+      <breadcrumb class="col"></breadcrumb>
+      <button *ngIf="false && !isMobileSize" class="btn btn-second btn-md position-absolute float-right"
+        style="right:0; z-index: 9" (click)="displayPreview = !displayPreview">Preview</button>
+      <span *ngIf="false && isMobileSize" class="fas fa-eye position-absolute float-right"
+        style="right: 0; z-index: 9; font-size: 1.5rem; margin-top: .75rem"
+        (click)="displayPreview = !displayPreview"></span>
+    </div>
+    <div *ngIf="shop?.status?.status == 'cancel'" class="alert-danger p-3 mt-2">
+      The shop is currently close and will not be seen in public.<br />
+    </div>
+    <div class="pt-3">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

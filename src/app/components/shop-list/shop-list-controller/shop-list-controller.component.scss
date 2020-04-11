@@ -1,0 +1,43 @@
+@import '../../../../assets/scss/variables.scss';
+
+.btn-create{
+    float: right;
+    margin-right: 1rem;
+    margin-left: 1rem;
+    margin-top: 1rem; 
+    color: black; 
+    font-size: .9rem;
+    transition: font-weight .2s ease;
+    &:hover{
+        font-weight: 500;
+    }
+}
+
+ul li {
+    display: inline-block;
+    a {
+        height: 3rem;
+        line-height: 3rem;
+        padding-left: 2rem;
+        padding-right: 2rem;
+        display: inline-block;
+        &.selected {
+            border-bottom: 3px solid map-get($ws-color, secondary);
+        }
+        &:hover {
+            border-bottom: 3px solid rgba(0, 0, 0, .5);
+            text-decoration: none;
+        }
+    }
+}
+.fa-sync-alt{
+    color: map-get($ws-color, dark-grey);
+    transition: color .2s ease;
+    font-size: 1.3rem;
+    &:hover{
+        color: map-get($ws-color, secondary);
+    }
+    &.loading{
+        animation: rotate 8s infinite;
+    }
+}

@@ -1,0 +1,62 @@
+@import "src/assets/scss/variables.scss";
+
+header {
+    height: 41px;
+    background-color: map-get($ws-color, secondary);
+    padding: 0 .5rem;
+    .logo {
+        display: inline-block;
+        padding: .15rem .5rem;
+        color: #fff;
+        font-weight: normal;
+        transition: background-color ease .2s;
+        border-radius: .5rem;
+        cursor: pointer;
+        margin: 6px 2px 5px 0px;
+        &:hover {
+            background-color: rgba(209, 209, 240, 0.2);
+        }
+    }
+    .ws-nav{
+        display: inline-block;
+        margin-left: .5rem;
+        margin-bottom: 0;
+        font-size: .9rem;
+        li{
+            display: inline-block;
+            margin-right: .25rem;
+        }
+        a{
+            color: #ccc;
+            padding: 6px .5rem;
+            font-weight: normal;
+            border-radius: .5rem;
+            &:hover{
+                background-color: rgba(209,209,240,0.2);
+            }
+            &.selected{
+                color: map-get($ws-color, secondary);
+                background-color: #fff;
+            }
+        }
+    }
+    .li-container {
+        display: inline-block;
+        padding: .15rem .5rem;
+        margin: 6px 0px 5px 0px;
+        transition: background-color ease .2s;
+        cursor: pointer;
+        border-radius: .5rem;
+        img {
+            width: 23px;
+            height: 23px;
+            border-radius: 50%;
+        }
+        &:hover {
+            background-color: rgba(209, 209, 240, 0.2);
+        }
+    }
+}
+.dropdown-toggle:after{
+    display:none;
+}

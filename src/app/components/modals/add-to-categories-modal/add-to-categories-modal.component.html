@@ -1,0 +1,34 @@
+<ws-modal [id]="id" maxWidth="400">
+  <header modalHeader>Add To Categories
+    <span class="fas fa-question-circle clickable" title="This allows to add the selected items to the other categories"
+      wsTippy>
+    </span>
+  </header>
+  <div modalBody>
+    <div class="mb-3" style="max-height:200px; overflow-y: auto"
+      *ngIf="displayCategoryList && displayCategoryList.length; else noCategory;">
+      <ul style="list-style: none; " class="center mb-0 p-3">
+        <li *ngFor="let category of displayCategoryList; let i = index" class="position-relative"
+          (click)="addToCategoryList(category);">
+          <span class="mr-5">{{category?.name}}</span>
+          <mat-checkbox [color]="'primary'" class="card-checkbox-div" (click)="$event.stopPropagation()"
+            [checked]="isCategoryInCategoryList(category)" (change)="addToCategoryList(category);"></mat-checkbox>
+        </li>
+      </ul>
+    </div>
+    <div class="float-right row col-auto">
+      <button class="btn btn-second btn-md" (click)="deselectCategories()">Reset</button>
+      <ws-loading-button [class]="'btn btn-md btn-second'" [loading]="loading.isRunning()" (click)="action()">Add
+      </ws-loading-button>
+      <button class="btn btn-second btn-md" (click)="close()">Back</button>
+    </div>
+  </div>
+</ws-modal>
+
+<ng-template #noCategory>
+  <div class="w-100">
+    <div class="h5 text-muted text-center font-weight-light">
+      No Category
+    </div>
+  </div>
+</ng-template>

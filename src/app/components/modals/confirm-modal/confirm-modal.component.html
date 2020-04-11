@@ -1,0 +1,11 @@
+<ws-modal [id]="id" maxWidth="400">
+    <header modalHeader>{{header}}</header>
+    <div modalBody>
+        <p class="mb-2">{{message}}</p>
+        <ng-content select="[content]"></ng-content>
+        <div class="row no-gutters">
+            <button class="btn btn-md btn-second ml-0 col" (click)="action(); close()">Confirm</button>
+            <button class="btn btn-md btn-second mr-0 col" (click)="close()">Cancel</button>
+        </div>
+    </div>
+</ws-modal>

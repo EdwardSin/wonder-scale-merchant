@@ -1,0 +1,21 @@
+@import '../../../../assets/scss/variables.scss';
+.contributor-label {
+    border: 1px solid map-get($ws-color, light-grey);
+    border-radius: 20px;
+    font-size: .8rem;
+    padding: 0 .5rem;
+    height: 1.3rem;
+}
+
+a {
+    .fa-check-circle,
+    .fa-times-circle{
+        transition: all .1s ease;
+    }
+    &:hover {
+        .fa-check-circle,
+        .fa-times-circle {
+            filter: drop-shadow(0 2px 3px rgba(0, 0, 0, .3));
+        }
+    }
+}

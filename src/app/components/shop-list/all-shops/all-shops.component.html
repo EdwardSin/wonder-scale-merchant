@@ -1,0 +1,18 @@
+<div *ngIf="activeShopList?.length; else loadingTemplate">
+  <div *ngFor="let shop of activeShopList">
+    <active-shop class="d-block" [shop]="shop" class="row no-gutters pt-2 pb-2 pl-4 pr-4 bg-white mt-2"
+      *ngIf="shop?.status?.status == 'active'">
+    </active-shop>
+  </div>
+</div>
+
+<ng-template #loadingTemplate>
+  <ng-container *ngIf="loading.isRunning();else noShopTemplate">
+    <ws-loading></ws-loading>
+  </ng-container>
+</ng-template>
+<ng-template #noShopTemplate>
+  <h4 class="text-center mt-5 mb-5">
+    Create your shop and start to manage it now!
+  </h4>
+</ng-template>

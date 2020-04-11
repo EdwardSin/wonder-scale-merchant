@@ -1,0 +1,25 @@
+.color-container{
+    width: 82px;
+    .color-selected{
+        border: 3px solid #fff;
+        border-radius: 50px;
+        padding: .5rem;
+        &.selected{
+            border-color:#717171;
+        }
+    }
+    .color-content{
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        box-shadow: 3px 3px 3px #ccc;
+        cursor: pointer;
+    }
+}
+.color-span{
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 1px solid #000;
+}

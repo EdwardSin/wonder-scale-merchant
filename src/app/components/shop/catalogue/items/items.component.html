@@ -1,0 +1,50 @@
+<h4 class="ws-title">{{ category_name }}</h4>
+<div class="text-center text-lg-left">
+  <!-- <button class="btn btn-md btn-second" onclick="document.getElementById('importFile').click()">
+    <i class="fas fa-upload mr-1"></i>Import</button>
+  <button class="btn btn-md btn-second" (click)="export()"><i class="fas fa-download mr-1"></i> Export</button>
+  <a href="https://assets.wonderscale.com/template/template.xlsx" download style="color: white">
+    <button class="btn btn-md btn-second" (click)="toastDownload()"><i class="fas fa-download mr-1"></i>
+      Save Template</button>
+  </a> -->
+</div>
+<input id="importFile" type="file" hidden name="importFile" #importFile
+  accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+  (change)="importFileChangeEvent($event)" />
+<div *ngIf="allItems?.length && displayBanner" class="p-3 alert-danger mb-2">Publish item to show to public!</div>
+<item-controller></item-controller>
+<div *ngIf="allItems?.length; else loadingTemplate">
+  <div *ngIf="displayItems.length; else searchLoadingTemplate">
+    <item-view></item-view>
+  </div>
+</div>
+<ng-template #noItem>
+  <ng-container *ngIf="categoryFound; else noCategoryFound">
+    <div class="ws-background text-center">
+      <h5 class="pt-5 pb-5">You don't have any item in the category.</h5>
+    </div>
+  </ng-container>
+</ng-template>
+
+<ng-template #noSearchItem>
+  <h4 class="mt-5 mb-5 text-center">No item found!</h4>
+  <!-- <notitle [titles]="['no.found_item']"></notitle> -->
+</ng-template>
+
+<ng-template #loadingTemplate>
+  <ng-container *ngIf="loading.isRunning(); else noItem">
+    <ws-loading></ws-loading>
+  </ng-container>
+</ng-template>
+
+<ng-template #searchLoadingTemplate>
+  <ng-container *ngIf="loading.isRunning(); else noSearchItem">
+    <ws-loading></ws-loading>
+  </ng-container>
+</ng-template>
+
+<ng-template #noCategoryFound>
+  <h4 class="mt-5 mb-5 text-center">No item found!</h4>
+</ng-template>
+
+<import-items-modal id="importItemsModal"></import-items-modal>

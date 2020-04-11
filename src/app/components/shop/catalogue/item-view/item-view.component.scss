@@ -1,0 +1,147 @@
+@import '../../../../../assets/scss/variables.scss';
+
+.fas {
+  &.fa-cog {
+    color: rgba(0, 0, 0, .7);
+  }
+}
+
+.item-checkbox {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  z-index: 1;
+}
+
+.item-setting {
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 2;
+  cursor: pointer;
+
+  .item-setting-item {
+    padding: .5rem;
+    width: 2rem;
+    line-height: .9rem;
+    text-align: center;
+    vertical-align: middle;
+    display: inline-block;
+    background-color: rgba(255,255,255, 0.6);
+    transition: background-color .3s ease;
+
+    &:hover {
+      background-color: rgba(255,255,255, 0.4);
+    }
+  }
+
+}
+::ng-deep mat-checkbox label{
+    margin-bottom: 0;
+}
+
+.add_item_checkbox_div {
+  width: 80px;
+  line-height: 20px;
+
+  label {
+    background-color: map-get($ws-color, white);
+    border: 1px solid map-get($ws-color, light-grey);
+    position: absolute;
+    top: 7px;
+    width: 20px;
+    height: 20px;
+    display: block;
+    z-index: 1;
+
+    &:after {
+      content: " ";
+      opacity: 0;
+      width: 90%;
+      height: 50%;
+      top: 2px;
+      left: 1px;
+      position: absolute;
+      border: 3px solid map-get($ws-color, black);
+      border-top: none;
+      border-right: none;
+      background: transparent;
+      transform: rotate(-45deg);
+    }
+  }
+
+  input[type="checkbox"]:checked+label:after {
+    opacity: 1;
+  }
+}
+
+#setting_tag {
+  transform: translateX(-100%);
+  opacity: 0;
+  transition: all .5s ease;
+
+  &:hover {
+    background-color: map-get($ws-color, secondary);
+    border-color: map-get($ws-color, secondary) !important;
+
+    .fa-cog {
+      color: map-get($ws-color, white);
+    }
+  }
+}
+
+item {
+  .refId {
+    z-index: 1;
+    left: 10px;
+    bottom: 10px;
+    background-color: rgb(128, 128, 128);
+  }
+
+  .categoryname {
+    z-index: 1;
+    left: 10px;
+    bottom: 10px;
+    background-color: rgb(153, 0, 0);
+  }
+
+  .showCategory {
+    bottom: 30px;
+  }
+
+  &:hover #setting_tag {
+    opacity: 1;
+    transform: translateX(0%);
+  }
+
+  &.inactiveItem {
+    opacity: .6;
+  }
+}
+
+@media (max-width: 992px) {
+  item {
+    .refId {
+      left: 0px;
+      bottom: 0px;
+      width: 100%;
+      text-align: center;
+      font-size: 14px;
+      background-color: rgb(128, 128, 128);
+    }
+
+    .categoryname {
+      left: 0px;
+      bottom: 0px;
+      width: 100%;
+      text-align: center;
+      font-size: 14px;
+      background-color: rgb(153, 0, 0);
+    }
+
+    .showCateogry {
+      bottom: 21px;
+    }
+  }
+
+}

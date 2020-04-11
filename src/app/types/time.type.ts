@@ -1,0 +1,1 @@
+export type TimeSymbol = "am" | "pm";

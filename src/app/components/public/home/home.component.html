@@ -1,0 +1,130 @@
+<div class="background-container"></div>
+
+<div class="background-text container position-relative" style="height: 600px; z-index: 10; padding-top: 5%">
+  <h1 style="font-size: 3rem" class="mb-5">Wonder Scale</h1>
+  <p class="mb-4" style="font-size: 1.5rem">A platform for merchants to manage and advertise your shop.</p>
+
+  <p class="d-inline-block" style="font-size: 1.8rem">We promise to provide the best services to our customers.</p>
+  <button class="btn-background" [routerLink]="['', { outlets: {modal: 'login'}}]">Join us now!</button>
+
+</div>
+
+<div class="container text-center pt-5 pb-5">
+  <h4>Promotion Now</h4>
+  <p>We offer our first 100 merchants for free advertising!</p>
+  <button class="btn btn-second" [routerLink]="['', { outlets: {modal: 'login'}}]">Get offer now!</button>
+</div>
+<div class="pt-4 pb-4" style="background-color: #f5f5f5">
+  <div class="container">
+    <h4>Free Services</h4>
+    <div class="row no-gutters pt-2 pb-2">
+      <div class="col-lg-3 text-center p-3">
+        <div class="fas fa-map-marked-alt mb-2" style="font-size: 4rem"></div>
+        <p class="font-weight-bold mb-1">Show shop on map</p>
+        <p style="font-size: .9rem">Customers can find your shop easily by item on map.</p>
+      </div>
+      <div class="col-lg-3 text-center p-3">
+        <div class="fas fa-th-large mb-2" style="font-size: 4rem"></div>
+        <p class="font-weight-bold mb-1">Item management</p>
+        <p style="font-size: .9rem">Seller can upload item and manage their shop online.</p>
+      </div>
+      <div class="col-lg-3 text-center p-3">
+        <div class="fas fa-store mb-2" style="font-size: 4rem"></div>
+        <p class="font-weight-bold mb-1">Display latest information</p>
+        <p style="font-size: .9rem">Seller can display shop information, promotion banner and job vacancy banner to
+          interact their customers.</p>
+      </div>
+      <div class="col-lg-3 text-center p-3">
+        <div class="fas fa-qrcode mb-2" style="font-size: 4rem"></div>
+        <p class="font-weight-bold mb-1">Get your QR-code</p>
+        <p style="font-size: .9rem">Display QR code on your wall.<br />Customer can easily scan and view your shop.</p>
+      </div>
+    </div>
+    <h4>Extra Services</h4>
+    <div class="row no-gutters pt-2 pb-2">
+      <div class="offset-lg-3 col-lg-3 text-center p-3">
+        <img class="mb-2" style="width: 60px;" src="assets/images/svg/edvertising-icon.svg" alt="order" />
+        <p class="font-weight-bold mb-1">Shop Advertising</p>
+        <p style="font-size: .9rem">Shop will be promoted in multiple places in apps to attract more customers.</p>
+      </div>
+      <div class="col-lg-3 text-center p-3">
+        <div class="fas fa-user-tie mb-2" style="font-size: 4rem"></div>
+        <p class="font-weight-bold mb-1">Recruitment Advertising</p>
+        <p style="font-size: .9rem">Post job vacancy advertisement to recruit new staffs.</p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container pt-4 pb-4">
+  <h4>Coming Soon</h4>
+  <div class="row no-gutters pt-2 pb-2">
+    <div class="col-lg-4 text-center p-3">
+      <img class="mb-2" style="width: 60px;" src="assets/images/svg/order.svg" alt="order" />
+      <p class="font-weight-bold mb-1">Order System</p>
+      <p style="font-size: .9rem">Seller allows users to make order online.<br />Users pay online and pick up in store.
+      </p>
+    </div>
+    <div class="col-lg-4 text-center p-3">
+      <img class="mb-2" style="width: 60px;" src="assets/images/svg/ecommerce.svg" alt="order" />
+      <p class="font-weight-bold mb-1">E-Commerce</p>
+      <p style="font-size: .9rem">Seller easily sell online.<br /> Users pay online and wait for the delivery.</p>
+    </div>
+    <div class="col-lg-4 text-center p-3">
+      <div class="fas fa-ellipsis-h mb-2 mt-3" style="font-size: 4rem"></div>
+    </div>
+  </div>
+</div>
+<footer class="pt-3">
+  <div></div>
+  <div class='container-fluid col-md-8 pt-20 pl-0 pr-0'>
+    <div class='row no-gutters'>
+      <div class="footer-box-left col-md-4 mb-2" *ngIf="false">
+        <div *ngIf="false">
+          <a id="facebook" href='https://www.facebook.com/wonderscale/' aria-label="facebook" rel="noopener"
+            target="_blank">
+            <span class="fab fa-facebook-square"></span></a>
+          <a id="instagram" href='https://www.instagram.com' target="_blank" aria-label="insta" rel="noopener"
+            class='ml-3'>
+            <span class="fab fa-instagram"></span>
+          </a>
+          <a id="twitter" href='https://www.twitter.com' target="_blank" aria-label="insta" rel="noopener" class='ml-3'>
+            <span class="fab fa-twitter"></span>
+          </a>
+        </div>
+      </div>
+      <div class="footer-box-center col-md-8 no-gutters row">
+        <div class="col">
+          <ul>
+            <li class="col">
+              <a class="font-weight-bold ws-white" routerLink="/">Wonder Scale</a>
+            </li>
+            <li class="col">
+              <a class="font-9" [routerLink]="['/contact-us']">Contact Us</a>
+            </li>
+            <li class="col">
+              <a class="font-9" routerLink="/about-us">About Us</a>
+            </li>
+            <li class="col">
+              <a class="font-9" routerLink="/policy">Policy</a>
+            </li>
+            <li *ngIf="false">
+              <a routerLink="/help">Help</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-md-4 footer-box-right" style="font-size: .9rem">
+        <p class="text-md-right text-center ws-white">Wonder Scale &#169;
+          <br>Copyright {{year}}. All Rights Reserved.</p>
+        <div class="fb-like mb-2" data-href="https://www.facebook.com/wonderscale/" data-layout="button"
+          data-action="like" data-size="small" data-show-faces="false" data-share="true"></div>
+      </div>
+    </div>
+    <div class="row no-gutters" style="font-size: .9rem">
+      <div class="row no-gutters w-100 pt-2 font-9">
+        <div class="offset-6 col row no-gutters">
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>

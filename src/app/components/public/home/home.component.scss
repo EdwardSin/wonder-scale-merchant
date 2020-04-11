@@ -1,0 +1,125 @@
+@import "src/assets/scss/variables.scss";
+
+.background-container{
+    height: 600px;
+    width: 100%;
+    background-image: url('/assets/images/background-image.jpeg');
+    background-size: cover;
+    background-position: center;
+    position: absolute;
+    filter: brightness(.6);
+}
+.background-text {
+    color: #fff;
+}
+.btn-background{
+    background:transparent; 
+    border: 2px solid #fff; 
+    color: #fff; 
+    font-size: 1.1rem;
+    float:right;
+    padding: .5rem 1.25rem;
+    transition: opacity .2s ease;
+    &:hover{
+        opacity: .7;
+    }
+}
+footer {
+    // position: absolute;
+    // bottom: 0px;
+    width: 100%;
+    opacity: 1;
+    border-top: 1px solid map-get($ws-color, lighten-grey);
+    background-color: map-get($ws-color, secondary) ;
+}
+
+.footer-box-center {
+    ul {
+        margin-bottom: 10px;
+        padding-left: 0;
+        li {
+            list-style: none;
+            display: inline;
+            a {
+                &:link,
+                &:visited {
+                    color: map-get($ws-color, white);
+                    text-align: center;
+                    text-decoration: none;
+                }
+                &:hover {
+                    color: map-get($ws-color, darker-grey);
+                }
+                &:focus {
+                    text-decoration: none;
+                }
+            }
+            &:first-child {
+                display: block;
+                font-size: 20px;
+                color: map-get($ws-color, primary);
+                margin-bottom: 12px;
+            }
+        }
+    }
+}
+
+.footer-box-center p {
+    list-style: none;
+    color: map-get($ws-color, primary);
+}
+
+.footer-box-right {
+    text-align: right;
+}
+
+.currencyDiv {
+    position: absolute;
+    bottom: 30px;
+    box-shadow: map-get($ws-style, box-shadow);
+    background-color: map-get($ws-color, white);
+    width: 300px;
+    left: -150px;
+    
+    p{
+        color: map-get($ws-color, light-grey);
+        border-bottom: map-get($ws-style, border);
+    }
+    ul {
+        max-height: 550px;
+        overflow-y: scroll;
+        list-style: none;
+        padding: 0;
+        margin:0;
+        li:hover{
+            background-color: map-get($ws-color, lighter-grey);
+        }
+        .selected {
+            font-weight: bold;
+            background-color: map-get($ws-color, lighter-grey);
+        }
+    }
+}
+
+
+#facebook,
+#instagram,
+#twitter {
+    width: 35px;
+    height: 35px;
+    display: inline-block;
+    color: map-get($ws-color, white);
+    text-decoration: none;
+    span{
+        font-size:35px;
+    }
+}
+
+@media (max-width: 768px) {
+    .footer-box-left {
+        text-align: center;
+    }
+    .footer-box-right {
+        text-align: center;
+    }
+}

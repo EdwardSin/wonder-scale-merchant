@@ -1,0 +1,29 @@
+<div modal class="modal">
+  <div class="modal-wrap">
+    <div class="modal-body">
+      <div (click)="$event.stopPropagation()" class="modal-body-content">
+        <div class="modal-content" style="max-width: 620px;">
+          <div class="modal-close">
+            <span class="fas fa-times" [routerLink]="['', {outlets: {modal:'item'}}]"
+              queryParamsHandling="merge"></span>
+          </div>
+
+          <div class="row no-gutters" *ngIf="images.length; else noImageTemplate">
+            <div class="position-relative image-container" *ngFor="let image of images">
+              <span class="fas fa-check-circle position-absolute"></span>
+              <img style="width: 175px; height: 175px; object-fit: cover" src="image" alt="image" />
+            </div>
+          </div>
+
+          <div class="text-center">
+            <button class="btn btn-second btn-md" [routerLink]="['', {outlets: {modal:'item'}}]"
+              [queryParams]="{url: url}" queryParamsHandling="merge">Confirm</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #noImageTemplate>
+  <h4 class="mt-5 mb-5 text-center">Please upload some images to select!</h4>
+</ng-template>

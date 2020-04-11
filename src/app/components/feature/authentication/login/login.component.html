@@ -1,0 +1,54 @@
+<div modal class="modal">
+  <div class="modal-wrap">
+    <div class="modal-body">
+      <div (click)="$event.stopPropagation()" class="modal-body-content">
+        <form class="modal-content" style="max-width: 500px" [formGroup]="loginForm">
+          <div class="modal-close">
+            <span class="fas fa-times" [routerLink]="['', {outlets: {modal:null}}]"></span>
+          </div>
+          <div class="ws-input">
+            <input placeholder="Login Email" class="form-control nooutline" formControlName="email" required>
+          </div>
+          <mat-error *ngIf="loginForm.controls['email'].hasError('required') && loginForm.controls['email'].touched">
+            Please
+            enter a email.</mat-error>
+          <mat-error *ngIf="loginForm.controls['email'].hasError('email') && loginForm.controls['email'].touched">
+            Please enter a valid email.</mat-error>
+          <div class="ws-input">
+            <input placeholder="Password" type="password" class="form-control nooutline" formControlName="password"
+              required>
+          </div>
+          <mat-error
+            *ngIf="loginForm.controls['password'].hasError('required') && loginForm.controls['password'].touched">
+            Please enter a password.</mat-error>
+          <a href="javascript: void(0)" class="font-weight-light text-center pt-2 pb-2 mb-0"
+            [routerLink]="['', {outlets: {modal: 'forgot-password'}}]" skipLocationChange>Forgot Password?</a>
+          <div class="text-center center" style="width: 90%">
+            <ws-loading-button [class]="'btn btn-block btn-second mb-2'" [loading]="loading.isRunning()"
+              (click)="login()">Login
+            </ws-loading-button>
+          </div>
+          <div class="text-center mt-1 mb-1" style="overflow: hidden">
+            <span id="continueSpan" class="p-2 position-relative">
+              <span class="innerSpan">
+                <span>Continue log in with</span>
+              </span>
+            </span>
+          </div>
+          <button class="btn btn-second mb-2 center" style="width: 90%; background-color: #4568B2"
+            (click)="loginWithFb()">
+            <span class="fab fa-facebook-f mr-2"></span>Log in with
+            Facebook</button>
+          <button class="btn btn-second mb-3 center" style="width: 90%; background-color:#DC4E41"
+            (click)="loginWithGoogle()">
+            <span class="fab fa-google-plus-g mr-2"></span>Log in with
+            Google</button>
+          <p class="mb-0 font-weight-light">Don't have an account?
+            <a href="javascript:void(0)" class="font-weight-bold default"
+              [routerLink]="['',{outlets:{modal: 'register'}}]" skipLocationChange>Sign
+              up</a></p>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

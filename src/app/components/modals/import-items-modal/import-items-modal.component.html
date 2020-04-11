@@ -1,0 +1,15 @@
+<ws-modal [id]="id" [clickClose]="false">
+  <header modalHeader>Import Items</header>
+  <div modalBody>
+    <div id="wrapper" #tableView></div>
+    <ul class="mt-3">
+      <li [class.text-success]="isHeaderValid" class="text-danger">Header is missing.</li>
+      <li [class.text-success]="isEmptyField" class="text-danger">Empty field is not allowed except description.</li>
+      <li [class.text-success]="isStockValid" class="text-danger">Only 'true' or 'false' are allowed in In-Stock field.
+      </li>
+      <li [class.text-success]="isNumberValid" class="text-danger">Only number is allowed in Price & Quantity fields.
+      </li>
+    </ul>
+    <button class="btn btn-md btn-second float-right" (click)="uploadItems()">Import</button>
+  </div>
+</ws-modal>

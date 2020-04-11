@@ -1,0 +1,1 @@
+export type MapSearhBarType = 'find_shop' | 'find_item' ;

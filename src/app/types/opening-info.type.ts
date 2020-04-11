@@ -1,0 +1,1 @@
+export type OpeningInfoType = 'selected_hours' | 'temporary_closed' | 'always_open' | 'no_hour_available';

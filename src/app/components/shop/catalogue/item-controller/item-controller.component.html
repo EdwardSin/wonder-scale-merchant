@@ -1,0 +1,150 @@
+<div class="row no-gutters w-100 position-relative" style="z-index:2">
+    <div class="row no-gutters order-2 center">
+        <div class="ws-circle-button" mdbDropdown>
+            <button id="sortButton" mdbDropdownToggle title="Order" wsTippy
+                class="btn btn-controller small nooutline clickable d-inline">
+                <span class="fa fa-ellipsis-v"></span>
+            </button>
+            <div class="dropdown-menu mt-0 pb-0 pt-0" aria-labelledby="sortButton">
+                <button class="dropdown-item" [class.orderSelected]="isOrder('alphabet') || isOrder(undefined)"
+                    (click)="setOrderAndSwitchAscending('alphabet')">Alphabet
+                    <span *ngIf="isOrder('alphabet')" class="pl-3 fas fa-sort"></span>
+                </button>
+                <button class="dropdown-item" [class.orderSelected]="isOrder('price_low_to_high')"
+                    (click)="setOrderAndSwitchAscending('price_low_to_high')">Price(Low to High)
+                </button>
+                <button class="dropdown-item" [class.orderSelected]="isOrder('price_high_to_low')"
+                    (click)="setOrderAndSwitchAscending('price_high_to_low')">Price(High to Low)
+                </button>
+                <button class="dropdown-item" [class.orderSelected]="isOrder('latest')"
+                    (click)="setOrderAndSwitchAscending('latest')">Last Update
+                    <span *ngIf="isOrder('latest')" class="pl-3 fas fa-sort"></span>
+                </button>
+                <button class="dropdown-item" [class.orderSelected]="isOrder('status')"
+                    (click)="setOrderAndSwitchAscending('status')">Status
+                    <span *ngIf="isOrder('status')" class="pl-3 fas fa-sort"></span>
+                </button>
+                <!-- <button class="dropdown-item nooutline" [class.orderSelected]="isOrder('custom order')" *ngIf="false && param !== 'defaultcategory'"
+                    (click)="setOrderAndSwitchAscending('custom order')">Custom Order
+                    <span *ngIf="isOrder('custom order')" class="pl-3 fas fa-sort"></span>
+                </button> -->
+            </div>
+        </div>
+
+        <div class="ws-circle-button" mdbDropdown>
+            <button id="listButton" mdbDropdownToggle title="Display" wsTippy
+                class="btn btn-controller small clickable d-inline">
+                <span class="fa" [class.fa-th-large]="isDisplay('block')"
+                    [class.fa-list]="isDisplay('list') || isDisplay(undefined)"></span>
+            </button>
+            <div class="dropdown-menu mt-0 pb-0 pt-0" aria-labelledby="listButton">
+                <button class="dropdown-item" [class.orderSelected]="isDisplay('block')" (click)="setDisplay('block')">
+                    <span class="fas fa-th-large mr-2"></span>Block
+                </button>
+                <button class="dropdown-item" [class.orderSelected]="isDisplay('list') || isDisplay(undefined)"
+                    (click)="setDisplay('list')">
+                    <span class="fas fa-list mr-2"></span>List
+                </button>
+            </div>
+        </div>
+        <div class="ws-circle-button" *ngIf="previousEditedItems.length">
+            <button title="Select Previous Edit Items" wsTippy class="btn btn-controller small"
+                (click)="selectPrevious()">
+                <span class="fa fa-angle-double-left"></span>
+            </button>
+        </div>
+        <div class="ws-circle-button" *ngIf="editItems.length != allItems.length">
+            <button title="Select All" wsTippy class="btn btn-controller small" (click)="selectAll()">
+                <span class="fa fa-check-square"></span>
+            </button>
+        </div>
+        <div class="ws-circle-button" *ngIf="editItems.length">
+            <button title="Deselect All" wsTippy style="width:150px" class="btn btn-controller small"
+                (click)="deselectAll()">
+                <span class="fa fa-check-square d-inline-block mr-2"
+                    style="opacity:.3; vertical-align: text-top"></span>
+                <span class="text-center d-inline-block" style="vertical-align: middle"
+                    *ngIf="editItems?.length >= 1 && editItems?.length < allItems.length">{{editItems?.length}}
+                    Selected<span class="d-inline-block" *ngIf="editItems?.length > 1">s</span>
+                </span>
+                <span class="text-center d-inline-block" style="vertical-align: middle"
+                    *ngIf="editItems?.length == allItems.length">({{editItems?.length}})All Selected</span>
+            </button>
+        </div>
+        <div class="ws-circle-button" [routerLink]="['',{outlets: {modal: 'item'}}]" queryParamsHandling="merge">
+            <button title="Add New Item" wsTippy class="btn btn-controller small">
+                <span class="fa fa-plus"></span>
+            </button>
+        </div>
+        <div *ngIf="isMobileSize && editItems?.length" class="col ws-circle-button">
+            <button title="Number of selected items" wsTippy class="btn btn-controller small btn-selected-item">
+                <span>{{editItems?.length}}</span>
+            </button>
+        </div>
+    </div>
+    <div class="col-lg order-1 order-lg-2 m-1">
+        <search-bar [placeholder]="'Search Item'" [searchAttributes]="['name', 'refId']" [items]="allItems"
+            (resultChange)="getSearchItems($event)" [searchKeyword]="searchController.searchKeyword"></search-bar>
+    </div>
+</div>
+
+<div class="row no-gutters w-100 position-relative" style="z-index:1">
+    <div class="row no-gutters w-100" *ngIf="editItems.length">
+        <div *ngFor="let btnItem of btnSelectedItemList">
+            <div class="ws-circle-button" *ngIf="btnItem?.displayed">
+                <button title="{{ btnItem?.title}}" wsTippy class="btn btn-controller small"
+                    (click)="btnItem.trigger()">
+                    <span class="fa center" [ngClass]="btnItem.spanClass"></span>
+                </button>
+            </div>
+        </div>
+        <!-- <div class="m-1">
+            <div *ngIf="editItems?.length && !isMobileSize" class="label col">
+                <span class="text-center d-block" style="line-height: 36px"
+                    *ngIf="editItems?.length >= 1 && editItems?.length < allItems.length">{{editItems?.length}}
+                    Selected Item<span *ngIf="editItems?.length > 1">s</span>
+                </span>
+                <span class="text-center d-block" style="line-height: 36px"
+                    *ngIf="editItems?.length == allItems.length">({{editItems?.length}}) All Item Selected</span>
+            </div>
+        </div> -->
+    </div>
+</div>
+<div class="pl-1 pr-1" *ngIf="param == 'new'">
+    <textarea name="message" class="form form-control no-resize mt-2 nooutline" placeholder="Advertising Message..."
+        [(ngModel)]="message"></textarea>
+    <button wsDebounceClick class="btn btn-second btn-md float-right" (debounceClick)="changeMessage()">Change</button>
+    <button title="Place your new items to the top of news feed of your followers" wsTippy
+        class="btn btn-md newitem float-right" wsDebounceClick [class.done]="is_publish"
+        (debounceClick)="advertiseItems()">{{ is_publish ? 'Done' : 'Advertise'}}</button>
+    <div class="clearfix"></div>
+</div>
+<confirm-modal id="removeItemsModal" [message]="'Are you sure to remove all selected items?'" [action]="action">
+</confirm-modal>
+<add-to-categories-modal id="addToCategoriesModal" [action]="action" [displayCategoryList]="displayCategoryList"
+    [(editCategoryList)]="editCategoryList"></add-to-categories-modal>
+<move-to-categories-modal id="moveToCategoriesModal" [action]="action" [displayCategoryList]="displayCategoryList"
+    [(editCategory)]="editCategory"></move-to-categories-modal>
+<edit-multiple-items-modal [editItems]="editItems" id="editMultipleItemsModal" [action]="action">
+</edit-multiple-items-modal>
+
+<ng-template #noItem>
+    <div class="w-100">
+        <div class="h4 text-muted text-center font-weight-light mt-5 mb-5">
+            Add Some Item
+            <div class="d-inline-block ml-2" [routerLink]="['../../categories', category_name, 'add']"
+                [queryParams]="{ref: shop_id, cat_ref: category?._id,'categoryname':category?.name}">
+                <span class="fa fa-plus-square" style="font-size:larger;vertical-align: middle"></span>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<!-- <modal id="informationModal">
+    <title modalHeader class="m-0" [title]="'item_controller.information'"></title>
+    <div modalBody>
+        <div class="">
+            <p class="mb-0" style="white-space: pre-line">{{info_message}}</p>
+        </div>
+    </div>
+</modal> -->

@@ -1,0 +1,35 @@
+<ws-modal [id]="id">
+  <header modalHeader>Edit Contributor</header>
+  <div modalBody>
+    <form #form="ngForm" (ngSubmit)="editContributor()">
+      <img class="center d-block" style="width: 120px; height: 120px; border-radius: 50%; object-fit: contain"
+        src="{{contributorController.selectedContributor?.profileImage}}" alt="profile image" />
+      <label class="p-0 mb-0">First Name</label>
+      <input [disabled]="true" class="form-control form-control-sm"
+        [value]="contributorController.selectedContributor?.firstName + ' ' + contributorController.selectedContributor?.lastName" />
+      <label class="p-0 mb-0">Email</label>
+      <input [disabled]="true" class="form-control form-control-sm"
+        [value]="contributorController.selectedContributor?.email" />
+      <div>
+        <label class="p-0 mb-0">Role</label>
+        <select class="form-control form-control-sm p-0 nooutline font-9" name="role"
+          (input)="contributorController.reset()" [(ngModel)]="contributorController.new_role">
+          <option [value]="'admin'">Admin</option>
+          <option [value]="'Maintainer'">Maintainer</option>
+        </select>
+        <permission-list [role]="contributorController.new_role"></permission-list>
+      </div>
+
+      <div class="mt-2">
+        <ws-loading-button [type]="'button'" *ngIf="contributorController?.selectedContributor?.email !== user?.email"
+          [class]="'btn btn-md btn-second'" (click)="removeContributor()"
+          [loading]="loading.isRunning() || removeLoading.isRunning()">Remove</ws-loading-button>
+        <div class="float-right">
+          <ws-loading-button [class]="'btn btn-md btn-second'"
+            [loading]="loading.isRunning() || removeLoading.isRunning()">Confirm</ws-loading-button>
+          <button class="btn btn-md btn-second nooutline" type="button" (click)="close()">Cancel</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</ws-modal>

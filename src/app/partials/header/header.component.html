@@ -1,0 +1,48 @@
+<header>
+  <div class="logo" [routerLink]="['/']">
+    <img style="width: 24px; height:24px;margin-top: -2px"
+      src="https://assets.wonderscale.com/upload/images/icons/icon-72x72.png" alt="icon.png" />
+    <span class="ml-2" style="vertical-align: middle">Wonder Scale</span>
+  </div>
+  <ul *ngIf="user" class="ws-nav list-unstyled">
+    <li>
+      <a href="javascript:void(0)" (click)="navigateToHome()">Shops</a>
+    </li>
+  </ul>
+  <div class="float-right d-inline-block">
+    <div *ngIf="!user" class="d-inline-block mr-2 ml-2 ws-white"
+      style="font-size: .9rem; line-height: 2rem; vertical-align: middle">
+      <a class="ws-white d-inline-block ml-2 mr-2" href="javascript:void(0)" (click)="navigateToLogin()">Login</a>|<a
+        class="ws-white d-inline-block ml-2 mr-2" href="javascript:void(0)" (click)="navigateToSignup()">Sign-up</a>
+    </div>
+    <div class="btn-group mr-1 d-none d-md-inline-block" mdbDropdown>
+      <div mdbDropdownToggle class="li-container dropdown-toggle">
+        <span class="fas fa-question-circle mr-1" style="color: #888; font-size: 1rem; vertical-align: middle"></span>
+        <span class="fas fa-chevron-down" style="color: #888; font-size: .6rem; vertical-align: sub"></span>
+      </div>
+      <div class="dropdown-menu dropdown-primary" style="margin-top: 20px; right:0; left: inherit">
+        <a class="dropdown-item" *ngIf="false" href="#">Help</a>
+        <!-- <div class="divider dropdown-divider"></div> -->
+        <a class="dropdown-item" routerLink="contact-us">Contact Us</a>
+        <!-- <a class="dropdown-item" routerLink="about-us">About Us</a> -->
+      </div>
+    </div>
+    <div *ngIf="user" class="btn-group" mdbDropdown>
+      <div mdbDropdownToggle class="li-container dropdown-toggle">
+        <img class='mr-1' src="{{user?.profileImage}}" alt="profile" />
+        <span class="fas fa-chevron-down" style="color: #888; font-size: .6rem; vertical-align: sub"></span>
+      </div>
+      <div class="dropdown-menu dropdown-primary" style="margin-top: 20px; right:0; left: inherit">
+        <div style="padding: 0.25rem 1.5rem">{{user?.firstName}} {{user?.lastName}}
+          <!-- <span style="font-size: .8rem" class="mt-2 d-block text-muted">@{{user?.username}}</span> -->
+        </div>
+        <div class="divider dropdown-divider"></div>
+        <a *ngIf="false" class="dropdown-item" [routerLink]="['profile']">Settings</a>
+        <a class="dropdown-item" [routerLink]="['shops/all']">All Shops</a>
+        <a *ngIf="false" class="dropdown-item" href="https://www.wonderscale.com">To Wonder Scale</a>
+        <div class="divider dropdown-divider"></div>
+        <a class="dropdown-item" (click)="logout()">Logout</a>
+      </div>
+    </div>
+  </div>
+</header>

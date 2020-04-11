@@ -1,0 +1,30 @@
+<ws-modal [id]="id" maxWidth="400">
+  <header modalHeader>Move To Categories
+    <span class="fas fa-question-circle clickable" title="Move item to the other category" wsTippy>
+    </span>
+  </header>
+  <div modalBody>
+    <div class="mb-3" style="max-height:200px; overflow-y:auto"
+      *ngIf="displayCategoryList && displayCategoryList.length>0; else noCategory;">
+      <ul style="list-style: none;" class="p-3 mb-0 center">
+        <li *ngFor="let category of displayCategoryList; let i = index" class="position-relative">
+          <span class="mr-5">{{category?.name}}</span>
+          <mat-radio-button [color]="'primary'" class="card-checkbox-div"
+            (click)="$event.stopPropagation(); editCategory = category;"></mat-radio-button>
+        </li>
+      </ul>
+    </div>
+    <div class="float-right row col-auto">
+      <ws-loading-button [class]="'btn btn-md btn-second'" [loading]="loading.isRunning()" (click)="action()">
+        Move</ws-loading-button>
+      <button class="btn btn-md btn-second" (click)="close()">Back</button>
+    </div>
+  </div>
+</ws-modal>
+<ng-template #noCategory>
+  <div class="w-100">
+    <div class="h5 text-muted text-center font-weight-light">
+      No Category
+    </div>
+  </div>
+</ng-template>

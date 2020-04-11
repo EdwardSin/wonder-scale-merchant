@@ -1,0 +1,254 @@
+<div modal class="modal">
+  <div class="modal-wrap">
+    <div class="modal-body">
+      <div [ngSwitch]="phase.step" (click)="$event.stopPropagation()" class="modal-body-content">
+        <form *ngSwitchCase="0" class="modal-content">
+          <div class="modal-close">
+            <span class="fas fa-times" [routerLink]="['', {outlets: {modal:null}}]"></span>
+          </div>
+          <p class="mb-4">Choose your store type.</p>
+          <div class="row no-gutters">
+            <div class="col-lg-6 p-3 text-center">
+              <button class="btn-type p-3" (click)="storeType='physicalStore'"
+                [class.selected]="storeType=='physicalStore'">
+                <img class="mb-4 mt-4" style="height: 75px" src="assets/images/svg/store.svg" alt="physical store" />
+                <p class="font-weight-bold mb-2">Physical Store</p>
+                <p style="font-size: .8rem">Physical store is existed.<br />
+                  (Store can sell online in future.)</p>
+              </button>
+            </div>
+            <div class="col-lg-6 p-3 text-center">
+              <button class="btn-type p-3" (click)="storeType='onlineStore'"
+                [class.selected]="storeType=='onlineStore'">
+                <img class="mb-4 mt-4" style="height: 75px" src="assets/images/svg/ecommerce.svg" alt="ecommerce" />
+                <p class="font-weight-bold mb-2">Online Store</p>
+                <p style="font-size: .8rem">Sell products online only.<br />
+                  (Store can add details in future.)</p>
+              </button>
+            </div>
+          </div>
+          <button class="btn btn-md btn-second" type="button" style="margin-left: auto" (click)="next()">Next</button>
+        </form>
+        <form *ngSwitchCase="1" class="modal-content">
+          <div class="modal-close">
+            <span class="fas fa-times" [routerLink]="['', {outlets: {modal:null}}]"></span>
+          </div>
+          <p class="mb-4">Choose your shop type for us to provide you specified services.</p>
+          <div class="row no-gutters">
+            <div class="col-lg-4 p-2 text-center">
+              <button class="btn-type p-4" (click)="storeServiceType='restaurant'"
+                [class.selected]="storeServiceType=='restaurant'">
+                <div class="fas fa-utensils mb-4" style="font-size: 4rem; color: #A52A2A"></div>
+                <p class="font-weight-bold mb-2">Restaurant</p>
+                <p style="font-size: .8rem">Examples: Foods, Beverages,<br /> Desserts, Cafe etc.</p>
+              </button>
+            </div>
+            <div class="col-lg-4 p-2 text-center">
+              <button class="btn-type p-4" (click)="storeServiceType='shopping'"
+                [class.selected]="storeServiceType=='shopping'">
+                <div class="fas fa-shopping-bag mb-4" style="font-size: 4rem; color: #FF7F50"></div>
+                <p class="font-weight-bold mb-2">Shopping</p>
+                <p style="font-size: .8rem">Examples: Shirts, <br />Electronic products, Furniture etc.</p>
+              </button>
+            </div>
+            <div class="col-lg-4 p-2 text-center">
+              <button class="btn-type p-4" (click)="storeServiceType='services'"
+                [class.selected]="storeServiceType=='services'">
+                <div class="fas fa-cog mb-4" style="font-size: 4rem; color: #EFD31A"></div>
+                <p class="font-weight-bold mb-2">Services</p>
+                <p style="font-size: .8rem">Examples: PC Repair, <br />Recycle Center, Cleaning Service etc.</p>
+              </button>
+            </div>
+          </div>
+          <div class="row no-gutters">
+            <button *ngIf="false" class="btn btn-md btn-second" type="button"
+              (click)="phase.previous()">Previous</button>
+            <button class="btn btn-md btn-second" type="button" style="margin-left: auto" (click)="next()">Next</button>
+          </div>
+        </form>
+
+        <form *ngSwitchCase="2" class="modal-content" style="width: 500px" [formGroup]="basicFormGroup"
+          (keydown.enter)="$event.preventDefault()">
+          <div class="modal-close">
+            <span class="fas fa-times" [routerLink]="['', {outlets: {modal:null}}]"></span>
+          </div>
+          <div class="ws-input">
+            <input placeholder="Business Store Name*" formControlName="name" class="form-control nooutline">
+          </div>
+          <mat-error
+            *ngIf="basicFormGroup.controls['name'].hasError('required') && basicFormGroup.controls['name'].touched">
+            Please enter business store name.
+          </mat-error>
+          <div class="ws-input">
+            <input placeholder="Business Phone Number*" formControlName="tel" class="form-control nooutline">
+          </div>
+          <mat-error
+            *ngIf="basicFormGroup.controls['tel'].hasError('required') && basicFormGroup.controls['tel'].touched">
+            Please enter business tel.
+          </mat-error>
+          <div class="ws-input">
+            <input placeholder="Business Email" formControlName="email" class="form-control nooutline">
+          </div>
+          <mat-error
+            *ngIf="basicFormGroup.controls['email'].hasError('minlength') && basicFormGroup.controls['email'].touched">
+            At least 3 characters.
+          </mat-error>
+          <mat-error
+            *ngIf="basicFormGroup.controls['email'].hasError('maxlength') && basicFormGroup.controls['email'].touched">
+            Max 30 characters.
+          </mat-error>
+          <mat-error
+            *ngIf="basicFormGroup.controls['email'].hasError('email') && basicFormGroup.controls['email'].touched">
+            Please enter a valid email.
+          </mat-error>
+          <div class="ws-input">
+            <input placeholder="URL (https://www.example.com)" formControlName="website" class="form-control nooutline">
+          </div>
+          <mat-error
+            *ngIf="basicFormGroup.controls['website'].hasError('minlength') && basicFormGroup.controls['website'].touched">
+            At least 3 characters.
+          </mat-error>
+          <mat-error
+            *ngIf="basicFormGroup.controls['email'].hasError('maxlength') && basicFormGroup.controls['email'].touched">
+            Max 30 characters.
+          </mat-error>
+          <div class="ws-input">
+            <mat-select placeholder="Selected Currency" formControlName="currency" class="form-control nooutline">
+              <mat-option [value]="_currency" *ngFor="let _currency of currency.keys">
+                {{currency.currencies[_currency]}} ({{currency.values[_currency]}})
+              </mat-option>
+            </mat-select>
+          </div>
+          <mat-error
+            *ngIf="basicFormGroup.controls['currency'].hasError('required') && basicFormGroup.controls['currency'].touched">
+            Please enter business currency.
+          </mat-error>
+          <div class="row no-gutters mt-4">
+            <button class="btn btn-md btn-second" type="button" (click)="phase.previous()">Previous</button>
+            <button class="btn btn-md btn-second" type="button" style="margin-left: auto" (click)="next()">Next</button>
+          </div>
+        </form>
+
+        <form *ngSwitchCase="3" class="modal-content" style="min-width: 500px" [formGroup]="addressFormGroup"
+          (keydown.enter)="$event.preventDefault()">
+          <div class="modal-close">
+            <span class="fas fa-times" [routerLink]="['', {outlets: {modal:null}}]"></span>
+          </div>
+          <div class="ws-input" style="display: flex">
+            <span class="fas fa-search text-center mr-1"
+              style="line-height: 23px; width: 17px; color: rgba(0,0,0,.3)"></span>
+            <input autocomplete="nope" placeholder="Address" formControlName="search_address"
+              (keydown.enter)="mapController.onAddressChanged(); setAddressFormValue()"
+              (keydown)="mapController.selectAddress($event)" (focus)="mapController.displayed = true"
+              (click)="$event.stopPropagation()"
+              (input)="mapController.valueChanged(addressFormGroup.get('search_address').value)" required>
+          </div>
+          <div class="position-relative w-100">
+            <ul class="list-group suggestions" *ngIf="mapController?.suggestions?.length && mapController?.displayed">
+              <li [class.hover]="mapController.hovered == i"
+                *ngFor="let suggestion of mapController?.displaySuggestions; let i = index;"
+                (click)="$event.stopPropagation(); mapController.hovered = i; mapController.onAddressChanged(); setAddressFormValue()">
+                <span class="ws-main fas fa-map-marker-alt pr-2"></span>{{suggestion}}</li>
+            </ul>
+          </div>
+          <hr class="w-100 mb-0 mt-2" />
+          <div class="ws-input">
+            <input autocomplete="nope" placeholder="Address" formControlName="address" required>
+          </div>
+          <mat-error *ngIf="addressFormGroup.controls['address'].hasError('required') &&
+              addressFormGroup.controls['address'].touched">Please enter an address.
+          </mat-error>
+
+          <div class="row pl-3 pr-3">
+            <div class="ws-input col mr-2">
+              <input placeholder="State" formControlName="state" required>
+            </div>
+
+            <div class="ws-input">
+              <input placeholder="Postcode" formControlName="postcode" required>
+            </div>
+
+            <div class="ws-input col ml-2">
+              <mat-select placeholder="Country" formControlName="country">
+                <mat-option [value]="country" *ngFor="let country of countries.values">{{country}}</mat-option>
+              </mat-select>
+            </div>
+          </div>
+          <mat-error
+            *ngIf="addressFormGroup.controls['state'].hasError('required') && addressFormGroup.controls['state'].touched">
+            Please enter a state.
+          </mat-error>
+          <mat-error
+            *ngIf="addressFormGroup.controls['postcode'].hasError('required') && addressFormGroup.controls['postcode'].touched">
+            Please enter a postcode.
+          </mat-error>
+          <mat-error
+            *ngIf="addressFormGroup.controls['country'].hasError('required') && addressFormGroup.controls['country'].touched">
+            Please enter a country.
+          </mat-error>
+          <p class="text-muted mb-0 mt-2">*Click to set your shop accurate location.</p>
+          <agm-map class="w-100" [longitude]="mapController.mapLng" [latitude]="mapController.mapLat" [zoom]="14"
+            [gestureHandling]="'greedy'" [maxZoom]="18" [minZoom]="1" [streetViewControl]="false" panControl="false"
+            zoomControl="false" (mapClick)="mapController.mapClick($event)">
+            <agm-marker [longitude]="mapController.markerLng" [latitude]="mapController.markerLat"></agm-marker>
+          </agm-map>
+          <div class="row no-gutters mt-4">
+            <button class="btn btn-md btn-second" type="button" (click)="phase.previous()">Previous</button>
+            <button class="btn btn-md btn-second" type="button" style="margin-left: auto" (click)="next()">Next</button>
+          </div>
+        </form>
+
+        <form *ngSwitchCase="4" class="modal-content" style="width: 500px" [formGroup]="openingInfoFormGroup"
+          (keydown.enter)="$event.preventDefault()">
+          <div class="modal-close">
+            <span class="fas fa-times" [routerLink]="['', {outlets: {modal:null}}]"></span>
+          </div>
+          <business-timetable [(timetable)]="timetable"></business-timetable>
+          <div class="row no-gutters mt-4">
+            <button class="btn btn-md btn-second" type="button" (click)="phase.previous()">Previous</button>
+            <button class="btn btn-md btn-second" type="button" style="margin-left: auto" (click)="next()">Next</button>
+          </div>
+        </form>
+
+        <form *ngSwitchCase="5" class="modal-content" style="min-width: 500px" [formGroup]="termAndConfitionsFormGroup"
+          (keydown.enter)="$event.preventDefault()">
+          <div class="modal-close">
+            <span class="fas fa-times" [routerLink]="['', {outlets: {modal:null}}]"></span>
+          </div>
+          <div class="termContainer mb-3 ">{{termAndCondition}}
+          </div>
+          <div>
+            <div>
+              <mat-checkbox class="mr-2 d-inline-block" [color]="'primary'" formControlName="accept" required>
+              </mat-checkbox>
+              <span style="vertical-align: text-bottom">I accept the term and condition.</span>
+            </div>
+            <mat-error *ngIf="termAndConfitionsFormGroup.controls['accept'].hasError('required')">Please accept before
+              continue.</mat-error>
+          </div>
+          <div class="row no-gutters mt-4">
+            <button class="btn btn-md btn-second" type="button" (click)="phase.previous()">Previous</button>
+            <button class="btn btn-md btn-second" type="button" style="margin-left: auto"
+              (click)="createShop()">Next</button>
+          </div>
+        </form>
+
+        <div *ngSwitchCase="6" class="modal-content" style="min-width: 500px">
+          <div class="modal-close" [routerLink]="['', {outlets: {modal:null}}]">
+            <span class="fas fa-times"></span>
+          </div>
+          <div class="text-center mt-4 mb-4">
+            <span class="far fa-check-circle" style="font-size: 5rem; color:#68DC64"></span>
+          </div>
+
+          <p class="text-center mb-3" style="font-size: .8rem">Store is created.<br />
+            Continue to start managing and upload items.
+          </p>
+          <div class="text-center">
+            <button class="btn btn-md btn-second" (click)="navigateToShop()">Continue</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
