@@ -1,7 +1,7 @@
 <div modal class="modal">
   <div class="modal-wrap">
     <div class="modal-body">
-      <div (click)="$event.stopPropagation()" class="modal-body-content">
+      <div (click)="$event.stopPropagation()" class="modal-body-content" style="max-width: 500px">
         <div class="modal-content" *ngIf="loading.isRunning(); else successContent">
           <h3 class="font-weight-bold">Activation</h3>
           <div class="text-center mt-4 mb-4">
@@ -20,15 +20,14 @@
 </div>
 <ng-template #successContent>
   <ng-container *ngIf="activateSuccess; else failContent">
-    <div class="modal-content">
-      <div class="modal-close">
-        <span class="fas fa-times" [routerLink]="['', {outlets: {modal:null}}]"></span>
-      </div>
+    <div class="modal-content" style="max-width: 500px">
       <h3 class="font-weight-bold">Activation</h3>
-      <div class="text-center mt-4 mb-4">
+      <div class="text-center mt-5 mb-4">
         <span class="far fa-check-circle" style="font-size: 7rem; color:#68DC64"></span>
       </div>
-      <p class="text-center mb-3">Activate successfully!</p>
+      <p class="text-center mb-5">Activate successfully!<br/>
+        You can login now!
+      </p>
       <a href="javascript:void(0)" style="color: #000; font-size: 1.1rem; font-weight: 400"
         [routerLink]="['',{ outlets: { modal: 'login' } }]"><span class="fas fa-chevron-left mr-2"></span>Back to
         login</a>
@@ -37,16 +36,16 @@
 </ng-template>
 <ng-template #failContent>
   <ng-container *ngIf="!resend; else resendContent">
-    <div class="modal-content">
+    <div class="modal-content" style="max-width: 500px;">
       <div class="modal-close">
         <span class="fas fa-times" [routerLink]="['', {outlets: {modal:null}}]"></span>
       </div>
       <h3 class="font-weight-bold">Activation</h3>
-      <div class="text-center mt-4 mb-4">
+      <div class="text-center mt-5 mb-4">
         <span class="far fa-times-circle" style="font-size: 7rem; color:#ff0000"></span>
       </div>
       <p class="text-center mb-0" style="font-size: 1.2rem">Activation is failed!</p>
-      <button [disabled]="resendLoading.isRunning()" class="text-center"
+      <button [disabled]="resendLoading.isRunning()" class="text-center mb-4"
         style="color: #990000; background: none; border: 0" (click)="resendLink()">Resend Activation
         link</button>
     </div>

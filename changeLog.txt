@@ -9,3 +9,4 @@
 .: WSM: Task: Get template from existing code (WSM-14)
 .: WSM: Task: Registration (WSM-2)
 .: WSM: Task: Login (WSM-2)
+.: WSM: Task: Activate account after registration (WSM-16)

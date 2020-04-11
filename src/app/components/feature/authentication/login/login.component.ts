@@ -135,7 +135,7 @@ export class LoginComponent implements OnInit {
     this.resendLoading.start();
     this.userService.resendActivationEmailConfirmation({ email: this.storeEmail, password: this.storePassword }).subscribe(result => {
       this.userService.resendActivationEmail(this.storeEmail).pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
-        WsToastService.toastSubject.next({ content: "Activation Email is sent!" });
+        WsToastService.toastSubject.next({ content: "Activation Email is sent!", type: 'success' });
         this.resend = false;
         this.resendLoading.stop();
 
