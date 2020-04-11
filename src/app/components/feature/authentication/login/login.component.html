@@ -23,7 +23,7 @@
             Please enter a password.</mat-error>
           <a href="javascript: void(0)" class="font-weight-light text-center pt-2 pb-2 mb-0"
             [routerLink]="['', {outlets: {modal: 'forgot-password'}}]" skipLocationChange>Forgot Password?</a>
-          <div class="text-center center" style="width: 90%">
+          <div class="text-center center w-100">
             <ws-loading-button [class]="'btn btn-block btn-second mb-2'" [loading]="loading.isRunning()"
               (click)="login()">Login
             </ws-loading-button>
@@ -35,11 +35,11 @@
               </span>
             </span>
           </div>
-          <button class="btn btn-second mb-2 center" style="width: 90%; background-color: #4568B2"
+          <button class="btn btn-second mb-2 center w-100" style="background-color: #4568B2"
             (click)="loginWithFb()">
             <span class="fab fa-facebook-f mr-2"></span>Log in with
             Facebook</button>
-          <button class="btn btn-second mb-3 center" style="width: 90%; background-color:#DC4E41"
+          <button class="btn btn-second mb-3 center w-100" style="background-color:#DC4E41"
             (click)="loginWithGoogle()">
             <span class="fab fa-google-plus-g mr-2"></span>Log in with
             Google</button>
