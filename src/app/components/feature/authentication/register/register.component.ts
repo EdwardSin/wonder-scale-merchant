@@ -40,10 +40,7 @@ export class RegisterComponent implements OnInit {
 
   private ngUnsubscribe: Subject<any> = new Subject;
   environment = environment;
-  constructor(private userService: UserService,
-    private router: Router,
-    private route: ActivatedRoute,
-    private authenticationService: AuthenticationService) {
+  constructor(private userService: UserService) {
     this.setupRegisterForm();
   }
   ngOnInit() {
@@ -69,8 +66,8 @@ export class RegisterComponent implements OnInit {
         .pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.loading.stop()))
         .subscribe(result => {
           this.registerSuccess = true;
-          //WsToastService.toastSubject.next({ content: 'Account is registed! Please check your email!', type: 'success' });
-          //this.cancelClicked();
+          WsToastService.toastSubject.next({ content: 'Account is registed! Please check your email!', type: 'success' });
+          this.cancelClicked();
           this.registerForm.reset();
         }, (err) => {
           WsToastService.toastSubject.next({ content: err.error.message, type: 'danger' });

@@ -7,3 +7,4 @@
 - 2020-04-11                                -
 ---------------------------------------------
 .: WSM: Task: Get template from existing code (WSM-14)
+.: WSM: Task: Registration (WSM-2)

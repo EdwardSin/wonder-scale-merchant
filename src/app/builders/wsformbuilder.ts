@@ -36,8 +36,8 @@ export class WSFormBuilder {
         let formBuilder = new FormBuilder();
         return formBuilder.group({
             email: ["", [Validators.required, Validators.email, Validators.maxLength(30)]],
-            firstName: ["", [Validators.required, Validators.maxLength(30)]],
-            lastName: ["", [Validators.required, Validators.maxLength(30)]],
+            firstName: ["", [Validators.required, Validators.maxLength(40)]],
+            lastName: ["", [Validators.required, Validators.maxLength(40)]],
             username: ["", [Validators.required, Validators.maxLength(30)]],
             tel: ["", [Validators.required, Validators.maxLength(20)]],
             gender: ["", [Validators.required, GenderValidation.Valid]],
@@ -77,8 +77,8 @@ export class WSFormBuilder {
         let formBuilder = new FormBuilder();
         return formBuilder.group({
             email: ["", [Validators.required, Validators.email, Validators.maxLength(30)]],
-            firstName: ["", [Validators.required, Validators.maxLength(30)]],
-            lastName: ["", [Validators.required, Validators.maxLength(30)]],
+            firstName: ["", [Validators.required, Validators.maxLength(40)]],
+            lastName: ["", [Validators.required, Validators.maxLength(40)]],
             tel: ["", [Validators.required, Validators.maxLength(20)]],
             gender: ["", [Validators.required, GenderValidation.Valid]],
             passwordGroup: formBuilder.group({
