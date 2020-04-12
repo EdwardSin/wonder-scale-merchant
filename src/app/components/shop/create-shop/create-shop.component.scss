@@ -22,8 +22,9 @@ ul.suggestions {
     z-index: 1;
     background-color: #fff;
     position: absolute;
-    width: 100%;
-    top: .25rem;
+    width: calc(100% - 40px);
+    right: .6rem;
+    top: -.3rem;
     font-size: .8rem;
     overflow: hidden;
     border-radius: .25rem;
@@ -45,8 +46,7 @@ ul.suggestions {
 .termContainer{
     font-size: .8rem; 
     white-space: pre-line;
-    overflow-y: scroll; 
-    max-width: 600px; 
+    overflow-y: scroll;
     max-height: 500px;
     background-color: #fff;
     margin-left: auto;

@@ -32,6 +32,7 @@ import { ActivateComponent } from './components/feature/authentication/activate/
 import { ResetPasswordComponent } from './components/feature/authentication/reset-password/reset-password.component';
 import { AboutUsComponent } from '@components/public/about-us/about-us.component';
 import { ModalDirective } from './directives/modal.directive';
+import { ClickoutsideDirective } from './directives/clickoutside.directive';
 import { ShopListComponent } from '@components/shop-list/shop-list.component';
 import { AllShopsComponent } from '@components/shop-list/all-shops/all-shops.component';
 import { AllItemsComponent } from '@components/shop/catalogue/all-items/all-items.component';
@@ -153,6 +154,7 @@ export function provideConfig() {
 
     // Directives
     ModalDirective,
+    ClickoutsideDirective,
 
     // Elements
     WsLoadingComponent,

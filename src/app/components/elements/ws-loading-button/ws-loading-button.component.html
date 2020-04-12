@@ -1,4 +1,4 @@
-<button [ngClass]="class" [type]="type" [disabled]="loading">
+<button [ngClass]="class" [type]="type" [disabled]="loading || disabled">
   <ws-spinner *ngIf="loading" [spinnerColor]="'#fff'" [width]="15" [height]="15" [borderWidth]="3" class="mr-2"></ws-spinner>
   <span><ng-content></ng-content></span>
 </button>

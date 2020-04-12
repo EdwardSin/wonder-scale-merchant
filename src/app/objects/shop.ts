@@ -12,7 +12,6 @@ export class Shop {
         address: string,
         state: string,
         postcode: string,
-        city: string,
         country: string,
     };
     phone?: Array<string>;
@@ -39,5 +38,11 @@ export class Shop {
     };
     viewed?: number;
     categoryList?: Array<string>;
+     constructor(){
+         this.location = {
+             type: 'Point',
+             coordinates: [0, 0]
+         }
+     }
 }
 type StatusType = 'pending' | 'active' | 'inactive' | 'blocked' | 'saved' | 'unsaved' | 'save removed';
