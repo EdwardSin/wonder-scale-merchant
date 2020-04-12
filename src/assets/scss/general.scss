@@ -1,0 +1,53 @@
+
+#continueSpan {
+    &::before {
+        content: "" !important;
+        position: absolute !important;
+        top: 50% !important;
+        right: 100% !important;
+        width: 5000px !important;
+        border-bottom: 1px solid rgb(228, 228, 228) !important;
+    }
+    &::after {
+        content: "" !important;
+        position: absolute !important;
+        top: 50% !important;
+        left: 100% !important;
+        width: 5000px !important;
+        border-bottom: 1px solid rgb(228, 228, 228) !important;
+    }
+    .innerSpan {
+        font-weight: 300 !important;
+        word-wrap: break-word !important;
+        font-size: 14px !important;
+        line-height: 18px !important;
+        letter-spacing: normal !important;
+        font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif !important;
+        color: rgb(118, 118, 118) !important;
+        display: inline !important;
+        margin: 0px !important;
+    }
+}
+.map-screen {
+    position: absolute;
+    height: 300px;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    background-color: rgba(255, 255, 255, 0.6);
+    .loading {
+        position: absolute;
+        top: calc(50% - 15px);
+        left: calc(50% - 15px);
+        display: inline;
+    }
+}
+
+.mat-select-placeholder {
+    color: #6c757d;
+}
+
+.mat-select.mat-select-disabled{
+    background-color: #e9ecef;
+}

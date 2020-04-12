@@ -36,7 +36,8 @@
               "src/assets/scss/animate.scss",
               "src/assets/scss/styles.scss",
               "src/assets/scss/theme.scss",
-              "src/assets/scss/modal.scss"
+              "src/assets/scss/modal.scss",
+              "src/assets/scss/general.scss"
             
             ],
             "scripts": [
