@@ -47,15 +47,14 @@ export class UserService {
   resendActivationEmail = function (email) {
     return this.http.put(this.USER_URL + '/resend/activation-email', { email });
   };
-  sendPasswordLinkToEmail = function (resetData) {
-    let headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    return this.http.post(this.USER_URL + '/reset/password', resetData, {
-      headers: headers
-    });
+  sendPasswordLinkToEmail(resetData) {
+    return this.http.post(this.USER_URL + '/reset/password', resetData);
   };
+  resetPassword(obj: { email: String, password: String, confirmPassword: String, resetToken: String }) {
+    return this.http.patch(this.USER_URL + '/reset/password/' + obj.resetToken, obj);
+  }
   // Grab user's information from e-mail reset link
-  resetUserFromLink = function (token) {
-    return this.http.get(this.USER_URL + '/reset/password/' + token);
+  resetUserFromLink(token): Observable<User> {
+    return this.http.get<User>(this.USER_URL + '/reset/password/' + token);
   };
 }

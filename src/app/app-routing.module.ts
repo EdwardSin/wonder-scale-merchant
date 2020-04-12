@@ -29,6 +29,7 @@ import { AllItemsComponent } from '@components/shop/catalogue/all-items/all-item
 import { CatalogueComponent } from '@components/shop/catalogue/catalogue.component';
 import { AuthGuard } from './guards/auth.guard';
 import { ShopResolver } from '@components/resolvers/shopResolver.service';
+import { ResetPasswordComponent } from '@components/feature/authentication/reset-password/reset-password.component';
 
 
 const routes: Routes = [{
@@ -68,6 +69,10 @@ const routes: Routes = [{
 }, {
   path: 'forgot-password',
   component: ForgotPasswordComponent,
+  outlet: 'modal'
+}, {
+  path: 'reset-password/:token',
+  component: ResetPasswordComponent,
   outlet: 'modal'
 }, {
   path: 'shops/:username',
