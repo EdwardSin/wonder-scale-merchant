@@ -4,7 +4,7 @@ export class PasswordValidator {
     this.errors = { oldPassword: "", password: "", confirmPassword: "" };
   }
   validate(passwordController, confirmPasswordController, oldPasswordController?): boolean {
-
+    this.reset();
     if (oldPasswordController && oldPasswordController.errors && oldPasswordController.errors.required) {
       this.errors.oldPassword = "Please enter old password!";
       return false;

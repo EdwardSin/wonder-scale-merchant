@@ -29,6 +29,7 @@ import { LoginComponent } from './components/feature/authentication/login/login.
 import { RegisterComponent } from './components/feature/authentication/register/register.component';
 import { ForgotPasswordComponent } from './components/feature/authentication/forgot-password/forgot-password.component';
 import { ActivateComponent } from './components/feature/authentication/activate/activate.component';
+import { ResetPasswordComponent } from './components/feature/authentication/reset-password/reset-password.component';
 import { AboutUsComponent } from '@components/public/about-us/about-us.component';
 import { ModalDirective } from './directives/modal.directive';
 import { ShopListComponent } from '@components/shop-list/shop-list.component';
@@ -116,6 +117,7 @@ export function provideConfig() {
     ForgotPasswordComponent,
     ActivateComponent,
     RegisterComponent,
+    ResetPasswordComponent,
     AboutUsComponent,
     MainComponent,
     MainContainerComponent,
