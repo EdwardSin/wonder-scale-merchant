@@ -33,21 +33,21 @@
             </a>
           </li>
           <li>
-            <a [routerLinkActive]="'active'" [routerLink]="['catalogue', 'publish']">Publish
+            <a [routerLinkActive]="'active'" [routerLink]="['catalogue', 'published']">Published
               <span class="badge ws-bg-secondary badge-pill float-right"
-                style="vertical-align: text-bottom">{{ numberOfPublishItems }}</span>
+                style="vertical-align: text-bottom">{{ numberOfPublishedItems }}</span>
             </a>
           </li>
           <li>
-            <a [routerLinkActive]="'active'" [routerLink]="['catalogue', 'unpublish']">Unpublish
+            <a [routerLinkActive]="'active'" [routerLink]="['catalogue', 'unpublished']">Unpublished
               <span class="badge ws-bg-secondary badge-pill float-right"
-                style="vertical-align: text-bottom">{{ numberOfUnpublishItems }}</span>
+                style="vertical-align: text-bottom">{{ numberOfUnpublishedItems }}</span>
             </a>
           </li>
           <li>
-            <a [routerLinkActive]="'active'" [routerLink]="['catalogue', 'uncategoried']">Uncategoried
+            <a [routerLinkActive]="'active'" [routerLink]="['catalogue', 'uncategorized']">Uncategorized
               <span class="badge ws-bg-secondary badge-pill float-right"
-                style="vertical-align: text-bottom">{{ numberOfUncategoriedItems }}</span>
+                style="vertical-align: text-bottom">{{ numberOfUncategorizedItems }}</span>
             </a>
           </li>
           <hr class="m-0" />
@@ -64,11 +64,12 @@
                 </a>
               </div>
               <span *ngIf="!isEditCategory(category?.name)" class="drag-handle" cdkDragHandle>
-                <span class="fas fa-bars" style="font-size: 1rem;"></span>
+                <span class="fas fa-bars" style="font-size: .9rem; margin-left: .25rem"></span>
               </span>
               <a href="javascript:void(0)" *ngIf="!isEditCategory(category?.name)" class="ws-secondary"
                 [routerLinkActive]="'active'" [routerLink]="['catalogue', 'custom', category.name]">
-                <span>{{ category?.name }}</span>
+                <span style="overflow: hidden; width: 160px; text-overflow: ellipsis; display: inline-block">
+                  {{ category?.name }}</span>
                 <span class="badge ws-bg-secondary badge-pill float-right"
                   style="vertical-align: text-bottom">{{category?.items?.length}}</span>
                 <div>

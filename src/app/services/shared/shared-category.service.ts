@@ -15,15 +15,15 @@ export class SharedCategoryService {
     numberOfAllItems: BehaviorSubject<number> = new BehaviorSubject<number>(0);
     numberOfDiscountItems: BehaviorSubject<number> = new BehaviorSubject<number>(0);
     numberOfNewItems: BehaviorSubject<number> = new BehaviorSubject<number>(0);
-    numberOfPublishItems: BehaviorSubject<number> = new BehaviorSubject<number>(0);
-    numberOfUnpublishItems: BehaviorSubject<number> = new BehaviorSubject<number>(0);
-    numberOfUncategoriedItems: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+    numberOfPublishedItems: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+    numberOfUnpublishedItems: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+    numberOfUncategorizedItems: BehaviorSubject<number> = new BehaviorSubject<number>(0);
     allItemsRefresh: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
     newItemsRefresh: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
     discountItemsRefresh: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-    publishItemsRefresh: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-    unpublishItemsRefresh: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-    uncategoriedItemsRefresh: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    publishedItemsRefresh: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    unpublishedItemsRefresh: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    uncategorizedItemsRefresh: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
     categoryRefresh: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
     categoriesRefresh: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
@@ -41,9 +41,9 @@ export class SharedCategoryService {
             this.authCategoryContributorService.getNumberOfAllItems(),
             this.authCategoryContributorService.getNumberOfNewItems(),
             this.authCategoryContributorService.getNumberOfDiscountItems(),
-            this.authCategoryContributorService.getNumberOfPublishItems(),
-            this.authCategoryContributorService.getNumberOfUnpublishItems(),
-            this.authCategoryContributorService.getNumberOfUncategoriedItems(),
+            this.authCategoryContributorService.getNumberOfPublishedItems(),
+            this.authCategoryContributorService.getNumberOfUnpublishedItems(),
+            this.authCategoryContributorService.getNumberOfUncategorizedItems(),
             this.authCategoryContributorService.getAuthenticatedCategoriesByShopId().pipe(filter(x => x != null))
         ])
             .subscribe(results => {
@@ -51,17 +51,17 @@ export class SharedCategoryService {
                 this.numberOfAllItems.next(results[0]['result']);
                 this.numberOfNewItems.next(results[1]['result']);
                 this.numberOfDiscountItems.next(results[2]['result']);
-                this.numberOfPublishItems.next(results[3]['result']);
-                this.numberOfUnpublishItems.next(results[4]['result']);
-                this.numberOfUncategoriedItems.next(results[5]['result']);
+                this.numberOfPublishedItems.next(results[3]['result']);
+                this.numberOfUnpublishedItems.next(results[4]['result']);
+                this.numberOfUncategorizedItems.next(results[5]['result']);
                 this.categories.next(results[6]['result']);
                 this.sharedLoadingService.screenLoading.next(false);
                 this.allItemsRefresh.next(true);
                 this.newItemsRefresh.next(true);
                 this.discountItemsRefresh.next(true);
-                this.publishItemsRefresh.next(true);
-                this.unpublishItemsRefresh.next(true);
-                this.uncategoriedItemsRefresh.next(true);
+                this.publishedItemsRefresh.next(true);
+                this.unpublishedItemsRefresh.next(true);
+                this.uncategorizedItemsRefresh.next(true);
                 this.categoryRefresh.next(true);
 
                 if (callback) {

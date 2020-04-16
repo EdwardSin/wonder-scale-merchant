@@ -28,6 +28,7 @@ export class ItemViewComponent implements OnInit {
   @Input() showCategory: boolean = false;
   order: OrderType = 'alphabet';
   orderBy: OrderingType;
+  param;
   display: ViewType = 'list';
   isMobileSize: boolean;
   currencyOption: CurrencyOption = new CurrencyOption;
@@ -51,6 +52,7 @@ export class ItemViewComponent implements OnInit {
 
   ngOnInit() {
     this.isMobileSize = ScreenHelper.isMobileSize();
+    this.param = this.route.snapshot['url'] && this.route.snapshot['url'][0] && this.route.snapshot['url'][0]['path'];
     this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe(queryParams => {
       this.display = queryParams['display'] || 'list';
       this.order = queryParams['order'] || 'alphabet';

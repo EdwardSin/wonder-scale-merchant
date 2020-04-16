@@ -1,4 +1,4 @@
-<h4 class="ws-title">Unpublish Items</h4>
+<h4 class="ws-title">Unpublished<span class='fas fa-info-circle ml-2'></span></h4>
 
 <div *ngIf="allItems.length; else loadingTemplate">
     <item-controller></item-controller>
@@ -9,7 +9,7 @@
 
 <ng-template #noItem>
     <div class="text-center ws-background">
-        <p class="ws-no-title">Unpublish item</p>
+        <p class="ws-no-title">Unpublished item</p>
         <span class="text-muted">Items not showing to public.</span>
     </div>
 </ng-template>

@@ -45,9 +45,9 @@ export class MainComponent implements OnInit {
   numberOfAllItems: number = 0;
   numberOfDiscountItems: number = 0;
   numberOfNewItems: number = 0;
-  numberOfPublishItems: number = 0;
-  numberOfUnpublishItems: number = 0;
-  numberOfUncategoriedItems: number = 0;
+  numberOfPublishedItems: number = 0;
+  numberOfUnpublishedItems: number = 0;
+  numberOfUncategorizedItems: number = 0;
 
   loading: WsLoading = new WsLoading;
   displayPreview: boolean;
@@ -127,9 +127,9 @@ export class MainComponent implements OnInit {
           this.numberOfAllItems = this.shop.number_of_all_items;
           this.numberOfDiscountItems = this.shop.number_of_discount_items;
           this.numberOfNewItems = this.shop.number_of_new_items;
-          this.numberOfPublishItems = this.shop.number_of_publish_items;
-          this.numberOfUnpublishItems = this.shop.number_of_unpublish_items;
-          this.numberOfUncategoriedItems = this.shop.number_of_uncategoried_items;
+          this.numberOfPublishedItems = this.shop.number_of_published_items;
+          this.numberOfUnpublishedItems = this.shop.number_of_unpublished_items;
+          this.numberOfUncategorizedItems = this.shop.number_of_uncategorized_items;
           this.shop_username = this.shop.username;
           this.refreshContributors();
           // this.getUnrepliedRequests();
@@ -148,17 +148,17 @@ export class MainComponent implements OnInit {
       .subscribe(res => {
         this.numberOfNewItems = res;
       })
-    this.sharedCategoryService.numberOfPublishItems.pipe(takeUntil(this.ngUnsubscribe))
+    this.sharedCategoryService.numberOfPublishedItems.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(res => {
-        this.numberOfPublishItems = res;
+        this.numberOfPublishedItems = res;
       })
-    this.sharedCategoryService.numberOfUnpublishItems.pipe(takeUntil(this.ngUnsubscribe))
+    this.sharedCategoryService.numberOfUnpublishedItems.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(res => {
-        this.numberOfUnpublishItems = res;
+        this.numberOfUnpublishedItems = res;
       })
-    this.sharedCategoryService.numberOfUncategoriedItems.pipe(takeUntil(this.ngUnsubscribe))
+    this.sharedCategoryService.numberOfUncategorizedItems.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(res => {
-        this.numberOfUncategoriedItems = res;
+        this.numberOfUncategorizedItems = res;
       })
     this.sharedShopService.contributorRefresh.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
@@ -274,14 +274,15 @@ export class MainComponent implements OnInit {
   }
   removeCategory() {
     this.authCategoryContributorService
-      .removeCategory(this.selectedCategory['_id'])
+      .removeCategories({categories: [this.selectedCategory['_id']]})
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
         WsToastService.toastSubject.next({ content: "Category is removed!", type: 'success' });
         _.remove(this.categories, (x) => this.selectedCategory['_id'] === x._id);
-        if (this.category_name == 'All') {
-          this.refreshCategories();
+        if (this.selectedCategory.name === this.category_name) {
+          this.router.navigate(['catalogue', 'all'], {relativeTo: this.route});
         }
+        this.refreshCategories();
       }, (err) => {
         WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
       });
@@ -293,6 +294,7 @@ export class MainComponent implements OnInit {
   }
   setEditCategory(name) {
     this.editname = name;
+    this.edit_new_name = name;
     this.ref.detectChanges();
   }
   isEditCategory(name) {
@@ -300,7 +302,7 @@ export class MainComponent implements OnInit {
   }
   isValidated(name) {
     if (name == '' || name.trim() == '') {
-      WsToastService.toastSubject.next({ content: 'Category name is required!', type: 'danger' });
+      WsToastService.toastSubject.next({ content: 'Category name is invalid!', type: 'danger' });
       return false;
     } else if (name.length > 30) {
       WsToastService.toastSubject.next({ content: 'Category name is too long!', type: 'danger' });

@@ -33,19 +33,19 @@ export class AuthItemContributorService {
   getAuthenticatedDiscountItemsByShopId() {
     return this.http.get<{result: Item[]}>(AuthItemContributorUrl.getAuthenticatedDiscountItemsByShopIdUrl, this.accessTokenService.getAccessToken());
   }
-  getAuthenticatedPublishItemCategoryByShopId() {
-    return this.http.get<{result: Item[]}>(AuthItemContributorUrl.getAuthenticatedPublishItemCategoryByShopIdUrl, this.accessTokenService.getAccessToken());
+  getAuthenticatedPublishedItemCategoryByShopId() {
+    return this.http.get<{result: Item[]}>(AuthItemContributorUrl.getAuthenticatedPublishedItemCategoryByShopIdUrl, this.accessTokenService.getAccessToken());
   }
-  getAuthenticatedUnpublishItemCategoryByShopId() {
-    return this.http.get<{result: Item[]}>(AuthItemContributorUrl.getAuthenticatedUnpublishItemCategoryByShopIdUrl, this.accessTokenService.getAccessToken());
+  getAuthenticatedUnpublishedItemCategoryByShopId() {
+    return this.http.get<{result: Item[]}>(AuthItemContributorUrl.getAuthenticatedUnpublishedItemCategoryByShopIdUrl, this.accessTokenService.getAccessToken());
   }
-  getAuthenticatedUncategoriedItemCategoryByShopId() {
-    return this.http.get<{result: Item[]}>(AuthItemContributorUrl.getAuthenticatedUncategoriedItemCategoryByShopIdUrl, this.accessTokenService.getAccessToken());
+  getAuthenticatedUncategorizedItemCategoryByShopId() {
+    return this.http.get<{result: Item[]}>(AuthItemContributorUrl.getAuthenticatedUncategorizedItemCategoryByShopIdUrl, this.accessTokenService.getAccessToken());
   }
-  activateItems(items) {
+  publishItems(items) {
     return this.http.put(AuthItemContributorUrl.activateItemsUrl, { items }, this.accessTokenService.getAccessToken());
   }
-  inactivateItems(items) {
+  unpublishItems(items) {
     return this.http.put(AuthItemContributorUrl.inactivateItemsUrl, { items }, this.accessTokenService.getAccessToken());
   }
   addItem(newItem) {

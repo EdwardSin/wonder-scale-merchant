@@ -1,5 +1,5 @@
-<div class="input-group w-100">
-    <input placeholder="{{ placeholder }}" class="form-control nooutline font-weight-bold" name="search_keyword"
+<div class="input-group p-0">
+    <input placeholder="{{ placeholder }}" class="form-control form-control-sm nooutline font-weight-bold" name="search_keyword"
         (keyup.enter)="searchItem()" [(ngModel)]="searchKeyword" />
     <div class="input-group-append">
         <button *ngIf="searchKeyword" class="input-group-text nooutline border-radius-0" (click)="searchKeyword = ''">

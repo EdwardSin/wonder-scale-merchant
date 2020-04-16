@@ -42,7 +42,6 @@ export class ResetPasswordComponent implements OnInit {
       this.loading.start();
       this.userService.resetPassword({ email: this.user.email, password: this.resetPasswordForm.value.password, confirmPassword: this.resetPasswordForm.value.confirmPassword, resetToken: this.resetToken }).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.loading.stop()))
         .subscribe(result => {
-          console.log(result);
           this.resetSuccess = true;
         }, err => {
           console.log(err);

@@ -59,9 +59,9 @@ import { BusinessLocationComponent } from '@components/elements/business-locatio
 import { BusinessTimetableComponent } from '@components/elements/business-timetable/business-timetable.component';
 import { InformationComponent } from '@components/shop/information/information.component';
 import { ItemsComponent } from '@components/shop/catalogue/items/items.component';
-import { UncategoriedItemsComponent } from '@components/shop/catalogue/uncategoried-items/uncategoried-items.component';
-import { UnpublishItemsComponent } from '@components/shop/catalogue/unpublish-items/unpublish-items.component';
-import { PublishItemsComponent } from '@components/shop/catalogue/publish-items/publish-items.component';
+import { UncategorizedItemsComponent } from '@components/shop/catalogue/uncategorized-items/uncategorized-items.component';
+import { UnpublishedItemsComponent } from '@components/shop/catalogue/unpublished-items/unpublished-items.component';
+import { PublishedItemsComponent } from '@components/shop/catalogue/published-items/published-items.component';
 import { NewItemsComponent } from '@components/shop/catalogue/new-items/new-items.component';
 import { CatalogueComponent } from '@components/shop/catalogue/catalogue.component';
 import { isPlatformBrowser } from '@angular/common';
@@ -81,6 +81,7 @@ import { ImageUploadModalComponent } from '@components/elements/image-upload-mod
 import { EditContributorModalComponent } from '@components/modals/edit-contributor-modal/edit-contributor-modal.component';
 import { WsToastComponent } from '@components/elements/ws-toast/ws-toast.component';
 import { WsLoadingScreenComponent } from '@components/elements/ws-loading-screen/ws-loading-screen.component';
+import { ModifyItemComponent } from '@components/shop/catalogue/modify-item/modify-item.component';
 export function jwtOptionsFactory(platformId) {
   return {
     tokenGetter: () => {
@@ -137,15 +138,18 @@ export function provideConfig() {
     CreateShopComponent,
     InformationComponent,
     ItemsComponent,
-    UncategoriedItemsComponent,
-    UnpublishItemsComponent,
-    PublishItemsComponent,
+    UncategorizedItemsComponent,
+    UnpublishedItemsComponent,
+    PublishedItemsComponent,
     NewItemsComponent,
     CatalogueComponent,
     SettingsComponent,
     AboutComponent,
     SocialMediaComponent,
     QrcodeComponent,
+    ModifyItemComponent,
+    ColorPickerComponent,
+    ImagePickerComponent,
     ErrorComponent,
 
     // Pipes
