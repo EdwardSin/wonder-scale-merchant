@@ -27,7 +27,9 @@
 .ws-secondary{
     color: map-get($ws-color, secondary);
 }
-
+.ws-dark-color{
+    color: map-get($ws-color, dark);
+}
 .ws-clear-color{
     color: map-get($ws-color, white);
 }

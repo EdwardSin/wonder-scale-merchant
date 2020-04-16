@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { environment } from '@environments/environment';
-import { Item } from '@objects/item';
 import { AuthItemContributorService } from '@services/http/auth-shop/contributor/auth-item-contributor.service';
 import { SharedCategoryService } from '@services/shared/shared-category.service';
 import { SharedItemService } from '@services/shared/shared-item.service';
@@ -12,45 +10,42 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-publish-items',
-  templateUrl: './publish-items.component.html',
-  styleUrls: ['./publish-items.component.scss']
+  selector: 'app-unpublished-items',
+  templateUrl: './unpublished-items.component.html',
+  styleUrls: ['./unpublished-items.component.scss']
 })
-export class PublishItemsComponent implements OnInit {
-  allItems: Item[] = [];
-  editItemList: Item[] = [];
-  displayItems: Item[] = [];
+export class UnpublishedItemsComponent implements OnInit {
+  shop_id: String;
+  allItems: Array<any> = [];
+  editItemList: Array<any> = [];
+  displayItems: Array<any> = [];
   loading: WsLoading = new WsLoading;
   environment = environment;
 
   private ngUnsubscribe: Subject<any> = new Subject();
 
   constructor(
-    private route: ActivatedRoute,
     private authItemContributorService: AuthItemContributorService,
     private sharedItemService: SharedItemService,
     private sharedCategoryService: SharedCategoryService,
     private sharedShopService: SharedShopService) {
-
   }
 
   ngOnInit() {
     let shop_name = this.sharedShopService.shop_name;
-    DocumentHelper.setWindowTitleWithWonderScale('Publish | ' + shop_name);
-    this.sharedCategoryService.publishItemsRefresh.pipe(takeUntil(this.ngUnsubscribe))
+    DocumentHelper.setWindowTitleWithWonderScale('Unpublished | ' + shop_name);
+    this.sharedCategoryService.unpublishedItemsRefresh.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(res => {
-        this.getPublishItems();
-
+        this.getUnpublishedItems();
       })
   }
-
-  getPublishItems() {
+  getUnpublishedItems() {
     this.loading.start();
-    this.authItemContributorService.getAuthenticatedPublishItemCategoryByShopId().pipe(takeUntil(this.ngUnsubscribe))
+    this.authItemContributorService.getAuthenticatedUnpublishedItemCategoryByShopId().pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
         this.allItems = result.result;
         this.displayItems = result.result;
-        this.sharedCategoryService.numberOfPublishItems.next(this.allItems.length);
+        this.sharedCategoryService.numberOfUnpublishedItems.next(this.allItems.length);
         this.sharedItemService.allItems.next(this.allItems);
         this.sharedItemService.displayItems.next(this.displayItems);
         this.loading.stop();

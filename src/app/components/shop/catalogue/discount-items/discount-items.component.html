@@ -1,4 +1,4 @@
-<h4 class="ws-title">Discount Items</h4>
+<h4 class="ws-title">Discount<span class='fas fa-info-circle ml-2'></span></h4>
 
 <div *ngIf="allItems?.length; else loadingTemplate">
     <item-controller></item-controller>
@@ -9,8 +9,8 @@
 
 <ng-template #noItem>
     <div class="text-center ws-background">
-        <p class="ws-no-title">Discount item</p>
-        <span class="text-muted">Provide discount to public.</span>
+        <p class="ws-no-title">Discount items</p>
+        <span class="text-muted">Items which currently provide discount to public.</span>
     </div>
 </ng-template>
 <ng-template #noSearchItem>

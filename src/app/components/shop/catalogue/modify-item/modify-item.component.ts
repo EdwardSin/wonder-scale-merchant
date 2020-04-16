@@ -81,8 +81,13 @@ export class ModifyItemComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.setItemSettings();
-    this.getDefaultSetting();
+    this.sharedShopService.shop.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+      if (result) {
+        this.shop = result;
+        this.setItemSettings();
+        this.getDefaultSetting();
+      }
+    });
     this.getItem();
     this.getCategories();
   }
@@ -158,8 +163,8 @@ export class ModifyItemComponent implements OnInit {
       .subscribe(result => {
         if (result) {
           this.defaultSetting = <any>result;
+          this.setupDefaultSetting();
         }
-        this.setupDefaultSetting();
       })
   }
   setupDefaultSetting() {

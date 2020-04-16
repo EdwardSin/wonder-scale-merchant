@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { environment } from '@environments/environment';
 import { Item } from '@objects/item';
 import { AuthItemContributorService } from '@services/http/auth-shop/contributor/auth-item-contributor.service';
@@ -11,12 +12,11 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-uncategoried-items',
-  templateUrl: './uncategoried-items.component.html',
-  styleUrls: ['./uncategoried-items.component.scss']
+  selector: 'app-published-items',
+  templateUrl: './published-items.component.html',
+  styleUrls: ['./published-items.component.scss']
 })
-export class UncategoriedItemsComponent implements OnInit {
-  shop_id: String;
+export class PublishedItemsComponent implements OnInit {
   allItems: Item[] = [];
   editItemList: Item[] = [];
   displayItems: Item[] = [];
@@ -26,34 +26,36 @@ export class UncategoriedItemsComponent implements OnInit {
   private ngUnsubscribe: Subject<any> = new Subject();
 
   constructor(
+    private route: ActivatedRoute,
     private authItemContributorService: AuthItemContributorService,
     private sharedItemService: SharedItemService,
     private sharedCategoryService: SharedCategoryService,
     private sharedShopService: SharedShopService) {
+
   }
 
   ngOnInit() {
     let shop_name = this.sharedShopService.shop_name;
-    DocumentHelper.setWindowTitleWithWonderScale('Uncategoried | ' + shop_name);
-    this.sharedCategoryService.uncategoriedItemsRefresh.pipe(takeUntil(this.ngUnsubscribe))
+    DocumentHelper.setWindowTitleWithWonderScale('Published | ' + shop_name);
+    this.sharedCategoryService.publishedItemsRefresh.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(res => {
-        this.getUncategoriedItems();
+        this.getPublishedItems();
+
       })
   }
 
-  getUncategoriedItems() {
+  getPublishedItems() {
     this.loading.start();
-    this.authItemContributorService.getAuthenticatedUncategoriedItemCategoryByShopId().pipe(takeUntil(this.ngUnsubscribe))
+    this.authItemContributorService.getAuthenticatedPublishedItemCategoryByShopId().pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
         this.allItems = result.result;
         this.displayItems = result.result;
-        this.sharedCategoryService.numberOfUncategoriedItems.next(this.allItems.length);
+        this.sharedCategoryService.numberOfPublishedItems.next(this.allItems.length);
         this.sharedItemService.allItems.next(this.allItems);
         this.sharedItemService.displayItems.next(this.displayItems);
         this.loading.stop();
       })
   }
-
   ngOnDestroy() {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();

@@ -11,7 +11,7 @@
 <input id="importFile" type="file" hidden name="importFile" #importFile
   accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
   (change)="importFileChangeEvent($event)" />
-<div *ngIf="allItems?.length && displayBanner" class="p-3 alert-danger mb-2">Publish item to show to public!</div>
+<div *ngIf="allItems?.length && displayBanner" class="p-3 alert-danger mb-2">Published item to show to public!</div>
 <item-controller></item-controller>
 <div *ngIf="allItems?.length; else loadingTemplate">
   <div *ngIf="displayItems.length; else searchLoadingTemplate">
@@ -21,7 +21,7 @@
 <ng-template #noItem>
   <ng-container *ngIf="categoryFound; else noCategoryFound">
     <div class="ws-background text-center">
-      <h5 class="pt-5 pb-5">You don't have any item in the category.</h5>
+      <h6 class="pt-5 pb-5">No items in the category.</h6>
     </div>
   </ng-container>
 </ng-template>

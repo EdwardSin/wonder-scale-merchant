@@ -122,9 +122,9 @@ export class AuthItemContributorUrl {
     static getAuthenticatedAllItemsByShopIdUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/all';
     static getAuthenticatedNewItemsByShopIdUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/new';
     static getAuthenticatedDiscountItemsByShopIdUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/discount';
-    static getAuthenticatedPublishItemCategoryByShopIdUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/publish';
-    static getAuthenticatedUnpublishItemCategoryByShopIdUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/unpublish';
-    static getAuthenticatedUncategoriedItemCategoryByShopIdUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/uncategoried';
+    static getAuthenticatedPublishedItemCategoryByShopIdUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/published';
+    static getAuthenticatedUnpublishedItemCategoryByShopIdUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/unpublished';
+    static getAuthenticatedUncategorizedItemCategoryByShopIdUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/uncategorized';
     static activateItemsUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/publish/items';
     static inactivateItemsUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/unpublish/items';
     static addItemUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '';
@@ -171,17 +171,18 @@ export class AuthCategoryContributorUrl {
     static addCategoryUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL;
     static editCategoryUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL;
     static removeCategoryUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL;
+    static removeCategoriesUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL + '/remove/categories';
     static getAuthenticatedCategoriesByShopIdUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL + '/shopid';
-    static addItemsToCategoryUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL + '/add-items';
+    static addItemsToCategoryUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL + '/items/add';
     static removeItemsFromCategoryUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL + '/remove/itemsfromcategory';
     static moveCategoryUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL + '/move';
     static rearrangeCategoriesUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL + '/rearrange';
     static getNumberOfAllItemsUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL + '/number_of_all_items';
     static getNumberOfNewItemsUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL + '/number_of_new_items';
     static getNumberOfDiscountItemsUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL + '/number_of_discount_items';
-    static getNumberOfPublishItemsUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL + '/number_of_publish_items';
-    static getNumberOfUnpublishItemsUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL + '/number_of_unpublish_items';
-    static getNumberOfUncategoriedItemsUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL + '/number_of_uncategoried_items';
+    static getNumberOfPublishedItemsUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL + '/number_of_published_items';
+    static getNumberOfUnpublishedItemsUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL + '/number_of_unpublished_items';
+    static getNumberOfUncategorizedItemsUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL + '/number_of_uncategorized_items';
 
 }
 

@@ -1,17 +1,15 @@
-<h4 class="ws-title">Uncategoried Items</h4>
-
+<h4 class="ws-title">Published<span class='fas fa-info-circle ml-2'></span></h4>
 <div *ngIf="allItems.length; else loadingTemplate">
     <item-controller></item-controller>
-    <div class="text-info">Uncategoried item will not be published!</div>
     <div *ngIf="displayItems.length; else searchLoadingTemplate">
-        <item-view></item-view>
+        <item-view [showCategory]="true"></item-view>
     </div>
 </div>
 
 <ng-template #noItem>
     <div class="text-center ws-background">
-        <p class="ws-no-title">No uncategoried item</p>
-        <span class="text-muted">Uncategoried item will not be published.</span>
+        <p class="ws-no-title">Published items</p>
+        <span class="text-muted">Published item to public for viewing.</span>
     </div>
 </ng-template>
 <ng-template #noSearchItem>

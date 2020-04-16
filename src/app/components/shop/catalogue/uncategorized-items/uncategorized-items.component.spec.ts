@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UnpublishItemsComponent } from './unpublish-items.component';
+import { UncategorizedItemsComponent } from './uncategorized-items.component';
 
-describe('UnpublishItemsComponent', () => {
-  let component: UnpublishItemsComponent;
-  let fixture: ComponentFixture<UnpublishItemsComponent>;
+describe('UncategorizedItemsComponent', () => {
+  let component: UncategorizedItemsComponent;
+  let fixture: ComponentFixture<UncategorizedItemsComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ UnpublishItemsComponent ]
+      declarations: [ UncategorizedItemsComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(UnpublishItemsComponent);
+    fixture = TestBed.createComponent(UncategorizedItemsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,3 +1,5 @@
+@import './variables.scss';
+
 .modal {
   z-index: 999;
 
@@ -52,6 +54,17 @@
       margin: 48px 0 80px;
       margin-left: auto;
       margin-right: auto;
+    }
+
+    .modal-header {
+      position: relative;
+      font-size: 1.3rem;
+      border-radius: .25rem .25rem 0 0;
+      border-bottom: none;
+      color: map-get($ws-color, white);
+      width: 100%;
+      padding: .6em;
+      background-color: map-get($ws-color, secondary);
     }
 
     .modal-content {

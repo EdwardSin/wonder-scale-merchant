@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UncategoriedItemsComponent } from './uncategoried-items.component';
+import { PublishedItemsComponent } from './published-items.component';
 
-describe('UncategoriedItemsComponent', () => {
-  let component: UncategoriedItemsComponent;
-  let fixture: ComponentFixture<UncategoriedItemsComponent>;
+describe('PublishedItemsComponent', () => {
+  let component: PublishedItemsComponent;
+  let fixture: ComponentFixture<PublishedItemsComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ UncategoriedItemsComponent ]
+      declarations: [ PublishedItemsComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(UncategoriedItemsComponent);
+    fixture = TestBed.createComponent(PublishedItemsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

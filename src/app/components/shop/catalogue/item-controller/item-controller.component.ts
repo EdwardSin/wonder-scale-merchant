@@ -28,9 +28,6 @@ import { finalize, takeUntil } from 'rxjs/operators';
   animations: [UnitAnimation.slideDown(-50)]
 })
 export class ItemControllerComponent implements OnInit {
-
-
-
   allItems: Item[] = [];
   displayItems: Item[] = [];
   editItems: Item[] = [];
@@ -38,11 +35,10 @@ export class ItemControllerComponent implements OnInit {
 
   shop;
   param = '';
-  shop_username = '';
-  category_name = '';
+  categoryName = '';
   categoryList: Array<any> = [];
   selectedCategory = '';
-  is_publish: boolean;
+  isPublished: boolean;
   loading: WsLoading = new WsLoading;
   environment = environment;
 
@@ -53,8 +49,6 @@ export class ItemControllerComponent implements OnInit {
   editCategory = {};
   editCategoryList: Array<any> = [];
   displayCategoryList: Array<any> = [];
-
-  btnSelectedItemList: Array<any> = [];
   info_message: string = '';
   isMobileSize: boolean;
   previousEditedItems: Array<any> = [];
@@ -80,9 +74,8 @@ export class ItemControllerComponent implements OnInit {
     this.searchController.order = this.route.snapshot.queryParams['order'];
     this.searchController.orderBy = this.route.snapshot.queryParams['by'];
     this.searchController.display = this.route.snapshot.queryParams['display'];
-    this.shop_username = this.route.snapshot.params['username'];
-    this.category_name = this.route.snapshot.params['name'];
-    this.getPublishInfo();
+    this.categoryName = this.route.snapshot.params['name'];
+    this.getPublishedInfo();
 
     this.sharedItemService.allItems.pipe(takeUntil(this.ngUnsubscribe)).subscribe(res => {
       if (res) {
@@ -99,78 +92,6 @@ export class ItemControllerComponent implements OnInit {
         this.displayItems = res;
       }
     })
-    this.btnSelectedItemList = [
-      {
-        spanClass: 'fa-bullhorn',
-        title: 'Publish',
-        trigger: () => {
-          return this.activateItems();
-        },
-        displayed: true
-      },
-      {
-        spanClass: 'fa-unbullhorn',
-        title: 'Unpublish',
-        trigger: () => {
-          return this.inactivateItems();
-        },
-        displayed: true
-      },
-      {
-        spanClass: 'fa-tags',
-        title: 'Mark as New',
-        trigger: () => {
-          return this.markAsNew();
-        },
-        displayed: this.param != 'new'
-      },
-      {
-        spanClass: 'fa-untags',
-        title: 'Unmark from New',
-        trigger: () => {
-          return this.unmarkNew();
-        },
-        displayed: true
-      },
-      {
-        spanClass: 'fa-edit',
-        title: 'Edit Multiple Items',
-        trigger: () => {
-          this.action = this.editMultipleItems.bind(this);
-          return this.openModal('editMultipleItemsModal');
-        },
-        displayed: true
-      },
-      {
-        spanClass: 'fa-plus-square',
-        title: 'Add To',
-        trigger: () => {
-          this.getCategoryByShopId();
-          this.action = this.onAddItemToCategory.bind(this, this.editItems);
-          this.openModal('addToCategoriesModal');
-        },
-        displayed: true
-      },
-      {
-        spanClass: 'fa-arrows-alt',
-        title: 'Move To',
-        trigger: () => {
-          this.getCategoryByShopId();
-          this.action = this.onMoveCategory.bind(this, this.editItems);
-          this.openModal('moveToCategoriesModal');
-        },
-        displayed: this.param == 'custom'
-      },
-      {
-        spanClass: 'fa-trash',
-        title: 'Remove',
-        trigger: () => {
-          this.action = this.param == 'uncategoried' ? this.removeItemsPermanantly.bind(this) : this.removeItemsFromCategory.bind(this);
-          this.openModal('removeItemsModal');
-        },
-        displayed: true
-      }
-    ];
     this.isMobileSize = ScreenHelper.isMobileSize();
   }
 
@@ -178,11 +99,11 @@ export class ItemControllerComponent implements OnInit {
   onResize(event) {
     this.isMobileSize = ScreenHelper.isMobileSize();
   }
-  activateItems() {
+  publishItems() {
     var editItems = this.editItems;
     this.previousEditedItems = _.clone(editItems);
     if (editItems.length) {
-      this.authItemContributorService.activateItems(editItems)
+      this.authItemContributorService.publishItems(editItems)
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(result => {
           this.refreshCategories(() => {
@@ -193,11 +114,11 @@ export class ItemControllerComponent implements OnInit {
         });
     }
   }
-  inactivateItems() {
+  unpublishItems() {
     var editItems = this.editItems;
     this.previousEditedItems = _.clone(editItems);
     if (editItems.length) {
-      this.authItemContributorService.inactivateItems(editItems)
+      this.authItemContributorService.unpublishItems(editItems)
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(results => {
           this.refreshCategories(() => {
@@ -208,7 +129,6 @@ export class ItemControllerComponent implements OnInit {
         });
     }
   }
-
   changeMessage() {
     this.authShopContributorService
       .changeNewItemMessage(this.message)
@@ -220,8 +140,8 @@ export class ItemControllerComponent implements OnInit {
       });
   }
   advertiseItems() {
-    var publishDate = this.getPublishDate(this.shop);
-    if (!this.isPublish(publishDate)) {
+    var publishedDate = this.getPublishedDate(this.shop);
+    if (!this.isPublishedFunc(publishedDate)) {
       var obj = {
         message: this.message,
         items: this.displayItems.map(x => x['_id'])
@@ -231,7 +151,7 @@ export class ItemControllerComponent implements OnInit {
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(result => {
           WsToastService.toastSubject.next({ content: "Shop is advertised!", type: 'success' });
-          this.is_publish = true;
+          this.isPublished = true;
           this.shop.new = result['new'];
           this.sharedShopService.shop.next(this.shop);
         }, err => {
@@ -241,6 +161,30 @@ export class ItemControllerComponent implements OnInit {
       WsToastService.toastSubject.next({
         content: 'Shop has been published today. Try it tomorrow.', type: 'danger'
       });
+    }
+  }
+  // openMultipleEditModal() {
+  //   this.action = this.editMultipleItems.bind(this);
+  //   return this.openModal('editMultipleItemsModal');
+  // }
+  openAddToModal() {
+    this.getCategoryByShopId();
+    this.action = this.onAddItemToCategory.bind(this, this.editItems);
+    this.openModal('addToCategoriesModal');
+  }
+  openMoveModal() {
+    this.getCategoryByShopId();
+    this.action = this.onMoveCategory.bind(this, this.editItems);
+    this.openModal('moveToCategoriesModal');
+  }
+  openRemoveModal() {
+    this.action = this.param == 'uncategorized' ? this.removeItemsPermanantly.bind(this) : this.removeItemsFromCategory.bind(this);
+    this.openModal('removeItemsModal');
+  }
+  isActionOpen = false;
+  checkSelectedItems(dropdown) {
+    if (!this.editItems.length) {
+      WsToastService.toastSubject.next({ content: 'Please select items!', type: 'danger'})
     }
   }
   markAsNew() {
@@ -403,8 +347,8 @@ export class ItemControllerComponent implements OnInit {
       .subscribe(result => {
         var categoryList = result['result'];
         this.categoryList = result['result'];
-        this.selectedCategory = this.categoryList.find(x => x.name === this.category_name);
-        this.displayCategoryList = this.getOtherCategoryByName(categoryList, this.category_name);
+        this.selectedCategory = this.categoryList.find(x => x.name === this.categoryName);
+        this.displayCategoryList = this.getOtherCategoryByName(categoryList, this.categoryName);
       })
   }
   getOtherCategoryByName(categoryList, name) {
@@ -480,18 +424,18 @@ export class ItemControllerComponent implements OnInit {
       queryParamsHandling: 'merge'
     });
   }
-  getPublishInfo() {
-    let publishDate = this.getPublishDate(this.shop);
-    this.is_publish = this.isPublish(publishDate);
+  getPublishedInfo() {
+    let publishedDate = this.getPublishedDate(this.shop);
+    this.isPublished = this.isPublishedFunc(publishedDate);
     if (this.shop && this.shop.new) {
       this.message = this.shop.new.message;
     }
   }
   // Tested
-  getPublishDate(shop) {
+  getPublishedDate(shop) {
     var returnDate;
-    if (shop && shop.new && shop.new.publish_at) {
-      returnDate = new Date(shop.new.publish_at);
+    if (shop && shop.new && shop.new.published_at) {
+      returnDate = new Date(shop.new.published_at);
     } else {
       returnDate = this.getYesterdayDate(new Date()).toDate();
     }
@@ -503,9 +447,9 @@ export class ItemControllerComponent implements OnInit {
     return moment(date).add(-1, 'days');
   }
   // Tested
-  isPublish(publishDate) {
-    var publishAt = this.getDate(publishDate);
-    return this.isDateToday(publishAt);
+  isPublishedFunc(publishedDate) {
+    var publishedAt = this.getDate(publishedDate);
+    return this.isDateToday(publishedAt);
   }
   // Tested
   isDateToday(compareDate) {
