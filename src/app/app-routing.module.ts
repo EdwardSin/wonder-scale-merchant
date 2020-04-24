@@ -31,8 +31,7 @@ import { AuthGuard } from './guards/auth.guard';
 import { ShopResolver } from '@components/resolvers/shopResolver.service';
 import { ResetPasswordComponent } from '@components/feature/authentication/reset-password/reset-password.component';
 import { ModifyItemComponent } from '@components/shop/catalogue/modify-item/modify-item.component';
-import { ColorPickerComponent } from '@components/shop/catalogue/color-picker/color-picker.component';
-import { ImagePickerComponent } from '@components/shop/catalogue/image-picker/image-picker.component';
+import { ModifyItemTypeComponent } from '@components/shop/catalogue/modify-item-type/modify-item-type.component';
 
 
 const routes: Routes = [{
@@ -80,20 +79,11 @@ const routes: Routes = [{
 }, {
   path: 'item',
   component: ModifyItemComponent,
-  outlet: 'modal',
-  children: [
-    { path: '', redirectTo: 'color', pathMatch: 'full', },
-    {
-      path: 'color',
-      component: ColorPickerComponent,
-      outlet: 'type'
-    },
-    {
-      path: 'image',
-      component: ImagePickerComponent,
-      outlet: 'type'
-    }
-  ]
+  outlet: 'modal'
+}, {
+  path: 'item-types',
+  component: ModifyItemTypeComponent,
+  outlet: 'modal'
 }, {
   path: 'shops/:username',
   component: MainComponent,

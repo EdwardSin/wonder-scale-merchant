@@ -1,10 +1,9 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Constants } from '@constants/constants';
 import { environment } from '@environments/environment';
-import { ItemType } from '@wstypes/item.type';
 import { AuthCategoryContributorService } from '@services/http/auth-shop/contributor/auth-category-contributor.service';
 import { AuthDefaultSettingContributorService } from '@services/http/auth-shop/contributor/auth-default-setting-contributor.service';
 import { AuthItemContributorService } from '@services/http/auth-shop/contributor/auth-item-contributor.service';
@@ -13,10 +12,11 @@ import { SharedShopService } from '@services/shared/shared-shop.service';
 import { WsLoading } from '@components/elements/ws-loading/ws-loading';
 import { WsToastService } from '@components/elements/ws-toast/ws-toast.service';
 import { ImageHelper } from '@helpers/imagehelper/image.helper';
-import { UploadHelper } from '@helpers/uploadhelper/upload.helper';
 import _ from 'lodash';
-import { from, of, Subject } from 'rxjs';
+import { from, of, Subject, forkJoin } from 'rxjs';
 import { finalize, map, mergeMap, takeUntil } from 'rxjs/operators';
+import { WSFormBuilder } from '@builders/wsformbuilder';
+import { RoutePartsService } from '@services/general/route-parts.service';
 
 
 @Component({
@@ -27,7 +27,6 @@ import { finalize, map, mergeMap, takeUntil } from 'rxjs/operators';
 })
 export class ModifyItemComponent implements OnInit {
   itemGroup: FormGroup;
-  ecommerceGroup: FormGroup;
   shop;
   currentItem;
   tempItem;
@@ -35,24 +34,22 @@ export class ModifyItemComponent implements OnInit {
   allProfileItems = [];
   allDescriptionItems = [];
   categories = [];
-  selectedCategory;
   environment = environment;
   loading: WsLoading = new WsLoading;
+  addItemLoading: WsLoading = new WsLoading;
   //selectedType: ItemType;
   selectedTypeIndex: number;
   private ngUnsubscribe: Subject<any> = new Subject;
   @ViewChild('itemProfileUpload', { static: false }) itemProfileUpload: ElementRef;
   @ViewChild('itemDescriptionUpload', { static: false }) itemDescriptionUpload: ElementRef;
   profileImageIndex = 0;
-  isSetEcommerce: Boolean = false;
-  item_id;
+  itemId;
   profileImageName;
-  itemTypes: Array<ItemType> = [];
   defaultSetting = {
     is__new: true,
     isInStock: true,
     isPriceDisplayed: true,
-    isMarkedAsPublished: true,
+    isPublished: true,
     isPickup: false,
     isEcommerce: false,
     currency: 'MYR'
@@ -61,50 +58,36 @@ export class ModifyItemComponent implements OnInit {
   constructor(private sharedShopService: SharedShopService,
     private router: Router,
     private route: ActivatedRoute,
-    private ref: ChangeDetectorRef,
     private sharedCategoryService: SharedCategoryService,
+    private routePartsService: RoutePartsService,
     private authCategoryContributorService: AuthCategoryContributorService,
     private authDefaultSettingContributorService: AuthDefaultSettingContributorService,
     private authItemContributorService: AuthItemContributorService) {
-    this.getCurrency();
-    this.createItemGroup();
-    this.createEcommerceGroup();
-    this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe(param => {
-      if (param.colorName) {
-        this.ecommerceGroup.value['color'] = param.colorName || 'Color';
-        this.ecommerceGroup.value['hexColor'] = param.colorName || '';
-      }
-      else if (param.url) {
-        this.ecommerceGroup.value['image'] = param.url || '';
-      }
-    })
+      this.loading.start();
+      this.getCurrency();
+      this.itemGroup = WSFormBuilder.createItemForm();
   }
 
   ngOnInit() {
     this.sharedShopService.shop.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       if (result) {
         this.shop = result;
-        this.setItemSettings();
+        this.itemGroup.get('currency').setValue(this.shop.currency);
         this.getDefaultSetting();
       }
     });
     this.getItem();
     this.getCategories();
   }
-  getCategory() {
-    this.sharedShopService.selectedCategory.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
-      if (result) {
-        this.selectedCategory = result;
-      }
-    })
-  }
   getItem() {
-    let item_id = this.route.snapshot.queryParams['id'];
-    if (item_id) {
-      this.authItemContributorService.getItemById(item_id).pipe(takeUntil(this.ngUnsubscribe))
+    let itemId = this.route.snapshot.queryParams['id'];
+    if (itemId) {
+      this.authItemContributorService.getItemById(itemId).pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(result => {
-          this.currentItem = result;
-          this.setupItemForm(this.currentItem);
+          if(result) {
+            this.currentItem = result['result'];
+            this.setupItemForm(this.currentItem);
+          }
         })
     }
   }
@@ -112,6 +95,7 @@ export class ModifyItemComponent implements OnInit {
     this.authCategoryContributorService.getAuthenticatedCategoriesByShopId().pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
         this.categories = result['result'];
+        this.setDefaultCategory(this.categories);
       })
   }
   getCurrency() {
@@ -124,42 +108,8 @@ export class ModifyItemComponent implements OnInit {
       }
     });
   }
-  createItemGroup() {
-    let formBuilder = new FormBuilder();
-    this.itemGroup = formBuilder.group({
-      refId: ['', [Validators.required, Validators.maxLength(30)]],
-      name: ['', [Validators.required, Validators.maxLength(50)]],
-      currency: ['', [Validators.required]],
-      price: [0.00, [Validators.required]],
-      quantity: [''],
-      categories: [''],
-      description: ['', [Validators.maxLength(400)]],
-      isEntityNew: [true, [Validators.required]],
-      isInStock: [true, [Validators.required]],
-      isPriceDisplayed: [false, [Validators.required]],
-      isMarkedAsPublished: [false, Validators.required],
-      isEcommerce: [false],
-      isPickup: [false]
-    })
-  }
-  createEcommerceGroup() {
-    let formBuilder = new FormBuilder();
-    this.ecommerceGroup = formBuilder.group({
-      brand: [''],
-      warranty: [''],
-      image: [''],
-      color: ['Color'],
-      hexColor: [''],
-      sizes: [''],
-      quantity: [''],
-      weight: ['']
-    })
-  }
-  setItemSettings() {
-    this.itemGroup.get('currency').setValue(this.shop.currency);
-  }
   getDefaultSetting() {
-    this.authDefaultSettingContributorService.getDefaultItemSettingByShopId().pipe(takeUntil(this.ngUnsubscribe))
+    this.authDefaultSettingContributorService.getDefaultItemSettingByShopId().pipe(takeUntil(this.ngUnsubscribe), finalize(() => _.delay(() => { this.loading.stop();}, 500)))
       .subscribe(result => {
         if (result) {
           this.defaultSetting = <any>result;
@@ -167,57 +117,101 @@ export class ModifyItemComponent implements OnInit {
         }
       })
   }
+  setDefaultCategory(categories) {
+    let routeParts = this.routePartsService.generateRouteParts(this.route.parent.snapshot);
+    if (routeParts[1]['title'] == 'cat') {
+      let categoryName = RoutePartsService.parseText(routeParts[0]);
+      let category = categories.find(category => category.name == categoryName);
+      if (category){
+        this.itemGroup.controls['categories'].setValue([category._id]);
+      }
+    }
+  }
   setupDefaultSetting() {
-
     this.itemGroup.patchValue({
       ...this.defaultSetting,
       currency: this.defaultSetting.currency || this.shop.currency
-    })
+    });
+    if(this.currentItem) {
+      this.itemGroup.patchValue({...this.currentItem});
+    }
   }
   validateBasicForm() {
     let refId = this.itemGroup.get('refId');
     let name = this.itemGroup.get('name');
     let price = this.itemGroup.get('price');
+    let discount = this.itemGroup.get('discount');
+    let weight = this.itemGroup.get('weight');
+    let quantity = this.itemGroup.get('quantity');
     let description = this.itemGroup.get('description');
-
+    let warranty = this.itemGroup.get('warranty');
+    let brand = this.itemGroup.get('brand');
+    let priceRegex = /^\d*(?:\.\d{1,2})?$/;
+    let intergerRegex = /^\d+$/;
     if (refId.errors && refId.errors.required) {
-      WsToastService.toastSubject.next({ content: 'ID is required!', type: 'danger' });
+      WsToastService.toastSubject.next({ content: 'SKU is required!', type: 'danger' });
       return false;
     }
     else if (refId.errors && refId.errors.maxlength) {
-      WsToastService.toastSubject.next({ content: 'ID is too long. Max 30 characters!', type: 'danger' });
+      WsToastService.toastSubject.next({ content: 'SKU is too long. Max 36 characters!', type: 'danger' });
       return false;
     }
     else if (name.errors && name.errors.required) {
-      WsToastService.toastSubject.next({ content: 'Name is required!', type: 'danger' });
+      WsToastService.toastSubject.next({ content: 'Product name is required!', type: 'danger' });
       return false;
     } else if (name.errors && name.errors.maxlength) {
-      WsToastService.toastSubject.next({ content: 'Name is too long. Max 50 characters!', type: 'danger' });
+      WsToastService.toastSubject.next({ content: 'Product name is too long. Max 128 characters!', type: 'danger' });
       return false;
     }
     else if (price.errors && price.errors.required) {
       WsToastService.toastSubject.next({ content: 'Price is required!', type: 'danger' });
       return false;
     }
+    else if (price.value && !priceRegex.test(price.value)){
+      WsToastService.toastSubject.next({ content: 'Price is invalid!', type: 'danger' });
+      return false;
+    } 
+    else if (discount.value && (!priceRegex.test(discount.value) || +discount.value > 100)){
+      WsToastService.toastSubject.next({ content: 'Discount is invalid!', type: 'danger' });
+      return false;
+    }
+    else if (weight.value && !priceRegex.test(weight.value)){
+      WsToastService.toastSubject.next({ content: 'Weight is invalid!', type: 'danger' });
+      return false;
+    }
+    else if (quantity.value && !intergerRegex.test(quantity.value)){
+      WsToastService.toastSubject.next({ content: 'Quantity is invalid!', type: 'danger' });
+      return false;
+    } else if(quantity.value && +quantity.value > 999999) {
+      WsToastService.toastSubject.next({ content: 'Quantity should less than 999999!', type: 'danger' });
+      return false;
+    }
     else if (description.errors && description.errors.maxlength) {
-      WsToastService.toastSubject.next({ content: 'Description is too long. Max 500 characters!', type: 'danger' });
+      WsToastService.toastSubject.next({ content: 'Description is too long. Max 256 characters!', type: 'danger' });
+      return false;
+    }
+    else if (brand.errors && brand.errors.maxlength) {
+      WsToastService.toastSubject.next({ content: 'Brand is too long. Max 256 characters!', type: 'danger' });
+      return false;
+    }
+    else if (warranty.errors && warranty.errors.maxlength) {
+      WsToastService.toastSubject.next({ content: 'Warranty is too long. Max 256 characters!', type: 'danger' });
       return false;
     }
     return true;
   }
   setupItemForm(item) {
-    this.itemGroup.patchValue(item)
-    this.item_id = item['_id'];
-    this.itemTypes = item['types'];
-    this.profileImageIndex = item['profile_image_index'];
-    this.allProfileItems = item.profile_images.map(image => { return { filename: image.url, type: 'url' } });
-    this.allDescriptionItems = item.description_images.map(image => { return { filename: image.url, type: 'url' } });
-    this.profileImageName = this.allProfileItems.length ? this.allProfileItems[this.profileImageIndex].filename : '';
+    this.itemGroup.patchValue(item);
+    this.itemId = item['_id'];
+    this.profileImageIndex = item['profileImageIndex'] > -1 ? item['profileImageIndex']: 0;
+    this.allProfileItems = item.profileImages.map(image => { return { name: image, type: 'url' } });
+    this.allDescriptionItems = item.descriptionImages.map(image => { return { name: image, type: 'url' } });
+    this.profileImageName = this.allProfileItems.length ? this.allProfileItems[this.profileImageIndex].name : ''; 
   }
   addItem() {
     let currentItem = {
       ...this.itemGroup.value,
-      profile_image_index: this.profileImageIndex
+      profileImageIndex: this.profileImageIndex
     }
     return this.authItemContributorService.addItem(currentItem);
   }
@@ -225,119 +219,73 @@ export class ModifyItemComponent implements OnInit {
     let currentItem = {
       ...this.currentItem,
       ...this.itemGroup.value,
-      types: this.itemTypes,
-      profile_image_index: this.profileImageIndex
+      profileImageIndex: this.profileImageIndex
     };
     return this.authItemContributorService.editItem(currentItem);
   }
-  updateItemType() {
-    let currentItem = {
-      item_id: this.currentItem._id,
-      ...this.ecommerceGroup.value,
-      types: this.itemTypes,
-    };
-    this.authItemContributorService.editItemTypes(currentItem)
-      .pipe(takeUntil(this.ngUnsubscribe),
-        finalize(() => { this.loading.stop() }))
-      .subscribe(result => {
-        this.refreshCategories();
-        this.sharedCategoryService.categoriesRefresh.next(true);
-        this.router.navigate([{ outlets: { modal: null } }]);
-      });
-  }
   uploadAndAddItem() {
     if (this.validateBasicForm()) {
-      this.addItem().pipe(
-        takeUntil(this.ngUnsubscribe),
-        mergeMap((result) => {
-          this.item_id = result['_id'];
-          this.tempItem = result;
-          return this.allProfileItems.length ? this.uploadProfileImages(this.allProfileItems) : of(0);
-        }),
-        mergeMap(result => {
-          return this.allDescriptionItems.length ? this.uploadDescriptionImages(this.allDescriptionItems) : of(0);
-        }),
-        finalize(() => { this.loading.stop() })
-      ).subscribe(result => {
-        this.router.navigate([{ outlets: { modal: 'item' } }], { queryParams: { id: this.item_id } });
+      this.addItemLoading.start();
+      this.addItem().pipe(takeUntil(this.ngUnsubscribe), 
+        mergeMap((result) => 
+          forkJoin((() => {
+            this.itemId = result['result']['_id'];
+            this.tempItem = result['result'];
+            return this.allProfileItems.length ? this.uploadProfileImages(this.allProfileItems) : of(0);
+          })(), (() => {
+            return this.allDescriptionItems.length ? this.uploadDescriptionImages(this.allDescriptionItems) : of(0);
+          })())
+      ),
+      finalize(() => { this.addItemLoading.stop() }))
+      .subscribe(result => {
         this.currentItem = this.tempItem;
-        this.isSetEcommerce = true;
+        this.router.navigate([{ outlets: {modal: 'item-types'}}], {queryParams: { id: this.itemId }, queryParamsHandling: 'merge'});
         this.refreshCategories();
         this.sharedCategoryService.categoriesRefresh.next(true);
-      })
+      }, err => {
+        WsToastService.toastSubject.next({ content: 'Error when creating item!', type: 'danger' });
+      });
     }
   }
   uploadAndEditItem() {
     if (this.validateBasicForm()) {
-      this.loading.start();
-      this.editItem().pipe(
-        takeUntil(this.ngUnsubscribe),
-        mergeMap((result) => {
-          let profileItems = this.allProfileItems.filter(x => x.type == 'blob');
+      this.addItemLoading.start();
+      this.editItem().pipe(takeUntil(this.ngUnsubscribe), 
+        mergeMap((result) => 
+          forkJoin((() => {
+            let profileItems = this.allProfileItems.filter(x => x.type == 'blob');
           return profileItems.length ? this.uploadProfileImages(profileItems) : of(0);
-        }),
-        mergeMap(result => {
-          let descriptionItems = this.allDescriptionItems.filter(x => x.type == 'blob');
-          return descriptionItems.length ? this.uploadDescriptionImages(descriptionItems) : of(0);
-        }),
-        finalize(() => { this.loading.stop() })
-      ).subscribe(result => {
-        this.isSetEcommerce = true;
+          })(), (() => {
+            let descriptionItems = this.allDescriptionItems.filter(x => x.type == 'blob');
+            return descriptionItems.length ? this.uploadDescriptionImages(descriptionItems) : of(0);
+          })())
+      ),
+      finalize(() => { this.addItemLoading.stop(); }))
+      .subscribe(result => {
         this.refreshCategories();
         this.sharedCategoryService.categoriesRefresh.next(true);
-      })
+        this.router.navigate([{ outlets: {modal: null}}], {queryParamsHandling: 'merge'});
+      }, err => {
+        WsToastService.toastSubject.next({ content: 'Error when editing item!', type: 'danger' });
+      });
     }
   }
-  resetForm() {
-    this.itemGroup.patchValue({
-      refId: '',
-      name: '',
-      currency: this.shop.currency,
-      price: '0.00',
-      quantity: 0,
-      isEntityNew: true,
-      isInStock: true,
-      isPriceDisplayed: true,
-      isMarkedAsPublished: false,
-      isEcommerce: false,
-      isPickup: false,
-      description: ''
-    })
-
-    this.profileImageName = '';
-    this.allProfileItems = [];
-    this.allDescriptionItems = [];
-    this.loading.stop();
-  }
-  fileProfileChangeEvent(event) {
-    var preProfileFiles = <Array<File>>event.target.files;
-    let uploadedProfileFiles = UploadHelper.getMaxAbleUploadProfileFiles(this.allProfileItems.length, preProfileFiles, 5);
-    UploadHelper.notificationIfOver(uploadedProfileFiles, preProfileFiles);
-    UploadHelper.showImages([], uploadedProfileFiles, (images) => { return callback.bind(this)(images) });
-    this.itemProfileUpload.nativeElement.value = '';
-
-    function callback(image) {
-      let uniqueNo = this.ID();
-      if (this.profileImageName == '') {
-        this.profileImageName = uniqueNo + image['name'];
-        this.profileImageIndex = 0;
+  onProfileImageUploaded(event) {
+    if (!this.profileImageName) {
+      this.profileImageName = event[0].name;
+    }
+    event.forEach(item => {
+      if (!this.allProfileItems.includes(item)) {
+        this.allProfileItems.push(item);
       }
-      this.allProfileItems.push({ url: image['base64'], filename: uniqueNo + image['name'], loading: false, done: false, type: 'blob', id: uniqueNo });
-      this.ref.detectChanges();
-    }
+    });
   }
-  fileDescriptionChangeEvent(event) {
-    var preProfileFiles = <Array<File>>event.target.files;
-    let uploadedDescriptionFiles = UploadHelper.getMaxAbleUploadProfileFiles(this.allDescriptionItems.length, preProfileFiles, 10);
-    UploadHelper.notificationIfOver(uploadedDescriptionFiles, preProfileFiles);
-    UploadHelper.showImages([], <Array<File>>event.target.files, (images) => callback.bind(this)(images));
-    this.itemDescriptionUpload.nativeElement.value = '';
-
-    function callback(image) {
-      let uniqueNo = this.ID();
-      this.allDescriptionItems.push({ url: image['base64'], filename: image['name'], loading: false, done: false, type: 'blob', id: uniqueNo });
-      this.ref.detectChanges();
-    }
+  onDescriptionImageUploaded(event) {
+    event.forEach(item => {
+      if (!this.allDescriptionItems.includes(item)) {
+        this.allDescriptionItems.push(item);
+      }
+    });
   }
   uploadProfileImages(uploadProfileItems) {
     uploadProfileItems.forEach(image => { image.loading = true; })
@@ -345,13 +293,14 @@ export class ModifyItemComponent implements OnInit {
       .pipe(mergeMap(image => {
         let obj = {
           id: image['id'],
-          file: image['url'],
-          profile_image_index: this.profileImageIndex,
-          item_id: this.item_id
+          file: image['base64'],
+          profileImageIndex: this.profileImageIndex,
+          itemId: this.itemId
         };
         return this.authItemContributorService.editProfileImage(obj);
       }), map(result => {
         this.doneUpload(uploadProfileItems, result['id'], result['filename'])
+        return 'done';
       }));
   }
   uploadDescriptionImages(uploadDescriptionItems) {
@@ -360,63 +309,70 @@ export class ModifyItemComponent implements OnInit {
       .pipe(mergeMap(image => {
         let obj = {
           id: image['id'],
-          file: image['url'],
-          item_id: this.item_id
+          file: image['base64'],
+          itemId: this.itemId
         };
         return this.authItemContributorService.editDescriptionImage(obj)
       }),
         map(result => {
           this.doneUpload(uploadDescriptionItems, result['id'], result['filename'])
+          return 'done';
         }));
   }
+  
   removeProfileImage(filename) {
     var file = ImageHelper.getUploadProfileItem(this.allProfileItems, filename);
-    if (file && file.type == 'blob') {
-      _.remove(this.allProfileItems, (x) => x == file);
-      var image = ImageHelper.getFormattedImage(filename);
-      this.profileImageIndex = ImageHelper.getRemoveProfileImageIndex(this.profileImageIndex);
-      this.profileImageName = this.allProfileItems.length ? this.allProfileItems[this.profileImageIndex].filename : '';
-      var profileImage = ImageHelper.getProfileImageIfEmpty(this.allProfileItems, this.profileImageIndex);
-    }
-    else {
-      let result = confirm('Are you sure to remove?');
-      if (result) {
-        let obj = {
-          item_id: this.currentItem._id,
-          filename: file.filename
-        }
-        this.authItemContributorService.removeProfileImage(obj).pipe(takeUntil(this.ngUnsubscribe))
-          .subscribe(result => {
-            this.allProfileItems = this.allProfileItems.filter(x => x.filename != filename);
-            this.profileImageIndex = ImageHelper.getRemoveProfileImageIndex(this.profileImageIndex);
-            this.profileImageName = this.allProfileItems.length ? this.allProfileItems[this.profileImageIndex].filename : '';
-          });
+    
+    if (file) {
+      if(file.type == 'blob') {
+        _.remove(this.allProfileItems, (x) => x == file);
+        this.profileImageIndex = ImageHelper.getRemoveProfileImageIndex(this.profileImageIndex);
+        this.profileImageName = this.allProfileItems.length ? this.allProfileItems[this.profileImageIndex].name : '';
       }
+      else {
+        let result = confirm('Are you sure to remove?');
+        if (result) {
+          let obj = {
+            itemId: this.currentItem._id,
+            filename: file.name
+          }
+          this.authItemContributorService.removeProfileImage(obj).pipe(takeUntil(this.ngUnsubscribe))
+            .subscribe(result => {
+              this.allProfileItems = this.allProfileItems.filter(x => x.name != filename);
+              this.profileImageIndex = ImageHelper.getRemoveProfileImageIndex(this.profileImageIndex);
+              this.profileImageName = this.allProfileItems.length ? this.allProfileItems[this.profileImageIndex].name : '';
+            });
+        }
+      }
+    } else {
+      WsToastService.toastSubject.next({content: 'Image is not found!', type: 'danger'});
     }
   }
   removeDescriptionImage(filename) {
     var file = ImageHelper.getUploadProfileItem(this.allDescriptionItems, filename);
-    if (file && file.type == 'blob') {
-      _.remove(this.allDescriptionItems, (x) => x == filename);
-      _.remove(this.allDescriptionItems, (x) => x == file);
-      file['done'] = false;
-      var image = ImageHelper.getFormattedImage('item_thumbnails');
-    }
-    else {
-      let result = confirm('Are you sure to remove?');
-      if (result) {
-        let obj = {
-          item_id: this.currentItem._id,
-          filename: file.filename
-        }
-
-        this.authItemContributorService.removeDescriptionImage(obj).pipe(takeUntil(this.ngUnsubscribe))
-          .subscribe(result => {
-            this.allDescriptionItems = this.allDescriptionItems.filter(x => x.filename != filename);
-          });
+    if (file) {
+        if(file.type == 'blob') {
+        _.remove(this.allDescriptionItems, (x) => x.name == filename);
+        file['done'] = false;
       }
+      else {
+        let result = confirm('Are you sure to remove?');
+        if (result) {
+          let obj = {
+            itemId: this.currentItem._id,
+            filename: file.name
+          }
+          this.authItemContributorService.removeDescriptionImage(obj).pipe(takeUntil(this.ngUnsubscribe))
+            .subscribe(result => {
+              this.allDescriptionItems = this.allDescriptionItems.filter(x => x.name != filename);
+            });
+        }
+      }
+    } else {
+      WsToastService.toastSubject.next({content: 'Image is not found!', type: 'danger'});
     }
   }
+  
   refreshCategories() {
     this.sharedCategoryService.refreshCategories();
   }
@@ -429,59 +385,7 @@ export class ModifyItemComponent implements OnInit {
   }
   selectProfileImage(name) {
     this.profileImageName = name;
-    this.profileImageIndex = this.allProfileItems.findIndex(x => x.filename == this.profileImageName);
-  }
-  ID() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-      var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-      return v.toString(16);
-    });
-  }
-  addItemType() {
-    let type = {
-      quantity: this.ecommerceGroup.value.quantity || 999,
-      sizes: this.ecommerceGroup.value.sizes || 'All Sizes',
-      hexColor: this.ecommerceGroup.value.hexColor,
-      color: this.ecommerceGroup.value.color,
-      weight: this.ecommerceGroup.value.weight || 0.5
-    }
-    this.itemTypes.push({ ...type });
-  }
-  editItemType() {
-    this.itemTypes[this.selectedTypeIndex] = {
-      quantity: this.ecommerceGroup.value.quantity || 999,
-      sizes: this.ecommerceGroup.value.sizes || 'All Sizes',
-      hexColor: this.ecommerceGroup.value.hexColor,
-      color: this.ecommerceGroup.value.color,
-      weight: this.ecommerceGroup.value.weight || 0.5
-    }
-
-    this.resetTypeForm();
-  }
-  selectType(index) {
-    if (this.selectedTypeIndex == index) {
-      this.resetTypeForm();
-      return;
-    }
-    this.selectedTypeIndex = index;
-    let type = this.itemTypes[index];
-    this.ecommerceGroup.patchValue({ ...type });
-  }
-  resetTypeForm() {
-    this.selectedTypeIndex = null;
-    this.ecommerceGroup.patchValue({
-      color: 'Color',
-      quantity: '',
-      hexColor: '',
-      weight: '',
-      sizes: []
-    })
-  }
-  removeItemType(type) {
-    _.remove(this.itemTypes, (x) => x == type);
-  }
-  doneAllUploaded() {
-    return this.allProfileItems.filter(x => !x.done && x.type == 'blob').length === 0 && this.allDescriptionItems.filter(x => !x.done && x.type == 'blob').length === 0;
+    this.profileImageIndex = this.allProfileItems.findIndex(x => x.name == this.profileImageName);
   }
   dropProfile(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.allProfileItems, event.previousIndex, event.currentIndex);

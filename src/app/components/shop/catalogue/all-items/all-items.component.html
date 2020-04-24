@@ -1,6 +1,6 @@
-<h4 class="ws-title">All<span class='fas fa-info-circle ml-2'></span></h4>
+<h4 class="ws-title">All<span title="Display all items" class='fas fa-info-circle ml-2 font-9'></span></h4>
 
-<div *ngIf="allItems?.length; else loadingTemplate">
+<div *ngIf="numberOfAllItems; else loadingTemplate">
     <!-- <div class="p-3 alert-warning mb-2 position-relative">Published item to show to public!</div> -->
     <item-controller></item-controller>
     <div *ngIf="displayItems?.length; else searchLoadingTemplate">

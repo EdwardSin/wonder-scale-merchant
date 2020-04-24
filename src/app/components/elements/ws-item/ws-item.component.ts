@@ -1,7 +1,12 @@
-import { Component, ElementRef, HostListener, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, OnInit, SimpleChanges, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { Subject } from 'rxjs';
 import { environment } from '@environments/environment';
 import { WsModalService } from '@components/elements/ws-modal/ws-modal.service';
+import { Item } from '@objects/item';
+import { Currency } from '@objects/currency';
+import { CurrencyOption } from '@objects/currency.option';
+import { CurrencyService } from '@services/http/general/currency.service';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'ws-item',
@@ -9,6 +14,8 @@ import { WsModalService } from '@components/elements/ws-modal/ws-modal.service';
   styleUrls: ['./ws-item.component.scss']
 })
 export class WsItemComponent implements OnInit {
+  Currency = Currency;
+  currencyOption: CurrencyOption = new CurrencyOption;
   @Input() item: Item;
   @Input() showDelete: boolean;
   @Input() showSeller: boolean;
@@ -35,7 +42,9 @@ export class WsItemComponent implements OnInit {
   scroll$;
   private ngUnsubscribe: Subject<any> = new Subject();
   constructor(
-    private modalService: WsModalService
+    private modalService: WsModalService,
+    private currencyService: CurrencyService,
+    private ref: ChangeDetectorRef
   ) {
   }
 
@@ -49,11 +58,28 @@ export class WsItemComponent implements OnInit {
     if (this.free_size_img) {
       this.free_size_img.nativeElement.height = this.free_size_img.nativeElement.width;
     }
-
+    this.currencyService.currencyRate
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe(result => {
+      if (result) {
+        this.currencyOption.currencies = result;
+        this.currencyService.selectedCurrency
+          .pipe(takeUntil(this.ngUnsubscribe))
+          .subscribe(result => {
+            if (result) {
+              this.currencyOption.target_currency = result;
+              this.currencyOption.symbol = this.currencyOption.currencySymbols[result];
+              this.currencyOption.rate = this.currencyOption.currencies[result];
+              this.ref.detectChanges();
+            }
+          });
+        this.ref.detectChanges();
+      }
+    });
   }
   ngOnChanges(changes: SimpleChanges) {
     if (changes['item'] && this.item) {
-      this.item['profileImage'] = this.item['profile_images'].length > 0 ? this.item['profile_images'][this.item['profile_image_index']] :
+      this.item['profileImage'] = this.item.profileImages.length > 0 ? this.item.profileImages[this.item.profileImageIndex] :
         environment.IMAGE_URL + 'upload/images/img_not_available.png'
     }
   }
@@ -79,14 +105,6 @@ export class WsItemComponent implements OnInit {
   }
 }
 
-export class Item {
-  name: string;
-  profileImage: string;
-  price: number;
-  discount: number;
-  currency: string;
-  nofound?: boolean;
-}
 export class Seller {
   name: string;
 }

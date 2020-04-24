@@ -8,6 +8,7 @@ import { WsLoading } from '@components/elements/ws-loading/ws-loading';
 import { DocumentHelper } from '@helpers/documenthelper/document.helper';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 
 @Component({
   selector: 'app-new-items',
@@ -15,14 +16,16 @@ import { takeUntil } from 'rxjs/operators';
   styleUrls: ['./new-items.component.scss']
 })
 export class NewItemsComponent implements OnInit {
-  allItems: Array<any> = [];
   displayItems: Array<any> = [];
   loading: WsLoading = new WsLoading;
+  numberOfNewItems = 0;
+  queryParams = {page: 1, keyword: '', order: '', orderBy: 'asc'};
   environment = environment;
 
   private ngUnsubscribe: Subject<any> = new Subject();
 
   constructor(
+    private route: ActivatedRoute,
     private authItemContributorService: AuthItemContributorService,
     private sharedItemService: SharedItemService,
     private sharedCategoryService: SharedCategoryService,
@@ -32,21 +35,28 @@ export class NewItemsComponent implements OnInit {
   ngOnInit() {
     let shop_name = this.sharedShopService.shop_name;
     DocumentHelper.setWindowTitleWithWonderScale('New | ' + shop_name);
+    this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe(queryParam => {
+      this.queryParams = {keyword: queryParam['s_keyword'], page: queryParam['page'], order: queryParam['order'], orderBy: queryParam['by']};
+      this.getNewItems(this.queryParams.keyword, this.queryParams.page, this.queryParams.order, this.queryParams.orderBy);
+    })
     this.sharedCategoryService.newItemsRefresh.pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(res => {
-        this.getNewItems();
-      })
+    .subscribe(res => {
+      this.getNewItems(this.queryParams.keyword, this.queryParams.page, this.queryParams.order , this.queryParams.orderBy);
+    })
+    this.sharedCategoryService.numberOfNewItems.pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe(res => {
+      this.numberOfNewItems = res;
+    })
   }
 
-  getNewItems() {
+  getNewItems(keyword='', page=1, order='alphabet', orderBy) {
     this.loading.start();
-    this.authItemContributorService.getAuthenticatedNewItemsByShopId().pipe(takeUntil(this.ngUnsubscribe))
+    this.authItemContributorService.getAuthenticatedNewItemsByShopId({keyword, page, order, orderBy}).pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
-        this.allItems = result.result;
         this.displayItems = result.result;
-        this.sharedCategoryService.numberOfNewItems.next(this.allItems.length);
-        this.sharedItemService.allItems.next(this.allItems);
         this.sharedItemService.displayItems.next(this.displayItems);
+        this.sharedCategoryService.numberOfCurrentTotalItems.next(result['total']);
         this.loading.stop();
       })
   }

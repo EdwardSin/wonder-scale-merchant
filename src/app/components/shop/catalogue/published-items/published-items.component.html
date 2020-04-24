@@ -1,5 +1,5 @@
-<h4 class="ws-title">Published<span class='fas fa-info-circle ml-2'></span></h4>
-<div *ngIf="allItems.length; else loadingTemplate">
+<h4 class="ws-title">Published<span title="Display all published items" class='fas fa-info-circle ml-2 font-9'></span></h4>
+<div *ngIf="numberOfPublishedItems; else loadingTemplate">
     <item-controller></item-controller>
     <div *ngIf="displayItems.length; else searchLoadingTemplate">
         <item-view [showCategory]="true"></item-view>

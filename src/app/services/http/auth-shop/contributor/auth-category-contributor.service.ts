@@ -30,8 +30,8 @@ export class AuthCategoryContributorService {
   removeItemsFromCategory(obj) {
     return this.http.put(AuthCategoryContributorUrl.removeItemsFromCategoryUrl, obj, this.accessTokenService.getAccessToken());
   }
-  moveCategory(category_id, obj) {
-    return this.http.put(AuthCategoryContributorUrl.moveCategoryUrl + '/' + category_id, obj, this.accessTokenService.getAccessToken());
+  moveCategory(obj) {
+    return this.http.put(AuthCategoryContributorUrl.moveCategoryUrl, obj, this.accessTokenService.getAccessToken());
   }
   rearrangeCategories(obj) {
     return this.http.put(AuthCategoryContributorUrl.rearrangeCategoriesUrl, obj, this.accessTokenService.getAccessToken());

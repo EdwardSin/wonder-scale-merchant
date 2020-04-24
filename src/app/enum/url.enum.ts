@@ -70,7 +70,7 @@ export class AuthShopContributorUrl {
     static editInformationImagesOrderUrl = URL.AUTH_SHOP_CONTRIBUTOR_URL + '/rearrange/information-image';
     static removeInformationImageUrl = URL.AUTH_SHOP_CONTRIBUTOR_URL + '/remove/information-image';
     static advertiseItemsUrl = URL.AUTH_SHOP_CONTRIBUTOR_URL + '/advupdate';
-    static changeNewItemMessageUrl = URL.AUTH_SHOP_CONTRIBUTOR_URL + '/updatemessage';
+    static updateNewItemMessageUrl = URL.AUTH_SHOP_CONTRIBUTOR_URL + '/updatemessage';
 }
 export class AuthReviewContributorUrl {
     static getReviewByShopIdUrl = URL.AUTH_REVIEW_CONTRIBUTOR_URL + '/shopid';
@@ -132,12 +132,15 @@ export class AuthItemContributorUrl {
     static editItemTypesUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/item-types';
     static editMultipleItemsUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/edit-multiple';
     static removeItemsPermanantlyUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/remove/items/permanently';
+    static removeItemTypeUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/remove/item-type';
     static uploadItemsUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/upload/items'
     static editProfileImageUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/edit/profile-image';
     static editDescriptionImageUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/edit/description-image';
+    static editItemTypeImageUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/edit/item-type-image';
     static editProfileImageIndexUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/edit/profile-image-index';
     static removeProfileImageUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/remove/profile-image';
     static removeDescriptionImageUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/remove/description-image';
+    static removeItemTypeImageUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/remove/item-type-image';
 
 }
 export class AuthCartContributorUrl {

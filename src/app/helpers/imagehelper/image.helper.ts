@@ -21,7 +21,7 @@ export class ImageHelper {
   }
 
   public static getUploadProfileItem(uploadProfileItems, filename) {
-    return uploadProfileItems.find(file => { return file.filename == filename })
+    return uploadProfileItems.find(file => { return file.name == filename })
   }
 
   public static magnify(img) {

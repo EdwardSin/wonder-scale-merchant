@@ -15,8 +15,7 @@
       </ul>
     </div>
     <div class="float-right row col-auto">
-      <ws-loading-button [class]="'btn btn-md btn-second'" [loading]="loading.isRunning()" (click)="action()">
-        Move</ws-loading-button>
+      <ws-loading-button [class]="'btn btn-md btn-second mr-1'" [loading]="loading" (click)="action()">Move</ws-loading-button>
       <button class="btn btn-md btn-second" (click)="close()">Back</button>
     </div>
   </div>

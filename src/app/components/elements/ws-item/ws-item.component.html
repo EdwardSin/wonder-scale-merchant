@@ -42,10 +42,11 @@
                     <div *ngIf='showOffer' class="offer-tag">{{item?.discount}}%</div>
                     <p class="mb-0 float-right w-100" style="height:40px; padding-top:5px; line-height: 1.1"
                         *ngIf="!item?.nofound">
-                        <span class="ws-primary font-weight-normal d-block">
-                            {{ item?.currency }} {{ item?.price }}
-                            <!-- {{ currencyOption?.symbol }}{{item?.price | currency: currencyOption?.currencies[item?.currency]: currencyOption?.rate | discountconverter : item?.show_offer ? item?.discount
-                          : 0 }} -->
+                        <span class="font-weight-normal d-block">
+                            {{ Currency.symbols[item?.currency] }}
+                            {{item?.price | 
+                                currency: currencyOption?.currencies[item?.currency]: currencyOption?.rate | 
+                                discountconverter : item?.showOffer ? item?.discount: 0 }}
                         </span>
                         <!-- <span *ngIf='showOffer' [class.is-offer]="showOffer" class="offer-price-tag">{{ item?.currency }}
                         {{ item?.price | currency: currencyOption?.currencies[item?.currency]: currencyOption?.rate }}</span> -->

@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ImagePickerComponent } from './image-picker.component';
+import { WsUploaderComponent } from './ws-uploader.component';
 
-describe('ImagePickerComponent', () => {
-  let component: ImagePickerComponent;
-  let fixture: ComponentFixture<ImagePickerComponent>;
+describe('WsUploaderComponent', () => {
+  let component: WsUploaderComponent;
+  let fixture: ComponentFixture<WsUploaderComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ImagePickerComponent ]
+      declarations: [ WsUploaderComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ImagePickerComponent);
+    fixture = TestBed.createComponent(WsUploaderComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

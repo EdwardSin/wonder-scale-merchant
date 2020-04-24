@@ -1,0 +1,173 @@
+<div modal class="modal">
+  <div class="modal-wrap">
+    <div class="modal-body">
+      <div class="modal-body-content">
+        <form class="modal-content" [formGroup]="itemTypesForm">
+          <div class="modal-close">
+            <span class="fas fa-times" [routerLink]="['', {outlets: {modal:null}}]" [queryParamsHandling]="'merge'"></span>
+          </div>
+          <ng-container formArrayName="itemTypes" *ngIf="!loading.isRunning() && currentItem; let i = index" >
+            <div>
+              <h4 class="d-inline-block mt-1">{{ currentItem.name}}</h4>
+              <div class="ws-circle-button float-right">
+                <button type="button" title="Edit Item" class="btn btn-controller small mr-2" (click)="navigateToEditItem()">
+                  <span class="fas fa-edit"></span>
+                </button>
+                  <button type="button" title="Add Item Type" class="btn btn-controller small" (click)="addNewItemType()">
+                    <span class="fas fa-plus"></span>
+                  </button>
+              </div>
+            </div>
+            <div *ngFor="let itemType of itemTypesForm.get('itemTypes').controls; index as i"
+              class="my-2 border position-relative" style="padding: .5rem">
+              <span *ngIf="i != 0" (click)="removeItemType(itemType)" class="position-absolute fas fa-times clickable"
+                style="right: -28px;
+            top: 10px;
+            background-color: #f7f7f7;
+            width: 27px;
+            height: 30px;
+            text-align: center;
+            line-height: 30px;
+            border-radius: 0 5px 5px 0;
+            font-size: .8rem;">
+              </span>
+              <ng-container *ngIf="!itemTypesForm.controls.itemTypes.value[i].isCollapsed" [formGroupName]="i">
+                <div class="row no-gutters" style="flex-wrap: nowrap;">
+                  <ws-uploader [id]="'item-uploader' + i" [max]="3"
+                    [input]="itemTypesForm.controls.itemTypes.value[i].images"
+                    (output)="onItemTypeImageUploaded($event, i)"></ws-uploader>
+
+                  <button type="button" class="btn-item-upload mx-1" (click)="onItemTypeClicked('item-uploader' + i)">
+                    <span class="fas fa-camera font-12"></span>
+                    <p class="mb-0 font-weight-light font-8">Image<br />(300 x 300)<br />Maximum 3</p>
+                  </button>
+                  <div class="all-item-container ws-drag-list" cdkDropList
+                    (cdkDropListDropped)="dropItemTypeImages($event, itemTypesForm.controls.itemTypes.value[i].images)"
+                    cdkDropListOrientation="horizontal">
+                    <div class="ws-drag-box mr-1 ml-1 border"
+                      *ngFor="let image of itemTypesForm.controls.itemTypes.value[i].images" cdkDrag>
+                      <div [ngSwitch]="image?.type" class="center">
+                        <div *ngSwitchCase="'url'" class="h-100 position-relative">
+                          <div class="item_div position-relative">
+                            <img src="{{environment.IMAGE_URL + image?.name}}" class="image-upload" alt="item.png" />
+                            <div class="corner-setting">
+                              <span class="corner-setting-item fas fa-times" (click)="$event.stopPropagation();removeItemTypeImage(image?.name, 
+                        itemTypesForm.controls.itemTypes.value[i])"></span>
+                            </div>
+                          </div>
+                        </div>
+                        <div *ngSwitchCase="'blob'" class="h-100 position-relative">
+                          <div class="item_div position-relative">
+                            <div *ngIf="!image?.done && image?.loading"
+                              class="w-100 h-100 position-absolute text-center"
+                              style="background-color: rgba(204,204,204,0.7)">
+                              <ws-spinner-dot class="position-absolute d-block" style="top: 50%; left: 50%;"
+                                [color]="'rgba(255,255,255,.8)'"></ws-spinner-dot>
+                            </div>
+                            <img [src]="image?.url" data-upload='img_upload' class="image-upload" alt="item.png" />
+                            <div class="corner-setting">
+                              <span class="corner-setting-item fas fa-times" (click)="$event.stopPropagation();removeItemTypeImage(image?.name, 
+                        itemTypesForm.controls.itemTypes.value[i])"></span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row no-gutters">
+                  <div class="px-1 col">
+                    <div class="ws-input clickable position-relative"
+                      (click)="itemTypesForm.controls.itemTypes.value[i].isOpen = true">
+                      <span class="color-span mr-1 ml-2"
+                        [style.background-color]="itemTypesForm.controls.itemTypes.value[i].hexColor"></span>
+                      <input class="form-control form-control-sm d-inline-block" placeholder="Color" disabled
+                        style="background-color: transparent; width: inherit"
+                        value="{{itemTypesForm.controls.itemTypes.value[i].hexColor}}" />
+                      <ws-dropdown [items]="colors" [(isOpen)]="itemTypesForm.controls.itemTypes.value[i].isOpen"
+                        [styles]="{width: '300px'}" [isAllowedCustomInput]="true"
+                        [placeholder]="'Enter hex color code (E.g. #000000)'"
+                        (onItemClicked)="onColorValueChanged($event, itemTypesForm.controls.itemTypes.controls[i])">
+                      </ws-dropdown>
+                    </div>
+                    <div class="ws-input">
+                      <mat-select class="form-control form-control-sm" placeholder="Sizes" formControlName="sizes"
+                        multiple>
+                        <mat-option [value]="'3XS'">3XS</mat-option>
+                        <mat-option [value]="'2XS'">2XS</mat-option>
+                        <mat-option [value]="'XS'">XS</mat-option>
+                        <mat-option [value]="'S'">S</mat-option>
+                        <mat-option [value]="'M'">M</mat-option>
+                        <mat-option [value]="'L'">L</mat-option>
+                        <mat-option [value]="'XL'">XL</mat-option>
+                        <mat-option [value]="'2XL'">2XL</mat-option>
+                        <mat-option [value]="'3XL'">3XL</mat-option>
+                        <mat-option [value]="'4XL'">4XL</mat-option>
+                      </mat-select>
+                    </div>
+                  </div>
+                </div>
+                <div class="row no-gutters">
+                  <div class="col-sm-6 px-1">
+                    <div class="ws-input">
+                      <div class="input-group">
+                        <div class="input-group-prepend" style="width: 100px">
+                          <span>Price</span>
+                        </div>
+                        <input wsAutofocus [isAutoFocus]="i == 0" class="form-control form-control-sm" tabIndex="1" placeholder="Blank to use default"
+                          formControlName="price" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-6 px-1">
+                    <div class="ws-input">
+                      <div class="input-group">
+                        <div class="input-group-prepend" style="width: 100px">
+                          <span>Discount (%)</span>
+                        </div>
+                        <input class="form-control form-control-sm" tabIndex="1" placeholder="Blank to use default"
+                          formControlName="discount" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-6 px-1">
+                    <div class="ws-input">
+                      <div class="input-group">
+                        <div class="input-group-prepend" style="width: 100px">
+                          <span>Quantity</span>
+                        </div>
+                        <input class="form-control form-control-sm" tabIndex="1" placeholder="Blank to use default"
+                          formControlName="quantity" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-6 px-1">
+                    <div class="ws-input">
+                      <div class="input-group">
+                        <div class="input-group-prepend" style="width: 100px">
+                          <span>Weight (kg)</span>
+                        </div>
+                        <input class="form-control form-control-sm" tabIndex="1" placeholder="Blank to use default"
+                          formControlName="weight" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+            <div>
+                <ws-loading-button class="d-block" [loading]="itemTypeLoading.isRunning()"
+                [class]="'btn btn-md btn-second float-right mr-0'" (click)="editItemTypes()">Save</ws-loading-button>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="loading.isRunning(); else noItem">
+                <ws-loading></ws-loading>
+            </ng-container>
+        </form>
+        <ng-template #noItem>
+            <p *ngIf="!currentItem" class="pt-5 pb-5 mb-0 text-center">Item cannot be retrieved!</p>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>

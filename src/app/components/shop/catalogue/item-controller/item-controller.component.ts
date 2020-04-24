@@ -38,7 +38,7 @@ export class ItemControllerComponent implements OnInit {
   categoryName = '';
   categoryList: Array<any> = [];
   selectedCategory = '';
-  isPublished: boolean;
+  isAdvertised: boolean;
   loading: WsLoading = new WsLoading;
   environment = environment;
 
@@ -51,7 +51,9 @@ export class ItemControllerComponent implements OnInit {
   displayCategoryList: Array<any> = [];
   info_message: string = '';
   isMobileSize: boolean;
+  moment = moment;
   previousEditedItems: Array<any> = [];
+  isAdvertiseDropdownOpened: boolean;
   action: Function;
 
   private ngUnsubscribe: Subject<any> = new Subject();
@@ -74,14 +76,15 @@ export class ItemControllerComponent implements OnInit {
     this.searchController.order = this.route.snapshot.queryParams['order'];
     this.searchController.orderBy = this.route.snapshot.queryParams['by'];
     this.searchController.display = this.route.snapshot.queryParams['display'];
+    this.searchController.searchKeyword = this.route.snapshot['queryParams']['s_keyword'];
     this.categoryName = this.route.snapshot.params['name'];
-    this.getPublishedInfo();
-
-    this.sharedItemService.allItems.pipe(takeUntil(this.ngUnsubscribe)).subscribe(res => {
-      if (res) {
-        this.allItems = res;
-      }
-    })
+    this.sharedShopService.shop.pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(result => {
+        if (result) {
+          this.shop = result;
+          this.getPublishedInfo();
+        }
+    });
     this.sharedItemService.editItems.pipe(takeUntil(this.ngUnsubscribe)).subscribe(res => {
       if (res) {
         this.editItems = res;
@@ -129,13 +132,14 @@ export class ItemControllerComponent implements OnInit {
         });
     }
   }
-  changeMessage() {
+  updateMessage() {
     this.authShopContributorService
-      .changeNewItemMessage(this.message)
+      .updateNewItemMessage({message: this.message})
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
         this.shop.new.message = this.message;
         this.sharedShopService.shop.next(this.shop);
+        this.isAdvertiseDropdownOpened = false;
         WsToastService.toastSubject.next({ content: "Message is updated!", type: 'success' });
       });
   }
@@ -143,16 +147,16 @@ export class ItemControllerComponent implements OnInit {
     var publishedDate = this.getPublishedDate(this.shop);
     if (!this.isPublishedFunc(publishedDate)) {
       var obj = {
-        message: this.message,
-        items: this.displayItems.map(x => x['_id'])
+        message: this.message
       };
       this.authShopContributorService
         .advertiseItems(obj)
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(result => {
-          WsToastService.toastSubject.next({ content: "Shop is advertised!", type: 'success' });
-          this.isPublished = true;
-          this.shop.new = result['new'];
+          WsToastService.toastSubject.next({ content: "New items are advertised and notify your customers!", type: 'success' });
+          this.isAdvertised = true;
+          this.shop.new = result['data'];
+          this.isAdvertiseDropdownOpened = false;
           this.sharedShopService.shop.next(this.shop);
         }, err => {
           WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
@@ -181,7 +185,6 @@ export class ItemControllerComponent implements OnInit {
     this.action = this.param == 'uncategorized' ? this.removeItemsPermanantly.bind(this) : this.removeItemsFromCategory.bind(this);
     this.openModal('removeItemsModal');
   }
-  isActionOpen = false;
   checkSelectedItems(dropdown) {
     if (!this.editItems.length) {
       WsToastService.toastSubject.next({ content: 'Please select items!', type: 'danger'})
@@ -216,7 +219,7 @@ export class ItemControllerComponent implements OnInit {
     var editCategoryList = this.editCategoryList;
     this.loading.start();
     var itemAndCategoryList = {
-      edit_item_list: this.editCategoryList.map(x => x['_id']),
+      edit_item_list: this.previousEditedItems.map(x => x['_id']),
       edit_category_list: editCategoryList.map(x => x['_id'])
     };
 
@@ -224,7 +227,6 @@ export class ItemControllerComponent implements OnInit {
       .addItemsToCategory(itemAndCategoryList)
       .pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.loading.stop()))
       .subscribe(result => {
-
         this.refreshCategories(() => {
           this.deselectCategories();
           this.closeModal('addToCategoriesModal');
@@ -232,19 +234,20 @@ export class ItemControllerComponent implements OnInit {
         })
       });
   }
-  getSearchItems(event) {
-    this.sharedItemService.displayItems.next(event);
-  }
+  // getSearchItems(event) {
+  //   this.sharedItemService.displayItems.next(event);
+  // }
   onMoveCategory(editItems) {
     var editCategory = this.editCategory;
     this.loading.start();
     var itemAndCategoryList = {
-      move_to_category_id: editCategory['_id'],
-      item_list: editItems.map(x => x._id)
+      moveFromCategoryId: this.selectedCategory['_id'],
+      moveToCategoryId: editCategory['_id'],
+      items: editItems.map(x => x._id)
     };
 
     this.authCategoryContributorService
-      .moveCategory(this.selectedCategory['_id'], itemAndCategoryList)
+      .moveCategory(itemAndCategoryList)
       .pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.loading.stop()))
       .subscribe(result => {
         this.refreshCategories(() => {
@@ -330,7 +333,7 @@ export class ItemControllerComponent implements OnInit {
     this.previousEditedItems = [];
     this.loading.start();
     this.authItemContributorService.removeItemsPermanantly({
-      item_ids: editItems.map(x => x['_id'])
+      items: editItems.map(x => x['_id'])
     })
       .pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.loading.stop()))
       .subscribe(result => {
@@ -342,6 +345,7 @@ export class ItemControllerComponent implements OnInit {
       });
   }
   getCategoryByShopId() {
+    this.categoryName = this.route.snapshot.params['name'];
     this.authCategoryContributorService.getAuthenticatedCategoriesByShopId()
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
@@ -426,7 +430,7 @@ export class ItemControllerComponent implements OnInit {
   }
   getPublishedInfo() {
     let publishedDate = this.getPublishedDate(this.shop);
-    this.isPublished = this.isPublishedFunc(publishedDate);
+    this.isAdvertised = this.isPublishedFunc(publishedDate);
     if (this.shop && this.shop.new) {
       this.message = this.shop.new.message;
     }
@@ -434,8 +438,8 @@ export class ItemControllerComponent implements OnInit {
   // Tested
   getPublishedDate(shop) {
     var returnDate;
-    if (shop && shop.new && shop.new.published_at) {
-      returnDate = new Date(shop.new.published_at);
+    if (shop && shop.new && shop.new.publishedAt) {
+      returnDate = new Date(shop.new.publishedAt);
     } else {
       returnDate = this.getYesterdayDate(new Date()).toDate();
     }

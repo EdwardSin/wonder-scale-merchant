@@ -31,14 +31,13 @@ export class UploadHelper {
                             file: image,
                             done: isPreLoad,
                             type: 'blob',
-                            base64: e['target']['result']
+                            base64: reader.result
                         };
                         if(image['name'] && image['name'].split('.').length > 1){
                             img['ext'] = image['name'].split('.').pop();
                         }
                         images.push(img);
                         callback(img);
-                    
                 }
                 reader.readAsDataURL(image);
             }
@@ -50,19 +49,18 @@ export class UploadHelper {
             WsToastService.toastSubject.next({ content: "Max images are uploaded!" });
         }
     }
-    public static getMaxAbleUploadProfileFiles(exist_profile_items_number, preprofile_files, MAX = 1) {
-        var able_upload_spaces = MAX - exist_profile_items_number;
-        var able_upload_profile_files = [];
-        for (let i = 0; i < able_upload_spaces; i++) {
-            if (preprofile_files[i]) {
-                able_upload_profile_files.push(preprofile_files[i]);
+    public static getMaxAbleUploadProfileFiles(existProfileItemsNumber, preprofileFiles, MAX = 1) {
+        var ableUploadSpaces = MAX - existProfileItemsNumber;
+        var ableUploadProfileFiles = [];
+        for (let i = 0; i < ableUploadSpaces; i++) {
+            if (preprofileFiles[i]) {
+                ableUploadProfileFiles.push(preprofileFiles[i]);
             }
             else {
-                
                 break;
             }
         }
-        return able_upload_profile_files;
+        return ableUploadProfileFiles;
     }
     private static validatePhoto(file) {
         var fileTypes = [

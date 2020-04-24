@@ -1,0 +1,14 @@
+<div #elementRef class="ws-dropdown-container" [ngClass]="class" [ngStyle]="styles" *ngIf="isOpen">
+    <ul *ngIf="items.length" class="ws-dropdown-list mb-0">
+      <li class="ws-dropdown-list-item" *ngFor="let item of items" (click)="selectItem(item)">
+          {{ item.name }}
+      </li>
+    </ul>
+    <div #ref>
+      <ng-content></ng-content>
+    </div>
+    <p class="pt-3 pb-3 mb-0 text-center" *ngIf="!items.length && ref.innerHTML == ''">No matches found</p>
+    <div class="ws-dropdown-custom-input-container" *ngIf="isAllowedCustomInput">
+      <input name="value" class="ws-dropdown-custom-input" [placeholder]="placeholder" [(ngModel)]="customValue" (keydown.enter)="selectItem({name: customValue, value: customValue})" />
+    </div>
+  </div>

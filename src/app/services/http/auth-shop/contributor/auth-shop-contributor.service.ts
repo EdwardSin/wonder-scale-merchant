@@ -59,9 +59,9 @@ export class AuthShopContributorService {
     return this.http.put(AuthShopContributorUrl.removeInformationImageUrl, obj, this.accessTokenService.getAccessToken());
   }
   advertiseItems(obj) {
-    return this.http.put(AuthShopContributorUrl.advertiseItemsUrl, obj, this.accessTokenService.getAccessToken());
+    return this.http.post(AuthShopContributorUrl.advertiseItemsUrl, obj, this.accessTokenService.getAccessToken());
   }
-  changeNewItemMessage(obj) {
-    return this.http.put(AuthShopContributorUrl.changeNewItemMessageUrl, obj, this.accessTokenService.getAccessToken());
+  updateNewItemMessage(obj) {
+    return this.http.put(AuthShopContributorUrl.updateNewItemMessageUrl, obj, this.accessTokenService.getAccessToken());
   }
 }

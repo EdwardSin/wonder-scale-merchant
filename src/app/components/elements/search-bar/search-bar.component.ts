@@ -11,6 +11,7 @@ export class SearchBarComponent implements OnInit {
   @Input() items;
   @Input() searchAttributes;
   @Input() placeholder = 'Search Item';
+  @Input() action: Function;
   @Input() get result() { return this._result; }
   @Input() get searchKeyword() { return this._searchKeyword };
   @Output() resultChange: EventEmitter<any> = new EventEmitter;
@@ -34,8 +35,12 @@ export class SearchBarComponent implements OnInit {
     this.searchKeywordChange.emit(val);
   }
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['items']) {
-      this.searchItem();
+    if(this.action) {
+      this.action(this._searchKeyword);
+    } else {
+      if (changes['items']) {
+        this.searchItem();
+      }
     }
   }
   searchItem() {
@@ -68,7 +73,12 @@ export class SearchBarComponent implements OnInit {
     }
   }
   navigate() {
-    this.router.navigate([], { queryParams: { page: 1, s_keyword: this.searchKeyword }, queryParamsHandling: 'merge' })
+    let queryParams = {};
+    if(this.searchKeyword) {
+      queryParams = {...queryParams, s_keyword: this.searchKeyword};
+    }
+    queryParams = {...queryParams, page: 1};
+    this.router.navigate([], { queryParams });
   }
   ngOnDestroy() {
     this.ngUnsubscribe.next();

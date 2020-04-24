@@ -1,7 +1,7 @@
 <div class="row no-gutters w-100 position-relative" style="z-index:2">
     <div class="col-lg order-1 order-lg-2 mr-1">
         <search-bar class="d-inline-block mr-2" [placeholder]="'Search Item'" [searchAttributes]="['name', 'refId']" [items]="allItems"
-            (resultChange)="getSearchItems($event)" [searchKeyword]="searchController.searchKeyword"></search-bar>
+            [searchKeyword]="searchController.searchKeyword"></search-bar>
             <!-- <div class="ws-circle-button" *ngIf="previousEditedItems.length">
                 <button title="Select Previous Edit Items" wsTippy class="btn btn-controller small"
                     (click)="selectPrevious()">
@@ -41,14 +41,27 @@
                     <button *ngIf="param != 'uncategorized' && param != 'new'" class="dropdown-item" (click)="markAsNew()">Mark as New</button>
                     <button *ngIf="param != 'uncategorized'" class="dropdown-item" (click)="unmarkNew()">Unmark from New</button>
                     <button class="dropdown-item" (click)="openAddToModal()">Add to</button>
-                    <button *ngIf="param == 'custom'" class="dropdown-item" (click)="onMoveCategory(editItems)">Move to</button>
-                    <button class="dropdown-item" (click)="openRemoveModal()">Remove</button>
+                    <button *ngIf="param == 'custom'" class="dropdown-item" (click)="openMoveModal()">Move to</button>
+                    <button *ngIf="param != 'uncategorized'" class="dropdown-item" (click)="openRemoveModal()">Remove from categories</button>
+                    <button *ngIf="param == 'uncategorized' " class="dropdown-item" (click)="openRemoveModal()">Remove Permanently</button>
                 </div>
             </div>
-            <div class="ws-circle-button">
-                <button title="Advertise" wsTippy class="btn btn-controller small">
+            <div *ngIf="param == 'new'" class="ws-circle-button">
+                <button (click)="isAdvertiseDropdownOpened = !isAdvertiseDropdownOpened" title="Advertise" wsTippy class="btn btn-controller small">
                     <span class="fas fa-bullhorn"></span>
                 </button>
+                <ws-dropdown [class]="'p-4 mt-2'" [styles]="{width: '400px'}" [(isOpen)]="isAdvertiseDropdownOpened">
+                    <p class="font-8 mb-1">Last Date: {{ moment(shop?.new?.publishedAt).format('Y-MM-DD, hh:mm') }}</p>
+                    <p class="font-8 mb-2">Next Time: 
+                        <span *ngIf="moment(shop?.new?.publishedAt).add(1,'days').diff(moment()) >= 0">{{ moment().to(moment(shop?.new?.publishedAt).add(1,'days')) }}</span>
+                        <span style="color: goldenrod" class="font-weight-bold" *ngIf="moment(shop?.new?.publishedAt).add(1,'days').diff(moment()) < 0">Current</span>
+                    </p>
+                    <textarea [(ngModel)]="message" class="form-control form-control-sm w-100 mb-2" style="height: 130px"
+                    placeholder="Advertise and notify your followers."></textarea>
+                    <button class="btn btn-sm btn-second float-right ml-2" (click)="updateMessage()">Update</button>
+                    <button class="btn btn-sm btn-second float-right" [disabled]="isAdvertised" (click)="advertiseItems()">Advertise</button>
+                    <span class="clearfix d-block"></span>
+                </ws-dropdown>
             </div>
     </div>
     <div class="row no-gutters order-2 center">
@@ -77,17 +90,17 @@
                     (click)="setOrderAndSwitchAscending('latest')">Last Update
                     <span *ngIf="isOrder('latest')" class="pl-3 fas fa-sort"></span>
                 </button>
-                <button class="dropdown-item" [class.orderSelected]="isOrder('status')"
+                <!-- <button class="dropdown-item" [class.orderSelected]="isOrder('status')"
                     (click)="setOrderAndSwitchAscending('status')">Status
                     <span *ngIf="isOrder('status')" class="pl-3 fas fa-sort"></span>
-                </button>
+                </button> -->
                 <!-- <button class="dropdown-item nooutline" [class.orderSelected]="isOrder('custom order')" *ngIf="false && param !== 'defaultcategory'"
                     (click)="setOrderAndSwitchAscending('custom order')">Custom Order
                     <span *ngIf="isOrder('custom order')" class="pl-3 fas fa-sort"></span>
                 </button> -->
             </div>
         </div>
-        <div class="ws-circle-button" mdbDropdown>
+        <!-- <div class="ws-circle-button" mdbDropdown>
             <button id="listButton" mdbDropdownToggle title="Display" wsTippy
                 class="btn btn-controller small clickable d-inline">
                 <span class="fa" [class.fa-th-large]="isDisplay('block')"
@@ -102,7 +115,7 @@
                     <span class="fas fa-list mr-2"></span>List
                 </button>
             </div>
-        </div>
+        </div> -->
     </div>
 </div>
 
@@ -129,9 +142,9 @@
 </div> -->
 <confirm-modal id="removeItemsModal" [message]="'Are you sure to remove all selected items?'" [action]="action">
 </confirm-modal>
-<add-to-categories-modal id="addToCategoriesModal" [action]="action" [displayCategoryList]="displayCategoryList"
+<add-to-categories-modal id="addToCategoriesModal" [action]="action" [loading]="loading.isRunning()" [displayCategoryList]="displayCategoryList"
     [(editCategoryList)]="editCategoryList"></add-to-categories-modal>
-<move-to-categories-modal id="moveToCategoriesModal" [action]="action" [displayCategoryList]="displayCategoryList"
+<move-to-categories-modal id="moveToCategoriesModal" [action]="action" [loading]="loading.isRunning()" [displayCategoryList]="displayCategoryList"
     [(editCategory)]="editCategory"></move-to-categories-modal>
 <edit-multiple-items-modal [editItems]="editItems" id="editMultipleItemsModal" [action]="action">
 </edit-multiple-items-modal>
@@ -141,7 +154,8 @@
         <div class="h4 text-muted text-center font-weight-light mt-5 mb-5">
             Add Some Item
             <div class="d-inline-block ml-2" [routerLink]="['../../categories', categoryName, 'add']"
-                [queryParams]="{ref: shop_id, cat_ref: category?._id,'categoryname':category?.name}">
+                [queryParams]="{ref: shop_id, cat_ref: category?._id,'categoryname':category?.name}"
+                queryParamsHandling="merge">
                 <span class="fa fa-plus-square" style="font-size:larger;vertical-align: middle"></span>
             </div>
         </div>

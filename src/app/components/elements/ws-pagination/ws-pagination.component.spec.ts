@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ColorPickerComponent } from './color-picker.component';
+import { WsPaginationComponent } from './ws-pagination.component';
 
-describe('ColorPickerComponent', () => {
-  let component: ColorPickerComponent;
-  let fixture: ComponentFixture<ColorPickerComponent>;
+describe('WsPaginationComponent', () => {
+  let component: WsPaginationComponent;
+  let fixture: ComponentFixture<WsPaginationComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ColorPickerComponent ]
+      declarations: [ WsPaginationComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ColorPickerComponent);
+    fixture = TestBed.createComponent(WsPaginationComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
