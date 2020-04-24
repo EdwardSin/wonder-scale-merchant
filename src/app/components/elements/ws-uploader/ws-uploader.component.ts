@@ -37,6 +37,7 @@ export class WsUploaderComponent implements OnInit {
         console.log('Maximum files are uploaded!');
       }
     }
+    event.target.value = "";
   }
   previewImage(file, callback) {
     let reader = new FileReader;
