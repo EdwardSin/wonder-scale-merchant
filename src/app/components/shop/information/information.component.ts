@@ -42,8 +42,8 @@ export class InformationComponent implements OnInit {
       if (res) {
         DocumentHelper.setWindowTitleWithWonderScale('Informations | ' + res.name);
         this.shop = res;
-        this.numOfTotalImages = this.shop['informationImages'].length;
-        this.allImages = this.shop['informationImages'].map(image => { return { url: image, type: 'url' } });
+        this.numOfTotalImages = this.shop.informationImages.length;
+        this.allImages = this.shop.informationImages.map(image => { return { url: image, type: 'url' } });
         this.loading.stop();
       }
     });
@@ -74,12 +74,12 @@ export class InformationComponent implements OnInit {
         result => {
           this.shop.informationImages.splice(result['index'], 0, result['image']);
           this.allImages[result['index']] = { url: result['image'], type: 'url' };
-          WsToastService.toastSubject.next({ content: "Banner has been changed!", type: 'success' });
         },
         err => { },
         () => {
           this.isImagesUploading = false;
           this.editedFlag = this.allImages.filter(image => image.type === 'blob').length > 0;
+          WsToastService.toastSubject.next({ content: "Banner has been changed!", type: 'success' });
           this.editShop();
         }
       );
@@ -103,11 +103,9 @@ export class InformationComponent implements OnInit {
       this.uploadImagesAndEdit();
     }
   }
-  removePreUploadImage(item, event) {
-    _.remove(this.allImages, item);
-    this.numOfTotalImages--;
-    event.stopPropagation();
-    this.editedFlag = this.allImages.filter(image => image.type === 'blob').length > 0;
+  removePreUploadImage(item) {
+    _.remove(this.allImages, (x) => x.name == item.name);
+    this.editedFlag = this.allImages.find(image => image.type == 'blob');
   }
   removeUploadedImage(image) {
     if (this.shop && this.shop['informationImages']) {
@@ -128,18 +126,15 @@ export class InformationComponent implements OnInit {
     }
   }
   fileChangeEvent(event) {
-    var preInformationFiles = <Array<File>>event.target.files;
-    var ableUploadImages = UploadHelper.getMaxAbleUploadProfileFiles(this.numOfTotalImages, preInformationFiles, 10);
-
-    UploadHelper.notificationIfOver(ableUploadImages, preInformationFiles);
-    UploadHelper.showImages([], ableUploadImages, images => { callBack.bind(this)(images); }, true);
-
-    function callBack(image) {
-      this.allImages.unshift(image);
-      this.numOfTotalImages++;
-      this.editedFlag = this.allImages.filter(image => image.type === 'blob').length;
-      this.informationUploadInput.nativeElement.value = '';
-    }
+    event.forEach(item => {
+      let exist = this.allImages.find(image => {
+        return image.name == item.name && image.file.size == item.file.size;
+      })
+      if (!exist) {
+        this.allImages.push(item);
+        this.editedFlag = true;
+      }
+    });
   }
   drop(event: CdkDragDrop<string[]>) {
     this.editedFlag = true;
