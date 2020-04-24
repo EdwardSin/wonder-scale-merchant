@@ -8,6 +8,7 @@ import { WsLoading } from '@components/elements/ws-loading/ws-loading';
 import { DocumentHelper } from '@helpers/documenthelper/document.helper';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-unpublished-items',
@@ -16,15 +17,17 @@ import { takeUntil } from 'rxjs/operators';
 })
 export class UnpublishedItemsComponent implements OnInit {
   shop_id: String;
-  allItems: Array<any> = [];
   editItemList: Array<any> = [];
   displayItems: Array<any> = [];
+  numberOfUnpublishedItems = 0;
+  queryParams = {page: 1, keyword: '', order: '', orderBy: 'asc'};
   loading: WsLoading = new WsLoading;
   environment = environment;
 
   private ngUnsubscribe: Subject<any> = new Subject();
 
   constructor(
+    private route: ActivatedRoute,
     private authItemContributorService: AuthItemContributorService,
     private sharedItemService: SharedItemService,
     private sharedCategoryService: SharedCategoryService,
@@ -34,20 +37,27 @@ export class UnpublishedItemsComponent implements OnInit {
   ngOnInit() {
     let shop_name = this.sharedShopService.shop_name;
     DocumentHelper.setWindowTitleWithWonderScale('Unpublished | ' + shop_name);
+    this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe(queryParam => {
+      this.queryParams = {keyword: queryParam['s_keyword'], page: queryParam['page'], order: queryParam['order'], orderBy: queryParam['by']};
+      this.getUnpublishedItems(this.queryParams.keyword, this.queryParams.page, this.queryParams.order, this.queryParams.orderBy);
+    })
     this.sharedCategoryService.unpublishedItemsRefresh.pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(res => {
-        this.getUnpublishedItems();
-      })
+    .subscribe(res => {
+      this.getUnpublishedItems(this.queryParams.keyword, this.queryParams.page, this.queryParams.order, this.queryParams.orderBy);
+    })
+    this.sharedCategoryService.numberOfUnpublishedItems.pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe(res => {
+      this.numberOfUnpublishedItems = res;
+    })
   }
-  getUnpublishedItems() {
+  getUnpublishedItems(keyword='', page=1, order='alphabet', orderBy) {
     this.loading.start();
-    this.authItemContributorService.getAuthenticatedUnpublishedItemCategoryByShopId().pipe(takeUntil(this.ngUnsubscribe))
+    this.authItemContributorService.getAuthenticatedUnpublishedItemCategoryByShopId({keyword, page, order, orderBy}).pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
-        this.allItems = result.result;
         this.displayItems = result.result;
-        this.sharedCategoryService.numberOfUnpublishedItems.next(this.allItems.length);
-        this.sharedItemService.allItems.next(this.allItems);
         this.sharedItemService.displayItems.next(this.displayItems);
+        this.sharedCategoryService.numberOfCurrentTotalItems.next(result['total']);
         this.loading.stop();
       })
   }

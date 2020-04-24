@@ -1,6 +1,6 @@
 <div class="main-container-with-nav" [class.main-container-with-nav-icon]="!isNavOpen"
   *ngIf="shop && !loading.isRunning(); else loadingTemplate">
-  <ws-left-nav [(isNavOpen)]="isNavOpen" [isMobileSize]="isMobileSize">
+  <ws-left-nav [isNavOpen]="isNavOpen" (isNavOpenChange)="isNavOpenChange($event)" [isMobileSize]="isMobileSize">
     <ul class="ws-main-nav-list">
       <li *ngIf="false" class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
         <a [routerLink]="['']">
@@ -17,37 +17,37 @@
           <li>
             <a [routerLinkActive]="'active'" [routerLink]="['catalogue', 'all']">All
               <span class="badge ws-bg-secondary badge-pill float-right"
-                style="vertical-align: text-bottom">{{ numberOfAllItems }}</span>
+                style="margin-top: 3px">{{ numberOfAllItems }}</span>
             </a>
           </li>
           <li>
             <a [routerLinkActive]="'active'" [routerLink]="['catalogue', 'new']">New
               <span class="badge ws-bg-secondary badge-pill float-right"
-                style="vertical-align: text-bottom">{{ numberOfNewItems }}</span>
+                style="margin-top: 3px">{{ numberOfNewItems }}</span>
             </a>
           </li>
           <li>
             <a [routerLinkActive]="'active'" [routerLink]="['catalogue', 'discount']">Discount
               <span class="badge ws-bg-secondary badge-pill float-right"
-                style="vertical-align: text-bottom">{{ numberOfDiscountItems }}</span>
+                style="margin-top: 3px">{{ numberOfDiscountItems }}</span>
             </a>
           </li>
           <li>
             <a [routerLinkActive]="'active'" [routerLink]="['catalogue', 'published']">Published
               <span class="badge ws-bg-secondary badge-pill float-right"
-                style="vertical-align: text-bottom">{{ numberOfPublishedItems }}</span>
+                style="margin-top: 3px">{{ numberOfPublishedItems }}</span>
             </a>
           </li>
           <li>
             <a [routerLinkActive]="'active'" [routerLink]="['catalogue', 'unpublished']">Unpublished
               <span class="badge ws-bg-secondary badge-pill float-right"
-                style="vertical-align: text-bottom">{{ numberOfUnpublishedItems }}</span>
+                style="margin-top: 3px">{{ numberOfUnpublishedItems }}</span>
             </a>
           </li>
           <li>
             <a [routerLinkActive]="'active'" [routerLink]="['catalogue', 'uncategorized']">Uncategorized
               <span class="badge ws-bg-secondary badge-pill float-right"
-                style="vertical-align: text-bottom">{{ numberOfUncategorizedItems }}</span>
+                style="margin-top: 3px">{{ numberOfUncategorizedItems }}</span>
             </a>
           </li>
           <hr class="m-0" />
@@ -71,7 +71,7 @@
                 <span style="overflow: hidden; width: 160px; text-overflow: ellipsis; display: inline-block">
                   {{ category?.name }}</span>
                 <span class="badge ws-bg-secondary badge-pill float-right"
-                  style="vertical-align: text-bottom">{{category?.items?.length}}</span>
+                  style="margin-top: 3px">{{category?.items?.length}}</span>
                 <div>
                   <span class="edit-button d-inline-block ws-secondary" style="font-size: .8rem"
                     (click)="$event.preventDefault(); $event.stopPropagation(); setEditCategory(category?.name)">Edit</span>
@@ -129,7 +129,7 @@
         <a [routerLink]="['quotation']">
           <span class="ws-main-nav-icon fas fa-file-invoice"></span>
           <span class="ws-main-nav-text">Quotations
-            <span class="badge ws-bg-secondary badge-pill float-right" style="vertical-align: text-bottom"
+            <span class="badge ws-bg-secondary badge-pill float-right" style="margin-top: 3px"
               *ngIf="unreplied_quotations.length">{{unreplied_quotations.length}}</span>
           </span>
         </a>

@@ -28,7 +28,6 @@ import { filter, finalize, takeUntil } from 'rxjs/operators';
   styleUrls: ['./items.component.scss']
 })
 export class ItemsComponent implements OnInit {
-  allItems: Item[] = [];
   displayItems: Item[] = [];
   editItemList: Item[] = [];
   category_id: string = '';
@@ -37,6 +36,8 @@ export class ItemsComponent implements OnInit {
   displayBanner: boolean;
   categoryFound: boolean;
   selectedCategory: Category;
+  numberOfItems = 0;
+  queryParams = {page: 1, keyword: '', order: '', orderBy: 'asc'};
   @ViewChild('importFile', { static: true }) importFile: ElementRef;
   environment = environment;
 
@@ -68,9 +69,24 @@ export class ItemsComponent implements OnInit {
     let shop_name = this.sharedShopService.shop_name;
     this.category_name = this.route.snapshot.params.name;
     DocumentHelper.setWindowTitleWithWonderScale(this.category_name + ' | ' + shop_name);
+
+    this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe(queryParam => {
+      this.queryParams = {keyword: queryParam['s_keyword'], page: queryParam['page'], order: queryParam['order'], orderBy: queryParam['by']};
+      if (this.selectedCategory) {
+        this.getItems(this.queryParams.keyword, this.queryParams.page, this.queryParams.order, this.queryParams.orderBy);
+      }
+    })
     this.sharedCategoryService.categoryRefresh.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       if (result) {
         this.getCategoryByNameAndShopId();
+      }
+    })
+    this.sharedShopService.selectedCategory.pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe(res => {
+      this.numberOfItems = 0;
+      if (res && res.items) {
+        this.numberOfItems = res.items.length;
       }
     })
   }
@@ -81,26 +97,22 @@ export class ItemsComponent implements OnInit {
         this.selectedCategory = result;
         this.sharedShopService.selectedCategory.next(result);
         this.category_id = this.selectedCategory._id;
-        this.getItems();
+        this.getItems(this.queryParams.keyword, this.queryParams.page, this.queryParams.order, this.queryParams.orderBy);
       })
   }
-  getItems() {
+  getItems(keyword='', page=1, order='alphabet', orderBy) {
     this.displayBanner = false;
     this.loading.start();
     this.categoryFound = false;
-    this.authItemContributorService.getItemsByCategoryId(this.category_id)
+    this.authItemContributorService.getItemsByCategoryId(this.category_id, keyword, page, order, orderBy)
       .pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.loading.stop())).subscribe(result => {
         this.categoryFound = true;
-        this.allItems = result['result'];
         this.displayItems = result['result'];
-        this.sharedItemService.allItems.next(this.allItems);
         this.sharedItemService.displayItems.next(this.displayItems);
-
-        this.ref.detectChanges();
-        PriceHelper.getDisplayPrice(this.allItems, PriceHelper.currencies, PriceHelper.rate);
+        this.sharedCategoryService.numberOfCurrentTotalItems.next(result['total']);
         PriceHelper.getDisplayPrice(this.displayItems, PriceHelper.currencies, PriceHelper.rate);
         ArrayHelper.clear(this.editItemList);
-        this.displayBanner = this.isBannerShow();
+        // this.displayBanner = this.isBannerShow();
         this.sharedLoadingService.screenLoading.next(false);
         this.sharedCategoryService.categoryRefresh.next(false);
       })
@@ -112,13 +124,13 @@ export class ItemsComponent implements OnInit {
     this.importFile.nativeElement.value = '';
   }
 
-  isBannerShow() {
-    return this.allItems.length > 0 && !this.isActiveItemFound(this.allItems);
-  }
+  // isBannerShow() {
+  //   return this.allItems.length > 0 && !this.isActiveItemFound(this.allItems);
+  // }
 
-  isActiveItemFound(allItems) {
-    return allItems.find(x => x.status == 'active');
-  }
+  // isActiveItemFound(allItems) {
+  //   return allItems.find(x => x.status == 'active');
+  // }
   openModal(id) {
     this.modalService.open(id);
   }

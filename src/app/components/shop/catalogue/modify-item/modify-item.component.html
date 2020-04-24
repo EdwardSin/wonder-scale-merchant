@@ -1,254 +1,256 @@
 <div modal class="modal">
   <div class="modal-wrap">
     <div class="modal-body">
-      <div (click)="$event.stopPropagation()" class="modal-body-content">
-        <form [formGroup]="itemGroup" class="center modal-content" *ngIf="!isSetEcommerce; else ecommerceFormTemplate">
+      <div class="modal-body-content">
+        <form [formGroup]="itemGroup" class="center modal-content">
           <div class="modal-close">
-            <span class="fas fa-times" [routerLink]="['', {outlets: {modal:null}}]"></span>
+            <span class="fas fa-times" [routerLink]="['', {outlets: {modal:null}}]" [queryParamsHandling]="'merge'"></span>
           </div>
-          <div class="row no-gutters" style="flex-wrap: nowrap">
-            <input id="item_profile_upload" #itemProfileUpload type="file" accept="image/*" hidden multiple
-              name="profile_images" (change)="fileProfileChangeEvent($event)" />
-            <button type="button" class="btn-item-upload mr-1"
-              onclick="document.getElementById('item_profile_upload').click();">
-              <span class="fas fa-camera font-12"></span>
-              <p class="mb-0 font-weight-light">Image<br />(300 x 300)</p>
-            </button>
-            <div id="scrollContainer" class="all-item-container ws-drag-list" cdkDropList
-              cdkDropListOrientation="horizontal" (cdkDropListDropped)="dropProfile($event)">
-              <div class="ws-drag-box ml-1 mr-1 border" *ngFor="let image of allProfileItems"
-                (click)="selectProfileImage(image?.filename)" cdkDrag>
-                <div [ngSwitch]="image?.type">
-                  <div *ngSwitchCase="'url'" class="h-100 position-relative">
-                    <div class="item_div position-relative">
-                      <div *ngIf="profileImageName == image?.filename" class="position-absolute"
-                        style="top: 0; height: 175px; width: 175px; background-color: rgba(136,136,136,0.6); z-index: 1">
-                        <p class="mb-0" style="line-height: 175px; text-align: center; color: #fff;">Set As Profile
-                          Image
-                        </p>
+          <div *ngIf="currentItem">
+            <h4 class="d-inline-block mt-1">{{ currentItem.name}}</h4>
+            <div class="ws-circle-button float-right">
+              <button type="button" title="Edit Item Type" class="btn btn-controller small"
+                [routerLink]="['', {outlets: { modal: 'item-types'}}]" [queryParams]="{id: currentItem._id}" [queryParamsHandling]="'merge'">
+                <span class="fas fa-sitemap"></span>
+              </button>
+            </div>
+          </div>
+          <ng-container *ngIf="!loading.isRunning() else loadingTemplate">
+            <div class="row no-gutters" style="flex-wrap: nowrap">
+              <!-- <input id="item_profile_upload" #itemProfileUpload type="file" accept="image/*" hidden multiple
+              name="profile_images" (change)="fileProfileChangeEvent($event)" /> -->
+              <button type="button" class="btn-item-upload mr-1"
+                onclick="document.getElementById('itemProfileUpload').click();">
+                <span class="fas fa-camera font-12"></span>
+                <p class="mb-0 font-weight-light font-8">Image<br />(300 x 300)<br />Maximum 5</p>
+              </button>
+              <ws-uploader [id]="'itemProfileUpload'" [max]="5" [input]="allProfileItems"
+                (output)="onProfileImageUploaded($event)"></ws-uploader>
+              <div id="scrollContainer" class="all-item-container ws-drag-list" cdkDropList
+                cdkDropListOrientation="horizontal" (cdkDropListDropped)="dropProfile($event)">
+                <div class="ws-drag-box ml-1 mr-1 border" *ngFor="let image of allProfileItems"
+                  (click)="selectProfileImage(image?.name)" cdkDrag>
+                  <div [ngSwitch]="image?.type">
+                    <div *ngSwitchCase="'url'" class="h-100 position-relative">
+                      <div class="item_div position-relative">
+                        <div *ngIf="profileImageName == image?.name" class="position-absolute"
+                          style="top: 0; height: 175px; width: 175px; background-color: rgba(136,136,136,0.6); z-index: 1">
+                          <p class="mb-0" style="line-height: 175px; text-align: center; color: #fff;">Set As Profile
+                            Image
+                          </p>
+                        </div>
+                        <img class="image-upload" src="{{environment.IMAGE_URL + image?.name}}" alt="item.png" />
                       </div>
-                      <img class="image-upload" src="{{environment.IMAGE_URL + image?.filename}}" alt="item.png" />
+                      <div class="corner-setting">
+                        <span class="corner-setting-item fas fa-times"
+                          (click)="$event.stopPropagation();removeProfileImage(image?.name)"></span>
+                      </div>
                     </div>
-                    <div class="corner-setting">
-                      <span class="corner-setting-item fas fa-times"
-                        (click)="$event.stopPropagation();removeProfileImage(image?.filename)"></span>
+                    <div *ngSwitchCase="'blob'" class="h-100 position-relative">
+                      <div class="item_div position-relative">
+                        <div *ngIf="profileImageName == image?.name" class="position-absolute"
+                          style="top: 0; height: 175px; width: 175px; background-color: rgba(136,136,136,0.6); z-index: 1">
+                          <p class="mb-0" style="line-height: 175px; text-align: center; color: #fff;">Set As Profile
+                            Image
+                          </p>
+                        </div>
+                        <div style="display: table-cell; vertical-align: middle">
+                          <div *ngIf="!image?.done && image?.loading" class="w-100 h-100 position-absolute text-center"
+                            style="background-color: rgba(204,204,204,0.7)">
+                            <ws-spinner-dot class="position-absolute d-block" style="top: 50%; left: 50%;"
+                              [color]="'rgba(255,255,255,.8)'"></ws-spinner-dot>
+                          </div>
+                          <img class="image-upload" [src]="image?.url" data-upload='img_upload' alt="item.png" />
+                        </div>
+                      </div>
+                      <div class="corner-setting">
+                        <span class="corner-setting-item fas fa-times"
+                          (click)="$event.stopPropagation();removeProfileImage(image?.name)"></span>
+                      </div>
                     </div>
                   </div>
-                  <div *ngSwitchCase="'blob'" class="h-100 position-relative">
-                    <div class="item_div position-relative">
-                      <div *ngIf="profileImageName == image?.filename" class="position-absolute"
-                        style="top: 0; height: 175px; width: 175px; background-color: rgba(136,136,136,0.6); z-index: 1">
-                        <p class="mb-0" style="line-height: 175px; text-align: center; color: #fff;">Set As Profile
-                          Image
-                        </p>
+                </div>
+              </div>
+            </div>
+            <div class="ws-input">
+              <mat-select class="form-control form-control-sm border-right-0" formControlName="categories"
+                placeholder="Category Name" multiple>
+                <mat-option *ngFor="let category of categories" [value]="category._id">{{category.name}}</mat-option>
+              </mat-select>
+            </div>
+            <div class="ws-input">
+              <div class="input-group">
+                <div class="input-group-prepend" style="width: 120px" title="Stock keeping unit">
+                  <span>SKU*</span>
+                </div>
+                <input wsAutofocus class="form-control form-control-sm" autocomplete="off" name="refId"
+                  formControlName="refId" tabIndex="1" />
+              </div>
+            </div>
+            <div class="ws-input">
+              <div class="input-group">
+                <div class="input-group-prepend" style="width: 120px">
+                  <span>Product name*</span>
+                </div>
+                <input name="name" class="form-control form-control-sm" autocomplete="off" formControlName="name"
+                  tabIndex="2" />
+              </div>
+            </div>
+            <div class="ws-input">
+              <div class="input-group">
+                <div class="input-group-prepend" style="width: 120px">
+                  <span>Price*</span>
+                </div>
+                <div class="input-group-prepend border-right-0 pr-0 ws-bg-clear">
+                  <mat-select class="form-control form-control-sm border-right-0 py-0"
+                    style="width: 100px; height: 21px;" formControlName="currency" placeholder="Currency">
+                    <mat-option *ngFor="let currency of currencies" [value]="currency.name">
+                      {{currency.name + " (" + currency.symbol + ")"}}</mat-option>
+                  </mat-select>
+                </div>
+                <input name="price" autocomplete="off" tabIndex="2" class="form-control form-control-sm p-1"
+                  lang="en-150" placeholder="0.00" formControlName="price" />
+              </div>
+            </div>
+            <div class="ws-input">
+              <div class="input-group">
+                <div class="input-group-prepend" style="width: 120px">
+                  <span>Discount (%)</span>
+                </div>
+                <input name="discount" autocomplete="off" tabIndex="2" class="form-control form-control-sm p-1"
+                  lang="en-150" placeholder="0.00" formControlName="discount" />
+              </div>
+            </div>
+            <div class="ws-input">
+              <div class="input-group">
+                <div class="input-group-prepend" style="width: 120px">
+                  <span>Weight (kg)</span>
+                </div>
+                <input name="weight" autocomplete="off" tabIndex="2" class="form-control form-control-sm p-1"
+                  lang="en-150" placeholder="0.0" formControlName="weight" />
+              </div>
+            </div>
+            <div class="ws-input">
+              <div class="input-group">
+                <div class="input-group-prepend" style="width: 120px">
+                  <span>Quantity</span>
+                </div>
+                <input name="quantity" autocomplete="off" tabIndex="2" class="form-control form-control-sm p-1"
+                  lang="en-150" formControlName="quantity" />
+              </div>
+            </div>
+            <div class="ws-input">
+              <textarea class="form-control form-control-sm" autocomplete="off" name="description" tabIndex="2"
+                placeholder="Description" style="resize:none" formControlName="description" rows='4'></textarea>
+            </div>
+            <div class="ws-input">
+              <div class="input-group">
+                <div class="input-group-prepend" style="width: 120px">
+                  <span>Brand</span>
+                </div>
+                <input class="form-control form-control-sm" tabIndex="2" placeholder="Default: No Brand"
+                  formControlName="brand" />
+              </div>
+            </div>
+            <div class="ws-input mb-3">
+              <div class="input-group">
+                <div class="input-group-prepend" style="width: 120px">
+                  <span>Warranty</span>
+                </div>
+                <input class="form-control form-control-sm" tabIndex="2" placeholder="Default: No Warranty"
+                  formControlName="warranty" />
+              </div>
+            </div>
+            <div class="row no-gutters mb-2" style="flex-wrap: nowrap;">
+              <button type="button" class="btn-item-upload mr-1"
+                onclick="document.getElementById('itemDescriptionUpload').click();">
+                <span class="fas fa-camera font-12"></span>
+                <p class="mb-0 font-weight-light font-8">Description Image<br />(500 x 500)<br />Maximum 5</p>
+              </button>
+              <ws-uploader [id]="'itemDescriptionUpload'" [input]="allDescriptionItems"
+                (output)="onDescriptionImageUploaded($event)"></ws-uploader>
+              <div class="all-item-container ws-drag-list" cdkDropList (cdkDropListDropped)="dropDescription($event)"
+                cdkDropListOrientation="horizontal">
+                <div class="ws-drag-box mr-1 ml-1 border" *ngFor="let image of allDescriptionItems" cdkDrag>
+                  <div [ngSwitch]="image?.type" class="center">
+                    <div *ngSwitchCase="'url'" class="h-100 position-relative">
+                      <div class="item_div position-relative">
+                        <img src="{{environment.IMAGE_URL + image?.name}}" class="image-upload" alt="item.png" />
+                        <div class="corner-setting">
+                          <span class="corner-setting-item fas fa-times"
+                            (click)="$event.stopPropagation();removeDescriptionImage(image?.name)"></span>
+                        </div>
                       </div>
-                      <div style="display: table-cell; vertical-align: middle">
+                    </div>
+                    <div *ngSwitchCase="'blob'" class="h-100 position-relative">
+                      <div class="item_div position-relative">
                         <div *ngIf="!image?.done && image?.loading" class="w-100 h-100 position-absolute text-center"
                           style="background-color: rgba(204,204,204,0.7)">
                           <ws-spinner-dot class="position-absolute d-block" style="top: 50%; left: 50%;"
                             [color]="'rgba(255,255,255,.8)'"></ws-spinner-dot>
                         </div>
-                        <img class="image-upload" [defaultImage]="environment.LOADING_IMG_URL" [lazyLoad]="image?.url"
-                          data-upload='img_upload' alt="item.png" />
+                        <img [src]="image?.url" data-upload='img_upload' class="image-upload" alt="item.png" />
+                        <div class="corner-setting">
+                          <span class="corner-setting-item fas fa-times"
+                            (click)="$event.stopPropagation();removeDescriptionImage(image?.name)"></span>
+                        </div>
                       </div>
                     </div>
-                    <div class="corner-setting">
-                      <span class="corner-setting-item fas fa-times"
-                        (click)="$event.stopPropagation();removeProfileImage(image?.filename)"></span>
-                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div class="ws-input">
-            <mat-select class="form-control form-control-sm nooutline border-right-0" formControlName="categories"
-              placeholder="Category Name" multiple>
-              <mat-option *ngFor="let category of categories" [value]="category._id">{{category.name}}</mat-option>
-            </mat-select>
-          </div>
-          <div class="ws-input">
-            <input class="form-control form-control-sm nooutline" autocomplete="off" name="refId"
-              placeholder="Stock keeping unit (SKU)*" formControlName="refId" tabIndex="1" />
-          </div>
-          <div class="ws-input">
-            <input class="form-control form-control-sm nooutline" autocomplete="off" name="name"
-              placeholder="Product Name*" formControlName="name" tabIndex="2" />
-          </div>
+            <div class="row no-gutters mt-2">
+              <div class="col-6">
+                <div class="input-group" style="flex-wrap: nowrap">
+                  <mat-checkbox [color]="'primary'" class="mr-1" formControlName="isEntityNew">
+                  </mat-checkbox>
+                  Mark as New
+                </div>
+                <div class="input-group" style="flex-wrap: nowrap">
 
-          <div class="ws-input">
-            <div class="input-group">
-              <div class="input-group-prepend">
-                <mat-select class="form-control form-control-sm nooutline border-right-0" style="width: 100px"
-                  formControlName="currency" placeholder="Currency">
-                  <mat-option *ngFor="let currency of currencies" [value]="currency.name">
-                    {{currency.name + " (" + currency.symbol + ")"}}</mat-option>
-                </mat-select>
-              </div>
-              <input name="price" autocomplete="off" tabIndex="2" class="form-control form-control-sm nooutline p-1"
-                lang="en-150" placeholder="Price*" formControlName="price" />
-            </div>
-          </div>
-          <div class="ws-input mb-2">
-            <textarea class="form-control form-control-sm nooutline" autocomplete="off" name="description" tabIndex="4"
-              placeholder="Description" style="resize:none" formControlName="description" rows='4'></textarea>
-          </div>
-
-          <div class="row no-gutters mb-2">
-            <button type="button" class="btn-item-upload mr-1"
-              onclick="document.getElementById('item_description_upload').click();">
-              <span class="fas fa-camera font-12"></span>
-              <p class="mb-0 font-weight-light">Description Image<br />(500 x 500)</p>
-            </button>
-
-            <div class="all-item-container ws-drag-list" cdkDropList (cdkDropListDropped)="dropDescription($event)"
-              cdkDropListOrientation="horizontal">
-              <div class="ws-drag-box mr-1 ml-1 border" *ngFor="let image of allDescriptionItems" cdkDrag>
-                <div [ngSwitch]="image?.type" class="center">
-                  <div *ngSwitchCase="'url'" class="item_div position-relative">
-                    <img src="{{environment.IMAGE_URL + image?.filename}}" class="image-upload" alt="item.png" />
-                    <div class="corner-setting">
-                      <span class="corner-setting-item fas fa-times"
-                        (click)="$event.stopPropagation();removeDescriptionImage(image?.filename)"></span>
-                    </div>
-                  </div>
-                  <div *ngSwitchCase="'blob'" class="item_div position-relative">
-                    <div *ngIf="!image?.done && image?.loading" class="w-100 h-100 position-absolute text-center"
-                      style="background-color: rgba(204,204,204,0.7)">
-                      <ws-spinner-dot class="position-absolute d-block" style="top: 50%; left: 50%;"
-                        [color]="'rgba(255,255,255,.8)'"></ws-spinner-dot>
-                    </div>
-                    <img [defaultImage]="environment.LOADING_IMG_URL" [lazyLoad]="image?.url" data-upload='img_upload'
-                      class="image-upload" alt="item.png" />
-
-                    <div class="corner-setting">
-                      <span class="corner-setting-item fas fa-times"
-                        (click)="$event.stopPropagation();removeDescriptionImage(image?.filename)"></span>
-                    </div>
-                  </div>
+                  <mat-checkbox [color]="'primary'" class="mr-1" formControlName="isPublished">
+                  </mat-checkbox>
+                  Mark item as published item
+                </div>
+                <div class="input-group" style="flex-wrap: nowrap">
+                  <mat-checkbox [color]="'primary'" class="mr-1" formControlName="isPriceDisplayed">
+                  </mat-checkbox>
+                  Displayed price to public
+                </div>
+                <div class="input-group" style="flex-wrap: nowrap">
+                  <mat-checkbox [color]="'primary'" class="mr-1" formControlName="isInStock">
+                  </mat-checkbox>
+                  Item is in-stock currently
                 </div>
               </div>
-              <input id="item_description_upload" #itemDescriptionUpload type="file" hidden multiple accept="image/*"
-                (change)="fileDescriptionChangeEvent($event)" />
-            </div>
-          </div>
-          <div class="row no-gutters mt-2">
-            <div class="col-6">
-              <div class="input-group" style="flex-wrap: nowrap">
-                <mat-checkbox [color]="'primary'" class="mr-1" formControlName="isEntityNew">
-                </mat-checkbox>
-                Mark as New
-              </div>
-              <div class="input-group" style="flex-wrap: nowrap">
-
-                <mat-checkbox [color]="'primary'" class="mr-1" formControlName="isMarkedAsPublished">
-                </mat-checkbox>
-                Mark item as published item
-              </div>
-              <div class="input-group" style="flex-wrap: nowrap">
-                <mat-checkbox [color]="'primary'" class="mr-1" formControlName="isPriceDisplayed">
-                </mat-checkbox>
-                Displayed price to public
-              </div>
-              <div class="input-group" style="flex-wrap: nowrap">
-                <mat-checkbox [color]="'primary'" class="mr-1" formControlName="isInStock">
-                </mat-checkbox>
-                Item is in-stock currently
-              </div>
-            </div>
-            <div class="col-6">
-              <!-- <div class="input-group" style="flex-wrap: nowrap">
+              <div class="col-6">
+                <!-- <div class="input-group" style="flex-wrap: nowrap">
                 <mat-checkbox [color]="'primary'" class="mr-1" formControlName="isEcommerce">
                 </mat-checkbox>
                 E-Commerce available
               </div> -->
-              <div class="input-group" style="flex-wrap: nowrap">
+                <!-- <div class="input-group" style="flex-wrap: nowrap">
                 <mat-checkbox [color]="'primary'" class="mr-1" formControlName="isPickup">
                 </mat-checkbox>
                 Pickup in store
+              </div> -->
               </div>
             </div>
-          </div>
-          <div>
-            <button *ngIf="!currentItem" class="btn btn-md btn-second float-right mr-0" type="button"
-              (click)="uploadAndAddItem()">Create</button>
-            <button *ngIf="currentItem" class="btn btn-md btn-second float-right mr-0" type="button"
-              (click)="uploadAndEditItem()">Save</button>
-          </div>
+            <div>
+              <ws-loading-button *ngIf="!currentItem" class="d-block" [loading]="addItemLoading.isRunning()"
+                [class]="'btn btn-md btn-second float-right mr-0'" type="button" (click)="uploadAndAddItem()">Create
+              </ws-loading-button>
+              <ws-loading-button *ngIf="currentItem" class="d-block" [loading]="addItemLoading.isRunning()"
+                [class]="'btn btn-md btn-second float-right mr-0'" type="button" (click)="uploadAndEditItem()">Save
+              </ws-loading-button>
+            </div>
+          </ng-container>
+          <ng-template #loadingTemplate>
+            <ws-loading></ws-loading>
+          </ng-template>
         </form>
       </div>
     </div>
   </div>
 </div>
-
-<ng-template #ecommerceFormTemplate>
-  <form class="modal-content" [formGroup]="ecommerceGroup">
-    <div class="modal-close">
-      <span class="fas fa-times" [routerLink]="['', {outlets: {modal:null}}]"></span>
-    </div>
-    <div class="ws-input">
-      <input class="form-control" placeholder="Brand (Default: No Brand)" formControlName="brand" />
-    </div>
-    <div class="ws-input">
-      <input class="form-control" placeholder="Warranty (Default: No Warranty)" formControlName="warranty" />
-    </div>
-    <div class="row no-gutters mb-4">
-      <div class="btn-image mt-3" [routerLink]="[{outlets: {type: 'image'}}]" queryParamsHandling="merge"
-        skipLocationChange>
-        <span class="fas fa-image p-2"></span>
-      </div>
-      <div class="pl-1 pr-1 col">
-        <div class="ws-input clickable" [routerLink]="[{ outlets: {type: 'color'}}]" queryParamsHandling="merge"
-          skipLocationChange>
-          <div class="p-2"><span class="color-span mr-2" *ngIf="ecommerceGroup.value.color != 'Color'"
-              [style.background-color]="ecommerceGroup.value.hexColor"></span>
-            <span class="d-inline-block"
-              style="line-height: 20px; vertical-align: middle">{{ecommerceGroup.value.color}}</span></div>
-        </div>
-        <div class="ws-input">
-          <mat-select class="form-control" placeholder="Sizes (Default: All Sizes)" formControlName="sizes" multiple>
-            <mat-option [value]="'3XS'">3XS</mat-option>
-            <mat-option [value]="'2XS'">2XS</mat-option>
-            <mat-option [value]="'XS'">XS</mat-option>
-            <mat-option [value]="'S'">S</mat-option>
-            <mat-option [value]="'M'">M</mat-option>
-            <mat-option [value]="'L'">L</mat-option>
-            <mat-option [value]="'XL'">XL</mat-option>
-            <mat-option [value]="'2XL'">2XL</mat-option>
-            <mat-option [value]="'3XL'">3XL</mat-option>
-            <mat-option [value]="'4XL'">4XL</mat-option>
-          </mat-select>
-        </div>
-      </div>
-      <div class="pl-1 pr-1 col position-relative">
-        <div class="ws-input">
-          <input class="form-control" placeholder="Quantity" formControlName="quantity" />
-        </div>
-        <div class="ws-input">
-          <input class="form-control" placeholder="Weight (kg)" formControlName="weight" />
-        </div>
-        <div class="btn-plus" (click)="addItemType()">
-          <span class="fas fa-plus"></span>
-        </div>
-        <div [class.selected]="selectedTypeIndex != null" class="btn-edit" (click)="editItemType()">
-          <span class="fas fa-edit"></span>
-        </div>
-      </div>
-    </div>
-    <div class="mb-2">
-      <div class="mb-1 row no-gutters p-2 type-container" [class.selected]="selectedTypeIndex == i"
-        *ngFor="let type of itemTypes; let i = index" (click)="selectType(i)">
-        <div class="col p-2"><span class="color-span mr-2" [style.background-color]="type.hexColor"></span>
-          <span class="d-inline-block" style="line-height: 20px; vertical-align: middle">{{type.color}}</span></div>
-        <div class="col p-2">Quantity: {{type.quantity}}</div>
-        <div class="col p-2">{{type.sizes}}</div>
-        <div class="col p-2">{{type.weight}}kg</div>
-        <a class="p-2" href="javascript:void(0)" (click)="removeItemType(type)">Remove</a>
-      </div>
-    </div>
-    <div>
-      <button class="btn btn-md btn-second float-right mr-0" (click)="updateItemType()">Save</button>
-    </div>
-  </form>
-</ng-template>
-<router-outlet name="type"></router-outlet>

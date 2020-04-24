@@ -1,6 +1,5 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ArrayHelper } from '@helpers/arrayhelper/array.helper';
-import { WsLoading } from '@components/elements/ws-loading/ws-loading';
 import { WsModalClass } from '@components/elements/ws-modal/ws-modal';
 import { WsModalService } from '@components/elements/ws-modal/ws-modal.service';
 import _ from 'lodash';
@@ -12,10 +11,10 @@ import _ from 'lodash';
 })
 export class AddToCategoriesModalComponent extends WsModalClass implements OnInit {
   @Input() action: Function;
+  @Input() loading: Boolean = false;
   @Input() displayCategoryList = [];
   @Input() get editCategoryList() { return this._editCategoryList; }
   @Output() editCategoryListChange: EventEmitter<any> = new EventEmitter;
-  loading: WsLoading = new WsLoading;
   _editCategoryList = [];
 
   set editCategoryList(val) {

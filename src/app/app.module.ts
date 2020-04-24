@@ -41,12 +41,11 @@ import { ShopListControllerComponent } from '@components/shop-list/shop-list-con
 import { ActiveShopComponent } from '@components/shop-list/active-shop/active-shop.component';
 import { PendingShopComponent } from '@components/shop-list/pending-shop/pending-shop.component';
 import { WsPassDatePipe } from './pipes/ws-pass-date.pipe';
+import { WsCurrencyPipe } from './pipes/ws-currency.pipe';
 import { ConfirmModalComponent } from '@components/modals/confirm-modal/confirm-modal.component';
 import { ItemViewComponent } from '@components/shop/catalogue/item-view/item-view.component';
 import { ItemControllerComponent } from '@components/shop/catalogue/item-controller/item-controller.component';
-import { ImagePickerComponent } from '@components/shop/catalogue/image-picker/image-picker.component';
 import { DiscountItemsComponent } from '@components/shop/catalogue/discount-items/discount-items.component';
-import { ColorPickerComponent } from '@components/shop/catalogue/color-picker/color-picker.component';
 import { WsModalComponent } from '@components/elements/ws-modal/ws-modal.component';
 import { SearchBarComponent } from '@components/elements/search-bar/search-bar.component';
 import { AddToCategoriesModalComponent } from '@components/modals/add-to-categories-modal/add-to-categories-modal.component';
@@ -82,6 +81,12 @@ import { EditContributorModalComponent } from '@components/modals/edit-contribut
 import { WsToastComponent } from '@components/elements/ws-toast/ws-toast.component';
 import { WsLoadingScreenComponent } from '@components/elements/ws-loading-screen/ws-loading-screen.component';
 import { ModifyItemComponent } from '@components/shop/catalogue/modify-item/modify-item.component';
+import { WsDropdownComponent } from '@components/elements/ws-dropdown/ws-dropdown.component';
+import { WsDiscountconverterPipe } from './pipes/ws-discountconverter.pipe';
+import { WsUploaderComponent } from './components/elements/ws-uploader/ws-uploader.component';
+import { WsPaginationComponent } from './components/elements/ws-pagination/ws-pagination.component';
+import { AutofocusDirective } from './directives/autofocus.directive';
+import { ModifyItemTypeComponent } from './components/shop/catalogue/modify-item-type/modify-item-type.component';
 export function jwtOptionsFactory(platformId) {
   return {
     tokenGetter: () => {
@@ -130,9 +135,7 @@ export function provideConfig() {
     ActiveShopComponent,
     AllItemsComponent,
     ShopListControllerComponent,
-    ColorPickerComponent,
     DiscountItemsComponent,
-    ImagePickerComponent,
     ItemControllerComponent,
     ItemViewComponent,
     CreateShopComponent,
@@ -148,17 +151,19 @@ export function provideConfig() {
     SocialMediaComponent,
     QrcodeComponent,
     ModifyItemComponent,
-    ColorPickerComponent,
-    ImagePickerComponent,
+    WsDropdownComponent,
     ErrorComponent,
 
     // Pipes
     WsPassDatePipe,
+    WsCurrencyPipe,
+    WsDiscountconverterPipe,
     WsLimitCtrlPipe,
 
     // Directives
     ModalDirective,
     ClickoutsideDirective,
+    AutofocusDirective,
 
     // Elements
     WsLoadingComponent,
@@ -178,6 +183,8 @@ export function provideConfig() {
     PermissionListComponent,
     BusinessLocationComponent,
     BusinessTimetableComponent,
+    WsUploaderComponent,
+    WsPaginationComponent,
     
     // Modals
     AddToCategoriesModalComponent,
@@ -186,7 +193,8 @@ export function provideConfig() {
     MoveToCategoriesModalComponent,
     ImportItemsModalComponent,
     ImageUploadModalComponent,
-    EditContributorModalComponent
+    EditContributorModalComponent,
+    ModifyItemTypeComponent
   ],
   imports: [
     BrowserModule,

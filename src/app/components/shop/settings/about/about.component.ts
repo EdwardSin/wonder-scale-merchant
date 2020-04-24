@@ -72,7 +72,7 @@ export class AboutComponent implements OnInit {
     isMarkedAsNew: true,
     isInStock: true,
     isPriceDisplayed: true,
-    isMarkedAsPublished: true,
+    isPublished: true,
     isEcommerce: false,
     isPickup: false,
     defaultCurrency: 'MYR'

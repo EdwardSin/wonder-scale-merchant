@@ -18,6 +18,7 @@ export class SharedCategoryService {
     numberOfPublishedItems: BehaviorSubject<number> = new BehaviorSubject<number>(0);
     numberOfUnpublishedItems: BehaviorSubject<number> = new BehaviorSubject<number>(0);
     numberOfUncategorizedItems: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+    numberOfCurrentTotalItems: BehaviorSubject<number> = new BehaviorSubject<number>(0);
     allItemsRefresh: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
     newItemsRefresh: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
     discountItemsRefresh: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, Input, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from '@environments/environment';
 import { Currency } from '@objects/currency';
 import { CurrencyOption } from '@objects/currency.option';
@@ -7,15 +7,14 @@ import { Item } from '@objects/item';
 import { CurrencyService } from '@services/http/general/currency.service';
 import { SharedItemService } from '@services/shared/shared-item.service';
 import { SharedShopService } from '@services/shared/shared-shop.service';
-import { OrderHelper } from '@helpers/orderhelper/order.helper';
-import { OrderType } from '@wstypes/order.type';
-import { OrderingType } from '@wstypes/ordering.type';
 import { ViewType } from '@wstypes/view.type';
 import { PriceHelper } from '@helpers/pricehelper/price.helper';
 import { ScreenHelper } from '@helpers/screenhelper/screen.helper';
 import { WsModalService } from '@components/elements/ws-modal/ws-modal.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { SharedNavbarService } from '@services/shared/shared-nav-bar.service';
+import { SharedCategoryService } from '@services/shared/shared-category.service';
 
 @Component({
   selector: 'item-view',
@@ -26,57 +25,62 @@ import { takeUntil } from 'rxjs/operators';
 export class ItemViewComponent implements OnInit {
 
   @Input() showCategory: boolean = false;
-  order: OrderType = 'alphabet';
-  orderBy: OrderingType;
   param;
+  shop;
   display: ViewType = 'list';
   isMobileSize: boolean;
   currencyOption: CurrencyOption = new CurrencyOption;
   environment = environment;
   Currency = Currency;
-  allItems: Item[] = [];
   displayItems: Item[] = [];
   editItems: Item[] = [];
+  isNavOpen: Boolean = false;
+  total: number = 0;
+  currentPage: number = 1;
 
   private ngUnsubscribe: Subject<any> = new Subject();
 
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private sharedItemService: SharedItemService,
+    private sharedCategoryService: SharedCategoryService,
     private sharedShopService: SharedShopService,
     private ref: ChangeDetectorRef,
     private currencyService: CurrencyService,
-    private modalService: WsModalService
-  ) { }
+    private modalService: WsModalService,
+    private sharedNavbarService: SharedNavbarService
+  ) { 
+  }
 
   ngOnInit() {
     this.isMobileSize = ScreenHelper.isMobileSize();
     this.param = this.route.snapshot['url'] && this.route.snapshot['url'][0] && this.route.snapshot['url'][0]['path'];
     this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe(queryParams => {
       this.display = queryParams['display'] || 'list';
-      this.order = queryParams['order'] || 'alphabet';
-      this.orderBy = queryParams['by'];
-      this.displayItems = OrderHelper.orderByAndSetItemList(this.order, this.displayItems, this.orderBy);
+      this.currentPage = queryParams['page'] || 1;
       this.ref.detectChanges();
     })
-    this.sharedItemService.allItems.pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(res => {
-        if (res) {
-          this.allItems = res;
-        }
-      })
+    this.sharedShopService.shop.pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe(result => {
+      if(result) {
+        this.shop = result;
+      }
+    });
     this.sharedItemService.displayItems.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(res => {
         if (res) {
           this.displayItems = res;
-          this.order = this.route.snapshot.queryParams['order'] || 'alphabet';
-          this.orderBy = this.route.snapshot.queryParams['by'];
           this.display = this.route.snapshot.queryParams['display'] || 'list';
           PriceHelper.getDisplayPrice(this.displayItems, PriceHelper.currencies, PriceHelper.rate);
-          this.displayItems = OrderHelper.orderByAndSetItemList(this.order, this.displayItems, this.orderBy);
           this.ref.detectChanges();
         }
+      })
+    this.sharedCategoryService.numberOfCurrentTotalItems.pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(res => {
+        this.total = res;
+        this.ref.detectChanges();
       })
     this.sharedItemService.editItems.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(res => {
@@ -103,7 +107,11 @@ export class ItemViewComponent implements OnInit {
           this.ref.detectChanges();
         }
       });
-
+    this.sharedNavbarService.isNavSubject.pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe(res => {
+      this.isNavOpen = res;
+      this.ref.detectChanges();
+    });
   }
 
   @HostListener('window:resize', ['$event'])
@@ -133,6 +141,9 @@ export class ItemViewComponent implements OnInit {
   openModal(id, item) {
     this.modalService.open(id);
     this.modalService.setElement(id, item);
+  }
+  navigate(event) {
+    this.router.navigate([], { queryParams: {page: event}, queryParamsHandling: 'merge' });
   }
 
   ngOnDestroy() {

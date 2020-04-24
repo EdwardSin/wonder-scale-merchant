@@ -1,7 +1,7 @@
 @import '../../../../assets/scss/variables.scss';
 
 .fa-times{
-    color: map-get($ws-color, light-grey);
+    color: map-get($ws-color, light-grey-1);
     &:hover{
         color: map-get($ws-color, dark-grey);
     }

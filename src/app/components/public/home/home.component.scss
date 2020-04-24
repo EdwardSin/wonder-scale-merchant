@@ -82,7 +82,7 @@ footer {
     left: -150px;
     
     p{
-        color: map-get($ws-color, light-grey);
+        color: map-get($ws-color, light-grey-1);
         border-bottom: map-get($ws-style, border);
     }
     ul {
@@ -92,11 +92,11 @@ footer {
         padding: 0;
         margin:0;
         li:hover{
-            background-color: map-get($ws-color, lighter-grey);
+            background-color: map-get($ws-color, light-grey-4);
         }
         .selected {
             font-weight: bold;
-            background-color: map-get($ws-color, lighter-grey);
+            background-color: map-get($ws-color, light-grey-4);
         }
     }
 }

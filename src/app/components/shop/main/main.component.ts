@@ -22,10 +22,12 @@ import { WsLoading } from '@components/elements/ws-loading/ws-loading';
 import { WsModalService } from '@components/elements/ws-modal/ws-modal.service';
 import { WsToastService } from '@components/elements/ws-toast/ws-toast.service';
 import _ from 'lodash';
-import { Subject } from 'rxjs';
+import { Subject, BehaviorSubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SharedLoadingService } from '../../../services/shared/shared-loading.service';
 import { Shop } from '@objects/shop';
+import { SharedItemService } from '@services/shared/shared-item.service';
+import { SharedNavbarService } from '@services/shared/shared-nav-bar.service';
 
 
 @Component({
@@ -74,7 +76,6 @@ export class MainComponent implements OnInit {
   constructor(private router: Router, private route: ActivatedRoute,
     private authShopContributorService: AuthShopContributorService,
     private authCategoryContributorService: AuthCategoryContributorService,
-    // private authRequestContributorService: AuthRequestContributorService,
     private currencyService: CurrencyService,
     private sharedCategoryService: SharedCategoryService,
     private sharedShopService: SharedShopService,
@@ -85,6 +86,8 @@ export class MainComponent implements OnInit {
     private shopAuthorizationService: ShopAuthorizationService,
     private activeRoute: ActivatedRoute,
     private sharedLoadingService: SharedLoadingService,
+    private sharedNavbarService: SharedNavbarService,
+    private sharedItemService: SharedItemService,
     private ref: ChangeDetectorRef) {
 
   }
@@ -93,22 +96,21 @@ export class MainComponent implements OnInit {
     this.isMobileSize = ScreenHelper.isMobileSize();
     this.isNavOpen = !this.isMobileSize;
     this.shop_username = this.route.snapshot.params['username'];
-
+    this.sharedNavbarService.isNavSubject.next(this.isNavOpen);
     this.router.events.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(event => {
         if (event instanceof NavigationEnd) {
           if (this.isMobileSize) {
             this.isNavOpen = false;
+            this.sharedNavbarService.isNavSubject.next(this.isNavOpen);
+          }
+          this.sharedItemService.editItems.next([]);
+          this.routeParts = this.routePartsService.generateRouteParts(this.activeRoute.snapshot);
+          if (this.routeParts[1]['title'] == 'cat') {
+            this.category_name = RoutePartsService.parseText(this.routeParts[0]);
           }
         }
       })
-
-    this.route.url.subscribe(url => {
-      this.routeParts = this.routePartsService.generateRouteParts(this.activeRoute.snapshot);
-      if (this.routeParts[1]['title'] == 'cat') {
-        this.category_name = RoutePartsService.parseText(this.routeParts[0]);
-      }
-    })
     this.sharedUserService.user.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
         if (result) {
@@ -186,6 +188,10 @@ export class MainComponent implements OnInit {
     //       //this.refreshCategories();
     //     }
     //   })
+    this.sharedNavbarService.isNavSubject.pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe(res => {
+      this.isNavOpen = res;
+    });
     this.sharedShopService.quotations.pipe(takeUntil(this.ngUnsubscribe)).subscribe(res => {
       if (res) {
         this.unreplied_quotations = res;
@@ -245,6 +251,7 @@ export class MainComponent implements OnInit {
         .subscribe(result => {
           WsToastService.toastSubject.next({ content: 'Category is added!', type: 'success' });
           this.new_name = '';
+          result['result'].items = [];
           this.categories.push(result['result']);
         }, (err) => {
           WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
@@ -331,6 +338,10 @@ export class MainComponent implements OnInit {
   }
   closeModal(id) {
     this.modalService.close(id);
+  }
+  isNavOpenChange(event){
+    this.isNavOpen = event;
+    this.sharedNavbarService.isNavSubject.next(event);
   }
   ngOnDestroy() {
     this.ngUnsubscribe.next();

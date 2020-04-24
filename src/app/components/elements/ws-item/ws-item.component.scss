@@ -1,5 +1,6 @@
 @import '../../../../assets/scss/variables.scss';
 :host{
+    cursor: pointer;
     .offer-tag{
         position: absolute;
         padding-right: .25rem;
@@ -21,7 +22,6 @@
         z-index:1;
         filter: drop-shadow(2px 2px 3px #666666);
     }
-    cursor: pointer;
     .card-text {
         text-overflow: ellipsis;
         overflow: hidden;
@@ -90,10 +90,9 @@
         width: 100%;
         font-size:.8rem;
     }
-    
     .fa-times {
         position: absolute;
-        color: map-get($ws-color, light-grey);
+        color: map-get($ws-color, light-grey-1);
         z-index: 99;
         top: 10px;
         right: 10px;
@@ -121,9 +120,8 @@
             animation: enlarge 0.3s ease;
         }
     }
-    
     .fa-info-sign {
-        color: map-get($ws-color, light-grey);
+        color: map-get($ws-color, light-grey-1);
         position: absolute;
         z-index: 99;
         left: 5px;
@@ -136,17 +134,17 @@
         color: map-get($ws-color, primary);
     }
     .item-div{
-        border: 1px solid map-get($ws-color, lighten-grey);
+        border: 1px solid map-get($ws-color, light-grey-2);
         border-radius: .25rem;
         overflow: hidden;
-        background-color: map-get($ws-color, lighter-grey);
+        background-color: map-get($ws-color, light-grey-4);
         position:relative;
         z-index: 1;
         &:hover {
             .fa-cog{
                 opacity: 0.3;
             }
-            box-shadow: 0 0 3px map-get($ws-color, dark-grey);
+            box-shadow: 0 0 3px map-get($ws-color, light-grey-1);
         }
         .fa-cog:hover {
             opacity: 0.7;

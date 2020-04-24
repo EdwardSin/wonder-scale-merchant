@@ -10,27 +10,6 @@
             opacity: 0.7;
         }
     }
-    // &.fa-bullhorn{
-    //     padding:6px;
-    //     &::before{
-    //         content: url('/assets/images/svg/bullhorn.svg');
-    //         width: 23px;
-    //     }
-    // }
-    // &.fa-unbullhorn{
-    //     padding:6px;
-    //     &::before{
-    //         content: url('/assets/images/svg/unbullhorn.svg');
-    //         width: 23px;
-    //     }
-    // }
-    // &.fa-untags{
-    //     padding:6px;
-    //     &::before{
-    //         content: url('/assets/images/svg/untags.svg');
-    //         width: 25px;    
-    //     }
-    // }
     &.fa-cog{
         width:16px;
         height:16px;
@@ -92,13 +71,8 @@
     }
 }
 .dropdown-item{
-    &:hover{
-        color:map-get($ws-color, clear);
-        background-color: map-get($ws-color, secondary-hover);
-    }
     &.orderSelected{
-        color:map-get($ws-color, clear);
-        background-color: map-get($ws-color, secondary);
+        background-color: map-get($ws-color, light-grey-3);
     }
 }
 
@@ -169,7 +143,7 @@
         height: 30px;
         padding: 0;
         margin: 0;
-        background-color: #f4f5f7;
+        background-color: map-get($ws-color, light-grey-4);
         color: #505f79;
         transition: background-color .2s ease-out, color .2s ease-out;
         &:hover {

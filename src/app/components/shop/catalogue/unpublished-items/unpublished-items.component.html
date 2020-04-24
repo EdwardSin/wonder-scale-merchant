@@ -1,6 +1,6 @@
-<h4 class="ws-title">Unpublished<span class='fas fa-info-circle ml-2'></span></h4>
+<h4 class="ws-title">Unpublished<span title="Display all unpublished items" class='fas fa-info-circle ml-2 font-9'></span></h4>
 
-<div *ngIf="allItems.length; else loadingTemplate">
+<div *ngIf="numberOfUnpublishedItems; else loadingTemplate">
     <item-controller></item-controller>
     <div *ngIf="displayItems.length; else searchLoadingTemplate">
         <item-view [showCategory]="true"></item-view>

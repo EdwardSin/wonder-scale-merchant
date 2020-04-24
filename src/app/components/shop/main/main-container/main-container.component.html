@@ -1,9 +1,9 @@
 <div class="main-container">
   <div class="container-fluid pb-5">
     <div class="row no-gutters w-100 position-relative">
-      <span *ngIf="isMobileSize" class="text-center"
+      <span *ngIf="isMobileSize" class="text-center clickable"
         style="line-height: 47px; vertical-align: middle; border-bottom: 1px solid #e5e5e5"
-        (click)="isNavOpen = !isNavOpen">
+        (click)="onNavbarOpen(isNavOpen)">
         <span class="fas fa-bars d-inline-block pr-3 pl-3"></span>
       </span>
       <breadcrumb class="col"></breadcrumb>
