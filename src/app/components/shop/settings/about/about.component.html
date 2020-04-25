@@ -1,44 +1,42 @@
 <h4 class="ws-title">About</h4>
-<div class="pb-3">
-  <div class="p-0 banner-image-container mb-2 center">
-    <div class="hover p-3">
-      <label *ngIf="isBannerUploaded" (click)="editBanner()" class="btn-upload mr-2">
-        <span class="fas fa-upload"></span></label>
-      <label onclick="document.getElementById('bannerImage').click()" class="btn-upload btn-upload-camera">
-        <span class="fas fa-camera"></span></label>
-      <!-- <a *ngIf="isBannerUploaded" href="javascript:void(0)" class="btn-upload">Upload</a> -->
-    </div>
-    <div style="background-color: rgba(0,0,0,.2); max-width: 500px; width: 100%; height: 275px">
-      <div (click)="openShopModal('imageUploadModal', shop)">
-        <img class="img-profile" src="{{environment.IMAGE_URL + shop?.profileImage}}" alt="Shop Profile" />
-        <span class="img-profile img-hover">
-          <span class="camera">
-            <span class="fas fa-camera"></span>
-          </span>
-        </span>
-      </div>
-      <img *ngIf="shop?.bannerImage || isBannerUploaded" class="banner-image" #bannerImage
-        src="{{ environment.IMAGE_URL + shop?.bannerImage}}" alt="Shop Banner" />
-      <input id="bannerImage" #bannerImageInput (change)="fileChangeEvent($event)" type="file" hidden />
-    </div>
+<div class="p-0 banner-image-container center">
+  <div class="hover p-3">
+    <label onclick="document.getElementById('bannerImage').click()" class="btn-upload btn-upload-camera mr-2">
+      <span class="fas fa-camera"></span></label>
+    <label *ngIf="shop?.bannerImage || isBannerUploaded" (click)="removeBannerImage()" class="btn-upload float-right">
+      <span class="fas fa-trash"></span></label>
+    <label *ngIf="isBannerUploaded" (click)="editBannerImage()" class="btn-upload float-right mr-2">
+      <span class="fas fa-save"></span></label>
   </div>
-  <!-- <button *ngIf="shop?.bannerImage || isBannerUploaded" class="btn btn-second btn-md m-0 mt-3 mb-3 mr-2"
-    wsDebounceClick (debounceClick)="editBanner()">Upload and Save</button>
-  <button *ngIf="shop?.bannerImage || isBannerUploaded" class="btn btn-second btn-md m-0 mt-3 mb-3" wsDebounceClick
-    (debounceClick)="removeBanner()">Remove</button> -->
-
-
-
-
-  <!-- <div class="d-inline-block" style="vertical-align: middle">
-    <span class="d-flex" style="font-size: 1.5rem">{{shop?.name}}</span>
-    <span class="text-center d-block">@{{shop?.username}}</span>
-    <a class="text-center default" href="javascript:void(0)" (click)="openShopModal('imageUploadModal', shop)">
-      <span>Edit Profile</span>
-    </a>
-  </div> -->
+  <div style="background-color: rgba(0,0,0,.2); max-width: 465px; width: 100%; height: 220px">
+    <div onclick="document.getElementById('profileImage').click()">
+      <img class="img-profile" [src]="profileImage" alt="Shop Profile" />
+      <span class="img-profile img-hover">
+        <span *ngIf="!isProfileImageUploading.isRunning()" class="camera">
+          <span class="fas fa-camera"></span>
+        </span>
+        <span *ngIf="isProfileImageUploading.isRunning()" class="img-profile__uploading">
+          <img style="position: absolute; top: calc(50% - 8px); left: calc(50% - 8px);" [src]="environment.LOADING_UPLOAD_DATA" alt="loading" />
+        </span>
+      </span>
+    </div>
+    <img *ngIf="bannerImage || isBannerUploaded" class="banner-image" [src]="bannerImage" alt="Shop Banner" />
+    <span *ngIf="isBannerImageUploading.isRunning()" class="img-banner__uploading">
+      <img style="position: absolute; top: calc(50% - 8px); left: calc(50% - 8px);" [src]="environment.LOADING_UPLOAD_DATA" alt="loading" />
+    </span>
+    <ws-uploader [id]="'bannerImage'" [max]="1" [input]="[]" (output)="bannerFileChangeEvent($event)"></ws-uploader>
+    <ws-uploader [id]="'profileImage'" [max]="1" [input]="[]" (output)="profileImageFileChangeEvent($event)"></ws-uploader>
+  </div>
 </div>
-<div class="pt-3 pb-3">
+
+<!-- <div class="d-inline-block" style="vertical-align: middle">
+  <span class="d-flex" style="font-size: 1.5rem">{{shop?.name}}</span>
+  <span class="text-center d-block">@{{shop?.username}}</span>
+  <a class="text-center default" href="javascript:void(0)" (click)="openShopModal('imageUploadModal', shop)">
+    <span>Edit Profile</span>
+  </a>
+</div> -->
+<div class="py-2">
   <div class="settings-header">
     <h4 class="ws-subtitle mb-3">General</h4>
     <button class="btn btn-expand float-right" (click)="isGeneralExpanded = !isGeneralExpanded">{{ isGeneralExpanded ?
@@ -60,14 +58,16 @@
         </div>
 
         <label class="settings-label">Description (Optional)</label>
-        <textarea rows="5" name="Description" class="settings-input nooutline form-control form-control-sm"
+        <textarea rows="5" maxlength="256" name="Description" class="settings-input nooutline form-control form-control-sm"
           formControlName="description"></textarea>
         <label class="settings-label">Currency</label>
-        <select class="form-control nooutline" formControlName="currency">
-          <option *ngFor="let currency of Currency.currenciesAsArray" [value]="currency">{{currency}}
-            ({{Currency.symbols[currency]}})</option>
-        </select>
-        <div class="d-block mt-3 border p-3" style="background-color: #fafafa; border-radius: .25rem">
+
+        <mat-select class="form-control form-control-sm" placeholder="Currency" formControlName="currency">
+          <mat-option [value]="currency" *ngFor="let currency of Currency.currenciesAsArray">{{currency}}({{Currency.symbols[currency]}})
+          </mat-option>
+        </mat-select>
+        
+        <!-- <div class="d-block mt-3 border p-3" style="background-color: #fafafa; border-radius: .25rem">
           <label class="mb-0 w-100 font-weight-bold">Tag Recommendation:</label>
           <label class="mb-0 w-100">Restaurants:</label>
           <div class="mb-2" style="line-height: 1rem">
@@ -105,9 +105,8 @@
           <span class="fas fa-times clickable"
             (click)="$event.stopPropagation(); tag.removeTag(rtag); tag.reset();"></span>
         </span>
-        <br />
-        <button class="btn btn-success btn-md m-0 mt-3 mb-3" wsDebounceClick (debounceClick)="editGeneral()">Save
-          Changes</button>
+        <br /> -->
+        <button class="btn btn-success btn-sm m-0 mt-3 mb-3" wsDebounceClick (debounceClick)="editGeneral()">Save Changes</button>
       </form>
     </div>
   </div>
@@ -153,7 +152,7 @@
               <mat-checkbox [color]="'primary'" formControlName="isInStock"></mat-checkbox>
             </td>
           </tr>
-          <tr>
+          <!-- <tr>
             <td class="pr-3">
               <span>E-Commerce available</span>
             </td>
@@ -179,10 +178,9 @@
                   ({{Currency.symbols[currency]}})</option>
               </select>
             </td>
-          </tr>
+          </tr> -->
         </table>
-        <button class="btn btn-success btn-md m-0 mt-3 mb-3" wsDebounceClick (debounceClick)="editDefault()">Save
-          Changes</button>
+        <button class="btn btn-success btn-sm m-0 mt-3 mb-3" wsDebounceClick (debounceClick)="editDefault()">Save Changes</button>
       </form>
     </div>
   </div>
@@ -193,32 +191,35 @@
     <p>Update your shop contact information.</p>
     <div [@expand]="'down'" *ngIf="isContactExpanded">
       <form [formGroup]="form" (keydown.enter)="$event.preventDefault()">
-        <div>
+        <div class="col-sm-6 px-0 center mb-3">
           <label class="settings-label">Email</label>
           <ws-multiple-input [(items)]="shop.email" [type]="'email'" [placeholder]="'Email'" [maxItems]="3"
             [name]="'email'"></ws-multiple-input>
         </div>
-        <div>
+        <div class="col-sm-6 px-0 center mb-3">
           <label class="settings-label">Tel</label>
           <ws-multiple-input [(items)]="shop.phone" [type]="'tel'" [placeholder]="'Tel'" [maxItems]="3" [name]="'tel'">
           </ws-multiple-input>
         </div>
-        <div>
+        <div class="col-sm-6 px-0 center mb-3">
           <label class="settings-label">Website</label>
           <ws-multiple-input [(items)]="shop.website" [type]="'url'"
             [placeholder]="'Url (Example: https://www.example.com)'" [maxItems]="3" [name]="'website'">
           </ws-multiple-input>
         </div>
-        <div>
+        
+        <div class="col-sm-6 px-0 center">
           <label class="settings-label">Busines Point</label>
-          <business-location [address]="address" [mapController]="mapController"></business-location>
+          <br/>
+          <mat-checkbox [color]="'primary'" [checked]="isShowLocation" (change)="disabledControls()" class="mr-2 d-inline-block"  style="vertical-align: text-top"></mat-checkbox>
+            <label class="mb-0 font-9" style="display: inline-flex">Show Business Location</label>
+          <business-location [disabled]="!isShowLocation" [address]="address" [mapController]="mapController"></business-location>
         </div>
-        <div>
+        <div class="col-sm-6 px-0 center">
           <label class="settings-label">Opening Hour</label>
           <business-timetable [(timetable)]="timetable"></business-timetable>
         </div>
-        <button class="btn btn-success btn-md m-0 mt-3 mb-3" wsDebounceClick (debounceClick)="editContact()">Save
-          Changes</button>
+        <button class="btn btn-success btn-sm m-0 mt-3 mb-3" wsDebounceClick (debounceClick)="editContact()">Save Changes</button>
       </form>
     </div>
   </div>
@@ -271,7 +272,7 @@
             <option>Maintainer</option>
           </select>
           <permission-list [role]="contributorController.new_role"></permission-list>
-          <button class="btn btn-md btn-success m-0 mt-3 mb-3" wsDebounceClick
+          <button class="btn btn-sm btn-success m-0 mt-3 mb-3" wsDebounceClick
             (debounceClick)="inviteContributor()">Invite</button>
         </div>
       </form>
@@ -328,9 +329,9 @@
         <p *ngIf="shop?.status?.status != 'cancel'" class="font-weight-normal" style="font-size: .9rem">
           You can reactivate shop within 14 days.<br>
           Shop will not be displayed to public.</p>
-        <button *ngIf="shop.status.status == 'cancel'" class="btn btn-warning btn-md m-0"
+        <button *ngIf="shop.status.status == 'cancel'" class="btn btn-warning btn-sm m-0"
           (click)="openModal('confirmReactivateModal')">Reactivate</button>
-        <button *ngIf="shop.status.status != 'cancel'" class="btn btn-md btn-danger m-0"
+        <button *ngIf="shop.status.status != 'cancel'" class="btn btn-sm btn-danger m-0"
           (click)="openModal('confirmCloseShopModal')">Remove
           Shop Permanently</button>
       </form>
@@ -340,7 +341,7 @@
           All contributors can leave the shop.<br />
           At lease 1 admin should be in the shop.
         </p>
-        <button class="btn btn-warning btn-md m-0" (click)="openModal('confirmQuitShopModal')">Leave Shop</button>
+        <button class="btn btn-warning btn-sm m-0" (click)="openModal('confirmQuitShopModal')">Leave Shop</button>
       </form>
     </div>
   </div>
@@ -350,7 +351,7 @@
         <p>Reset your password to keep your account safe.</p>
     </div> -->
 </div>
-<image-upload-modal id="imageUploadModal" [type]="'shop'"></image-upload-modal>
+<!-- <image-upload-modal id="imageUploadModal" [type]="'shop'"></image-upload-modal> -->
 <edit-contributor-modal id="editModal"></edit-contributor-modal>
 <confirm-modal id="confirmCloseShopModal" [message]="'Are you sure to close the shop permanently?'"
   [action]="closePermanently.bind(this)"></confirm-modal>

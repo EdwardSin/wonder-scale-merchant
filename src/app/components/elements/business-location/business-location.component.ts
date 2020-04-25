@@ -13,6 +13,7 @@ import _ from "lodash";
 export class BusinessLocationComponent implements OnInit {
   @Input() address: Address;
   @Input() mapController: MapController;
+  @Input() disabled: boolean = true;
   environment = environment;
   data = {
     countries: Constants.countries,

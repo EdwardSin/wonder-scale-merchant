@@ -86,6 +86,7 @@ import { WsDiscountconverterPipe } from './pipes/ws-discountconverter.pipe';
 import { WsUploaderComponent } from './components/elements/ws-uploader/ws-uploader.component';
 import { WsPaginationComponent } from './components/elements/ws-pagination/ws-pagination.component';
 import { AutofocusDirective } from './directives/autofocus.directive';
+import { DebounceClickDirective } from './directives/debounce-click.directive';
 import { ModifyItemTypeComponent } from './components/shop/catalogue/modify-item-type/modify-item-type.component';
 export function jwtOptionsFactory(platformId) {
   return {
@@ -164,6 +165,7 @@ export function provideConfig() {
     ModalDirective,
     ClickoutsideDirective,
     AutofocusDirective,
+    DebounceClickDirective,
 
     // Elements
     WsLoadingComponent,
