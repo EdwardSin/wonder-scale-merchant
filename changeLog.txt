@@ -8,6 +8,7 @@
 ---------------------------------------------
 .: WSM: Story: Shop Settings Module (WSM-23)
 .: WSM: Story: Currency Module (WSM-34)
+.: WSM: Task: Change Icon (WSM-17)
 
 ---------------------------------------------
 - 2020-04-24                                -

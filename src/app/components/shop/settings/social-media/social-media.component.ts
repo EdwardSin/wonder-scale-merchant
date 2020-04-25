@@ -47,7 +47,7 @@ export class SocialMediaComponent implements OnInit {
     this.route.data.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
         this.shop = result['shop'];
-        DocumentHelper.setWindowTitleWithWonderScale('Social Media | Settings | ' + this.shop.name);
+        DocumentHelper.setWindowTitleWithWonderScale('Social Media - Settings | ' + this.shop.name);
         this.isMediaMax = this.isMediaMaximum();
         this.loading.stop();
       })
