@@ -5,7 +5,6 @@ import { WSFormBuilder } from '@builders/wsformbuilder';
 import { environment } from '@environments/environment.prod';
 import { Contributor } from '@objects/contributor';
 import { ContributorController } from '@objects/contributor.controller';
-import { Currency } from '@objects/currency';
 import { Tag } from '@objects/tag';
 import { TagController } from '@objects/tag.controller';
 import { AuthDefaultSettingAdminService } from '@services/http/auth-shop/admin/auth-default-setting-admin.service';
@@ -31,6 +30,7 @@ import { Shop } from '@objects/shop';
 import { WsToastComponent } from '@components/elements/ws-toast/ws-toast.component';
 import{ EmailValidator} from '@validations/email.validator';
 import { URLValidator } from '@validations/urlvalidator';
+import { CurrencyService } from '@services/http/general/currency.service';
 
 @Component({
   selector: 'app-about',
@@ -51,7 +51,6 @@ export class AboutComponent implements OnInit {
   isShowLocation: boolean;
   remove_day_number: number;
   element: string;
-  Currency = Currency;
   loading: WsLoading = new WsLoading;
   refreshLoading: WsLoading = new WsLoading;
   isBannerUploaded: boolean;
@@ -98,6 +97,7 @@ export class AboutComponent implements OnInit {
     private gpsService: WsGpsService,
     private router: Router,
     private route: ActivatedRoute,
+    private currencyService: CurrencyService,
     private authShopUserService: AuthShopUserService,
     private shopAuthorizationService: ShopAuthorizationService,
     private ref: ChangeDetectorRef) {
@@ -156,13 +156,14 @@ export class AboutComponent implements OnInit {
       this.authShopContributorService.editGeneral(obj).pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(result => {
           WsToastService.toastSubject.next({ content: "Information has been updated!", type: 'success' });
-          this.router.navigate(['shops', this.form.value.username, 'settings', 'about']);
           this.shop['username'] = this.form.value.username;
           this.shop['description'] = this.form.value.description;
           this.shop['currency'] = this.form.value.currency;
           // this.shop['tags'] = this.tag.tags;
           this.isGeneralExpanded = false;
-          this.sharedShopService.shop.next(this.shop)
+          this.currencyService.selectedCurrency.next(this.shop.currency);
+          this.sharedShopService.shop.next(this.shop);
+          this.router.navigate(['shops', this.form.value.username, 'settings', 'about']);
         }, err => {
           WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
         });

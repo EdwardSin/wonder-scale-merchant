@@ -28,7 +28,8 @@
       </th>
       <th width="200px">ID</th>
       <th>Name</th>
-      <th width="200px">Price({{Currency.symbols[shop?.currency]}})</th>
+      <th width="200px">Price({{ currencySymbol }})</th>
+      <th width="200px">Discount Price({{ currencySymbol }})</th>
       <th width="300px">Status</th>
       <th width="120px">Actions</th>
       <tbody>
@@ -41,8 +42,12 @@
             <a class="default" href="javascript:void(0)" (click)="$event.stopPropagation();" 
             [routerLink]="['', { outlets: {modal: 'item'}}]" [queryParams]="{id: item?._id}" [queryParamsHandling]="'merge'">{{ item?.name | titlecase | limitTo: 128 }}</a>
           </td>
-          <td *ngIf="currencyOption?.currencies">
-            {{ item?.price | currency: currencyOption?.currencies[item?.currency]: currencyOption?.rate }}</td>
+          <td *ngIf="item.currency && selectedCurrencyCode">
+            {{ item?.price | currency: currencyService.getCurrencyWithCode(item?.currency).rate: currencyService.getCurrencyWithCode(selectedCurrencyCode).rate }}
+          </td>
+          <td *ngIf="item.currency && selectedCurrencyCode">
+            {{ item?.price | currency: currencyService.getCurrencyWithCode(item?.currency).rate: currencyService.getCurrencyWithCode(selectedCurrencyCode).rate | discountconverter : item?.discount }}
+          </td>
           <td>
             <span *ngIf="item?.isEntityNew" class="badge badge-warning mr-1">New</span>
             <span *ngIf="item?.isOffer" class="badge ws-clear-color ws-bg-offer mr-1">Discount</span>

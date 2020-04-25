@@ -1,14 +1,14 @@
 <h4 class="ws-title">Discount<span title="Display all discount items" class='fas fa-info-circle ml-2 font-9'></span></h4>
 
+<item-controller></item-controller>
 <div *ngIf="numberOfDiscountItems; else loadingTemplate">
-    <item-controller></item-controller>
     <div *ngIf="displayItems.length; else searchLoadingTemplate">
         <item-view [showCategory]="true"></item-view>
     </div>
 </div>
 
 <ng-template #noItem>
-    <div class="text-center ws-background">
+    <div class="py-5 text-center">
         <p class="ws-no-title">Discount items</p>
         <span class="text-muted">Items which currently provide discount to public.</span>
     </div>

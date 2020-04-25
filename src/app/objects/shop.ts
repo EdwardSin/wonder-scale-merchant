@@ -32,6 +32,7 @@ export class Shop {
     openingInfoType?: OpeningInfoType;
     openingInfo?: Array<OpeningInfo>;
     media?: Array<string>;
+    currency?: string;
     currentStatus?: boolean;
     review?: {
         count: number,

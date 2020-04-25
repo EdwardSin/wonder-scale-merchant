@@ -43,13 +43,14 @@
                     <p class="mb-0 float-right w-100" style="height:40px; padding-top:5px; line-height: 1.1"
                         *ngIf="!item?.nofound">
                         <span class="font-weight-normal d-block">
-                            {{ Currency.symbols[item?.currency] }}
-                            {{item?.price | 
-                                currency: currencyOption?.currencies[item?.currency]: currencyOption?.rate | 
-                                discountconverter : item?.showOffer ? item?.discount: 0 }}
+                            {{ currencyService.getCurrencyWithCode[item?.currency].symbol }}
+                            {{item?.price | currency: currencyService.getCurrencyWithCode[item?.currency].rate: currencyService.getCurrencyWithCode(selectedCurrencyCode).rate 
+                                | discountconverter: item?.showOffer ? item?.discount: 0 }}
                         </span>
-                        <!-- <span *ngIf='showOffer' [class.is-offer]="showOffer" class="offer-price-tag">{{ item?.currency }}
-                        {{ item?.price | currency: currencyOption?.currencies[item?.currency]: currencyOption?.rate }}</span> -->
+                        <span *ngIf='showOffer' [class.is-offer]="showOffer" class="offer-price-tag">
+                            {{ currencyService.getCurrencyWithCode[item?.currency].symbol }}
+                            {{item?.price | currency: currencyService.getCurrencyWithCode[item?.currency].rate: currencyService.getCurrencyWithCode(selectedCurrencyCode).rate  }}
+                        </span>
                     </p>
                 </div>
                 <div class="card-small-text" *ngIf="showSeller && seller">

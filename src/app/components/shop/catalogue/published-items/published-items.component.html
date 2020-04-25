@@ -1,13 +1,13 @@
 <h4 class="ws-title">Published<span title="Display all published items" class='fas fa-info-circle ml-2 font-9'></span></h4>
+<item-controller></item-controller>
 <div *ngIf="numberOfPublishedItems; else loadingTemplate">
-    <item-controller></item-controller>
     <div *ngIf="displayItems.length; else searchLoadingTemplate">
         <item-view [showCategory]="true"></item-view>
     </div>
 </div>
 
 <ng-template #noItem>
-    <div class="text-center ws-background">
+    <div class="py-5 text-center">
         <p class="ws-no-title">Published items</p>
         <span class="text-muted">Published item to public for viewing.</span>
     </div>

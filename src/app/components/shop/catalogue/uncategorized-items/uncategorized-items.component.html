@@ -1,14 +1,14 @@
 <h4 class="ws-title">Uncategorized<span title="Display all uncategorized items" class='fas fa-info-circle ml-2 font-9'></span></h4>
 
+<item-controller></item-controller>
 <div *ngIf="numberOfUncategorizedItems; else loadingTemplate">
-    <item-controller></item-controller>
     <div *ngIf="displayItems.length; else searchLoadingTemplate">
         <item-view></item-view>
     </div>
 </div>
 
 <ng-template #noItem>
-    <div class="text-center ws-background">
+    <div class="py-5 text-center">
         <p class="ws-no-title">No uncategorized item</p>
         <span class="text-muted">Uncategorized item will not be published.</span>
     </div>

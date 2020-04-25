@@ -28,9 +28,9 @@ export class CreateShopComponent implements OnInit {
   shop: Shop;
   timetable: Timetable = new Timetable;
   currency = {
-    currencies: Constants.currencyFullname,
+    currencies: Constants.currencyFullnames,
     values: Constants.currencySymbols,
-    keys: Object.keys(Constants.currencyFullname)
+    keys: Object.keys(Constants.currencyFullnames)
   }
   countries = {
     values: Object.values(Constants.countries)
