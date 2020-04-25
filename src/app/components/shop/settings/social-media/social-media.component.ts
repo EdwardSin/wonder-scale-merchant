@@ -59,7 +59,7 @@ export class SocialMediaComponent implements OnInit {
   editMedia(media, form, index) {
     var account = form.value[media];
     var obj = {
-      mediaType: media,
+      type: media,
       value: account,
       index: index
     };
@@ -100,11 +100,11 @@ export class SocialMediaComponent implements OnInit {
   addMedia(media, account) {
     if (validateMedia.bind(this)(account)) {
       this.authShopContributorService
-        .addMedia({ mediaType: media, value: account })
+        .addMedia({ type: media, value: account })
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(result => {
           if (!this.shop.media) this.shop.media = [];
-          this.shop.media.push({ mediaType: media, value: account });
+          this.shop.media.push({ type: media, value: account });
           this.selectedMedia = undefined;
           this.fbmedia = '';
           this.instamedia = '';
@@ -133,15 +133,15 @@ export class SocialMediaComponent implements OnInit {
   }
   removeMedia(type, value) {
     this.authShopContributorService
-      .removeMedia({ mediaType: type, value: value })
+      .removeMedia({ type: type, value: value })
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
-        _.remove(this.shop.media, (x) => x.mediaType == type && x.value == value);
+        _.remove(this.shop.media, (x) => x.type == type && x.value == value);
         this.isMediaMax = this.isMediaMaximum();
-        WsToastService.toastSubject.next({ content: "Media is updated!", type: 'success' });
+        WsToastService.toastSubject.next({ content: "Media is removed successfully!", type: 'success' });
 
       }, (err) => {
-        WsToastService.toastSubject.next({ content: "Media is not updated!", type: 'danger' });
+        WsToastService.toastSubject.next({ content: "Media is failed to remove!", type: 'danger' });
       });
   }
   mediaChange() {
