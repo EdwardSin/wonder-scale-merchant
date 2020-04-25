@@ -276,7 +276,7 @@ export class ImageUploadModalComponent extends WsModalClass implements OnInit {
     let shop = this.item;
     var image_blob = this.copyImage.nativeElement.src;
     this.uploading.start();
-    this.authShopContributorService.editProfile({ file: image_blob, remove_file: shop.profileImage })
+    this.authShopContributorService.editProfileImage({ file: image_blob, removeFile: shop.profileImage })
       .pipe(finalize(() => { this.uploadedFlag = false; this.uploading.stop() }))
       .subscribe(result => {
         this.sharedShopService.shop.next(result['result']);

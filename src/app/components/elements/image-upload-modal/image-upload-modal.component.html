@@ -1,10 +1,10 @@
-<ws-modal [id]="id">
+<ws-modal [id]="id"  maxWidth="500">
   <header modalHeader>Edit Profile</header>
   <div modalBody>
     <div class="row no-gutters">
       <div *ngIf="!uploadedFlag" class="w-100 p-lg-5 p-4 clickable text-center"
         style=" border: 1px dashed #888; font-size: 1.2rem" (click)="selectImage()">Upload Profile Image</div>
-      <div #imageDiv
+      <div #imageDiv class="center"
         style="background-color: rgba(0, 0, 0, 0.1); overflow: hidden; position: relative; width: 600px; height: 450px; display: none; padding: 50px; border-radius: 5px">
         <div class="position-relative">
           <div class="position-absolute" style="opacity: .4; top:0; left: 90px">

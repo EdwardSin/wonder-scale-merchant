@@ -13,7 +13,7 @@ export class AuthShopContributorService {
   getContributors() {
     return this.http.get(AuthShopContributorUrl.getContributorsUrl, this.accessTokenService.getAccessToken());
   }
-  editProfile(obj) {
+  editProfileImage(obj) {
     return this.http.put(AuthShopContributorUrl.editProfileUrl, obj, this.accessTokenService.getAccessToken());
   }
   editGeneral(obj) {
@@ -28,10 +28,10 @@ export class AuthShopContributorService {
   addBanner(obj) {
     return this.http.put(AuthShopContributorUrl.addBannerUrl, obj, this.accessTokenService.getAccessToken());
   }
-  editBanner(obj) {
+  editBannerImage(obj) {
     return this.http.put(AuthShopContributorUrl.editBannerUrl, obj, this.accessTokenService.getAccessToken());
   }
-  removeBanner(obj) {
+  removeBannerImage(obj) {
     return this.http.put(AuthShopContributorUrl.removeBannerUrl, obj, this.accessTokenService.getAccessToken());
   }
   removeMedia(obj) {

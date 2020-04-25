@@ -8,6 +8,7 @@ export class Shop {
     username?: string;
     serviceType: string;
     profileImage?: string = "upload/images/shop.png";
+    bannerImage?: string;
     fullAddress?: {
         address: string,
         state: string,
@@ -22,7 +23,7 @@ export class Shop {
     };
     status?: {
         status: StatusType,
-        expireDate?: Date
+        expiryDate?: Date
     };
     type?: string;
     email?: Array<string>;
@@ -45,4 +46,4 @@ export class Shop {
          }
      }
 }
-type StatusType = 'pending' | 'active' | 'inactive' | 'blocked' | 'saved' | 'unsaved' | 'save removed';
+type StatusType = 'pending' | 'active' | 'inactive' | 'blocked' | 'cancel' | 'saved' | 'unsaved' | 'save removed';

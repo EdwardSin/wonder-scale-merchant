@@ -4,7 +4,7 @@
     (keydown.enter)="mapController.onAddressChanged();" 
     (keydown)="mapController.selectAddress($event)" (focus)="mapController.displayed = true" 
     (input)="address.valueChanged(); mapController.valueChanged(mapController.address.address)"
-    [(ngModel)]="mapController.address.address" />
+    [(ngModel)]="mapController.address.address" [disabled]="disabled"/>
   <div class="position-relative w-100">
     <ul class="list-group suggestions" *ngIf="mapController?.suggestions?.length && mapController?.displayed">
       <li [class.hover]="mapController.hovered == i" *ngFor="let suggestion of mapController?.displaySuggestions; let i = index;"
@@ -15,11 +15,11 @@
 
   <div class="row no-gutters w-100 mt-2">
     <input #postcodeInput name="postcode" autocomplete="nope" [class.has-error]="address?.errors?.postcode != ''" class="pl-2 form-control form-control-sm col-lg-3 nooutline"
-      (input)="address.valueChanged()" placeholder="Postcode" [(ngModel)]="address.postcode" />
+      (input)="address.valueChanged()" placeholder="Postcode" [(ngModel)]="address.postcode"  [disabled]="disabled"/>
     <input #stateInput name="state" autocomplete="nope" [class.has-error]="address?.errors?.state != ''" class="pl-2 form-control form-control-sm col-lg-3 mt-2 mt-lg-0 offset-lg-1 nooutline"
-      (input)="address.valueChanged()" placeholder="State" [(ngModel)]="address.state" />
+      (input)="address.valueChanged()" placeholder="State" [(ngModel)]="address.state"  [disabled]="disabled"/>
     <select #countryInput name="country" id="country-select" [class.has-error]="address?.errors?.country != ''" class="pl-2 form-control form-control-sm col-lg-4 mt-2 mt-lg-0 offset-lg-1 nooutline"
-      tabIndex="4" style="color:#888" (input)="address.valueChanged()" [(ngModel)]="address.country">
+      tabIndex="4" style="color:#888" (input)="address.valueChanged()" [(ngModel)]="address.country" [disabled]="disabled">
       <option value="" disabled selected>Country</option>
       <option [value]="country" *ngFor="let country of data?.value">{{country}}</option>
     </select>
@@ -31,6 +31,7 @@
   </div>
   <p class="text-muted mb-0 mt-2">*Click to set the accurate location for your customer</p>
   <div class="border mb-3 w-100 position-relative">
+    <div class="w-100 map-screen" *ngIf="disabled"></div>
     <agm-map class="w-100" [longitude]="mapController.mapLng" [latitude]="mapController.mapLat" [zoom]="14" [gestureHandling]="'greedy'"
       [maxZoom]="17" [minZoom]="11" [streetViewControl]="false" panControl="false" zoomControl="false" (mapClick)="mapController.mapClick($event)">
       <agm-marker [longitude]="mapController.markerLng" [latitude]="mapController.markerLat"></agm-marker>
