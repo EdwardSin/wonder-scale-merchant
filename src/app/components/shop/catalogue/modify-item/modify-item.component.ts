@@ -99,7 +99,7 @@ export class ModifyItemComponent implements OnInit {
       })
   }
   getCurrency() {
-    var currencyFullName = Constants.currencyFullname;
+    var currencyFullName = Constants.currencyFullnames;
     var currencySymbols = Constants.currencySymbols;
     this.currencies = Object.keys(currencyFullName).map(name => {
       return {

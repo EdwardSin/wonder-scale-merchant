@@ -39,12 +39,6 @@
 .ws-light-grey-1{
     color: map-get($ws-color, light-grey-1);
 }
-.ws-background {
-    // background-color: map-get($ws-color, light-grey-4);
-    // padding: 25px;
-    // border-radius: .25rem;
-    // border: 1px solid map-get($ws-color, light-grey-1);
-}
 .ws-link {
     cursor: pointer;
     color: map-get($ws-color, primary);

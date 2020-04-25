@@ -24,7 +24,6 @@ export class AppComponent {
         if (result) {
           let rates = result['rates'];
           this.currencyService.currencyRate.next(rates);
-          this.currencyService.currencyName.next(Currency.currenciesAsArray);
         }
       });
   }

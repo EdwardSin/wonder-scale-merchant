@@ -6,24 +6,25 @@
 ---------------------------------------------
 - 2020-04-25                                -
 ---------------------------------------------
-.: WSM: Task: Shop Settings Module (WSM-23)
+.: WSM: Story: Shop Settings Module (WSM-23)
+.: WSM: Story: Currency Module (WSM-34)
 
 ---------------------------------------------
 - 2020-04-24                                -
 ---------------------------------------------
-.: WSM: Task: Item Module (WSM-29)
-.: WSM: Task: Information Module (WSM-21)
+.: WSM: Story: Item Module (WSM-29)
+.: WSM: Story: Information Module (WSM-21)
 
 ---------------------------------------------
 - 2020-04-16                                -
 ---------------------------------------------
-.: WSM: Task: Catalogue Module (WSM-5)
+.: WSM: Story: Catalogue Module (WSM-5)
 
 ---------------------------------------------
 - 2020-04-12                                -
 ---------------------------------------------
 .: WSM: Task: Forget Password (WSM-3)
-.: WSM: Task: Shop Module (WSM-24)
+.: WSM: Story: Shop Module (WSM-24)
 
 ---------------------------------------------
 - 2020-04-11                                -

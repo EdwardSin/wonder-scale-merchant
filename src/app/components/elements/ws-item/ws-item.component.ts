@@ -4,7 +4,6 @@ import { environment } from '@environments/environment';
 import { WsModalService } from '@components/elements/ws-modal/ws-modal.service';
 import { Item } from '@objects/item';
 import { Currency } from '@objects/currency';
-import { CurrencyOption } from '@objects/currency.option';
 import { CurrencyService } from '@services/http/general/currency.service';
 import { takeUntil } from 'rxjs/operators';
 
@@ -14,8 +13,6 @@ import { takeUntil } from 'rxjs/operators';
   styleUrls: ['./ws-item.component.scss']
 })
 export class WsItemComponent implements OnInit {
-  Currency = Currency;
-  currencyOption: CurrencyOption = new CurrencyOption;
   @Input() item: Item;
   @Input() showDelete: boolean;
   @Input() showSeller: boolean;
@@ -37,7 +34,7 @@ export class WsItemComponent implements OnInit {
   seller_id: string;
   isFollow: boolean;
   isNavigated: boolean;
-
+  selectedCurrencyCode: string;
   environment = environment;
   scroll$;
   private ngUnsubscribe: Subject<any> = new Subject();
@@ -60,22 +57,24 @@ export class WsItemComponent implements OnInit {
     }
     this.currencyService.currencyRate
     .pipe(takeUntil(this.ngUnsubscribe))
-    .subscribe(result => {
-      if (result) {
-        this.currencyOption.currencies = result;
-        this.currencyService.selectedCurrency
-          .pipe(takeUntil(this.ngUnsubscribe))
-          .subscribe(result => {
-            if (result) {
-              this.currencyOption.target_currency = result;
-              this.currencyOption.symbol = this.currencyOption.currencySymbols[result];
-              this.currencyOption.rate = this.currencyOption.currencies[result];
-              this.ref.detectChanges();
-            }
-          });
+    .subscribe(rates => {
+      if (rates) {
+        this.currencyService.currencyFullnameArray.forEach(key => {
+          let currency = new Currency();
+          currency.code = key;
+          currency.rate = rates[key];
+          currency.symbol = this.currencyService.currencySymbols[key];
+          currency.fullname = this.currencyService.currencyFullnames[key];
+          this.currencyService.currencies.push(currency);
+        })
         this.ref.detectChanges();
       }
     });
+    this.currencyService.selectedCurrency
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe(result => {
+      this.selectedCurrencyCode = result;
+    })
   }
   ngOnChanges(changes: SimpleChanges) {
     if (changes['item'] && this.item) {

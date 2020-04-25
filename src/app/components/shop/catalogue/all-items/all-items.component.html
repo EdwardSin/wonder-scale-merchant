@@ -1,15 +1,14 @@
 <h4 class="ws-title">All<span title="Display all items" class='fas fa-info-circle ml-2 font-9'></span></h4>
 
+<item-controller></item-controller>
 <div *ngIf="numberOfAllItems; else loadingTemplate">
-    <!-- <div class="p-3 alert-warning mb-2 position-relative">Published item to show to public!</div> -->
-    <item-controller></item-controller>
     <div *ngIf="displayItems?.length; else searchLoadingTemplate">
         <item-view [showCategory]="true"></item-view>
-    </div>
+</div>
 </div>
 
 <ng-template #noItem>
-    <div class="text-center ws-background">
+    <div class="py-5 text-center">
         <p class="ws-no-title mt-2">Start adding new item</p>
         <span class="text-muted mb-2 d-inline-block">Select a category and add item</span>
     </div>

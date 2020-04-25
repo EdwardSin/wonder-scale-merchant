@@ -1,8 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from '@environments/environment';
-import { Currency } from '@objects/currency';
-import { CurrencyOption } from '@objects/currency.option';
 import { Item } from '@objects/item';
 import { CurrencyService } from '@services/http/general/currency.service';
 import { SharedItemService } from '@services/shared/shared-item.service';
@@ -15,6 +13,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SharedNavbarService } from '@services/shared/shared-nav-bar.service';
 import { SharedCategoryService } from '@services/shared/shared-category.service';
+import { Currency } from '@objects/currency';
 
 @Component({
   selector: 'item-view',
@@ -27,11 +26,11 @@ export class ItemViewComponent implements OnInit {
   @Input() showCategory: boolean = false;
   param;
   shop;
+  selectedCurrencyCode;
+  currencySymbol;
   display: ViewType = 'list';
   isMobileSize: boolean;
-  currencyOption: CurrencyOption = new CurrencyOption;
   environment = environment;
-  Currency = Currency;
   displayItems: Item[] = [];
   editItems: Item[] = [];
   isNavOpen: Boolean = false;
@@ -66,6 +65,7 @@ export class ItemViewComponent implements OnInit {
     .subscribe(result => {
       if(result) {
         this.shop = result;
+        this.currencySymbol = this.currencyService.currencySymbols[this.shop.currency];
       }
     });
     this.sharedItemService.displayItems.pipe(takeUntil(this.ngUnsubscribe))
@@ -91,22 +91,24 @@ export class ItemViewComponent implements OnInit {
       })
     this.currencyService.currencyRate
       .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(result => {
-        if (result) {
-          this.currencyOption.currencies = result;
-          this.currencyService.selectedCurrency
-            .pipe(takeUntil(this.ngUnsubscribe))
-            .subscribe(result => {
-              if (result) {
-                this.currencyOption.target_currency = result;
-                this.currencyOption.symbol = this.currencyOption.currencySymbols[result];
-                this.currencyOption.rate = this.currencyOption.currencies[result];
-                this.ref.detectChanges();
-              }
-            });
+      .subscribe(rates => {
+        if (rates) {
+          this.currencyService.currencyFullnameArray.forEach(key => {
+            let currency = new Currency();
+            currency.code = key;
+            currency.rate = rates[key];
+            currency.symbol = this.currencyService.currencySymbols[key];
+            currency.fullname = this.currencyService.currencyFullnames[key];
+            this.currencyService.currencies.push(currency);
+          })
           this.ref.detectChanges();
         }
       });
+    this.currencyService.selectedCurrency
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe(result => {
+      this.selectedCurrencyCode = result;
+    });
     this.sharedNavbarService.isNavSubject.pipe(takeUntil(this.ngUnsubscribe))
     .subscribe(res => {
       this.isNavOpen = res;

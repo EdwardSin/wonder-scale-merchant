@@ -265,7 +265,7 @@ export class Constants {
     ZM: 'Zambia',
     ZW: 'Zimbabwe'
   };
-  public static currencyFullname = {
+  public static currencyFullnames = {
     AUD: 'Australlian Dollar',
     BRL: 'Brazilian Real',
     CAD: 'Canadian Dollar',

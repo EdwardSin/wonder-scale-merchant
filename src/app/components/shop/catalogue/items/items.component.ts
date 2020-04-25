@@ -6,7 +6,6 @@ import { Item } from '@objects/item';
 import { AuthCategoryContributorService } from '@services/http/auth-shop/contributor/auth-category-contributor.service';
 import { AuthItemContributorService } from '@services/http/auth-shop/contributor/auth-item-contributor.service';
 import { AuthShopContributorService } from '@services/http/auth-shop/contributor/auth-shop-contributor.service';
-import { CurrencyService } from '@services/http/general/currency.service';
 import { SharedCategoryService } from '@services/shared/shared-category.service';
 import { SharedItemService } from '@services/shared/shared-item.service';
 import { SharedLoadingService } from '@services/shared/shared-loading.service';
@@ -43,7 +42,6 @@ export class ItemsComponent implements OnInit {
 
   private ngUnsubscribe: Subject<any> = new Subject();
   constructor(
-    private currencyService: CurrencyService,
     private sharedShopService: SharedShopService,
     private sharedLoadingService: SharedLoadingService,
     private modalService: WsModalService,
