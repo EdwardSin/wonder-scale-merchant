@@ -7,6 +7,7 @@
 - 2020-04-26                                -
 ---------------------------------------------
 .: WSM: Task: Smaller error font size (WSM-19)
+.: WSM: Task: Without login after account activation (WSM-18)
 
 ---------------------------------------------
 - 2020-04-25                                -
