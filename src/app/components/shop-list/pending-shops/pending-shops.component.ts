@@ -7,8 +7,8 @@ import { SharedShopService } from '@services/shared/shared-shop.service';
 import { SharedUserService } from '@services/shared/shared-user.service';
 import { WsLoading } from '@components/elements/ws-loading/ws-loading';
 import { DocumentHelper } from '@helpers/documenthelper/document.helper';
-import { Subject } from 'rxjs';
-import { finalize, takeUntil } from 'rxjs/operators';
+import { Subject, combineLatest, timer } from 'rxjs';
+import { finalize, takeUntil, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-pending-shops',
@@ -25,11 +25,11 @@ export class PendingShopsComponent implements OnInit {
   constructor(private sharedUserService: SharedUserService,
     private authShopUserService: AuthShopUserService,
     private sharedLoadingService: SharedLoadingService,
-    private sharedShopService: SharedShopService,
-    private router: Router) { }
+    private sharedShopService: SharedShopService) { }
 
   ngOnInit() {
     DocumentHelper.setWindowTitleWithWonderScale('Pending Shops');
+    this.loading.start();
     this.sharedUserService.user.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
         if (result) {
@@ -45,14 +45,19 @@ export class PendingShopsComponent implements OnInit {
       })
   }
   getPendingShops() {
-    this.loading.start();
     this.sharedLoadingService.loading.next(this.loading.isRunning());
-    this.authShopUserService.getInvitationShopsByUserId().pipe(takeUntil(this.ngUnsubscribe), finalize(() => { this.loading.stop(); this.sharedLoadingService.loading.next(this.loading.isRunning()); }))
+    combineLatest(timer(500),
+    this.authShopUserService.getInvitationShopsByUserId())
+    .pipe(
+      map(x => x[1]),
+      takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
         this.pendingShopList = result['result'];
         this.pendingShopList.forEach(shop => {
           shop.current_contributor = this.authShopUserService.getContributorRole(shop, this.user);
         })
+        this.loading.stop();
+        this.sharedLoadingService.loading.next(this.loading.isRunning());
       })
   }
   ngOnDestroy() {

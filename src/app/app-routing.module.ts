@@ -96,7 +96,6 @@ const routes: Routes = [{
       path: 'catalogue',
       component: CatalogueComponent,
       data: { title: 'cat', breadcrumb: 'Catalogue' },
-      // canActivate: [AuthGuard],
       children: [{ path: '', redirectTo: 'all', pathMatch: 'full' },
       { path: 'all', component: AllItemsComponent, data: { title: 'all', breadcrumb: 'All' } },
       { path: 'new', component: NewItemsComponent, data: { title: 'new', breadcrumb: 'New' } },

@@ -182,12 +182,6 @@ export class MainComponent implements OnInit {
           this.categories = res;
         }
       })
-    // this.sharedCategoryService.categoriesRefresh.pipe(takeUntil(this.ngUnsubscribe))
-    //   .subscribe(res => {
-    //     if (res) {
-    //       //this.refreshCategories();
-    //     }
-    //   })
     this.sharedNavbarService.isNavSubject.pipe(takeUntil(this.ngUnsubscribe))
     .subscribe(res => {
       this.isNavOpen = res;
@@ -319,7 +313,7 @@ export class MainComponent implements OnInit {
   }
 
   refreshCategories() {
-    this.sharedCategoryService.refreshCategories();
+    this.sharedCategoryService.refreshCategories(null, true, false);
   }
   // getUnrepliedRequests() {
   //   this.authRequestContributorService.getUnrepliedRequests().pipe(takeUntil(this.ngUnsubscribe))

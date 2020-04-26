@@ -1,3 +1,4 @@
+@import './variables.scss';
 
 #continueSpan {
     &::before {
@@ -49,6 +50,9 @@
 .mat-select.mat-select-disabled{
     background-color: #e9ecef;
 }
+.mat-option-pseudo-checkbox.mat-pseudo-checkbox.mat-pseudo-checkbox-checked {
+    background: map-get($ws-color, secondary);
+  }
 .mat-error{
     font-size: .9rem;
 }

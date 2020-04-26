@@ -1,4 +1,4 @@
-<h4 class="ws-title">{{ category_name }}</h4>
+<h4 class="ws-title">{{ categoryName }}</h4>
 <div class="text-center text-lg-left">
   <!-- <button class="btn btn-md btn-second" onclick="document.getElementById('importFile').click()">
     <i class="fas fa-upload mr-1"></i>Import</button>
@@ -13,7 +13,7 @@
   (change)="importFileChangeEvent($event)" />
 <div *ngIf="displayBanner" class="p-3 alert-danger mb-2">Published item to show to public!</div>
 <item-controller></item-controller>
-<div *ngIf="numberOfItems; else loadingTemplate">
+<div *ngIf="numberOfItems && !loading.isRunning(); else loadingTemplate">
   <div *ngIf="displayItems.length; else searchLoadingTemplate">
     <item-view></item-view>
   </div>
@@ -33,18 +33,18 @@
 
 <ng-template #loadingTemplate>
   <ng-container *ngIf="loading.isRunning(); else noItem">
-    <ws-loading></ws-loading>
+    <ws-spinner class="text-center d-block w-100" style="padding-top: 30vh"></ws-spinner>
   </ng-container>
 </ng-template>
 
 <ng-template #searchLoadingTemplate>
   <ng-container *ngIf="loading.isRunning(); else noSearchItem">
-    <ws-loading></ws-loading>
+    <ws-spinner class="text-center d-block w-100" style="padding-top: 30vh"></ws-spinner>
   </ng-container>
 </ng-template>
 
 <ng-template #noCategoryFound>
-  <h4 class="mt-5 mb-5 text-center">No item found!</h4>
+  <h4 class="mt-5 mb-5 text-center">No item found!!</h4>
 </ng-template>
 
 <import-items-modal id="importItemsModal"></import-items-modal>

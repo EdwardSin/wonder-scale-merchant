@@ -147,9 +147,8 @@ export class ModifyItemTypeComponent implements OnInit {
         })))
       }), takeUntil(this.ngUnsubscribe),
       finalize(() => this.itemTypeLoading.stop())).subscribe(result => {
-          this.refreshCategories();
-          this.sharedCategoryService.categoriesRefresh.next(true);
-          this.router.navigate([{ outlets: { modal: null } }], { queryParamsHandling: 'merge'});
+          this.sharedCategoryService.refreshCategories();
+          this.router.navigate([{ outlets: { modal: null } }], {queryParams: {id: null}, queryParamsHandling: 'merge'});
       });
     }
   }
@@ -206,9 +205,6 @@ export class ModifyItemTypeComponent implements OnInit {
     } else {
       WsToastService.toastSubject.next({content: 'Please enter a valid hex color code!', type: 'danger'});
     }
-  }
-  refreshCategories() {
-    this.sharedCategoryService.refreshCategories();
   }
   navigateToEditItem(){
     this.router.navigate([{ outlets: {modal: 'item'}}], {queryParams: { id: this.itemId }, queryParamsHandling: 'merge'});

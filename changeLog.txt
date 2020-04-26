@@ -8,6 +8,7 @@
 ---------------------------------------------
 .: WSM: Task: Smaller error font size (WSM-19)
 .: WSM: Task: Without login after account activation (WSM-18)
+.: WSM: Task: Set a delay to all loading (WSM-36)
 
 ---------------------------------------------
 - 2020-04-25                                -

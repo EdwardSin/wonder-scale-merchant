@@ -240,8 +240,7 @@ export class ModifyItemComponent implements OnInit {
       .subscribe(result => {
         this.currentItem = this.tempItem;
         this.router.navigate([{ outlets: {modal: 'item-types'}}], {queryParams: { id: this.itemId }, queryParamsHandling: 'merge'});
-        this.refreshCategories();
-        this.sharedCategoryService.categoriesRefresh.next(true);
+        this.sharedCategoryService.refreshCategories();
       }, err => {
         WsToastService.toastSubject.next({ content: 'Error when creating item!', type: 'danger' });
       });
@@ -262,9 +261,8 @@ export class ModifyItemComponent implements OnInit {
       ),
       finalize(() => { this.addItemLoading.stop(); }))
       .subscribe(result => {
-        this.refreshCategories();
-        this.sharedCategoryService.categoriesRefresh.next(true);
-        this.router.navigate([{ outlets: {modal: null}}], {queryParamsHandling: 'merge'});
+        this.sharedCategoryService.refreshCategories();
+        this.router.navigate([{ outlets: {modal: null}}], {queryParams: {id: null}, queryParamsHandling: 'merge'});
       }, err => {
         WsToastService.toastSubject.next({ content: 'Error when editing item!', type: 'danger' });
       });
@@ -371,10 +369,6 @@ export class ModifyItemComponent implements OnInit {
     } else {
       WsToastService.toastSubject.next({content: 'Image is not found!', type: 'danger'});
     }
-  }
-  
-  refreshCategories() {
-    this.sharedCategoryService.refreshCategories();
   }
   doneUpload(allItems, _id, filename) {
     var item = allItems.find(item => item.id == _id);

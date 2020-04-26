@@ -106,8 +106,7 @@ export class AboutComponent implements OnInit {
 
   ngOnInit() {
     this.createShopForm();
-    this.route.data.pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(result => {
+    this.route.data.pipe(takeUntil(this.ngUnsubscribe)) .subscribe(result => {
         this.shop = result['shop'];
         if(this.shop.profileImage){
           this.profileImage = environment.IMAGE_URL + this.shop.profileImage;
@@ -119,7 +118,7 @@ export class AboutComponent implements OnInit {
         this.getDateDifference();
         this.setupShopForm();
         this.getDefaultSetting();
-      })
+    })
 
     let shop_name = this.sharedShopService.shop_name;
     DocumentHelper.setWindowTitleWithWonderScale('About - Settings | ' + shop_name);

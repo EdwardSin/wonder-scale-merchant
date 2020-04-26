@@ -65,7 +65,7 @@
             </div>
     </div>
     <div class="row no-gutters order-2 center">
-        <div class="ws-circle-button" [routerLink]="['',{outlets: {modal: 'item'}}]" queryParamsHandling="merge">
+        <div class="ws-circle-button" [routerLink]="['',{outlets: {modal: 'item'}}]" [queryParams]="{id:null}" queryParamsHandling="merge">
             <button title="Add New Item" wsTippy class="btn btn-controller small">
                 <span class="fa fa-plus"></span>
             </button>

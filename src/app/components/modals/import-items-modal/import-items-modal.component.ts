@@ -142,7 +142,7 @@ export class ImportItemsModalComponent extends WsModalClass implements OnInit {
       this.authItemContributorService.uploadItems({ items: obj, category_id: this.category_id, currency: this.shop.currency }).pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(result => {
           this.close();
-          this.sharedLoadingService.screenLoading.next(true);
+          this.sharedLoadingService.screenLoading.next({loading: true});
 
         })
     }

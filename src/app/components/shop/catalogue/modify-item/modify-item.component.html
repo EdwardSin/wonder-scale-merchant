@@ -4,7 +4,7 @@
       <div class="modal-body-content">
         <form [formGroup]="itemGroup" class="center modal-content">
           <div class="modal-close">
-            <span class="fas fa-times" [routerLink]="['', {outlets: {modal:null}}]" [queryParamsHandling]="'merge'"></span>
+            <span class="fas fa-times" [routerLink]="['', {outlets: {modal:null}}]" [queryParams]="{id: null}" [queryParamsHandling]="'merge'"></span>
           </div>
           <div *ngIf="currentItem">
             <h4 class="d-inline-block mt-1">{{ currentItem.name}}</h4>
@@ -247,7 +247,7 @@
             </div>
           </ng-container>
           <ng-template #loadingTemplate>
-            <ws-loading></ws-loading>
+            <ws-spinner class="text-center d-block w-100" style="padding-top: 15vh; padding-bottom: 15vh"></ws-spinner>
           </ng-template>
         </form>
       </div>

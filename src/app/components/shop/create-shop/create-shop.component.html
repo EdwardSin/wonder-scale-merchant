@@ -162,8 +162,8 @@
                   setAddressFormValue(); 
                   mapController.displayed = false">
                   <span class="ws-main fas fa-map-marker-alt pr-2"></span>{{suggestion}}</li>
-                <li *ngIf="!mapController?.suggestions?.length && mapController?.loading.isRunning()">
-                  <ws-loading></ws-loading>
+                <li style="pointer-events: none;" *ngIf="!mapController?.suggestions?.length && mapController?.loading.isRunning()">
+                  <ws-spinner class="text-center d-block w-100 py-4"></ws-spinner>
                 </li>
                 <li
                   *ngIf="!mapController?.loading.isRunning() && !mapController?.suggestions?.length && mapController?.displayed">
