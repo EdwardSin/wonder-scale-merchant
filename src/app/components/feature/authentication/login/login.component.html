@@ -7,7 +7,7 @@
             <span class="fas fa-times" [routerLink]="['', {outlets: {modal:null}}]"></span>
           </div>
           <div class="ws-input">
-            <input placeholder="Login Email" class="form-control nooutline" formControlName="email" required>
+            <input wsAutofocus placeholder="Login Email" class="form-control" formControlName="email" required>
           </div>
           <mat-error *ngIf="loginForm.controls['email'].hasError('required') && loginForm.controls['email'].touched">
             Please
@@ -15,7 +15,7 @@
           <mat-error *ngIf="loginForm.controls['email'].hasError('email') && loginForm.controls['email'].touched">
             Please enter a valid email.</mat-error>
           <div class="ws-input">
-            <input placeholder="Password" type="password" class="form-control nooutline" formControlName="password"
+            <input placeholder="Password" type="password" class="form-control" formControlName="password"
               required>
           </div>
           <mat-error

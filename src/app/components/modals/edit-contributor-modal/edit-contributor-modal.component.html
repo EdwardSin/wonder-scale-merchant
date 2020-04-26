@@ -12,7 +12,7 @@
         [value]="contributorController.selectedContributor?.email" />
       <div>
         <label class="p-0 mb-0">Role</label>
-        <select class="form-control form-control-sm p-0 nooutline font-9" name="role"
+        <select class="form-control form-control-sm p-0 font-9" name="role"
           (input)="contributorController.reset()" [(ngModel)]="contributorController.new_role">
           <option [value]="'admin'">Admin</option>
           <option [value]="'Maintainer'">Maintainer</option>
@@ -27,7 +27,7 @@
         <div class="float-right">
           <ws-loading-button [class]="'btn btn-md btn-second'"
             [loading]="loading.isRunning() || removeLoading.isRunning()">Confirm</ws-loading-button>
-          <button class="btn btn-md btn-second nooutline" type="button" (click)="close()">Cancel</button>
+          <button class="btn btn-md btn-second" type="button" (click)="close()">Cancel</button>
         </div>
       </div>
     </form>

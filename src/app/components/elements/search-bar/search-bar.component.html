@@ -1,11 +1,11 @@
 <div class="input-group p-0">
-    <input placeholder="{{ placeholder }}" class="form-control form-control-sm nooutline font-weight-bold" name="search_keyword"
+    <input placeholder="{{ placeholder }}" class="form-control form-control-sm font-weight-bold" name="search_keyword"
         (keyup.enter)="navigate()" [(ngModel)]="searchKeyword" />
     <div class="input-group-append">
-        <button *ngIf="searchKeyword" class="input-group-text nooutline border-radius-0" (click)="searchKeyword = ''; navigate()">
+        <button *ngIf="searchKeyword" class="input-group-text border-radius-0" (click)="searchKeyword = ''; navigate()">
             <span class="fa fa-times"></span>
         </button>
-        <button class="input-group-text nooutline" title="Search" (click)="navigate()">
+        <button class="input-group-text" title="Search" (click)="navigate()">
             <span class="fa fa-search"></span>
         </button>
     </div>

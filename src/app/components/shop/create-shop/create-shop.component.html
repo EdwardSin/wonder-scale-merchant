@@ -73,21 +73,21 @@
             <span class="fas fa-times" [routerLink]="['', {outlets: {modal:null}}]"></span>
           </div>
           <div class="ws-input">
-            <input placeholder="Business Name*" formControlName="name" class="form-control nooutline">
+            <input wsAutofocus placeholder="Business Name*" formControlName="name" class="form-control font-9">
           </div>
           <mat-error
             *ngIf="basicFormGroup.controls['name'].hasError('required') && basicFormGroup.controls['name'].touched">
             Please enter business store name.
           </mat-error>
           <div class="ws-input">
-            <input placeholder="Contact Number*" formControlName="tel" class="form-control nooutline">
+            <input placeholder="Contact Number*" formControlName="tel" class="form-control font-9">
           </div>
           <mat-error
             *ngIf="basicFormGroup.controls['tel'].hasError('required') && basicFormGroup.controls['tel'].touched">
             Please enter business tel.
           </mat-error>
           <div class="ws-input">
-            <mat-select placeholder="Selected Currency*" formControlName="currency" class="form-control nooutline">
+            <mat-select placeholder="Selected Currency*" formControlName="currency" class="form-control font-9">
               <mat-option [value]="_currency" *ngFor="let _currency of currency.keys">
                 {{currency.currencies[_currency]}} ({{currency.values[_currency]}})
               </mat-option>
@@ -105,7 +105,7 @@
             </span>
           </div>
           <div class="ws-input mt-0">
-            <input placeholder="Contact Email" formControlName="email" class="form-control nooutline">
+            <input placeholder="Contact Email" formControlName="email" class="form-control font-9">
           </div>
           <mat-error
             *ngIf="basicFormGroup.controls['email'].hasError('minlength') && basicFormGroup.controls['email'].touched">
@@ -120,7 +120,7 @@
             Please enter a valid email.
           </mat-error>
           <div class="ws-input">
-            <input placeholder="Official URL (https://www.example.com)" formControlName="website" class="form-control nooutline">
+            <input placeholder="Official URL (https://www.example.com)" formControlName="website" class="form-control font-9">
           </div>
           <mat-error
             *ngIf="basicFormGroup.controls['website'].hasError('minlength') && basicFormGroup.controls['website'].touched">
@@ -147,8 +147,8 @@
             <label class="mb-0" style="display: inline-flex">Show Business Location</label>
           </div>
           <div class="ws-input" style="display: flex">
-                <span class="fas fa-search text-center mr-1" style="line-height: 37px; width: 17px; color: rgba(0,0,0,.3)"></span>
-                <input autocomplete="nope" placeholder="Search..." class="form-control" formControlName="searchAddress"
+                <span class="fas fa-search text-center mr-1" style="line-height: 35px; width: 40px; color: rgba(0,0,0,.3)"></span>
+                <input wsAutofocus style="border-top-left-radius: 0; border-bottom-left-radius: 0" autocomplete="nope" placeholder="Search..." class="form-control font-9" formControlName="searchAddress"
                   (keydown.enter)="mapController.onAddressChanged(); setAddressFormValue()"
                   (keydown)="mapController.selectAddress($event)" (focus)="mapController.displayed = true; mapController.loading.stop();
                   mapController.valueChanged(addressFormGroup.get('searchAddress').value)" (click)="$event.stopPropagation()"
@@ -173,7 +173,7 @@
             </div>
           <hr class="w-100 mb-0" style="margin-top: .75rem" />
           <div class="ws-input">
-            <input class="form-control nooutline" autocomplete="nope" placeholder="Address" formControlName="address" required>
+            <input class="form-control font-9" autocomplete="nope" placeholder="Address" formControlName="address" required>
           </div>
           <mat-error *ngIf="addressFormGroup.controls['address'].hasError('required') &&
               addressFormGroup.controls['address'].touched">Please enter an address.
@@ -181,13 +181,13 @@
 
           <div class="row pl-3 pr-3">
             <div class="ws-input col mr-2">
-              <input class="form-control nooutline" placeholder="State" formControlName="state" required>
+              <input class="form-control font-9" placeholder="State" formControlName="state" required>
             </div>
             <div class="ws-input">
-              <input class="form-control nooutline" placeholder="Postcode" formControlName="postcode" required>
+              <input class="form-control font-9" placeholder="Postcode" formControlName="postcode" required>
             </div>
             <div class="ws-input col ml-2">
-              <mat-select placeholder="Country" formControlName="country" class="form-control nooutline">
+              <mat-select placeholder="Country" formControlName="country" class="form-control font-9">
                 <mat-option [value]="country" *ngFor="let country of countries.values">{{country}}</mat-option>
               </mat-select>
             </div>
