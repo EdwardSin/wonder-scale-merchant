@@ -1,6 +1,6 @@
 <div>
     <ng-content select="[settingTag]"></ng-content>
-    <div class="item-div nooutline" *ngIf="item">
+    <div class="item-div" *ngIf="item">
         <ng-content select="[topbar]"></ng-content>
 
 
@@ -25,7 +25,7 @@
             <div *ngIf="showSimilar" class="caption">
                 <div class="row caption-content no-gutters">
                     <div id="similar" class="col pt-2 pb-2 font-9">
-                        <!-- <a class="nooutline" [routerLink]="['/search']" [queryParams]="{
+                        <!-- <a class=""" [routerLink]="['/search']" [queryParams]="{
                               display:'block', order:'thebest', keyword: item?.name, service : 'find_item', type:'all'}"
                           translate>item.find_similar</a> -->
                     </div>
@@ -35,7 +35,7 @@
         <!--Card content-->
         <div class="card-body">
             <!--Text-->
-            <p *ngIf="item.name; else noItem" class="card-text font-9 mb-0 cm-pointer nooutline" title="{{item?.name}}"
+            <p *ngIf="item.name; else noItem" class="card-text font-9 mb-0 cm-pointer" title="{{item?.name}}"
                 (click)="$event.stopPropagation(); navigateTextLink()">{{item?.name | titlecase}}</p>
             <div class="w-100 row no-gutters">
                 <div class="col text-right">
@@ -54,7 +54,7 @@
                     </p>
                 </div>
                 <div class="card-small-text" *ngIf="showSeller && seller">
-                    <a class="default nooutline" href="javascript:void(0)"
+                    <a class="default" href="javascript:void(0)"
                         (click)="$event.stopPropagation(); navigateSmallTextLink()">{{seller?.name}}</a>
                 </div>
             </div>
@@ -64,5 +64,5 @@
 </div>
 
 <ng-template #noItem>
-    <div class="card-text font-9 mb-0 cm-pointer nooutline">Item has been removed by seller.</div>
+    <div class="card-text font-9 mb-0 cm-pointer">Item has been removed by seller.</div>
 </ng-template>

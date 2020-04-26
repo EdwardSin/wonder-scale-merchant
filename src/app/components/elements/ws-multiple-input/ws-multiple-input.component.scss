@@ -5,15 +5,3 @@ button{
         background-color: #c4ccd4;
     }
 }
-div.nooutline:focus,
-button.nooutline:focus,
-li.nooutline:focus,
-input.nooutline:focus,
-span.nooutline:focus,
-textarea.nooutline:focus,
-select.nooutline:focus,
-.nooutline:focus {
-    outline: none;
-    outline: 0;
-    box-shadow: none;
-}

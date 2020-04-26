@@ -18,7 +18,7 @@
               </div>
             </div>
           </div>
-          <div class="pl-2 d-inline-block clickable nooutline float-right">
+          <div class="pl-2 d-inline-block clickable float-right">
             <span class="fas fa-question-circle text-muted"
               style="font-size: .9rem; vertical-align: -webkit-baseline-middle"></span>
           </div>
@@ -26,12 +26,12 @@
         <div class="row no-gutters">
           <mat-checkbox [color]="'primary'" class="p-2 mb-2" [name]="'edit_discount'" ngModel></mat-checkbox>
           <div class="input-group input-group-sm mb-2 mt-1 col">
-            <input class="form-control nooutline" type="number" name="discount" placeholder="Discount" ngModel />
+            <input class="form-control" type="number" name="discount" placeholder="Discount" ngModel />
             <div class="input-group-append input-group-sm">
               <span class="input-group-text fas fa-percent"></span>
             </div>
           </div>
-          <div class="pl-2 d-inline-block clickable nooutline float-right">
+          <div class="pl-2 d-inline-block clickable float-right">
             <span class="fas fa-question-circle text-muted"
               style="font-size: .9rem; vertical-align: -webkit-baseline-middle"></span>
           </div>
@@ -41,20 +41,20 @@
               <div class="row no-gutters">
                 <div class="input-group input-group-sm col" style="z-index:0">
                   <input name='tag' [disabled]="tag.tags.length > 4" placeholder="Related Tag" autocomplete="off"
-                    class='form-control nooutline' [(ngModel)]="tag.input" (keydown.enter)="tag.addTag()" />
+                    class='form-control' [(ngModel)]="tag.input" (keydown.enter)="tag.addTag()" />
                   <div class="input-group-append">
-                    <button [disabled]="tags?.length > 4" class="clickable input-group-text nooutline" type="button"
+                    <button [disabled]="tags?.length > 4" class="clickable input-group-text" type="button"
                       (click)="tag.addTag()">
                       <i class="fas fa-plus" style="font-size: inherit"></i>
                     </button>
                   </div>
                 </div>
-                <div class="pl-2 d-inline-block clickable nooutline float-right">
+                <div class="pl-2 d-inline-block clickable float-right">
                   <span class="fas fa-question-circle text-muted"
                     style="font-size: .9rem; vertical-align: -webkit-baseline-middle"></span>
                 </div>
               </div>
-              <span class="badge ws-bg-secondary mr-1 clickable nooutline font-7" *ngFor="let item of tag.tags">
+              <span class="badge ws-bg-secondary mr-1 clickable font-7" *ngFor="let item of tag.tags">
                 {{item}}
                 <span class="fas fa-times" (click)="tag.removeTag(item); $event.stopPropagation();"></span>
               </span>
@@ -64,9 +64,9 @@
       </div>
     </div>
     <div class="float-right row col-auto">
-      <ws-loading-button [class]="'btn btn-md btn-second nooutline'" [loading]="loading.isRunning()">Save
+      <ws-loading-button [class]="'btn btn-md btn-second'" [loading]="loading.isRunning()">Save
       </ws-loading-button>
-      <button class="btn btn-md btn-second nooutline" type="button" (click)="close()">Back</button>
+      <button class="btn btn-md btn-second" type="button" (click)="close()">Back</button>
     </div>
   </form>
 </ws-modal>

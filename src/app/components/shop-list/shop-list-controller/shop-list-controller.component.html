@@ -1,4 +1,4 @@
-<div class="border-bottom border-top">
+<div class="border-bottom border-top ws-bg-clear">
   <ul class="list-unstyled mb-0 position-relative">
     <li>
       <a class="default font-9" routerLinkActive="selected" [routerLink]="['all']">All</a>
@@ -9,15 +9,15 @@
         <span *ngIf="pendingShopList.length" class="badge badge-warning ml-2">{{pendingShopList.length}}</span>
       </a>
     </li>
-    <button [disabled]="loading.isRunning()" style="background:none; border:0;margin-top: 1rem;"
-      class="nooutline clickable p-0 pr-2 float-right" wsDebounceClick (debounceClick)="refresh()">
-      <span [class.loading]="loading.isRunning()" class="fas fa-sync-alt"></span>
-    </button>
-    <a class="d-inline-block d-sm-none float-right pl-3 pr-3" style="margin-top: 1rem; color: #888"
-      [routerLink]="['',{outlets: {modal:'new-shop'}}]">
-      <span class="fas fa-plus" style="font-size: 1.3rem;"></span>
-    </a>
-    <a class="btn-create d-none d-sm-inline-block" [routerLink]="['',{outlets: {modal:'new-shop'}}]">+
-      Create New Shop</a>
+    <div class="ws-circle-button float-right mt-1 mr-3">
+      <button [disabled]="loading.isRunning()" class="btn btn-controller small" wsDebounceClick (debounceClick)="refresh()">
+        <span [class.loading]="loading.isRunning()" class="fas fa-sync-alt"></span>
+      </button>
+    </div>
+    <div class="ws-circle-button float-right mr-1 mt-1">
+      <button class="btn btn-controller small" [routerLink]="['',{outlets: {modal:'new-shop'}}]">
+        <span class="fas fa-plus"></span>
+      </button>
+    </div>
   </ul>
 </div>

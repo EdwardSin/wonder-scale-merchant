@@ -2,11 +2,11 @@
   <div class="row col-12 no-gutters mb-3" *ngIf="display === 'block'">
     <ws-item [item]="item" [showSetting]="true" [showNew]="item?.isEntityNew" [showOffer]="item?.isOffer"
       [showSimilar]="false" [style.z-index]="displayItems?.length - i" [class.inactiveItem]="item?.status === 'active'"
-      class="col-6 col-sm-2 square p-1 nooutline" *ngFor="let item of displayItems; let i = index; trackBy: trackByFn"
+      class="col-6 col-sm-2 square p-1" *ngFor="let item of displayItems; let i = index; trackBy: trackByFn"
       (click)="$event.stopPropagation(); addToItemList(item);">
       <div settingCog class="item-setting">
         <div class="item-setting-item" (click)="$event.stopPropagation(); openModal('createItemModal', item)">
-          <span class="fas fa-cog nooutline"></span>
+          <span class="fas fa-cog"></span>
         </div>
         <div class="item-setting-item">
           <mat-checkbox [color]="'primary'" [checked]="isInclude(item)" (click)="$event.stopPropagation()"

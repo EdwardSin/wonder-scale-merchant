@@ -43,11 +43,12 @@
         display: inline;
     }
 }
-
 .mat-select-placeholder {
     color: #6c757d;
 }
-
 .mat-select.mat-select-disabled{
     background-color: #e9ecef;
+}
+.mat-error{
+    font-size: .9rem;
 }

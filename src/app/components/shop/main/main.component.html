@@ -55,7 +55,7 @@
             <div *ngFor="let category of categories" class="ws-drag" cdkDrag>
               <div class="input-group" *ngIf="isEditCategory(category?.name)">
                 <input (clickOutside)="setEditCategory('')" name="category" type='text'
-                  style="padding-left: 40px; height: 40px; margin-left: 4px;" class="col nooutline border-0"
+                  style="padding-left: 40px; height: 40px; margin-left: 4px;" class="col border-0"
                   autocomplete="off" [ngModel]="editname" (ngModelChange)="edit_new_name = $event" />
                 <a class="text-center p-0"
                   style="line-height:40px; width: 60px; vertical-align:middle; font-size: .8rem"
@@ -83,7 +83,7 @@
           </li>
 
           <li class="row no-gutters">
-            <input placeholder="Add New Category" class="new-input col border-0 pl-4 nooutline"
+            <input placeholder="Add New Category" class="new-input col border-0 pl-4"
               (keydown.enter)="addCategory()" [(ngModel)]="new_name" />
             <span class="fas fa-plus pl-3 pr-3" (click)="addCategory()"></span>
           </li>

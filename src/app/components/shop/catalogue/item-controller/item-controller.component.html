@@ -32,7 +32,7 @@
                 </button>
             </div>
             <div [isDisabled]="!editItems.length" (click)="checkSelectedItems()" class="ws-circle-button" #dropdown="bs-dropdown" mdbDropdown>
-                <button title="Actions" mdbDropdownToggle wsTippy class="btn btn-controller small nooutline clickable">
+                <button title="Actions" mdbDropdownToggle wsTippy class="btn btn-controller small">
                     <span class="fas fa-ellipsis-h"></span>
                 </button>
                 <div class="dropdown-menu mt-0 pb-0 pt-0">
@@ -72,7 +72,7 @@
         </div>
         <div class="ws-circle-button" mdbDropdown>
             <button placement="right" id="sortButton" mdbDropdownToggle title="Order" wsTippy
-                class="btn btn-controller small nooutline clickable d-inline">
+                class="btn btn-controller small clickable d-inline">
                 <span class="fa fa-ellipsis-v"></span>
             </button>
             <div class="dropdown-menu dropdown-menu-right mt-0 pb-0 pt-0" aria-labelledby="sortButton">
@@ -94,7 +94,7 @@
                     (click)="setOrderAndSwitchAscending('status')">Status
                     <span *ngIf="isOrder('status')" class="pl-3 fas fa-sort"></span>
                 </button> -->
-                <!-- <button class="dropdown-item nooutline" [class.orderSelected]="isOrder('custom order')" *ngIf="false && param !== 'defaultcategory'"
+                <!-- <button class="dropdown-item" [class.orderSelected]="isOrder('custom order')" *ngIf="false && param !== 'defaultcategory'"
                     (click)="setOrderAndSwitchAscending('custom order')">Custom Order
                     <span *ngIf="isOrder('custom order')" class="pl-3 fas fa-sort"></span>
                 </button> -->
@@ -132,7 +132,7 @@
             </div> -->
 </div>
 <!-- <div class="pl-1 pr-1" *ngIf="param == 'new'">
-    <textarea name="message" class="form form-control no-resize mt-2 nooutline" placeholder="Advertising Message..."
+    <textarea name="message" class="form form-control no-resize mt-2" placeholder="Advertising Message..."
         [(ngModel)]="message"></textarea>
     <button wsDebounceClick class="btn btn-second btn-md float-right" (debounceClick)="changeMessage()">Change</button>
     <button title="Place your new items to the top of news feed of your followers" wsTippy

@@ -29,7 +29,7 @@
     <div class="row no-gutters mt-2 float-right">
       <input *ngIf="uploadedFlag" class="mr-5 mt-3" style="width:300px" type="range" id="image-size" name="image-size"
         min="0" max="320" value="{{imageSize}}" step="1" [(ngModel)]="imageSize" (ngModelChange)="resize()" />
-      <ws-loading-button *ngIf="uploadedFlag" [class]="'btn btn-md btn-second nooutline mr-2'"
+      <ws-loading-button *ngIf="uploadedFlag" [class]="'btn btn-md btn-second mr-2'"
         [loading]="uploading.isRunning()" (click)="uploadFunction()">Upload</ws-loading-button>
       <button class="btn btn-md btn-second" (click)="closeModal(id)">Cancel</button>
     </div>
