@@ -56,11 +56,13 @@ export class HeaderComponent implements OnInit {
 
   }
   logout() {
-    this.sharedLoadingService.screenLoading.next(true);
+    this.sharedLoadingService.screenLoading.next({loading: true, label: 'Logging out...'});
     this.authenticationService.logout().then(result => {
-      this.router.navigate(['']);
-      this.sharedLoadingService.screenLoading.next(false);
-      this.sharedShopService.shop.next(null);
+      setTimeout(() => {
+        this.sharedLoadingService.screenLoading.next({loading: false});
+        this.router.navigate(['']);
+        this.sharedShopService.shop.next(null);
+      }, 500);
     });
   }
   ngOnDestroy() {

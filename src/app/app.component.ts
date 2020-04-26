@@ -13,6 +13,7 @@ import { Currency } from './objects/currency';
 export class AppComponent {
   title = 'wonder-scale-merchant';
   screenLoading: Boolean;
+  loadingLabel: string;
   private ngUnsubscribe: Subject<any> = new Subject;
   constructor(private currencyService: CurrencyService,
     private ref: ChangeDetectorRef,
@@ -30,8 +31,16 @@ export class AppComponent {
   ngOnInit() {
     this.sharedLoadingService.screenLoading.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
-        this.screenLoading = result;
-        this.ref.detectChanges();
+        if (!result.loading) {
+          setTimeout(() => {
+            this.screenLoading = result.loading;
+            this.ref.detectChanges();
+          }, 500);
+        } else {
+          this.screenLoading = result.loading;
+          this.loadingLabel = result.label;
+          this.ref.detectChanges();
+        }
       })
   }
   ngOnDestory() {

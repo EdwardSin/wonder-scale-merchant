@@ -1,7 +1,7 @@
 <h4 class="ws-title">New<span title="Display all marked as new items" class='fas fa-info-circle ml-2 font-9'></span></h4>
 <item-controller></item-controller>
-<div *ngIf="numberOfNewItems; else loadingTemplate">
-    <div *ngIf="displayItems.length; else searchLoadingTemplate">
+<div *ngIf="numberOfNewItems && !loading.isRunning(); else loadingTemplate">
+    <div *ngIf="displayItems.length && !loading.isRunning(); else searchLoadingTemplate">
         <item-view [showCategory]="true"></item-view>
     </div>
 </div>
@@ -17,12 +17,12 @@
 </ng-template>
 <ng-template #loadingTemplate>
     <ng-container *ngIf="loading.isRunning(); else noItem">
-        <ws-loading></ws-loading>
+        <ws-spinner class="text-center d-block w-100" style="padding-top: 30vh"></ws-spinner>
     </ng-container>
 </ng-template>
 
 <ng-template #searchLoadingTemplate>
     <ng-container *ngIf="loading.isRunning(); else noSearchItem">
-        <ws-loading></ws-loading>
+        <ws-spinner class="text-center d-block w-100" style="padding-top: 30vh"></ws-spinner>
     </ng-container>
 </ng-template>

@@ -78,6 +78,10 @@ export class ItemControllerComponent implements OnInit {
     this.searchController.display = this.route.snapshot.queryParams['display'];
     this.searchController.searchKeyword = this.route.snapshot['queryParams']['s_keyword'];
     this.categoryName = this.route.snapshot.params['name'];
+
+    this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe(queryParams => {
+      this.searchController.searchKeyword = queryParams['s_keyword'];
+    })
     this.sharedShopService.shop.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
         if (result) {
@@ -109,9 +113,9 @@ export class ItemControllerComponent implements OnInit {
       this.authItemContributorService.publishItems(editItems)
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(result => {
-          this.refreshCategories(() => {
-            WsToastService.toastSubject.next({ content: "Items have been activated!", type: 'success' });
-          })
+          this.sharedCategoryService.refreshCategories(() => {
+            WsToastService.toastSubject.next({ content: "Items have been published!", type: 'success' });
+          }, false)
         }, (err) => {
           WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
         });
@@ -124,9 +128,9 @@ export class ItemControllerComponent implements OnInit {
       this.authItemContributorService.unpublishItems(editItems)
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(results => {
-          this.refreshCategories(() => {
-            WsToastService.toastSubject.next({ content: "Items have been inactivated!", type: 'success' });
-          })
+          this.sharedCategoryService.refreshCategories(() => {
+            WsToastService.toastSubject.next({ content: "Items have been unpublished!", type: 'success' });
+          }, false)
         }, (err) => {
           WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
         });
@@ -195,7 +199,7 @@ export class ItemControllerComponent implements OnInit {
     this.authItemContributorService.markAsNew(this.editItems)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(results => {
-        this.refreshCategories(() => {
+        this.sharedCategoryService.refreshCategories(() => {
           WsToastService.toastSubject.next({ content: "Mark as new!", type: 'success' });
         })
       }, (err) => {
@@ -207,7 +211,7 @@ export class ItemControllerComponent implements OnInit {
     this.authItemContributorService.unmarkNew(this.editItems)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(results => {
-        this.refreshCategories(() => {
+        this.sharedCategoryService.refreshCategories(() => {
           WsToastService.toastSubject.next({ content: "Unmark from new!", type: 'success' });
         })
       }, (err) => {
@@ -227,7 +231,7 @@ export class ItemControllerComponent implements OnInit {
       .addItemsToCategory(itemAndCategoryList)
       .pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.loading.stop()))
       .subscribe(result => {
-        this.refreshCategories(() => {
+        this.sharedCategoryService.refreshCategories(() => {
           this.deselectCategories();
           this.closeModal('addToCategoriesModal');
           WsToastService.toastSubject.next({ content: "Added to category!", type: 'success' });
@@ -250,7 +254,7 @@ export class ItemControllerComponent implements OnInit {
       .moveCategory(itemAndCategoryList)
       .pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.loading.stop()))
       .subscribe(result => {
-        this.refreshCategories(() => {
+        this.sharedCategoryService.refreshCategories(() => {
           this.deselectCategories();
           this.closeModal('moveToCategoriesModal');
           WsToastService.toastSubject.next({ content: "Moved to category!", type: 'success' });
@@ -297,7 +301,7 @@ export class ItemControllerComponent implements OnInit {
         .pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.loading.stop()))
         .subscribe(result => {
           ArrayHelper.clear(this.tag.tags);
-          this.refreshCategories(() => {
+          this.sharedCategoryService.refreshCategories(() => {
             this.closeModal('editMultipleItemsModal');
             WsToastService.toastSubject.next({ content: "Items are edited!", type: 'success' });
           })
@@ -320,7 +324,7 @@ export class ItemControllerComponent implements OnInit {
       .subscribe(results => {
         let tempAllItems = this.allItems.filter(x => !_.includes(editItems, x));
         let tempDisplayItems = this.displayItems.filter(x => !_.includes(editItems, x));
-        this.refreshCategories(() => {
+        this.sharedCategoryService.refreshCategories(() => {
           WsToastService.toastSubject.next({ content: "Items have been removed from category!", type: 'success' });
         })
 
@@ -337,7 +341,7 @@ export class ItemControllerComponent implements OnInit {
     })
       .pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.loading.stop()))
       .subscribe(result => {
-        this.refreshCategories(() => {
+        this.sharedCategoryService.refreshCategories(() => {
           WsToastService.toastSubject.next({ content: "Removed from category!", type: 'success' });
         })
       }, (err) => {
@@ -417,9 +421,6 @@ export class ItemControllerComponent implements OnInit {
   }
   deselectAll() {
     this.sharedItemService.editItems.next([]);
-  }
-  refreshCategories(callback) {
-    this.sharedCategoryService.refreshCategories(callback);
   }
   navigateTo(order, orderBy, display) {
     //alphabet

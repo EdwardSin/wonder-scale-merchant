@@ -52,8 +52,8 @@
             <span *ngIf="item?.isEntityNew" class="badge badge-warning mr-1">New</span>
             <span *ngIf="item?.isOffer" class="badge ws-clear-color ws-bg-offer mr-1">Discount</span>
             <span *ngIf="!item?.categories.length" class="badge ws-bg-light-grey-1 mr-1">Uncategorized</span>
-            <span *ngIf="item?.isPublished && param != 'uncategorized'" class="badge badge-success mr-1">Published</span>
-            <span *ngIf="!item?.isPublished && param != 'uncategorized'" class="badge ws-clear-color ws-bg-dark-grey">Unpublished</span>
+            <span *ngIf="item?.isPublished && item?.categories.length && param != 'uncategorized'" class="badge badge-success mr-1">Published</span>
+            <span *ngIf="!item?.isPublished && item?.categories.length && param != 'uncategorized'" class="badge ws-clear-color ws-bg-dark-grey">Unpublished</span>
           </td>
           <td>
             <a title="Edit Item" href="javascript:void(0)" class="ws-dark-color btn-link p-2 mr-1" (click)="$event.stopPropagation();"

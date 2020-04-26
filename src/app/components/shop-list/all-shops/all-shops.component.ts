@@ -5,8 +5,8 @@ import { SharedShopService } from '@services/shared/shared-shop.service';
 import { SharedUserService } from '@services/shared/shared-user.service';
 import { WsLoading } from '@components/elements/ws-loading/ws-loading';
 import { DocumentHelper } from '@helpers/documenthelper/document.helper';
-import { Subject } from 'rxjs';
-import { finalize, takeUntil } from 'rxjs/operators';
+import { Subject, combineLatest, timer } from 'rxjs';
+import { finalize, takeUntil, delay, tap, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-all-shops',
@@ -25,7 +25,7 @@ export class AllShopsComponent implements OnInit {
 
   ngOnInit() {
     DocumentHelper.setWindowTitleWithWonderScale('Joined Shops');
-
+    this.loading.start();
     this.sharedUserService.user.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
         if (result) {
@@ -43,15 +43,17 @@ export class AllShopsComponent implements OnInit {
   getActiveShops() {
     this.loading.start();
     this.sharedLoadingService.loading.next(this.loading.isRunning());
-    this.authShopUserService.getShopsByUserId().pipe(takeUntil(this.ngUnsubscribe), finalize(() => {
-      this.loading.stop();
-      this.sharedLoadingService.loading.next(this.loading.isRunning());
-    }))
+    combineLatest(timer(500), this.authShopUserService.getShopsByUserId())
+    .pipe(
+      map(x => x[1]),
+      takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
         this.activeShopList = result['result'];
         this.activeShopList.forEach(shop => {
           shop.current_contributor = this.authShopUserService.getContributorRole(shop, this.user);
         });
+        this.loading.stop();
+        this.sharedLoadingService.loading.next(this.loading.isRunning());
       })
   }
   ngOnDestroy() {

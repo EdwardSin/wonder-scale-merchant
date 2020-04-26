@@ -23,11 +23,7 @@ export class SharedShopService {
 
   refresh: Subject<Boolean> = new Subject;
   recruitmentRefresh: BehaviorSubject<Boolean> = new BehaviorSubject<Boolean>(false);
-  selectedCategory: BehaviorSubject<any> = new BehaviorSubject<any>(null);
-
-
   items: Subject<any> = new BehaviorSubject<any>(null);
-
   payments: Subject<any> = new BehaviorSubject<any>([]);
   quotations: Subject<any> = new BehaviorSubject<any>([]);
   promotions: Subject<any> = new BehaviorSubject<any>([]);
