@@ -6,6 +6,8 @@ import { DocumentHelper } from '@helpers/documenthelper/document.helper';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import * as $ from 'jquery';
+import { WsToastService } from '@components/elements/ws-toast/ws-toast.service';
+import { environment } from '@environments/environment';
 
 @Component({
   selector: 'app-qrcode',
@@ -14,7 +16,11 @@ import * as $ from 'jquery';
 })
 export class QrcodeComponent implements OnInit {
   shop;
+  qrSize: number = 200;
   loading: WsLoading = new WsLoading;
+  displayImage = '';
+  environment = environment;
+  @ViewChild('urlInput', { static: true }) urlInput: ElementRef;
   @ViewChild('printContent', { static: true }) printContent: ElementRef;
   private ngUnsubscribe: Subject<any> = new Subject;
   constructor(private sharedShopService: SharedShopService, ) {
@@ -25,10 +31,8 @@ export class QrcodeComponent implements OnInit {
       .subscribe(result => {
         if (result) {
           this.shop = result;
-          $('.qrcode').ready(() => {
-            QRCodeBuilder.createQRcode('.qrcode', this.shop.username, this.shop._id);
-            this.copyToPrint();
-          })
+          this.displayImage = environment.IMAGE_URL + this.shop.profileImage;
+          this.renderQrcode();
         }
         this.loading.stop();
       })
@@ -40,6 +44,57 @@ export class QrcodeComponent implements OnInit {
   copyToPrint() {
     let canvas = <HTMLCanvasElement>document.getElementById('canvas1');
     (<HTMLImageElement>document.getElementById('copyimage')).src = canvas.toDataURL('image/png');
+  }
+  renderQrcode() {
+    this.qrSize = Math.max(72, this.qrSize);
+    this.qrSize = Math.min(300, this.qrSize);
+    $('.qrcode').html('');
+    $(() => {
+      let image = <HTMLImageElement>document.createElement('img');
+      image.crossOrigin = 'anonymous';
+      image.src = this.displayImage;
+      image.alt = 'profile-image';
+      QRCodeBuilder.createQRcode('.qrcode', this.shop.username, this.shop._id, { width: this.qrSize, height: this.qrSize});
+      $(() => {
+        image.addEventListener('load', e => {
+          setTimeout(() => {
+            this.renderProfileImageToQrcode(image);
+          }, 300);
+        });
+      });
+    });
+  }
+  imageChangeEvent(event) {
+    this.displayImage = event[0].url.changingThisBreaksApplicationSecurity;
+    this.renderQrcode();
+  }
+  renderProfileImageToQrcode(image) {
+    let canvas = document.getElementById('canvas1');
+    let context =(<HTMLCanvasElement>canvas).getContext('2d');
+    let width = this.qrSize / 3 * 185 / 300;
+    let height = this.qrSize / 3 * 185 / 300;
+    let offsetyY = this.qrSize * 9 / 300;
+    let offsetX = this.qrSize/2 - width/2;
+    let offsetY = this.qrSize/2 - height/2 - offsetyY;
+    context.save();
+    context.beginPath();
+    context.arc(offsetX + width/2, offsetY + width/2, width/2, 0, 2*Math.PI);
+    context.fill();
+    context.clip();
+    context.drawImage(image, offsetX, offsetY, width, height);
+    context.restore();
+  }
+  copyURL() {
+    $('#urlInput').select();
+    document.execCommand("copy");
+    WsToastService.toastSubject.next({ content: 'URL is copied!', type: 'success'});
+  }  
+  downloadQrcode() {
+    let elementQrcode = document.getElementById('id-qrcode');
+    let canvas = document.getElementById('canvas1');
+    let dataURL = (<HTMLCanvasElement>canvas).toDataURL('image/png');
+    (<HTMLLinkElement>elementQrcode).href = dataURL;
+    (<HTMLLinkElement>elementQrcode).click();
   }
   printQrCode() {
     const WindowPrt = window.open('', '', 'left=0,top=0,width=900,height=900,toolbar=0,scrollbars=0,status=0');
