@@ -1,17 +1,81 @@
 <h4 class="ws-title">QR Code</h4>
 
 <div class="mt-3" *ngIf="shop ;else loadingTemplate">
-    <div class="p-4 center position-relative">
-        <p class="text-center mb-2">Scan me to view more items!</p>
-        <div class="qrcode text-center"></div>
-        <p style="text-align: center; margin-top: .25rem; margin-bottom: 0">@{{ shop?.username }}</p>
+    <div class="col-sm-4 px-0 mb-3">
+        <label class="font-weight-bold">URL:</label>
+        <div class="input-group">
+            <input id="urlInput" class="form-control" style="background-color: #fff" readonly="readonly" [value]="'https://www.wonderscale.com/shop?id=' + shop?._id"/>
+            <div class="input-group-append">
+                <button class="btn input-group-text" (click)="copyURL()"><span class="fas fa-copy"></span></button>
+                <!-- <button class="btn input-group-text"><span class="fas fa-share-alt"></span></button> -->
+            </div>
+            <a id="id-qrcode" hidden href="#" download="ws-qr-code.png"></a>
+        </div>
     </div>
+    <!-- <img id="id-image"
+    [src]="environment.IMAGE_URL + shop.profileImage" 
+    hidden style="object-fit: contain; border-radius: 50%" alt="profile-image" /> -->
+    <ws-uploader [id]="'qrcode-profile'" [max]="1" [input]="[]" (output)="imageChangeEvent($event)"></ws-uploader>
+    <div class="row no-gutters">
+        <div class="col-sm-4">
+            <label class="font-weight-bold">Preview:</label>
+            <div class="border border-radius p-3">
+                <div class="row no-gutters mb-2">
+                    <div class="col">
+                        <div class="row no-gutters mb-3">
+                            <div class="input-group input-group-sm pr-1">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Size</span>
+                                </div>
+                                <input name="qr-size" placeholder="72 - 300" class="form-control" value="72" (keydown.enter)="renderQrcode()" [(ngModel)]="qrSize" />
+                                <div class="input-group-append">
+                                    <span class="input-group-text">px</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="ws-circle-button float-right">
+                            <button title="Download QR-code" class="btn btn-controller" (click)="downloadQrcode()">
+                                <span class="fas fa-download"></span>
+                            </button>
+                        </div>
+                        <!-- <div class="ws-circle-button">
+                            <button class="btn btn-controller">
+                                <span class="fas fa-share-alt"></span>
+                            </button>
+                        </div> -->
+                        <div class="ws-circle-button float-right">
+                            <button title="Upload profile image to QR-code" class="btn btn-controller" onclick="document.getElementById('qrcode-profile').click();">
+                                <span class="fas fa-upload"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="clearfix"></div>
+                <div class="qrcode text-center"></div>
+                <p style="text-align: center; margin-top: .25rem; margin-bottom: 0">@{{ shop?.username }}</p>
+            </div>
+        </div>
+        <div class="offset-sm-1 col-sm-6 px-3">
+            <label class="font-weight-bold ml-4">Tips:</label>
+            <ol>
+                <li class="font-9">Place QR-code at the obvious place to easily catch your customers' eyes.</li>
+                <li class="font-9">Try to scan the QR-code after printing out.</li>
+                <!-- <ol>Share tje QR code to be referral in order to earn credits.</ol> -->
+            </ol>
+        </div>
+    </div>
+    <!-- <div class="p-4 center position-relative">
+        <p class="text-center mb-2">Scan me to view more items!</p>
+    </div> -->
     <div class="col-lg p-4 text-center">
-        <p class="font-8">You can print the QR Code and place it in your shop.
+        <!-- <p class="font-8">You can print the QR Code and place it in your shop.
             <br/> The code will bring customer to the homepage of your shop so they can look through the items in your shop.
             <br/> You may also customize the layout and include the QR Code to personalize the QR Code.
-        </p>
-        <button class="btn btn-second btn-md" (click)="printQrCode()">Print</button>
+        </p> -->
+        <!-- <button class="btn btn-second btn-md" (click)="printQrCode()">Print</button> -->
     </div>
 </div>
 
@@ -21,8 +85,7 @@
         <div style="position: relative">
             <img id="copyimage" src="" alt="copy" />
             <div style="width:50px; height:50px; position:absolute; border-radius: 50%; top: calc(50% - 25px - .75rem);left: calc(50% - 25px - .75rem);">
-                <img style="width: 72px; height: 72px" src="https://res.cloudinary.com/hdpveefqg/image/upload/v1544152336/icon-qrcode.png"
-                    alt="icon" />
+                <img style="width:72px; height: 72px" src="/assets/images/png/icon.png" alt="icon" />
             </div>
         </div>
         <p style="text-align: center; margin-top: .25rem; margin-bottom: 0">@{{ shop?.username }}</p>
