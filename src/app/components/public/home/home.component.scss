@@ -1,16 +1,52 @@
 @import "src/assets/scss/variables.scss";
 
-.background-container{
-    height: 600px;
-    width: 100%;
-    background-image: url('/assets/images/background-image.jpeg');
-    background-size: cover;
-    background-position: center;
+.background-image{
     position: absolute;
-    filter: brightness(.6);
+    top: 10rem;
+    right:2rem;
+    z-index: -1;
 }
 .background-text {
     color: #fff;
+}
+.feature-container{
+    padding: 4rem 0;
+    transition: transform ease .3s;
+    .icon {
+        filter: drop-shadow(0 3px 3px #999);
+        font-size: 5rem; 
+        transform: color .2s ease;
+    }
+    &:hover{
+        transform: scale(1.03);
+        .icon {
+            &.icon-item {
+                color: #CC8500;
+            }
+            &.icon-store {
+                color: #0ABCC9;
+            }
+            &.icon-qrcode{
+                color: #990000;
+            }
+            &.icon-bell{
+                color: #E6C300;
+            }
+            &.icon-right{
+                animation: swing;
+                animation-duration: 8s;
+            }
+            &.icon-left{
+                animation: swing;
+                animation-duration: 8s;
+                transform-origin: top;
+                animation-iteration-count: infinite;
+            }
+        }
+    }
+}
+.icon{
+    transition: transform ease-out .4s;
 }
 .btn-background{
     background:transparent; 
