@@ -5,6 +5,6 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class ShopAuthorizationService {
-  isAdminAuthorized: BehaviorSubject<Boolean> = new BehaviorSubject(false);
+  isAdminAuthorized: BehaviorSubject<boolean> = new BehaviorSubject(false);
   constructor() { }
 }

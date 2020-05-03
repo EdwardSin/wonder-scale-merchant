@@ -117,9 +117,8 @@
           'Collapse' :'Expand'}}</button>
     <p>Set the default settings.</p>
     <div [@expand]="'down'" *ngIf="isDefaultExpanded" style="height: 100%">
-
       <label class="font-9 font-weight-bold pl-4">Item</label>
-      <form class="pl-4" [formGroup]="settingsForm" (keydown.enter)="$event.preventDefault()">
+      <form [formGroup]="settingsForm" (keydown.enter)="$event.preventDefault()">
         <table>
           <tr>
             <td class="pr-3">
@@ -231,8 +230,8 @@
     <h4 class="ws-subtitle mb-3">Contributor</h4>
     <button class="btn btn-expand float-right" (click)="isContributorExpanded = !isContributorExpanded">{{
       isContributorExpanded ? 'Collapse' :'Expand'}}</button>
-    <p>You can control and view contributor in Vrest Hotel.</p>
-    <div [@expand]="'down'" *ngIf="isContributorExpanded" style="height: 100%">
+    <p>You can control and view contributor in {{ shop?.name }}.</p>
+    <div [@expand]="'down'" *ngIf="isContributorExpanded" class="col-sm-6 px-0 center" style="height: 100%">
       <form class="border mb-3" *ngIf="isAdminAuthorized">
         <div class="border-bottom p-2 text-center" style="background-color: #fafafa;">
           Invite Contributor
@@ -241,8 +240,8 @@
           <label class="settings-label">Select members to invite</label>
           <div class="form-control form-control-sm">
             <div class="row no-gutters w-100">
-              <span class="badge ws-bg-secondary mr-1" style="height:20px;line-height:20px"
-                *ngFor="let contributor of contributorController.new_contributors">{{
+              <span class="badge ws-bg-secondary mr-1" style="height:20px;line-height:17px"
+                *ngFor="let contributor of contributorController.newContributors">{{
                 contributor?.firstName}}
                 <span class="fas fa-times ml-2 clickable" (click)="removeContributor(contributor)"></span>
               </span>
@@ -254,19 +253,20 @@
             <ul *ngIf="userSuggestions?.length" class="contributor-list list-unstyled mb-0">
               <li *ngFor="let user of userSuggestions" (click)="addContributor(user)">
                 <img class="mr-2" style="width:24px; height:24px; object-fit: contain; border-radius: 50%;"
-                  src="{{user?.profileImage}}" alt="profile image" />
+                  [defaultImage]="environment.LAZY_LOAD_IMAGE"
+                  [lazyLoad]="user?.profileImage" alt="profile image" />
                 <div class="d-inline-block">{{user?.firstName }} {{user?.lastName}}</div>
               </li>
             </ul>
           </div>
 
           <label class="settings-label">Choose a role permission</label>
-          <select name="role" [(ngModel)]="contributorController.new_role"
+          <select name="role" [(ngModel)]="contributorController.newRole"
             class="settings-input form-control form-control-sm">
-            <option>Admin</option>
-            <option>Maintainer</option>
+            <option value="admin">Admin</option>
+            <option value="maintainer">Maintainer</option>
           </select>
-          <permission-list [role]="contributorController.new_role"></permission-list>
+          <permission-list [role]="contributorController.newRole"></permission-list>
           <button class="btn btn-sm btn-success m-0 mt-3 mb-3" wsDebounceClick
             (debounceClick)="inviteContributor()">Invite</button>
         </div>
@@ -277,12 +277,14 @@
           Contributors of
           <span class="font-weight-bold">Vrest Hotel</span>
           <button [disabled]="refreshLoading.isRunning()" style="background: none; border: 0"
-            class="p-0 float-right" (click)="getContributors()">
-            <span [class.loading]="refreshLoading.isRunning()" class="fas fa-sync-alt mr-2 clickable"></span>
+            class="p-0 float-right mr-2" (click)="getContributors()">
+            <span [class.loading]="refreshLoading.isRunning()" class="fas fa-sync-alt clickable"></span>
           </button>
         </div>
-        <div class="p-3" *ngFor="let contributor of contributorController.exists_contributors">
-          <img class="mr-3" style="width: 40px; height: 40px; border-radius: 50%" src="{{contributor?.profileImage}}"
+        <div class="p-3" *ngFor="let contributor of contributorController.existsContributors">
+          <img class="mr-3" style="width: 40px; height: 40px; border-radius: 50%"
+            [defaultImage]="environment.LAZY_LOAD_IMAGE"
+            [lazyLoad]="contributor?.profileImage"
             alt="Profile" />
           <div class="d-inline-block" style="vertical-align: middle">
             <span class="d-flex font-weight-normal" style="font-size:.9rem">{{contributor?.firstName}}
@@ -316,27 +318,30 @@
     <p>Perform advanced options such as removing your shop.</p>
     <div [@expand]="'down'" *ngIf="isAdvancedExpanded" style="height: 100%">
       <form *ngIf="isAdminAuthorized" class="mb-3">
-        <p *ngIf="shop?.status?.status == 'cancel'" class="font-weight-normal" style="font-size: .9rem">
-          Shop is allowed to be removed permanently after {{ remove_day_number }} days.
+        <p *ngIf="shop?.status?.status == 'closed' && timeDifference > 0" class="alert alert-secondary ws-bg-light-grey-4 mb-1" style="font-size: .9rem">
+          <button *ngIf="shop.status.status == 'closed' && timeDifference > 0" class="btn btn-primary btn-sm m-0 mb-2"
+            (click)="openModal('confirmReactivateModal')">Reactivate</button>
+          <br/>
+          Shop will be removed permanently {{timeDifferenceString}}.
           <br />
-          You can reactivate any time.
+          You can reactivate anytime before shop is removed permanently.
         </p>
-        <p *ngIf="shop?.status?.status != 'cancel'" class="font-weight-normal" style="font-size: .9rem">
-          You can reactivate shop within 14 days.<br>
-          Shop will not be displayed to public.</p>
-        <button *ngIf="shop.status.status == 'cancel'" class="btn btn-warning btn-sm m-0"
-          (click)="openModal('confirmReactivateModal')">Reactivate</button>
-        <button *ngIf="shop.status.status != 'cancel'" class="btn btn-sm btn-danger m-0"
+        <p *ngIf="shop?.status?.status != 'closed'" class="alert alert-secondary ws-bg-light-grey-4 mb-1" style="font-size: .9rem">
+          <button *ngIf="shop.status.status != 'closed'" class="btn btn-sm btn-danger m-0 mb-2"
           (click)="openModal('confirmCloseShopModal')">Remove
           Shop Permanently</button>
+          <br/>
+          You can reactivate shop within 1 hour.<br>
+          Shop will not be displayed to public.</p>
       </form>
 
       <form class="mb-3">
-        <p class="font-weight-normal" style="font-size: .9rem">
+        <p class="alert alert-secondary ws-bg-light-grey-4 mb-1" style="font-size: .9rem">
+          <button class="btn btn-warning btn-sm m-0 mb-2" (click)="openModal('confirmQuitShopModal')">Leave Shop</button>
+          <br/>
           All contributors can leave the shop.<br />
-          At lease 1 admin should be in the shop.
+          At least 1 admin should be in the shop.
         </p>
-        <button class="btn btn-warning btn-sm m-0" (click)="openModal('confirmQuitShopModal')">Leave Shop</button>
       </form>
     </div>
   </div>

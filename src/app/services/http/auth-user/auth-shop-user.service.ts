@@ -46,6 +46,6 @@ export class AuthShopUserService {
     return this.http.post(AuthShopUserUrl.addShopUrl, shop);
   }
   getContributorRole(shop, user) {
-    return shop.contributors.find(contributor => contributor.user._id == user._id);
+    return shop.contributors.find(contributor => contributor.user == user._id);
   }
 }

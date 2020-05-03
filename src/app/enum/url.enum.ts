@@ -202,7 +202,7 @@ export class AuthShopAdminUrl {
     static inviteContributorUrl = URL.AUTH_SHOP_ADMIN_URL + '/contributor/invite';
     static editContributorUrl = URL.AUTH_SHOP_ADMIN_URL + '/contributor/edit';
     static removeContributorUrl = URL.AUTH_SHOP_ADMIN_URL + '/contributor/remove';
-    static closePermanentlyUrl = URL.AUTH_SHOP_ADMIN_URL + '/closepermanently';
+    static closePermanentlyUrl = URL.AUTH_SHOP_ADMIN_URL + '/close/permanently';
     static reactivateShopUrl = URL.AUTH_SHOP_ADMIN_URL + '/reactivate';
 }
 

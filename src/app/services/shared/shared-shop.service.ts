@@ -13,7 +13,7 @@ export class SharedShopService {
   currency: string = '';
 
   activeShopList: Subject<any[]> = new Subject<any[]>();
-  pendingShopList: Subject<any[]> = new Subject<any[]>();
+  pendingShopList: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
 
 
 

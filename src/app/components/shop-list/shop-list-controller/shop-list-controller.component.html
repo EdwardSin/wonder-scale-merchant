@@ -6,7 +6,7 @@
     |
     <li>
       <a class="default font-9" routerLinkActive="selected" [routerLink]="['pending']">Pending
-        <span *ngIf="pendingShopList.length" class="badge badge-warning ml-2">{{pendingShopList.length}}</span>
+        <span *ngIf="pendingShopList.length > 0" class="badge badge-warning ml-2">{{pendingShopList.length}}</span>
       </a>
     </li>
     <div class="ws-circle-button float-right mt-1 mr-3">
@@ -14,7 +14,7 @@
         <span [class.loading]="loading.isRunning()" class="fas fa-sync-alt"></span>
       </button>
     </div>
-    <div class="ws-circle-button float-right mr-1 mt-1">
+    <div class="ws-circle-button float-right mt-1">
       <button class="btn btn-controller small" [routerLink]="['',{outlets: {modal:'new-shop'}}]">
         <span class="fas fa-plus"></span>
       </button>

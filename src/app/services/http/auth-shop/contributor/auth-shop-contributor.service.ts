@@ -9,7 +9,6 @@ import { AccessTokenService } from '@services/http/auth-shop/access-token.servic
 export class AuthShopContributorService {
 
   constructor(private http: HttpClient, private accessTokenService: AccessTokenService) { }
-
   getContributors() {
     return this.http.get(AuthShopContributorUrl.getContributorsUrl, this.accessTokenService.getAccessToken());
   }
@@ -40,11 +39,11 @@ export class AuthShopContributorService {
   editMedia(obj) {
     return this.http.put(AuthShopContributorUrl.editMediaUrl, obj, this.accessTokenService.getAccessToken());
   }
-  joinContributor(obj) {
-    return this.http.put(AuthShopContributorUrl.joinContributorUrl, obj, this.accessTokenService.getAccessToken());
+  joinContributor(shopId) {
+    return this.http.put(AuthShopContributorUrl.joinContributorUrl, {shopId});
   }
-  rejectContributor(obj) {
-    return this.http.put(AuthShopContributorUrl.rejectContributorUrl, obj, this.accessTokenService.getAccessToken());
+  rejectContributor(shopId) {
+    return this.http.put(AuthShopContributorUrl.rejectContributorUrl, {shopId});
   }
   leaveShop() {
     return this.http.put(AuthShopContributorUrl.leaveShopUrl, {}, this.accessTokenService.getAccessToken());
