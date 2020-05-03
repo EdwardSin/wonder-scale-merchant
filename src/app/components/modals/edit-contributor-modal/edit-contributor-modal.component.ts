@@ -12,6 +12,7 @@ import { WsModalService } from '@components/elements/ws-modal/ws-modal.service';
 import { WsToastService } from '@components/elements/ws-toast/ws-toast.service';
 import _ from 'lodash';
 import { finalize, takeUntil } from 'rxjs/operators';
+import { Role } from '@enum/Role.enum';
 
 @Component({
   selector: 'edit-contributor-modal',
@@ -56,12 +57,12 @@ export class EditContributorModalComponent extends WsModalClass implements OnIni
   editContributor() {
     if (this.contributorController.validate()) {
       let contributor: Contributor = Object.assign({}, this.contributorController.selectedContributor);
-      contributor.role = this.contributorController.new_role;
+      contributor.role = this.contributorController.newRole;
       this.loading.start();
       this.authShopAdminService.editContributor(contributor)
         .pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.loading.stop()))
         .subscribe(result => {
-          this.contributorController.selectedContributor.role = this.contributorController.new_role;
+          this.contributorController.selectedContributor.role = this.contributorController.newRole;
           this.sharedShopService.contributorRefresh.next(this.contributorController);
           WsToastService.toastSubject.next({ content: 'Contributor is updated!', type: 'success' });
           super.close();
@@ -79,11 +80,7 @@ export class EditContributorModalComponent extends WsModalClass implements OnIni
     }
     this.removeLoading.start();
     this.authShopAdminService.removeContributor(obj).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.removeLoading.stop())).subscribe(result => {
-      //_.remove(this.contributorController.exists_contributors, (x) => x.email == this.contributorController.selectedContributor.email);
-
-
       this.sharedShopService.refreshContributor.next(true);
-      //this.sharedShopService.contributorRefresh.next(this.contributorController);
       WsToastService.toastSubject.next({ content: "Contributor is removed!", type: 'success' });
       super.close();
     }, err => {

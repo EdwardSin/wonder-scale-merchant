@@ -7,8 +7,8 @@ import { SharedShopService } from '@services/shared/shared-shop.service';
 import { SharedUserService } from '@services/shared/shared-user.service';
 import { WsLoading } from '@components/elements/ws-loading/ws-loading';
 import { DocumentHelper } from '@helpers/documenthelper/document.helper';
-import { Subject, combineLatest, timer } from 'rxjs';
-import { finalize, takeUntil, map } from 'rxjs/operators';
+import { Subject, combineLatest, timer, interval } from 'rxjs';
+import { finalize, takeUntil, map, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-pending-shops',
@@ -22,43 +22,18 @@ export class PendingShopsComponent implements OnInit {
   environment = environment;
   private ngUnsubscribe: Subject<any> = new Subject;
 
-  constructor(private sharedUserService: SharedUserService,
-    private authShopUserService: AuthShopUserService,
-    private sharedLoadingService: SharedLoadingService,
+  constructor(
     private sharedShopService: SharedShopService) { }
 
   ngOnInit() {
     DocumentHelper.setWindowTitleWithWonderScale('Pending Shops');
-    this.loading.start();
-    this.sharedUserService.user.pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(result => {
-        if (result) {
-          this.user = result;
-          this.getPendingShops();
-        }
-      })
-    this.sharedShopService.refresh.pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(result => {
-        if (result) {
-          this.getPendingShops();
-        }
-      })
-  }
-  getPendingShops() {
-    this.sharedLoadingService.loading.next(this.loading.isRunning());
-    combineLatest(timer(500),
-    this.authShopUserService.getInvitationShopsByUserId())
-    .pipe(
-      map(x => x[1]),
-      takeUntil(this.ngUnsubscribe))
-      .subscribe(result => {
-        this.pendingShopList = result['result'];
-        this.pendingShopList.forEach(shop => {
-          shop.current_contributor = this.authShopUserService.getContributorRole(shop, this.user);
-        })
+    this.sharedShopService.pendingShopList.pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe(result => {
+      if (result) {
+        this.pendingShopList = result;
         this.loading.stop();
-        this.sharedLoadingService.loading.next(this.loading.isRunning());
-      })
+      }
+    });
   }
   ngOnDestroy() {
     this.ngUnsubscribe.next();

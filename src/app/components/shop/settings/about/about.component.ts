@@ -13,6 +13,7 @@ import { AuthShopContributorService } from '@services/http/auth-shop/contributor
 import { AuthShopUserService } from '@services/http/auth-user/auth-shop-user.service';
 import { ShopAuthorizationService } from '@services/http/general/shop-authorization.service';
 import { UserService } from '@services/http/general/user.service';
+import { SharedUserService } from '@services/shared/shared-user.service';
 import { SharedShopService } from '@services/shared/shared-shop.service';
 import { WsLoading } from '@components/elements/ws-loading/ws-loading';
 import { DocumentHelper } from '@helpers/documenthelper/document.helper';
@@ -23,7 +24,7 @@ import { MapController } from '@objects/map.controller';
 import { WsGpsService } from '@services/general/ws-gps.service';
 import { WsModalService } from '@components/elements/ws-modal/ws-modal.service';
 import { WsToastService } from '@components/elements/ws-toast/ws-toast.service';
-import { forkJoin as observableForkJoin, Subject } from 'rxjs';
+import { forkJoin as observableForkJoin, Subject, interval } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
 import _ from 'lodash';
 import { Shop } from '@objects/shop';
@@ -31,6 +32,8 @@ import { WsToastComponent } from '@components/elements/ws-toast/ws-toast.compone
 import{ EmailValidator} from '@validations/email.validator';
 import { URLValidator } from '@validations/urlvalidator';
 import { CurrencyService } from '@services/http/general/currency.service';
+import * as moment from 'moment';
+import { Role } from '@enum/Role.enum';
 
 @Component({
   selector: 'app-about',
@@ -45,11 +48,10 @@ export class AboutComponent implements OnInit {
   isPermissionExpanded: boolean;
   isContributorExpanded: boolean;
   isAdvancedExpanded: boolean;
-
+  moment = moment;
   isShopClosing: boolean;
   isShopClosable: boolean;
   isShowLocation: boolean;
-  remove_day_number: number;
   element: string;
   loading: WsLoading = new WsLoading;
   refreshLoading: WsLoading = new WsLoading;
@@ -74,6 +76,8 @@ export class AboutComponent implements OnInit {
     defaultCurrency: 'MYR'
   };
   tag = new Tag;
+  timeDifference: number;
+  timeDifferenceString: string;
   @ViewChildren('websiteElement') websiteElements: QueryList<any>;
   @ViewChildren('telElement') telElements: QueryList<any>;
   @ViewChildren('emailElement') emailElements: QueryList<any>;
@@ -98,6 +102,7 @@ export class AboutComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private currencyService: CurrencyService,
+    private sharedUserService: SharedUserService,
     private authShopUserService: AuthShopUserService,
     private shopAuthorizationService: ShopAuthorizationService,
     private ref: ChangeDetectorRef) {
@@ -106,7 +111,7 @@ export class AboutComponent implements OnInit {
 
   ngOnInit() {
     this.createShopForm();
-    this.route.data.pipe(takeUntil(this.ngUnsubscribe)) .subscribe(result => {
+    this.route.data.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
         this.shop = result['shop'];
         if(this.shop.profileImage){
           this.profileImage = environment.IMAGE_URL + this.shop.profileImage;
@@ -114,10 +119,22 @@ export class AboutComponent implements OnInit {
         if(this.shop.bannerImage){
           this.bannerImage = environment.IMAGE_URL + this.shop.bannerImage;
         }
+        if (this.shop.status.status == 'closed' && this.shop.status.expiryDate) {
+          this.timeDifference = moment(this.shop.status.expiryDate).diff(moment());
+          this.timeDifferenceString = moment(this.shop.status.expiryDate).fromNow();
+          interval(2000).pipe(takeUntil(this.ngUnsubscribe)).subscribe(() => {
+            this.timeDifference = moment(this.shop.status.expiryDate).diff(moment());
+            this.timeDifferenceString = moment(this.shop.status.expiryDate).fromNow();
+          });
+        }
         this.ref.detectChanges();
-        this.getDateDifference();
         this.setupShopForm();
         this.getDefaultSetting();
+        this.updateContributorAuthorization();
+    })
+    this.shopAuthorizationService.isAdminAuthorized.pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe(result => {
+      this.isAdminAuthorized = result;
     })
 
     let shop_name = this.sharedShopService.shop_name;
@@ -127,13 +144,15 @@ export class AboutComponent implements OnInit {
       .subscribe(result => {
         if (result) {
           this.contributorController = result;
+          this.updateContributorAuthorization();
         }
       })
-
-    this.shopAuthorizationService.isAdminAuthorized.pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(result => {
-        this.isAdminAuthorized = result;
-      })
+  }
+  updateContributorAuthorization() {
+    let contributors = this.contributorController.existsContributors;
+    let user = this.sharedUserService.user.value;
+    let contributor = contributors.find(contributor => contributor['user'] == user._id && contributor.role == 'admin');
+    this.shopAuthorizationService.isAdminAuthorized.next(contributor != null);
   }
   getDefaultSetting() {
     this.authDefaultSettingAdminService.getDefaultSettingByShopId().pipe(takeUntil(this.ngUnsubscribe))
@@ -362,26 +381,27 @@ export class AboutComponent implements OnInit {
     this.refreshLoading.start();
     this.authShopContributorService.getContributors().pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.refreshLoading.stop()))
       .subscribe(result => {
-        this.contributorController.exists_contributors = result['result'];
+        this.contributorController.existsContributors = result['result'];
         this.sharedShopService.contributorRefresh.next(this.contributorController);
+        this.updateContributorAuthorization();
       }, err => {
         WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
       })
   }
   inviteContributor() {
-    if (this.contributorController.new_contributors.length) {
-      observableForkJoin(this.contributorController.new_contributors.map(contributor => {
+    if (this.contributorController.newContributors.length) {
+      observableForkJoin(this.contributorController.newContributors.map(contributor => {
         let obj = {
           contributor: contributor
         }
         return this.authShopAdminService.inviteContributor(obj);
       }))
         .subscribe(result => {
-          this.contributorController.exists_contributors = _.union(this.contributorController.exists_contributors, this.contributorController.new_contributors);
-          this.contributorController.new_contributors = new Array;
+          this.contributorController.existsContributors = _.union(this.contributorController.existsContributors, this.contributorController.newContributors);
+          this.contributorController.newContributors = new Array;
           WsToastService.toastSubject.next({ content: "Contributors are invited!", type: 'success' });
         }, err => {
-          WsToastService.toastSubject.next({ content: err.error });
+          WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
         });
     }
     else {
@@ -391,29 +411,34 @@ export class AboutComponent implements OnInit {
   addContributor(user) {
     this.userSuggestions = [];
     this.contributorController.searchText = '';
-    if (_.find(this.contributorController.exists_contributors, (x) => x.email == user.email)) {
+    if (_.find(this.contributorController.existsContributors, (x) => x.email == user.email)) {
       WsToastService.toastSubject.next({ content: "User is already a contributor!", type: 'danger' });
     }
-    else if (_.find(this.contributorController.new_contributors, (x) => x.email == user.email)) {
+    else if (_.find(this.contributorController.newContributors, (x) => x.email == user.email)) {
       WsToastService.toastSubject.next({ content: "User has been added!", type: 'danger' });
     }
     else {
-      this.contributorController.new_contributors.push(<Contributor>{
-        email: user.email, user_id: user._id, role: this.contributorController.new_role,
+      this.contributorController.newContributors.push(<Contributor>{
+        email: user.email, _id: user._id, role: this.contributorController.newRole,
         profileImage: user.profileImage, status: 'pending',
         firstName: user.firstName, lastName: user.lastName
       });
     }
   }
   removeContributor(user) {
-    _.remove(this.contributorController.new_contributors, (x) => x._id == user._id);
+    _.remove(this.contributorController.newContributors, (x) => x._id == user._id);
   }
   closePermanently() {
     this.authShopAdminService
       .closePermanently()
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
-        window.location.reload();
+        let date = new Date;
+        date.setHours(date.getHours() + 1);
+        this.shop.status.status = 'closed';
+        this.shop.status.expiryDate = date;
+        this.sharedShopService.shop.next(this.shop);
+        this.router.navigate(['../../catalogue', 'all'], {relativeTo: this.route});
       }, err => {
         WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
       });
@@ -423,21 +448,27 @@ export class AboutComponent implements OnInit {
       .reactivateShop()
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
-        window.location.reload();
+        this.shop.status.status = 'active';
+        this.shop.status.expiryDate = null;
+        this.sharedShopService.shop.next(this.shop);
+        this.router.navigate(['../../catalogue', 'all'], { relativeTo: this.route });
       });
   }
   quitShop() {
     this.authShopContributorService.leaveShop()
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
-        this.router.navigate(['/all']);
+        this.router.navigate(['shops/all']);
       }, err => {
         WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
       })
   }
   openModal(id, element) {
     this.modalService.open(id);
-    this.contributorController.selectedContributor = element;
+    if(element){
+      this.contributorController.selectedContributor = element;
+      this.contributorController.newRole = element.role;
+    }
     this.modalService.setElement(id, this.contributorController);
   }
   openShopModal(id, element) {
@@ -446,20 +477,6 @@ export class AboutComponent implements OnInit {
   }
   disabledControls(){
     this.isShowLocation = !this.isShowLocation;
-  }
-  getDateDifference() {
-    if (this.shop.status && this.shop.status.status == 'cancel') {
-      var oneDay = 24 * 60 * 60 * 1000;
-      var firstDate = new Date(this.shop.status.expiryDate);
-      var secondDate = new Date();
-
-      let remove_days = Math.round(
-        (firstDate.getTime() - secondDate.getTime()) / oneDay
-      );
-      this.isShopClosing = remove_days > 0 && remove_days <= 14;
-      this.isShopClosable = remove_days <= 0;
-      this.remove_day_number = remove_days;
-    }
   }
   closeModal(id) {
     this.element = '';

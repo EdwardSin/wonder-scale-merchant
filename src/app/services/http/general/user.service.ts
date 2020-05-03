@@ -11,8 +11,8 @@ export class UserService {
   USER_URL = '/api/users';
   constructor(private http: HttpClient, private authenticationService: AuthenticationService) { }
 
-  getUserByUserId(user_id): Observable<User> {
-    return this.http.get<User>(this.USER_URL + '/profile/' + user_id);
+  getUserByUserId(userId): Observable<User> {
+    return this.http.get<User>(this.USER_URL + '/profile/' + userId);
   }
   addUser(user) {
     let headers = new HttpHeaders();

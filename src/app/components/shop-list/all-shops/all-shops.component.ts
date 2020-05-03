@@ -50,7 +50,7 @@ export class AllShopsComponent implements OnInit {
       .subscribe(result => {
         this.activeShopList = result['result'];
         this.activeShopList.forEach(shop => {
-          shop.current_contributor = this.authShopUserService.getContributorRole(shop, this.user);
+          shop.currentContributor = this.authShopUserService.getContributorRole(shop, this.user);
         });
         this.loading.stop();
         this.sharedLoadingService.loading.next(this.loading.isRunning());

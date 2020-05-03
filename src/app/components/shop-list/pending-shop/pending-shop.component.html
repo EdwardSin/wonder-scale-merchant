@@ -1,27 +1,33 @@
 <img class="mr-3" style="width: 64px; height: 64px; border-radius: 50%"
-  src="{{environment.IMAGE_URL + shop?.profileImage}}" alt="shop profile" />
+  [defaultImage]="environment.LAZY_LOAD_IMAGE"
+  [lazyLoad]="environment.IMAGE_URL + shop?.profileImage" alt="shop profile" />
 <div class="col">
   <div class="d-flex mt-2">
-    <a class="default" href="javascript:void(0)" (click)="blockMessage()">
+    <a class="default" href="javascript:void(0)">
       <span>{{shop?.name}}</span>
     </a>
     <span *ngIf="shop?.status?.status == 'active'" class="fas fa-circle ml-2 text-success"
       style="filter: drop-shadow(0 0  2px #1e7b34);line-height: 20px;"></span>
-    <span *ngIf="shop?.status?.status == 'cancel'" class="fas fa-circle ml-2 text-danger"
+    <span *ngIf="shop?.status?.status == 'closed'" class="fas fa-circle ml-2 text-danger"
       style="filter: drop-shadow(0 0 2px #990000);line-height: 20px;"></span>
     <span *ngIf="shop?.status?.status == 'pending'" class="fas fa-circle ml-2 text-warning"
       style="filter: drop-shadow(0 0 2px #ffbb33);line-height: 20px;"></span>
-    <span class="contributor-label ml-3">{{ shop?.current_contributor?.role}}</span>
+    <span class="contributor-label ml-3">{{ shop?.currentContributor?.role}}</span>
   </div>
-  <span class="mt-1 d-flex" style="font-size: .8rem">Invited by <span
-      class="font-weight-bold ml-1 mr-1">{{ shop?.current_contributor?.invitedBy}}</span>
-    {{ shop?.current_contributor?.invitedDate | passDate}}</span>
+  <span class="mt-1 d-flex" style="font-size: .8rem">Invited at 
+    {{ shop?.currentContributor?.invitedDate | passDate}}</span>
 </div>
 <div class="col-auto float-right mt-3">
-  <a href="javascript:void(0)" (click)="accept(shop?.name, shop?._id)"><span
-      class="fas fa-check-circle text-success mr-2" style="font-size: 2.5rem"></span></a>
-  <a href="javascript:void(0)" (click)="openModal('confirmModal')"><span class="fas fa-times-circle text-danger"
-      style="font-size: 2.5rem"></span></a>
+  <div class='ws-circle-button'>
+    <button class="btn btn-controller" (click)="accept(shop)">
+      <span class="fas fa-check"></span>
+    </button>
+  </div>
+  <div class='ws-circle-button'>
+    <button class="btn btn-controller" (click)="openModal('confirmModal')">
+      <span class="fas fa-times"></span>
+    </button>
+  </div>
 </div>
 <confirm-modal *ngIf="isRemoveModalOpen" id="confirmModal" [message]="'Are you sure to reject the invitation?'"
-  [closeCallback]="closeModal" [action]="reject.bind(this, shop?.name, shop?._id)"></confirm-modal>
+  [closeCallback]="closeModal" [action]="reject.bind(this, shop)"></confirm-modal>

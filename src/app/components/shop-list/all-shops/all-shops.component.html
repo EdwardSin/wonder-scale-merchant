@@ -1,7 +1,7 @@
 <div *ngIf="activeShopList?.length; else loadingTemplate">
   <div *ngFor="let shop of activeShopList">
     <active-shop class="d-block" [shop]="shop" class="row no-gutters py-3 px-4 bg-white border-bottom"
-      *ngIf="shop?.status?.status == 'active'">
+      *ngIf="shop?.status?.status == 'active' || shop?.status?.status == 'closed'">
     </active-shop>
   </div>
 </div>

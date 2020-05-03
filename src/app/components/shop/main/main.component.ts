@@ -22,13 +22,14 @@ import { WsLoading } from '@components/elements/ws-loading/ws-loading';
 import { WsModalService } from '@components/elements/ws-modal/ws-modal.service';
 import { WsToastService } from '@components/elements/ws-toast/ws-toast.service';
 import _ from 'lodash';
-import { Subject, BehaviorSubject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Subject, BehaviorSubject, interval, of } from 'rxjs';
+import { takeUntil, switchMap } from 'rxjs/operators';
 import { SharedLoadingService } from '../../../services/shared/shared-loading.service';
 import { Shop } from '@objects/shop';
 import { SharedItemService } from '@services/shared/shared-item.service';
 import { SharedNavbarService } from '@services/shared/shared-nav-bar.service';
-
+import * as moment from 'moment';
+import { AuthShopUserService } from '@services/http/auth-user/auth-shop-user.service';
 
 @Component({
   selector: 'app-main',
@@ -42,15 +43,12 @@ export class MainComponent implements OnInit {
   shop_username: string;
   shop;
   user;
-
-
   numberOfAllItems: number = 0;
   numberOfDiscountItems: number = 0;
   numberOfNewItems: number = 0;
   numberOfPublishedItems: number = 0;
   numberOfUnpublishedItems: number = 0;
   numberOfUncategorizedItems: number = 0;
-
   loading: WsLoading = new WsLoading;
   displayPreview: boolean;
   categories: Array<any> = [];
@@ -86,6 +84,7 @@ export class MainComponent implements OnInit {
     private shopAuthorizationService: ShopAuthorizationService,
     private activeRoute: ActivatedRoute,
     private sharedLoadingService: SharedLoadingService,
+    private authShopUserService: AuthShopUserService,
     private sharedNavbarService: SharedNavbarService,
     private sharedItemService: SharedItemService,
     private ref: ChangeDetectorRef) {
@@ -218,20 +217,19 @@ export class MainComponent implements OnInit {
   }
   getContributors() {
     if (this.shop) {
-      this.contributorController.exists_contributors = this.shop.contributors;
+      this.contributorController.existsContributors = this.shop.contributors;
       this.sharedShopService.contributorRefresh.next(this.contributorController);
     }
   }
   refreshContributors() {
     this.authShopContributorService.getContributors().pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
-        this.contributorController.exists_contributors = result['result'];
+        this.contributorController.existsContributors = result['result'];
         this.sharedShopService.contributorRefresh.next(this.contributorController);
       })
   }
-  isAdminAuthorizedRefresh(user_id: string) {
-    let isAdminAuthorized = this.contributorController.exists_contributors.some(x => x.user == user_id && x.role == Role.Admin);
-
+  isAdminAuthorizedRefresh(userId: string) {
+    let isAdminAuthorized = this.contributorController.existsContributors.some(x => x.user == userId && x.role == Role.Admin);
     this.shopAuthorizationService.isAdminAuthorized.next(isAdminAuthorized);
   }
   addCategory() {

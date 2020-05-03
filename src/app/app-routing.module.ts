@@ -32,6 +32,7 @@ import { ShopResolver } from '@components/resolvers/shopResolver.service';
 import { ResetPasswordComponent } from '@components/feature/authentication/reset-password/reset-password.component';
 import { ModifyItemComponent } from '@components/shop/catalogue/modify-item/modify-item.component';
 import { ModifyItemTypeComponent } from '@components/shop/catalogue/modify-item-type/modify-item-type.component';
+import { ShopGuard } from './shop.guard';
 
 
 const routes: Routes = [{
@@ -95,6 +96,7 @@ const routes: Routes = [{
     {
       path: 'catalogue',
       component: CatalogueComponent,
+      canActivate: [ShopGuard],
       data: { title: 'cat', breadcrumb: 'Catalogue' },
       children: [{ path: '', redirectTo: 'all', pathMatch: 'full' },
       { path: 'all', component: AllItemsComponent, data: { title: 'all', breadcrumb: 'All' } },
@@ -108,6 +110,7 @@ const routes: Routes = [{
     },
     {
       path: 'information',
+      canActivate: [ShopGuard],
       component: InformationComponent,
       data: { title: 'information', breadcrumb: 'Information' }
     },
@@ -163,6 +166,7 @@ const routes: Routes = [{
     // },
     {
       path: 'settings',
+      canActivate: [ShopGuard],
       component: SettingsComponent,
       data: { title: 'settings', breadcrumb: 'Settings' },
       children: [{
@@ -186,6 +190,7 @@ const routes: Routes = [{
     },
     {
       path: 'qrcode',
+      canActivate: [ShopGuard],
       component: QrcodeComponent,
       data: { title: 'qrcode', breadcrumb: 'Qr Code' }
     }, {

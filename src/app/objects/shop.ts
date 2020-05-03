@@ -39,6 +39,7 @@ export class Shop {
         score: number
     };
     viewed?: number;
+    contributors: [];
     categoryList?: Array<string>;
      constructor(){
          this.location = {
@@ -47,4 +48,4 @@ export class Shop {
          }
      }
 }
-type StatusType = 'pending' | 'active' | 'inactive' | 'blocked' | 'cancel' | 'saved' | 'unsaved' | 'save removed';
+type StatusType = 'pending' | 'active' | 'inactive' | 'blocked' | 'closed' | 'saved' | 'unsaved' | 'save removed';

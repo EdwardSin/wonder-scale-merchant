@@ -9,6 +9,9 @@
 .ws-bg-light-grey-1{
     background-color: map-get($ws-color, light-grey-1);
 }
+.ws-bg-light-grey-4{
+    background-color: map-get($ws-color, light-grey-4);
+}
 .ws-bg-dark-grey {
     background-color: map-get($ws-color, dark-grey);
 }
