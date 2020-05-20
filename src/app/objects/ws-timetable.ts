@@ -13,7 +13,7 @@ import { TodayOpeningInfo } from './ws-today-opening-info';
 export class Timetable {
   operatingHourRadio: OpeningInfoType = 'no_hour_available';
   operatingHours: Array<OpeningInfo> = [];
-  errors?: { operating_hour: String };
+  errors?: { operating_hour: string };
   public static days = _.values(Day);
 
   constructor() {
@@ -69,8 +69,8 @@ export class Timetable {
     } else {
       this.operatingHours[i].time = [
         {
-          openingHour: environment.DEFAULT_STRING,
-          closeHour: environment.DEFAULT_STRING
+          openingHour: '',
+          closeHour: ''
         }
       ];
     }

@@ -6,7 +6,7 @@ import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
   styleUrls: ['./ws-loading-screen.component.scss']
 })
 export class WsLoadingScreenComponent implements OnInit {
-  @Input() label: String = 'Loading...';
+  @Input() label: string = 'Loading...';
   constructor() { }
 
   ngOnInit() {

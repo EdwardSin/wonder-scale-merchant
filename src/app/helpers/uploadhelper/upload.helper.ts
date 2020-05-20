@@ -1,4 +1,4 @@
-import { WsToastService } from '@components/elements/ws-toast/ws-toast.service';
+import { WsToastService } from '@elements/ws-toast/ws-toast.service';
 export class UploadHelper {
 
     public static fileChangeEvent(fileInput: any) {

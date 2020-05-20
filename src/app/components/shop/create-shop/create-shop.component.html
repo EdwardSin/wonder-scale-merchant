@@ -210,7 +210,7 @@
             <agm-map class="w-100" [longitude]="mapController.mapLng" [latitude]="mapController.mapLat" [zoom]="14"
               [gestureHandling]="'greedy'" [maxZoom]="18" [minZoom]="1" [streetViewControl]="false" panControl="false"
               zoomControl="false" (mapClick)="mapController.mapClick($event)">
-              <agm-marker [longitude]="mapController.markerLng" [latitude]="mapController.markerLat"></agm-marker>
+              <agm-marker [longitude]="mapController.markerPoint.longitude" [latitude]="mapController.markerPoint.latitude"></agm-marker>
             </agm-map>
           </div>
           <div class="row no-gutters mt-4">

@@ -10,12 +10,12 @@ import { SharedCategoryService } from '@services/shared/shared-category.service'
 import { SharedItemService } from '@services/shared/shared-item.service';
 import { SharedLoadingService } from '@services/shared/shared-loading.service';
 import { SharedShopService } from '@services/shared/shared-shop.service';
-import { WsLoading } from '@components/elements/ws-loading/ws-loading';
+import { WsLoading } from '@elements/ws-loading/ws-loading';
 import { DocumentHelper } from '@helpers/documenthelper/document.helper';
 import { ArrayHelper } from '@helpers/arrayhelper/array.helper';
 import { PriceHelper } from '@helpers/pricehelper/price.helper';
-import { WsModalService } from '@components/elements/ws-modal/ws-modal.service';
-import { WsToastService } from '@components/elements/ws-toast/ws-toast.service';
+import { WsModalService } from '@elements/ws-modal/ws-modal.service';
+import { WsToastService } from '@elements/ws-toast/ws-toast.service';
 // import { saveAs } from 'file-saver';
 import { Subject, combineLatest, timer } from 'rxjs';
 import { filter, finalize, takeUntil, map, switchMap } from 'rxjs/operators';

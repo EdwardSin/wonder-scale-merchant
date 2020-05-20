@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, Input } from '@angular/core';
 import { environment } from '@environments/environment';
 import { Contributor } from '@objects/contributor';
 import { ContributorController } from '@objects/contributor.controller';
@@ -6,10 +6,10 @@ import { AuthShopAdminService } from '@services/http/auth-shop/admin/auth-shop-a
 import { ShopAuthorizationService } from '@services/http/general/shop-authorization.service';
 import { SharedShopService } from '@services/shared/shared-shop.service';
 import { SharedUserService } from '@services/shared/shared-user.service';
-import { WsLoading } from '@components/elements/ws-loading/ws-loading';
-import { WsModalClass } from '@components/elements/ws-modal/ws-modal';
-import { WsModalService } from '@components/elements/ws-modal/ws-modal.service';
-import { WsToastService } from '@components/elements/ws-toast/ws-toast.service';
+import { WsLoading } from '@elements/ws-loading/ws-loading';
+import { WsModalClass } from '@elements/ws-modal/ws-modal';
+import { WsModalService } from '@elements/ws-modal/ws-modal.service';
+import { WsToastService } from '@elements/ws-toast/ws-toast.service';
 import _ from 'lodash';
 import { finalize, takeUntil } from 'rxjs/operators';
 import { Role } from '@enum/Role.enum';
@@ -20,6 +20,7 @@ import { Role } from '@enum/Role.enum';
   styleUrls: ['./edit-contributor-modal.component.scss']
 })
 export class EditContributorModalComponent extends WsModalClass implements OnInit {
+  @Input() isOpened;
   user;
   isAdminAuthorized: Boolean;
   loading: WsLoading = new WsLoading;

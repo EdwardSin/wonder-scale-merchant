@@ -4,18 +4,18 @@ export class Constants {
     closeHour: "05:00 pm"
   }
   public static months = {
-    JAN: 'JAN',
-    FEB: 'FEB',
-    MAR: 'MAR',
-    APR: 'APR',
-    MAY: 'MAY',
-    JUN: 'JUN',
-    JUL: 'JUL',
-    AUG: 'AUG',
-    SEP: 'SEP',
-    OCT: 'OCT',
-    NOV: 'NOV',
-    DEC: 'DEC'
+    JAN: 'Jan',
+    FEB: 'Feb',
+    MAR: 'Mar',
+    APR: 'Apr',
+    MAY: 'May',
+    JUN: 'Jun',
+    JUL: 'Jul',
+    AUG: 'Aau',
+    SEP: 'Sep',
+    OCT: 'Oct',
+    NOV: 'Nov',
+    DEC: 'Dec'
   };
   public static countries = {
     AF: 'Afghanistan',

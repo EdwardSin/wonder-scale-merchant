@@ -1,4 +1,4 @@
-<ws-modal [id]="id" maxWidth="400">
+<ws-modal [(isOpened)]="isOpened" [id]="id" maxWidth="400">
   <header modalHeader>Edit Multiple Items
     <span class="fas fa-question-circle clickable"
       title="User can edit multiple items' discount feature and related tags" wsTippy>
@@ -39,7 +39,7 @@
             <mat-checkbox [color]="'primary'" class="p-2 mb-2" [name]="'edit_tag'" ngModel></mat-checkbox>
             <div class="col mt-1">
               <div class="row no-gutters">
-                <div class="input-group input-group-sm col" style="z-index:0">
+                <!-- <div class="input-group input-group-sm col" style="z-index:0">
                   <input name='tag' [disabled]="tag.tags.length > 4" placeholder="Related Tag" autocomplete="off"
                     class='form-control' [(ngModel)]="tag.input" (keydown.enter)="tag.addTag()" />
                   <div class="input-group-append">
@@ -48,7 +48,7 @@
                       <i class="fas fa-plus" style="font-size: inherit"></i>
                     </button>
                   </div>
-                </div>
+                </div> -->
                 <div class="pl-2 d-inline-block clickable float-right">
                   <span class="fas fa-question-circle text-muted"
                     style="font-size: .9rem; vertical-align: -webkit-baseline-middle"></span>

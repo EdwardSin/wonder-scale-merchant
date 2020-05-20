@@ -6,7 +6,7 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./ws-spinner-bar.component.scss']
 })
 export class WsSpinnerBarComponent implements OnInit {
-  @Input() color: String = '#282c35';
+  @Input() color: string = '#282c35';
   constructor() { }
 
   ngOnInit() {

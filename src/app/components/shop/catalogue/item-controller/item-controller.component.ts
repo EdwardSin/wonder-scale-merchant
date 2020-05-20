@@ -11,11 +11,11 @@ import { AuthShopContributorService } from '@services/http/auth-shop/contributor
 import { SharedCategoryService } from '@services/shared/shared-category.service';
 import { SharedItemService } from '@services/shared/shared-item.service';
 import { SharedShopService } from '@services/shared/shared-shop.service';
-import { WsLoading } from '@components/elements/ws-loading/ws-loading';
+import { WsLoading } from '@elements/ws-loading/ws-loading';
 import { ArrayHelper } from '@helpers/arrayhelper/array.helper';
 import { ScreenHelper } from '@helpers/screenhelper/screen.helper';
-import { WsModalService } from '@components/elements/ws-modal/ws-modal.service';
-import { WsToastService } from '@components/elements/ws-toast/ws-toast.service';
+import { WsModalService } from '@elements/ws-modal/ws-modal.service';
+import { WsToastService } from '@elements/ws-toast/ws-toast.service';
 import _ from 'lodash';
 import * as moment from 'moment';
 import { forkJoin as observableForkJoin, Subject } from 'rxjs';
@@ -51,6 +51,10 @@ export class ItemControllerComponent implements OnInit {
   displayCategoryList: Array<any> = [];
   info_message: string = '';
   isMobileSize: boolean;
+  isRemoveAllSelectedItemModalConfirmationOpened: boolean;
+  isAddToCategoriesModalOpened: boolean;
+  isMoveToCategoriesModalOpened: boolean;
+  isEditMultipleItemsModalOpened: boolean;
   moment = moment;
   previousEditedItems: Array<any> = [];
   isAdvertiseDropdownOpened: boolean;
@@ -189,7 +193,7 @@ export class ItemControllerComponent implements OnInit {
     this.action = this.param == 'uncategorized' ? this.removeItemsPermanantly.bind(this) : this.removeItemsFromCategory.bind(this);
     this.openModal('removeItemsModal');
   }
-  checkSelectedItems(dropdown) {
+  checkSelectedItems() {
     if (!this.editItems.length) {
       WsToastService.toastSubject.next({ content: 'Please select items!', type: 'danger'})
     }

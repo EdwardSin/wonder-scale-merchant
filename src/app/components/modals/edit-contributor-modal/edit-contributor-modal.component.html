@@ -1,4 +1,4 @@
-<ws-modal [id]="id">
+<ws-modal [(isOpened)]="isOpened" [id]="id">
   <header modalHeader>Edit Contributor</header>
   <div modalBody>
     <form #form="ngForm" (ngSubmit)="editContributor()">

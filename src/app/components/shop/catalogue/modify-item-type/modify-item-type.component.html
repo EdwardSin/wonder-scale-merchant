@@ -18,7 +18,7 @@
                   </button>
               </div>
             </div>
-            <div *ngFor="let itemType of itemTypesForm.get('itemTypes').controls; index as i"
+            <div *ngFor="let itemType of itemTypesForm.get('itemTypes')['controls']; index as i"
               class="my-2 border position-relative" style="padding: .5rem">
               <span *ngIf="i != 0" (click)="removeItemType(itemType)" class="position-absolute fas fa-times clickable"
                 style="right: -28px;
@@ -87,7 +87,7 @@
                       <ws-dropdown [items]="colors" [(isOpen)]="itemTypesForm.controls.itemTypes.value[i].isOpen"
                         [styles]="{width: '300px'}" [isAllowedCustomInput]="true"
                         [placeholder]="'Enter hex color code (E.g. #000000)'"
-                        (onItemClicked)="onColorValueChanged($event, itemTypesForm.controls.itemTypes.controls[i])">
+                        (onItemClicked)="onColorValueChanged($event, itemTypesForm.get('itemTypes')['controls'][i])">
                       </ws-dropdown>
                     </div>
                     <div class="ws-input">

@@ -62,9 +62,9 @@ export class InputValidateHelper {
 
   // Tested
   public static validatedHour(hour) {
-    var HH = Number(hour.slice(0, 2));
+    var HH = +hour.slice(0, 2);
     var symbol = hour.slice(2, 3);
-    var MM = Number(hour.slice(3, 6));
+    var MM = +hour.slice(3, 6);
     var AMPM = hour.slice(6, 8) || "";
 
     return (hour.length == 8 && HH > 0 && HH < 13 &&

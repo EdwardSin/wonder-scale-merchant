@@ -31,8 +31,10 @@ export class FeatureUrl {
 }
 export class AuthUserUrl {
     static getUserUrl = URL.AUTH_USERS_URL + '/users';
+    static getProfileUrl = URL.AUTH_USERS_URL + '/users/profile';
     static getPasswordExistedUrl = URL.AUTH_USERS_URL + '/users/is-password';
-    static editProfileUrl = URL.AUTH_USERS_URL + '/users/edit/profile';
+    static removeProfileImageUrl = URL.AUTH_USERS_URL + '/users/remove/profile-image';
+    static editProfileUrl = URL.AUTH_USERS_URL + '/users/edit/profile-image';
     static editGeneralUrl = URL.AUTH_USERS_URL + '/users/edit/general';
     static changePasswordUrl = URL.AUTH_USERS_URL + '/users/edit/password';
     static savePasswordUrl = URL.AUTH_USERS_URL + '/users/save/password';
@@ -56,6 +58,7 @@ export class AuthShopContributorUrl {
     static getContributorsUrl = URL.AUTH_SHOP_CONTRIBUTOR_URL + '/contributors';
     static addBannerUrl = URL.AUTH_SHOP_CONTRIBUTOR_URL + '/add/banner-image';
     static editProfileUrl = URL.AUTH_SHOP_CONTRIBUTOR_URL + '/edit/profile-image';
+    static removeProfileUrl = URL.AUTH_SHOP_CONTRIBUTOR_URL + '/remove/profile-image';
     static editGeneralUrl = URL.AUTH_SHOP_CONTRIBUTOR_URL + '/edit/general';
     static editContactUrl = URL.AUTH_SHOP_CONTRIBUTOR_URL + '/edit/contact';
     static editBannerUrl = URL.AUTH_SHOP_CONTRIBUTOR_URL + '/edit/banner-image';

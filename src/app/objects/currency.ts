@@ -1,6 +1,6 @@
 export class Currency {
-  rate: Number;
-  code: String;
-  fullname: String;
-  symbol: String;
+  rate: number;
+  code: string;
+  fullname: string;
+  symbol: string;
 }

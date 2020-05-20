@@ -2,12 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { UserService } from '@services/http/general/user.service';
-import { WsLoading } from '@components/elements/ws-loading/ws-loading';
+import { WsLoading } from '@elements/ws-loading/ws-loading';
 import { Subject } from 'rxjs';
 import { takeUntil, finalize } from 'rxjs/operators';
-import { WsToastService } from '@components/elements/ws-toast/ws-toast.service';
+import { WsToastService } from '@elements/ws-toast/ws-toast.service';
 import { AuthUserService } from '@services/http/general/auth-user.service';
 import { SharedUserService } from '@services/shared/shared-user.service';
+import { environment } from '@environments/environment';
 import * as _ from 'lodash';
 
 @Component({
@@ -21,6 +22,7 @@ export class ActivateComponent implements OnInit {
   resendLoading: WsLoading = new WsLoading;
   activateSuccess;
   resend;
+  environment = environment;
   private ngUnsubscribe: Subject<any> = new Subject();
 
   constructor(
@@ -45,7 +47,7 @@ export class ActivateComponent implements OnInit {
         this.activateSuccess = true;
         this.getUser();
         _.delay(() => {
-          this.router.navigateByUrl('/shops/all');
+          this.router.navigateByUrl(environment.RETURN_URL);
         }, 3000);
       }, (err) => {
         this.activateSuccess = false;
@@ -69,7 +71,7 @@ export class ActivateComponent implements OnInit {
   getUser() {
     this.authUserService.getUser().pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
-        this.sharedUserService.user.next(result);
+        this.sharedUserService.user.next(result.result);
       })
   }
 }

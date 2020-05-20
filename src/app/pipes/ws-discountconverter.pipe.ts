@@ -5,7 +5,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class WsDiscountconverterPipe implements PipeTransform {
   transform(value: any, discountPercentage = 0): any {
-    var discount = Number(value);
+    var discount = +value;
     if (value >= 0) {
       discount = (value * (100 - discountPercentage)) / 100;
     }

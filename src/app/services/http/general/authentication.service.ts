@@ -5,7 +5,7 @@ import { AuthService, FacebookLoginProvider, GoogleLoginProvider } from 'angular
 import decode from 'jwt-decode';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { SharedUserService } from '../../shared/shared-user.service';
+import { SharedUserService } from '@services/shared/shared-user.service';
 
 @Injectable({
     providedIn: 'root'
@@ -58,6 +58,7 @@ export class AuthenticationService {
             AuthenticationService.user_id = null;
             this.http.post('/api/auth-users/users/logout', {}).subscribe(result => {
                 this.sharedUserService.user.next(null);
+                this.sharedUserService.favoriteItems.next([]);
                 resolve(result['loggedIn']);
             })
             if (this.authService['_user']) {

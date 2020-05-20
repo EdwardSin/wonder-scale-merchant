@@ -1,34 +1,5 @@
 @import './variables.scss';
 
-#continueSpan {
-    &::before {
-        content: "" !important;
-        position: absolute !important;
-        top: 50% !important;
-        right: 100% !important;
-        width: 5000px !important;
-        border-bottom: 1px solid rgb(228, 228, 228) !important;
-    }
-    &::after {
-        content: "" !important;
-        position: absolute !important;
-        top: 50% !important;
-        left: 100% !important;
-        width: 5000px !important;
-        border-bottom: 1px solid rgb(228, 228, 228) !important;
-    }
-    .innerSpan {
-        font-weight: 300 !important;
-        word-wrap: break-word !important;
-        font-size: 14px !important;
-        line-height: 18px !important;
-        letter-spacing: normal !important;
-        font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif !important;
-        color: rgb(118, 118, 118) !important;
-        display: inline !important;
-        margin: 0px !important;
-    }
-}
 .map-screen {
     position: absolute;
     height: 300px;
@@ -55,4 +26,28 @@
   }
 .mat-error{
     font-size: .9rem;
+}
+.btn.btn-controller {
+    border-radius: 5px;
+    background-color: #f7f7f7;
+    color: #505f79;
+    transition: background-color .2s ease-out, color .2s ease-out;
+    &:hover {
+        background-color: #ebecf0;
+    }
+    &:active{
+        color: #fff;
+        background-color: #282C35;
+    }
+    span {
+        display: block;
+        justify-content: center;
+    }
+    &.selected{
+        color: #fff;
+        background-color: #282C35;
+        &:hover{
+            background-color: #4d5466;
+        }
+    }
 }

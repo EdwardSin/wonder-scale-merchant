@@ -3,15 +3,10 @@
     <div class="row no-gutters w-100 position-relative">
       <span *ngIf="isMobileSize" class="text-center clickable"
         style="line-height: 47px; vertical-align: middle; border-bottom: 1px solid #e5e5e5"
-        (click)="onNavbarOpen(isNavOpen)">
+        (click)="onNavbarOpen()">
         <span class="fas fa-bars d-inline-block pr-3 pl-3"></span>
       </span>
       <breadcrumb class="col"></breadcrumb>
-      <button *ngIf="false && !isMobileSize" class="btn btn-second btn-md position-absolute float-right"
-        style="right:0; z-index: 9" (click)="displayPreview = !displayPreview">Preview</button>
-      <span *ngIf="false && isMobileSize" class="fas fa-eye position-absolute float-right"
-        style="right: 0; z-index: 9; font-size: 1.5rem; margin-top: .75rem"
-        (click)="displayPreview = !displayPreview"></span>
     </div>
     <div *ngIf="shop?.status?.status == 'closed'" class="alert-danger p-3 mt-2">
       <span class="font-9">The shop is currently closed and will not be seen in public.</span><br />
@@ -24,5 +19,5 @@
   </div>
 </div>
 
-<confirm-modal id="confirmReactivateShopModal" [message]="'Are you sure to reactivate the shop?'"
+<confirm-modal *ngIf="isConfirmReactivateShopModalOpened" [(isOpened)]="isConfirmReactivateShopModalOpened" id="confirmReactivateShopModal" [message]="'Are you sure to reactivate the shop?'"
   [action]="reactivateFromInactive.bind(this)"></confirm-modal>

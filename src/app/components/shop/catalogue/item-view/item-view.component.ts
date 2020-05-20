@@ -8,7 +8,7 @@ import { SharedShopService } from '@services/shared/shared-shop.service';
 import { ViewType } from '@wstypes/view.type';
 import { PriceHelper } from '@helpers/pricehelper/price.helper';
 import { ScreenHelper } from '@helpers/screenhelper/screen.helper';
-import { WsModalService } from '@components/elements/ws-modal/ws-modal.service';
+import { WsModalService } from '@elements/ws-modal/ws-modal.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SharedNavbarService } from '@services/shared/shared-nav-bar.service';
@@ -36,7 +36,6 @@ export class ItemViewComponent implements OnInit {
   isNavOpen: Boolean = false;
   total: number = 0;
   currentPage: number = 1;
-
   private ngUnsubscribe: Subject<any> = new Subject();
 
 
@@ -47,7 +46,7 @@ export class ItemViewComponent implements OnInit {
     private sharedCategoryService: SharedCategoryService,
     private sharedShopService: SharedShopService,
     private ref: ChangeDetectorRef,
-    private currencyService: CurrencyService,
+    public currencyService: CurrencyService,
     private modalService: WsModalService,
     private sharedNavbarService: SharedNavbarService
   ) { 

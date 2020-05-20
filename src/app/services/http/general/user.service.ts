@@ -50,7 +50,7 @@ export class UserService {
   sendPasswordLinkToEmail(resetData) {
     return this.http.post(this.USER_URL + '/reset/password', resetData);
   };
-  resetPassword(obj: { email: String, password: String, confirmPassword: String, resetToken: String }) {
+  resetPassword(obj: { email: string, password: string, confirmPassword: string, resetToken: string }) {
     return this.http.patch(this.USER_URL + '/reset/password/' + obj.resetToken, obj);
   }
   // Grab user's information from e-mail reset link

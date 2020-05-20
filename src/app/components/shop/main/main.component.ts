@@ -18,9 +18,9 @@ import { SharedUserService } from '@services/shared/shared-user.service';
 import { DocumentHelper } from '@helpers/documenthelper/document.helper';
 import { PriceHelper } from '@helpers/pricehelper/price.helper';
 import { ScreenHelper } from '@helpers/screenhelper/screen.helper';
-import { WsLoading } from '@components/elements/ws-loading/ws-loading';
-import { WsModalService } from '@components/elements/ws-modal/ws-modal.service';
-import { WsToastService } from '@components/elements/ws-toast/ws-toast.service';
+import { WsLoading } from '@elements/ws-loading/ws-loading';
+import { WsModalService } from '@elements/ws-modal/ws-modal.service';
+import { WsToastService } from '@elements/ws-toast/ws-toast.service';
 import _ from 'lodash';
 import { Subject, BehaviorSubject, interval, of } from 'rxjs';
 import { takeUntil, switchMap } from 'rxjs/operators';
@@ -51,6 +51,7 @@ export class MainComponent implements OnInit {
   numberOfUncategorizedItems: number = 0;
   loading: WsLoading = new WsLoading;
   displayPreview: boolean;
+  isRemoveCategoryConfirmationModalOpened: boolean;
   categories: Array<any> = [];
   displayCategories: Array<any> = [];
 

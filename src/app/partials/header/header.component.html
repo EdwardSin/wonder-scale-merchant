@@ -1,4 +1,4 @@
-<header>
+<header [class.header__collapsed]="isShrink">
   <img class="mx-1" style="width: 24px; height:24px;margin-top: -2px" src="../../assets/images/png/icon.png" alt="icon.png" />
   <div class="logo" [routerLink]="['/']">
     <span style="vertical-align: middle">Wonder Scale</span>
@@ -8,13 +8,14 @@
       <a href="javascript:void(0)" (click)="navigateToHome()">Shops</a>
     </li>
   </ul>
-  <div class="float-right d-inline-block">
-    <div *ngIf="!user" class="d-inline-block mr-2 ml-2 ws-white"
-      style="font-size: .9rem; line-height: 2rem; vertical-align: middle">
-      <a class="ws-white d-inline-block ml-2 mr-2" href="javascript:void(0)" (click)="navigateToLogin()">Login</a>|<a
-        class="ws-white d-inline-block ml-2 mr-2" href="javascript:void(0)" (click)="navigateToSignup()">Sign-up</a>
+  <div class="user-container float-right d-inline-block">
+    <div *ngIf="!user" class="user__login-container d-inline-block"
+      style="font-size: .9rem; line-height: 41px; vertical-align: middle">
+      <a class="user__link" href="javascript:void(0)" (click)="navigateToLogin()">Login</a>
+      <span class="ws-white">|</span>
+      <a class="user__link" href="javascript:void(0)" (click)="navigateToSignup()">Sign-up</a>
     </div>
-    <div class="btn-group mr-1 d-none d-md-inline-block" mdbDropdown>
+    <div *ngIf="false" class="btn-group mr-1 d-none d-md-inline-block" mdbDropdown>
       <div mdbDropdownToggle class="li-container dropdown-toggle">
         <span class="fas fa-question-circle mr-1" style="color: #888; font-size: 1rem; vertical-align: middle"></span>
         <span class="fas fa-chevron-down" style="color: #888; font-size: .6rem; vertical-align: sub"></span>
@@ -26,7 +27,26 @@
         <!-- <a class="dropdown-item" routerLink="about-us">About Us</a> -->
       </div>
     </div>
+
     <div *ngIf="user" class="btn-group" mdbDropdown>
+      <div mdbDropdownToggle class="user-container__profile-container dropdown-toggle">
+        <img class='user-container__profile mr-1' src="{{user?.profileImage}}" alt="profile" />
+        <span class="user-container__chevron-icon fas fa-chevron-down" style="color: #888; font-size: .6rem; vertical-align: sub"></span>
+      </div>
+      <div class="dropdown-menu dropdown-primary">
+        <a href="javascript:void(0)" class="dropdown-item font-weight-bold" style="pointer-events: none;">{{user?.firstName}} {{user?.lastName}}
+        </a>
+        <div class="divider dropdown-divider"></div>
+        <a class="dropdown-item" [routerLink]="['shops/all']">All pages</a>
+        <a *ngIf="false" class="dropdown-item" href="https://www.wonderscale.com">To Wonder Scale</a>
+        <!-- <a class="dropdown-item" [routerLink]="['settings']">Settings</a> -->
+        <div class="divider dropdown-divider"></div>
+        <a class="dropdown-item" (click)="logout()">Logout</a>
+      </div>
+  </div>
+
+
+    <div *ngIf="false && user" class="btn-group mr-2" mdbDropdown>
       <div mdbDropdownToggle class="li-container dropdown-toggle">
         <img class='mr-1' src="{{user?.profileImage}}" alt="profile" />
         <span class="fas fa-chevron-down" style="color: #888; font-size: .6rem; vertical-align: sub"></span>

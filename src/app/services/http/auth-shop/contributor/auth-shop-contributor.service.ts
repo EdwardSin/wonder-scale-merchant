@@ -15,6 +15,9 @@ export class AuthShopContributorService {
   editProfileImage(obj) {
     return this.http.put(AuthShopContributorUrl.editProfileUrl, obj, this.accessTokenService.getAccessToken());
   }
+  removeProfileImage() {
+    return this.http.put(AuthShopContributorUrl.removeProfileUrl, {}, this.accessTokenService.getAccessToken());
+  }
   editGeneral(obj) {
     return this.http.put(AuthShopContributorUrl.editGeneralUrl, obj, this.accessTokenService.getAccessToken());
   }

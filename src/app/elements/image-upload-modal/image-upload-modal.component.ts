@@ -6,9 +6,9 @@ import { AuthenticationService } from '@services/http/general/authentication.ser
 import { SharedShopService } from '@services/shared/shared-shop.service';
 import { SharedUserService } from '@services/shared/shared-user.service';
 import { UploadHelper } from '@helpers/uploadhelper/upload.helper';
-import { WsLoading } from '@components/elements/ws-loading/ws-loading';
-import { WsModalClass } from '@components/elements/ws-modal/ws-modal';
-import { WsModalService } from '@components/elements/ws-modal/ws-modal.service';
+import { WsLoading } from '@elements/ws-loading/ws-loading';
+import { WsModalClass } from '@elements/ws-modal/ws-modal';
+import { WsModalService } from '@elements/ws-modal/ws-modal.service';
 import { finalize } from 'rxjs/operators';
 
 @Component({

@@ -15,25 +15,28 @@ import { ShopAuthorizationService } from '@services/http/general/shop-authorizat
 import { UserService } from '@services/http/general/user.service';
 import { SharedUserService } from '@services/shared/shared-user.service';
 import { SharedShopService } from '@services/shared/shared-shop.service';
-import { WsLoading } from '@components/elements/ws-loading/ws-loading';
+import { WsLoading } from '@elements/ws-loading/ws-loading';
 import { DocumentHelper } from '@helpers/documenthelper/document.helper';
 import { UploadHelper } from '@helpers/uploadhelper/upload.helper';
 import { Address } from '@objects/address';
 import { Timetable } from '@objects/ws-timetable';
 import { MapController } from '@objects/map.controller';
 import { WsGpsService } from '@services/general/ws-gps.service';
-import { WsModalService } from '@components/elements/ws-modal/ws-modal.service';
-import { WsToastService } from '@components/elements/ws-toast/ws-toast.service';
+import { WsModalService } from '@elements/ws-modal/ws-modal.service';
+import { WsToastService } from '@elements/ws-toast/ws-toast.service';
 import { forkJoin as observableForkJoin, Subject, interval } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
 import _ from 'lodash';
 import { Shop } from '@objects/shop';
-import { WsToastComponent } from '@components/elements/ws-toast/ws-toast.component';
-import{ EmailValidator} from '@validations/email.validator';
+import { WsToastComponent } from '@elements/ws-toast/ws-toast.component';
+import { EmailValidator } from '@validations/email.validator';
 import { URLValidator } from '@validations/urlvalidator';
 import { CurrencyService } from '@services/http/general/currency.service';
 import * as moment from 'moment';
+declare var jQuery: any;
+import * as $ from 'jquery';
 import { Role } from '@enum/Role.enum';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-about',
@@ -55,8 +58,6 @@ export class AboutComponent implements OnInit {
   element: string;
   loading: WsLoading = new WsLoading;
   refreshLoading: WsLoading = new WsLoading;
-  isBannerUploaded: boolean;
-
   address: Address = new Address;
   timetable: Timetable = new Timetable;
   mapController: MapController;
@@ -89,6 +90,14 @@ export class AboutComponent implements OnInit {
   profileImage;
   bannerImage;
   bannerImageFile;
+  previewImage;
+  croppieObj;
+  isConfirmCloseShopModalOpened: boolean;
+  isConfirmReactivateModalOpened: boolean;
+  isConfirmQuitShopModalOpened: boolean;
+  isEditContributorModalOpened: boolean;
+  isProfileUploaderOpened: boolean;
+  isBannerUploaderOpened: boolean;
   environment = environment;
   contributorController: ContributorController = new ContributorController;
   private ngUnsubscribe: Subject<any> = new Subject;
@@ -97,45 +106,44 @@ export class AboutComponent implements OnInit {
     private authShopAdminService: AuthShopAdminService,
     private authDefaultSettingAdminService: AuthDefaultSettingAdminService,
     private modalService: WsModalService,
-    private userService: UserService,
     private gpsService: WsGpsService,
     private router: Router,
     private route: ActivatedRoute,
-    private currencyService: CurrencyService,
+    private sanitization: DomSanitizer,
+    public currencyService: CurrencyService,
     private sharedUserService: SharedUserService,
     private authShopUserService: AuthShopUserService,
     private shopAuthorizationService: ShopAuthorizationService,
     private ref: ChangeDetectorRef) {
     this.mapController = new MapController(this.gpsService, this.address);
   }
-
   ngOnInit() {
     this.createShopForm();
     this.route.data.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
-        this.shop = result['shop'];
-        if(this.shop.profileImage){
-          this.profileImage = environment.IMAGE_URL + this.shop.profileImage;
-        }
-        if(this.shop.bannerImage){
-          this.bannerImage = environment.IMAGE_URL + this.shop.bannerImage;
-        }
-        if (this.shop.status.status == 'closed' && this.shop.status.expiryDate) {
+      this.shop = result['shop'];
+      if (this.shop.profileImage) {
+        this.profileImage = environment.IMAGE_URL + this.shop.profileImage;
+      }
+      if (this.shop.bannerImage) {
+        this.bannerImage = environment.IMAGE_URL + this.shop.bannerImage;
+      }
+      if (this.shop.status.status == 'closed' && this.shop.status.expiryDate) {
+        this.timeDifference = moment(this.shop.status.expiryDate).diff(moment());
+        this.timeDifferenceString = moment(this.shop.status.expiryDate).fromNow();
+        interval(2000).pipe(takeUntil(this.ngUnsubscribe)).subscribe(() => {
           this.timeDifference = moment(this.shop.status.expiryDate).diff(moment());
           this.timeDifferenceString = moment(this.shop.status.expiryDate).fromNow();
-          interval(2000).pipe(takeUntil(this.ngUnsubscribe)).subscribe(() => {
-            this.timeDifference = moment(this.shop.status.expiryDate).diff(moment());
-            this.timeDifferenceString = moment(this.shop.status.expiryDate).fromNow();
-          });
-        }
-        this.ref.detectChanges();
-        this.setupShopForm();
-        this.getDefaultSetting();
-        this.updateContributorAuthorization();
+        });
+      }
+      this.ref.detectChanges();
+      this.setupShopForm();
+      this.getDefaultSetting();
+      this.updateContributorAuthorization();
     })
     this.shopAuthorizationService.isAdminAuthorized.pipe(takeUntil(this.ngUnsubscribe))
-    .subscribe(result => {
-      this.isAdminAuthorized = result;
-    })
+      .subscribe(result => {
+        this.isAdminAuthorized = result;
+      })
 
     let shop_name = this.sharedShopService.shop_name;
     DocumentHelper.setWindowTitleWithWonderScale('About - Settings | ' + shop_name);
@@ -205,8 +213,8 @@ export class AboutComponent implements OnInit {
       fullAddress: this.mapController.address,
       openingInfoType: this.timetable.operatingHourRadio,
       openingInfo: this.timetable.operatingHourRadio == 'selected_hours' ? this.timetable.operatingHours : [],
-      longitude: this.mapController.markerLng,
-      latitude: this.mapController.markerLat
+      longitude: this.mapController.markerPoint.longitude,
+      latitude: this.mapController.markerPoint.latitude
     }
     if (this.isContactValidated(obj)) {
       this.authShopContributorService.editContact(obj).pipe(takeUntil(this.ngUnsubscribe))
@@ -236,7 +244,7 @@ export class AboutComponent implements OnInit {
     let description = form.get('description');
     let currency = form.get('currency');
     if (username.errors && username.errors.required) {
-      WsToastService.toastSubject.next({ content: 'Username is required!', type: 'danger'});
+      WsToastService.toastSubject.next({ content: 'Username is required!', type: 'danger' });
       return false;
     }
     else if (description.errors && description.errors.maxlength) {
@@ -244,7 +252,7 @@ export class AboutComponent implements OnInit {
       return false;
     }
     else if (currency.errors && currency.errors.required) {
-      WsToastService.toastSubject.next({ content: 'Currency is required!', type: 'danger'});
+      WsToastService.toastSubject.next({ content: 'Currency is required!', type: 'danger' });
       return false;
     }
     return true;
@@ -257,41 +265,27 @@ export class AboutComponent implements OnInit {
     if (emails.find(email => !EmailValidator.validate(email))) {
       WsToastService.toastSubject.next({ content: 'Email is not valid!', type: 'danger' });
       return false;
-    } else if (phones.find(phone => {return phone.length > 20})) {
+    } else if (phones.find(phone => { return phone.length > 20 })) {
       WsToastService.toastSubject.next({ content: 'Phone is too long! Max 20 characters!', type: 'danger' });
       return false;
-    } else if (websites.find(website => {return !URLValidator.validate(website)})) {
+    } else if (websites.find(website => { return !URLValidator.validate(website) })) {
       WsToastService.toastSubject.next({ content: 'Website is not valid!', type: 'danger' });
       return false;
-    } else if ((this.isShowLocation && fullAddress && !fullAddress.address) || 
-                (this.isShowLocation && fullAddress && !fullAddress.state) ||
-                (this.isShowLocation && fullAddress && !fullAddress.postcode)) {
+    } else if ((this.isShowLocation && fullAddress && !fullAddress.address) ||
+      (this.isShowLocation && fullAddress && !fullAddress.state) ||
+      (this.isShowLocation && fullAddress && !fullAddress.postcode)) {
       WsToastService.toastSubject.next({ content: 'Address should be completed!', type: 'danger' });
       return false;
     }
     return true;
   }
-  editBannerImage() {
-    if (this.isBannerUploaded) {
-      this.isBannerImageUploading.start();
-      this.authShopContributorService.editBannerImage({ file: this.bannerImageFile.base64, removeFile: this.shop.bannerImage})
-      .pipe(takeUntil(this.ngUnsubscribe), finalize(() => {this.isBannerImageUploading.stop()}))
-      .subscribe(result => {
-        this.bannerImage = environment.IMAGE_URL + result['data'];
-        this.isBannerUploaded = false;
-        this.shop.bannerImage = result['data'];
-        this.sharedShopService.shop.next(this.shop);
-        WsToastService.toastSubject.next({ content: 'Banner image is changed successfully!', type: 'success'});
-      });
-    }
-  }
   removeBannerImage() {
-    if (this.shop.bannerImage && !this.isBannerUploaded) {
-      if(confirm('Are you sure to remove banner?')) {
+    if (this.shop.bannerImage) {
+      if (confirm('Are you sure to remove banner?')) {
         this.isBannerImageUploading.start();
         this.authShopContributorService.removeBannerImage({
           file: this.shop.bannerImage
-        }).pipe(takeUntil(this.ngUnsubscribe), finalize(() => {this.isBannerImageUploading.stop()}))
+        }).pipe(takeUntil(this.ngUnsubscribe), finalize(() => { this.isBannerImageUploading.stop() }))
           .subscribe(result => {
             this.bannerImage = '';
             this.shop.bannerImage = '';
@@ -300,28 +294,12 @@ export class AboutComponent implements OnInit {
           })
       }
     }
-    else if(this.shop.bannerImage) {
+    else if (this.shop.bannerImage) {
       this.bannerImage = environment.IMAGE_URL + this.shop.bannerImage;
-      this.isBannerUploaded = false;
     }
     else {
       this.bannerImage = '';
-      this.isBannerUploaded = false;
     }
-  }
-  profileImageFileChangeEvent(event) {
-    this.isProfileImageUploading.start();
-    this.authShopContributorService.editProfileImage({ file: event[0].base64, removeFile: this.shop.profileImage })
-    .pipe(takeUntil(this.ngUnsubscribe), finalize(() => {this.isProfileImageUploading.stop()}))
-    .subscribe(result => {
-      this.profileImage = environment.IMAGE_URL + result['data'];
-      WsToastService.toastSubject.next({ content: 'Profile image is changed successfully!', type: 'success'});
-    });
-  }
-  bannerFileChangeEvent(event) {
-    this.bannerImageFile = event[0];
-    this.bannerImage = event[0].url;
-    this.isBannerUploaded = true;
   }
   createShopForm() {
     this.form = WSFormBuilder.createShopForm();
@@ -347,10 +325,10 @@ export class AboutComponent implements OnInit {
         this.address.postcode = this.shop.fullAddress.postcode;
         this.address.state = this.shop.fullAddress.state;
         this.address.country = this.shop.fullAddress.country;
-        this.mapController.markerLng = this.shop.location.coordinates[0];
-        this.mapController.markerLat = this.shop.location.coordinates[1];
-        this.mapController.mapLng = this.shop.location.coordinates[0];
-        this.mapController.mapLat = this.shop.location.coordinates[1];
+        this.mapController.markerPoint.longitude = this.shop.location.coordinates[0];
+        this.mapController.markerPoint.latitude = this.shop.location.coordinates[1];
+        this.mapController.mapPoint.longitude = this.shop.location.coordinates[0];
+        this.mapController.mapPoint.latitude = this.shop.location.coordinates[1];
       }
       this.timetable.operatingHours =
         this.shop.openingInfo.length > 0
@@ -438,7 +416,7 @@ export class AboutComponent implements OnInit {
         this.shop.status.status = 'closed';
         this.shop.status.expiryDate = date;
         this.sharedShopService.shop.next(this.shop);
-        this.router.navigate(['../../catalogue', 'all'], {relativeTo: this.route});
+        this.router.navigate(['../../catalogue', 'all'], { relativeTo: this.route });
       }, err => {
         WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
       });
@@ -463,23 +441,115 @@ export class AboutComponent implements OnInit {
         WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
       })
   }
-  openModal(id, element) {
+  openModal(id, element = null) {
     this.modalService.open(id);
-    if(element){
+    if (element) {
       this.contributorController.selectedContributor = element;
       this.contributorController.newRole = element.role;
     }
     this.modalService.setElement(id, this.contributorController);
   }
-  openShopModal(id, element) {
-    this.modalService.open(id);
-    this.modalService.setElement(id, this.shop);
-  }
-  disabledControls(){
+  disabledControls() {
     this.isShowLocation = !this.isShowLocation;
   }
-  closeModal(id) {
-    this.element = '';
-    this.modalService.close(id);
+  removeProfileImage() {
+    if (confirm('Are you sure to remove your profile image?')) {
+      this.authShopContributorService.removeProfileImage().pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.loading.stop())).subscribe(result => {
+        this.profileImage = environment.IMAGE_URL + 'upload/images/shop.png';
+      });
+    }
+  }
+  fileChangeEvent(event) {
+    let files = <Array<File>>event.target.files;
+    for (let file of files) {
+      this.previewImageFunc(file, (result) => {
+        result.url = this.sanitization.bypassSecurityTrustResourceUrl(result.url);
+        this.previewImage = result.url;
+        this.uploadImageModalChange();
+      });
+    }
+    event.target.value = "";
+  }
+  fileBannerChangeEvent(event) {
+    let files = <Array<File>>event.target.files;
+    for (let file of files) {
+      this.previewImageFunc(file, (result) => {
+        result.url = this.sanitization.bypassSecurityTrustResourceUrl(result.url);
+        this.previewImage = result.url;
+        this.uploadBannerImageModalChange();
+      });
+    }
+    event.target.value = "";
+  }
+  previewImageFunc(file, callback) {
+    let reader = new FileReader;
+    reader.onload = function (e) {
+      let img = {
+        name: file['name'],
+        file: file,
+        url: URL.createObjectURL(file),
+        type: 'blob',
+        base64: reader.result
+      };
+      if (file['name'] && file['name'].split('.').length > 1) {
+        img['ext'] = file['name'].split('.').pop();
+      }
+      callback(img);
+    }
+    reader.readAsDataURL(file);
+  }
+  removePreviewImage() {
+    this.previewImage = null;
+    $('.croppie-container').remove();
+  }
+  async uploadImage() {
+    let result = await this.croppieObj.result();
+    this.isProfileImageUploading.start();
+
+    this.authShopContributorService.editProfileImage({ file: result }).pipe(takeUntil(this.ngUnsubscribe), finalize(() => { this.isProfileImageUploading.stop() }))
+      .subscribe(result => {
+        this.profileImage = environment.IMAGE_URL + result['data'];
+        this.isProfileUploaderOpened = false;
+        this.removePreviewImage();
+        WsToastService.toastSubject.next({ content: 'Profile image is changed successfully!', type: 'success' });
+      });
+  }
+  async uploadBannerImage() {
+    let result = await this.croppieObj.result();
+    this.isBannerImageUploading.start();
+
+    this.authShopContributorService.editBannerImage({ file: result }).pipe(takeUntil(this.ngUnsubscribe), finalize(() => { this.isBannerImageUploading.stop() }))
+      .subscribe(result => {
+        this.bannerImage = environment.IMAGE_URL + result['data'];
+        this.shop.bannerImage = result['data'];
+        this.sharedShopService.shop.next(this.shop);
+        this.isBannerUploaderOpened = false;
+        this.removePreviewImage();
+        WsToastService.toastSubject.next({ content: 'Banner image is changed successfully!', type: 'success' });
+      });
+  }
+  uploadImageModalChange() {
+    $(() => {
+      let Croppie = window['Croppie'];
+      this.croppieObj = new Croppie(document.getElementById('id-preview-image'), {
+        viewport: {
+          width: 300,
+          height: 300,
+          type: 'circle'
+        }
+      });
+    });
+  }
+  uploadBannerImageModalChange() {
+    $(() => {
+      let Croppie = window['Croppie'];
+      this.croppieObj = new Croppie(document.getElementById('id-banner-preview-image'), {
+        viewport: {
+          width: 800,
+          height: 480,
+          type: 'rectangle'
+        }
+      });
+    });
   }
 }

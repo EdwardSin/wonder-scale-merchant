@@ -9,7 +9,7 @@ export class WsDropdownComponent implements OnInit {
 
   // @Input() isOpen: Boolean = false;
   @Input() isAllowedCustomInput: Boolean = false;
-  @Input() customValue: String = '';
+  @Input() customValue: string = '';
   @Input() styles = {};
   @Input() class = '';
   @Input() items = [];

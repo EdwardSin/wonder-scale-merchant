@@ -5,7 +5,7 @@ import { AuthItemContributorService } from '@services/http/auth-shop/contributor
 import { SharedCategoryService } from '@services/shared/shared-category.service';
 import { SharedItemService } from '@services/shared/shared-item.service';
 import { SharedShopService } from '@services/shared/shared-shop.service';
-import { WsLoading } from '@components/elements/ws-loading/ws-loading';
+import { WsLoading } from '@elements/ws-loading/ws-loading';
 import { DocumentHelper } from '@helpers/documenthelper/document.helper';
 import { Subject, combineLatest, timer } from 'rxjs';
 import { takeUntil, map, finalize } from 'rxjs/operators';
@@ -17,7 +17,7 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./uncategorized-items.component.scss']
 })
 export class UncategorizedItemsComponent implements OnInit {
-  shop_id: String;
+  shop_id: string;
   editItemList: Item[] = [];
   displayItems: Item[] = [];
   loading: WsLoading = new WsLoading;

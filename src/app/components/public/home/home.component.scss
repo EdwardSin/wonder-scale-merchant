@@ -1,17 +1,40 @@
 @import "src/assets/scss/variables.scss";
 
-.background-image{
-    position: absolute;
-    top: 10rem;
-    right:2rem;
-    z-index: -1;
+// .background-image{
+//     position: absolute;
+//     top: 10rem;
+//     right:2rem;
+//     z-index: -1;
+//     width: 100%;
+// }
+.background{
+    padding-top: 17%;
+    // min-height: 600px;
+    z-index: 10;
+    padding-bottom: 17%;
+    .background__title{
+        font-size: 3rem;
+    }
+    .background__image{
+        width: 100%;
+        max-width: 300px;
+        margin-top: -5%;
+        margin-left: auto;
+        margin-right: auto;
+        display: block;
+    }
+    .background__texture{
+    }
 }
 .background-text {
     color: #fff;
 }
-.feature-container{
+.feature__container{
     padding: 4rem 0;
     transition: transform ease .3s;
+    .feature__title{
+        font-size: 1.5rem;
+    }
     .icon {
         filter: drop-shadow(0 3px 3px #999);
         font-size: 5rem; 
@@ -152,6 +175,11 @@ footer {
 }
 
 @media (max-width: 768px) {
+    .background{
+        .background__title{
+            font-size: 2rem;
+        }
+    }
     .footer-box-left {
         text-align: center;
     }
