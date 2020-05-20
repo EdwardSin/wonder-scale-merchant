@@ -1,13 +1,17 @@
 <div class="background-container"></div>
 
-<div class="container position-relative" style="height: 600px; z-index: 10;">
-  <div style="vertical-align: middle; display: table-cell; height: 600px">
-    <h1 style="font-size: 3rem" class="mb-4">Merchant | Wonder Scale</h1>
-    <p class="mb-4" style="color: #888; font-size: 1.5rem">A platform for merchants to manage and advertise your shop.</p>
-    <p style="color: #888; font-size: 1rem; margin-bottom: 2rem">- We promise to provide the best services to our customers.</p>
-    <button class="btn btn-second" style="margin-left: 14rem" [routerLink]="['', { outlets: {modal: 'login'}}]">Join us now!</button>
+<div class="container position-relative">
+  <div class="background row no-gutters">
+    <div class="col-lg-9 background__texture order-12 order-lg-1 text-center text-lg-left">
+      <h1 class="background__title mb-4">Merchant | Wonder Scale</h1>
+      <p class="mb-4" style="color: #888; font-size: 1.5rem">A platform for merchants to manage and advertise your shop.</p>
+      <p style="color: #888; font-size: 1rem; margin-bottom: 2rem">- We promise to provide the best services to our customers.</p>
+      <button class="btn btn-second" [routerLink]="['', { outlets: {modal: 'login'}}]">Join us now!</button>
+    </div>
+    <div class="col-lg-3 order-1 order-lg-12 mb-3">
+      <img class="background__image" src="/assets/images/png/icon.png" alt="home icon" />
+    </div>
   </div>
-  <img class="background-image d-none d-sm-block" src="/assets/images/png/icon.png" alt="home icon" />
 </div>
 
 <!-- <div class="container text-center pt-5 pb-5">
@@ -18,20 +22,20 @@
 <div class="pt-4 pb-4" style="background-color: #f5f5f5">
   <div class="container">
     <h4 class="font-weight-bold">Free Services</h4>      
-      <div class="row no-gutters text-center feature-container">
+      <div class="row no-gutters text-center feature__container">
         <div class="col-sm-6 text-center">
           <div class="icon icon-right icon-item fas fa-th-large mb-2"></div>
         </div>
         <div class="col-sm-6">
-          <p class="font-weight-bold mb-1">Catalogue management</p>
+          <p class="feature__title font-weight-bold mb-1">Catalogue management</p>
           <p style="font-size: .9rem">- Manage your items by systems.
             <br/>
             <span class="ml-2">You can publish your items online instantly.</span></p>
         </div>
       </div>
-      <div class="row no-gutters text-center feature-container">
+      <div class="row no-gutters text-center feature__container">
         <div class="col-sm-6 order-12 order-sm-1">
-          <p class="font-weight-bold mb-1">Display latest information</p>
+          <p class="feature__title font-weight-bold mb-1">Display latest information</p>
           <p class="mb-0" style="font-size: .9rem">- Display your shop information in crease the exposure to public.</p>
           <p class="mb-0" style="font-size: .9rem">- Display promotion banner, job vacancy banner to interact their customer.</p>
         </div>
@@ -39,19 +43,19 @@
           <div class="fas fa-store icon icon-store icon-left mb-2"></div>
         </div>
       </div>
-      <div class="row no-gutters text-center feature-container">
+      <div class="row no-gutters text-center feature__container">
         <div class="col-sm-6 text-center">
           <div class="fas fa-qrcode icon icon-qrcode icon-right mb-2"></div>
         </div>
         <div class="col-sm-6">
-          <p class="font-weight-bold mb-1">Get your QR-code</p>
+          <p class="feature__title font-weight-bold mb-1">Get your QR-code</p>
           <p style="font-size: .9rem">- Display QR code on your shop.<br/>
             <span class="ml-2">Make your customer easily scan and view your shop.</span></p>
         </div>
       </div>
-      <div class="row no-gutters text-center feature-container">
+      <div class="row no-gutters text-center feature__container">
         <div class="col-sm-6 order-12 order-sm-1">
-          <p class="font-weight-bold mb-1">Notify your customers</p>
+          <p class="feature__title font-weight-bold mb-1">Notify your customers</p>
           <p style="font-size: .9rem">- Now you can notify your customers any new arrival products & wish list products.</p>
         </div>
         <div class="col-sm-6 text-center order-1 order-sm-12">
@@ -99,26 +103,26 @@
   <div class='container-fluid col-md-8 pt-20 pl-0 pr-0'>
     <div class='row no-gutters'>
       <div class="footer-box-left col-md-4 mb-2" *ngIf="false">
-        <div *ngIf="false">
+        <div>
           <a id="facebook" href='https://www.facebook.com/wonderscale/' aria-label="facebook" rel="noopener"
             target="_blank">
             <span class="fab fa-facebook-square"></span></a>
-          <a id="instagram" href='https://www.instagram.com' target="_blank" aria-label="insta" rel="noopener"
+          <!-- <a id="instagram" href='https://www.instagram.com' target="_blank" aria-label="insta" rel="noopener"
             class='ml-3'>
             <span class="fab fa-instagram"></span>
           </a>
           <a id="twitter" href='https://www.twitter.com' target="_blank" aria-label="insta" rel="noopener" class='ml-3'>
             <span class="fab fa-twitter"></span>
-          </a>
+          </a> -->
         </div>
       </div>
       <div class="footer-box-center col-md-8 no-gutters row">
         <div class="col">
           <ul>
-            <li class="col">
+            <!-- <li class="col">
               <a class="font-weight-bold ws-white" routerLink="/">Wonder Scale</a>
-            </li>
-            <li class="col">
+            </li> -->
+            <!-- <li class="col">
               <a class="font-9" [routerLink]="['/contact-us']">Contact Us</a>
             </li>
             <li class="col">
@@ -129,7 +133,7 @@
             </li>
             <li *ngIf="false">
               <a routerLink="/help">Help</a>
-            </li>
+            </li> -->
           </ul>
         </div>
       </div>

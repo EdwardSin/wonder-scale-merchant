@@ -140,27 +140,14 @@
         (debounceClick)="advertiseItems()">{{ isPublished ? 'Done' : 'Advertise'}}</button>
     <div class="clearfix"></div>
 </div> -->
-<confirm-modal id="removeItemsModal" [message]="'Are you sure to remove all selected items?'" [action]="action">
+<confirm-modal *ngIf="isRemoveAllSelectedItemModalConfirmationOpened" [(isOpened)]="isRemoveAllSelectedItemModalConfirmationOpened" id="removeItemsModal" [message]="'Are you sure to remove all selected items?'" [action]="action">
 </confirm-modal>
-<add-to-categories-modal id="addToCategoriesModal" [action]="action" [loading]="loading.isRunning()" [displayCategoryList]="displayCategoryList"
+<add-to-categories-modal *ngIf="isAddToCategoriesModalOpened" [(isOpened)]="isAddToCategoriesModalOpened" id="addToCategoriesModal" [action]="action" [loading]="loading.isRunning()" [displayCategoryList]="displayCategoryList"
     [(editCategoryList)]="editCategoryList"></add-to-categories-modal>
-<move-to-categories-modal id="moveToCategoriesModal" [action]="action" [loading]="loading.isRunning()" [displayCategoryList]="displayCategoryList"
+<move-to-categories-modal *ngIf="isMoveToCategoriesModalOpened" [(isOpened)]="isMoveToCategoriesModalOpened" id="moveToCategoriesModal" [action]="action" [loading]="loading.isRunning()" [displayCategoryList]="displayCategoryList"
     [(editCategory)]="editCategory"></move-to-categories-modal>
-<edit-multiple-items-modal [editItems]="editItems" id="editMultipleItemsModal" [action]="action">
+<edit-multiple-items-modal *ngIf="isEditMultipleItemsModalOpened" [(isOpened)]="isEditMultipleItemsModalOpened" [editItems]="editItems" id="editMultipleItemsModal" [action]="action">
 </edit-multiple-items-modal>
-
-<ng-template #noItem>
-    <div class="w-100">
-        <div class="h4 text-muted text-center font-weight-light mt-5 mb-5">
-            Add Some Item
-            <div class="d-inline-block ml-2" [routerLink]="['../../categories', categoryName, 'add']"
-                [queryParams]="{ref: shop_id, cat_ref: category?._id,'categoryname':category?.name}"
-                queryParamsHandling="merge">
-                <span class="fa fa-plus-square" style="font-size:larger;vertical-align: middle"></span>
-            </div>
-        </div>
-    </div>
-</ng-template>
 
 <!-- <modal id="informationModal">
     <title modalHeader class="m-0" [title]="'item_controller.information'"></title>

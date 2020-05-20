@@ -5,8 +5,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Constants } from '@constants/constants';
 import { Phase } from '@objects/phase';
 import { AuthShopUserService } from '@services/http/auth-user/auth-shop-user.service';
-import { WsLoading } from '@components/elements/ws-loading/ws-loading';
-import { WsToastService } from '@components/elements/ws-toast/ws-toast.service';
+import { WsLoading } from '@elements/ws-loading/ws-loading';
+import { WsToastService } from '@elements/ws-toast/ws-toast.service';
 import { Shop } from '@objects/shop';
 import { Timetable } from '@objects/ws-timetable';
 import { MapController } from '@objects/map.controller';
@@ -168,7 +168,7 @@ export class CreateShopComponent implements OnInit {
         postcode: this.addressFormGroup.value.postcode,
         country: this.addressFormGroup.value.country
       };
-      shop.location = { coordinates: [this.mapController.markerLng, this.mapController.markerLat] };
+      shop.location = { coordinates: [this.mapController.markerPoint.longitude, this.mapController.markerPoint.latitude] };
     }
     shop.openingInfoType = this.timetable.operatingHourRadio;
     shop.openingInfo = shop.openingInfoType == 'selected_hours' ? this.timetable.operatingHours : [];

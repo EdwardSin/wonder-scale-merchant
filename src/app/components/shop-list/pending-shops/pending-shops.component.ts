@@ -5,7 +5,7 @@ import { AuthShopUserService } from '@services/http/auth-user/auth-shop-user.ser
 import { SharedLoadingService } from '@services/shared/shared-loading.service';
 import { SharedShopService } from '@services/shared/shared-shop.service';
 import { SharedUserService } from '@services/shared/shared-user.service';
-import { WsLoading } from '@components/elements/ws-loading/ws-loading';
+import { WsLoading } from '@elements/ws-loading/ws-loading';
 import { DocumentHelper } from '@helpers/documenthelper/document.helper';
 import { Subject, combineLatest, timer, interval } from 'rxjs';
 import { finalize, takeUntil, map, switchMap } from 'rxjs/operators';

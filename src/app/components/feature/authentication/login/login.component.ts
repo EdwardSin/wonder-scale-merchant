@@ -9,12 +9,13 @@ import { AuthenticationService } from '@services/http/general/authentication.ser
 import { UserService } from '@services/http/general/user.service';
 import { SharedUserService } from '@services/shared/shared-user.service';
 import { DocumentHelper } from '@helpers/documenthelper/document.helper';
-import { WsLoading } from '@components/elements/ws-loading/ws-loading';
-import { WsToastService } from '@components/elements/ws-toast/ws-toast.service';
+import { WsLoading } from '@elements/ws-loading/ws-loading';
+import { WsToastService } from '@elements/ws-toast/ws-toast.service';
 import decode from 'jwt-decode';
 import { ScreenService } from '@services/general/screen.service';
 import { Subject } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
+import { environment } from '@environments/environment';
 
 
 @Component({
@@ -46,15 +47,13 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     DocumentHelper.setWindowTitleWithWonderScale(Title.HOME);
-    this.isMobileSize = this.screenService.isMobileSize();
     this.createLoginForm();
     this.createPasswordForm();
+    this.screenService.isMobileSize.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+      this.isMobileSize = result;
+    })
   }
   ngAfterViewInit() {
-  }
-  @HostListener('window:resize', ['event'])
-  onResize() {
-    this.isMobileSize = this.screenService.isMobileSize();
   }
   login() {
     this.loading.start();
@@ -152,11 +151,15 @@ export class LoginComponent implements OnInit {
   getUser() {
     this.authUserService.getUser().pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
-        this.sharedUserService.user.next(result);
+        this.sharedUserService.user.next(result.result);
       })
   }
 
   getReturnUrl() {
-    return this.route.snapshot.queryParams['returnUrl'] || 'shops/all';
+    let returnUrl = this.route.snapshot.queryParams['returnUrl']
+    if (returnUrl !== undefined) {
+      return returnUrl;
+    }
+    return environment.RETURN_URL;
   }
 }

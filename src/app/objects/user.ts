@@ -9,10 +9,11 @@ export class User {
 	gender?: string;
 	profileImage?: string;
 	receiveInfo?: boolean;
-	resetToken?: String;
+	resetToken?: string;
 	active?: boolean;
 	type?: string;
 	token?: string;
+	existsPassword?: boolean;
 	blacklist?: Array<string>
 	follow?: {
 		items: Array<string>,

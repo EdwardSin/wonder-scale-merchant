@@ -7,7 +7,7 @@ import { Subject } from 'rxjs';
 import { ShopAuthorizationService } from '@services/http/general/shop-authorization.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthShopAdminService } from '@services/http/auth-shop/admin/auth-shop-admin.service';
-import { WsModalService } from '@components/elements/ws-modal/ws-modal.service';
+import { WsModalService } from '@elements/ws-modal/ws-modal.service';
 
 @Component({
   selector: 'main-container',
@@ -18,6 +18,7 @@ export class MainContainerComponent implements OnInit {
   shop;
   isNavOpen: boolean;
   isAdminAuthorized: boolean;
+  isConfirmReactivateShopModalOpened: boolean;
   isMobileSize: boolean;
   private ngUnsubscribe: Subject<any> = new Subject;
   constructor(private router: Router,
@@ -49,7 +50,7 @@ export class MainContainerComponent implements OnInit {
   onResize(event) {
     this.isMobileSize = ScreenHelper.isMobileSize();
   }
-  onNavbarOpen () {
+  onNavbarOpen() {
     this.isNavOpen = !this.isNavOpen
     this.sharedNavbarService.isNavSubject.next(this.isNavOpen);
   }
@@ -63,7 +64,7 @@ export class MainContainerComponent implements OnInit {
       this.sharedShopService.shop.next(this.shop);
     });
   }
-  openModal(id, element) {
+  openModal(id, element=null) {
     this.modalService.open(id);
     this.modalService.setElement(id, element);
   }

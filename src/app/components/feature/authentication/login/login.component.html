@@ -2,12 +2,12 @@
   <div class="modal-wrap">
     <div class="modal-body">
       <div (click)="$event.stopPropagation()" class="modal-body-content">
-        <form class="modal-content" style="max-width: 500px" [formGroup]="loginForm">
+        <form class="px-lg-5 p-4 pt-5 modal-content" style="max-width: 500px" [formGroup]="loginForm">
           <div class="modal-close">
             <span class="fas fa-times" [routerLink]="['', {outlets: {modal:null}}]"></span>
           </div>
           <div class="ws-input">
-            <input wsAutofocus placeholder="Login Email" class="form-control" formControlName="email" required>
+            <input placeholder="Login Email" class="form-control" formControlName="email" required>
           </div>
           <mat-error *ngIf="loginForm.controls['email'].hasError('required') && loginForm.controls['email'].touched">
             Please

@@ -2,13 +2,13 @@
   <div class="modal-wrap">
     <div class="modal-body">
       <div (click)="$event.stopPropagation()" class="modal-body-content">
-        <form class="modal-content" style="max-width: 600px" [formGroup]="registerForm" (ngSubmit)="register()"
+        <form class="px-lg-5 p-4 pt-5 modal-content" style="max-width: 600px" [formGroup]="registerForm" (ngSubmit)="register()"
           *ngIf="!registerSuccess; else successContent">
           <div class="modal-close">
             <span class="fas fa-times" [routerLink]="['', {outlets: {modal:null}}]"></span>
           </div>
           <div class="ws-input">
-            <input wsAutofocus name="firstName" type="text" placeholder="First Name" class="form-control form-control-sm"
+            <input name="firstName" type="text" placeholder="First Name" class="form-control form-control-sm"
               formControlName="firstName" />
           </div>
           <div class="ws-input">
@@ -34,7 +34,7 @@
               <input name="password" type="password" placeholder="Password"
                 class="form-control form-control-sm" formControlName="password" />
             </div>
-            <ul class="font-9 text-muted mb-2 list-unstyled pl-3 pr-3">
+            <ul class="font-9 text-muted my-2 list-unstyled pl-3 pr-3">
               <li [class.text-success]="!password.errors?.minlength && !password.errors?.required" class="p-0">At
                 least
                 8

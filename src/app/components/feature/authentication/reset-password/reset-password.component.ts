@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { WSFormBuilder } from '@builders/wsformbuilder';
 import { PasswordValidator } from '@validations/user-validation/password.validator';
 import { User } from '@objects/user';
-import { WsLoading } from '@components/elements/ws-loading/ws-loading';
-import { WsToastService } from '@components/elements/ws-toast/ws-toast.service';
+import { WsLoading } from '@elements/ws-loading/ws-loading';
+import { WsToastService } from '@elements/ws-toast/ws-toast.service';
 import { Subject } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
 import { UserService } from '@services/http/general/user.service';
@@ -20,10 +20,11 @@ export class ResetPasswordComponent implements OnInit {
   resetPasswordForm;
   resetSuccess: Boolean;
   user: User;
-  resetToken: String;
+  resetToken: string;
   passwordValidator = new PasswordValidator;
   private ngUnsubscribe: Subject<any> = new Subject;
-  constructor(private userService: UserService,
+  constructor(private router: Router,
+    private userService: UserService,
     private route: ActivatedRoute) {
   }
 
@@ -61,8 +62,8 @@ export class ResetPasswordComponent implements OnInit {
       }
     }
   }
-  resendLink() {
-
+  close() {
+    this.router.navigate([{ outlets: {modal: null}} ]);
   }
   get password() { return this.resetPasswordForm.get("password"); }
 

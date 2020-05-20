@@ -9,8 +9,8 @@ import { AuthDefaultSettingContributorService } from '@services/http/auth-shop/c
 import { AuthItemContributorService } from '@services/http/auth-shop/contributor/auth-item-contributor.service';
 import { SharedCategoryService } from '@services/shared/shared-category.service';
 import { SharedShopService } from '@services/shared/shared-shop.service';
-import { WsLoading } from '@components/elements/ws-loading/ws-loading';
-import { WsToastService } from '@components/elements/ws-toast/ws-toast.service';
+import { WsLoading } from '@elements/ws-loading/ws-loading';
+import { WsToastService } from '@elements/ws-toast/ws-toast.service';
 import { ImageHelper } from '@helpers/imagehelper/image.helper';
 import _ from 'lodash';
 import { from, of, Subject, forkJoin } from 'rxjs';

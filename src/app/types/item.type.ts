@@ -1,7 +1,7 @@
 export class ItemType {
-    quantity?: Number;
-    sizes: Array<String>;
+    quantity?: number;
+    sizes: Array<string>;
     hexColor: string;
-    weight?: Number;
-    images?: Array<String>;
+    weight?: number;
+    images?: Array<string>;
 }

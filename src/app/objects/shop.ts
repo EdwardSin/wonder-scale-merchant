@@ -9,6 +9,7 @@ export class Shop {
     serviceType: string;
     profileImage?: string = "upload/images/shop.png";
     bannerImage?: string;
+    informationImages?: Array<string>;
     fullAddress?: {
         address: string,
         state: string,
@@ -18,7 +19,7 @@ export class Shop {
     phone?: Array<string>;
     website?: Array<string>;
     location?: {
-        type?: String,
+        type?: string,
         coordinates: [number, number]
     };
     status?: {
@@ -31,7 +32,7 @@ export class Shop {
     description?: string;
     openingInfoType?: OpeningInfoType;
     openingInfo?: Array<OpeningInfo>;
-    media?: Array<string>;
+    media?: Array<any>;
     currency?: string;
     currentStatus?: boolean;
     review?: {

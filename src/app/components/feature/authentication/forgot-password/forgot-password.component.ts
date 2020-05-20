@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { WSFormBuilder } from '@builders/wsformbuilder';
 import { UserService } from '@services/http/general/user.service';
-import { WsLoading } from '@components/elements/ws-loading/ws-loading';
-import { WsToastService } from '@components/elements/ws-toast/ws-toast.service';
+import { WsLoading } from '@elements/ws-loading/ws-loading';
+import { WsToastService } from '@elements/ws-toast/ws-toast.service';
 import { Subject } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
 

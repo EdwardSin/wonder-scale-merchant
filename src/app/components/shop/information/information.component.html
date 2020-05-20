@@ -98,5 +98,5 @@
     <h4 class="text-center mt-5 mb-5">Shop cannot be displayed!</h4>
 </ng-template>
 
-<confirm-modal id="deleteItemModal" [message]="'Are you sure to remove the images?'"
+<confirm-modal *ngIf="isDeleteConfirmationModalOpened" [(isOpened)]="isDeleteConfiramtionModalOpened" id="deleteItemModal" [message]="'Are you sure to remove the images?'"
     [action]="removeUploadedImage.bind(this, selectedInformation)"></confirm-modal>

@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ArrayHelper } from '@helpers/arrayhelper/array.helper';
-import { WsModalClass } from '@components/elements/ws-modal/ws-modal';
-import { WsModalService } from '@components/elements/ws-modal/ws-modal.service';
+import { WsModalClass } from '@elements/ws-modal/ws-modal';
+import { WsModalService } from '@elements/ws-modal/ws-modal.service';
 import _ from 'lodash';
 
 @Component({
@@ -10,6 +10,7 @@ import _ from 'lodash';
   styleUrls: ['./add-to-categories-modal.component.scss']
 })
 export class AddToCategoriesModalComponent extends WsModalClass implements OnInit {
+  @Input() isOpened: boolean;
   @Input() action: Function;
   @Input() loading: Boolean = false;
   @Input() displayCategoryList = [];

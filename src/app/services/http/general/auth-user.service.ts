@@ -17,13 +17,19 @@ export class AuthUserService {
   getUser(): Observable<Result<User>> {
     return this.http.get<Result<User>>(AuthUserUrl.getUserUrl);
   }
+  getProfile(): Observable<Result<User>> {
+    return this.http.get<Result<User>>(AuthUserUrl.getProfileUrl);
+  }
+  removeProfileImage() {
+    return this.http.put(AuthUserUrl.removeProfileImageUrl, {});
+  }
   editProfile(obj): Observable<Result<User>> {
     return this.http.put<Result<User>>(AuthUserUrl.editProfileUrl, obj);
   }
   editGeneral(obj) {
     return this.http.put(AuthUserUrl.editGeneralUrl, obj);
   }
-  changePassword = function (obj) {
+  changePassword(obj) {
     return this.http.put(AuthUserUrl.changePasswordUrl, obj);
   };
 }

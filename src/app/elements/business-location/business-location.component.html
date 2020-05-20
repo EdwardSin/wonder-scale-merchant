@@ -32,16 +32,16 @@
   <p class="text-muted mb-0 mt-2">*Click to set the accurate location for your customer</p>
   <div class="border mb-3 w-100 position-relative">
     <div class="w-100 map-screen" *ngIf="disabled"></div>
-    <agm-map class="w-100" [longitude]="mapController.mapLng" [latitude]="mapController.mapLat" [zoom]="14" [gestureHandling]="'greedy'"
+    <agm-map class="w-100" [longitude]="mapController.mapPoint.longitude" [latitude]="mapController.mapPoint.latitude" [zoom]="14" [gestureHandling]="'greedy'"
       [maxZoom]="17" [minZoom]="11" [streetViewControl]="false" panControl="false" zoomControl="false" (mapClick)="mapController.mapClick($event)">
-      <agm-marker [longitude]="mapController.markerLng" [latitude]="mapController.markerLat"></agm-marker>
+      <agm-marker [longitude]="mapController.markerPoint.longitude" [latitude]="mapController.markerPoint.latitude"></agm-marker>
     </agm-map>
     <div *ngIf="mapController.locationLoading.isRunning()" class="w-100 h-100 map-screen">
       <ws-spinner class="loading"></ws-spinner>
     </div>
   </div>
-  <input name="lng" hidden class="form-control form-control-sm" type="text" [(ngModel)]="mapController.markerLng"
+  <input name="lng" hidden class="form-control form-control-sm" type="text" [(ngModel)]="mapController.markerPoint.longitude"
   />
-  <input name="lat" hidden class="form-control form-control-sm" type="text" [(ngModel)]="mapController.markerLat"
+  <input name="lat" hidden class="form-control form-control-sm" type="text" [(ngModel)]="mapController.markerPoint.latitude"
   />
 </div>

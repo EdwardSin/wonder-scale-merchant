@@ -5,7 +5,7 @@ import { AuthItemContributorService } from '@services/http/auth-shop/contributor
 import { SharedCategoryService } from '@services/shared/shared-category.service';
 import { SharedItemService } from '@services/shared/shared-item.service';
 import { SharedShopService } from '@services/shared/shared-shop.service';
-import { WsLoading } from '@components/elements/ws-loading/ws-loading';
+import { WsLoading } from '@elements/ws-loading/ws-loading';
 import { DocumentHelper } from '@helpers/documenthelper/document.helper';
 import { Subject, combineLatest, Observable, Subscription, timer } from 'rxjs';
 import { takeUntil, switchMap, debounce, debounceTime, tap, delay, share, finalize, bufferTime, map } from 'rxjs/operators';
@@ -23,7 +23,7 @@ export class AllItemsComponent implements OnInit {
   environment = environment;
   queryParams = { page: 1, keyword: '', order: '', orderBy: 'asc' };
   numberOfAllItems = 0;
-  shop_id: String;
+  shop_id: string;
   private ngUnsubscribe: Subject<any> = new Subject();
   getAllItemsSubscribe: Subscription = new Subscription();
   constructor(

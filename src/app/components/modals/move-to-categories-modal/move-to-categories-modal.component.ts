@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewEncapsulation } from '@angular/core';
-import { WsModalClass } from '@components/elements/ws-modal/ws-modal';
-import { WsModalService } from '@components/elements/ws-modal/ws-modal.service';
+import { WsModalClass } from '@elements/ws-modal/ws-modal';
+import { WsModalService } from '@elements/ws-modal/ws-modal.service';
 
 @Component({
   selector: 'move-to-categories-modal',
@@ -9,6 +9,7 @@ import { WsModalService } from '@components/elements/ws-modal/ws-modal.service';
   encapsulation: ViewEncapsulation.None
 })
 export class MoveToCategoriesModalComponent extends WsModalClass implements OnInit {
+  @Input() isOpened: boolean;
   @Input() action: Function;
   @Input() loading: Boolean = false;
   @Input() get editCategory() { return this._editCategory; }

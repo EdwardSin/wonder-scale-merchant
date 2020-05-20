@@ -2,8 +2,8 @@ import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@an
 import { AuthItemContributorService } from '@services/http/auth-shop/contributor/auth-item-contributor.service';
 import { SharedLoadingService } from '@services/shared/shared-loading.service';
 import { SharedShopService } from '@services/shared/shared-shop.service';
-import { WsModalClass } from '@components/elements/ws-modal/ws-modal';
-import { WsModalService } from '@components/elements/ws-modal/ws-modal.service';
+import { WsModalClass } from '@elements/ws-modal/ws-modal';
+import { WsModalService } from '@elements/ws-modal/ws-modal.service';
 import _ from 'lodash';
 import { takeUntil } from 'rxjs/operators';
 import * as XLSX from 'xlsx';

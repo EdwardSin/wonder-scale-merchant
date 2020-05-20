@@ -1,8 +1,8 @@
 import { Component, ElementRef, Input, OnInit } from '@angular/core';
 import { Tag } from '@objects/tag';
-import { WsLoading } from '@components/elements/ws-loading/ws-loading';
-import { WsModalClass } from '@components/elements/ws-modal/ws-modal';
-import { WsModalService } from '@components/elements/ws-modal/ws-modal.service';
+import { WsLoading } from '@elements/ws-loading/ws-loading';
+import { WsModalClass } from '@elements/ws-modal/ws-modal';
+import { WsModalService } from '@elements/ws-modal/ws-modal.service';
 
 @Component({
   selector: 'edit-multiple-items-modal',
@@ -10,6 +10,7 @@ import { WsModalService } from '@components/elements/ws-modal/ws-modal.service';
   styleUrls: ['./edit-multiple-items-modal.component.scss']
 })
 export class EditMultipleItemsModalComponent extends WsModalClass implements OnInit {
+  @Input() isOpened: boolean;
   @Input() action: Function;
   @Input() editItems = [];
   tag: Tag = new Tag;

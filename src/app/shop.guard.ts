@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AuthShopUserService } from '@services/http/auth-user/auth-shop-user.service';
-import { WsToastService } from '@components/elements/ws-toast/ws-toast.service';
+import { WsToastService } from '@elements/ws-toast/ws-toast.service';
 
 @Injectable({
   providedIn: 'root'

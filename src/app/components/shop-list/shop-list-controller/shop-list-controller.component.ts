@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { SharedLoadingService } from '@services/shared/shared-loading.service';
 import { SharedShopService } from '@services/shared/shared-shop.service';
-import { WsLoading } from '@components/elements/ws-loading/ws-loading';
+import { WsLoading } from '@elements/ws-loading/ws-loading';
 import { Subject, interval, combineLatest, timer } from 'rxjs';
 import { takeUntil, switchMap, map } from 'rxjs/operators';
 import { AuthShopUserService } from '@services/http/auth-user/auth-shop-user.service';
