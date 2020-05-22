@@ -14,7 +14,6 @@ import { WsLoading } from '@elements/ws-loading/ws-loading';
 import { DocumentHelper } from '@helpers/documenthelper/document.helper';
 import { ArrayHelper } from '@helpers/arrayhelper/array.helper';
 import { PriceHelper } from '@helpers/pricehelper/price.helper';
-import { WsModalService } from '@elements/ws-modal/ws-modal.service';
 import { WsToastService } from '@elements/ws-toast/ws-toast.service';
 // import { saveAs } from 'file-saver';
 import { Subject, combineLatest, timer } from 'rxjs';
@@ -43,7 +42,6 @@ export class ItemsComponent implements OnInit {
   constructor(
     private sharedShopService: SharedShopService,
     private sharedLoadingService: SharedLoadingService,
-    private modalService: WsModalService,
     private sharedItemService: SharedItemService,
     private sharedCategoryService: SharedCategoryService,
     private authShopContributorService: AuthShopContributorService,
@@ -128,12 +126,10 @@ export class ItemsComponent implements OnInit {
         this.sharedCategoryService.categoryRefresh.next({refresh: false, loading: false});
       })
   }
-  importFileChangeEvent(event) {
-    this.modalService.open('importItemsModal');
-    event.categoryId = this.categoryId;
-    this.modalService.setElement('importItemsModal', event);
-    this.importFile.nativeElement.value = '';
-  }
+  // importFileChangeEvent(event) {
+  //   event.categoryId = this.categoryId;
+  //   this.importFile.nativeElement.value = '';
+  // }
 
   // isBannerShow() {
   //   return this.allItems.length > 0 && !this.isActiveItemFound(this.allItems);
@@ -142,9 +138,6 @@ export class ItemsComponent implements OnInit {
   // isActiveItemFound(allItems) {
   //   return allItems.find(x => x.status == 'active');
   // }
-  openModal(id) {
-    this.modalService.open(id);
-  }
   toastDownload() {
     WsToastService.toastSubject.next({ content: 'Template is downloading!' });
   }

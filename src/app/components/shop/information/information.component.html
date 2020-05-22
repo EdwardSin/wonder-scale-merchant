@@ -27,7 +27,7 @@
                         <div *ngSwitchCase="'url'" class="h-100">
                             <div class="corner-setting">
                                 <span class="corner-setting-item fas fa-times"
-                                    (click)="openModal('deleteItemModal', image)"></span>
+                                    (click)="openInformationModal(image)"></span>
                             </div>
                             <div class="image-item d-table h-100 position-relative clear-d-color">
                                 <div style="background-color: white; display: table-cell; vertical-align: middle; border: 1px solid #ccc;">
@@ -98,5 +98,5 @@
     <h4 class="text-center mt-5 mb-5">Shop cannot be displayed!</h4>
 </ng-template>
 
-<confirm-modal *ngIf="isDeleteConfirmationModalOpened" [(isOpened)]="isDeleteConfiramtionModalOpened" id="deleteItemModal" [message]="'Are you sure to remove the images?'"
+<confirm-modal *ngIf="isDeletedConfirmationModalOpened" [(isOpened)]="isDeletedConfirmationModalOpened" id="deleteItemModal" [message]="'Are you sure to remove the images?'"
     [action]="removeUploadedImage.bind(this, selectedInformation)"></confirm-modal>

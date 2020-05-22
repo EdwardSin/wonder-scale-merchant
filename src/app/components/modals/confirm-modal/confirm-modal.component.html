@@ -3,9 +3,9 @@
     <div modalBody>
         <p class="mb-2">{{message}}</p>
         <ng-content select="[content]"></ng-content>
-        <div class="row no-gutters">
-            <button class="btn btn-md btn-second mr-1 col" (click)="action(); close()">Confirm</button>
-            <button class="btn btn-md btn-second ml-1 col" (click)="close()">Cancel</button>
+        <div class="center mt-4 float-right">
+            <button class="btn btn-sm btn-controller mr-1" (click)="action(); close()">Confirm</button>
+            <button class="btn btn-sm btn-controller ml-1" (click)="close()">Cancel</button>
         </div>
     </div>
 </ws-modal>

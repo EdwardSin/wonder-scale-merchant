@@ -75,7 +75,6 @@ import { BreadcrumbComponent } from '@elements/breadcrumb/breadcrumb.component';
 import { ImportItemsModalComponent } from '@components/modals/import-items-modal/import-items-modal.component';
 import { WsMultipleInputComponent } from '@elements/ws-multiple-input/ws-multiple-input.component';
 import { PermissionListComponent } from '@elements/permission-list/permission-list.component';
-import { ImageUploadModalComponent } from '@elements/image-upload-modal/image-upload-modal.component';
 import { EditContributorModalComponent } from '@components/modals/edit-contributor-modal/edit-contributor-modal.component';
 import { WsToastComponent } from '@elements/ws-toast/ws-toast.component';
 import { WsLoadingScreenComponent } from '@elements/ws-loading-screen/ws-loading-screen.component';
@@ -192,7 +191,6 @@ export function provideConfig() {
     EditMultipleItemsModalComponent,
     MoveToCategoriesModalComponent,
     ImportItemsModalComponent,
-    ImageUploadModalComponent,
     EditContributorModalComponent,
     ModifyItemTypeComponent
   ],

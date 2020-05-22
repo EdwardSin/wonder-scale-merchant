@@ -10,7 +10,7 @@
     </div>
     <div *ngIf="shop?.status?.status == 'closed'" class="alert-danger p-3 mt-2">
       <span class="font-9">The shop is currently closed and will not be seen in public.</span><br />
-      <span class="font-8" *ngIf="isAdminAuthorized">Click <span class="font-weight-bold clickable" (click)="openModal('confirmReactivateShopModal')">here</span> to reactivate shop.</span>
+      <span class="font-8" *ngIf="isAdminAuthorized">Click <span class="font-weight-bold clickable" (click)="isConfirmReactivateShopModalOpened = true">here</span> to reactivate shop.</span>
       <span class="font-8" *ngIf="!isAdminAuthorized">Contact your admin to reactivate the shop.</span>
     </div>
     <div class="pt-3">

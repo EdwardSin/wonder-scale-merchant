@@ -1,6 +1,5 @@
 import { Component, ElementRef, Input, OnInit } from '@angular/core';
-import { WsModalClass } from '@elements/ws-modal/ws-modal';
-import { WsModalService } from '@elements/ws-modal/ws-modal.service';
+import { WsModalComponent } from '@elements/ws-modal/ws-modal.component';
 
 
 @Component({
@@ -8,17 +7,15 @@ import { WsModalService } from '@elements/ws-modal/ws-modal.service';
   templateUrl: './confirm-modal.component.html',
   styleUrls: ['./confirm-modal.component.scss']
 })
-export class ConfirmModalComponent extends WsModalClass implements OnInit {
+export class ConfirmModalComponent extends WsModalComponent implements OnInit {
   @Input() isOpened: boolean;
   @Input() header: string = "Confirmation";
   @Input() message: string;
   @Input() action: Function;
   @Input() closeCallback: Function;
 
-  constructor(
-    modalService: WsModalService, 
-    el: ElementRef) {
-    super(modalService, el);
+  constructor() {
+    super();
   }
   ngOnInit() {
     super.ngOnInit();

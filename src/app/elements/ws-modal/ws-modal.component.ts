@@ -1,6 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewEncapsulation, EventEmitter, Output, SimpleChanges } from '@angular/core';
-import { WsModalService } from './ws-modal.service';
-import { WsModalClass } from './ws-modal';
+import { Component, Input, OnInit, ViewEncapsulation, EventEmitter, Output, SimpleChanges } from '@angular/core';
 
 @Component({
   selector: 'ws-modal',
@@ -8,7 +6,7 @@ import { WsModalClass } from './ws-modal';
   styleUrls: ['./ws-modal.component.scss'],//, '../../../../assets/scss/modal.scss'
   encapsulation: ViewEncapsulation.None
 })
-export class WsModalComponent extends WsModalClass implements OnInit {
+export class WsModalComponent implements OnInit {
   @Input() id: string;
   @Input() headerColor;
   @Input() noHeader: boolean;
@@ -17,9 +15,7 @@ export class WsModalComponent extends WsModalClass implements OnInit {
   _isOpened: boolean;
   @Input() get isOpened() { return this._isOpened; }
   @Output() isOpenedChange: EventEmitter<boolean> = new EventEmitter;
-  constructor(modalService: WsModalService,
-    el: ElementRef) {
-    super(modalService, el);
+  constructor() {
   }
   ngOnInit() {
   }
@@ -36,11 +32,10 @@ export class WsModalComponent extends WsModalClass implements OnInit {
     this.isOpenedChange.emit(val);
   }
   close() {
-    this.modalService.close(this.id);
+    this.isOpened = false;
   }
   closeOutside() {
     if (this.isCloseIconDisplayed) {
-      this.modalService.close(this.id);
     }
   }
   ngOnDestroy() {

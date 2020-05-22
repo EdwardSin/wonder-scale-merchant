@@ -4,7 +4,6 @@ import { environment } from '@environments/environment';
 import { AuthShopContributorService } from '@services/http/auth-shop/contributor/auth-shop-contributor.service';
 import { SharedShopService } from '@services/shared/shared-shop.service';
 import { WsToastService } from '@elements/ws-toast/ws-toast.service';
-import { WsModalService } from '@elements/ws-modal/ws-modal.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SharedUserService } from '@services/shared/shared-user.service';
@@ -17,12 +16,11 @@ import { Contributor } from '@objects/contributor';
 })
 export class PendingShopComponent implements OnInit {
   @Input() shop;
-  isRemoveModalOpen: Boolean;
+  isRemoveModalOpen: boolean;
   environment = environment;
   contributor: Contributor;
   private ngUnsubscribe: Subject<any> = new Subject;
   constructor(
-    private modalService: WsModalService,
     private router: Router,
     private ref: ChangeDetectorRef,
     private sharedUserService: SharedUserService,
@@ -44,17 +42,10 @@ export class PendingShopComponent implements OnInit {
     this.authShopContributorService.rejectContributor(shop._id).pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
         WsToastService.toastSubject.next({ content: "You rejected to join " + shop.name + "!", type: 'success' });
+        this.isRemoveModalOpen = false;
         this.sharedShopService.refresh.next(true);
       }, err => {
         WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
       })
-  }
-  openModal(id) {
-    this.isRemoveModalOpen = true;
-    this.ref.detectChanges();
-    this.modalService.open(id);
-  }
-  closeModal() {
-    this.isRemoveModalOpen = false;
   }
 }

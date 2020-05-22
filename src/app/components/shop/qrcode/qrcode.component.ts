@@ -55,13 +55,13 @@ export class QrcodeComponent implements OnInit {
       image.src = this.displayImage;
       image.alt = 'profile-image';
       QRCodeBuilder.createQRcode('.qrcode', this.shop.username, this.shop._id, { width: this.qrSize, height: this.qrSize});
-      $(() => {
-        image.addEventListener('load', e => {
-          setTimeout(() => {
-            this.renderProfileImageToQrcode(image);
-          }, 300);
-        });
+      // $(() => {
+      image.addEventListener('load', e => {
+        setTimeout(() => {
+          this.renderProfileImageToQrcode(image);
+        }, 500);
       });
+      // });
     });
   }
   imageChangeEvent(event) {

@@ -1,15 +1,14 @@
 import { Component, ElementRef, Input, OnInit } from '@angular/core';
 import { Tag } from '@objects/tag';
 import { WsLoading } from '@elements/ws-loading/ws-loading';
-import { WsModalClass } from '@elements/ws-modal/ws-modal';
-import { WsModalService } from '@elements/ws-modal/ws-modal.service';
+import { WsModalComponent } from '@elements/ws-modal/ws-modal.component';
 
 @Component({
   selector: 'edit-multiple-items-modal',
   templateUrl: './edit-multiple-items-modal.component.html',
   styleUrls: ['./edit-multiple-items-modal.component.scss']
 })
-export class EditMultipleItemsModalComponent extends WsModalClass implements OnInit {
+export class EditMultipleItemsModalComponent extends WsModalComponent implements OnInit {
   @Input() isOpened: boolean;
   @Input() action: Function;
   @Input() editItems = [];
@@ -19,8 +18,8 @@ export class EditMultipleItemsModalComponent extends WsModalClass implements OnI
   isRelatedTag: boolean;
   loading: WsLoading = new WsLoading;
 
-  constructor(modalService: WsModalService, el: ElementRef) {
-    super(modalService, el);
+  constructor() {
+    super();
   }
 
   ngOnInit() {

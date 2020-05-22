@@ -1,5 +1,5 @@
 <div class="row no-gutters w-100 position-relative" style="z-index:2">
-    <div class="col-lg order-1 order-lg-2 mr-1">
+    <div class="col-lg mr-1">
         <search-bar class="d-inline-block mr-2" [placeholder]="'Search Item'" [searchAttributes]="['name', 'refId']" [items]="allItems"
             [searchKeyword]="searchController.searchKeyword"></search-bar>
             <!-- <div class="ws-circle-button" *ngIf="previousEditedItems.length">
@@ -26,11 +26,6 @@
                         *ngIf="editItems?.length == allItems.length">({{editItems?.length}})All Selected</span>
                 </button>
             </div> -->
-            <div *ngIf="isMobileSize && editItems?.length" class="col ws-circle-button">
-                <button title="Number of selected items" wsTippy class="btn btn-controller small btn-selected-item">
-                    <span>{{editItems?.length}}</span>
-                </button>
-            </div>
             <div [isDisabled]="!editItems.length" (click)="checkSelectedItems()" class="ws-circle-button" #dropdown="bs-dropdown" mdbDropdown>
                 <button title="Actions" mdbDropdownToggle wsTippy class="btn btn-controller small">
                     <span class="fas fa-ellipsis-h"></span>
@@ -64,58 +59,60 @@
                 </ws-dropdown>
             </div>
     </div>
-    <div class="row no-gutters order-2 center">
-        <div class="ws-circle-button" [routerLink]="['',{outlets: {modal: 'item'}}]" [queryParams]="{id:null}" queryParamsHandling="merge">
-            <button title="Add New Item" wsTippy class="btn btn-controller small">
-                <span class="fa fa-plus"></span>
-            </button>
-        </div>
-        <div class="ws-circle-button" mdbDropdown>
-            <button placement="right" id="sortButton" mdbDropdownToggle title="Order" wsTippy
-                class="btn btn-controller small clickable d-inline">
-                <span class="fa fa-ellipsis-v"></span>
-            </button>
-            <div class="dropdown-menu dropdown-menu-right mt-0 pb-0 pt-0" aria-labelledby="sortButton">
-                <button class="dropdown-item" [class.orderSelected]="isOrder('alphabet') || isOrder(undefined)"
-                    (click)="setOrderAndSwitchAscending('alphabet')">Alphabet
-                    <span *ngIf="isOrder('alphabet')" class="pl-3 fas fa-sort"></span>
-                </button>
-                <button class="dropdown-item" [class.orderSelected]="isOrder('price_low_to_high')"
-                    (click)="setOrderAndSwitchAscending('price_low_to_high')">Price(Low to High)
-                </button>
-                <button class="dropdown-item" [class.orderSelected]="isOrder('price_high_to_low')"
-                    (click)="setOrderAndSwitchAscending('price_high_to_low')">Price(High to Low)
-                </button>
-                <button class="dropdown-item" [class.orderSelected]="isOrder('latest')"
-                    (click)="setOrderAndSwitchAscending('latest')">Last Update
-                    <span *ngIf="isOrder('latest')" class="pl-3 fas fa-sort"></span>
-                </button>
-                <!-- <button class="dropdown-item" [class.orderSelected]="isOrder('status')"
-                    (click)="setOrderAndSwitchAscending('status')">Status
-                    <span *ngIf="isOrder('status')" class="pl-3 fas fa-sort"></span>
-                </button> -->
-                <!-- <button class="dropdown-item" [class.orderSelected]="isOrder('custom order')" *ngIf="false && param !== 'defaultcategory'"
-                    (click)="setOrderAndSwitchAscending('custom order')">Custom Order
-                    <span *ngIf="isOrder('custom order')" class="pl-3 fas fa-sort"></span>
-                </button> -->
-            </div>
-        </div>
-        <!-- <div class="ws-circle-button" mdbDropdown>
-            <button id="listButton" mdbDropdownToggle title="Display" wsTippy
-                class="btn btn-controller small clickable d-inline">
-                <span class="fa" [class.fa-th-large]="isDisplay('block')"
-                    [class.fa-list]="isDisplay('list') || isDisplay(undefined)"></span>
-            </button>
-            <div class="dropdown-menu dropdown-menu-right mt-0 pb-0 pt-0" aria-labelledby="listButton">
-                <button class="dropdown-item" [class.orderSelected]="isDisplay('block')" (click)="setDisplay('block')">
-                    <span class="fas fa-th-large mr-2"></span>Block
-                </button>
-                <button class="dropdown-item" [class.orderSelected]="isDisplay('list') || isDisplay(undefined)"
-                    (click)="setDisplay('list')">
-                    <span class="fas fa-list mr-2"></span>List
+    <div class="col-auto">
+        <div class="row no-gutters order-2 center">
+            <div class="ws-circle-button" [routerLink]="['',{outlets: {modal: 'item'}}]" [queryParams]="{id:null}" queryParamsHandling="merge">
+                <button title="Add New Item" wsTippy class="btn btn-controller small">
+                    <span class="fa fa-plus"></span>
                 </button>
             </div>
-        </div> -->
+            <div class="ws-circle-button" mdbDropdown>
+                <button placement="right" id="sortButton" mdbDropdownToggle title="Order" wsTippy
+                    class="btn btn-controller small clickable d-inline">
+                    <span class="fa fa-ellipsis-v"></span>
+                </button>
+                <div class="dropdown-menu dropdown-menu-right mt-0 pb-0 pt-0" aria-labelledby="sortButton">
+                    <button class="dropdown-item" [class.orderSelected]="isOrder('alphabet') || isOrder(undefined)"
+                        (click)="setOrderAndSwitchAscending('alphabet')">Alphabet
+                        <span *ngIf="isOrder('alphabet')" class="pl-3 fas fa-sort"></span>
+                    </button>
+                    <button class="dropdown-item" [class.orderSelected]="isOrder('price_low_to_high')"
+                        (click)="setOrderAndSwitchAscending('price_low_to_high')">Price(Low to High)
+                    </button>
+                    <button class="dropdown-item" [class.orderSelected]="isOrder('price_high_to_low')"
+                        (click)="setOrderAndSwitchAscending('price_high_to_low')">Price(High to Low)
+                    </button>
+                    <button class="dropdown-item" [class.orderSelected]="isOrder('latest')"
+                        (click)="setOrderAndSwitchAscending('latest')">Last Update
+                        <span *ngIf="isOrder('latest')" class="pl-3 fas fa-sort"></span>
+                    </button>
+                    <!-- <button class="dropdown-item" [class.orderSelected]="isOrder('status')"
+                        (click)="setOrderAndSwitchAscending('status')">Status
+                        <span *ngIf="isOrder('status')" class="pl-3 fas fa-sort"></span>
+                    </button> -->
+                    <!-- <button class="dropdown-item" [class.orderSelected]="isOrder('custom order')" *ngIf="false && param !== 'defaultcategory'"
+                        (click)="setOrderAndSwitchAscending('custom order')">Custom Order
+                        <span *ngIf="isOrder('custom order')" class="pl-3 fas fa-sort"></span>
+                    </button> -->
+                </div>
+            </div>
+            <!-- <div class="ws-circle-button" mdbDropdown>
+                <button id="listButton" mdbDropdownToggle title="Display" wsTippy
+                    class="btn btn-controller small clickable d-inline">
+                    <span class="fa" [class.fa-th-large]="isDisplay('block')"
+                        [class.fa-list]="isDisplay('list') || isDisplay(undefined)"></span>
+                </button>
+                <div class="dropdown-menu dropdown-menu-right mt-0 pb-0 pt-0" aria-labelledby="listButton">
+                    <button class="dropdown-item" [class.orderSelected]="isDisplay('block')" (click)="setDisplay('block')">
+                        <span class="fas fa-th-large mr-2"></span>Block
+                    </button>
+                    <button class="dropdown-item" [class.orderSelected]="isDisplay('list') || isDisplay(undefined)"
+                        (click)="setDisplay('list')">
+                        <span class="fas fa-list mr-2"></span>List
+                    </button>
+                </div>
+            </div> -->
+        </div>
     </div>
 </div>
 
@@ -142,9 +139,15 @@
 </div> -->
 <confirm-modal *ngIf="isRemoveAllSelectedItemModalConfirmationOpened" [(isOpened)]="isRemoveAllSelectedItemModalConfirmationOpened" id="removeItemsModal" [message]="'Are you sure to remove all selected items?'" [action]="action">
 </confirm-modal>
-<add-to-categories-modal *ngIf="isAddToCategoriesModalOpened" [(isOpened)]="isAddToCategoriesModalOpened" id="addToCategoriesModal" [action]="action" [loading]="loading.isRunning()" [displayCategoryList]="displayCategoryList"
+<add-to-categories-modal *ngIf="isAddToCategoriesModalOpened" [(isOpened)]="isAddToCategoriesModalOpened" id="addToCategoriesModal" [action]="action" 
+    [loading]="categoriesLoading.isRunning()"
+    [addingLoading]="loading.isRunning()"
+    [categories]="displayCategoryList"
     [(editCategoryList)]="editCategoryList"></add-to-categories-modal>
-<move-to-categories-modal *ngIf="isMoveToCategoriesModalOpened" [(isOpened)]="isMoveToCategoriesModalOpened" id="moveToCategoriesModal" [action]="action" [loading]="loading.isRunning()" [displayCategoryList]="displayCategoryList"
+<move-to-categories-modal *ngIf="isMoveToCategoriesModalOpened" [(isOpened)]="isMoveToCategoriesModalOpened" id="moveToCategoriesModal" [action]="action"
+    [loading]="categoriesLoading.isRunning()"
+    [movingLoading]="loading.isRunning()"
+    [categories]="displayCategoryList"
     [(editCategory)]="editCategory"></move-to-categories-modal>
 <edit-multiple-items-modal *ngIf="isEditMultipleItemsModalOpened" [(isOpened)]="isEditMultipleItemsModalOpened" [editItems]="editItems" id="editMultipleItemsModal" [action]="action">
 </edit-multiple-items-modal>

@@ -10,7 +10,7 @@
             </div>
         </div>
     </div>
-    <div style="background-color: rgba(0,0,0,.2); max-width: 465px; width: 100%; min-height: 279px; height: 60%">
+    <div style="background-color: rgba(0,0,0,.2); max-width: 465px; width: 100%; height: 60%; margin-bottom: 3rem">
         <div>
             <img class="img-profile" [src]="profileImage" alt="Shop Profile" />
             <span class="img-profile img-hover">
@@ -28,7 +28,7 @@
                 </span>
             </span>
         </div>
-
+        <div *ngIf="!bannerImage" style="height: 279px"></div>
         <img *ngIf="bannerImage" class="banner-image" [src]="bannerImage" alt="Shop Banner" />
         <span *ngIf="isBannerImageUploading.isRunning()" class="img-banner__uploading">
             <img style="position: absolute; top: calc(50% - 8px); left: calc(50% - 8px);" [src]="environment.LOADING_UPLOAD_DATA" alt="loading" />
@@ -285,7 +285,7 @@
               contributor?.joinedDate | passDate }} - {{ contributor?.role}}</span>
                     </div>
                     <div *ngIf="isAdminAuthorized" class="d-inline-block float-right">
-                        <a href="javascript:void(0)" class="default" (click)="openModal('editModal', contributor)">
+                        <a href="javascript:void(0)" class="default" (click)="openEditContributorModal(contributor)">
                             <span class="font-weight-normal" style="font-size:.9rem">Edit</span>
                         </a>
                     </div>
@@ -300,14 +300,14 @@
         <div [@expand]="'down'" *ngIf="isAdvancedExpanded" style="height: 100%">
             <form *ngIf="isAdminAuthorized" class="mb-3">
                 <p *ngIf="shop?.status?.status == 'closed' && timeDifference > 0" class="alert alert-secondary ws-bg-light-grey-4 mb-1" style="font-size: .9rem">
-                    <button *ngIf="shop.status.status == 'closed' && timeDifference > 0" class="btn btn-primary btn-sm m-0 mb-2" (click)="openModal('confirmReactivateModal')">Reactivate</button>
+                    <button *ngIf="shop.status.status == 'closed' && timeDifference > 0" class="btn btn-primary btn-sm m-0 mb-2" (click)="isConfirmReactivateModalOpened = true">Reactivate</button>
                     <br />
                     Shop will be removed permanently {{timeDifferenceString}}.
                     <br />
                     You can reactivate anytime before shop is removed permanently.
                 </p>
                 <p *ngIf="shop?.status?.status != 'closed'" class="alert alert-secondary ws-bg-light-grey-4 mb-1" style="font-size: .9rem">
-                    <button *ngIf="shop.status.status != 'closed'" class="btn btn-sm btn-danger m-0 mb-2" (click)="openModal('confirmCloseShopModal')">Remove
+                    <button *ngIf="shop.status.status != 'closed'" class="btn btn-sm btn-danger m-0 mb-2" (click)="isConfirmCloseShopModalOpened = true">Remove
                         Shop Permanently</button>
                     <br />
                     You can reactivate shop within 1 hour.<br>
@@ -316,7 +316,7 @@
 
             <form class="mb-3">
                 <p class="alert alert-secondary ws-bg-light-grey-4 mb-1" style="font-size: .9rem">
-                    <button class="btn btn-warning btn-sm m-0 mb-2" (click)="openModal('confirmQuitShopModal')">Leave Shop</button>
+                    <button class="btn btn-warning btn-sm m-0 mb-2" (click)="isConfirmQuitShopModalOpened = true">Leave Shop</button>
                     <br />
                     All contributors can leave the shop.<br />
                     At least 1 admin should be in the shop.
@@ -330,8 +330,7 @@
         <p>Reset your password to keep your account safe.</p>
     </div> -->
 </div>
-<!-- <image-upload-modal id="imageUploadModal" [type]="'shop'"></image-upload-modal> -->
-<edit-contributor-modal *ngIf="isEditContributorModalOpened" [(isOpened)]="isEditContributorModalOpened" id="editModal"></edit-contributor-modal>
+<edit-contributor-modal *ngIf="isEditContributorModalOpened" [contributorController]="contributorController" [(isOpened)]="isEditContributorModalOpened" id="editModal"></edit-contributor-modal>
 <confirm-modal *ngIf="isConfirmCloseShopModalOpened" [(isOpened)]="isConfirmCloseShopModalOpened" id="confirmCloseShopModal" [message]="'Are you sure to close the shop permanently?'" [action]="closePermanently.bind(this)"></confirm-modal>
 <confirm-modal *ngIf="isConfirmReactivateModalOpened" [(isOpened)]="isConfirmReactivateModalOpened" id="confirmReactivateModal" [message]="'Are you sure to reactivate the shop?'" [action]="reactivateFromInactive.bind(this)"></confirm-modal>
 <confirm-modal *ngIf="isConfirmQuitShopModalOpened" [(isOpened)]="isConfirmQuitShopModalOpened" id="confirmQuitShopModal" [message]="'Are you sure to quit the shop?'" [action]="quitShop.bind(this)">
@@ -356,7 +355,7 @@
         <input hidden id="id-profile-image-upload" type="file" accept="image/*" name="profile-image" (change)="fileChangeEvent($event)" />
     </div>
 </ws-modal>
-<ws-modal *ngIf="isBannerUploaderOpened" [isCloseIconDisplayed]="false" [(isOpened)]="isBannerUploaderOpened" [maxWidth]="previewImage ? 1000: 400">
+<ws-modal *ngIf="isBannerUploaderOpened" [isCloseIconDisplayed]="false" [(isOpened)]="isBannerUploaderOpened" [maxWidth]="400">
     <div class="pt-3" modalBody>
         <div class='banner-preview-image__container center' [class.banner-preview-image__container-uploading]="previewImage">
             <span *ngIf="previewImage" class="banner-preview-image__remove-icon fas fa-times" (click)="removePreviewImage()"></span>

@@ -89,22 +89,18 @@ select.nooutline:focus,
         right: 6px;
         min-width: 80px;
         font-size: 14px;
-        color: #000;
-        background-color: #fff;
+        color: #505f79;
+        background-color: #f7f7f7;
         text-transform: unset;
-        border: 1px solid #e5e5e5;
         border-radius: 3px;
-        box-shadow: none;
-        transition: background-color ease .1s;
+        transition: background-color .2s ease-out, color .2s ease-out;
         padding: 6px 10px;
         &:hover{
-            background-color: #f0f0f0;
-            border-color: #e3e3e3;
-            color: #2e2e2e;
+            background-color: #ebecf0;
         }
         &:active{
-            box-shadow: none !important;
-            background-color: #eaeaea;
+            color: #fff;
+            background-color: #282c35;
         }
     }
 }

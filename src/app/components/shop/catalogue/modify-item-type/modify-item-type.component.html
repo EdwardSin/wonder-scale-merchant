@@ -114,7 +114,7 @@
                         <div class="input-group-prepend" style="width: 100px">
                           <span>Price</span>
                         </div>
-                        <input wsAutofocus [isAutoFocus]="i == 0" class="form-control form-control-sm" tabIndex="1" placeholder="Blank to use default"
+                        <input class="form-control form-control-sm" tabIndex="1" placeholder="Blank to use default"
                           formControlName="price" />
                       </div>
                     </div>
@@ -157,7 +157,7 @@
             </div>
             <div>
                 <ws-loading-button class="d-block" [loading]="itemTypeLoading.isRunning()"
-                [class]="'btn btn-md btn-second float-right mr-0'" (click)="editItemTypes()">Save</ws-loading-button>
+                [class]="'btn btn-sm btn-controller float-right mr-0'" (click)="editItemTypes()">Save</ws-loading-button>
             </div>
           </ng-container>
           <ng-container *ngIf="loading.isRunning(); else noItem">

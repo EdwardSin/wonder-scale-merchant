@@ -104,13 +104,13 @@
 }
 
 .banner-preview-image__container {
-    height: 180px;
-    width: 300px;
+    max-height: 180px;
+    max-width: 300px;
     margin-top: 2rem;
 
     &.banner-preview-image__container-uploading {
-        height: 800px;
-        width: 800px;
+        max-height: 800px;
+        max-width: 800px;
     }
 
     .banner-preview-image__text-container {
@@ -128,7 +128,6 @@
 .banner-image-container {
     position: relative;
     max-width: 465px;
-    min-height: 279px;
     width: 100%;
     height: 60%;
 

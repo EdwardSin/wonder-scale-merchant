@@ -8,12 +8,12 @@ import { SharedShopService } from '@services/shared/shared-shop.service';
 import { ViewType } from '@wstypes/view.type';
 import { PriceHelper } from '@helpers/pricehelper/price.helper';
 import { ScreenHelper } from '@helpers/screenhelper/screen.helper';
-import { WsModalService } from '@elements/ws-modal/ws-modal.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SharedNavbarService } from '@services/shared/shared-nav-bar.service';
 import { SharedCategoryService } from '@services/shared/shared-category.service';
 import { Currency } from '@objects/currency';
+import { ScreenService } from '@services/general/screen.service';
 
 @Component({
   selector: 'item-view',
@@ -46,8 +46,8 @@ export class ItemViewComponent implements OnInit {
     private sharedCategoryService: SharedCategoryService,
     private sharedShopService: SharedShopService,
     private ref: ChangeDetectorRef,
+    private screenService: ScreenService,
     public currencyService: CurrencyService,
-    private modalService: WsModalService,
     private sharedNavbarService: SharedNavbarService
   ) { 
   }
@@ -88,6 +88,9 @@ export class ItemViewComponent implements OnInit {
           this.ref.detectChanges();
         }
       })
+    this.screenService.isMobileSize.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+      this.isMobileSize = result;
+    });
     this.currencyService.currencyRate
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(rates => {
@@ -114,11 +117,6 @@ export class ItemViewComponent implements OnInit {
       this.ref.detectChanges();
     });
   }
-
-  @HostListener('window:resize', ['$event'])
-  onResize(event) {
-    this.isMobileSize = ScreenHelper.isMobileSize();
-  }
   selectAll() {
     this.sharedItemService.selectAll();
   }
@@ -137,11 +135,6 @@ export class ItemViewComponent implements OnInit {
 
   trackByFn(index, item) {
     return index;
-  }
-
-  openModal(id, item) {
-    this.modalService.open(id);
-    this.modalService.setElement(id, item);
   }
   navigate(event) {
     this.router.navigate([], { queryParams: {page: event}, queryParamsHandling: 'merge' });
