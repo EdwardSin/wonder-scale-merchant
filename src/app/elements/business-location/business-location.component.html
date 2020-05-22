@@ -7,7 +7,7 @@
     [(ngModel)]="mapController.address.address" [disabled]="disabled"/>
   <div class="position-relative w-100">
     <ul class="list-group suggestions" *ngIf="mapController?.suggestions?.length && mapController?.displayed">
-      <li [class.hover]="mapController.hovered == i" *ngFor="let suggestion of mapController?.displaySuggestions; let i = index;"
+      <li [class.hover]="mapController.hovered == i" *ngFor="let suggestion of mapController?.suggestions; let i = index;"
         (click)="$event.stopPropagation(); mapController.hovered = i; mapController.onAddressChanged()">
         <span class="ws-main fas fa-map-marker-alt pr-2"></span>{{suggestion}}</li>
     </ul>

@@ -19,7 +19,6 @@ import { DocumentHelper } from '@helpers/documenthelper/document.helper';
 import { PriceHelper } from '@helpers/pricehelper/price.helper';
 import { ScreenHelper } from '@helpers/screenhelper/screen.helper';
 import { WsLoading } from '@elements/ws-loading/ws-loading';
-import { WsModalService } from '@elements/ws-modal/ws-modal.service';
 import { WsToastService } from '@elements/ws-toast/ws-toast.service';
 import _ from 'lodash';
 import { Subject, BehaviorSubject, interval, of } from 'rxjs';
@@ -30,6 +29,7 @@ import { SharedItemService } from '@services/shared/shared-item.service';
 import { SharedNavbarService } from '@services/shared/shared-nav-bar.service';
 import * as moment from 'moment';
 import { AuthShopUserService } from '@services/http/auth-user/auth-shop-user.service';
+import { ScreenService } from '@services/general/screen.service';
 
 @Component({
   selector: 'app-main',
@@ -79,11 +79,11 @@ export class MainComponent implements OnInit {
     private sharedCategoryService: SharedCategoryService,
     private sharedShopService: SharedShopService,
     private sharedUserService: SharedUserService,
-    private modalService: WsModalService,
     private userService: UserService,
     private routePartsService: RoutePartsService,
     private shopAuthorizationService: ShopAuthorizationService,
     private activeRoute: ActivatedRoute,
+    private screenService: ScreenService,
     private sharedLoadingService: SharedLoadingService,
     private authShopUserService: AuthShopUserService,
     private sharedNavbarService: SharedNavbarService,
@@ -93,24 +93,29 @@ export class MainComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.isMobileSize = ScreenHelper.isMobileSize();
-    this.isNavOpen = !this.isMobileSize;
     this.shop_username = this.route.snapshot.params['username'];
-    this.sharedNavbarService.isNavSubject.next(this.isNavOpen);
     this.router.events.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(event => {
         if (event instanceof NavigationEnd) {
+          this.sharedItemService.editItems.next([]);
           if (this.isMobileSize) {
             this.isNavOpen = false;
             this.sharedNavbarService.isNavSubject.next(this.isNavOpen);
           }
-          this.sharedItemService.editItems.next([]);
           this.routeParts = this.routePartsService.generateRouteParts(this.activeRoute.snapshot);
           if (this.routeParts[1]['title'] == 'cat') {
             this.category_name = RoutePartsService.parseText(this.routeParts[0]);
           }
         }
       })
+    this.screenService.isMobileSize.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+      this.isMobileSize = result; 
+      this.isNavOpen = true;
+      if (this.isMobileSize) {
+        this.isNavOpen = false;
+        this.sharedNavbarService.isNavSubject.next(this.isNavOpen);
+      }
+    })
     this.sharedUserService.user.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
         if (result) {
@@ -212,10 +217,6 @@ export class MainComponent implements OnInit {
         }
       });
   }
-  @HostListener('window:resize', ['$event'])
-  onResize(event) {
-    this.isMobileSize = ScreenHelper.isMobileSize();
-  }
   getContributors() {
     if (this.shop) {
       this.contributorController.existsContributors = this.shop.contributors;
@@ -267,6 +268,7 @@ export class MainComponent implements OnInit {
             this.router.navigate(['catalogue', 'custom', obj.name]);
           }
           category['name'] = this.edit_new_name;
+          this.setEditCategory('');
         }, (err) => {
           WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
         });
@@ -288,9 +290,8 @@ export class MainComponent implements OnInit {
       });
   }
   openRemoveModal(category) {
-    this.modalService.open('confirmModal');
     this.selectedCategory = category;
-    this.modalService.setElement('confirmModal', category);
+    this.isRemoveCategoryConfirmationModalOpened = true;
   }
   setEditCategory(name) {
     this.editname = name;
@@ -326,11 +327,7 @@ export class MainComponent implements OnInit {
       .rearrangeCategories({ categories: this.categories.map(x => x._id) })
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
-        WsToastService.toastSubject.next({ content: 'Rearrange done!', type: 'success' });
       });
-  }
-  closeModal(id) {
-    this.modalService.close(id);
   }
   isNavOpenChange(event){
     this.isNavOpen = event;

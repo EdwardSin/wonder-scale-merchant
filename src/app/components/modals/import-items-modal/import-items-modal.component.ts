@@ -2,12 +2,12 @@ import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@an
 import { AuthItemContributorService } from '@services/http/auth-shop/contributor/auth-item-contributor.service';
 import { SharedLoadingService } from '@services/shared/shared-loading.service';
 import { SharedShopService } from '@services/shared/shared-shop.service';
-import { WsModalClass } from '@elements/ws-modal/ws-modal';
-import { WsModalService } from '@elements/ws-modal/ws-modal.service';
 import _ from 'lodash';
 import { takeUntil } from 'rxjs/operators';
 import * as XLSX from 'xlsx';
 import { read, write } from 'xlsx';
+import { WsModalComponent } from '@elements/ws-modal/ws-modal.component';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'import-items-modal',
@@ -17,7 +17,7 @@ import { read, write } from 'xlsx';
 
 
 
-export class ImportItemsModalComponent extends WsModalClass implements OnInit {
+export class ImportItemsModalComponent extends WsModalComponent implements OnInit {
   isHeaderValid: boolean;
   isEmptyField: boolean;
   isStockValid: boolean;
@@ -25,14 +25,14 @@ export class ImportItemsModalComponent extends WsModalClass implements OnInit {
   upload_obj;
   shop;
   category_id;
+  private ngUnsubscribe: Subject<any> = new Subject;
   @ViewChild('tableView', { static: true }) tableView: ElementRef;
-  constructor(modalService: WsModalService,
+  constructor(
     private ref: ChangeDetectorRef,
     private authItemContributorService: AuthItemContributorService,
     private sharedShopService: SharedShopService,
-    private sharedLoadingService: SharedLoadingService,
-    el: ElementRef) {
-    super(modalService, el);
+    private sharedLoadingService: SharedLoadingService) {
+    super();
   }
 
   ngOnInit() {
@@ -74,7 +74,6 @@ export class ImportItemsModalComponent extends WsModalClass implements OnInit {
       this.tableView.nativeElement.innerHTML += htmlstr;
     };
     reader.readAsArrayBuffer(file);
-    super.setElement(event);
   }
   headerValidate(sheet) {
     return sheet['A1'].v == 'ID' && sheet['B1'].v == 'Name' && sheet['C1'].v == 'Price' &&

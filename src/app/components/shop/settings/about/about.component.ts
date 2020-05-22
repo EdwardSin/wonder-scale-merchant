@@ -22,7 +22,6 @@ import { Address } from '@objects/address';
 import { Timetable } from '@objects/ws-timetable';
 import { MapController } from '@objects/map.controller';
 import { WsGpsService } from '@services/general/ws-gps.service';
-import { WsModalService } from '@elements/ws-modal/ws-modal.service';
 import { WsToastService } from '@elements/ws-toast/ws-toast.service';
 import { forkJoin as observableForkJoin, Subject, interval } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
@@ -105,7 +104,6 @@ export class AboutComponent implements OnInit {
     private authShopContributorService: AuthShopContributorService,
     private authShopAdminService: AuthShopAdminService,
     private authDefaultSettingAdminService: AuthDefaultSettingAdminService,
-    private modalService: WsModalService,
     private gpsService: WsGpsService,
     private router: Router,
     private route: ActivatedRoute,
@@ -441,13 +439,10 @@ export class AboutComponent implements OnInit {
         WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
       })
   }
-  openModal(id, element = null) {
-    this.modalService.open(id);
-    if (element) {
-      this.contributorController.selectedContributor = element;
-      this.contributorController.newRole = element.role;
-    }
-    this.modalService.setElement(id, this.contributorController);
+  openEditContributorModal(contributor) {
+    this.isEditContributorModalOpened = true;
+    this.contributorController.selectedContributor = contributor;
+    this.contributorController.newRole = contributor.role;
   }
   disabledControls() {
     this.isShowLocation = !this.isShowLocation;
@@ -545,8 +540,8 @@ export class AboutComponent implements OnInit {
       let Croppie = window['Croppie'];
       this.croppieObj = new Croppie(document.getElementById('id-banner-preview-image'), {
         viewport: {
-          width: 800,
-          height: 480,
+          width: 300,
+          height: 180,
           type: 'rectangle'
         }
       });

@@ -14,12 +14,12 @@ import { SharedShopService } from '@services/shared/shared-shop.service';
 import { WsLoading } from '@elements/ws-loading/ws-loading';
 import { ArrayHelper } from '@helpers/arrayhelper/array.helper';
 import { ScreenHelper } from '@helpers/screenhelper/screen.helper';
-import { WsModalService } from '@elements/ws-modal/ws-modal.service';
 import { WsToastService } from '@elements/ws-toast/ws-toast.service';
 import _ from 'lodash';
 import * as moment from 'moment';
 import { forkJoin as observableForkJoin, Subject } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
+import { ScreenService } from '@services/general/screen.service';
 
 @Component({
   selector: 'item-controller',
@@ -39,6 +39,7 @@ export class ItemControllerComponent implements OnInit {
   categoryList: Array<any> = [];
   selectedCategory = '';
   isAdvertised: boolean;
+  categoriesLoading: WsLoading = new WsLoading;
   loading: WsLoading = new WsLoading;
   environment = environment;
 
@@ -64,7 +65,6 @@ export class ItemControllerComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private modalService: WsModalService,
     private authShopContributorService: AuthShopContributorService,
     private sharedCategoryService: SharedCategoryService,
     private sharedShopService: SharedShopService,
@@ -72,6 +72,7 @@ export class ItemControllerComponent implements OnInit {
     private authItemContributorService: AuthItemContributorService,
     private authCategoryContributorService: AuthCategoryContributorService,
     private router: Router,
+    private screenService: ScreenService,
     private ref: ChangeDetectorRef
   ) { }
 
@@ -103,12 +104,9 @@ export class ItemControllerComponent implements OnInit {
         this.displayItems = res;
       }
     })
-    this.isMobileSize = ScreenHelper.isMobileSize();
-  }
-
-  @HostListener('window:resize', ['$event'])
-  onResize(event) {
-    this.isMobileSize = ScreenHelper.isMobileSize();
+    this.screenService.isMobileSize.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+      this.isMobileSize = result;
+    })
   }
   publishItems() {
     var editItems = this.editItems;
@@ -177,21 +175,20 @@ export class ItemControllerComponent implements OnInit {
   }
   // openMultipleEditModal() {
   //   this.action = this.editMultipleItems.bind(this);
-  //   return this.openModal('editMultipleItemsModal');
   // }
   openAddToModal() {
-    this.getCategoryByShopId();
+    this.getCategoriesByShopId();
+    this.isAddToCategoriesModalOpened = true;
     this.action = this.onAddItemToCategory.bind(this, this.editItems);
-    this.openModal('addToCategoriesModal');
   }
   openMoveModal() {
-    this.getCategoryByShopId();
+    this.getCategoriesByShopId();
+    this.isMoveToCategoriesModalOpened = true;
     this.action = this.onMoveCategory.bind(this, this.editItems);
-    this.openModal('moveToCategoriesModal');
   }
   openRemoveModal() {
     this.action = this.param == 'uncategorized' ? this.removeItemsPermanantly.bind(this) : this.removeItemsFromCategory.bind(this);
-    this.openModal('removeItemsModal');
+    this.isRemoveAllSelectedItemModalConfirmationOpened = true;
   }
   checkSelectedItems() {
     if (!this.editItems.length) {
@@ -233,12 +230,13 @@ export class ItemControllerComponent implements OnInit {
 
     this.authCategoryContributorService
       .addItemsToCategory(itemAndCategoryList)
-      .pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.loading.stop()))
+      .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
         this.sharedCategoryService.refreshCategories(() => {
-          this.deselectCategories();
-          this.closeModal('addToCategoriesModal');
           WsToastService.toastSubject.next({ content: "Added to category!", type: 'success' });
+          this.deselectCategories();
+          this.isAddToCategoriesModalOpened = false;
+          this.loading.stop()
         })
       });
   }
@@ -256,11 +254,12 @@ export class ItemControllerComponent implements OnInit {
 
     this.authCategoryContributorService
       .moveCategory(itemAndCategoryList)
-      .pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.loading.stop()))
+      .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
         this.sharedCategoryService.refreshCategories(() => {
           this.deselectCategories();
-          this.closeModal('moveToCategoriesModal');
+          this.isMoveToCategoriesModalOpened = false;
+          this.loading.stop();
           WsToastService.toastSubject.next({ content: "Moved to category!", type: 'success' });
         })
       }, (err) => {
@@ -306,7 +305,6 @@ export class ItemControllerComponent implements OnInit {
         .subscribe(result => {
           ArrayHelper.clear(this.tag.tags);
           this.sharedCategoryService.refreshCategories(() => {
-            this.closeModal('editMultipleItemsModal');
             WsToastService.toastSubject.next({ content: "Items are edited!", type: 'success' });
           })
         }, (err) => {
@@ -352,10 +350,11 @@ export class ItemControllerComponent implements OnInit {
         WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
       });
   }
-  getCategoryByShopId() {
+  getCategoriesByShopId() {
     this.categoryName = this.route.snapshot.params['name'];
+    this.categoriesLoading.start();
     this.authCategoryContributorService.getAuthenticatedCategoriesByShopId()
-      .pipe(takeUntil(this.ngUnsubscribe))
+      .pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.categoriesLoading.stop()))
       .subscribe(result => {
         var categoryList = result['result'];
         this.categoryList = result['result'];
@@ -369,20 +368,6 @@ export class ItemControllerComponent implements OnInit {
   isCategoryInCategoryList(category) {
     var editCategoryList = this.editCategoryList;
     return _.includes(editCategoryList, category);
-  }
-  openModal(id) {
-    this.modalService.open(id);
-  }
-  closeModal(id: string) {
-    this.modalService.close(id);
-  }
-  removeItem() {
-    this.modalService.open('deleteModal');
-    this.modalService.close('editItemModal');
-  }
-  backToEdit() {
-    this.modalService.close('confirmationModal');
-    this.modalService.open('editItemModal');
   }
   isOrder(order) {
     return this.searchController.order === order;
@@ -477,7 +462,6 @@ export class ItemControllerComponent implements OnInit {
       date.getFullYear()
     );
   }
-
   ngOnDestroy() {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();

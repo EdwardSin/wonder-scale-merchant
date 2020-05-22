@@ -116,3 +116,13 @@
     text-decoration: underline
   }
 }
+
+@media(max-width:992px) {
+  .modal{
+    .modal-body {
+      .modal-content {
+        padding: 2rem;
+      }
+    }
+  }
+}

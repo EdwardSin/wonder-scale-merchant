@@ -7,6 +7,7 @@ import { SharedShopService } from '@services/shared/shared-shop.service';
 import { SharedUserService } from '@services/shared/shared-user.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { ScreenService } from '@services/general/screen.service';
 
 @Component({
   selector: 'app-header',
@@ -15,8 +16,10 @@ import { takeUntil } from 'rxjs/operators';
 })
 export class HeaderComponent implements OnInit {
   user;
+  isMobileSize;
   private ngUnsubscribe: Subject<any> = new Subject;
   constructor(private router: Router,
+    private screenService: ScreenService,
     private authUserService: AuthUserService,
     private authenticationService: AuthenticationService,
     private sharedShopService: SharedShopService,
@@ -31,6 +34,9 @@ export class HeaderComponent implements OnInit {
       if (result) {
         this.getUser();
       }
+    });
+    this.screenService.isMobileSize.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+      this.isMobileSize = result;
     })
   }
   getUser() {

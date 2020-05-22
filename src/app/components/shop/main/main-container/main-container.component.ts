@@ -7,7 +7,7 @@ import { Subject } from 'rxjs';
 import { ShopAuthorizationService } from '@services/http/general/shop-authorization.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthShopAdminService } from '@services/http/auth-shop/admin/auth-shop-admin.service';
-import { WsModalService } from '@elements/ws-modal/ws-modal.service';
+import { ScreenService } from '@services/general/screen.service';
 
 @Component({
   selector: 'main-container',
@@ -23,7 +23,7 @@ export class MainContainerComponent implements OnInit {
   private ngUnsubscribe: Subject<any> = new Subject;
   constructor(private router: Router,
     private route: ActivatedRoute,
-    private modalService: WsModalService,
+    private screenService: ScreenService,
     private authShopAdminService: AuthShopAdminService,
     private sharedShopService: SharedShopService,
     private shopAuthorizationService: ShopAuthorizationService,
@@ -31,13 +31,15 @@ export class MainContainerComponent implements OnInit {
 
   ngOnInit() {
     this.shop = this.sharedShopService.shop.getValue();
-    this.isMobileSize = ScreenHelper.isMobileSize();
     this.sharedShopService.shop.pipe(takeUntil(this.ngUnsubscribe))
     .subscribe(result => {
       if (result) {
         this.shop = result;
       }
     })
+    this.screenService.isMobileSize.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+      this.isMobileSize = result;
+    });
     this.sharedNavbarService.isNavSubject.pipe(takeUntil(this.ngUnsubscribe)).subscribe(res => {
       this.isNavOpen = res;
     });
@@ -45,10 +47,6 @@ export class MainContainerComponent implements OnInit {
     .subscribe(result => {
       this.isAdminAuthorized = result;
     });
-  }
-  @HostListener('window:resize', ['$event'])
-  onResize(event) {
-    this.isMobileSize = ScreenHelper.isMobileSize();
   }
   onNavbarOpen() {
     this.isNavOpen = !this.isNavOpen
@@ -63,9 +61,5 @@ export class MainContainerComponent implements OnInit {
       this.shop.status.expiryDate = null;
       this.sharedShopService.shop.next(this.shop);
     });
-  }
-  openModal(id, element=null) {
-    this.modalService.open(id);
-    this.modalService.setElement(id, element);
   }
 }

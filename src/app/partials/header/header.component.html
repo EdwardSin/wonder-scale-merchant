@@ -1,7 +1,9 @@
 <header [class.header__collapsed]="isShrink">
-  <img class="mx-1" style="width: 24px; height:24px;margin-top: -2px" src="../../assets/images/png/icon.png" alt="icon.png" />
+  <div class="d-inline-block" style="line-height: 41px">
+    <img class="mx-1" style="width: 24px; height:24px; margin-top: -2px" src="../../assets/images/png/icon.png" alt="icon.png" />
+  </div>
   <div class="logo" [routerLink]="['/']">
-    <span style="vertical-align: middle">Wonder Scale</span>
+    <span *ngIf="!isMobileSize" style="vertical-align: middle">Wonder Scale</span>
   </div>
   <ul *ngIf="user" class="ws-nav list-unstyled">
     <li>
@@ -11,9 +13,9 @@
   <div class="user-container float-right d-inline-block">
     <div *ngIf="!user" class="user__login-container d-inline-block"
       style="font-size: .9rem; line-height: 41px; vertical-align: middle">
-      <a class="user__link" href="javascript:void(0)" (click)="navigateToLogin()">Login</a>
+      <a class="user-container__link" href="javascript:void(0)" (click)="navigateToLogin()">Login</a>
       <span class="ws-white">|</span>
-      <a class="user__link" href="javascript:void(0)" (click)="navigateToSignup()">Sign-up</a>
+      <a class="user-container__link" href="javascript:void(0)" (click)="navigateToSignup()">Sign-up</a>
     </div>
     <div *ngIf="false" class="btn-group mr-1 d-none d-md-inline-block" mdbDropdown>
       <div mdbDropdownToggle class="li-container dropdown-toggle">
@@ -44,24 +46,5 @@
         <a class="dropdown-item" (click)="logout()">Logout</a>
       </div>
   </div>
-
-
-    <div *ngIf="false && user" class="btn-group mr-2" mdbDropdown>
-      <div mdbDropdownToggle class="li-container dropdown-toggle">
-        <img class='mr-1' src="{{user?.profileImage}}" alt="profile" />
-        <span class="fas fa-chevron-down" style="color: #888; font-size: .6rem; vertical-align: sub"></span>
-      </div>
-      <div class="dropdown-menu dropdown-primary" style="margin-top: 20px; right:0; left: inherit">
-        <div style="padding: 0.25rem 1.5rem">{{user?.firstName}} {{user?.lastName}}
-          <!-- <span style="font-size: .8rem" class="mt-2 d-block text-muted">@{{user?.username}}</span> -->
-        </div>
-        <div class="divider dropdown-divider"></div>
-        <a *ngIf="false" class="dropdown-item" [routerLink]="['profile']">Settings</a>
-        <a class="dropdown-item" [routerLink]="['shops/all']">All Shops</a>
-        <a *ngIf="false" class="dropdown-item" href="https://www.wonderscale.com">To Wonder Scale</a>
-        <div class="divider dropdown-divider"></div>
-        <a class="dropdown-item" (click)="logout()">Logout</a>
-      </div>
-    </div>
   </div>
 </header>

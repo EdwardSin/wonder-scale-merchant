@@ -19,8 +19,10 @@
   <div id="{{id}}" class="modal-wrap">
       <div class="modal-body">
           <div class="modal-body-content" [style.max-width.px]="maxWidth">
-              <div class="px-lg-5 px-3 pb-4 pt-3 modal-content">
-                  <span *ngIf="isCloseIconDisplayed" class="modal__close-icon fas fa-times" (click)="isOpened = false"></span>
+              <div class="px-lg-5 px-3 py-4 modal-content">
+                  <div class="modal-close">
+                    <span *ngIf="isCloseIconDisplayed" class="fas fa-times" (click)="close()"></span>
+                  </div>
                   <ng-content select="[modalBody]"></ng-content>
               </div>
           </div>

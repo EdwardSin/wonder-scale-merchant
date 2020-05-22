@@ -5,7 +5,7 @@
       class="col-6 col-sm-2 square p-1" *ngFor="let item of displayItems; let i = index; trackBy: trackByFn"
       (click)="$event.stopPropagation(); addToItemList(item);">
       <div settingCog class="item-setting">
-        <div class="item-setting-item" (click)="$event.stopPropagation(); openModal('createItemModal', item)">
+        <div class="item-setting-item" (click)="$event.stopPropagation();">
           <span class="fas fa-cog"></span>
         </div>
         <div class="item-setting-item">
@@ -55,7 +55,7 @@
             <span *ngIf="item?.isPublished && item?.categories.length && param != 'uncategorized'" class="badge badge-success mr-1">Published</span>
             <span *ngIf="!item?.isPublished && item?.categories.length && param != 'uncategorized'" class="badge ws-clear-color ws-bg-dark-grey">Unpublished</span>
           </td>
-          <td>
+          <td width="100">
             <a title="Edit Item" href="javascript:void(0)" class="ws-dark-color btn-link p-2 mr-1" (click)="$event.stopPropagation();"
               [routerLink]="['', { outlets: {modal: 'item'}}]" [queryParams]="{id: item?._id}" [queryParamsHandling]="'merge'">
               <span class="fas fa-edit"></span>

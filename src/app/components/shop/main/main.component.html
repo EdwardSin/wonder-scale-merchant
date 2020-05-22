@@ -53,8 +53,8 @@
           <hr class="m-0" />
           <li cdkDropList (cdkDropListDropped)="dropOrder($event)">
             <div *ngFor="let category of categories" class="ws-drag" cdkDrag>
-              <div class="input-group" *ngIf="isEditCategory(category?.name)">
-                <input (clickOutside)="setEditCategory('')" name="category" type='text'
+              <div (clickOutside)="setEditCategory('')" class="input-group" *ngIf="isEditCategory(category?.name)">
+                <input name="category" type='text'
                   style="padding-left: 40px; height: 40px; margin-left: 4px;" class="col border-0"
                   autocomplete="off" [ngModel]="editname" (ngModelChange)="edit_new_name = $event" />
                 <a class="text-center p-0"

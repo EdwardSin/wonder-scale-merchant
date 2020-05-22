@@ -5,7 +5,6 @@ import { AuthShopContributorService } from '@services/http/auth-shop/contributor
 import { SharedShopService } from '@services/shared/shared-shop.service';
 import { WsLoading } from '@elements/ws-loading/ws-loading';
 import { DocumentHelper } from '@helpers/documenthelper/document.helper';
-import { WsModalService } from '@elements/ws-modal/ws-modal.service';
 import { WsToastService } from '@elements/ws-toast/ws-toast.service';
 import { UploadHelper } from '@helpers/uploadhelper/upload.helper';
 import { ImageHelper } from '@helpers/imagehelper/image.helper';
@@ -23,7 +22,7 @@ export class InformationComponent implements OnInit {
   allImages: Array<any> = [];
   editedFlag: boolean;
   isImagesUploading: boolean;
-  isDeleteConfiramtionModalOpened: boolean;
+  isDeletedConfirmationModalOpened: boolean;
   selectedInformation;
   environment = environment;
   removeLoading: WsLoading = new WsLoading;
@@ -31,7 +30,6 @@ export class InformationComponent implements OnInit {
   @ViewChild('informationUploadInput', { static: true }) informationUploadInput: ElementRef;
   private ngUnsubscribe: Subject<any> = new Subject();
   constructor(private sharedShopService: SharedShopService,
-    private modalService: WsModalService,
     private authShopContributorService: AuthShopContributorService) { }
 
   ngOnInit() {
@@ -121,7 +119,7 @@ export class InformationComponent implements OnInit {
           _.remove(this.allImages, image);
           _.remove(this.shop['informationImages'], image.url);
           this.numOfTotalImages--;
-          this.closeModal('deleteItemModal');
+          this.isDeletedConfirmationModalOpened = false;
           this.removeLoading.stop();
         });
     }
@@ -141,12 +139,9 @@ export class InformationComponent implements OnInit {
     this.editedFlag = true;
     moveItemInArray(this.allImages, event.previousIndex, event.currentIndex);
   }
-  openModal(id, selectedInformation) {
+  openInformationModal(selectedInformation) {
+    this.isDeletedConfirmationModalOpened = true;
     this.selectedInformation = selectedInformation;
-    this.modalService.open(id);
-  }
-  closeModal(id) {
-    this.modalService.close(id);
   }
   ngOnDestroy() {
     this.ngUnsubscribe.next();
