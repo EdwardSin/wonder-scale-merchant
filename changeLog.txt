@@ -7,6 +7,7 @@
 - 2020-05-23                                -
 ---------------------------------------------
 .: WSM: Task: Update link folder with Wonder Scale Website (WSM-54)
+.: WSM: Task: Disabled to upload customize image in QR code (WSM-20)
 
 ---------------------------------------------
 - 2020-05-20                                -
