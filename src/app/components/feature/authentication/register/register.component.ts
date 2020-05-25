@@ -105,10 +105,10 @@ export class RegisterComponent implements OnInit {
       WsToastService.toastSubject.next({ content: this.emailValidator.errors.email, type: 'danger' });
       return;
     }
-    else if (!this.telValidator.validate(telController)) {
-      WsToastService.toastSubject.next({ content: this.telValidator.errors.tel, type: 'danger' });
-      return;
-    }
+    // else if (!this.telValidator.validate(telController)) {
+    //   WsToastService.toastSubject.next({ content: this.telValidator.errors.tel, type: 'danger' });
+    //   return;
+    // }
     else if (!this.genderValidator.validate(genderController)) {
       WsToastService.toastSubject.next({ content: this.genderValidator.errors.gender, type: 'danger' });
       return;
