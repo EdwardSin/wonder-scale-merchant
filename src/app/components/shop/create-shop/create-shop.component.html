@@ -254,20 +254,16 @@
           </div>
         </form>
 
-        <div *ngSwitchCase="6" class="modal-content">
+        <div *ngSwitchCase="6" class="modal-content" style="max-width: 500px">
           <div class="modal-close" [routerLink]="['', {outlets: {modal:null}}]">
             <span class="fas fa-times"></span>
           </div>
           <div class="text-center mt-5 mb-4">
-            <span class="far fa-check-circle" style="font-size: 5rem; color:#68DC64"></span>
+            <span class="far fa-check-circle" style="font-size: 7rem; color:#68DC64"></span>
           </div>
-
-          <p class="text-center mb-5">Store is created.<br />
-            Continue to start managing and uploading items.
-          </p>
-          <div class="text-center">
-            <button class="btn btn-md btn-second" (click)="navigateToShop()">Continue</button>
-          </div>
+          <p class="text-center mb-2">Page is created.</p>
+          <p class="text-center mb-2">Start managing and uploading items.</p>
+          <p class="text-center mb-5 text-muted">Redirecting...</p>
         </div>
       </div>
     </div>

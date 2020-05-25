@@ -70,10 +70,9 @@ export class MapController{
             this.address.state = address.address.state;
             this.address.city = address.address.city;
             this.address.country = address.address.country;
-            this.address.address = MapHelper.getSelectedFormattedAddress(address);
             this.locationLoading.start();
             let coords = await new Promise((resolve, reject) => {
-                this.gpsService.geocode({ address: this.address.address }, (coords) => {
+                this.gpsService.geocode({ address: MapHelper.getSelectedFormattedAddress(address) }, (coords) => {
                     resolve(coords);
                 })
             });
