@@ -19,7 +19,7 @@ import { SharedUserService } from '@services/shared/shared-user.service';
   styleUrls: ['./reset-password.component.scss']
 })
 export class ResetPasswordComponent implements OnInit {
-
+  userLoading: WsLoading = new WsLoading;
   loading: WsLoading = new WsLoading;
   resetPasswordForm;
   resetSuccess: Boolean;
@@ -40,8 +40,12 @@ export class ResetPasswordComponent implements OnInit {
   }
   getResetPasswordUser() {
     this.resetToken = this.route.snapshot.params.token;
+    this.userLoading.start();
     this.userService.resetUserFromLink(this.resetToken).pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       this.user = result;
+      _.delay(() => {
+        this.userLoading.stop();
+      },2000);
     })
   }
   resetPassword() {
