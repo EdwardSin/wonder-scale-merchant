@@ -4,6 +4,7 @@ import { AuthUserUrl } from '@enum/url.enum';
 import { User } from '@objects/user';
 import { Result } from '@objects/result';
 import { Observable } from 'rxjs';
+import { environment } from '@environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -30,6 +31,7 @@ export class AuthUserService {
     return this.http.put(AuthUserUrl.editGeneralUrl, obj);
   }
   changePassword(obj) {
-    return this.http.put(AuthUserUrl.changePasswordUrl, obj);
+    let source = environment.SOURCE || 'website';
+    return this.http.put(AuthUserUrl.changePasswordUrl, {...obj, source});
   };
 }

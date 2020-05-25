@@ -8,6 +8,10 @@ import { WsToastService } from '@elements/ws-toast/ws-toast.service';
 import { Subject } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
 import { UserService } from '@services/http/general/user.service';
+import { environment } from '@environments/environment';
+import * as _ from 'lodash';
+import { AuthUserService } from '@services/http/general/auth-user.service';
+import { SharedUserService } from '@services/shared/shared-user.service';
 
 @Component({
   selector: 'app-reset-password',
@@ -25,6 +29,8 @@ export class ResetPasswordComponent implements OnInit {
   private ngUnsubscribe: Subject<any> = new Subject;
   constructor(private router: Router,
     private userService: UserService,
+    private authUserService: AuthUserService,
+    private sharedUserService: SharedUserService,
     private route: ActivatedRoute) {
   }
 
@@ -44,6 +50,11 @@ export class ResetPasswordComponent implements OnInit {
       this.userService.resetPassword({ email: this.user.email, password: this.resetPasswordForm.value.password, confirmPassword: this.resetPasswordForm.value.confirmPassword, resetToken: this.resetToken }).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.loading.stop()))
         .subscribe(result => {
           this.resetSuccess = true;
+          this.getUser(() => {
+            _.delay(() => {
+              this.router.navigateByUrl(environment.RETURN_URL);
+            }, 2000);
+          });
         }, err => {
           console.log(err);
           WsToastService.toastSubject.next({ content: err.error.message, type: 'danger' });
@@ -66,5 +77,13 @@ export class ResetPasswordComponent implements OnInit {
     this.router.navigate([{ outlets: {modal: null}} ]);
   }
   get password() { return this.resetPasswordForm.get("password"); }
-
+  getUser(callback) {
+    this.authUserService.getUser().pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(result => {
+        this.sharedUserService.user.next(result.result);
+        if(callback) {
+          callback();
+        }
+      })
+  }
 }

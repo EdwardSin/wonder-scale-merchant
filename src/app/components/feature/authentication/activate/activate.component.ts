@@ -45,10 +45,11 @@ export class ActivateComponent implements OnInit {
     this.userService.activateAccount(token).pipe(takeUntil(this.ngUnsubscribe), finalize(() => {this.loading.stop();}))
       .subscribe(result => {
         this.activateSuccess = true;
-        this.getUser();
-        _.delay(() => {
-          this.router.navigateByUrl(environment.RETURN_URL);
-        }, 3000);
+        this.getUser(() => {
+          _.delay(() => {
+            this.router.navigateByUrl(environment.RETURN_URL);
+          }, 2000);
+        });
       }, (err) => {
         this.activateSuccess = false;
       })
@@ -68,10 +69,13 @@ export class ActivateComponent implements OnInit {
         WsToastService.toastSubject.next({ content: err.error.message, type: 'danger' });
       })
   }
-  getUser() {
+  getUser(callback) {
     this.authUserService.getUser().pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
         this.sharedUserService.user.next(result.result);
+        if(callback) {
+          callback();
+        }
       })
   }
 }
