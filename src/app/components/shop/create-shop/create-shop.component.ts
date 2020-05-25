@@ -13,6 +13,7 @@ import { MapController } from '@objects/map.controller';
 import { WsGpsService } from '@services/general/ws-gps.service';
 import { Subject } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'create-shop',
@@ -178,6 +179,9 @@ export class CreateShopComponent implements OnInit {
         .subscribe(result => {
           this.shop = <Shop>result['result'];
           this.phase.next();
+          _.delay(() => {
+            this.navigateToShop();
+          }, 3000);
         }, (err) => {
           WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
         })

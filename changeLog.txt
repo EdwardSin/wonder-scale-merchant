@@ -8,6 +8,7 @@
 ---------------------------------------------
 .: WSM: Task: Remove tel required from registration (WSM-2)
 .: WSM: BugFix: Open url in correct domain (WSM-74)
+.: WSM: Task: Update create shop flow (WSM-24)
 
 ---------------------------------------------
 - 2020-05-23                                -
