@@ -82,9 +82,6 @@ export class CreateShopComponent implements OnInit {
       if (this.basicFormGroup.valid) {
         this.phase.next();
       }
-      else {
-        WsToastService.toastSubject.next({ content: 'Please complete the form.', type: 'danger' });
-      }
     }
     else if (this.phase.isStep(3)) {
       if (!this.addressFormGroup.value.isShowLocation || this.addressFormGroup.valid) {
@@ -105,10 +102,10 @@ export class CreateShopComponent implements OnInit {
   }
   createBasicForm() {
     this.basicFormGroup = this.formBuilder.group({
-      name: ['', Validators.required],
-      tel: ['', Validators.required],
+      name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(40)]],
+      tel: ['', [Validators.required, Validators.maxLength(30)]],
       email: ['', [Validators.minLength(3), Validators.maxLength(30), Validators.email]],
-      website: ['', [Validators.minLength(3), Validators.maxLength(30)]],
+      website: ['', [Validators.minLength(3), Validators.maxLength(128)]],
       currency: ['', [Validators.required]]
     });
   }
