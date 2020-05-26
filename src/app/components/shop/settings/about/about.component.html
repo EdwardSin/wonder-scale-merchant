@@ -12,8 +12,10 @@
     </div>
     <div style="background-color: rgba(0,0,0,.2); max-width: 465px; width: 100%; height: 60%; margin-bottom: 3rem">
         <div>
-            <img class="img-profile" [src]="profileImage" alt="Shop Profile" />
-            <span class="img-profile img-hover">
+            <div class="img-profile__container">
+                <img class="img-profile" [src]="profileImage" alt="Shop Profile" />
+            </div>
+            <span class="img-profile-camera img-hover">
                 <div class="profile-settings__profile-image-upload" mdbDropdown>
                     <span *ngIf="!isProfileImageUploading.isRunning()" class="camera nooutline" mdbDropdownToggle>
                         <span class="fas fa-camera"></span>
