@@ -1,15 +1,32 @@
 @import '../../../../../assets/scss/variables.scss';
 
-.img-profile {
+.img-profile__container{
     border-radius: 50%;
     width: 100px;
     height: 100px;
     position: absolute;
     bottom: -50px;
     left: calc(5%);
-    border: 3px solid #fff;
+    border: 2px solid #ccc;
     transition: .3s ease;
+    background-color: #fff;
 
+    .img-profile {
+        height: 100%;
+        width: 100%;
+        border-radius: 50%;
+        position: relative;
+    }
+}
+.img-profile-camera{
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    bottom: -50px;
+    left: calc(5%);
+    border: 2px solid #ccc;
+    transition: .3s ease;
     .img-profile__uploading {
         position: absolute;
         top: 0;
