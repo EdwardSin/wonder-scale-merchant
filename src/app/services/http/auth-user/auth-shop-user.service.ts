@@ -7,6 +7,7 @@ import { tap } from 'rxjs/operators';
 import { SharedShopService } from '../../shared/shared-shop.service';
 import { SharedUserService } from '../../shared/shared-user.service';
 import { CurrencyService } from '../general/currency.service';
+import { environment } from '@environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -43,7 +44,8 @@ export class AuthShopUserService {
     }));
   }
   addShop(shop) {
-    return this.http.post(AuthShopUserUrl.addShopUrl, shop);
+    let source = environment.SOURCE || 'website';
+    return this.http.post(AuthShopUserUrl.addShopUrl, {...shop, source});
   }
   getContributorRole(shop, user) {
     return shop.contributors.find(contributor => contributor.user == user._id);

@@ -234,7 +234,7 @@
           </div>
         </form>
 
-        <form *ngSwitchCase="4" class="modal-content" [formGroup]="openingInfoFormGroup"
+        <form *ngSwitchCase="4" class="modal-content" style="width: fit-content" [formGroup]="openingInfoFormGroup"
           (keydown.enter)="$event.preventDefault()">
           <div class="modal-close">
             <span class="fas fa-times" [routerLink]="['', {outlets: {modal:null}}]"></span>
