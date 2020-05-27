@@ -159,6 +159,7 @@ export class CreateShopComponent implements OnInit {
     shop.email = [this.basicFormGroup.value.email];
     shop.website = [this.basicFormGroup.value.website];
     shop['currency'] = this.basicFormGroup.value.currency;
+    shop.showAddress = this.addressFormGroup.value.isShowLocation;
     if (this.addressFormGroup.value.isShowLocation) {
       shop.fullAddress = {
         address: this.addressFormGroup.value.address,
