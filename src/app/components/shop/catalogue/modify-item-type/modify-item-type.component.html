@@ -52,6 +52,7 @@
                             <img src="{{environment.IMAGE_URL + image?.name}}" class="image-upload" alt="item.png" />
                             <div class="corner-setting">
                               <span class="corner-setting-item fas fa-times" (click)="$event.stopPropagation();removeItemTypeImage(image?.name, 
+                              itemTypesForm.controls.itemTypes.controls[i],
                         itemTypesForm.controls.itemTypes.value[i])"></span>
                             </div>
                           </div>
@@ -67,6 +68,7 @@
                             <img [src]="image?.url" data-upload='img_upload' class="image-upload" alt="item.png" />
                             <div class="corner-setting">
                               <span class="corner-setting-item fas fa-times" (click)="$event.stopPropagation();removeItemTypeImage(image?.name, 
+                              itemTypesForm.controls.itemTypes.controls[i],
                         itemTypesForm.controls.itemTypes.value[i])"></span>
                             </div>
                           </div>

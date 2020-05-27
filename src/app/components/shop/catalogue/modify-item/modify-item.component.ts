@@ -221,6 +221,14 @@ export class ModifyItemComponent implements OnInit {
       ...this.itemGroup.value,
       profileImageIndex: this.profileImageIndex
     };
+    if (this.allProfileItems.length) {
+       let allProfileItems = this.allProfileItems.filter(x => x.type == 'url');
+       currentItem.profileImages = allProfileItems.map(x => x.name);
+    }
+    if (this.allDescriptionItems.length) {
+       let allDescriptionItems = this.allDescriptionItems.filter(x => x.type == 'url');
+       currentItem.descriptionImages = allDescriptionItems.map(x => x.name);
+    }
     return this.authItemContributorService.editItem(currentItem);
   }
   uploadAndAddItem() {
@@ -289,11 +297,13 @@ export class ModifyItemComponent implements OnInit {
     uploadProfileItems.forEach(image => { image.loading = true; })
     return from(uploadProfileItems)
       .pipe(mergeMap(image => {
+        let index = this.allProfileItems.indexOf(image);
         let obj = {
           id: image['id'],
           file: image['base64'],
           profileImageIndex: this.profileImageIndex,
-          itemId: this.itemId
+          itemId: this.itemId,
+          position: index
         };
         return this.authItemContributorService.editProfileImage(obj);
       }), map(result => {
@@ -305,10 +315,12 @@ export class ModifyItemComponent implements OnInit {
     uploadDescriptionItems.forEach(image => { image.loading = true; });
     return from(uploadDescriptionItems)
       .pipe(mergeMap(image => {
+        let index = this.allDescriptionItems.indexOf(image);
         let obj = {
           id: image['id'],
           file: image['base64'],
-          itemId: this.itemId
+          itemId: this.itemId,
+          position: index
         };
         return this.authItemContributorService.editDescriptionImage(obj)
       }),
@@ -323,8 +335,9 @@ export class ModifyItemComponent implements OnInit {
     
     if (file) {
       if(file.type == 'blob') {
+        let removeIndex = this.allProfileItems.indexOf(file);
+        this.profileImageIndex = ImageHelper.getRemoveProfileImageIndex(this.allProfileItems.length, removeIndex, this.profileImageIndex);
         _.remove(this.allProfileItems, (x) => x == file);
-        this.profileImageIndex = ImageHelper.getRemoveProfileImageIndex(this.profileImageIndex);
         this.profileImageName = this.allProfileItems.length ? this.allProfileItems[this.profileImageIndex].name : '';
       }
       else {
@@ -336,8 +349,9 @@ export class ModifyItemComponent implements OnInit {
           }
           this.authItemContributorService.removeProfileImage(obj).pipe(takeUntil(this.ngUnsubscribe))
             .subscribe(result => {
+              let removeIndex = this.allProfileItems.indexOf(file);
+              this.profileImageIndex = ImageHelper.getRemoveProfileImageIndex(this.allProfileItems.length, removeIndex, this.profileImageIndex);
               this.allProfileItems = this.allProfileItems.filter(x => x.name != filename);
-              this.profileImageIndex = ImageHelper.getRemoveProfileImageIndex(this.profileImageIndex);
               this.profileImageName = this.allProfileItems.length ? this.allProfileItems[this.profileImageIndex].name : '';
             });
         }
@@ -383,6 +397,7 @@ export class ModifyItemComponent implements OnInit {
   }
   dropProfile(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.allProfileItems, event.previousIndex, event.currentIndex);
+    this.profileImageIndex = this.allProfileItems.findIndex(x => x.name == this.profileImageName);
   }
   dropDescription(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.allDescriptionItems, event.previousIndex, event.currentIndex);
