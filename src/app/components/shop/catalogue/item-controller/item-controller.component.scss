@@ -149,6 +149,10 @@
         &:hover {
             background-color: #ebecf0;
         }
+        &:active{
+            color: #fff;
+            background-color: #282C35;
+        }
         span {
             display: block;
             justify-content: center;

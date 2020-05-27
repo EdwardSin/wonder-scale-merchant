@@ -75,15 +75,17 @@ export class ModifyItemTypeComponent implements OnInit {
       itemTypes.push(form);
     });
   }
-  uploadItemImages(images, itemTypeId) {
+  uploadItemImages(allImages, images, itemTypeId) {
     images.forEach(image => image.loading = true);
     return from(images)
     .pipe(mergeMap(image => {
+      let index = allImages.indexOf(image);
       let obj = {
         id: image['id'],
         file: image['base64'],
         itemId: this.itemId,
-        itemTypeId
+        itemTypeId,
+        position: index
       }
       return this.authItemContributorService.editItemTypeImage(obj);
     }),
@@ -91,11 +93,13 @@ export class ModifyItemTypeComponent implements OnInit {
         this.doneUpload(images, result['id'], result['filename'])
       }));
   }
-  removeItemTypeImage(filename, itemType) {
+  removeItemTypeImage(filename, itemTypeControl, itemType) {
+    console.log();
     var file = ImageHelper.getUploadProfileItem(itemType.images, filename);
     if (file) {
       if(file.type == 'blob') {
         _.remove(itemType.images, (x) => x.name == filename);
+        itemTypeControl.controls['images'].setValue(itemType.images);
         file['done'] = false;
       }
       else {
@@ -109,6 +113,7 @@ export class ModifyItemTypeComponent implements OnInit {
           this.authItemContributorService.removeImage(obj).pipe(takeUntil(this.ngUnsubscribe))
             .subscribe(() => {
               itemType.images = itemType.images.filter(x => x.name != filename);
+              itemTypeControl.controls['images'].setValue(itemType.images);
             });
         }
       }
@@ -141,9 +146,9 @@ export class ModifyItemTypeComponent implements OnInit {
       this.authItemContributorService.editItemTypes(obj).pipe(mergeMap(result => {
         let itemTypes = result['result']['types'];
         return forkJoin(from(itemTypes.map(type => type._id)).pipe(mergeMap((itemTypeId, index) => {
-          let images = this.itemTypesForm.get('itemTypes').value[index]['images'];
-          images = images.filter(image => image.type == 'blob');
-          return images.length ? this.uploadItemImages(images, itemTypeId): of(0);
+          let allImages = this.itemTypesForm.get('itemTypes').value[index]['images'];
+          let images = allImages.filter(image => image.type == 'blob');
+          return images.length ? this.uploadItemImages(allImages, images, itemTypeId): of(0);
         })))
       }), takeUntil(this.ngUnsubscribe),
       finalize(() => this.itemTypeLoading.stop())).subscribe(result => {

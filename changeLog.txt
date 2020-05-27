@@ -7,6 +7,7 @@
 - 2020-05-27                                -
 ---------------------------------------------
 .: WSM: Task: Update Shop Settings (WSM-23)
+.: WSM: BugFix: Fix Profile Ordering Issue (WSM-29)
 
 ---------------------------------------------
 - 2020-05-26                                -
