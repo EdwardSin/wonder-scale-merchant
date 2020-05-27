@@ -158,35 +158,6 @@
                 formControlName="isShowLocation"></mat-checkbox>
             <label class="mb-0" style="display: inline-flex">Show Business Location</label>
           </div>
-          <div class="ws-input" style="display: flex">
-                <span class="fas fa-search text-center mr-1" style="line-height: 35px; width: 40px; color: rgba(0,0,0,.3)"></span>
-                <input style="border-top-left-radius: 0; border-bottom-left-radius: 0" autocomplete="nope" placeholder="Search..." class="form-control font-9" formControlName="searchAddress"
-                  (keydown.enter)="mapController.onAddressSelected(); setAddressFormValue(); mapController.displayed = false"
-                  (keydown)="mapController.selectAddress($event)" (focus)="mapController.displayed = true; mapController.loading.stop();
-                  mapController.valueChanged(addressFormGroup.get('searchAddress').value)" (click)="$event.stopPropagation()"
-                  (input)="mapController.valueChanged(addressFormGroup.get('searchAddress').value)" required>
-            </div>
-            <div class="position-relative w-100">
-              <ul class="list-group suggestions" (clickOutside)="mapController.displayed = false"
-                *ngIf="mapController?.displayed">
-                <li [class.hover]="mapController.hovered == i"
-                  *ngFor="let suggestion of mapController?.suggestions; let i = index;"
-                  (click)="$event.stopPropagation(); 
-                  mapController.hovered = i; 
-                  mapController.onAddressSelected(); 
-                  setAddressFormValue(); 
-                  mapController.displayed = false">
-                  <span class="ws-main fas fa-map-marker-alt pr-2"></span>{{suggestion}}</li>
-                <li style="pointer-events: none;" *ngIf="!mapController?.suggestions?.length && mapController?.loading.isRunning()">
-                  <ws-spinner class="text-center d-block w-100 py-4"></ws-spinner>
-                </li>
-                <li
-                  *ngIf="!mapController?.loading.isRunning() && !mapController?.suggestions?.length && mapController?.displayed">
-                  <span class="pt-5 pb-5">No result and try other location!</span>
-                </li>
-              </ul>
-            </div>
-          <hr class="w-100 mb-0" style="margin-top: .75rem" />
           <div class="ws-input">
             <input class="form-control font-9" autocomplete="nope" placeholder="Address" formControlName="address" required>
           </div>
@@ -219,6 +190,35 @@
             *ngIf="addressFormGroup.controls['country'].hasError('required') && addressFormGroup.controls['country'].touched">
             Please enter a country.
           </mat-error>
+          <hr class="w-100 mb-0" style="margin-top: .75rem" />
+          <div class="ws-input" style="display: flex">
+            <span class="fas fa-search text-center mr-1" style="line-height: 35px; width: 40px; color: rgba(0,0,0,.3)"></span>
+            <input style="border-top-left-radius: 0; border-bottom-left-radius: 0" autocomplete="nope" placeholder="Search..." class="form-control font-9" formControlName="searchAddress"
+              (keydown.enter)="mapController.onAddressSelected(); setAddressFormValue(); mapController.displayed = false"
+              (keydown)="mapController.selectAddress($event)" (focus)="mapController.displayed = true; mapController.loading.stop();
+              mapController.valueChanged(addressFormGroup.get('searchAddress').value)" (click)="$event.stopPropagation()"
+              (input)="mapController.valueChanged(addressFormGroup.get('searchAddress').value)" required>
+          </div>
+          <div class="position-relative w-100">
+            <ul class="list-group suggestions" (clickOutside)="mapController.displayed = false"
+              *ngIf="mapController?.displayed">
+              <li [class.hover]="mapController.hovered == i"
+                *ngFor="let suggestion of mapController?.suggestions; let i = index;"
+                (click)="$event.stopPropagation(); 
+                mapController.hovered = i; 
+                mapController.onAddressSelected(); 
+                setAddressFormValue(); 
+                mapController.displayed = false">
+                <span class="ws-main fas fa-map-marker-alt pr-2"></span>{{suggestion}}</li>
+              <li style="pointer-events: none;" *ngIf="!mapController?.suggestions?.length && mapController?.loading.isRunning()">
+                <ws-spinner class="text-center d-block w-100 py-4"></ws-spinner>
+              </li>
+              <li
+                *ngIf="!mapController?.loading.isRunning() && !mapController?.suggestions?.length && mapController?.displayed">
+                <span class="pt-5 pb-5">No result and try other location!</span>
+              </li>
+            </ul>
+          </div>
           <p class="text-muted mb-0 mt-2">*Click to set your shop accurate location.</p>
           <div class="position-relative">
             <div class="w-100 map-screen" *ngIf="!addressFormGroup.get('isShowLocation').value || mapController.locationLoading.isRunning()"></div>

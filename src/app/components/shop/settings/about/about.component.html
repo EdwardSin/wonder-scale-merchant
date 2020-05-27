@@ -201,9 +201,9 @@
                 <div class="col-sm-6 px-0 center">
                     <label class="settings-label">Busines Point</label>
                     <br />
-                    <mat-checkbox [color]="'primary'" [checked]="isShowLocation" (change)="disabledControls()" class="mr-2 d-inline-block" style="vertical-align: text-top"></mat-checkbox>
+                    <mat-checkbox [color]="'primary'" [checked]="shop.showAddress" (change)="disabledControls()" class="mr-2 d-inline-block" style="vertical-align: text-top"></mat-checkbox>
                     <label class="mb-0 font-9" style="display: inline-flex">Show Business Location</label>
-                    <business-location [disabled]="!isShowLocation" [address]="address" [mapController]="mapController"></business-location>
+                    <business-location [disabled]="!shop.showAddress" [address]="address" [mapController]="mapController"></business-location>
                 </div>
                 <div class="col-sm-6 px-0 center">
                     <label class="settings-label">Opening Hour</label>

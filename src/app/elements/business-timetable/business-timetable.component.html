@@ -16,11 +16,11 @@
       <div class="col">{{day}}</div>
       <div class="col-7">
         <div class="row no-gutters font-9 mb-1" *ngFor="let hour of timetable.operatingHours[i].time; let j = index">
-          <input name="openingHour{{i}}{{j}}" [disabled]="!timetable.operatingHours[i].selected"
+          <input (blur)="focusOutTimetable()" name="openingHour{{i}}{{j}}" [disabled]="!timetable.operatingHours[i].selected"
             class="form-control form-control-sm col mr-1 pl-1" style="height:25px; font-family: sans-serif"
             placeholder="Time" value="{{hour.openingHour}}" [(ngModel)]="hour.openingHour" />
           <span class="pt-1">-</span>
-          <input name="closeHour{{i}}{{j}}" [disabled]="!timetable.operatingHours[i].selected"
+          <input (blur)="focusOutTimetable()" name="closeHour{{i}}{{j}}" [disabled]="!timetable.operatingHours[i].selected"
             class="form-control form-control-sm col ml-1 pl-1" style="height:25px; font-family: sans-serif"
             placeholder="Time" value="{{hour.closeHour}}" [(ngModel)]="hour.closeHour" />
           <button *ngIf="j == 0"

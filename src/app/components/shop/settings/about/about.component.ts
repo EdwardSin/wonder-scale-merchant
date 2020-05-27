@@ -53,7 +53,6 @@ export class AboutComponent implements OnInit {
   moment = moment;
   isShopClosing: boolean;
   isShopClosable: boolean;
-  isShowLocation: boolean;
   element: string;
   loading: WsLoading = new WsLoading;
   refreshLoading: WsLoading = new WsLoading;
@@ -208,6 +207,7 @@ export class AboutComponent implements OnInit {
       email: this.shop.email,
       phone: this.shop.phone,
       website: this.shop.website,
+      showAddress: this.shop.showAddress,
       fullAddress: this.mapController.address,
       openingInfoType: this.timetable.operatingHourRadio,
       openingInfo: this.timetable.operatingHourRadio == 'selected_hours' ? this.timetable.operatingHours : [],
@@ -269,10 +269,10 @@ export class AboutComponent implements OnInit {
     } else if (websites.find(website => { return !URLValidator.validate(website) })) {
       WsToastService.toastSubject.next({ content: 'Website is not valid!', type: 'danger' });
       return false;
-    } else if ((this.isShowLocation && fullAddress && !fullAddress.address) ||
-      (this.isShowLocation && fullAddress && !fullAddress.state) ||
-      (this.isShowLocation && fullAddress && !fullAddress.postcode)) {
-      WsToastService.toastSubject.next({ content: 'Address should be completed!', type: 'danger' });
+    } else if ((this.shop.showAddress && fullAddress && !fullAddress.address) ||
+      (this.shop.showAddress && fullAddress && !fullAddress.state) ||
+      (this.shop.showAddress && fullAddress && !fullAddress.postcode)) {
+      WsToastService.toastSubject.next({ content: 'Please complete your business address!', type: 'danger' });
       return false;
     }
     return true;
@@ -334,7 +334,6 @@ export class AboutComponent implements OnInit {
           : Timetable.DEFAULT_OPENING_INFO;
       this.shop.openingInfo = this.shop.openingInfo || Timetable.DEFAULT_OPENING_INFO;
       this.timetable.operatingHourRadio = this.shop.openingInfoType;
-      this.isShowLocation = this.shop.fullAddress != undefined;
       this.tag.tags = _.clone(this.shop.tags);
     }
   }
@@ -445,7 +444,7 @@ export class AboutComponent implements OnInit {
     this.contributorController.newRole = contributor.role;
   }
   disabledControls() {
-    this.isShowLocation = !this.isShowLocation;
+    this.shop.showAddress = !this.shop.showAddress;
   }
   removeProfileImage() {
     if (confirm('Are you sure to remove your profile image?')) {

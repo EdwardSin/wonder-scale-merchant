@@ -29,6 +29,8 @@ ul.suggestions {
     top: 0;
     left: 0;
     overflow: hidden;
+    z-index: 1;
+    height: 100%;
     background-color: rgba(255, 255, 255, 0.5);
     .loading {
         position: absolute;

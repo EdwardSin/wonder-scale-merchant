@@ -25,4 +25,7 @@ export class BusinessTimetableComponent implements OnInit {
   itemChange(event) {
     this.timetable.operatingHourRadio = event.value;
   }
+  focusOutTimetable() {
+    this.timetable.validate();
+  }
 }

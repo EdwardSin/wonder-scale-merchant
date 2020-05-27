@@ -66,10 +66,6 @@ export class MapController{
     async onAddressSelected() {
         var address = this.suggestionsObj[this.hovered];
         if (this.suggestionsObj.length > 0 && address) {
-            this.address.postcode = address.address.postalCode;
-            this.address.state = address.address.state;
-            this.address.city = address.address.city;
-            this.address.country = address.address.country;
             this.locationLoading.start();
             let coords = await new Promise((resolve, reject) => {
                 this.gpsService.geocode({ address: MapHelper.getSelectedFormattedAddress(address) }, (coords) => {

@@ -10,6 +10,7 @@ export class Shop {
     profileImage?: string = "upload/images/shop.png";
     bannerImage?: string;
     informationImages?: Array<string>;
+    showAddress: boolean;
     fullAddress?: {
         address: string,
         state: string,
