@@ -221,5 +221,6 @@
   </ng-container>
 </ng-template>
 
-<confirm-modal *ngIf="isRemoveCategoryConfirmationModalOpened" [(isOpened)]="isRemoveCategoryConfirmationModalOpened" id="confirmModal" [message]="'Are you sure to remove category?'" [action]="removeCategory.bind(this)">
+<confirm-modal *ngIf="isRemoveCategoryConfirmationModalOpened" [(isOpened)]="isRemoveCategoryConfirmationModalOpened" id="confirmModal" [loading]="removeLoading.isRunning()" 
+[message]="'Are you sure to remove category?'" [action]="removeCategory.bind(this)">
 </confirm-modal>

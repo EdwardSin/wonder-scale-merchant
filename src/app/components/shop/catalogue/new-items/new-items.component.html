@@ -13,7 +13,9 @@
     </div>
 </ng-template>
 <ng-template #noSearchItem>
-    <h4 class="mt-5 mb-5 text-center">No item found!</h4>
+    <div class="text-center">
+        <h6 class="py-5">No items found.</h6>
+    </div>
 </ng-template>
 <ng-template #loadingTemplate>
     <ng-container *ngIf="loading.isRunning(); else noItem">

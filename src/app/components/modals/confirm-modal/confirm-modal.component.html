@@ -4,7 +4,7 @@
         <p class="mb-2">{{message}}</p>
         <ng-content select="[content]"></ng-content>
         <div class="center mt-4 float-right">
-            <button class="btn btn-sm btn-controller mr-1" (click)="action(); close()">Confirm</button>
+            <ws-loading-button [class]="'btn btn-sm btn-controller mr-1'" [loading]="loading" (click)="action()">Confirm</ws-loading-button>
             <button class="btn btn-sm btn-controller ml-1" (click)="close()">Cancel</button>
         </div>
     </div>

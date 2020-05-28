@@ -60,6 +60,7 @@ export class MainContainerComponent implements OnInit {
       this.shop.status.status = 'active';
       this.shop.status.expiryDate = null;
       this.sharedShopService.shop.next(this.shop);
+      this.isConfirmReactivateShopModalOpened = false;
     });
   }
 }
