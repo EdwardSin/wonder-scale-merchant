@@ -156,7 +156,7 @@ export class AboutComponent implements OnInit {
   updateContributorAuthorization() {
     let contributors = this.contributorController.existsContributors;
     let user = this.sharedUserService.user.value;
-    let contributor = contributors.find(contributor => contributor['user'] == user._id && contributor.role == 'admin');
+    let contributor = contributors.find(contributor => contributor['user'] == user._id && contributor.role == Role.Admin);
     this.shopAuthorizationService.isAdminAuthorized.next(contributor != null);
   }
   getDefaultSetting() {

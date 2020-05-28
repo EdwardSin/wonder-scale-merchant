@@ -7,6 +7,7 @@
 - 2020-05-28                                -
 ---------------------------------------------
 .: WSM: Task: Update managing items flow (WSM-54)
+.: WSM: BugFix: Navigate to correct category when category name is edited (WSM-5)
 
 ---------------------------------------------
 - 2020-05-27                                -

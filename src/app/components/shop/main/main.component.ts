@@ -266,7 +266,7 @@ export class MainComponent implements OnInit {
         .subscribe(result => {
           WsToastService.toastSubject.next({ content: 'Category is edited!', type: 'success' });
           if (this.category_name === this.editname) {
-            this.router.navigate(['catalogue', 'custom', obj.name]);
+            this.router.navigate(['catalogue', 'custom', obj.name], {relativeTo: this.route});
           }
           category['name'] = this.edit_new_name;
           this.setEditCategory('');
