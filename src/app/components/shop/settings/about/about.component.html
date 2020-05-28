@@ -304,7 +304,7 @@
                 <p *ngIf="shop?.status?.status == 'closed' && timeDifference > 0" class="alert alert-secondary ws-bg-light-grey-4 mb-1" style="font-size: .9rem">
                     <button *ngIf="shop.status.status == 'closed' && timeDifference > 0" class="btn btn-primary btn-sm m-0 mb-2" (click)="isConfirmReactivateModalOpened = true">Reactivate</button>
                     <br />
-                    Shop will be removed permanently {{timeDifferenceString}}.
+                    Shop will be removed permanently <span class="text-danger font-weight-bold">{{timeDifferenceString}}</span>.
                     <br />
                     You can reactivate anytime before shop is removed permanently.
                 </p>
