@@ -394,9 +394,14 @@ export class AboutComponent implements OnInit {
     }
     else {
       this.contributorController.newContributors.push(<Contributor>{
-        email: user.email, _id: user._id, role: this.contributorController.newRole,
-        profileImage: user.profileImage, status: 'pending',
-        firstName: user.firstName, lastName: user.lastName
+        email: user.email,
+        user: user._id,
+        role: this.contributorController.newRole,
+        profileImage: user.profileImage,
+        status: 'pending',
+        invitedDate: new Date(),
+        firstName: user.firstName,
+        lastName: user.lastName
       });
     }
   }

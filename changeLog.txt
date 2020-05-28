@@ -8,6 +8,7 @@
 ---------------------------------------------
 .: WSM: Task: Update managing items flow (WSM-54)
 .: WSM: BugFix: Navigate to correct category when category name is edited (WSM-5)
+.: WSM: BugFix: Fixed operation after adding new contributor without refresh (WSM-25)
 
 ---------------------------------------------
 - 2020-05-27                                -
