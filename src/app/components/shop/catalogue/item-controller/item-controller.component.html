@@ -41,7 +41,7 @@
                     <button *ngIf="param == 'uncategorized' " class="dropdown-item" (click)="openRemoveModal()">Remove Permanently</button>
                 </div>
             </div>
-            <div *ngIf="param == 'new'" class="ws-circle-button">
+            <div *ngIf="param == 'new'" class="d-inline-block">
                 <button (click)="isAdvertiseDropdownOpened = !isAdvertiseDropdownOpened" title="Advertise" wsTippy class="btn btn-controller small">
                     <span class="fas fa-bullhorn"></span>
                 </button>
@@ -53,8 +53,8 @@
                     </p>
                     <textarea [(ngModel)]="message" class="form-control form-control-sm w-100 mb-2" style="height: 130px"
                     placeholder="Advertise and notify your followers."></textarea>
-                    <button class="btn btn-sm btn-second float-right ml-2" (click)="updateMessage()">Update</button>
-                    <button class="btn btn-sm btn-second float-right" [disabled]="isAdvertised" (click)="advertiseItems()">Advertise</button>
+                    <button class="btn btn-sm btn-controller float-right ml-2" (click)="updateMessage()">Update</button>
+                    <button class="btn btn-sm btn-controller float-right" [disabled]="isAdvertised" (click)="advertiseItems()">Advertise</button>
                     <span class="clearfix d-block"></span>
                 </ws-dropdown>
             </div>
@@ -137,7 +137,7 @@
         (debounceClick)="advertiseItems()">{{ isPublished ? 'Done' : 'Advertise'}}</button>
     <div class="clearfix"></div>
 </div> -->
-<confirm-modal *ngIf="isRemoveAllSelectedItemModalConfirmationOpened" [(isOpened)]="isRemoveAllSelectedItemModalConfirmationOpened" id="removeItemsModal" [message]="'Are you sure to remove all selected items?'" [action]="action">
+<confirm-modal *ngIf="isRemoveAllSelectedItemModalConfirmationOpened" [(isOpened)]="isRemoveAllSelectedItemModalConfirmationOpened" id="removeItemsModal" [loading]="loading.isRunning()" [message]="'Are you sure to remove all selected items?'" [action]="action">
 </confirm-modal>
 <add-to-categories-modal *ngIf="isAddToCategoriesModalOpened" [(isOpened)]="isAddToCategoriesModalOpened" id="addToCategoriesModal" [action]="action" 
     [loading]="categoriesLoading.isRunning()"

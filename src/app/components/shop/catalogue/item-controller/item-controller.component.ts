@@ -45,7 +45,7 @@ export class ItemControllerComponent implements OnInit {
 
   searchController: Searchbar = new Searchbar;
   tag: Tag = new Tag();
-
+  categories = [];
   message = '';
   editCategory = {};
   editCategoryList: Array<any> = [];
@@ -82,8 +82,6 @@ export class ItemControllerComponent implements OnInit {
     this.searchController.orderBy = this.route.snapshot.queryParams['by'];
     this.searchController.display = this.route.snapshot.queryParams['display'];
     this.searchController.searchKeyword = this.route.snapshot['queryParams']['s_keyword'];
-    this.categoryName = this.route.snapshot.params['name'];
-
     this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe(queryParams => {
       this.searchController.searchKeyword = queryParams['s_keyword'];
     })
@@ -106,6 +104,12 @@ export class ItemControllerComponent implements OnInit {
     })
     this.screenService.isMobileSize.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       this.isMobileSize = result;
+    })
+    this.sharedCategoryService.categories.pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(res => {
+        if (res) {
+          this.categories = res;
+        }
     })
   }
   publishItems() {
@@ -316,20 +320,21 @@ export class ItemControllerComponent implements OnInit {
     var editItems = this.editItems;
     this.previousEditedItems = [];
     this.loading.start();
+    let categoryName = this.route.snapshot.params['name'];
+    let selectedCategory = this.categories.find(x => x.name === categoryName);
     observableForkJoin(editItems.map(item => {
       return this.authCategoryContributorService.removeItemsFromCategory({
         items: editItems.map(x => x['_id']),
-        categories: this.selectedCategory ? [this.selectedCategory['_id']] : item.categories ? item.categories : []
+        categories: selectedCategory ? [selectedCategory['_id']] : item.categories ? item.categories : []
       })
     }))
-      .pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.loading.stop()))
+      .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(results => {
-        let tempAllItems = this.allItems.filter(x => !_.includes(editItems, x));
-        let tempDisplayItems = this.displayItems.filter(x => !_.includes(editItems, x));
         this.sharedCategoryService.refreshCategories(() => {
           WsToastService.toastSubject.next({ content: "Items have been removed from category!", type: 'success' });
+          this.isRemoveAllSelectedItemModalConfirmationOpened = false;
+          this.loading.stop();
         })
-
       }, (err) => {
         WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
       });

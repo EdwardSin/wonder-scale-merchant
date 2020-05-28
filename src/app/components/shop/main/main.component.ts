@@ -22,7 +22,7 @@ import { WsLoading } from '@elements/ws-loading/ws-loading';
 import { WsToastService } from '@elements/ws-toast/ws-toast.service';
 import _ from 'lodash';
 import { Subject, BehaviorSubject, interval, of } from 'rxjs';
-import { takeUntil, switchMap } from 'rxjs/operators';
+import { takeUntil, switchMap, finalize } from 'rxjs/operators';
 import { SharedLoadingService } from '../../../services/shared/shared-loading.service';
 import { Shop } from '@objects/shop';
 import { SharedItemService } from '@services/shared/shared-item.service';
@@ -50,6 +50,7 @@ export class MainComponent implements OnInit {
   numberOfUnpublishedItems: number = 0;
   numberOfUncategorizedItems: number = 0;
   loading: WsLoading = new WsLoading;
+  removeLoading: WsLoading = new WsLoading;
   displayPreview: boolean;
   isRemoveCategoryConfirmationModalOpened: boolean;
   categories: Array<any> = [];
@@ -275,16 +276,18 @@ export class MainComponent implements OnInit {
     }
   }
   removeCategory() {
+    this.removeLoading.start();
     this.authCategoryContributorService
       .removeCategories({categories: [this.selectedCategory['_id']]})
-      .pipe(takeUntil(this.ngUnsubscribe))
+      .pipe(takeUntil(this.ngUnsubscribe), finalize(() => {this.removeLoading.stop()}))
       .subscribe(result => {
         WsToastService.toastSubject.next({ content: "Category is removed!", type: 'success' });
         _.remove(this.categories, (x) => this.selectedCategory['_id'] === x._id);
         if (this.selectedCategory.name === this.category_name) {
           this.router.navigate(['catalogue', 'all'], {relativeTo: this.route});
         }
-        this.refreshCategories();
+        this.isRemoveCategoryConfirmationModalOpened = false;
+        this.sharedCategoryService.refreshCategories(null, false, true);
       }, (err) => {
         WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
       });

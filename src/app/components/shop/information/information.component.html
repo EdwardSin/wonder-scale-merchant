@@ -41,8 +41,8 @@
                         <div *ngSwitchCase="'blob'" class="h-100">
                             <div *ngIf="isImagesUploading" class="w-100 h-100 position-absolute text-center"
                                 style="z-index:2; top:0; background-color: rgba(0, 0, 0, .3)">
-                                <img style="margin-top: 45%" src="{{environment.LOADING_UPLOAD_DATA}}"
-                                    alt="uploading" />
+                                <ws-spinner-dot class="position-absolute d-block" style="top: 50%; left: 50%;" 
+                                [color]="'rgba(255,255,255,.8)'"></ws-spinner-dot>
                             </div>
                             <div class="corner-setting">
                                 <span class="corner-setting-item fas fa-times"
@@ -99,4 +99,4 @@
 </ng-template>
 
 <confirm-modal *ngIf="isDeletedConfirmationModalOpened" [(isOpened)]="isDeletedConfirmationModalOpened" id="deleteItemModal" [message]="'Are you sure to remove the images?'"
-    [action]="removeUploadedImage.bind(this, selectedInformation)"></confirm-modal>
+   [loading]="removeLoading.isRunning()" [action]="removeUploadedImage.bind(this, selectedInformation)"></confirm-modal>

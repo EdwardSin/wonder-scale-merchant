@@ -10,6 +10,7 @@ import { WsModalComponent } from '@elements/ws-modal/ws-modal.component';
 export class ConfirmModalComponent extends WsModalComponent implements OnInit {
   @Input() isOpened: boolean;
   @Input() header: string = "Confirmation";
+  @Input() loading: boolean;
   @Input() message: string;
   @Input() action: Function;
   @Input() closeCallback: Function;

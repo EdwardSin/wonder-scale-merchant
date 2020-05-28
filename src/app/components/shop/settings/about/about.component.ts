@@ -413,6 +413,7 @@ export class AboutComponent implements OnInit {
         this.shop.status.status = 'closed';
         this.shop.status.expiryDate = date;
         this.sharedShopService.shop.next(this.shop);
+        this.isConfirmCloseShopModalOpened = false;
         this.router.navigate(['../../catalogue', 'all'], { relativeTo: this.route });
       }, err => {
         WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
@@ -426,6 +427,7 @@ export class AboutComponent implements OnInit {
         this.shop.status.status = 'active';
         this.shop.status.expiryDate = null;
         this.sharedShopService.shop.next(this.shop);
+        this.isConfirmReactivateModalOpened = false;
         this.router.navigate(['../../catalogue', 'all'], { relativeTo: this.route });
       });
   }
@@ -433,6 +435,7 @@ export class AboutComponent implements OnInit {
     this.authShopContributorService.leaveShop()
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
+        this.isConfirmQuitShopModalOpened = false;
         this.router.navigate(['shops/all']);
       }, err => {
         WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
