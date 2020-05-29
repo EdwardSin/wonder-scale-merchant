@@ -328,10 +328,11 @@ export class AboutComponent implements OnInit {
         this.mapController.mapPoint.longitude = this.shop.location.coordinates[0];
         this.mapController.mapPoint.latitude = this.shop.location.coordinates[1];
       }
-      this.timetable.operatingHours =
-        this.shop.openingInfo.length > 0
-          ? JSON.parse(JSON.stringify(this.shop.openingInfo))
-          : Timetable.DEFAULT_OPENING_INFO;
+      if (this.shop.openingInfo && this.shop.openingInfo.length > 0) {
+        this.timetable.operatingHours = JSON.parse(JSON.stringify(this.shop.openingInfo));
+      } else {
+        this.timetable.operatingHours = Timetable.DEFAULT_OPENING_INFO;
+      }
       this.shop.openingInfo = this.shop.openingInfo || Timetable.DEFAULT_OPENING_INFO;
       this.timetable.operatingHourRadio = this.shop.openingInfoType;
       this.tag.tags = _.clone(this.shop.tags);
