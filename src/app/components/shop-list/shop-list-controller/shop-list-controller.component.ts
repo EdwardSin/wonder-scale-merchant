@@ -76,6 +76,7 @@ export class ShopListControllerComponent implements OnInit {
     });
   }
   refresh() {
+    this.loading.start();
     this.sharedShopService.refresh.next(true);
   }
   ngOnDestroy() {

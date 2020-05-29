@@ -7,6 +7,7 @@
 - 2020-05-29                                -
 ---------------------------------------------
 .: WSM: BugFix: Checking opening info (WSM-36)
+.: WSM: BugFix: Loading spinner in pending button (WSM-36)
 
 ---------------------------------------------
 - 2020-05-28                                -
