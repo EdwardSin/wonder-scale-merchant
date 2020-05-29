@@ -143,7 +143,7 @@ export class AboutComponent implements OnInit {
       })
 
     let shop_name = this.sharedShopService.shop_name;
-    DocumentHelper.setWindowTitleWithWonderScale('About - Settings | ' + shop_name);
+    DocumentHelper.setWindowTitleWithWonderScale('About - Settings - ' + shop_name);
 
     this.sharedShopService.contributorRefresh.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {

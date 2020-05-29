@@ -26,7 +26,7 @@ export class QrcodeComponent implements OnInit {
   constructor(private sharedShopService: SharedShopService, ) {
     this.loading.start();
     let shop_name = this.sharedShopService.shop_name;
-    DocumentHelper.setWindowTitleWithWonderScale('QR Code | ' + shop_name);
+    DocumentHelper.setWindowTitleWithWonderScale('QR Code - ' + shop_name);
     this.sharedShopService.shop.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
         if (result) {

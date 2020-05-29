@@ -35,7 +35,7 @@ export class DiscountItemsComponent implements OnInit {
 
   ngOnInit() {
     let shop_name = this.sharedShopService.shop_name;
-    DocumentHelper.setWindowTitleWithWonderScale('Discount | ' + shop_name);
+    DocumentHelper.setWindowTitleWithWonderScale('Discount - ' + shop_name);
     this.loading.start();
     this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(queryParam => {

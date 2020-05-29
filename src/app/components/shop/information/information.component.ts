@@ -39,7 +39,7 @@ export class InformationComponent implements OnInit {
     this.loading.start();
     this.sharedShopService.shop.pipe(takeUntil(this.ngUnsubscribe)).subscribe(res => {
       if (res) {
-        DocumentHelper.setWindowTitleWithWonderScale('Informations | ' + res.name);
+        DocumentHelper.setWindowTitleWithWonderScale('Information Banner - ' + res.name);
         this.shop = res;
         this.numOfTotalImages = this.shop.informationImages.length;
         this.allImages = this.shop.informationImages.map(image => { return { url: image, type: 'url' } });

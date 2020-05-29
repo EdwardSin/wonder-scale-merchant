@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DocumentHelper } from '@helpers/documenthelper/document.helper';
 
 @Component({
   selector: 'app-home',
@@ -12,6 +13,7 @@ export class HomeComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    DocumentHelper.setWindowTitleWithWonderScale('Merchant');
   }
 
 }
