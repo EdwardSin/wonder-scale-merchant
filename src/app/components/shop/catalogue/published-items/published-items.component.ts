@@ -37,7 +37,7 @@ export class PublishedItemsComponent implements OnInit {
 
   ngOnInit() {
     let shop_name = this.sharedShopService.shop_name;
-    DocumentHelper.setWindowTitleWithWonderScale('Published | ' + shop_name);
+    DocumentHelper.setWindowTitleWithWonderScale('Published - ' + shop_name);
     this.loading.start();
     this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(queryParam => {

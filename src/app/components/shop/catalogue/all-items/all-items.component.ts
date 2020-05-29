@@ -37,7 +37,7 @@ export class AllItemsComponent implements OnInit {
 
   ngOnInit() {
     let shop_name = this.sharedShopService.shop_name;
-    DocumentHelper.setWindowTitleWithWonderScale('All | ' + shop_name);
+    DocumentHelper.setWindowTitleWithWonderScale('All - ' + shop_name);
     this.loading.start();
     this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe(queryParam => {
       if (this.queryParams.keyword != queryParam.s_keyword || this.queryParams.page != queryParam.page || this.queryParams.order != queryParam.order || this.queryParams.orderBy != queryParam.by) {

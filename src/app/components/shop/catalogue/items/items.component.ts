@@ -55,11 +55,11 @@ export class ItemsComponent implements OnInit {
   ngOnInit() {
     let shop_name = this.sharedShopService.shop_name;
     this.categoryName = this.route.snapshot.params.name;
-    DocumentHelper.setWindowTitleWithWonderScale(this.categoryName + ' | ' + shop_name);
+    DocumentHelper.setWindowTitleWithWonderScale(this.categoryName + ' - ' + shop_name);
 
     this.route.params.pipe(takeUntil(this.ngUnsubscribe)).subscribe(res => {
       this.categoryName = this.route.snapshot.params.name;
-      DocumentHelper.setWindowTitleWithWonderScale(this.categoryName + ' | ' + shop_name);
+      DocumentHelper.setWindowTitleWithWonderScale(this.categoryName + ' - ' + shop_name);
       this.sharedCategoryService.categoryRefresh.next({refresh: true, loading: true});
     })
     this.loading.start();

@@ -34,7 +34,7 @@ export class NewItemsComponent implements OnInit {
 
   ngOnInit() {
     let shop_name = this.sharedShopService.shop_name;
-    DocumentHelper.setWindowTitleWithWonderScale('New | ' + shop_name);
+    DocumentHelper.setWindowTitleWithWonderScale('New - ' + shop_name);
     this.loading.start();
     this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(queryParam => {

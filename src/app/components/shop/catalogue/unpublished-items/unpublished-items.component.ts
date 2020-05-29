@@ -36,7 +36,7 @@ export class UnpublishedItemsComponent implements OnInit {
 
   ngOnInit() {
     let shop_name = this.sharedShopService.shop_name;
-    DocumentHelper.setWindowTitleWithWonderScale('Unpublished | ' + shop_name);
+    DocumentHelper.setWindowTitleWithWonderScale('Unpublished - ' + shop_name);
     this.loading.start();
     this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(queryParam => {
