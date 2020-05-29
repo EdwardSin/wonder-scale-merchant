@@ -9,6 +9,7 @@
 .: WSM: BugFix: Checking opening info (WSM-36)
 .: WSM: BugFix: Loading spinner in pending button (WSM-36)
 .: WSM: BugFix: Topic displayed incorrectly (WSM-71)
+.: WSM: BugFix: Facebook and Google error message from server (WSM-1)
 
 ---------------------------------------------
 - 2020-05-28                                -

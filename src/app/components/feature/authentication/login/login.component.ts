@@ -98,7 +98,7 @@ export class LoginComponent implements OnInit {
           let returnUrl = this.getReturnUrl();
           this.router.navigateByUrl(returnUrl);
         }, (err) => {
-          WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
+          WsToastService.toastSubject.next({ content: err.error.message, type: 'danger' });
         });
       }
     });
@@ -125,7 +125,7 @@ export class LoginComponent implements OnInit {
           this.router.navigateByUrl(returnUrl);
 
         }, (err) => {
-          WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
+          WsToastService.toastSubject.next({ content: err.error.message, type: 'danger' });
         });
       }
     });
