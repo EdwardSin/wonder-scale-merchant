@@ -11,6 +11,7 @@
 .: WSM: BugFix: Topic displayed incorrectly (WSM-71)
 .: WSM: BugFix: Facebook and Google error message from server (WSM-1)
 .: WSM: Task: Change qrcode url (WSM-20)
+.: WSM: Task: Update profile image and banner image design (WSM-54)
 
 ---------------------------------------------
 - 2020-05-28                                -

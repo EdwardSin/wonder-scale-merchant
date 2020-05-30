@@ -36,6 +36,7 @@ declare var jQuery: any;
 import * as $ from 'jquery';
 import { Role } from '@enum/Role.enum';
 import { DomSanitizer } from '@angular/platform-browser';
+import { ScreenService } from '@services/general/screen.service';
 
 @Component({
   selector: 'app-about',
@@ -97,6 +98,7 @@ export class AboutComponent implements OnInit {
   isProfileUploaderOpened: boolean;
   isBannerUploaderOpened: boolean;
   environment = environment;
+  isMobileSize: boolean;
   contributorController: ContributorController = new ContributorController;
   private ngUnsubscribe: Subject<any> = new Subject;
   constructor(private sharedShopService: SharedShopService,
@@ -111,6 +113,7 @@ export class AboutComponent implements OnInit {
     private sharedUserService: SharedUserService,
     private authShopUserService: AuthShopUserService,
     private shopAuthorizationService: ShopAuthorizationService,
+    private screenService: ScreenService,
     private ref: ChangeDetectorRef) {
     this.mapController = new MapController(this.gpsService, this.address);
   }
@@ -151,6 +154,11 @@ export class AboutComponent implements OnInit {
           this.contributorController = result;
           this.updateContributorAuthorization();
         }
+      })
+    
+      this.screenService.isMobileSize.pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(result => {
+        this.isMobileSize = result;
       })
   }
   updateContributorAuthorization() {
@@ -518,7 +526,7 @@ export class AboutComponent implements OnInit {
       });
   }
   async uploadBannerImage() {
-    let result = await this.croppieObj.result();
+    let result = await this.croppieObj.result({size: 'original'});
     this.isBannerImageUploading.start();
 
     this.authShopContributorService.editBannerImage({ file: result }).pipe(takeUntil(this.ngUnsubscribe), finalize(() => { this.isBannerImageUploading.stop() }))
@@ -549,7 +557,7 @@ export class AboutComponent implements OnInit {
       this.croppieObj = new Croppie(document.getElementById('id-banner-preview-image'), {
         viewport: {
           width: 300,
-          height: 180,
+          height: 108.303,
           type: 'rectangle'
         }
       });
