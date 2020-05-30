@@ -58,7 +58,7 @@ export class AuthenticationService {
             AuthenticationService.user_id = null;
             this.http.post('/api/auth-users/users/logout', {}).subscribe(result => {
                 this.sharedUserService.user.next(null);
-                this.sharedUserService.favoriteItems.next([]);
+                this.sharedUserService.followItems.next([]);
                 resolve(result['loggedIn']);
             })
             if (this.authService['_user']) {
