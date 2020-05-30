@@ -4,6 +4,12 @@
 
 - v1.0.1000                                 -
 ---------------------------------------------
+- 2020-05-30                                -
+---------------------------------------------
+.: WSM: Task: Update profile image and banner image design (WSM-54)
+.：WSM: Task: Change currency service default code (WSM-54)
+
+---------------------------------------------
 - 2020-05-29                                -
 ---------------------------------------------
 .: WSM: BugFix: Checking opening info (WSM-36)
@@ -11,7 +17,6 @@
 .: WSM: BugFix: Topic displayed incorrectly (WSM-71)
 .: WSM: BugFix: Facebook and Google error message from server (WSM-1)
 .: WSM: Task: Change qrcode url (WSM-20)
-.: WSM: Task: Update profile image and banner image design (WSM-54)
 
 ---------------------------------------------
 - 2020-05-28                                -
