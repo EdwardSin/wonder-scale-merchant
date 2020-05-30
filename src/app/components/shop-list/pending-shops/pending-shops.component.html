@@ -1,14 +1,16 @@
 <div *ngIf="pendingShopList?.length; else loadingTemplate">
-  <pending-shop class="row no-gutters pt-3 pb-3" [shop]="shop" *ngFor="let shop of pendingShopList"></pending-shop>
+  <div *ngFor="let shop of pendingShopList">
+    <pending-shop [shop]="shop" class="row no-gutters py-4 px-3 bg-white border-bottom"></pending-shop>
+  </div>
 </div>
 
 <ng-template #loadingTemplate>
   <ng-container *ngIf="loading.isRunning();else noShopTemplate">
-    <ws-loading></ws-loading>
+    <ws-spinner class="text-center d-block w-100" style="padding-top: 30vh"></ws-spinner>
   </ng-container>
 </ng-template>
 <ng-template #noShopTemplate>
-  <h4 class="text-center mt-5 mb-5">
+  <p class="text-center py-5">
     No Pending Shops!
-  </h4>
+  </p>
 </ng-template>

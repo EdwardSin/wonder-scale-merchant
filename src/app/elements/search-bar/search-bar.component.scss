@@ -1,0 +1,12 @@
+@import '../../../assets/scss/variables.scss';
+
+input:focus{
+    z-index: 0 !important;
+}
+.form-control{
+    border-color: map-get($ws-color, border);
+}
+.input-group-text{
+    border-color: map-get($ws-color, border);
+    cursor: pointer;
+}

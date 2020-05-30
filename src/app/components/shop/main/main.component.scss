@@ -46,7 +46,7 @@
 .drag-handle {
     position: absolute;
     left: 13px;
-    top: 20px;
+    top: .4rem;
     cursor: move;
     display: block;
     .fa-bars {
@@ -87,7 +87,7 @@
         width: 40px;
         height: 40px;
         text-align: center;
-        color: map-get($ws-color, light-grey);
+        color: map-get($ws-color, light-grey-1);
         .fas.fa-times {
             font-size: 1.2rem;
             width: 40px;

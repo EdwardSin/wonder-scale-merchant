@@ -6,7 +6,6 @@ import { BehaviorSubject } from 'rxjs';
     providedIn: 'root'
 })
 export class SharedItemService {
-    allItems: BehaviorSubject<Item[]> = new BehaviorSubject<Item[]>([]);
     displayItems: BehaviorSubject<Item[]> = new BehaviorSubject<Item[]>([]);
     editItems: BehaviorSubject<Item[]> = new BehaviorSubject<Item[]>([]);
 

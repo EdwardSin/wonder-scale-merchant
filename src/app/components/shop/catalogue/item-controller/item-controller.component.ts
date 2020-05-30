@@ -11,15 +11,15 @@ import { AuthShopContributorService } from '@services/http/auth-shop/contributor
 import { SharedCategoryService } from '@services/shared/shared-category.service';
 import { SharedItemService } from '@services/shared/shared-item.service';
 import { SharedShopService } from '@services/shared/shared-shop.service';
-import { WsLoading } from '@components/elements/ws-loading/ws-loading';
+import { WsLoading } from '@elements/ws-loading/ws-loading';
 import { ArrayHelper } from '@helpers/arrayhelper/array.helper';
 import { ScreenHelper } from '@helpers/screenhelper/screen.helper';
-import { WsModalService } from '@components/elements/ws-modal/ws-modal.service';
-import { WsToastService } from '@components/elements/ws-toast/ws-toast.service';
+import { WsToastService } from '@elements/ws-toast/ws-toast.service';
 import _ from 'lodash';
 import * as moment from 'moment';
 import { forkJoin as observableForkJoin, Subject } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
+import { ScreenService } from '@services/general/screen.service';
 
 @Component({
   selector: 'item-controller',
@@ -28,9 +28,6 @@ import { finalize, takeUntil } from 'rxjs/operators';
   animations: [UnitAnimation.slideDown(-50)]
 })
 export class ItemControllerComponent implements OnInit {
-
-
-
   allItems: Item[] = [];
   displayItems: Item[] = [];
   editItems: Item[] = [];
@@ -38,33 +35,36 @@ export class ItemControllerComponent implements OnInit {
 
   shop;
   param = '';
-  shop_username = '';
-  category_name = '';
+  categoryName = '';
   categoryList: Array<any> = [];
   selectedCategory = '';
-  is_publish: boolean;
+  isAdvertised: boolean;
+  categoriesLoading: WsLoading = new WsLoading;
   loading: WsLoading = new WsLoading;
   environment = environment;
 
   searchController: Searchbar = new Searchbar;
   tag: Tag = new Tag();
-
+  categories = [];
   message = '';
   editCategory = {};
   editCategoryList: Array<any> = [];
   displayCategoryList: Array<any> = [];
-
-  btnSelectedItemList: Array<any> = [];
   info_message: string = '';
   isMobileSize: boolean;
+  isRemoveAllSelectedItemModalConfirmationOpened: boolean;
+  isAddToCategoriesModalOpened: boolean;
+  isMoveToCategoriesModalOpened: boolean;
+  isEditMultipleItemsModalOpened: boolean;
+  moment = moment;
   previousEditedItems: Array<any> = [];
+  isAdvertiseDropdownOpened: boolean;
   action: Function;
 
   private ngUnsubscribe: Subject<any> = new Subject();
 
   constructor(
     private route: ActivatedRoute,
-    private modalService: WsModalService,
     private authShopContributorService: AuthShopContributorService,
     private sharedCategoryService: SharedCategoryService,
     private sharedShopService: SharedShopService,
@@ -72,6 +72,7 @@ export class ItemControllerComponent implements OnInit {
     private authItemContributorService: AuthItemContributorService,
     private authCategoryContributorService: AuthCategoryContributorService,
     private router: Router,
+    private screenService: ScreenService,
     private ref: ChangeDetectorRef
   ) { }
 
@@ -80,15 +81,17 @@ export class ItemControllerComponent implements OnInit {
     this.searchController.order = this.route.snapshot.queryParams['order'];
     this.searchController.orderBy = this.route.snapshot.queryParams['by'];
     this.searchController.display = this.route.snapshot.queryParams['display'];
-    this.shop_username = this.route.snapshot.params['username'];
-    this.category_name = this.route.snapshot.params['name'];
-    this.getPublishInfo();
-
-    this.sharedItemService.allItems.pipe(takeUntil(this.ngUnsubscribe)).subscribe(res => {
-      if (res) {
-        this.allItems = res;
-      }
+    this.searchController.searchKeyword = this.route.snapshot['queryParams']['s_keyword'];
+    this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe(queryParams => {
+      this.searchController.searchKeyword = queryParams['s_keyword'];
     })
+    this.sharedShopService.shop.pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(result => {
+        if (result) {
+          this.shop = result;
+          this.getPublishedInfo();
+        }
+    });
     this.sharedItemService.editItems.pipe(takeUntil(this.ngUnsubscribe)).subscribe(res => {
       if (res) {
         this.editItems = res;
@@ -99,140 +102,71 @@ export class ItemControllerComponent implements OnInit {
         this.displayItems = res;
       }
     })
-    this.btnSelectedItemList = [
-      {
-        spanClass: 'fa-bullhorn',
-        title: 'Publish',
-        trigger: () => {
-          return this.activateItems();
-        },
-        displayed: true
-      },
-      {
-        spanClass: 'fa-unbullhorn',
-        title: 'Unpublish',
-        trigger: () => {
-          return this.inactivateItems();
-        },
-        displayed: true
-      },
-      {
-        spanClass: 'fa-tags',
-        title: 'Mark as New',
-        trigger: () => {
-          return this.markAsNew();
-        },
-        displayed: this.param != 'new'
-      },
-      {
-        spanClass: 'fa-untags',
-        title: 'Unmark from New',
-        trigger: () => {
-          return this.unmarkNew();
-        },
-        displayed: true
-      },
-      {
-        spanClass: 'fa-edit',
-        title: 'Edit Multiple Items',
-        trigger: () => {
-          this.action = this.editMultipleItems.bind(this);
-          return this.openModal('editMultipleItemsModal');
-        },
-        displayed: true
-      },
-      {
-        spanClass: 'fa-plus-square',
-        title: 'Add To',
-        trigger: () => {
-          this.getCategoryByShopId();
-          this.action = this.onAddItemToCategory.bind(this, this.editItems);
-          this.openModal('addToCategoriesModal');
-        },
-        displayed: true
-      },
-      {
-        spanClass: 'fa-arrows-alt',
-        title: 'Move To',
-        trigger: () => {
-          this.getCategoryByShopId();
-          this.action = this.onMoveCategory.bind(this, this.editItems);
-          this.openModal('moveToCategoriesModal');
-        },
-        displayed: this.param == 'custom'
-      },
-      {
-        spanClass: 'fa-trash',
-        title: 'Remove',
-        trigger: () => {
-          this.action = this.param == 'uncategoried' ? this.removeItemsPermanantly.bind(this) : this.removeItemsFromCategory.bind(this);
-          this.openModal('removeItemsModal');
-        },
-        displayed: true
-      }
-    ];
-    this.isMobileSize = ScreenHelper.isMobileSize();
+    this.screenService.isMobileSize.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+      this.isMobileSize = result;
+    })
+    this.sharedCategoryService.categories.pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(res => {
+        if (res) {
+          this.categories = res;
+        }
+    })
   }
-
-  @HostListener('window:resize', ['$event'])
-  onResize(event) {
-    this.isMobileSize = ScreenHelper.isMobileSize();
-  }
-  activateItems() {
+  publishItems() {
     var editItems = this.editItems;
     this.previousEditedItems = _.clone(editItems);
     if (editItems.length) {
-      this.authItemContributorService.activateItems(editItems)
+      this.authItemContributorService.publishItems(editItems)
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(result => {
-          this.refreshCategories(() => {
-            WsToastService.toastSubject.next({ content: "Items have been activated!", type: 'success' });
-          })
+          this.sharedCategoryService.refreshCategories(() => {
+            WsToastService.toastSubject.next({ content: "Items have been published!", type: 'success' });
+          }, false)
         }, (err) => {
           WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
         });
     }
   }
-  inactivateItems() {
+  unpublishItems() {
     var editItems = this.editItems;
     this.previousEditedItems = _.clone(editItems);
     if (editItems.length) {
-      this.authItemContributorService.inactivateItems(editItems)
+      this.authItemContributorService.unpublishItems(editItems)
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(results => {
-          this.refreshCategories(() => {
-            WsToastService.toastSubject.next({ content: "Items have been inactivated!", type: 'success' });
-          })
+          this.sharedCategoryService.refreshCategories(() => {
+            WsToastService.toastSubject.next({ content: "Items have been unpublished!", type: 'success' });
+          }, false)
         }, (err) => {
           WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
         });
     }
   }
-
-  changeMessage() {
+  updateMessage() {
     this.authShopContributorService
-      .changeNewItemMessage(this.message)
+      .updateNewItemMessage({message: this.message})
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
         this.shop.new.message = this.message;
         this.sharedShopService.shop.next(this.shop);
+        this.isAdvertiseDropdownOpened = false;
         WsToastService.toastSubject.next({ content: "Message is updated!", type: 'success' });
       });
   }
   advertiseItems() {
-    var publishDate = this.getPublishDate(this.shop);
-    if (!this.isPublish(publishDate)) {
+    var publishedDate = this.getPublishedDate(this.shop);
+    if (!this.isPublishedFunc(publishedDate)) {
       var obj = {
-        message: this.message,
-        items: this.displayItems.map(x => x['_id'])
+        message: this.message
       };
       this.authShopContributorService
         .advertiseItems(obj)
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(result => {
-          WsToastService.toastSubject.next({ content: "Shop is advertised!", type: 'success' });
-          this.is_publish = true;
-          this.shop.new = result['new'];
+          WsToastService.toastSubject.next({ content: "New items are advertised and notify your customers!", type: 'success' });
+          this.isAdvertised = true;
+          this.shop.new = result['data'];
+          this.isAdvertiseDropdownOpened = false;
           this.sharedShopService.shop.next(this.shop);
         }, err => {
           WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
@@ -243,12 +177,34 @@ export class ItemControllerComponent implements OnInit {
       });
     }
   }
+  // openMultipleEditModal() {
+  //   this.action = this.editMultipleItems.bind(this);
+  // }
+  openAddToModal() {
+    this.getCategoriesByShopId();
+    this.isAddToCategoriesModalOpened = true;
+    this.action = this.onAddItemToCategory.bind(this, this.editItems);
+  }
+  openMoveModal() {
+    this.getCategoriesByShopId();
+    this.isMoveToCategoriesModalOpened = true;
+    this.action = this.onMoveCategory.bind(this, this.editItems);
+  }
+  openRemoveModal() {
+    this.action = this.param == 'uncategorized' ? this.removeItemsPermanantly.bind(this) : this.removeItemsFromCategory.bind(this);
+    this.isRemoveAllSelectedItemModalConfirmationOpened = true;
+  }
+  checkSelectedItems() {
+    if (!this.editItems.length) {
+      WsToastService.toastSubject.next({ content: 'Please select items!', type: 'danger'})
+    }
+  }
   markAsNew() {
     this.previousEditedItems = [...this.editItems];
     this.authItemContributorService.markAsNew(this.editItems)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(results => {
-        this.refreshCategories(() => {
+        this.sharedCategoryService.refreshCategories(() => {
           WsToastService.toastSubject.next({ content: "Mark as new!", type: 'success' });
         })
       }, (err) => {
@@ -260,7 +216,7 @@ export class ItemControllerComponent implements OnInit {
     this.authItemContributorService.unmarkNew(this.editItems)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(results => {
-        this.refreshCategories(() => {
+        this.sharedCategoryService.refreshCategories(() => {
           WsToastService.toastSubject.next({ content: "Unmark from new!", type: 'success' });
         })
       }, (err) => {
@@ -272,40 +228,42 @@ export class ItemControllerComponent implements OnInit {
     var editCategoryList = this.editCategoryList;
     this.loading.start();
     var itemAndCategoryList = {
-      edit_item_list: this.editCategoryList.map(x => x['_id']),
+      edit_item_list: this.previousEditedItems.map(x => x['_id']),
       edit_category_list: editCategoryList.map(x => x['_id'])
     };
 
     this.authCategoryContributorService
       .addItemsToCategory(itemAndCategoryList)
-      .pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.loading.stop()))
+      .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
-
-        this.refreshCategories(() => {
-          this.deselectCategories();
-          this.closeModal('addToCategoriesModal');
+        this.sharedCategoryService.refreshCategories(() => {
           WsToastService.toastSubject.next({ content: "Added to category!", type: 'success' });
+          this.deselectCategories();
+          this.isAddToCategoriesModalOpened = false;
+          this.loading.stop()
         })
       });
   }
-  getSearchItems(event) {
-    this.sharedItemService.displayItems.next(event);
-  }
+  // getSearchItems(event) {
+  //   this.sharedItemService.displayItems.next(event);
+  // }
   onMoveCategory(editItems) {
     var editCategory = this.editCategory;
     this.loading.start();
     var itemAndCategoryList = {
-      move_to_category_id: editCategory['_id'],
-      item_list: editItems.map(x => x._id)
+      moveFromCategoryId: this.selectedCategory['_id'],
+      moveToCategoryId: editCategory['_id'],
+      items: editItems.map(x => x._id)
     };
 
     this.authCategoryContributorService
-      .moveCategory(this.selectedCategory['_id'], itemAndCategoryList)
-      .pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.loading.stop()))
+      .moveCategory(itemAndCategoryList)
+      .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
-        this.refreshCategories(() => {
+        this.sharedCategoryService.refreshCategories(() => {
           this.deselectCategories();
-          this.closeModal('moveToCategoriesModal');
+          this.isMoveToCategoriesModalOpened = false;
+          this.loading.stop();
           WsToastService.toastSubject.next({ content: "Moved to category!", type: 'success' });
         })
       }, (err) => {
@@ -350,8 +308,7 @@ export class ItemControllerComponent implements OnInit {
         .pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.loading.stop()))
         .subscribe(result => {
           ArrayHelper.clear(this.tag.tags);
-          this.refreshCategories(() => {
-            this.closeModal('editMultipleItemsModal');
+          this.sharedCategoryService.refreshCategories(() => {
             WsToastService.toastSubject.next({ content: "Items are edited!", type: 'success' });
           })
         }, (err) => {
@@ -363,20 +320,21 @@ export class ItemControllerComponent implements OnInit {
     var editItems = this.editItems;
     this.previousEditedItems = [];
     this.loading.start();
+    let categoryName = this.route.snapshot.params['name'];
+    let selectedCategory = this.categories.find(x => x.name === categoryName);
     observableForkJoin(editItems.map(item => {
       return this.authCategoryContributorService.removeItemsFromCategory({
         items: editItems.map(x => x['_id']),
-        categories: this.selectedCategory ? [this.selectedCategory['_id']] : item.categories ? item.categories : []
+        categories: selectedCategory ? [selectedCategory['_id']] : item.categories ? item.categories : []
       })
     }))
-      .pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.loading.stop()))
+      .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(results => {
-        let tempAllItems = this.allItems.filter(x => !_.includes(editItems, x));
-        let tempDisplayItems = this.displayItems.filter(x => !_.includes(editItems, x));
-        this.refreshCategories(() => {
+        this.sharedCategoryService.refreshCategories(() => {
           WsToastService.toastSubject.next({ content: "Items have been removed from category!", type: 'success' });
+          this.isRemoveAllSelectedItemModalConfirmationOpened = false;
+          this.loading.stop();
         })
-
       }, (err) => {
         WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
       });
@@ -386,25 +344,27 @@ export class ItemControllerComponent implements OnInit {
     this.previousEditedItems = [];
     this.loading.start();
     this.authItemContributorService.removeItemsPermanantly({
-      item_ids: editItems.map(x => x['_id'])
+      items: editItems.map(x => x['_id'])
     })
       .pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.loading.stop()))
       .subscribe(result => {
-        this.refreshCategories(() => {
+        this.sharedCategoryService.refreshCategories(() => {
           WsToastService.toastSubject.next({ content: "Removed from category!", type: 'success' });
         })
       }, (err) => {
         WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
       });
   }
-  getCategoryByShopId() {
+  getCategoriesByShopId() {
+    this.categoryName = this.route.snapshot.params['name'];
+    this.categoriesLoading.start();
     this.authCategoryContributorService.getAuthenticatedCategoriesByShopId()
-      .pipe(takeUntil(this.ngUnsubscribe))
+      .pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.categoriesLoading.stop()))
       .subscribe(result => {
         var categoryList = result['result'];
         this.categoryList = result['result'];
-        this.selectedCategory = this.categoryList.find(x => x.name === this.category_name);
-        this.displayCategoryList = this.getOtherCategoryByName(categoryList, this.category_name);
+        this.selectedCategory = this.categoryList.find(x => x.name === this.categoryName);
+        this.displayCategoryList = this.getOtherCategoryByName(categoryList, this.categoryName);
       })
   }
   getOtherCategoryByName(categoryList, name) {
@@ -413,20 +373,6 @@ export class ItemControllerComponent implements OnInit {
   isCategoryInCategoryList(category) {
     var editCategoryList = this.editCategoryList;
     return _.includes(editCategoryList, category);
-  }
-  openModal(id) {
-    this.modalService.open(id);
-  }
-  closeModal(id: string) {
-    this.modalService.close(id);
-  }
-  removeItem() {
-    this.modalService.open('deleteModal');
-    this.modalService.close('editItemModal');
-  }
-  backToEdit() {
-    this.modalService.close('confirmationModal');
-    this.modalService.open('editItemModal');
   }
   isOrder(order) {
     return this.searchController.order === order;
@@ -470,9 +416,6 @@ export class ItemControllerComponent implements OnInit {
   deselectAll() {
     this.sharedItemService.editItems.next([]);
   }
-  refreshCategories(callback) {
-    this.sharedCategoryService.refreshCategories(callback);
-  }
   navigateTo(order, orderBy, display) {
     //alphabet
     this.router.navigate([], {
@@ -480,18 +423,18 @@ export class ItemControllerComponent implements OnInit {
       queryParamsHandling: 'merge'
     });
   }
-  getPublishInfo() {
-    let publishDate = this.getPublishDate(this.shop);
-    this.is_publish = this.isPublish(publishDate);
+  getPublishedInfo() {
+    let publishedDate = this.getPublishedDate(this.shop);
+    this.isAdvertised = this.isPublishedFunc(publishedDate);
     if (this.shop && this.shop.new) {
       this.message = this.shop.new.message;
     }
   }
   // Tested
-  getPublishDate(shop) {
+  getPublishedDate(shop) {
     var returnDate;
-    if (shop && shop.new && shop.new.publish_at) {
-      returnDate = new Date(shop.new.publish_at);
+    if (shop && shop.new && shop.new.publishedAt) {
+      returnDate = new Date(shop.new.publishedAt);
     } else {
       returnDate = this.getYesterdayDate(new Date()).toDate();
     }
@@ -503,9 +446,9 @@ export class ItemControllerComponent implements OnInit {
     return moment(date).add(-1, 'days');
   }
   // Tested
-  isPublish(publishDate) {
-    var publishAt = this.getDate(publishDate);
-    return this.isDateToday(publishAt);
+  isPublishedFunc(publishedDate) {
+    var publishedAt = this.getDate(publishedDate);
+    return this.isDateToday(publishedAt);
   }
   // Tested
   isDateToday(compareDate) {
@@ -524,7 +467,6 @@ export class ItemControllerComponent implements OnInit {
       date.getFullYear()
     );
   }
-
   ngOnDestroy() {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();

@@ -8,22 +8,24 @@ export class Shop {
     username?: string;
     serviceType: string;
     profileImage?: string = "upload/images/shop.png";
+    bannerImage?: string;
+    informationImages?: Array<string>;
+    showAddress: boolean;
     fullAddress?: {
         address: string,
         state: string,
         postcode: string,
-        city: string,
         country: string,
     };
     phone?: Array<string>;
     website?: Array<string>;
     location?: {
-        type?: String,
+        type?: string,
         coordinates: [number, number]
     };
     status?: {
         status: StatusType,
-        expireDate?: Date
+        expiryDate?: Date
     };
     type?: string;
     email?: Array<string>;
@@ -31,13 +33,21 @@ export class Shop {
     description?: string;
     openingInfoType?: OpeningInfoType;
     openingInfo?: Array<OpeningInfo>;
-    media?: Array<string>;
+    media?: Array<any>;
+    currency?: string;
     currentStatus?: boolean;
     review?: {
         count: number,
         score: number
     };
     viewed?: number;
+    contributors: [];
     categoryList?: Array<string>;
+     constructor(){
+         this.location = {
+             type: 'Point',
+             coordinates: [0, 0]
+         }
+     }
 }
-type StatusType = 'pending' | 'active' | 'inactive' | 'blocked' | 'saved' | 'unsaved' | 'save removed';
+type StatusType = 'pending' | 'active' | 'inactive' | 'blocked' | 'closed' | 'saved' | 'unsaved' | 'save removed';

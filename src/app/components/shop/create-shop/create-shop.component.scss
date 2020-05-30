@@ -22,8 +22,9 @@ ul.suggestions {
     z-index: 1;
     background-color: #fff;
     position: absolute;
-    width: 100%;
-    top: .25rem;
+    width: calc(100% - 40px);
+    right: 0rem;
+    top: 0rem;
     font-size: .8rem;
     overflow: hidden;
     border-radius: .25rem;
@@ -45,8 +46,7 @@ ul.suggestions {
 .termContainer{
     font-size: .8rem; 
     white-space: pre-line;
-    overflow-y: scroll; 
-    max-width: 600px; 
+    overflow-y: scroll;
     max-height: 500px;
     background-color: #fff;
     margin-left: auto;
@@ -70,6 +70,21 @@ ul.suggestions {
         background: map-get($ws-color, secondary-hover); 
     }
 }
+.map-screen {
+    position: absolute;
+    height: 300px;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    background-color: rgba(255, 255, 255, 0.6);
+    .loading {
+        position: absolute;
+        top: calc(50% - 15px);
+        left: calc(50% - 15px);
+        display: inline;
+    }
+}
 
 agm-map {
     height: 300px
@@ -78,5 +93,14 @@ agm-map {
 @media(max-width:992px) {
     agm-map {
         height: 250px;
+    }
+    .map-screen{
+        height:250px;
+    }
+}
+
+@media(max-width:768px) {
+    .modal-content{
+        max-width: 500px;
     }
 }

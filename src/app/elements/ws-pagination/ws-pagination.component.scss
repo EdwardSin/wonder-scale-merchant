@@ -1,0 +1,45 @@
+.pagination{
+    .pagination__padding{
+      padding-top: 50px
+    }
+    .pagination__chevron-container{
+      height: 50px;
+      background-color: #f4f5f7;
+      position: fixed;
+      bottom: 0;
+      right: 0;
+      width: calc(100% - 50px);
+      transition: width ease .2s;
+      &.pagination__chevron-container__nav-open{
+        width: calc(100% - 250px);
+      }
+  
+      .pagination__showing-info{
+        line-height: 50px;
+        vertical-align: middle;
+        font-size: .8rem;
+      }
+      .pagination__chevron-left,
+      .pagination__chevron-right{
+        width: 50px;
+        line-height: 50px;
+        vertical-align: middle;
+        float: right;
+        text-align: center;
+        transition: background-color ease .2s;
+        cursor: pointer;
+        &:hover{
+          background-color: #ddd;
+        }
+      }
+    }
+  }
+
+  @media(max-width: 992px) {
+    .pagination{
+      .pagination__chevron-container{
+        width: 100%;
+      }
+    }
+  }
+  

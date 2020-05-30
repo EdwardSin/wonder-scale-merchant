@@ -3,9 +3,9 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { AuthShopContributorService } from '@services/http/auth-shop/contributor/auth-shop-contributor.service';
 import { SharedShopService } from '@services/shared/shared-shop.service';
-import { WsLoading } from '@components/elements/ws-loading/ws-loading';
+import { WsLoading } from '@elements/ws-loading/ws-loading';
 import { DocumentHelper } from '@helpers/documenthelper/document.helper';
-import { WsToastService } from '@components/elements/ws-toast/ws-toast.service';
+import { WsToastService } from '@elements/ws-toast/ws-toast.service';
 import _ from 'lodash';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -17,7 +17,7 @@ declare var $: any;
   styleUrls: ['./social-media.component.scss']
 })
 export class SocialMediaComponent implements OnInit {
-  info: String;
+  info: string;
   form: FormGroup;
   selectedMedia = undefined;
   loading: WsLoading = new WsLoading;
@@ -47,7 +47,7 @@ export class SocialMediaComponent implements OnInit {
     this.route.data.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
         this.shop = result['shop'];
-        DocumentHelper.setWindowTitleWithWonderScale('Social Media | Settings | ' + this.shop.name);
+        DocumentHelper.setWindowTitleWithWonderScale('Social Media - Settings - ' + this.shop.name);
         this.isMediaMax = this.isMediaMaximum();
         this.loading.stop();
       })
@@ -59,7 +59,7 @@ export class SocialMediaComponent implements OnInit {
   editMedia(media, form, index) {
     var account = form.value[media];
     var obj = {
-      mediaType: media,
+      type: media,
       value: account,
       index: index
     };
@@ -100,11 +100,11 @@ export class SocialMediaComponent implements OnInit {
   addMedia(media, account) {
     if (validateMedia.bind(this)(account)) {
       this.authShopContributorService
-        .addMedia({ mediaType: media, value: account })
+        .addMedia({ type: media, value: account })
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(result => {
           if (!this.shop.media) this.shop.media = [];
-          this.shop.media.push({ mediaType: media, value: account });
+          this.shop.media.push({ type: media, value: account });
           this.selectedMedia = undefined;
           this.fbmedia = '';
           this.instamedia = '';
@@ -133,15 +133,15 @@ export class SocialMediaComponent implements OnInit {
   }
   removeMedia(type, value) {
     this.authShopContributorService
-      .removeMedia({ mediaType: type, value: value })
+      .removeMedia({ type: type, value: value })
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
-        _.remove(this.shop.media, (x) => x.mediaType == type && x.value == value);
+        _.remove(this.shop.media, (x) => x.type == type && x.value == value);
         this.isMediaMax = this.isMediaMaximum();
-        WsToastService.toastSubject.next({ content: "Media is updated!", type: 'success' });
+        WsToastService.toastSubject.next({ content: "Media is removed successfully!", type: 'success' });
 
       }, (err) => {
-        WsToastService.toastSubject.next({ content: "Media is not updated!", type: 'danger' });
+        WsToastService.toastSubject.next({ content: "Media is failed to remove!", type: 'danger' });
       });
   }
   mediaChange() {

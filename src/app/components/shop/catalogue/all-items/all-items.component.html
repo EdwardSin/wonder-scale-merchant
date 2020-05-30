@@ -1,30 +1,31 @@
-<h4 class="ws-title">All Items</h4>
+<h4 class="ws-title">All<span title="Display all items" class='fas fa-info-circle ml-2 font-9'></span></h4>
 
-<div *ngIf="allItems?.length; else loadingTemplate">
-    <div class="p-3 alert-warning mb-2 position-relative">Publish item to show to public!</div>
-    <item-controller></item-controller>
+<item-controller></item-controller>
+<div *ngIf="numberOfAllItems && !loading.isRunning(); else loadingTemplate">
     <div *ngIf="displayItems?.length; else searchLoadingTemplate">
         <item-view [showCategory]="true"></item-view>
-    </div>
+</div>
 </div>
 
 <ng-template #noItem>
-    <div class="text-center ws-background">
+    <div class="py-5 text-center">
         <p class="ws-no-title mt-2">Start adding new item</p>
         <span class="text-muted mb-2 d-inline-block">Select a category and add item</span>
     </div>
 </ng-template>
 <ng-template #noSearchItem>
-    <h4 class="mt-5 mb-5 text-center">No item found!</h4>
+    <div class="text-center">
+        <h6 class="py-5">No items found.</h6>
+    </div>
 </ng-template>
 <ng-template #loadingTemplate>
     <ng-container *ngIf="loading.isRunning(); else noItem">
-        <ws-loading></ws-loading>
+        <ws-spinner class="text-center d-block w-100" style="padding-top: 30vh"></ws-spinner>
     </ng-container>
 </ng-template>
 
 <ng-template #searchLoadingTemplate>
     <ng-container *ngIf="loading.isRunning(); else noSearchItem">
-        <ws-loading></ws-loading>
+        <ws-spinner class="text-center d-block w-100" style="padding-top: 30vh"></ws-spinner>
     </ng-container>
 </ng-template>

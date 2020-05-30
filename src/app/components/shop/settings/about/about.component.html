@@ -1,159 +1,168 @@
 <h4 class="ws-title">About</h4>
-<div class="pb-3">
-  <div class="p-0 banner-image-container mb-2 center">
-    <div class="hover p-3">
-      <label *ngIf="isBannerUploaded" (click)="editBanner()" class="btn-upload mr-2">
-        <span class="fas fa-upload"></span></label>
-      <label onclick="document.getElementById('bannerImage').click()" class="btn-upload btn-upload-camera">
-        <span class="fas fa-camera"></span></label>
-      <!-- <a *ngIf="isBannerUploaded" href="javascript:void(0)" class="btn-upload">Upload</a> -->
-    </div>
-    <div style="background-color: rgba(0,0,0,.2); max-width: 500px; width: 100%; height: 275px">
-      <div (click)="openShopModal('imageUploadModal', shop)">
-        <img class="img-profile" src="{{environment.IMAGE_URL + shop?.profileImage}}" alt="Shop Profile" />
-        <span class="img-profile img-hover">
-          <span class="camera">
-            <span class="fas fa-camera"></span>
-          </span>
-        </span>
-      </div>
-      <img *ngIf="shop?.bannerImage || isBannerUploaded" class="banner-image" #bannerImage
-        src="{{ environment.IMAGE_URL + shop?.bannerImage}}" alt="Shop Banner" />
-      <input id="bannerImage" #bannerImageInput (change)="fileChangeEvent($event)" type="file" hidden />
-    </div>
-  </div>
-  <!-- <button *ngIf="shop?.bannerImage || isBannerUploaded" class="btn btn-second btn-md m-0 mt-3 mb-3 mr-2"
-    wsDebounceClick (debounceClick)="editBanner()">Upload and Save</button>
-  <button *ngIf="shop?.bannerImage || isBannerUploaded" class="btn btn-second btn-md m-0 mt-3 mb-3" wsDebounceClick
-    (debounceClick)="removeBanner()">Remove</button> -->
-
-
-
-
-  <!-- <div class="d-inline-block" style="vertical-align: middle">
-    <span class="d-flex" style="font-size: 1.5rem">{{shop?.name}}</span>
-    <span class="text-center d-block">@{{shop?.username}}</span>
-    <a class="text-center default" href="javascript:void(0)" (click)="openShopModal('imageUploadModal', shop)">
-      <span>Edit Profile</span>
-    </a>
-  </div> -->
-</div>
-<div class="pt-3 pb-3">
-  <div class="settings-header">
-    <h4 class="ws-subtitle mb-3">General</h4>
-    <button class="btn btn-expand float-right" (click)="isGeneralExpanded = !isGeneralExpanded">{{ isGeneralExpanded ?
-      'Collapse' :'Expand'}}</button>
-    <p>Update your shop name, description and general settings</p>
-    <div [@expand]="'down'" *ngIf="isGeneralExpanded" style="height: 100%">
-      <form [formGroup]="form" (keydown.enter)="$event.preventDefault()">
-        <div class="row no-gutters">
-          <div class="col-lg-9 pr-lg-2">
-            <label class="settings-label">Name</label>
-            <input name="Name" type="text" class="settings-input nooutline form-control form-control-sm"
-              formControlName="name" />
-          </div>
-          <div class="col-lg-3 pl-lg-2">
-            <label class="settings-label">Username</label>
-            <input name="Username" type="text" class="settings-input nooutline form-control form-control-sm"
-              formControlName="username" />
-          </div>
+<div class="row no-gutters center" style="width: fit-content">
+    <div class="col-lg-auto mb-3">
+        <div *ngIf="!isMobileSize" class="img-profile__container">
+            <img *ngIf="shop?.profileImage" class="img-profile__profile" [src]="profileImage" alt="profile-image" />
+            <img class="img-profile__profile-background my-1 center" src="assets/images/png/icon-with-profile-image-borderless.png" alt="profile-background" />
+            <p class="img-profile__name mb-0 text-break">{{ shop?.name }}</p>
+            <p class="img-profile__username mb-0">@{{ shop?.username }}</p>
         </div>
+        <div *ngIf="isMobileSize" class="img-profile__mobile-container">
+            <img *ngIf="shop?.profileImage" class="img-profile__profile" [src]="profileImage" alt="profile-image" />
+            <div class="img-profile__name-container">
+                <p class="img-profile__name mb-0 text-break">{{ shop?.name }}</p>
+                <p class="img-profile__username mb-0">@{{ shop?.username }}</p>
+            </div>
+        </div>
+        <span class="img-profile-camera img-hover">
+            <div class="img-profile__uploading" mdbDropdown>
+                <span *ngIf="!isProfileImageUploading.isRunning()" class="camera nooutline" mdbDropdownToggle>
+                    <span class="fas fa-camera"></span>
+                </span>
+                <div class="dropdown-menu dropdown-primary p-0">
+                    <a href="javascript:void(0)" class="dropdown-item" (click)="isProfileUploaderOpened = true">Upload</a>
+                    <a href="javascript:void(0)" (click)="removeProfileImage()" class="dropdown-item">Remove</a>
+                </div>
+            </div>
+            <span *ngIf="isProfileImageUploading.isRunning()" class="img-profile__uploading">
+                <img style="position: absolute; top: calc(50% - 8px); left: calc(50% - 8px);" [src]="environment.LOADING_UPLOAD_DATA" alt="loading" />
+            </span>
+        </span>
+    </div>
+    <div class="banner-image-container">
+        <div class="hover p-3">
+            <div class="profile-settings__profile-image-upload" mdbDropdown>
+                <label *ngIf="!isBannerImageUploading.isRunning()" class="btn-upload btn-upload-camera mr-2" mdbDropdownToggle>
+                    <span class="fas fa-camera"></span></label>
+                <div class="dropdown-menu dropdown-primary p-0" style="top: 15px; left: -8px; overflow: hidden;">
+                    <a href="javascript:void(0)" class="dropdown-item" (click)="isBannerUploaderOpened = true">Upload</a>
+                    <a href="javascript:void(0)" (click)="removeBannerImage()" class="dropdown-item">Remove</a>
+                </div>
+            </div>
+        </div>
+        <div class="w-100 h-100" style="background-color: rgba(0,0,0,.2);">
+            <div *ngIf="!bannerImage" style="height: 279px"></div>
+            <img *ngIf="bannerImage" class="banner-image" [src]="bannerImage" alt="Shop Banner" />
+            <span *ngIf="isBannerImageUploading.isRunning()" class="img-banner__uploading">
+                <img style="position: absolute; top: calc(50% - 8px); left: calc(50% - 8px);" [src]="environment.LOADING_UPLOAD_DATA" alt="loading" />
+            </span>
+        </div>
+    </div>
+</div>
+<div class="py-2">
+    <div class="settings-header">
+        <h4 class="ws-subtitle mb-3">General</h4>
+        <button class="btn btn-expand float-right" (click)="isGeneralExpanded = !isGeneralExpanded">{{ isGeneralExpanded ?
+      'Collapse' :'Expand'}}</button>
+        <p>Update your shop name, description and general settings</p>
+        <div [@expand]="'down'" *ngIf="isGeneralExpanded" style="height: 100%">
+            <form [formGroup]="form" (keydown.enter)="$event.preventDefault()">
+                <div class="row no-gutters">
+                    <div class="col-lg-9 pr-lg-2">
+                        <label class="settings-label">Name</label>
+                        <input name="Name" type="text" class="settings-input form-control form-control-sm" formControlName="name" />
+                    </div>
+                    <div class="col-lg-3 pl-lg-2">
+                        <label class="settings-label">Username</label>
+                        <input name="Username" type="text" class="settings-input form-control form-control-sm" formControlName="username" />
+                    </div>
+                </div>
 
-        <label class="settings-label">Description (Optional)</label>
-        <textarea rows="5" name="Description" class="settings-input nooutline form-control form-control-sm"
-          formControlName="description"></textarea>
-        <label class="settings-label">Currency</label>
-        <select class="form-control nooutline" formControlName="currency">
-          <option *ngFor="let currency of Currency.currenciesAsArray" [value]="currency">{{currency}}
-            ({{Currency.symbols[currency]}})</option>
-        </select>
-        <div class="d-block mt-3 border p-3" style="background-color: #fafafa; border-radius: .25rem">
+                <label class="settings-label">Description (Optional)</label>
+                <textarea rows="5" maxlength="256" name="Description" class="settings-input form-control form-control-sm" formControlName="description"></textarea>
+                <label class="settings-label">Currency</label>
+
+                <mat-select class="form-control form-control-sm" placeholder="Currency" formControlName="currency">
+                    <mat-option [value]="currency" *ngFor="let currency of currencyService.currencyFullnameArray">{{currency}}
+                        ({{currencyService.currencySymbols[currency]}})
+                    </mat-option>
+                </mat-select>
+
+                <!-- <div class="d-block mt-3 border p-3" style="background-color: #fafafa; border-radius: .25rem">
           <label class="mb-0 w-100 font-weight-bold">Tag Recommendation:</label>
           <label class="mb-0 w-100">Restaurants:</label>
           <div class="mb-2" style="line-height: 1rem">
             <span (click)="tag.addTag(rtag)" *ngFor="let rtag of restaurantTags"
-              class="badge noselect ws-bg-secondary pt-1 pb-1 mr-1 mb-1 clickable nooutline">{{
+              class="badge noselect ws-bg-secondary pt-1 pb-1 mr-1 mb-1 clickable">{{
               rtag }}</span>
           </div>
           <label class="mb-0 w-100">Shopping:</label>
           <div class="mb-2" style="line-height: 1rem">
             <span (click)="tag.addTag(stag)" *ngFor="let stag of shoppingTags"
-              class="badge noselect ws-bg-secondary pt-1 pb-1 mr-1 mb-1 clickable nooutline">{{
+              class="badge noselect ws-bg-secondary pt-1 pb-1 mr-1 mb-1 clickable">{{
               stag }}</span>
           </div>
           <label class="mb-0 w-100">Services:</label>
           <div style="line-height: 1rem">
             <span (click)="tag.addTag(stag)" *ngFor="let stag of serviceTags"
-              class="badge noselect ws-bg-secondary pt-1 pb-1 mr-1 mb-1 clickable nooutline">{{
+              class="badge noselect ws-bg-secondary pt-1 pb-1 mr-1 mb-1 clickable">{{
               stag }}</span>
           </div>
         </div>
         <label class="settings-label">Tag</label>
         <div class="input-group input-group-sm mb-1" style="z-index:0">
           <input name='tag' [disabled]="tag.tags.length > 4" (focus)="tag.reset()" (input)="tag.reset()"
-            placeholder="Related Tag (Max 5)" autocomplete="off" class='form-control nooutline'
+            placeholder="Related Tag (Max 5)" autocomplete="off" class='form-control'
             [ngModelOptions]="{standalone: true}" [(ngModel)]="tag.input" tabIndex="6" (keydown.enter)="tag.addTag()" />
           <div class="input-group-append">
-            <button [disabled]="tag.tags.length > 4" class="m-0 nooutline input-group-text clickable" type="button"
+            <button [disabled]="tag.tags.length > 4" class="m-0 input-group-text clickable" type="button"
               (click)="tag.addTag()">
               <i class="fa fa-plus"></i>
             </button>
           </div>
         </div>
-        <span class="badge ws-bg-secondary mr-1 nooutline mb-1" style="font-size: .7rem" *ngFor="let rtag of tag.tags">
+        <span class="badge ws-bg-secondary mr-1 mb-1" style="font-size: .7rem" *ngFor="let rtag of tag.tags">
           {{rtag}}
           <span class="fas fa-times clickable"
             (click)="$event.stopPropagation(); tag.removeTag(rtag); tag.reset();"></span>
         </span>
-        <br />
-        <button class="btn btn-success btn-md m-0 mt-3 mb-3" wsDebounceClick (debounceClick)="editGeneral()">Save
-          Changes</button>
-      </form>
+        <br /> -->
+                <button class="btn btn-success btn-sm m-0 mt-3 mb-3" wsDebounceClick (debounceClick)="editGeneral()">Save Changes</button>
+            </form>
+        </div>
     </div>
-  </div>
-  <div class="settings-header">
-    <h4 class="ws-subtitle mb-3">Default</h4>
-    <button class="btn btn-expand float-right" (click)="isDefaultExpanded = !isDefaultExpanded">{{ isDefaultExpanded ?
+    <div class="settings-header">
+        <h4 class="ws-subtitle mb-3">Default</h4>
+        <button class="btn btn-expand float-right" (click)="isDefaultExpanded = !isDefaultExpanded">{{ isDefaultExpanded ?
           'Collapse' :'Expand'}}</button>
-    <p>Set the default settings.</p>
-    <div [@expand]="'down'" *ngIf="isDefaultExpanded" style="height: 100%">
-
-      <label class="font-9 font-weight-bold pl-4">Item</label>
-      <form class="pl-4" [formGroup]="settingsForm" (keydown.enter)="$event.preventDefault()">
-        <table>
-          <tr>
-            <td class="pr-3">
-              <span>Mark item as New</span>
-            </td>
-            <td class="pt-1 text-right">
-              <mat-checkbox [color]="'primary'" formControlName="isMarkedAsNew"></mat-checkbox>
-            </td>
-          </tr>
-          <tr>
-            <td class="pr-3">
-              <span>Mark as published item</span>
-            </td>
-            <td class="pt-1 text-right">
-              <mat-checkbox [color]="'primary'" formControlName="isMarkedAsPublished"></mat-checkbox>
-            </td>
-          </tr>
-          <tr>
-            <td class="pr-3">
-              <span>Set displayed price to public</span>
-            </td>
-            <td class="pt-1 text-right">
-              <mat-checkbox [color]="'primary'" formControlName="isPriceDisplayed"></mat-checkbox>
-            </td>
-          </tr>
-          <tr>
-            <td class="pr-3">
-              <span>Set item in-stock</span>
-            </td>
-            <td class="pt-1 text-right">
-              <mat-checkbox [color]="'primary'" formControlName="isInStock"></mat-checkbox>
-            </td>
-          </tr>
-          <tr>
+        <p>Set the default settings.</p>
+        <div [@expand]="'down'" *ngIf="isDefaultExpanded" style="height: 100%">
+            <label class="font-9 font-weight-bold pl-4">Item</label>
+            <form [formGroup]="settingsForm" (keydown.enter)="$event.preventDefault()">
+                <table>
+                    <tr>
+                        <td class="pr-3">
+                            <span>Mark item as New</span>
+                        </td>
+                        <td class="pt-1 text-right">
+                            <mat-checkbox [color]="'primary'" formControlName="isMarkedAsNew"></mat-checkbox>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="pr-3">
+                            <span>Mark as published item</span>
+                        </td>
+                        <td class="pt-1 text-right">
+                            <mat-checkbox [color]="'primary'" formControlName="isPublished"></mat-checkbox>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="pr-3">
+                            <span>Set displayed price to public</span>
+                        </td>
+                        <td class="pt-1 text-right">
+                            <mat-checkbox [color]="'primary'" formControlName="isPriceDisplayed"></mat-checkbox>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="pr-3">
+                            <span>Set item in-stock</span>
+                        </td>
+                        <td class="pt-1 text-right">
+                            <mat-checkbox [color]="'primary'" formControlName="isInStock"></mat-checkbox>
+                        </td>
+                    </tr>
+                    <!-- <tr>
             <td class="pr-3">
               <span>E-Commerce available</span>
             </td>
@@ -173,57 +182,51 @@
             <td class="pr-3">
               <span>Set item default currency</span>
             </td>
-            <td class="pt-1">
-              <select class="form-control form-control-sm nooutline" formControlName="defaultCurrency">
-                <option *ngFor="let currency of Currency.currenciesAsArray" [value]="currency">{{currency}}
-                  ({{Currency.symbols[currency]}})</option>
-              </select>
-            </td>
-          </tr>
-        </table>
-        <button class="btn btn-success btn-md m-0 mt-3 mb-3" wsDebounceClick (debounceClick)="editDefault()">Save
-          Changes</button>
-      </form>
+          </tr> -->
+                </table>
+                <button class="btn btn-success btn-sm m-0 mt-3 mb-3" wsDebounceClick (debounceClick)="editDefault()">Save Changes</button>
+            </form>
+        </div>
     </div>
-  </div>
-  <div class="settings-header">
-    <h4 class="ws-subtitle mb-3">Contact</h4>
-    <button class="btn btn-expand float-right" (click)="isContactExpanded = !isContactExpanded">{{ isContactExpanded ?
+    <div class="settings-header">
+        <h4 class="ws-subtitle mb-3">Contact</h4>
+        <button class="btn btn-expand float-right" (click)="isContactExpanded = !isContactExpanded">{{ isContactExpanded ?
       'Collapse' :'Expand'}}</button>
-    <p>Update your shop contact information.</p>
-    <div [@expand]="'down'" *ngIf="isContactExpanded">
-      <form [formGroup]="form" (keydown.enter)="$event.preventDefault()">
-        <div>
-          <label class="settings-label">Email</label>
-          <ws-multiple-input [(items)]="shop.email" [type]="'email'" [placeholder]="'Email'" [maxItems]="3"
-            [name]="'email'"></ws-multiple-input>
-        </div>
-        <div>
-          <label class="settings-label">Tel</label>
-          <ws-multiple-input [(items)]="shop.phone" [type]="'tel'" [placeholder]="'Tel'" [maxItems]="3" [name]="'tel'">
-          </ws-multiple-input>
-        </div>
-        <div>
-          <label class="settings-label">Website</label>
-          <ws-multiple-input [(items)]="shop.website" [type]="'url'"
-            [placeholder]="'Url (Example: https://www.example.com)'" [maxItems]="3" [name]="'website'">
-          </ws-multiple-input>
-        </div>
-        <div>
-          <label class="settings-label">Busines Point</label>
-          <business-location [address]="address" [mapController]="mapController"></business-location>
-        </div>
-        <div>
-          <label class="settings-label">Opening Hour</label>
-          <business-timetable [(timetable)]="timetable"></business-timetable>
-        </div>
-        <button class="btn btn-success btn-md m-0 mt-3 mb-3" wsDebounceClick (debounceClick)="editContact()">Save
-          Changes</button>
-      </form>
-    </div>
-  </div>
+        <p>Update your shop contact information.</p>
+        <div [@expand]="'down'" *ngIf="isContactExpanded">
+            <form [formGroup]="form" (keydown.enter)="$event.preventDefault()">
+                <div class="col-sm-6 px-0 center mb-3">
+                    <label class="settings-label">Email</label>
+                    <ws-multiple-input [(items)]="shop.email" [type]="'email'" [placeholder]="'Email'" [maxItems]="3" [name]="'email'"></ws-multiple-input>
+                </div>
+                <div class="col-sm-6 px-0 center mb-3">
+                    <label class="settings-label">Tel</label>
+                    <ws-multiple-input [(items)]="shop.phone" [type]="'tel'" [placeholder]="'Tel'" [maxItems]="3" [name]="'tel'">
+                    </ws-multiple-input>
+                </div>
+                <div class="col-sm-6 px-0 center mb-3">
+                    <label class="settings-label">Website</label>
+                    <ws-multiple-input [(items)]="shop.website" [type]="'url'" [placeholder]="'Url (Example: https://www.example.com)'" [maxItems]="3" [name]="'website'">
+                    </ws-multiple-input>
+                </div>
 
-  <!-- <div class="settings-header">
+                <div class="col-sm-6 px-0 center">
+                    <label class="settings-label">Busines Point</label>
+                    <br />
+                    <mat-checkbox [color]="'primary'" [checked]="shop.showAddress" (change)="disabledControls()" class="mr-2 d-inline-block" style="vertical-align: text-top"></mat-checkbox>
+                    <label class="mb-0 font-9" style="display: inline-flex">Show Business Location</label>
+                    <business-location [disabled]="!shop.showAddress" [address]="address" [mapController]="mapController"></business-location>
+                </div>
+                <div class="col-sm-6 px-0 center">
+                    <label class="settings-label">Opening Hour</label>
+                    <business-timetable [(timetable)]="timetable"></business-timetable>
+                </div>
+                <button class="btn btn-success btn-sm m-0 mt-3 mb-3" wsDebounceClick (debounceClick)="editContact()">Save Changes</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- <div class="settings-header">
         <h4 class="ws-subtitle mb-3">Permission</h4>
         <button class="btn btn-expand float-right" (click)="isPermissionExpanded = !isPermissionExpanded">Expand</button>
         <p>Enable or disable certain features and choose access levels.</p>
@@ -231,130 +234,157 @@
             my message here
         </div>
     </div> -->
-  <div class="settings-header">
-    <h4 class="ws-subtitle mb-3">Contributor</h4>
-    <button class="btn btn-expand float-right" (click)="isContributorExpanded = !isContributorExpanded">{{
+    <div class="settings-header">
+        <h4 class="ws-subtitle mb-3">Contributor</h4>
+        <button class="btn btn-expand float-right" (click)="isContributorExpanded = !isContributorExpanded">{{
       isContributorExpanded ? 'Collapse' :'Expand'}}</button>
-    <p>You can control and view contributor in Vrest Hotel.</p>
-    <div [@expand]="'down'" *ngIf="isContributorExpanded" style="height: 100%">
-      <form class="border mb-3" *ngIf="isAdminAuthorized">
-        <div class="border-bottom p-2 text-center" style="background-color: #fafafa;">
-          Invite Contributor
-        </div>
-        <div class="p-3">
-          <label class="settings-label">Select members to invite</label>
-          <div class="form-control form-control-sm">
-            <div class="row no-gutters w-100">
-              <span class="badge ws-bg-secondary mr-1" style="height:20px;line-height:20px"
-                *ngFor="let contributor of contributorController.new_contributors">{{
+        <p>You can control and view contributor in {{ shop?.name }}.</p>
+        <div [@expand]="'down'" *ngIf="isContributorExpanded" class="col-sm-6 px-0 center" style="height: 100%">
+            <form class="border mb-3" *ngIf="isAdminAuthorized">
+                <div class="border-bottom p-2 text-center" style="background-color: #fafafa;">
+                    Invite Contributor
+                </div>
+                <div class="p-3">
+                    <label class="settings-label">Select members to invite</label>
+                    <div class="form-control form-control-sm">
+                        <div class="row no-gutters w-100">
+                            <span class="badge ws-bg-secondary mr-1" style="height:20px;line-height:17px" *ngFor="let contributor of contributorController.newContributors">{{
                 contributor?.firstName}}
-                <span class="fas fa-times ml-2 clickable" (click)="removeContributor(contributor)"></span>
-              </span>
-              <input autocomplete="off" (input)="valueChanged($event.target.value)" name="contributor"
-                class="mb-0 settings-input nooutline border-0 col" [(ngModel)]="contributorController.searchText" />
-            </div>
-          </div>
-          <div class="w-100 position-relative">
-            <ul *ngIf="userSuggestions?.length" class="contributor-list list-unstyled mb-0">
-              <li *ngFor="let user of userSuggestions" (click)="addContributor(user)">
-                <img class="mr-2" style="width:24px; height:24px; object-fit: contain; border-radius: 50%;"
-                  src="{{user?.profileImage}}" alt="profile image" />
-                <div class="d-inline-block">{{user?.firstName }} {{user?.lastName}}</div>
-              </li>
-            </ul>
-          </div>
+                                <span class="fas fa-times ml-2 clickable" (click)="removeContributor(contributor)"></span>
+                            </span>
+                            <input autocomplete="off" (input)="valueChanged($event.target.value)" name="contributor" class="mb-0 settings-input border-0 col" [(ngModel)]="contributorController.searchText" />
+                        </div>
+                    </div>
+                    <div class="w-100 position-relative">
+                        <ul *ngIf="userSuggestions?.length" class="contributor-list list-unstyled mb-0">
+                            <li *ngFor="let user of userSuggestions" (click)="addContributor(user)">
+                                <img class="mr-2" style="width:24px; height:24px; object-fit: contain; border-radius: 50%;" [defaultImage]="environment.LAZY_LOAD_IMAGE" [lazyLoad]="user?.profileImage" alt="profile image" />
+                                <div class="d-inline-block">{{user?.firstName }} {{user?.lastName}}</div>
+                            </li>
+                        </ul>
+                    </div>
 
-          <label class="settings-label">Choose a role permission</label>
-          <select name="role" [(ngModel)]="contributorController.new_role"
-            class="settings-input nooutline form-control form-control-sm">
-            <option>Admin</option>
-            <option>Maintainer</option>
-          </select>
-          <permission-list [role]="contributorController.new_role"></permission-list>
-          <button class="btn btn-md btn-success m-0 mt-3 mb-3" wsDebounceClick
-            (debounceClick)="inviteContributor()">Invite</button>
-        </div>
-      </form>
-      <p class="mb-2">Existing contributors</p>
-      <div class="border rounded">
-        <div class="border-bottom p-2" style="background-color: #fafafa; font-size: .9rem">
-          Contributors of
-          <span class="font-weight-bold">Vrest Hotel</span>
-          <button [disabled]="refreshLoading.isRunning()" style="background: none; border: 0"
-            class="p-0 nooutline float-right" (click)="getContributors()">
-            <span [class.loading]="refreshLoading.isRunning()" class="fas fa-sync-alt mr-2 clickable"></span>
-          </button>
-        </div>
-        <div class="p-3" *ngFor="let contributor of contributorController.exists_contributors">
-          <img class="mr-3" style="width: 40px; height: 40px; border-radius: 50%" src="{{contributor?.profileImage}}"
-            alt="Profile" />
-          <div class="d-inline-block" style="vertical-align: middle">
-            <span class="d-flex font-weight-normal" style="font-size:.9rem">{{contributor?.firstName}}
-              {{contributor?.lastName}}
-              <span *ngIf="contributor?.status == 'active'" class="fas fa-circle ml-2 text-success"
-                style="filter: drop-shadow(0 0  2px #1e7b34);line-height: 20px;"></span>
-              <span *ngIf="contributor?.status == 'rejected'" class="fas fa-circle ml-2 text-danger"
-                style="filter: drop-shadow(0 0 2px #990000);line-height: 20px;"></span>
-              <span *ngIf="contributor?.status == 'pending'" class="fas fa-circle ml-2 text-warning"
-                style="filter: drop-shadow(0 0 2px #ffbb33);line-height: 20px;"></span>
-            </span>
-            <span *ngIf="contributor?.status == 'active'" class="d-flex" style="font-size:.9rem">Joined {{
+                    <label class="settings-label">Choose a role permission</label>
+                    <select name="role" [(ngModel)]="contributorController.newRole" class="settings-input form-control form-control-sm">
+                        <option value="admin">Admin</option>
+                        <option value="maintainer">Maintainer</option>
+                    </select>
+                    <permission-list [role]="contributorController.newRole"></permission-list>
+                    <button class="btn btn-sm btn-success m-0 mt-3 mb-3" wsDebounceClick (debounceClick)="inviteContributor()">Invite</button>
+                </div>
+            </form>
+            <p class="mb-2">Existing contributors</p>
+            <div class="border rounded">
+                <div class="border-bottom p-2" style="background-color: #fafafa; font-size: .9rem">
+                    Contributors of
+                    <span class="font-weight-bold">Vrest Hotel</span>
+                    <button [disabled]="refreshLoading.isRunning()" style="background: none; border: 0" class="p-0 float-right mr-2" (click)="getContributors()">
+                        <span [class.loading]="refreshLoading.isRunning()" class="fas fa-sync-alt clickable"></span>
+                    </button>
+                </div>
+                <div class="p-3" *ngFor="let contributor of contributorController.existsContributors">
+                    <img class="mr-3" style="width: 40px; height: 40px; border-radius: 50%" [defaultImage]="environment.LAZY_LOAD_IMAGE" [lazyLoad]="contributor?.profileImage" alt="Profile" />
+                    <div class="d-inline-block" style="vertical-align: middle">
+                        <span class="d-flex font-weight-normal" style="font-size:.9rem">{{contributor?.firstName}}
+                            {{contributor?.lastName}}
+                            <span *ngIf="contributor?.status == 'active'" class="fas fa-circle ml-2 text-success" style="filter: drop-shadow(0 0  2px #1e7b34);line-height: 20px;"></span>
+                            <span *ngIf="contributor?.status == 'rejected'" class="fas fa-circle ml-2 text-danger" style="filter: drop-shadow(0 0 2px #990000);line-height: 20px;"></span>
+                            <span *ngIf="contributor?.status == 'pending'" class="fas fa-circle ml-2 text-warning" style="filter: drop-shadow(0 0 2px #ffbb33);line-height: 20px;"></span>
+                        </span>
+                        <span *ngIf="contributor?.status == 'active'" class="d-flex" style="font-size:.9rem">Joined {{
               contributor?.joinedDate | passDate }} - {{ contributor?.role}}</span>
-            <span *ngIf="contributor?.status == 'pending'" class="d-flex" style="font-size:.9rem">Invited {{
+                        <span *ngIf="contributor?.status == 'pending'" class="d-flex" style="font-size:.9rem">Invited {{
               contributor?.invitedDate | passDate }} - {{ contributor?.role}}</span>
-            <span *ngIf="contributor?.status == 'rejected'" class="d-flex" style="font-size:.9rem">Rejected {{
+                        <span *ngIf="contributor?.status == 'rejected'" class="d-flex" style="font-size:.9rem">Rejected {{
               contributor?.joinedDate | passDate }} - {{ contributor?.role}}</span>
-          </div>
-          <div *ngIf="isAdminAuthorized" class="d-inline-block float-right">
-            <a href="javascript:void(0)" class="default" (click)="openModal('editModal', contributor)">
-              <span class="font-weight-normal" style="font-size:.9rem">Edit</span>
-            </a>
-          </div>
+                    </div>
+                    <div *ngIf="isAdminAuthorized" class="d-inline-block float-right">
+                        <a href="javascript:void(0)" class="default" (click)="openEditContributorModal(contributor)">
+                            <span class="font-weight-normal" style="font-size:.9rem">Edit</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
-  <div class="settings-header">
-    <h4 class="ws-subtitle mb-3">Advanced</h4>
-    <button class="btn btn-expand float-right" (click)="isAdvancedExpanded = !isAdvancedExpanded">Expand</button>
-    <p>Perform advanced options such as removing your shop.</p>
-    <div [@expand]="'down'" *ngIf="isAdvancedExpanded" style="height: 100%">
-      <form *ngIf="isAdminAuthorized" class="ws-background mb-3">
-        <p *ngIf="shop?.status?.status == 'cancel'" class="font-weight-normal" style="font-size: .9rem">
-          Shop is allowed to be removed permanently after {{ remove_day_number }} days.
-          <br />
-          You can reactivate any time.
-        </p>
-        <p *ngIf="shop?.status?.status != 'cancel'" class="font-weight-normal" style="font-size: .9rem">
-          You can reactivate shop within 14 days.<br>
-          Shop will not be displayed to public.</p>
-        <button *ngIf="shop.status.status == 'cancel'" class="btn btn-warning btn-md m-0"
-          (click)="openModal('confirmReactivateModal')">Reactivate</button>
-        <button *ngIf="shop.status.status != 'cancel'" class="btn btn-md btn-danger m-0"
-          (click)="openModal('confirmCloseShopModal')">Remove
-          Shop Permanently</button>
-      </form>
+    <div class="settings-header">
+        <h4 class="ws-subtitle mb-3">Advanced</h4>
+        <button class="btn btn-expand float-right" (click)="isAdvancedExpanded = !isAdvancedExpanded">Expand</button>
+        <p>Perform advanced options such as removing your shop.</p>
+        <div [@expand]="'down'" *ngIf="isAdvancedExpanded" style="height: 100%">
+            <form *ngIf="isAdminAuthorized" class="mb-3">
+                <p *ngIf="shop?.status?.status == 'closed' && timeDifference > 0" class="alert alert-secondary ws-bg-light-grey-4 mb-1" style="font-size: .9rem">
+                    <button *ngIf="shop.status.status == 'closed' && timeDifference > 0" class="btn btn-primary btn-sm m-0 mb-2" (click)="isConfirmReactivateModalOpened = true">Reactivate</button>
+                    <br />
+                    Shop will be removed permanently <span class="text-danger font-weight-bold">{{timeDifferenceString}}</span>.
+                    <br />
+                    You can reactivate anytime before shop is removed permanently.
+                </p>
+                <p *ngIf="shop?.status?.status != 'closed'" class="alert alert-secondary ws-bg-light-grey-4 mb-1" style="font-size: .9rem">
+                    <button *ngIf="shop.status.status != 'closed'" class="btn btn-sm btn-danger m-0 mb-2" (click)="isConfirmCloseShopModalOpened = true">Remove
+                        Shop Permanently</button>
+                    <br />
+                    You can reactivate shop within 1 hour.<br>
+                    Shop will not be displayed to public.</p>
+            </form>
 
-      <form class="ws-background mb-3">
-        <p class="font-weight-normal" style="font-size: .9rem">
-          All contributors can leave the shop.<br />
-          At lease 1 admin should be in the shop.
-        </p>
-        <button class="btn btn-warning btn-md m-0" (click)="openModal('confirmQuitShopModal')">Leave Shop</button>
-      </form>
+            <form class="mb-3">
+                <p class="alert alert-secondary ws-bg-light-grey-4 mb-1" style="font-size: .9rem">
+                    <button class="btn btn-warning btn-sm m-0 mb-2" (click)="isConfirmQuitShopModalOpened = true">Leave Shop</button>
+                    <br />
+                    All contributors can leave the shop.<br />
+                    At least 1 admin should be in the shop.
+                </p>
+            </form>
+        </div>
     </div>
-  </div>
-  <!-- <div class="settings-header">
+    <!-- <div class="settings-header">
         <h4 class="ws-subtitle mb-3">Security</h4>
         <button class="btn float-right">Expand</button>
         <p>Reset your password to keep your account safe.</p>
     </div> -->
 </div>
-<image-upload-modal id="imageUploadModal" [type]="'shop'"></image-upload-modal>
-<edit-contributor-modal id="editModal"></edit-contributor-modal>
-<confirm-modal id="confirmCloseShopModal" [message]="'Are you sure to close the shop permanently?'"
-  [action]="closePermanently.bind(this)"></confirm-modal>
-<confirm-modal id="confirmReactivateModal" [message]="'Are you sure to reactivate the shop?'"
-  [action]="reactivateFromInactive.bind(this)"></confirm-modal>
-<confirm-modal id="confirmQuitShopModal" [message]="'Are you sure to quit the shop?'" [action]="quitShop.bind(this)">
+<edit-contributor-modal *ngIf="isEditContributorModalOpened" [contributorController]="contributorController" [(isOpened)]="isEditContributorModalOpened" id="editModal"></edit-contributor-modal>
+<confirm-modal *ngIf="isConfirmCloseShopModalOpened" [(isOpened)]="isConfirmCloseShopModalOpened" id="confirmCloseShopModal" [message]="'Are you sure to close the shop permanently?'" [action]="closePermanently.bind(this)"></confirm-modal>
+<confirm-modal *ngIf="isConfirmReactivateModalOpened" [(isOpened)]="isConfirmReactivateModalOpened" id="confirmReactivateModal" [message]="'Are you sure to reactivate the shop?'" [action]="reactivateFromInactive.bind(this)"></confirm-modal>
+<confirm-modal *ngIf="isConfirmQuitShopModalOpened" [(isOpened)]="isConfirmQuitShopModalOpened" id="confirmQuitShopModal" [message]="'Are you sure to quit the shop?'" [action]="quitShop.bind(this)">
 </confirm-modal>
+
+<ws-modal *ngIf="isProfileUploaderOpened" [isCloseIconDisplayed]="false" [(isOpened)]="isProfileUploaderOpened" [maxWidth]="400">
+    <div class="pt-3" modalBody>
+        <div class='preview-image__container center'>
+            <span class="preview-image__remove-icon fas fa-times" (click)="removePreviewImage()"></span>
+            <div *ngIf="!previewImage" onclick="document.getElementById('id-profile-image-upload').click()" class="preview-image__text-container">
+                <span class="preview-image__text-icon fas fa-image"></span>
+                <span class="preview-image__text">Upload Image</span>
+            </div>
+            <img *ngIf="previewImage" id="id-preview-image" class="preview-image" [src]="previewImage" alt="preview profile image" />
+        </div>
+        <div class="float-right mt-5">
+            <button class="btn btn-controller mr-1" (click)="uploadImage()" [disabled]="!previewImage">
+                <ws-spinner *ngIf="isProfileImageUploading?.isRunning()" [width]="15" [height]="15" [borderWidth]="3" class="mr-2"></ws-spinner>Upload
+            </button>
+            <button class="btn btn-controller" (click)="isProfileUploaderOpened = false; removePreviewImage()">Cancel</button>
+        </div>
+        <input hidden id="id-profile-image-upload" type="file" accept="image/*" name="profile-image" (change)="fileChangeEvent($event)" />
+    </div>
+</ws-modal>
+<ws-modal *ngIf="isBannerUploaderOpened" [isCloseIconDisplayed]="false" [(isOpened)]="isBannerUploaderOpened" [maxWidth]="400">
+    <div class="pt-3" modalBody>
+        <div class='banner-preview-image__container center' [class.banner-preview-image__container-uploading]="previewImage">
+            <span *ngIf="previewImage" class="banner-preview-image__remove-icon fas fa-times" (click)="removePreviewImage()"></span>
+            <div *ngIf="!previewImage" onclick="document.getElementById('id-banner-image-upload').click()" class="banner-preview-image__text-container">
+                <span class="banner-preview-image__text-icon fas fa-image"></span>
+                <span class="banner-preview-image__text">Upload Image</span>
+            </div>
+            <img *ngIf="previewImage" id="id-banner-preview-image" class="banner-preview-image" [src]="previewImage" alt="preview banner image" />
+        </div>
+        <div class="float-right mt-5">
+            <button class="btn btn-controller mr-1" (click)="uploadBannerImage()" [disabled]="!previewImage">
+                <ws-spinner *ngIf="isBannerImageUploading?.isRunning()" [width]="15" [height]="15" [borderWidth]="3" class="mr-2"></ws-spinner>Upload
+            </button>
+            <button class="btn btn-controller" (click)="isBannerUploaderOpened = false; removePreviewImage()">Cancel</button>
+        </div>
+        <input hidden id="id-banner-image-upload" type="file" accept="image/*" name="banner-image" (change)="fileBannerChangeEvent($event)" />
+    </div>
+</ws-modal>

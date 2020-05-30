@@ -2,15 +2,19 @@ import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { Constants } from '@constants/constants';
+import { Currency } from '@objects/currency';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CurrencyService {
-
+  currencies: Array<Currency> = [];
+  currencyFullnameArray = Object.keys(Constants.currencyFullnames);
+  currencyFullnames = Constants.currencyFullnames;
+  currencySymbols = Constants.currencySymbols;
   currencyRate: BehaviorSubject<any> = new BehaviorSubject(null);
-  currencyName: BehaviorSubject<any> = new BehaviorSubject(null);
-  selectedCurrency = new BehaviorSubject('MYR');
+  selectedCurrency: BehaviorSubject<string> = new BehaviorSubject('MYR');
 
   constructor(private http: HttpClient,
     @Inject(PLATFORM_ID) private platformId) {
@@ -18,6 +22,9 @@ export class CurrencyService {
     if (platform) {
       this.selectedCurrency = new BehaviorSubject(localStorage.getItem('currency') || 'MYR');
     }
+  }
+  getCurrencyWithCode(code='MYR') {
+    return this.currencies.find(currency => currency.code == code);
   }
 
   getCurrency() {

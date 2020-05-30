@@ -1,10 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { UserService } from '@services/http/general/user.service';
-import { WsLoading } from '@components/elements/ws-loading/ws-loading';
+import { WsLoading } from '@elements/ws-loading/ws-loading';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, finalize } from 'rxjs/operators';
+import { WsToastService } from '@elements/ws-toast/ws-toast.service';
+import { AuthUserService } from '@services/http/general/auth-user.service';
+import { SharedUserService } from '@services/shared/shared-user.service';
+import { environment } from '@environments/environment';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'activate',
@@ -17,10 +22,15 @@ export class ActivateComponent implements OnInit {
   resendLoading: WsLoading = new WsLoading;
   activateSuccess;
   resend;
+  environment = environment;
   private ngUnsubscribe: Subject<any> = new Subject();
 
-  constructor(private userService: UserService,
+  constructor(
+    private authUserService: AuthUserService,
+    private userService: UserService,
+    private sharedUserService: SharedUserService,
     private jwtHelperService: JwtHelperService,
+    private router: Router,
     private route: ActivatedRoute) { }
 
   ngOnInit() {
@@ -32,13 +42,16 @@ export class ActivateComponent implements OnInit {
     this.loading.start();
 
     let token = this.route.snapshot.params["token"];
-    this.userService.activateAccount(token).pipe(takeUntil(this.ngUnsubscribe))
+    this.userService.activateAccount(token).pipe(takeUntil(this.ngUnsubscribe), finalize(() => {this.loading.stop();}))
       .subscribe(result => {
         this.activateSuccess = true;
-        this.loading.stop();
+        this.getUser(() => {
+          _.delay(() => {
+            this.router.navigateByUrl(environment.RETURN_URL);
+          }, 2000);
+        });
       }, (err) => {
         this.activateSuccess = false;
-        this.loading.stop();
       })
   }
 
@@ -53,7 +66,16 @@ export class ActivateComponent implements OnInit {
       }, (err) => {
         this.resend = false;
         this.resendLoading.stop();
+        WsToastService.toastSubject.next({ content: err.error.message, type: 'danger' });
       })
   }
-
+  getUser(callback) {
+    this.authUserService.getUser().pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(result => {
+        this.sharedUserService.user.next(result.result);
+        if(callback) {
+          callback();
+        }
+      })
+  }
 }

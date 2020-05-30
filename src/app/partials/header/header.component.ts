@@ -7,6 +7,7 @@ import { SharedShopService } from '@services/shared/shared-shop.service';
 import { SharedUserService } from '@services/shared/shared-user.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { ScreenService } from '@services/general/screen.service';
 
 @Component({
   selector: 'app-header',
@@ -15,8 +16,10 @@ import { takeUntil } from 'rxjs/operators';
 })
 export class HeaderComponent implements OnInit {
   user;
+  isMobileSize;
   private ngUnsubscribe: Subject<any> = new Subject;
   constructor(private router: Router,
+    private screenService: ScreenService,
     private authUserService: AuthUserService,
     private authenticationService: AuthenticationService,
     private sharedShopService: SharedShopService,
@@ -31,13 +34,16 @@ export class HeaderComponent implements OnInit {
       if (result) {
         this.getUser();
       }
+    });
+    this.screenService.isMobileSize.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+      this.isMobileSize = result;
     })
   }
   getUser() {
     this.authUserService.getUser().pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(user => {
-        if(user) {
-          this.sharedUserService.user.next(user);
+      .subscribe(result => {
+        if(result) {
+          this.sharedUserService.user.next(result.result);
         }
       })
   }
@@ -56,11 +62,13 @@ export class HeaderComponent implements OnInit {
 
   }
   logout() {
-    this.sharedLoadingService.screenLoading.next(true);
+    this.sharedLoadingService.screenLoading.next({loading: true, label: 'Logging out...'});
     this.authenticationService.logout().then(result => {
-      this.router.navigate(['']);
-      this.sharedLoadingService.screenLoading.next(false);
-      this.sharedShopService.shop.next(null);
+      setTimeout(() => {
+        this.sharedLoadingService.screenLoading.next({loading: false});
+        this.router.navigate(['']);
+        this.sharedShopService.shop.next(null);
+      }, 500);
     });
   }
   ngOnDestroy() {

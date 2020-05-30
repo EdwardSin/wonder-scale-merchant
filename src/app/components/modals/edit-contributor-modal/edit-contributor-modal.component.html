@@ -1,4 +1,4 @@
-<ws-modal [id]="id">
+<ws-modal [id]="id" [maxWidth]="500" [isCloseIconDisplayed]="false">
   <header modalHeader>Edit Contributor</header>
   <div modalBody>
     <form #form="ngForm" (ngSubmit)="editContributor()">
@@ -12,22 +12,23 @@
         [value]="contributorController.selectedContributor?.email" />
       <div>
         <label class="p-0 mb-0">Role</label>
-        <select class="form-control form-control-sm p-0 nooutline font-9" name="role"
-          (input)="contributorController.reset()" [(ngModel)]="contributorController.new_role">
+        <select class="form-control form-control-sm p-0 font-9" name="role"
+          (input)="contributorController.reset()" [(ngModel)]="contributorController.newRole">
           <option [value]="'admin'">Admin</option>
-          <option [value]="'Maintainer'">Maintainer</option>
+          <option [value]="'maintainer'">Maintainer</option>
         </select>
-        <permission-list [role]="contributorController.new_role"></permission-list>
+        <permission-list [role]="contributorController.newRole"></permission-list>
       </div>
-
-      <div class="mt-2">
+      <div class="mt-3">
         <ws-loading-button [type]="'button'" *ngIf="contributorController?.selectedContributor?.email !== user?.email"
-          [class]="'btn btn-md btn-second'" (click)="removeContributor()"
-          [loading]="loading.isRunning() || removeLoading.isRunning()">Remove</ws-loading-button>
+          [class]="'btn btn-sm btn-danger'" (click)="removeContributor()"
+          [disabled]="loading.isRunning()"
+          [loading]="removeLoading.isRunning()">Remove</ws-loading-button>
         <div class="float-right">
-          <ws-loading-button [class]="'btn btn-md btn-second'"
-            [loading]="loading.isRunning() || removeLoading.isRunning()">Confirm</ws-loading-button>
-          <button class="btn btn-md btn-second nooutline" type="button" (click)="close()">Cancel</button>
+          <ws-loading-button [class]="'btn btn-sm btn-controller'"
+          [disabled]="removeLoading.isRunning()"
+            [loading]="loading.isRunning()">Confirm</ws-loading-button>
+          <button class="btn btn-sm btn-controller ml-2" type="button" (click)="close()">Cancel</button>
         </div>
       </div>
     </form>

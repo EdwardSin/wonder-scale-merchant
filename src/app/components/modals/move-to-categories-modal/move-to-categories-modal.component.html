@@ -1,13 +1,13 @@
-<ws-modal [id]="id" maxWidth="400">
+<ws-modal [id]="id" maxWidth="400" [isCloseIconDisplayed]="false">
   <header modalHeader>Move To Categories
     <span class="fas fa-question-circle clickable" title="Move item to the other category" wsTippy>
     </span>
   </header>
   <div modalBody>
     <div class="mb-3" style="max-height:200px; overflow-y:auto"
-      *ngIf="displayCategoryList && displayCategoryList.length>0; else noCategory;">
+      *ngIf="categories && categories.length && !loading; else loadingTemplate;">
       <ul style="list-style: none;" class="p-3 mb-0 center">
-        <li *ngFor="let category of displayCategoryList; let i = index" class="position-relative">
+        <li *ngFor="let category of categories; let i = index" class="position-relative">
           <span class="mr-5">{{category?.name}}</span>
           <mat-radio-button [color]="'primary'" class="card-checkbox-div"
             (click)="$event.stopPropagation(); editCategory = category;"></mat-radio-button>
@@ -15,15 +15,21 @@
       </ul>
     </div>
     <div class="float-right row col-auto">
-      <ws-loading-button [class]="'btn btn-md btn-second'" [loading]="loading.isRunning()" (click)="action()">
-        Move</ws-loading-button>
-      <button class="btn btn-md btn-second" (click)="close()">Back</button>
+      <ws-loading-button [class]="'btn btn-sm btn-controller mr-1'" [loading]="movingLoading" (click)="action()">Move</ws-loading-button>
+      <button class="btn btn-sm btn-controller" (click)="close()">Back</button>
     </div>
   </div>
 </ws-modal>
+
+<ng-template #loadingTemplate>
+  <ng-container *ngIf="loading; else noCategory">
+      <ws-spinner class="text-center d-block w-100" style="padding-top: 10vh; padding-bottom: 10vh"></ws-spinner>
+  </ng-container>
+</ng-template>
+
 <ng-template #noCategory>
   <div class="w-100">
-    <div class="h5 text-muted text-center font-weight-light">
+    <div class="h5 text-muted text-center font-weight-light" style="padding-top: 10vh; padding-bottom: 10vh">
       No Category
     </div>
   </div>

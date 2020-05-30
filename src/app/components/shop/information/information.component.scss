@@ -1,19 +1,30 @@
 @import '../../../../assets/scss/variables.scss';
 
-.fa-times{
-    color: map-get($ws-color, light-grey);
-    &:hover{
-        color: map-get($ws-color, dark-grey);
+.corner-setting {
+    position: absolute;
+    right: 1px;
+    top: 1px;
+    z-index: 2;
+    cursor: pointer;
+  
+    .corner-setting-item {
+      padding: .5rem;
+      width: 2rem;
+      line-height: .9rem;
+      text-align: center;
+      background-color: rgba(0, 0, 0, .3);
+      transition: background-color .3s ease;
+      color: #fff;
+  
+      &:hover {
+        background-color: rgba(0, 0, 0, .5);
+      }
     }
-}
+  }
 
 .fa-question-circle{
-    position: absolute;
     color: map-get($ws-color, dark-grey);
-    right: 30px;
     z-index: 1;
-    top: 10px;
-    right:10px;
 }
 
 .image-item{

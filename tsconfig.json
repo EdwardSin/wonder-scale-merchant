@@ -30,6 +30,9 @@
       "@components/*": [
         "src/app/components/*"
       ],
+      "@elements/*": [
+        "src/app/elements/*"
+      ],
       "@environments/*": [
         "src/environments/*"
       ],

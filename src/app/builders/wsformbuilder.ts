@@ -1,4 +1,4 @@
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from "@angular/forms";
 import { DateValidation } from "../validations/validators/datevalidation";
 import { GenderValidation } from "../validations/validators/gendervalidation";
 import { PasswordValidation } from './../validations/validators/passwordvalidation';
@@ -36,8 +36,8 @@ export class WSFormBuilder {
         let formBuilder = new FormBuilder();
         return formBuilder.group({
             email: ["", [Validators.required, Validators.email, Validators.maxLength(30)]],
-            firstName: ["", [Validators.required, Validators.maxLength(30)]],
-            lastName: ["", [Validators.required, Validators.maxLength(30)]],
+            firstName: ["", [Validators.required, Validators.maxLength(40)]],
+            lastName: ["", [Validators.required, Validators.maxLength(40)]],
             username: ["", [Validators.required, Validators.maxLength(30)]],
             tel: ["", [Validators.required, Validators.maxLength(20)]],
             gender: ["", [Validators.required, GenderValidation.Valid]],
@@ -77,9 +77,9 @@ export class WSFormBuilder {
         let formBuilder = new FormBuilder();
         return formBuilder.group({
             email: ["", [Validators.required, Validators.email, Validators.maxLength(30)]],
-            firstName: ["", [Validators.required, Validators.maxLength(30)]],
-            lastName: ["", [Validators.required, Validators.maxLength(30)]],
-            tel: ["", [Validators.required, Validators.maxLength(20)]],
+            firstName: ["", [Validators.required, Validators.maxLength(40)]],
+            lastName: ["", [Validators.required, Validators.maxLength(40)]],
+            tel: ["", [Validators.maxLength(20)]],
             gender: ["", [Validators.required, GenderValidation.Valid]],
             passwordGroup: formBuilder.group({
                 password: ["", [Validators.required, Validators.minLength(8),
@@ -119,13 +119,55 @@ export class WSFormBuilder {
             openingHour: ['']
         });
     }
+    public static createItemForm() {
+        let formBuilder = new FormBuilder();
+        return formBuilder.group({
+            refId: ['', [Validators.required, Validators.maxLength(36)]],
+            name: ['', [Validators.required, Validators.maxLength(128)]],
+            currency: ['', [Validators.required]],
+            price: ['', [Validators.required]],
+            discount: ['', []],
+            quantity: [''],
+            weight: [''],
+            categories: [[]],
+            brand: ['', [Validators.maxLength(256)]],
+            warranty: ['', [Validators.maxLength(256)]],
+            description: ['', [Validators.maxLength(256)]],
+            isEntityNew: [true, [Validators.required]],
+            isInStock: [true, [Validators.required]],
+            isPriceDisplayed: [false, [Validators.required]],
+            isPublished: [false, Validators.required],
+            isEcommerce: [false],
+            isPickup: [false]
+        })
+    }
+    public static createItemTypesGroup() {
+        let formBuilder = new FormBuilder();
+        return formBuilder.group({
+            itemTypes: new FormArray([])
+        })
+    }
+    public static createItemTypeForm() {
+        let formBuilder = new FormBuilder();
+        return formBuilder.group({
+            _id: new FormControl(''),
+            images: new FormControl([]),
+            hexColor: new FormControl(''),
+            sizes: new FormControl(['S', 'M', 'L']),
+            quantity: new FormControl(''),
+            price: new FormControl(''),
+            discount: new FormControl(''),
+            weight: new FormControl(''),
+            isOpen: false
+        });
+    }
     public static createSettingForm() {
         let formBuilder = new FormBuilder;
         return formBuilder.group({
             isMarkedAsNew: [''],
             isInStock: [''],
             isPriceDisplayed: [''],
-            isMarkedAsPublished: [''],
+            isPublished: [''],
             isEcommerce: [''],
             isPickup: [''],
             defaultCurrency: ['']

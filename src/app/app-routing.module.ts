@@ -20,15 +20,19 @@ import { AboutComponent } from '@components/shop/settings/about/about.component'
 import { SettingsComponent } from '@components/shop/settings/settings/settings.component';
 import { InformationComponent } from '@components/shop/information/information.component';
 import { ItemsComponent } from '@components/shop/catalogue/items/items.component';
-import { UncategoriedItemsComponent } from '@components/shop/catalogue/uncategoried-items/uncategoried-items.component';
-import { UnpublishItemsComponent } from '@components/shop/catalogue/unpublish-items/unpublish-items.component';
-import { PublishItemsComponent } from '@components/shop/catalogue/publish-items/publish-items.component';
+import { UncategorizedItemsComponent } from '@components/shop/catalogue/uncategorized-items/uncategorized-items.component';
+import { UnpublishedItemsComponent } from '@components/shop/catalogue/unpublished-items/unpublished-items.component';
+import { PublishedItemsComponent } from '@components/shop/catalogue/published-items/published-items.component';
 import { DiscountItemsComponent } from '@components/shop/catalogue/discount-items/discount-items.component';
 import { NewItemsComponent } from '@components/shop/catalogue/new-items/new-items.component';
 import { AllItemsComponent } from '@components/shop/catalogue/all-items/all-items.component';
 import { CatalogueComponent } from '@components/shop/catalogue/catalogue.component';
 import { AuthGuard } from './guards/auth.guard';
 import { ShopResolver } from '@components/resolvers/shopResolver.service';
+import { ResetPasswordComponent } from '@components/feature/authentication/reset-password/reset-password.component';
+import { ModifyItemComponent } from '@components/shop/catalogue/modify-item/modify-item.component';
+import { ModifyItemTypeComponent } from '@components/shop/catalogue/modify-item-type/modify-item-type.component';
+import { ShopGuard } from './shop.guard';
 
 
 const routes: Routes = [{
@@ -70,6 +74,18 @@ const routes: Routes = [{
   component: ForgotPasswordComponent,
   outlet: 'modal'
 }, {
+  path: 'reset-password/:token',
+  component: ResetPasswordComponent,
+  outlet: 'modal'
+}, {
+  path: 'item',
+  component: ModifyItemComponent,
+  outlet: 'modal'
+}, {
+  path: 'item-types',
+  component: ModifyItemTypeComponent,
+  outlet: 'modal'
+}, {
   path: 'shops/:username',
   component: MainComponent,
   canActivate: [AuthGuard],
@@ -80,20 +96,21 @@ const routes: Routes = [{
     {
       path: 'catalogue',
       component: CatalogueComponent,
+      canActivate: [ShopGuard],
       data: { title: 'cat', breadcrumb: 'Catalogue' },
-      // canActivate: [AuthGuard],
       children: [{ path: '', redirectTo: 'all', pathMatch: 'full' },
       { path: 'all', component: AllItemsComponent, data: { title: 'all', breadcrumb: 'All' } },
       { path: 'new', component: NewItemsComponent, data: { title: 'new', breadcrumb: 'New' } },
       { path: 'discount', component: DiscountItemsComponent, data: { title: 'discount', breadcrumb: 'Discount' } },
-      { path: 'publish', component: PublishItemsComponent, data: { title: 'publish', breadcrumb: 'Publish' } },
-      { path: 'unpublish', component: UnpublishItemsComponent, data: { title: 'unpublish', breadcrumb: 'Unpublish' } },
-      { path: 'uncategoried', component: UncategoriedItemsComponent, data: { title: 'uncategoried', breadcrumb: 'Uncategoried' } },
+      { path: 'published', component: PublishedItemsComponent, data: { title: 'published', breadcrumb: 'Published' } },
+      { path: 'unpublished', component: UnpublishedItemsComponent, data: { title: 'unpublished', breadcrumb: 'Unpublished' } },
+      { path: 'uncategorized', component: UncategorizedItemsComponent, data: { title: 'uncategorized', breadcrumb: 'Uncategorized' } },
       { path: 'custom/:name', component: ItemsComponent, data: { title: 'custom', breadcrumb: '{{name}}' } }
       ]
     },
     {
       path: 'information',
+      canActivate: [ShopGuard],
       component: InformationComponent,
       data: { title: 'information', breadcrumb: 'Information' }
     },
@@ -149,6 +166,7 @@ const routes: Routes = [{
     // },
     {
       path: 'settings',
+      canActivate: [ShopGuard],
       component: SettingsComponent,
       data: { title: 'settings', breadcrumb: 'Settings' },
       children: [{
@@ -172,6 +190,7 @@ const routes: Routes = [{
     },
     {
       path: 'qrcode',
+      canActivate: [ShopGuard],
       component: QrcodeComponent,
       data: { title: 'qrcode', breadcrumb: 'Qr Code' }
     }, {

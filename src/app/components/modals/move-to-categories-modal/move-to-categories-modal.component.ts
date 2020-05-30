@@ -1,7 +1,5 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewEncapsulation } from '@angular/core';
-import { WsLoading } from '@components/elements/ws-loading/ws-loading';
-import { WsModalClass } from '@components/elements/ws-modal/ws-modal';
-import { WsModalService } from '@components/elements/ws-modal/ws-modal.service';
+import { WsModalComponent } from '@elements/ws-modal/ws-modal.component';
 
 @Component({
   selector: 'move-to-categories-modal',
@@ -9,12 +7,13 @@ import { WsModalService } from '@components/elements/ws-modal/ws-modal.service';
   styleUrls: ['./move-to-categories-modal.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class MoveToCategoriesModalComponent extends WsModalClass implements OnInit {
+export class MoveToCategoriesModalComponent extends WsModalComponent implements OnInit {
   @Input() action: Function;
+  @Input() loading: boolean = false;
+  @Input() movingLoading: boolean;
   @Input() get editCategory() { return this._editCategory; }
   @Output() editCategoryChange: EventEmitter<any> = new EventEmitter;
-  loading: WsLoading = new WsLoading;
-  @Input() displayCategoryList = [];
+  @Input() categories = [];
 
   _editCategory: Object;
 
@@ -22,8 +21,8 @@ export class MoveToCategoriesModalComponent extends WsModalClass implements OnIn
     this._editCategory = val;
     this.editCategoryChange.emit(val);
   }
-  constructor(modalService: WsModalService, el: ElementRef) {
-    super(modalService, el);
+  constructor() {
+    super();
   }
 
   ngOnInit() {

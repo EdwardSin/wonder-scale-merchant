@@ -6,20 +6,18 @@ import { Item } from '@objects/item';
 import { AuthCategoryContributorService } from '@services/http/auth-shop/contributor/auth-category-contributor.service';
 import { AuthItemContributorService } from '@services/http/auth-shop/contributor/auth-item-contributor.service';
 import { AuthShopContributorService } from '@services/http/auth-shop/contributor/auth-shop-contributor.service';
-import { CurrencyService } from '@services/http/general/currency.service';
 import { SharedCategoryService } from '@services/shared/shared-category.service';
 import { SharedItemService } from '@services/shared/shared-item.service';
 import { SharedLoadingService } from '@services/shared/shared-loading.service';
 import { SharedShopService } from '@services/shared/shared-shop.service';
-import { WsLoading } from '@components/elements/ws-loading/ws-loading';
+import { WsLoading } from '@elements/ws-loading/ws-loading';
 import { DocumentHelper } from '@helpers/documenthelper/document.helper';
 import { ArrayHelper } from '@helpers/arrayhelper/array.helper';
 import { PriceHelper } from '@helpers/pricehelper/price.helper';
-import { WsModalService } from '@components/elements/ws-modal/ws-modal.service';
-import { WsToastService } from '@components/elements/ws-toast/ws-toast.service';
+import { WsToastService } from '@elements/ws-toast/ws-toast.service';
 // import { saveAs } from 'file-saver';
-import { Subject } from 'rxjs';
-import { filter, finalize, takeUntil } from 'rxjs/operators';
+import { Subject, combineLatest, timer } from 'rxjs';
+import { filter, finalize, takeUntil, map, switchMap } from 'rxjs/operators';
 // import * as XLSX from 'xlsx';
 
 @Component({
@@ -28,24 +26,22 @@ import { filter, finalize, takeUntil } from 'rxjs/operators';
   styleUrls: ['./items.component.scss']
 })
 export class ItemsComponent implements OnInit {
-  allItems: Item[] = [];
   displayItems: Item[] = [];
-  editItemList: Item[] = [];
-  category_id: string = '';
-  category_name: string = '';
+  categoryId: string = '';
+  categoryName: string = '';
   loading: WsLoading = new WsLoading;
   displayBanner: boolean;
   categoryFound: boolean;
   selectedCategory: Category;
+  numberOfItems = 0;
+  queryParams = { page: 1, keyword: '', order: '', orderBy: 'asc' };
   @ViewChild('importFile', { static: true }) importFile: ElementRef;
   environment = environment;
 
   private ngUnsubscribe: Subject<any> = new Subject();
   constructor(
-    private currencyService: CurrencyService,
     private sharedShopService: SharedShopService,
     private sharedLoadingService: SharedLoadingService,
-    private modalService: WsModalService,
     private sharedItemService: SharedItemService,
     private sharedCategoryService: SharedCategoryService,
     private authShopContributorService: AuthShopContributorService,
@@ -54,74 +50,94 @@ export class ItemsComponent implements OnInit {
     private ref: ChangeDetectorRef,
     private router: Router,
     private route: ActivatedRoute) {
-    let shop_name = this.sharedShopService.shop_name;
-    this.router.events.pipe(takeUntil(this.ngUnsubscribe), filter(event => event instanceof NavigationEnd))
-      .subscribe(event => {
-        this.category_name = this.route.snapshot.params.name;
-        DocumentHelper.setWindowTitleWithWonderScale(this.category_name + ' | ' + shop_name);
-        this.sharedCategoryService.categoryRefresh.next(true);
-      })
   }
 
   ngOnInit() {
-    this.loading.start();
     let shop_name = this.sharedShopService.shop_name;
-    this.category_name = this.route.snapshot.params.name;
-    DocumentHelper.setWindowTitleWithWonderScale(this.category_name + ' | ' + shop_name);
+    this.categoryName = this.route.snapshot.params.name;
+    DocumentHelper.setWindowTitleWithWonderScale(this.categoryName + ' - ' + shop_name);
+
+    this.route.params.pipe(takeUntil(this.ngUnsubscribe)).subscribe(res => {
+      this.categoryName = this.route.snapshot.params.name;
+      DocumentHelper.setWindowTitleWithWonderScale(this.categoryName + ' - ' + shop_name);
+      this.sharedCategoryService.categoryRefresh.next({refresh: true, loading: true});
+    })
+    this.loading.start();
+    this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(queryParam => {
+        if (this.queryParams.keyword != queryParam.s_keyword || this.queryParams.page != queryParam.page || this.queryParams.order != queryParam.order || this.queryParams.orderBy != queryParam.by) {
+          this.queryParams = { keyword: queryParam['s_keyword'], page: queryParam['page'], order: queryParam['order'], orderBy: queryParam['by'] };
+          if (this.selectedCategory) {
+            this.getItems(this.queryParams.keyword, this.queryParams.page, this.queryParams.order, this.queryParams.orderBy);
+          }
+        }
+      })
     this.sharedCategoryService.categoryRefresh.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
-      if (result) {
-        this.getCategoryByNameAndShopId();
+      if (result.refresh) {
+        this.getCategoryByNameAndShopId(this.queryParams.keyword, this.queryParams.page, this.queryParams.order, this.queryParams.orderBy, result.loading);
       }
     })
   }
-  getCategoryByNameAndShopId() {
-    this.authCategoryContributorService.getCategoryByNameAndShopId(this.category_name)
-      .pipe(takeUntil(this.ngUnsubscribe))
+  getCategoryByNameAndShopId(keyword = '', page = 1, order = 'alphabet', orderBy, isLoading=true) {
+    if(isLoading) {
+      this.loading.start();
+      this.numberOfItems = 0;
+      this.displayItems = [];
+      this.sharedItemService.displayItems.next(this.displayItems);
+    }
+    combineLatest(timer(500), this.authCategoryContributorService.getCategoryByNameAndShopId(this.categoryName))
+      .pipe(switchMap((result) => {
+        this.categoryFound = result[1] ? true: false;
+        this.displayBanner = false;
+        this.selectedCategory = result[1];
+        this.categoryId = this.selectedCategory._id;
+        if (result && result[1] && result[1]['items'].length) {
+          this.numberOfItems = result[1]['items'];
+        }
+        return this.authItemContributorService.getItemsByCategoryId(this.categoryId, keyword, page, order, orderBy);
+      }), 
+      finalize(() => { this.loading.stop(); }),
+      takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
-        this.selectedCategory = result;
-        this.sharedShopService.selectedCategory.next(result);
-        this.category_id = this.selectedCategory._id;
-        this.getItems();
-      })
-  }
-  getItems() {
-    this.displayBanner = false;
-    this.loading.start();
-    this.categoryFound = false;
-    this.authItemContributorService.getItemsByCategoryId(this.category_id)
-      .pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.loading.stop())).subscribe(result => {
-        this.categoryFound = true;
-        this.allItems = result['result'];
         this.displayItems = result['result'];
-        this.sharedItemService.allItems.next(this.allItems);
         this.sharedItemService.displayItems.next(this.displayItems);
-
-        this.ref.detectChanges();
-        PriceHelper.getDisplayPrice(this.allItems, PriceHelper.currencies, PriceHelper.rate);
+        this.sharedCategoryService.numberOfCurrentTotalItems.next(result['total']);
         PriceHelper.getDisplayPrice(this.displayItems, PriceHelper.currencies, PriceHelper.rate);
-        ArrayHelper.clear(this.editItemList);
-        this.displayBanner = this.isBannerShow();
-        this.sharedLoadingService.screenLoading.next(false);
-        this.sharedCategoryService.categoryRefresh.next(false);
+        this.sharedLoadingService.screenLoading.next({ loading: false });
+        this.sharedCategoryService.categoryRefresh.next({refresh: false, loading: false});
       })
   }
-  importFileChangeEvent(event) {
-    this.modalService.open('importItemsModal');
-    event.category_id = this.category_id;
-    this.modalService.setElement('importItemsModal', event);
-    this.importFile.nativeElement.value = '';
+  getItems(keyword = '', page = 1, order = 'alphabet', orderBy, isLoading = true) {
+    if (isLoading) {
+      this.loading.start();
+      this.displayBanner = false;
+    }
+    combineLatest(timer(500), this.authItemContributorService.getItemsByCategoryId(this.categoryId, keyword, page, order, orderBy))
+      .pipe(takeUntil(this.ngUnsubscribe),
+        map(x => x[1]),
+        finalize(() => { this.loading.stop(); }))
+      .subscribe(result => {
+        this.displayItems = result['result'];
+        this.sharedItemService.displayItems.next(this.displayItems);
+        this.sharedCategoryService.numberOfCurrentTotalItems.next(result['total']);
+        PriceHelper.getDisplayPrice(this.displayItems, PriceHelper.currencies, PriceHelper.rate);
+        // this.displayBanner = this.isBannerShow();
+        this.sharedLoadingService.screenLoading.next({ loading: false });
+        this.sharedCategoryService.categoryRefresh.next({refresh: false, loading: false});
+      })
   }
+  // importFileChangeEvent(event) {
+  //   event.categoryId = this.categoryId;
+  //   this.importFile.nativeElement.value = '';
+  // }
 
-  isBannerShow() {
-    return this.allItems.length > 0 && !this.isActiveItemFound(this.allItems);
-  }
+  // isBannerShow() {
+  //   return this.allItems.length > 0 && !this.isActiveItemFound(this.allItems);
+  // }
 
-  isActiveItemFound(allItems) {
-    return allItems.find(x => x.status == 'active');
-  }
-  openModal(id) {
-    this.modalService.open(id);
-  }
+  // isActiveItemFound(allItems) {
+  //   return allItems.find(x => x.status == 'active');
+  // }
   toastDownload() {
     WsToastService.toastSubject.next({ content: 'Template is downloading!' });
   }
@@ -139,7 +155,7 @@ export class ItemsComponent implements OnInit {
     // let wb = XLSX.utils.book_new();
     // wb.SheetNames.push("Sheet1");
     // wb.Props = {
-    //   Title: `${this.category_name} - Wonder Scale`,
+    //   Title: `${this.categoryName} - Wonder Scale`,
     //   Author: 'Wonder Scale',
     //   CreatedDate: new Date
     // }

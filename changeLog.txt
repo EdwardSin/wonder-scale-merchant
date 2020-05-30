@@ -4,6 +4,109 @@
 
 - v1.0.1000                                 -
 ---------------------------------------------
+- 2020-05-31                                -
+---------------------------------------------
+.: WSM: Task: Update code from website (WSM-54)
+
+---------------------------------------------
+- 2020-05-30                                -
+---------------------------------------------
+.: WSM: Task: Update profile image and banner image design (WSM-54)
+.：WSM: Task: Change currency service default code (WSM-54)
+
+---------------------------------------------
+- 2020-05-29                                -
+---------------------------------------------
+.: WSM: BugFix: Checking opening info (WSM-36)
+.: WSM: BugFix: Loading spinner in pending button (WSM-36)
+.: WSM: BugFix: Topic displayed incorrectly (WSM-71)
+.: WSM: BugFix: Facebook and Google error message from server (WSM-1)
+.: WSM: Task: Change qrcode url (WSM-20)
+
+---------------------------------------------
+- 2020-05-28                                -
+---------------------------------------------
+.: WSM: Task: Update managing items flow (WSM-54)
+.: WSM: BugFix: Navigate to correct category when category name is edited (WSM-5)
+.: WSM: BugFix: Fixed operation after adding new contributor without refresh (WSM-25)
+
+---------------------------------------------
+- 2020-05-27                                -
+---------------------------------------------
+.: WSM: Task: Update Shop Settings (WSM-23)
+.: WSM: BugFix: Fix Profile Ordering Issue (WSM-29)
+
+---------------------------------------------
+- 2020-05-26                                -
+---------------------------------------------
+.: WSM: Task: Update Shop Validation (WSM-24)
+.: WSM: Task: Profile Uploader (WSM-38)
+
+---------------------------------------------
+- 2020-05-25                                -
+---------------------------------------------
+.: WSM: Task: Remove tel required from registration (WSM-2)
+.: WSM: BugFix: Open url in correct domain (WSM-74)
+.: WSM: Task: Update create shop flow (WSM-24)
+
+---------------------------------------------
+- 2020-05-23                                -
+---------------------------------------------
+.: WSM: Task: Update link folder with Wonder Scale Website (WSM-54)
+.: WSM: Task: Disabled to upload customize image in QR code (WSM-20)
+
+---------------------------------------------
+- 2020-05-20                                -
+---------------------------------------------
+.: WSM: Task: Profile Image Upload (WSM-38)
+
+---------------------------------------------
+- 2020-05-03                                -
+---------------------------------------------
+.: WSM: Story: User Control (WSM-25)
+.: WSM: Task: Update icon in server (WSM-17)
+
+---------------------------------------------
+- 2020-05-01                                -
+---------------------------------------------
+.: WSM: Task: Home Page (WSM-4)
+.: WSM: Story: QR code Module (WSM-20)
+
+---------------------------------------------
+- 2020-04-26                                -
+---------------------------------------------
+.: WSM: Task: Smaller error font size (WSM-19)
+.: WSM: Task: Without login after account activation (WSM-18)
+.: WSM: Task: Set a delay to all loading (WSM-36)
+
+---------------------------------------------
+- 2020-04-25                                -
+---------------------------------------------
+.: WSM: Story: Shop Settings Module (WSM-23)
+.: WSM: Story: Currency Module (WSM-34)
+.: WSM: Task: Change Icon (WSM-17)
+
+---------------------------------------------
+- 2020-04-24                                -
+---------------------------------------------
+.: WSM: Story: Item Module (WSM-29)
+.: WSM: Story: Information Module (WSM-21)
+
+---------------------------------------------
+- 2020-04-16                                -
+---------------------------------------------
+.: WSM: Story: Catalogue Module (WSM-5)
+
+---------------------------------------------
+- 2020-04-12                                -
+---------------------------------------------
+.: WSM: Task: Forget Password (WSM-3)
+.: WSM: Story: Shop Module (WSM-24)
+
+---------------------------------------------
 - 2020-04-11                                -
 ---------------------------------------------
 .: WSM: Task: Get template from existing code (WSM-14)
+.: WSM: Task: Registration (WSM-2)
+.: WSM: Task: Login (WSM-2)
+.: WSM: Task: Activate account after registration (WSM-16)

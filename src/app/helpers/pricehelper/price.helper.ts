@@ -16,10 +16,10 @@ export class PriceHelper {
       item.display_discount_price = item.display_price - (+(this.getDisplayCurrencyPrice(this.displayPriceAfterDiscount(item.price, item.discount), currencies[item.currency], rate).toFixed(2)));
     }
   }
-  private static getDisplayCurrencyPrice(price, currency, rate): Number{
+  private static getDisplayCurrencyPrice(price, currency, rate): number{
     return (price / currency) * rate;
   }
-  private static priceAfterDiscount(price, discount = 0): Number {
+  private static priceAfterDiscount(price, discount = 0): number {
     return price - ((100 - discount) / 100) * price;
   }
   private static displayPriceAfterDiscount(price, discount = 0){

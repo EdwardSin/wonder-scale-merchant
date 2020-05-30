@@ -1,4 +1,4 @@
-<h4 class="ws-title">{{ category_name }}</h4>
+<h4 class="ws-title">{{ categoryName }}</h4>
 <div class="text-center text-lg-left">
   <!-- <button class="btn btn-md btn-second" onclick="document.getElementById('importFile').click()">
     <i class="fas fa-upload mr-1"></i>Import</button>
@@ -11,40 +11,42 @@
 <input id="importFile" type="file" hidden name="importFile" #importFile
   accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
   (change)="importFileChangeEvent($event)" />
-<div *ngIf="allItems?.length && displayBanner" class="p-3 alert-danger mb-2">Publish item to show to public!</div>
+<div *ngIf="displayBanner" class="p-3 alert-danger mb-2">Published item to show to public!</div>
 <item-controller></item-controller>
-<div *ngIf="allItems?.length; else loadingTemplate">
+<div *ngIf="numberOfItems && !loading.isRunning(); else loadingTemplate">
   <div *ngIf="displayItems.length; else searchLoadingTemplate">
     <item-view></item-view>
   </div>
 </div>
 <ng-template #noItem>
   <ng-container *ngIf="categoryFound; else noCategoryFound">
-    <div class="ws-background text-center">
-      <h5 class="pt-5 pb-5">You don't have any item in the category.</h5>
+    <div class="text-center">
+      <h6 class="py-5">No items in the category.</h6>
     </div>
   </ng-container>
 </ng-template>
 
 <ng-template #noSearchItem>
-  <h4 class="mt-5 mb-5 text-center">No item found!</h4>
+  <div class="text-center">
+    <h6 class="py-5">No items found.</h6>
+  </div>
   <!-- <notitle [titles]="['no.found_item']"></notitle> -->
 </ng-template>
 
 <ng-template #loadingTemplate>
   <ng-container *ngIf="loading.isRunning(); else noItem">
-    <ws-loading></ws-loading>
+    <ws-spinner class="text-center d-block w-100" style="padding-top: 30vh"></ws-spinner>
   </ng-container>
 </ng-template>
 
 <ng-template #searchLoadingTemplate>
   <ng-container *ngIf="loading.isRunning(); else noSearchItem">
-    <ws-loading></ws-loading>
+    <ws-spinner class="text-center d-block w-100" style="padding-top: 30vh"></ws-spinner>
   </ng-container>
 </ng-template>
 
 <ng-template #noCategoryFound>
-  <h4 class="mt-5 mb-5 text-center">No item found!</h4>
+  <h4 class="mt-5 mb-5 text-center">No item found!!</h4>
 </ng-template>
 
-<import-items-modal id="importItemsModal"></import-items-modal>
+<!-- <import-items-modal id="importItemsModal"></import-items-modal> -->

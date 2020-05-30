@@ -1,73 +1,73 @@
 <div class="row no-gutters w-100 mt-2 position-relative" style="z-index:1" *ngIf="displayItems.length">
-  <div class="row col-12 no-gutters mb-3" *ngIf="display === 'block'">
+  <!-- <div class="row col-12 no-gutters mb-3" *ngIf="display === 'block'">
     <ws-item [item]="item" [showSetting]="true" [showNew]="item?.isEntityNew" [showOffer]="item?.isOffer"
       [showSimilar]="false" [style.z-index]="displayItems?.length - i" [class.inactiveItem]="item?.status === 'active'"
-      class="col-6 col-sm-3 square p-1 nooutline" *ngFor="let item of displayItems; let i = index; trackBy: trackByFn"
+      class="col-6 col-sm-2 square p-1" *ngFor="let item of displayItems; let i = index; trackBy: trackByFn"
       (click)="$event.stopPropagation(); addToItemList(item);">
       <div settingCog class="item-setting">
-        <div class="item-setting-item" (click)="$event.stopPropagation(); openModal('createItemModal', item)">
-          <span class="fas fa-cog nooutline"></span>
+        <div class="item-setting-item" (click)="$event.stopPropagation();">
+          <span class="fas fa-cog"></span>
         </div>
         <div class="item-setting-item">
           <mat-checkbox [color]="'primary'" [checked]="isInclude(item)" (click)="$event.stopPropagation()"
             (change)="addToItemList(item)"></mat-checkbox>
         </div>
       </div>
-      <span [class.showCategory]="showCategory && !item?.uncategoried" tag
+      <span [class.showCategory]="showCategory && !item?.uncategorized" tag
         class="refId position-absolute font-8 pl-1 pr-1 ws-clear-color">{{item?.refId}}</span>
       <span *ngIf="showCategory && item?.category_name != ''" tag
         class="categoryname position-absolute font-8 pl-1 pr-1 ws-clear-color">{{item?.category_name}}</span>
 
     </ws-item>
-  </div>
+  </div> -->
   <div class="w-100" *ngIf="display === 'list'">
-    <table class="table table-hover w-100">
-      <th>
+    <table class="table table-hover w-100 font-9">
+      <th width="40px">
         <mat-checkbox [color]="'primary'" [checked]="editItems.length == displayItems.length"
           (change)="$event.checked ? selectAll(): deselectAll()"></mat-checkbox>
       </th>
-      <th>ID</th>
+      <th width="200px">ID</th>
       <th>Name</th>
-      <th>Price({{Currency.symbols[shop?.currency]}})</th>
-      <th>Display In</th>
-      <th>Status</th>
-      <th></th>
-      <tbody class="clickable">
+      <th width="200px">Price({{ currencySymbol }})</th>
+      <th width="200px">Discount Price({{ currencySymbol }})</th>
+      <th width="300px">Status</th>
+      <th width="120px">Actions</th>
+      <tbody>
         <tr *ngFor="let item of displayItems; let i = index">
           <td>
             <mat-checkbox [color]="'primary'" [checked]="isInclude(item)" (change)="addToItemList(item)"></mat-checkbox>
           </td>
           <td>{{ item?.refId}}</td>
           <td>
-            <a class="default" href="javascript:void(0)" (click)="$event.stopPropagation();"
-              [routerLink]="['', { outlets: {modal: 'item'}}]"
-              [queryParams]="{id: item?._id}">{{ item?.name | titlecase | limitTo: 30 }}</a>
+            <a class="default" href="javascript:void(0)" (click)="$event.stopPropagation();" 
+            [routerLink]="['', { outlets: {modal: 'item'}}]" [queryParams]="{id: item?._id}" [queryParamsHandling]="'merge'">{{ item?.name | titlecase | limitTo: 128 }}</a>
           </td>
-          <td *ngIf="currencyOption?.currencies">
-            {{ item?.price | currency: currencyOption?.currencies[item?.currency]: currencyOption?.rate }}</td>
-          <td>
-            <span *ngIf="item?.isEntityNew" class="badge ws-bg-primary ws-clear-color mr-1">New</span>
-            <span *ngIf="item?.isOffer" class="badge ws-clear-color ws-bg-offer">Discount</span>
+          <td *ngIf="item.currency && selectedCurrencyCode">
+            {{ item?.price | currency: currencyService.getCurrencyWithCode(item?.currency).rate: currencyService.getCurrencyWithCode(selectedCurrencyCode).rate }}
           </td>
-          <td>
-            <div *ngIf="item?.uncategoried">
-              <span class="badge ws-bg-light-grey">Uncategoried</span>
-              <br />
-            </div>
-            <div *ngIf="item?.status == 'active'">
-              <span class="badge badge-success">Publish</span>
-              <br />
-            </div>
-            <span *ngIf="item?.status == 'inactive'" class="badge ws-bg-dark-grey">Unpublish</span>
+          <td *ngIf="item.currency && selectedCurrencyCode">
+            {{ item?.price | currency: currencyService.getCurrencyWithCode(item?.currency).rate: currencyService.getCurrencyWithCode(selectedCurrencyCode).rate | discountconverter : item?.discount }}
           </td>
           <td>
-            <a href="javascript:void(0)" class="primary font-weight-bold" (click)="$event.stopPropagation();"
-              [routerLink]="['', { outlets: {modal: 'item'}}]" [queryParams]="{id: item?._id}">Edit</a>
-            <!-- <button class="btn btn-second btn-md m-0 nooutline" (click)="$event.stopPropagation();"
-                [routerLink]="['', { outlets: {modal: 'item'}}]" [queryParams]="{id: item?._id}">Edit</button> -->
+            <span *ngIf="item?.isEntityNew" class="badge badge-warning mr-1">New</span>
+            <span *ngIf="item?.isOffer" class="badge ws-clear-color ws-bg-offer mr-1">Discount</span>
+            <span *ngIf="!item?.categories.length" class="badge ws-bg-light-grey-1 mr-1">Uncategorized</span>
+            <span *ngIf="item?.isPublished && item?.categories.length && param != 'uncategorized'" class="badge badge-success mr-1">Published</span>
+            <span *ngIf="!item?.isPublished && item?.categories.length && param != 'uncategorized'" class="badge ws-clear-color ws-bg-dark-grey">Unpublished</span>
+          </td>
+          <td width="100">
+            <a title="Edit Item" href="javascript:void(0)" class="ws-dark-color btn-link p-2 mr-1" (click)="$event.stopPropagation();"
+              [routerLink]="['', { outlets: {modal: 'item'}}]" [queryParams]="{id: item?._id}" [queryParamsHandling]="'merge'">
+              <span class="fas fa-edit"></span>
+            </a>
+            <a title="Edit Item Types" href="javascript:void(0)" class="ws-dark-color btn-link p-2" (click)="$event.stopPropagation();"
+              [routerLink]="['', { outlets: {modal: 'item-types'}}]" [queryParams]="{id: item?._id}" [queryParamsHandling]="'merge'">
+              <span class="fas fa-sitemap"></span>
+            </a>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
+  <ws-pagination [expanded]="isNavOpen" [currentPage]="currentPage" [pageSize]="environment.ITEMS_PER_PAGE" [total]="total" (getPageNumber)="navigate($event)"></ws-pagination>
 </div>

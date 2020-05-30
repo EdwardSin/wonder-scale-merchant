@@ -3,7 +3,7 @@
     [trickleSpeed]="500" [thick]="true" [ease]="'easeInSine'"></ng-progress> -->
   <app-header></app-header>
 </div>
-<!-- <ws-loading-screen style="z-index: 1000" *ngIf="screenLoading"></ws-loading-screen> -->
+<ws-loading-screen [label]="loadingLabel" style="z-index: 1000" *ngIf="screenLoading"></ws-loading-screen>
 <div style="height: 41px;"></div>
 
 <ws-toast></ws-toast>

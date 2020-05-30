@@ -18,15 +18,18 @@ import { SharedUserService } from '@services/shared/shared-user.service';
 import { DocumentHelper } from '@helpers/documenthelper/document.helper';
 import { PriceHelper } from '@helpers/pricehelper/price.helper';
 import { ScreenHelper } from '@helpers/screenhelper/screen.helper';
-import { WsLoading } from '@components/elements/ws-loading/ws-loading';
-import { WsModalService } from '@components/elements/ws-modal/ws-modal.service';
-import { WsToastService } from '@components/elements/ws-toast/ws-toast.service';
+import { WsLoading } from '@elements/ws-loading/ws-loading';
+import { WsToastService } from '@elements/ws-toast/ws-toast.service';
 import _ from 'lodash';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Subject, BehaviorSubject, interval, of } from 'rxjs';
+import { takeUntil, switchMap, finalize } from 'rxjs/operators';
 import { SharedLoadingService } from '../../../services/shared/shared-loading.service';
 import { Shop } from '@objects/shop';
-
+import { SharedItemService } from '@services/shared/shared-item.service';
+import { SharedNavbarService } from '@services/shared/shared-nav-bar.service';
+import * as moment from 'moment';
+import { AuthShopUserService } from '@services/http/auth-user/auth-shop-user.service';
+import { ScreenService } from '@services/general/screen.service';
 
 @Component({
   selector: 'app-main',
@@ -40,17 +43,16 @@ export class MainComponent implements OnInit {
   shop_username: string;
   shop;
   user;
-
-
   numberOfAllItems: number = 0;
   numberOfDiscountItems: number = 0;
   numberOfNewItems: number = 0;
-  numberOfPublishItems: number = 0;
-  numberOfUnpublishItems: number = 0;
-  numberOfUncategoriedItems: number = 0;
-
+  numberOfPublishedItems: number = 0;
+  numberOfUnpublishedItems: number = 0;
+  numberOfUncategorizedItems: number = 0;
   loading: WsLoading = new WsLoading;
+  removeLoading: WsLoading = new WsLoading;
   displayPreview: boolean;
+  isRemoveCategoryConfirmationModalOpened: boolean;
   categories: Array<any> = [];
   displayCategories: Array<any> = [];
 
@@ -74,39 +76,45 @@ export class MainComponent implements OnInit {
   constructor(private router: Router, private route: ActivatedRoute,
     private authShopContributorService: AuthShopContributorService,
     private authCategoryContributorService: AuthCategoryContributorService,
-    // private authRequestContributorService: AuthRequestContributorService,
     private currencyService: CurrencyService,
     private sharedCategoryService: SharedCategoryService,
     private sharedShopService: SharedShopService,
     private sharedUserService: SharedUserService,
-    private modalService: WsModalService,
     private userService: UserService,
     private routePartsService: RoutePartsService,
     private shopAuthorizationService: ShopAuthorizationService,
     private activeRoute: ActivatedRoute,
+    private screenService: ScreenService,
     private sharedLoadingService: SharedLoadingService,
+    private authShopUserService: AuthShopUserService,
+    private sharedNavbarService: SharedNavbarService,
+    private sharedItemService: SharedItemService,
     private ref: ChangeDetectorRef) {
 
   }
 
   ngOnInit() {
-    this.isMobileSize = ScreenHelper.isMobileSize();
-    this.isNavOpen = !this.isMobileSize;
     this.shop_username = this.route.snapshot.params['username'];
-
     this.router.events.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(event => {
         if (event instanceof NavigationEnd) {
+          this.sharedItemService.editItems.next([]);
           if (this.isMobileSize) {
             this.isNavOpen = false;
+            this.sharedNavbarService.isNavSubject.next(this.isNavOpen);
+          }
+          this.routeParts = this.routePartsService.generateRouteParts(this.activeRoute.snapshot);
+          if (this.routeParts[1]['title'] == 'cat') {
+            this.category_name = RoutePartsService.parseText(this.routeParts[0]);
           }
         }
       })
-
-    this.route.url.subscribe(url => {
-      this.routeParts = this.routePartsService.generateRouteParts(this.activeRoute.snapshot);
-      if (this.routeParts[1]['title'] == 'cat') {
-        this.category_name = RoutePartsService.parseText(this.routeParts[0]);
+    this.screenService.isMobileSize.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+      this.isMobileSize = result; 
+      this.isNavOpen = true;
+      if (this.isMobileSize) {
+        this.isNavOpen = false;
+        this.sharedNavbarService.isNavSubject.next(this.isNavOpen);
       }
     })
     this.sharedUserService.user.pipe(takeUntil(this.ngUnsubscribe))
@@ -127,9 +135,9 @@ export class MainComponent implements OnInit {
           this.numberOfAllItems = this.shop.number_of_all_items;
           this.numberOfDiscountItems = this.shop.number_of_discount_items;
           this.numberOfNewItems = this.shop.number_of_new_items;
-          this.numberOfPublishItems = this.shop.number_of_publish_items;
-          this.numberOfUnpublishItems = this.shop.number_of_unpublish_items;
-          this.numberOfUncategoriedItems = this.shop.number_of_uncategoried_items;
+          this.numberOfPublishedItems = this.shop.number_of_published_items;
+          this.numberOfUnpublishedItems = this.shop.number_of_unpublished_items;
+          this.numberOfUncategorizedItems = this.shop.number_of_uncategorized_items;
           this.shop_username = this.shop.username;
           this.refreshContributors();
           // this.getUnrepliedRequests();
@@ -148,17 +156,17 @@ export class MainComponent implements OnInit {
       .subscribe(res => {
         this.numberOfNewItems = res;
       })
-    this.sharedCategoryService.numberOfPublishItems.pipe(takeUntil(this.ngUnsubscribe))
+    this.sharedCategoryService.numberOfPublishedItems.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(res => {
-        this.numberOfPublishItems = res;
+        this.numberOfPublishedItems = res;
       })
-    this.sharedCategoryService.numberOfUnpublishItems.pipe(takeUntil(this.ngUnsubscribe))
+    this.sharedCategoryService.numberOfUnpublishedItems.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(res => {
-        this.numberOfUnpublishItems = res;
+        this.numberOfUnpublishedItems = res;
       })
-    this.sharedCategoryService.numberOfUncategoriedItems.pipe(takeUntil(this.ngUnsubscribe))
+    this.sharedCategoryService.numberOfUncategorizedItems.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(res => {
-        this.numberOfUncategoriedItems = res;
+        this.numberOfUncategorizedItems = res;
       })
     this.sharedShopService.contributorRefresh.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
@@ -180,12 +188,10 @@ export class MainComponent implements OnInit {
           this.categories = res;
         }
       })
-    // this.sharedCategoryService.categoriesRefresh.pipe(takeUntil(this.ngUnsubscribe))
-    //   .subscribe(res => {
-    //     if (res) {
-    //       //this.refreshCategories();
-    //     }
-    //   })
+    this.sharedNavbarService.isNavSubject.pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe(res => {
+      this.isNavOpen = res;
+    });
     this.sharedShopService.quotations.pipe(takeUntil(this.ngUnsubscribe)).subscribe(res => {
       if (res) {
         this.unreplied_quotations = res;
@@ -212,26 +218,21 @@ export class MainComponent implements OnInit {
         }
       });
   }
-  @HostListener('window:resize', ['$event'])
-  onResize(event) {
-    this.isMobileSize = ScreenHelper.isMobileSize();
-  }
   getContributors() {
     if (this.shop) {
-      this.contributorController.exists_contributors = this.shop.contributors;
+      this.contributorController.existsContributors = this.shop.contributors;
       this.sharedShopService.contributorRefresh.next(this.contributorController);
     }
   }
   refreshContributors() {
     this.authShopContributorService.getContributors().pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
-        this.contributorController.exists_contributors = result['result'];
+        this.contributorController.existsContributors = result['result'];
         this.sharedShopService.contributorRefresh.next(this.contributorController);
       })
   }
-  isAdminAuthorizedRefresh(user_id: string) {
-    let isAdminAuthorized = this.contributorController.exists_contributors.some(x => x.user == user_id && x.role == Role.Admin);
-
+  isAdminAuthorizedRefresh(userId: string) {
+    let isAdminAuthorized = this.contributorController.existsContributors.some(x => x.user == userId && x.role == Role.Admin);
     this.shopAuthorizationService.isAdminAuthorized.next(isAdminAuthorized);
   }
   addCategory() {
@@ -245,6 +246,7 @@ export class MainComponent implements OnInit {
         .subscribe(result => {
           WsToastService.toastSubject.next({ content: 'Category is added!', type: 'success' });
           this.new_name = '';
+          result['result'].items = [];
           this.categories.push(result['result']);
         }, (err) => {
           WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
@@ -264,35 +266,39 @@ export class MainComponent implements OnInit {
         .subscribe(result => {
           WsToastService.toastSubject.next({ content: 'Category is edited!', type: 'success' });
           if (this.category_name === this.editname) {
-            this.router.navigate(['catalogue', 'custom', obj.name]);
+            this.router.navigate(['catalogue', 'custom', obj.name], {relativeTo: this.route});
           }
           category['name'] = this.edit_new_name;
+          this.setEditCategory('');
         }, (err) => {
           WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
         });
     }
   }
   removeCategory() {
+    this.removeLoading.start();
     this.authCategoryContributorService
-      .removeCategory(this.selectedCategory['_id'])
-      .pipe(takeUntil(this.ngUnsubscribe))
+      .removeCategories({categories: [this.selectedCategory['_id']]})
+      .pipe(takeUntil(this.ngUnsubscribe), finalize(() => {this.removeLoading.stop()}))
       .subscribe(result => {
         WsToastService.toastSubject.next({ content: "Category is removed!", type: 'success' });
         _.remove(this.categories, (x) => this.selectedCategory['_id'] === x._id);
-        if (this.category_name == 'All') {
-          this.refreshCategories();
+        if (this.selectedCategory.name === this.category_name) {
+          this.router.navigate(['catalogue', 'all'], {relativeTo: this.route});
         }
+        this.isRemoveCategoryConfirmationModalOpened = false;
+        this.sharedCategoryService.refreshCategories(null, false, true);
       }, (err) => {
         WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
       });
   }
   openRemoveModal(category) {
-    this.modalService.open('confirmModal');
     this.selectedCategory = category;
-    this.modalService.setElement('confirmModal', category);
+    this.isRemoveCategoryConfirmationModalOpened = true;
   }
   setEditCategory(name) {
     this.editname = name;
+    this.edit_new_name = name;
     this.ref.detectChanges();
   }
   isEditCategory(name) {
@@ -300,7 +306,7 @@ export class MainComponent implements OnInit {
   }
   isValidated(name) {
     if (name == '' || name.trim() == '') {
-      WsToastService.toastSubject.next({ content: 'Category name is required!', type: 'danger' });
+      WsToastService.toastSubject.next({ content: 'Category name is invalid!', type: 'danger' });
       return false;
     } else if (name.length > 30) {
       WsToastService.toastSubject.next({ content: 'Category name is too long!', type: 'danger' });
@@ -310,7 +316,7 @@ export class MainComponent implements OnInit {
   }
 
   refreshCategories() {
-    this.sharedCategoryService.refreshCategories();
+    this.sharedCategoryService.refreshCategories(null, true, false);
   }
   // getUnrepliedRequests() {
   //   this.authRequestContributorService.getUnrepliedRequests().pipe(takeUntil(this.ngUnsubscribe))
@@ -324,11 +330,11 @@ export class MainComponent implements OnInit {
       .rearrangeCategories({ categories: this.categories.map(x => x._id) })
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
-        WsToastService.toastSubject.next({ content: 'Rearrange done!', type: 'success' });
       });
   }
-  closeModal(id) {
-    this.modalService.close(id);
+  isNavOpenChange(event){
+    this.isNavOpen = event;
+    this.sharedNavbarService.isNavSubject.next(event);
   }
   ngOnDestroy() {
     this.ngUnsubscribe.next();

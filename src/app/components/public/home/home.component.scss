@@ -1,16 +1,75 @@
 @import "src/assets/scss/variables.scss";
 
-.background-container{
-    height: 600px;
-    width: 100%;
-    background-image: url('/assets/images/background-image.jpeg');
-    background-size: cover;
-    background-position: center;
-    position: absolute;
-    filter: brightness(.6);
+// .background-image{
+//     position: absolute;
+//     top: 10rem;
+//     right:2rem;
+//     z-index: -1;
+//     width: 100%;
+// }
+.background{
+    padding-top: 17%;
+    // min-height: 600px;
+    z-index: 10;
+    padding-bottom: 17%;
+    .background__title{
+        font-size: 3rem;
+    }
+    .background__image{
+        width: 100%;
+        max-width: 300px;
+        margin-top: -5%;
+        margin-left: auto;
+        margin-right: auto;
+        display: block;
+    }
+    .background__texture{
+    }
 }
 .background-text {
     color: #fff;
+}
+.feature__container{
+    padding: 4rem 0;
+    transition: transform ease .3s;
+    .feature__title{
+        font-size: 1.5rem;
+    }
+    .icon {
+        filter: drop-shadow(0 3px 3px #999);
+        font-size: 5rem; 
+        transform: color .2s ease;
+    }
+    &:hover{
+        transform: scale(1.03);
+        .icon {
+            &.icon-item {
+                color: #CC8500;
+            }
+            &.icon-store {
+                color: #0ABCC9;
+            }
+            &.icon-qrcode{
+                color: #990000;
+            }
+            &.icon-bell{
+                color: #E6C300;
+            }
+            &.icon-right{
+                animation: swing;
+                animation-duration: 8s;
+            }
+            &.icon-left{
+                animation: swing;
+                animation-duration: 8s;
+                transform-origin: top;
+                animation-iteration-count: infinite;
+            }
+        }
+    }
+}
+.icon{
+    transition: transform ease-out .4s;
 }
 .btn-background{
     background:transparent; 
@@ -82,7 +141,7 @@ footer {
     left: -150px;
     
     p{
-        color: map-get($ws-color, light-grey);
+        color: map-get($ws-color, light-grey-1);
         border-bottom: map-get($ws-style, border);
     }
     ul {
@@ -92,11 +151,11 @@ footer {
         padding: 0;
         margin:0;
         li:hover{
-            background-color: map-get($ws-color, lighter-grey);
+            background-color: map-get($ws-color, light-grey-4);
         }
         .selected {
             font-weight: bold;
-            background-color: map-get($ws-color, lighter-grey);
+            background-color: map-get($ws-color, light-grey-4);
         }
     }
 }
@@ -116,6 +175,11 @@ footer {
 }
 
 @media (max-width: 768px) {
+    .background{
+        .background__title{
+            font-size: 2rem;
+        }
+    }
     .footer-box-left {
         text-align: center;
     }
