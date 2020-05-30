@@ -5,14 +5,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Constants } from '@constants/constants';
 import { Phase } from '@objects/phase';
 import { AuthShopUserService } from '@services/http/auth-user/auth-shop-user.service';
-import { WsLoading } from '@components/elements/ws-loading/ws-loading';
-import { WsToastService } from '@components/elements/ws-toast/ws-toast.service';
+import { WsLoading } from '@elements/ws-loading/ws-loading';
+import { WsToastService } from '@elements/ws-toast/ws-toast.service';
 import { Shop } from '@objects/shop';
 import { Timetable } from '@objects/ws-timetable';
 import { MapController } from '@objects/map.controller';
 import { WsGpsService } from '@services/general/ws-gps.service';
 import { Subject } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'create-shop',
@@ -26,12 +27,11 @@ export class CreateShopComponent implements OnInit {
   mapController: MapController;
   loading: WsLoading = new WsLoading;
   shop: Shop;
-
   timetable: Timetable = new Timetable;
   currency = {
-    currencies: Constants.currencyFullname,
+    currencies: Constants.currencyFullnames,
     values: Constants.currencySymbols,
-    keys: Object.keys(Constants.currencyFullname)
+    keys: Object.keys(Constants.currencyFullnames)
   }
   countries = {
     values: Object.values(Constants.countries)
@@ -82,12 +82,9 @@ export class CreateShopComponent implements OnInit {
       if (this.basicFormGroup.valid) {
         this.phase.next();
       }
-      else {
-        WsToastService.toastSubject.next({ content: 'Please complete the form.', type: 'danger' });
-      }
     }
     else if (this.phase.isStep(3)) {
-      if (this.addressFormGroup.valid) {
+      if (!this.addressFormGroup.value.isShowLocation || this.addressFormGroup.valid) {
         this.phase.next();
       }
       else {
@@ -105,21 +102,21 @@ export class CreateShopComponent implements OnInit {
   }
   createBasicForm() {
     this.basicFormGroup = this.formBuilder.group({
-      name: ['', Validators.required],
-      tel: ['', Validators.required],
+      name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(40)]],
+      tel: ['', [Validators.required, Validators.maxLength(30)]],
       email: ['', [Validators.minLength(3), Validators.maxLength(30), Validators.email]],
-      website: ['', [Validators.minLength(3), Validators.maxLength(30)]],
+      website: ['', [Validators.minLength(3), Validators.maxLength(128)]],
       currency: ['', [Validators.required]]
     });
   }
   createAddressForm() {
     this.addressFormGroup = this.formBuilder.group({
-      search_address: [''],
-      address: ['', Validators.required],
-      state: ['', Validators.required],
-      city: ['', Validators.required],
-      postcode: ['', Validators.required],
-      country: ['', Validators.required]
+      isShowLocation: [true],
+      searchAddress: [''],
+      address: ['', [Validators.required, Validators.maxLength(128)]],
+      state: ['', [Validators.required, Validators.maxLength(48)]],
+      postcode: ['', [Validators.required, Validators.maxLength(128)]],
+      country: ['', [Validators.required, Validators.maxLength(128)]]
     });
   }
   createOpeningInfoForm() {
@@ -134,7 +131,7 @@ export class CreateShopComponent implements OnInit {
     })
   }
   getTermAndCondition() {
-    this.http.get("/assets/images/termAndCondition.txt", { responseType: 'text' }).pipe(
+    this.http.get("/assets/text/termAndCondition.txt", { responseType: 'text' }).pipe(
       takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
         if (result) {
@@ -150,7 +147,6 @@ export class CreateShopComponent implements OnInit {
   setAddressFormValue() {
     this.addressFormGroup.controls.address.setValue(this.mapController.address.address);
     this.addressFormGroup.controls.state.setValue(this.mapController.address.state);
-    this.addressFormGroup.controls.city.setValue(this.mapController.address.city);
     this.addressFormGroup.controls.postcode.setValue(this.mapController.address.postcode);
     this.addressFormGroup.controls.country.setValue(this.mapController.address.country);
   }
@@ -163,31 +159,50 @@ export class CreateShopComponent implements OnInit {
     shop.email = [this.basicFormGroup.value.email];
     shop.website = [this.basicFormGroup.value.website];
     shop['currency'] = this.basicFormGroup.value.currency;
-    shop.fullAddress = {
-      address: this.addressFormGroup.value.address,
-      state: this.addressFormGroup.value.state,
-      postcode: this.addressFormGroup.value.postcode,
-      city: this.addressFormGroup.value.city,
-      country: this.addressFormGroup.value.country
-    };
-
-    shop.location = { coordinates: [this.mapController.markerLng, this.mapController.markerLat] };
+    shop.showAddress = this.addressFormGroup.value.isShowLocation;
+    if (this.addressFormGroup.value.isShowLocation) {
+      shop.fullAddress = {
+        address: this.addressFormGroup.value.address,
+        state: this.addressFormGroup.value.state,
+        postcode: this.addressFormGroup.value.postcode,
+        country: this.addressFormGroup.value.country
+      };
+      shop.location = { coordinates: [this.mapController.markerPoint.longitude, this.mapController.markerPoint.latitude] };
+    }
     shop.openingInfoType = this.timetable.operatingHourRadio;
     shop.openingInfo = shop.openingInfoType == 'selected_hours' ? this.timetable.operatingHours : [];
     this.loading.start();
     if (this.termAndConfitionsFormGroup.valid) {
       this.authShopUserService.addShop(shop).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.loading.stop()))
         .subscribe(result => {
-          this.shop = <Shop>result;
+          this.shop = <Shop>result['result'];
           this.phase.next();
+          _.delay(() => {
+            this.navigateToShop();
+          }, 3000);
         }, (err) => {
           WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
         })
     }
   }
+  disabledControls() {
+    if (!this.addressFormGroup.value.isShowLocation) {
+      this.addressFormGroup.controls.searchAddress.disable();
+      this.addressFormGroup.controls.address.disable();
+      this.addressFormGroup.controls.state.disable();
+      this.addressFormGroup.controls.country.disable();
+      this.addressFormGroup.controls.postcode.disable();
+    } else {
+      this.addressFormGroup.controls.searchAddress.enable();
+      this.addressFormGroup.controls.address.enable();
+      this.addressFormGroup.controls.state.enable();
+      this.addressFormGroup.controls.country.enable();
+      this.addressFormGroup.controls.postcode.enable();
+    }
+  }
   navigateToShop() {
     this.router.navigate([{ outlets: { modal: null } }]).then(nav => {
-      this.router.navigate(['shops', this.shop.username]);
+      this.router.navigate(['/shops', this.shop.username]);
     });
   }
 }

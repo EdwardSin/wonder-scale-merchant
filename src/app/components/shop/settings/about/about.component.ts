@@ -5,7 +5,6 @@ import { WSFormBuilder } from '@builders/wsformbuilder';
 import { environment } from '@environments/environment.prod';
 import { Contributor } from '@objects/contributor';
 import { ContributorController } from '@objects/contributor.controller';
-import { Currency } from '@objects/currency';
 import { Tag } from '@objects/tag';
 import { TagController } from '@objects/tag.controller';
 import { AuthDefaultSettingAdminService } from '@services/http/auth-shop/admin/auth-default-setting-admin.service';
@@ -14,24 +13,30 @@ import { AuthShopContributorService } from '@services/http/auth-shop/contributor
 import { AuthShopUserService } from '@services/http/auth-user/auth-shop-user.service';
 import { ShopAuthorizationService } from '@services/http/general/shop-authorization.service';
 import { UserService } from '@services/http/general/user.service';
+import { SharedUserService } from '@services/shared/shared-user.service';
 import { SharedShopService } from '@services/shared/shared-shop.service';
-import { WsLoading } from '@components/elements/ws-loading/ws-loading';
+import { WsLoading } from '@elements/ws-loading/ws-loading';
 import { DocumentHelper } from '@helpers/documenthelper/document.helper';
 import { UploadHelper } from '@helpers/uploadhelper/upload.helper';
 import { Address } from '@objects/address';
 import { Timetable } from '@objects/ws-timetable';
 import { MapController } from '@objects/map.controller';
-import { EmailsValidator } from '@validations/shop-validation/emails.validator';
-import { TelsValidator } from '@validations/shop-validation/tels.validator';
-import { UsernameValidator } from '@validations/shop-validation/username.validator';
-import { WebsitesValidator } from '@validations/shop-validation/websites.validator';
 import { WsGpsService } from '@services/general/ws-gps.service';
-import { WsModalService } from '@components/elements/ws-modal/ws-modal.service';
-import { WsToastService } from '@components/elements/ws-toast/ws-toast.service';
-import { forkJoin as observableForkJoin, Subject } from 'rxjs';
+import { WsToastService } from '@elements/ws-toast/ws-toast.service';
+import { forkJoin as observableForkJoin, Subject, interval } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
 import _ from 'lodash';
-
+import { Shop } from '@objects/shop';
+import { WsToastComponent } from '@elements/ws-toast/ws-toast.component';
+import { EmailValidator } from '@validations/email.validator';
+import { URLValidator } from '@validations/urlvalidator';
+import { CurrencyService } from '@services/http/general/currency.service';
+import * as moment from 'moment';
+declare var jQuery: any;
+import * as $ from 'jquery';
+import { Role } from '@enum/Role.enum';
+import { DomSanitizer } from '@angular/platform-browser';
+import { ScreenService } from '@services/general/screen.service';
 
 @Component({
   selector: 'app-about',
@@ -46,94 +51,121 @@ export class AboutComponent implements OnInit {
   isPermissionExpanded: boolean;
   isContributorExpanded: boolean;
   isAdvancedExpanded: boolean;
-
+  moment = moment;
   isShopClosing: boolean;
   isShopClosable: boolean;
-  remove_day_number: number;
   element: string;
-  Currency = Currency;
   loading: WsLoading = new WsLoading;
   refreshLoading: WsLoading = new WsLoading;
-  isBannerUploaded: boolean;
-
-  @ViewChild('bannerImage', { static: true }) bannerImage: ElementRef;
-  @ViewChild('bannerImageInput', { static: true }) bannerImageInput: ElementRef;
-
   address: Address = new Address;
   timetable: Timetable = new Timetable;
   mapController: MapController;
   restaurantTags = TagController.headerTags.restaurantTags;
   serviceTags = TagController.headerTags.serviceTags;
   shoppingTags = TagController.headerTags.shoppingTags;
-  shop;
+  shop: Shop;
   form;
   settingsForm;
   settings = {
     isMarkedAsNew: true,
     isInStock: true,
     isPriceDisplayed: true,
-    isMarkedAsPublished: true,
+    isPublished: true,
     isEcommerce: false,
     isPickup: false,
     defaultCurrency: 'MYR'
   };
   tag = new Tag;
-
-  emails = [''];
-  tels = [''];
-  websites = [''];
-  emailsValidator: EmailsValidator = new EmailsValidator;
-  websitesValidator: WebsitesValidator = new WebsitesValidator;
-  usernameValidator: UsernameValidator = new UsernameValidator;
-  telsValidator: TelsValidator = new TelsValidator;
+  timeDifference: number;
+  timeDifferenceString: string;
   @ViewChildren('websiteElement') websiteElements: QueryList<any>;
   @ViewChildren('telElement') telElements: QueryList<any>;
   @ViewChildren('emailElement') emailElements: QueryList<any>;
   isAdminAuthorized: Boolean;
   valueChanged = _.debounce((value) => this.searchContributors(value), 300);
   userSuggestions = [];
+  isProfileImageUploading: WsLoading = new WsLoading();
+  isBannerImageUploading: WsLoading = new WsLoading();
+  profileImage;
+  bannerImage;
+  bannerImageFile;
+  previewImage;
+  croppieObj;
+  isConfirmCloseShopModalOpened: boolean;
+  isConfirmReactivateModalOpened: boolean;
+  isConfirmQuitShopModalOpened: boolean;
+  isEditContributorModalOpened: boolean;
+  isProfileUploaderOpened: boolean;
+  isBannerUploaderOpened: boolean;
   environment = environment;
+  isMobileSize: boolean;
   contributorController: ContributorController = new ContributorController;
   private ngUnsubscribe: Subject<any> = new Subject;
   constructor(private sharedShopService: SharedShopService,
     private authShopContributorService: AuthShopContributorService,
     private authShopAdminService: AuthShopAdminService,
     private authDefaultSettingAdminService: AuthDefaultSettingAdminService,
-    private modalService: WsModalService,
-    private userService: UserService,
     private gpsService: WsGpsService,
     private router: Router,
     private route: ActivatedRoute,
+    private sanitization: DomSanitizer,
+    public currencyService: CurrencyService,
+    private sharedUserService: SharedUserService,
     private authShopUserService: AuthShopUserService,
     private shopAuthorizationService: ShopAuthorizationService,
+    private screenService: ScreenService,
     private ref: ChangeDetectorRef) {
     this.mapController = new MapController(this.gpsService, this.address);
   }
-
   ngOnInit() {
     this.createShopForm();
-    this.route.data.pipe(takeUntil(this.ngUnsubscribe))
+    this.route.data.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+      this.shop = result['shop'];
+      if (this.shop.profileImage) {
+        this.profileImage = environment.IMAGE_URL + this.shop.profileImage;
+      }
+      if (this.shop.bannerImage) {
+        this.bannerImage = environment.IMAGE_URL + this.shop.bannerImage;
+      }
+      if (this.shop.status.status == 'closed' && this.shop.status.expiryDate) {
+        this.timeDifference = moment(this.shop.status.expiryDate).diff(moment());
+        this.timeDifferenceString = moment(this.shop.status.expiryDate).fromNow();
+        interval(2000).pipe(takeUntil(this.ngUnsubscribe)).subscribe(() => {
+          this.timeDifference = moment(this.shop.status.expiryDate).diff(moment());
+          this.timeDifferenceString = moment(this.shop.status.expiryDate).fromNow();
+        });
+      }
+      this.ref.detectChanges();
+      this.setupShopForm();
+      this.getDefaultSetting();
+      this.updateContributorAuthorization();
+    })
+    this.shopAuthorizationService.isAdminAuthorized.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
-        this.shop = result['shop'];
-        this.getDateDifference();
-        this.setupShopForm();
-        this.getDefaultSetting();
+        this.isAdminAuthorized = result;
       })
 
     let shop_name = this.sharedShopService.shop_name;
-    DocumentHelper.setWindowTitleWithWonderScale('About | Settings | ' + shop_name);
+    DocumentHelper.setWindowTitleWithWonderScale('About - Settings - ' + shop_name);
 
     this.sharedShopService.contributorRefresh.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
         if (result) {
           this.contributorController = result;
+          this.updateContributorAuthorization();
         }
       })
-
-    this.shopAuthorizationService.isAdminAuthorized.pipe(takeUntil(this.ngUnsubscribe))
+    
+      this.screenService.isMobileSize.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
-        this.isAdminAuthorized = result;
+        this.isMobileSize = result;
       })
+  }
+  updateContributorAuthorization() {
+    let contributors = this.contributorController.existsContributors;
+    let user = this.sharedUserService.user.value;
+    let contributor = contributors.find(contributor => contributor['user'] == user._id && contributor.role == Role.Admin);
+    this.shopAuthorizationService.isAdminAuthorized.next(contributor != null);
   }
   getDefaultSetting() {
     this.authDefaultSettingAdminService.getDefaultSettingByShopId().pipe(takeUntil(this.ngUnsubscribe))
@@ -149,25 +181,23 @@ export class AboutComponent implements OnInit {
       username: this.form.value.username,
       description: this.form.value.description,
       currency: this.form.value.currency,
-      tags: this.tag.tags
+      // tags: this.tag.tags
     }
-    if (isValidated(obj)) {
+    if (this.isGeneralValidated(this.form)) {
       this.authShopContributorService.editGeneral(obj).pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(result => {
           WsToastService.toastSubject.next({ content: "Information has been updated!", type: 'success' });
-          this.router.navigate([this.form.value.username, 'settings', 'about']);
           this.shop['username'] = this.form.value.username;
           this.shop['description'] = this.form.value.description;
           this.shop['currency'] = this.form.value.currency;
-          this.shop['tags'] = this.tag.tags;
-          this.sharedShopService.shop.next(this.shop)
-        }, err => {
+          // this.shop['tags'] = this.tag.tags;
           this.isGeneralExpanded = false;
+          this.currencyService.selectedCurrency.next(this.shop.currency);
+          this.sharedShopService.shop.next(this.shop);
+          this.router.navigate(['shops', this.form.value.username, 'settings', 'about']);
+        }, err => {
           WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
         });
-    }
-    function isValidated(obj) {
-      return true;
     }
   }
   editDefault() {
@@ -182,96 +212,99 @@ export class AboutComponent implements OnInit {
   }
   editContact() {
     let obj = {
-      email: this.shop['email'],
-      tel: this.shop['phone'],
-      website: this.shop['website'],
-      address: this.mapController.address.address,
-      postcode: this.mapController.address.postcode,
-      state: this.mapController.address.state,
-      country: this.mapController.address.country,
+      email: this.shop.email,
+      phone: this.shop.phone,
+      website: this.shop.website,
+      showAddress: this.shop.showAddress,
+      fullAddress: this.mapController.address,
       openingInfoType: this.timetable.operatingHourRadio,
       openingInfo: this.timetable.operatingHourRadio == 'selected_hours' ? this.timetable.operatingHours : [],
-      longitude: this.mapController.markerLng,
-      latitude: this.mapController.markerLat
+      longitude: this.mapController.markerPoint.longitude,
+      latitude: this.mapController.markerPoint.latitude
     }
-    if (isValidated(obj)) {
+    if (this.isContactValidated(obj)) {
       this.authShopContributorService.editContact(obj).pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(result => {
           WsToastService.toastSubject.next({ content: "Contact has been updated!", type: 'success' });
-          this.shop['email'] = obj.email;
-          this.shop['tel'] = obj.tel;
-          this.shop['website'] = obj.website;
-          this.shop['fullAddress']['address'] = obj.address;
-          this.shop['fullAddress']['postcode'] = obj.postcode;
-          this.shop['fullAddress']['state'] = obj.state;
-          this.shop['fullAddress']['country'] = obj.country;
-          this.shop['location']['coordinates'] = [obj.longitude, obj.latitude];
-          this.shop['openingInfo'] = obj.openingInfo;
-          this.shop['openingInfoType'] = obj.openingInfoType;
+          this.isContactExpanded = false;
+          this.shop.email = obj.email;
+          this.shop.phone = obj.phone;
+          this.shop.website = obj.website;
+          this.shop.fullAddress = {
+            address: obj.fullAddress.address,
+            postcode: obj.fullAddress.postcode,
+            state: obj.fullAddress.state,
+            country: obj.fullAddress.country
+          }
+          this.shop.location.coordinates = [obj.longitude, obj.latitude];
+          this.shop.openingInfo = obj.openingInfo;
+          this.shop.openingInfoType = obj.openingInfoType;
           this.sharedShopService.shop.next(this.shop)
         }, err => {
-          this.isContactExpanded = false;
           WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
         })
     }
-
-    function isValidated(obj) {
-      return true;
-    }
   }
-  editBanner() {
-    if (this.isBannerUploaded) {
-      if (this.shop.bannerImage) {
-        this.authShopContributorService.editBanner({
-          remove_file: this.shop.bannerImage,
-          file: this.bannerImage.nativeElement.src
-        }).pipe(takeUntil(this.ngUnsubscribe))
-          .subscribe(result => {
-            this.shop = result['result'];
-            this.isBannerUploaded = false;
-            this.sharedShopService.shop.next(this.shop);
-            WsToastService.toastSubject.next({ content: 'Banner is updated!', type: 'success' });
-          })
-      }
-      else {
-        this.authShopContributorService.addBanner({
-          file: this.bannerImage.nativeElement.src
-        }).pipe(takeUntil(this.ngUnsubscribe))
-          .subscribe(result => {
-            this.shop = result['result'];
-            this.isBannerUploaded = false;
-            this.sharedShopService.shop.next(this.shop);
-            WsToastService.toastSubject.next({ content: 'Banner is updated!', type: 'success' });
-          })
-      }
+  isGeneralValidated(form) {
+    let username = form.get('username');
+    let description = form.get('description');
+    let currency = form.get('currency');
+    if (username.errors && username.errors.required) {
+      WsToastService.toastSubject.next({ content: 'Username is required!', type: 'danger' });
+      return false;
     }
+    else if (description.errors && description.errors.maxlength) {
+      WsToastService.toastSubject.next({ content: 'Description is too long. Max 256 characters!', type: 'danger' });
+      return false;
+    }
+    else if (currency.errors && currency.errors.required) {
+      WsToastService.toastSubject.next({ content: 'Currency is required!', type: 'danger' });
+      return false;
+    }
+    return true;
   }
-  removeBanner() {
+  isContactValidated(obj) {
+    let emails = obj.email;
+    let phones = obj.phone;
+    let websites = obj.website;
+    let fullAddress = obj.fullAddress;
+    if (emails.find(email => !EmailValidator.validate(email))) {
+      WsToastService.toastSubject.next({ content: 'Email is not valid!', type: 'danger' });
+      return false;
+    } else if (phones.find(phone => { return phone.length > 20 })) {
+      WsToastService.toastSubject.next({ content: 'Phone is too long! Max 20 characters!', type: 'danger' });
+      return false;
+    } else if (websites.find(website => { return !URLValidator.validate(website) })) {
+      WsToastService.toastSubject.next({ content: 'Website is not valid!', type: 'danger' });
+      return false;
+    } else if ((this.shop.showAddress && fullAddress && !fullAddress.address) ||
+      (this.shop.showAddress && fullAddress && !fullAddress.state) ||
+      (this.shop.showAddress && fullAddress && !fullAddress.postcode)) {
+      WsToastService.toastSubject.next({ content: 'Please complete your business address!', type: 'danger' });
+      return false;
+    }
+    return true;
+  }
+  removeBannerImage() {
     if (this.shop.bannerImage) {
-      this.authShopContributorService.removeBanner({
-        file: this.shop.bannerImage
-      }).pipe(takeUntil(this.ngUnsubscribe))
-        .subscribe(result => {
-          this.bannerImageInput.nativeElement.value = '';
-          this.shop = result;
-          this.sharedShopService.shop.next(this.shop);
-          WsToastService.toastSubject.next({ content: 'Banner is removed!', type: 'success' });
-        })
+      if (confirm('Are you sure to remove banner?')) {
+        this.isBannerImageUploading.start();
+        this.authShopContributorService.removeBannerImage({
+          file: this.shop.bannerImage
+        }).pipe(takeUntil(this.ngUnsubscribe), finalize(() => { this.isBannerImageUploading.stop() }))
+          .subscribe(result => {
+            this.bannerImage = '';
+            this.shop.bannerImage = '';
+            this.sharedShopService.shop.next(this.shop);
+            WsToastService.toastSubject.next({ content: 'Banner is removed!', type: 'success' });
+          })
+      }
+    }
+    else if (this.shop.bannerImage) {
+      this.bannerImage = environment.IMAGE_URL + this.shop.bannerImage;
     }
     else {
-      this.bannerImageInput.nativeElement.value = '';
-      this.bannerImage.nativeElement.src = '';
-      this.isBannerUploaded = false;
-    }
-  }
-  fileChangeEvent(event) {
-    let fileToUpload = UploadHelper.fileChangeEvent(event);
-    if (fileToUpload.length) {
-      this.isBannerUploaded = true;
-      this.ref.detectChanges();
-      UploadHelper.readURL(fileToUpload[0], this.bannerImage.nativeElement, () => {
-
-      });
+      this.bannerImage = '';
     }
   }
   createShopForm() {
@@ -298,15 +331,16 @@ export class AboutComponent implements OnInit {
         this.address.postcode = this.shop.fullAddress.postcode;
         this.address.state = this.shop.fullAddress.state;
         this.address.country = this.shop.fullAddress.country;
-        this.mapController.markerLng = this.shop.location.coordinates[0];
-        this.mapController.markerLat = this.shop.location.coordinates[1];
-        this.mapController.mapLng = this.shop.location.coordinates[0];
-        this.mapController.mapLat = this.shop.location.coordinates[1];
+        this.mapController.markerPoint.longitude = this.shop.location.coordinates[0];
+        this.mapController.markerPoint.latitude = this.shop.location.coordinates[1];
+        this.mapController.mapPoint.longitude = this.shop.location.coordinates[0];
+        this.mapController.mapPoint.latitude = this.shop.location.coordinates[1];
       }
-      this.timetable.operatingHours =
-        this.shop.openingInfo.length > 0
-          ? JSON.parse(JSON.stringify(this.shop.openingInfo))
-          : Timetable.DEFAULT_OPENING_INFO;
+      if (this.shop.openingInfo && this.shop.openingInfo.length > 0) {
+        this.timetable.operatingHours = JSON.parse(JSON.stringify(this.shop.openingInfo));
+      } else {
+        this.timetable.operatingHours = Timetable.DEFAULT_OPENING_INFO;
+      }
       this.shop.openingInfo = this.shop.openingInfo || Timetable.DEFAULT_OPENING_INFO;
       this.timetable.operatingHourRadio = this.shop.openingInfoType;
       this.tag.tags = _.clone(this.shop.tags);
@@ -331,27 +365,27 @@ export class AboutComponent implements OnInit {
     this.refreshLoading.start();
     this.authShopContributorService.getContributors().pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.refreshLoading.stop()))
       .subscribe(result => {
-        this.contributorController.exists_contributors = result['result'];
+        this.contributorController.existsContributors = result['result'];
         this.sharedShopService.contributorRefresh.next(this.contributorController);
+        this.updateContributorAuthorization();
       }, err => {
-
         WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
       })
   }
   inviteContributor() {
-    if (this.contributorController.new_contributors.length) {
-      observableForkJoin(this.contributorController.new_contributors.map(contributor => {
+    if (this.contributorController.newContributors.length) {
+      observableForkJoin(this.contributorController.newContributors.map(contributor => {
         let obj = {
           contributor: contributor
         }
         return this.authShopAdminService.inviteContributor(obj);
       }))
         .subscribe(result => {
-          this.contributorController.exists_contributors = _.union(this.contributorController.exists_contributors, this.contributorController.new_contributors);
-          this.contributorController.new_contributors = new Array;
+          this.contributorController.existsContributors = _.union(this.contributorController.existsContributors, this.contributorController.newContributors);
+          this.contributorController.newContributors = new Array;
           WsToastService.toastSubject.next({ content: "Contributors are invited!", type: 'success' });
         }, err => {
-          WsToastService.toastSubject.next({ content: err.error });
+          WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
         });
     }
     else {
@@ -361,30 +395,40 @@ export class AboutComponent implements OnInit {
   addContributor(user) {
     this.userSuggestions = [];
     this.contributorController.searchText = '';
-    if (_.find(this.contributorController.exists_contributors, (x) => x.email == user.email)) {
+    if (_.find(this.contributorController.existsContributors, (x) => x.email == user.email)) {
       WsToastService.toastSubject.next({ content: "User is already a contributor!", type: 'danger' });
     }
-    else if (_.find(this.contributorController.new_contributors, (x) => x.email == user.email)) {
+    else if (_.find(this.contributorController.newContributors, (x) => x.email == user.email)) {
       WsToastService.toastSubject.next({ content: "User has been added!", type: 'danger' });
     }
     else {
-      this.contributorController.new_contributors.push(<Contributor>{
-        email: user.email, user_id: user._id, role: this.contributorController.new_role,
-        profileImage: user.profileImage, status: 'pending',
-        firstName: user.firstName, lastName: user.lastName
+      this.contributorController.newContributors.push(<Contributor>{
+        email: user.email,
+        user: user._id,
+        role: this.contributorController.newRole,
+        profileImage: user.profileImage,
+        status: 'pending',
+        invitedDate: new Date(),
+        firstName: user.firstName,
+        lastName: user.lastName
       });
     }
   }
   removeContributor(user) {
-    _.remove(this.contributorController.new_contributors, (x) => x._id == user._id);
+    _.remove(this.contributorController.newContributors, (x) => x._id == user._id);
   }
-
   closePermanently() {
     this.authShopAdminService
       .closePermanently()
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
-        window.location.reload();
+        let date = new Date;
+        date.setHours(date.getHours() + 1);
+        this.shop.status.status = 'closed';
+        this.shop.status.expiryDate = date;
+        this.sharedShopService.shop.next(this.shop);
+        this.isConfirmCloseShopModalOpened = false;
+        this.router.navigate(['../../catalogue', 'all'], { relativeTo: this.route });
       }, err => {
         WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
       });
@@ -394,43 +438,129 @@ export class AboutComponent implements OnInit {
       .reactivateShop()
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
-        window.location.reload();
+        this.shop.status.status = 'active';
+        this.shop.status.expiryDate = null;
+        this.sharedShopService.shop.next(this.shop);
+        this.isConfirmReactivateModalOpened = false;
+        this.router.navigate(['../../catalogue', 'all'], { relativeTo: this.route });
       });
   }
   quitShop() {
     this.authShopContributorService.leaveShop()
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
-        this.router.navigate(['/all']);
+        this.isConfirmQuitShopModalOpened = false;
+        this.router.navigate(['shops/all']);
       }, err => {
         WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
       })
   }
-  openModal(id, element) {
-    this.modalService.open(id);
-    this.contributorController.selectedContributor = element;
-    this.modalService.setElement(id, this.contributorController);
+  openEditContributorModal(contributor) {
+    this.isEditContributorModalOpened = true;
+    this.contributorController.selectedContributor = contributor;
+    this.contributorController.newRole = contributor.role;
   }
-  openShopModal(id, element) {
-    this.modalService.open(id);
-    this.modalService.setElement(id, this.shop);
+  disabledControls() {
+    this.shop.showAddress = !this.shop.showAddress;
   }
-  getDateDifference() {
-    if (this.shop.status && this.shop.status.status == 'cancel') {
-      var oneDay = 24 * 60 * 60 * 1000;
-      var firstDate = new Date(this.shop.status.expiry_date);
-      var secondDate = new Date();
-
-      let remove_days = Math.round(
-        (firstDate.getTime() - secondDate.getTime()) / oneDay
-      );
-      this.isShopClosing = remove_days > 0 && remove_days <= 14;
-      this.isShopClosable = remove_days <= 0;
-      this.remove_day_number = remove_days;
+  removeProfileImage() {
+    if (confirm('Are you sure to remove your profile image?')) {
+      this.authShopContributorService.removeProfileImage().pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.loading.stop())).subscribe(result => {
+        this.profileImage = environment.IMAGE_URL + 'upload/images/shop.png';
+      });
     }
   }
-  closeModal(id) {
-    this.element = '';
-    this.modalService.close(id);
+  fileChangeEvent(event) {
+    let files = <Array<File>>event.target.files;
+    for (let file of files) {
+      this.previewImageFunc(file, (result) => {
+        result.url = this.sanitization.bypassSecurityTrustResourceUrl(result.url);
+        this.previewImage = result.url;
+        this.uploadImageModalChange();
+      });
+    }
+    event.target.value = "";
+  }
+  fileBannerChangeEvent(event) {
+    let files = <Array<File>>event.target.files;
+    for (let file of files) {
+      this.previewImageFunc(file, (result) => {
+        result.url = this.sanitization.bypassSecurityTrustResourceUrl(result.url);
+        this.previewImage = result.url;
+        this.uploadBannerImageModalChange();
+      });
+    }
+    event.target.value = "";
+  }
+  previewImageFunc(file, callback) {
+    let reader = new FileReader;
+    reader.onload = function (e) {
+      let img = {
+        name: file['name'],
+        file: file,
+        url: URL.createObjectURL(file),
+        type: 'blob',
+        base64: reader.result
+      };
+      if (file['name'] && file['name'].split('.').length > 1) {
+        img['ext'] = file['name'].split('.').pop();
+      }
+      callback(img);
+    }
+    reader.readAsDataURL(file);
+  }
+  removePreviewImage() {
+    this.previewImage = null;
+    $('.croppie-container').remove();
+  }
+  async uploadImage() {
+    let result = await this.croppieObj.result();
+    this.isProfileImageUploading.start();
+
+    this.authShopContributorService.editProfileImage({ file: result }).pipe(takeUntil(this.ngUnsubscribe), finalize(() => { this.isProfileImageUploading.stop() }))
+      .subscribe(result => {
+        this.profileImage = environment.IMAGE_URL + result['data'];
+        this.isProfileUploaderOpened = false;
+        this.removePreviewImage();
+        WsToastService.toastSubject.next({ content: 'Profile image is changed successfully!', type: 'success' });
+      });
+  }
+  async uploadBannerImage() {
+    let result = await this.croppieObj.result({size: 'original'});
+    this.isBannerImageUploading.start();
+
+    this.authShopContributorService.editBannerImage({ file: result }).pipe(takeUntil(this.ngUnsubscribe), finalize(() => { this.isBannerImageUploading.stop() }))
+      .subscribe(result => {
+        this.bannerImage = environment.IMAGE_URL + result['data'];
+        this.shop.bannerImage = result['data'];
+        this.sharedShopService.shop.next(this.shop);
+        this.isBannerUploaderOpened = false;
+        this.removePreviewImage();
+        WsToastService.toastSubject.next({ content: 'Banner image is changed successfully!', type: 'success' });
+      });
+  }
+  uploadImageModalChange() {
+    $(() => {
+      let Croppie = window['Croppie'];
+      this.croppieObj = new Croppie(document.getElementById('id-preview-image'), {
+        viewport: {
+          width: 300,
+          height: 300,
+          type: 'circle'
+        }
+      });
+    });
+  }
+  uploadBannerImageModalChange() {
+    $(() => {
+      let Croppie = window['Croppie'];
+      this.croppieObj = new Croppie(document.getElementById('id-banner-preview-image'), {
+        viewport: {
+          width: 300,
+          height: 108.303,
+          type: 'rectangle'
+        }
+      });
+    });
   }
 }

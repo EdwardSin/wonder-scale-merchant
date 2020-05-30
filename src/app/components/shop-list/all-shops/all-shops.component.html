@@ -1,18 +1,19 @@
 <div *ngIf="activeShopList?.length; else loadingTemplate">
   <div *ngFor="let shop of activeShopList">
-    <active-shop class="d-block" [shop]="shop" class="row no-gutters pt-2 pb-2 pl-4 pr-4 bg-white mt-2"
-      *ngIf="shop?.status?.status == 'active'">
+    <active-shop class="d-block" [shop]="shop" class="row no-gutters py-3 px-4 bg-white border-bottom"
+      *ngIf="shop?.status?.status == 'active' || shop?.status?.status == 'closed'">
     </active-shop>
   </div>
 </div>
 
 <ng-template #loadingTemplate>
   <ng-container *ngIf="loading.isRunning();else noShopTemplate">
-    <ws-loading></ws-loading>
+    <ws-spinner class="text-center d-block w-100" style="padding-top: 30vh"></ws-spinner>
   </ng-container>
 </ng-template>
 <ng-template #noShopTemplate>
-  <h4 class="text-center mt-5 mb-5">
-    Create your shop and start to manage it now!
-  </h4>
+  <div class="py-5 text-center">
+    <p class="ws-no-title mb-1">Create your shop</p>
+    <span class="text-muted d-inline-block">Start to manage now!</span>
+  </div>
 </ng-template>

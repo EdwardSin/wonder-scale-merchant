@@ -4,7 +4,8 @@ export class DateOfBirthValidator {
         this.errors = { dateOfBirth: "" };
     }
     validate(dateController, monthController, yearController): boolean {
-        if (dateController.errors && dateController.errors.ValidDate) {
+        if (!dateController.value || dateController.errors && dateController.errors.ValidDate ||
+            !monthController.value || !yearController.value) {
             this.errors.dateOfBirth = "Please enter a valid date!";
             return false;
         }

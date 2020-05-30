@@ -30,11 +30,14 @@ export class AuthCategoryContributorService {
   removeItemsFromCategory(obj) {
     return this.http.put(AuthCategoryContributorUrl.removeItemsFromCategoryUrl, obj, this.accessTokenService.getAccessToken());
   }
-  moveCategory(category_id, obj) {
-    return this.http.put(AuthCategoryContributorUrl.moveCategoryUrl + '/' + category_id, obj, this.accessTokenService.getAccessToken());
+  moveCategory(obj) {
+    return this.http.put(AuthCategoryContributorUrl.moveCategoryUrl, obj, this.accessTokenService.getAccessToken());
   }
   rearrangeCategories(obj) {
     return this.http.put(AuthCategoryContributorUrl.rearrangeCategoriesUrl, obj, this.accessTokenService.getAccessToken());
+  }
+  removeCategories(categories) {
+    return this.http.put(AuthCategoryContributorUrl.removeCategoriesUrl, categories, this.accessTokenService.getAccessToken());
   }
   removeCategory(category_id) {
     return this.http.delete(AuthCategoryContributorUrl.removeCategoryUrl + '/' + category_id, this.accessTokenService.getAccessToken());
@@ -48,13 +51,13 @@ export class AuthCategoryContributorService {
   getNumberOfDiscountItems() {
     return this.http.get<{ result: number }>(AuthCategoryContributorUrl.getNumberOfDiscountItemsUrl, this.accessTokenService.getAccessToken());
   }
-  getNumberOfPublishItems() {
-    return this.http.get<{ result: number }>(AuthCategoryContributorUrl.getNumberOfPublishItemsUrl, this.accessTokenService.getAccessToken());
+  getNumberOfPublishedItems() {
+    return this.http.get<{ result: number }>(AuthCategoryContributorUrl.getNumberOfPublishedItemsUrl, this.accessTokenService.getAccessToken());
   }
-  getNumberOfUnpublishItems() {
-    return this.http.get<{ result: number }>(AuthCategoryContributorUrl.getNumberOfUnpublishItemsUrl, this.accessTokenService.getAccessToken());
+  getNumberOfUnpublishedItems() {
+    return this.http.get<{ result: number }>(AuthCategoryContributorUrl.getNumberOfUnpublishedItemsUrl, this.accessTokenService.getAccessToken());
   }
-  getNumberOfUncategoriedItems() {
-    return this.http.get<{ result: number }>(AuthCategoryContributorUrl.getNumberOfUncategoriedItemsUrl, this.accessTokenService.getAccessToken());
+  getNumberOfUncategorizedItems() {
+    return this.http.get<{ result: number }>(AuthCategoryContributorUrl.getNumberOfUncategorizedItemsUrl, this.accessTokenService.getAccessToken());
   }
 }

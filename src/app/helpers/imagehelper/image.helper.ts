@@ -5,8 +5,14 @@ export class ImageHelper {
 
   constructor() { }
 
-  public static getRemoveProfileImageIndex(profileImageIndex) {
-    return profileImageIndex != 0 ? profileImageIndex - 1 : 0;
+  public static getRemoveProfileImageIndex(listLength, removeIndex, profileImageIndex) {
+    let index = 0;
+    if (listLength - 1 >= profileImageIndex && removeIndex <= profileImageIndex && profileImageIndex != 0) {
+      index = profileImageIndex - 1;
+    } else {
+      index = profileImageIndex;
+    }
+    return index;
   }
 
   public static getProfileImageIfEmpty(allProfileImages, profileImageIndex, defaultImage = "img_not_available.png") {
@@ -21,7 +27,7 @@ export class ImageHelper {
   }
 
   public static getUploadProfileItem(uploadProfileItems, filename) {
-    return uploadProfileItems.find(file => { return file.filename == filename })
+    return uploadProfileItems.find(file => { return file.name == filename })
   }
 
   public static magnify(img) {

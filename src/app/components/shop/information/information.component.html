@@ -1,33 +1,39 @@
-<h4 class="ws-title">Information Banner</h4>
+<h4 class="ws-title d-inline-block mr-2">Information Banner</h4>
+<span title="Display different type of (Max 10) banner to your shop (Promotion, Job Vacancy, etc.)" wsTippy class="fa fa-question-circle"></span>
+<div class="mb-2 float-right d-inline-block">
+    <div class="ws-circle-button">
+        <button class="btn btn-controller small" title="Upload"
+            onclick="document.getElementById('information_upload_input').click();">
+            <span class="fas fa-upload"></span>
+        </button>
+        <ws-uploader [id]="'information_upload_input'" [max]="10"
+                    [input]="allImages"
+                    (output)="fileChangeEvent($event)"></ws-uploader>
+    </div>
+    <div class="ws-circle-button">
+        <button *ngIf="editedFlag" [disabled]="isImagesUploading" class="btn btn-controller small" title="Save"
+            (click)="editShop()">
+            <span class="fas fa-save"></span>
+        </button>
+    </div>
+</div>
 <div *ngIf="shop; else loadingTemplate">
-    <input id="information_upload_input" (change)="fileChangeEvent($event)" #informationUploadInput hidden name="banner"
-        multiple type="file" accept="image/*" />
-    <div class="row no-gutters w-100 position-relative mt-3">
-        <span title="Display different type of (Max 10) banner to your shop (Promotion, Job Vacancy, etc.)" wsTippy
-            class="clickable fa fa-question-circle"></span>
-        <div class="mb-2">
-            <button class="btn btn-second btn-md ml-0"
-                onclick="document.getElementById('information_upload_input').click();">
-                <span class="fas fa-plus mr-1"></span>Upload Information Banner
-            </button>
-            <ws-loading-button *ngIf="editedFlag" [class]="'btn btn-md btn-second'" [loading]="isImagesUploading"
-                (click)="editShop()">Save</ws-loading-button>
-        </div>
-
+    <div class="row no-gutters w-100 position-relative mt-2">
         <div class="row no-gutters w-100 center">
             <div *ngIf="allImages?.length; else noImage" class="all-item-container pb-2 ws-drag-list" cdkDropList
                 cdkDropListOrientation="horizontal" (cdkDropListDropped)="drop($event)">
                 <div class="ml-1 mr-1 ws-drag-box" *ngFor="let image of allImages; let i = index" cdkDrag>
                     <div [ngSwitch]="image?.type" class="position-relative w-100 h-100">
                         <div *ngSwitchCase="'url'" class="h-100">
-                            <span class="fas fa-times position-absolute clickable"
-                                style="right:10px;top:10px;z-index: 1;"
-                                (click)="openModal('deleteItemModal', image)"></span>
+                            <div class="corner-setting">
+                                <span class="corner-setting-item fas fa-times"
+                                    (click)="openInformationModal(image)"></span>
+                            </div>
                             <div class="image-item d-table h-100 position-relative clear-d-color">
-                                <div style="display: table-cell; vertical-align: middle; border: 1px solid #ccc">
+                                <div style="background-color: white; display: table-cell; vertical-align: middle; border: 1px solid #ccc;">
                                     <img style="height: 175px; width: 175px; object-fit: contain"
-                                        [defaultImage]="environment.LOADING_IMG_URL"
-                                        [lazyLoad]="environment.IMAGE_URL + image.url" data-upload='img_upload'
+                                        [defaultImage]="environment.LOADING_UPLOAD_DATA" [lazyLoad]="environment.IMAGE_URL + image.url"
+                                        [src]="environment.IMAGE_URL + image.url" data-upload='img_upload'
                                         alt="item.png" />
                                 </div>
                             </div>
@@ -35,16 +41,17 @@
                         <div *ngSwitchCase="'blob'" class="h-100">
                             <div *ngIf="isImagesUploading" class="w-100 h-100 position-absolute text-center"
                                 style="z-index:2; top:0; background-color: rgba(0, 0, 0, .3)">
-                                <img style="margin-top: 45%" src="{{environment.LOADING_UPLOAD_DATA}}"
-                                    alt="uploading" />
+                                <ws-spinner-dot class="position-absolute d-block" style="top: 50%; left: 50%;" 
+                                [color]="'rgba(255,255,255,.8)'"></ws-spinner-dot>
                             </div>
-                            <span class="fas fa-times position-absolute clickable"
-                                style="right:10px;top:10px;z-index: 1;"
-                                (click)="removePreUploadImage(image, $event)"></span>
+                            <div class="corner-setting">
+                                <span class="corner-setting-item fas fa-times"
+                                (click)="removePreUploadImage(image)"></span>
+                            </div>
                             <div class="image-item d-table h-100 position-relative clear-d-color">
-                                <div style="display: table-cell; vertical-align: middle; border: 1px solid #ccc; ">
+                                <div style="background-color: white; display: table-cell; vertical-align: middle; border: 1px solid #ccc;">
                                     <img style="height: 175px; width: 175px; object-fit: contain"
-                                        [defaultImage]="environment.LOADING_IMG_URL" [lazyLoad]="image?.base64"
+                                        [src]="image.url"
                                         data-upload='img_upload' alt="item.png" />
                                 </div>
                             </div>
@@ -62,16 +69,16 @@
         </div>
 
         <div class="w-100 mt-3" *ngIf="allImages?.length">
-            <h3>Preview:</h3>
+            <h4>Preview:</h4>
             <div class="w-100 mt-3">
                 <div style="max-width: 100%; width:fit-content" class="mb-3 center pl-1 pr-1 position-relative"
                     *ngFor="let image of allImages; let i = index">
                     <div [ngSwitch]="image?.type">
                         <img *ngSwitchCase="'url'" style="border: 1px solid #ccc" class="w-100"
-                            [defaultImage]="environment.LOADING_IMG_URL" [lazyLoad]="environment.IMAGE_URL + image.url"
+                            [defaultImage]="environment.LOADING_UPLOAD_DATA" [lazyLoad]="environment.IMAGE_URL + image.url"
                             alt="item.png" />
                         <img *ngSwitchCase="'blob'" style="border: 1px solid #ccc" class="w-100"
-                            data-upload='img_upload' src="{{image.base64}}" alt="item.png" />
+                            data-upload='img_upload' [src]="image.url" alt="item.png" />
                     </div>
                 </div>
             </div>
@@ -81,7 +88,7 @@
 
 <ng-template #loadingTemplate>
     <ng-container *ngIf="loading.isRunning(); else noShop">
-        <ws-loading></ws-loading>
+        <ws-spinner class="text-center d-block w-100" style="padding-top: 30vh"></ws-spinner>
     </ng-container>
 </ng-template>
 
@@ -91,5 +98,5 @@
     <h4 class="text-center mt-5 mb-5">Shop cannot be displayed!</h4>
 </ng-template>
 
-<confirm-modal id="deleteItemModal" [message]="'Are you sure to remove the images?'"
-    [action]="removeUploadedImage.bind(this, selectedInformation)"></confirm-modal>
+<confirm-modal *ngIf="isDeletedConfirmationModalOpened" [(isOpened)]="isDeletedConfirmationModalOpened" id="deleteItemModal" [message]="'Are you sure to remove the images?'"
+   [loading]="removeLoading.isRunning()" [action]="removeUploadedImage.bind(this, selectedInformation)"></confirm-modal>

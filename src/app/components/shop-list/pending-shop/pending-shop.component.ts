@@ -1,12 +1,13 @@
-import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from '@environments/environment';
 import { AuthShopContributorService } from '@services/http/auth-shop/contributor/auth-shop-contributor.service';
 import { SharedShopService } from '@services/shared/shared-shop.service';
-import { WsToastService } from '@components/elements/ws-toast/ws-toast.service';
-import { WsModalService } from '@components/elements/ws-modal/ws-modal.service';
+import { WsToastService } from '@elements/ws-toast/ws-toast.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { SharedUserService } from '@services/shared/shared-user.service';
+import { Contributor } from '@objects/contributor';
 
 @Component({
   selector: 'pending-shop',
@@ -15,45 +16,36 @@ import { takeUntil } from 'rxjs/operators';
 })
 export class PendingShopComponent implements OnInit {
   @Input() shop;
-  isRemoveModalOpen: Boolean;
+  isRemoveModalOpen: boolean;
   environment = environment;
+  contributor: Contributor;
   private ngUnsubscribe: Subject<any> = new Subject;
   constructor(
-    private modalService: WsModalService,
     private router: Router,
     private ref: ChangeDetectorRef,
+    private sharedUserService: SharedUserService,
     private sharedShopService: SharedShopService,
     private authShopContributorService: AuthShopContributorService) { }
 
   ngOnInit() {
   }
-  accept(shop_name, shop_id) {
-    this.authShopContributorService.joinContributor({ shop_id }).pipe(takeUntil(this.ngUnsubscribe))
+  accept(shop) {
+    this.authShopContributorService.joinContributor(shop._id).pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
-        WsToastService.toastSubject.next({ content: "You joined " + shop_name + "!", type: 'success' });
-        this.router.navigate([this.shop.username]);
+        WsToastService.toastSubject.next({ content: "You joined " + shop.name + "!", type: 'success' });
+        this.sharedShopService.refresh.next(true);
       }, err => {
         WsToastService.toastSubject.next({ content: err.error, type: 'danger' })
       })
   }
-  reject(shop_name, shop_id) {
-    this.authShopContributorService.rejectContributor({ shop_id }).pipe(takeUntil(this.ngUnsubscribe))
+  reject(shop) {
+    this.authShopContributorService.rejectContributor(shop._id).pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
+        WsToastService.toastSubject.next({ content: "You rejected to join " + shop.name + "!", type: 'success' });
+        this.isRemoveModalOpen = false;
         this.sharedShopService.refresh.next(true);
-        WsToastService.toastSubject.next({ content: "You rejected to join " + shop_name + "!", type: 'success' });
       }, err => {
         WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
       })
-  }
-  blockMessage() {
-    WsToastService.toastSubject.next({ content: "Shop can only be viewed by contributor!", type: 'danger' });
-  }
-  openModal(id) {
-    this.isRemoveModalOpen = true;
-    this.ref.detectChanges();
-    this.modalService.open(id);
-  }
-  closeModal() {
-    this.isRemoveModalOpen = false;
   }
 }

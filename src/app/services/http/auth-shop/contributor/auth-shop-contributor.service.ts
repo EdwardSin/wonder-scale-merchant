@@ -9,12 +9,14 @@ import { AccessTokenService } from '@services/http/auth-shop/access-token.servic
 export class AuthShopContributorService {
 
   constructor(private http: HttpClient, private accessTokenService: AccessTokenService) { }
-
   getContributors() {
     return this.http.get(AuthShopContributorUrl.getContributorsUrl, this.accessTokenService.getAccessToken());
   }
-  editProfile(obj) {
+  editProfileImage(obj) {
     return this.http.put(AuthShopContributorUrl.editProfileUrl, obj, this.accessTokenService.getAccessToken());
+  }
+  removeProfileImage() {
+    return this.http.put(AuthShopContributorUrl.removeProfileUrl, {}, this.accessTokenService.getAccessToken());
   }
   editGeneral(obj) {
     return this.http.put(AuthShopContributorUrl.editGeneralUrl, obj, this.accessTokenService.getAccessToken());
@@ -28,10 +30,10 @@ export class AuthShopContributorService {
   addBanner(obj) {
     return this.http.put(AuthShopContributorUrl.addBannerUrl, obj, this.accessTokenService.getAccessToken());
   }
-  editBanner(obj) {
+  editBannerImage(obj) {
     return this.http.put(AuthShopContributorUrl.editBannerUrl, obj, this.accessTokenService.getAccessToken());
   }
-  removeBanner(obj) {
+  removeBannerImage(obj) {
     return this.http.put(AuthShopContributorUrl.removeBannerUrl, obj, this.accessTokenService.getAccessToken());
   }
   removeMedia(obj) {
@@ -40,11 +42,11 @@ export class AuthShopContributorService {
   editMedia(obj) {
     return this.http.put(AuthShopContributorUrl.editMediaUrl, obj, this.accessTokenService.getAccessToken());
   }
-  joinContributor(obj) {
-    return this.http.put(AuthShopContributorUrl.joinContributorUrl, obj, this.accessTokenService.getAccessToken());
+  joinContributor(shopId) {
+    return this.http.put(AuthShopContributorUrl.joinContributorUrl, {shopId});
   }
-  rejectContributor(obj) {
-    return this.http.put(AuthShopContributorUrl.rejectContributorUrl, obj, this.accessTokenService.getAccessToken());
+  rejectContributor(shopId) {
+    return this.http.put(AuthShopContributorUrl.rejectContributorUrl, {shopId});
   }
   leaveShop() {
     return this.http.put(AuthShopContributorUrl.leaveShopUrl, {}, this.accessTokenService.getAccessToken());
@@ -59,9 +61,9 @@ export class AuthShopContributorService {
     return this.http.put(AuthShopContributorUrl.removeInformationImageUrl, obj, this.accessTokenService.getAccessToken());
   }
   advertiseItems(obj) {
-    return this.http.put(AuthShopContributorUrl.advertiseItemsUrl, obj, this.accessTokenService.getAccessToken());
+    return this.http.post(AuthShopContributorUrl.advertiseItemsUrl, obj, this.accessTokenService.getAccessToken());
   }
-  changeNewItemMessage(obj) {
-    return this.http.put(AuthShopContributorUrl.changeNewItemMessageUrl, obj, this.accessTokenService.getAccessToken());
+  updateNewItemMessage(obj) {
+    return this.http.put(AuthShopContributorUrl.updateNewItemMessageUrl, obj, this.accessTokenService.getAccessToken());
   }
 }

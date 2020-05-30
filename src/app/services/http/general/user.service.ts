@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { User } from '@objects/user';
 import { Observable } from 'rxjs';
 import { AuthenticationService } from './authentication.service';
+import { environment } from '@environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -11,13 +12,14 @@ export class UserService {
   USER_URL = '/api/users';
   constructor(private http: HttpClient, private authenticationService: AuthenticationService) { }
 
-  getUserByUserId(user_id): Observable<User> {
-    return this.http.get<User>(this.USER_URL + '/profile/' + user_id);
+  getUserByUserId(userId): Observable<User> {
+    return this.http.get<User>(this.USER_URL + '/profile/' + userId);
   }
   addUser(user) {
     let headers = new HttpHeaders();
+    let source = environment.SOURCE || 'website';
     headers.append('Content-Type', 'application/json');
-    return this.http.post(this.USER_URL + '/register', user, { headers: headers });
+    return this.http.post(this.USER_URL + '/register', {...user, source}, { headers: headers });
   }
   addUserByFb(user) {
     let headers = new HttpHeaders();
@@ -42,20 +44,23 @@ export class UserService {
     return this.http.get(this.USER_URL + '/reset/username/' + resetData);
   };
   resendActivationEmailConfirmation = function (resetData) {
-    return this.http.post(this.USER_URL + '/resend/activation-email', resetData);
+    let source = environment.SOURCE || 'website';
+    return this.http.post(this.USER_URL + '/resend/activation-email', {...resetData, source});
   };
   resendActivationEmail = function (email) {
-    return this.http.put(this.USER_URL + '/resend/activation-email', { email });
+    let source = environment.SOURCE || 'website';
+    return this.http.put(this.USER_URL + '/resend/activation-email', { email, source });
   };
-  sendPasswordLinkToEmail = function (resetData) {
-    let headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    return this.http.post(this.USER_URL + '/reset/password', resetData, {
-      headers: headers
-    });
+  sendPasswordLinkToEmail(resetData) {
+    let source = environment.SOURCE || 'website';
+    return this.http.post(this.USER_URL + '/reset/password', {...resetData, source});
   };
+  resetPassword(obj: { email: string, password: string, confirmPassword: string, resetToken: string }) {
+    let source = environment.SOURCE || 'website';
+    return this.http.patch(this.USER_URL + '/reset/password/' + obj.resetToken, {...obj, source});
+  }
   // Grab user's information from e-mail reset link
-  resetUserFromLink = function (token) {
-    return this.http.get(this.USER_URL + '/reset/password/' + token);
+  resetUserFromLink(token): Observable<User> {
+    return this.http.get<User>(this.USER_URL + '/reset/password/' + token);
   };
 }

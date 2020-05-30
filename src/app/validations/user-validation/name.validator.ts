@@ -4,6 +4,7 @@ export class NameValidator {
     this.errors = { firstName: "", lastName: "" };
   }
   validate(firstName, lastName): boolean {
+    this.reset();
     if (firstName.errors) {
       if (firstName.errors.required) {
         this.errors.firstName = "First name is required!";

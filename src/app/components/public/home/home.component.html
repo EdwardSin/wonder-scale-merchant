@@ -1,73 +1,97 @@
 <div class="background-container"></div>
 
-<div class="background-text container position-relative" style="height: 600px; z-index: 10; padding-top: 5%">
-  <h1 style="font-size: 3rem" class="mb-5">Wonder Scale</h1>
-  <p class="mb-4" style="font-size: 1.5rem">A platform for merchants to manage and advertise your shop.</p>
-
-  <p class="d-inline-block" style="font-size: 1.8rem">We promise to provide the best services to our customers.</p>
-  <button class="btn-background" [routerLink]="['', { outlets: {modal: 'login'}}]">Join us now!</button>
-
-</div>
-
-<div class="container text-center pt-5 pb-5">
-  <h4>Promotion Now</h4>
-  <p>We offer our first 100 merchants for free advertising!</p>
-  <button class="btn btn-second" [routerLink]="['', { outlets: {modal: 'login'}}]">Get offer now!</button>
-</div>
-<div class="pt-4 pb-4" style="background-color: #f5f5f5">
-  <div class="container">
-    <h4>Free Services</h4>
-    <div class="row no-gutters pt-2 pb-2">
-      <div class="col-lg-3 text-center p-3">
-        <div class="fas fa-map-marked-alt mb-2" style="font-size: 4rem"></div>
-        <p class="font-weight-bold mb-1">Show shop on map</p>
-        <p style="font-size: .9rem">Customers can find your shop easily by item on map.</p>
-      </div>
-      <div class="col-lg-3 text-center p-3">
-        <div class="fas fa-th-large mb-2" style="font-size: 4rem"></div>
-        <p class="font-weight-bold mb-1">Item management</p>
-        <p style="font-size: .9rem">Seller can upload item and manage their shop online.</p>
-      </div>
-      <div class="col-lg-3 text-center p-3">
-        <div class="fas fa-store mb-2" style="font-size: 4rem"></div>
-        <p class="font-weight-bold mb-1">Display latest information</p>
-        <p style="font-size: .9rem">Seller can display shop information, promotion banner and job vacancy banner to
-          interact their customers.</p>
-      </div>
-      <div class="col-lg-3 text-center p-3">
-        <div class="fas fa-qrcode mb-2" style="font-size: 4rem"></div>
-        <p class="font-weight-bold mb-1">Get your QR-code</p>
-        <p style="font-size: .9rem">Display QR code on your wall.<br />Customer can easily scan and view your shop.</p>
-      </div>
+<div class="container position-relative">
+  <div class="background row no-gutters">
+    <div class="col-lg-9 background__texture order-12 order-lg-1 text-center text-lg-left">
+      <h1 class="background__title mb-4">Merchant | Wonder Scale</h1>
+      <p class="mb-4" style="color: #888; font-size: 1.5rem">A platform for merchants to manage and advertise your shop.</p>
+      <p style="color: #888; font-size: 1rem; margin-bottom: 2rem">- We promise to provide the best services to our customers.</p>
+      <button class="btn btn-second" [routerLink]="['', { outlets: {modal: 'login'}}]">Join us now!</button>
     </div>
-    <h4>Extra Services</h4>
-    <div class="row no-gutters pt-2 pb-2">
-      <div class="offset-lg-3 col-lg-3 text-center p-3">
-        <img class="mb-2" style="width: 60px;" src="assets/images/svg/edvertising-icon.svg" alt="order" />
-        <p class="font-weight-bold mb-1">Shop Advertising</p>
-        <p style="font-size: .9rem">Shop will be promoted in multiple places in apps to attract more customers.</p>
-      </div>
-      <div class="col-lg-3 text-center p-3">
-        <div class="fas fa-user-tie mb-2" style="font-size: 4rem"></div>
-        <p class="font-weight-bold mb-1">Recruitment Advertising</p>
-        <p style="font-size: .9rem">Post job vacancy advertisement to recruit new staffs.</p>
-      </div>
+    <div class="col-lg-3 order-1 order-lg-12 mb-3">
+      <img class="background__image" src="/assets/images/png/icon.png" alt="home icon" />
     </div>
   </div>
 </div>
+
+<!-- <div class="container text-center pt-5 pb-5">
+  <h4>Promotion Now</h4>
+  <p>We offer our first 100 merchants for free advertising!</p>
+  <button class="btn btn-second" [routerLink]="['', { outlets: {modal: 'login'}}]">Get offer now!</button>
+</div> -->
+<div class="pt-4 pb-4" style="background-color: #f5f5f5">
+  <div class="container">
+    <h4 class="font-weight-bold">Free Services</h4>      
+      <div class="row no-gutters text-center feature__container">
+        <div class="col-sm-6 text-center">
+          <div class="icon icon-right icon-item fas fa-th-large mb-2"></div>
+        </div>
+        <div class="col-sm-6">
+          <p class="feature__title font-weight-bold mb-1">Catalogue management</p>
+          <p style="font-size: .9rem">- Manage your items by systems.
+            <br/>
+            <span class="ml-2">You can publish your items online instantly.</span></p>
+        </div>
+      </div>
+      <div class="row no-gutters text-center feature__container">
+        <div class="col-sm-6 order-12 order-sm-1">
+          <p class="feature__title font-weight-bold mb-1">Display latest information</p>
+          <p class="mb-0" style="font-size: .9rem">- Display your shop information in crease the exposure to public.</p>
+          <p class="mb-0" style="font-size: .9rem">- Display promotion banner, job vacancy banner to interact their customer.</p>
+        </div>
+        <div class="col-sm-6 text-center order-1 order-sm-12">
+          <div class="fas fa-store icon icon-store icon-left mb-2"></div>
+        </div>
+      </div>
+      <div class="row no-gutters text-center feature__container">
+        <div class="col-sm-6 text-center">
+          <div class="fas fa-qrcode icon icon-qrcode icon-right mb-2"></div>
+        </div>
+        <div class="col-sm-6">
+          <p class="feature__title font-weight-bold mb-1">Get your QR-code</p>
+          <p style="font-size: .9rem">- Display QR code on your shop.<br/>
+            <span class="ml-2">Make your customer easily scan and view your shop.</span></p>
+        </div>
+      </div>
+      <div class="row no-gutters text-center feature__container">
+        <div class="col-sm-6 order-12 order-sm-1">
+          <p class="feature__title font-weight-bold mb-1">Notify your customers</p>
+          <p style="font-size: .9rem">- Now you can notify your customers any new arrival products & wish list products.</p>
+        </div>
+        <div class="col-sm-6 text-center order-1 order-sm-12">
+          <div class="fas fa-bell icon icon-bell icon-left mb-2"></div>
+        </div>
+      </div>
+  </div>
+</div>
 <div class="container pt-4 pb-4">
-  <h4>Coming Soon</h4>
+  <h4 class="font-weight-bold">Coming Soon</h4>
   <div class="row no-gutters pt-2 pb-2">
     <div class="col-lg-4 text-center p-3">
-      <img class="mb-2" style="width: 60px;" src="assets/images/svg/order.svg" alt="order" />
+      <div class="fas fa-map-marked-alt mb-2" style="font-size: 4rem"></div>
+      <p class="font-weight-bold mb-1">Show shop on map</p>
+      <p style="font-size: .9rem">Customers can find your shop easily by item on map.</p>
+    </div>
+    <div class="col-lg-4 text-center p-3">
+      <img class="mb-2" style="height: 65.86px;" src="assets/images/svg/advertising.svg" alt="order" />
+      <p class="font-weight-bold mb-1">Shop Advertising</p>
+      <p style="font-size: .9rem">Shop will be promoted in multiple places in apps to attract more customers.</p>
+    </div>
+    <div class="col-lg-4 text-center p-3">
+      <span class="fas fa-clipboard-list mb-2" style="font-size: 4rem"></span>
       <p class="font-weight-bold mb-1">Order System</p>
       <p style="font-size: .9rem">Seller allows users to make order online.<br />Users pay online and pick up in store.
       </p>
     </div>
     <div class="col-lg-4 text-center p-3">
-      <img class="mb-2" style="width: 60px;" src="assets/images/svg/ecommerce.svg" alt="order" />
+      <span class="fas fa-globe mb-2" style="font-size: 4rem"></span>
       <p class="font-weight-bold mb-1">E-Commerce</p>
       <p style="font-size: .9rem">Seller easily sell online.<br /> Users pay online and wait for the delivery.</p>
+    </div>
+    <div class="col-lg-4 text-center p-3">
+      <div class="fas fa-user-tie mb-2" style="font-size: 4rem"></div>
+      <p class="font-weight-bold mb-1">Recruitment Advertising</p>
+      <p style="font-size: .9rem">Post job vacancy advertisement to recruit new staffs.</p>
     </div>
     <div class="col-lg-4 text-center p-3">
       <div class="fas fa-ellipsis-h mb-2 mt-3" style="font-size: 4rem"></div>
@@ -79,26 +103,26 @@
   <div class='container-fluid col-md-8 pt-20 pl-0 pr-0'>
     <div class='row no-gutters'>
       <div class="footer-box-left col-md-4 mb-2" *ngIf="false">
-        <div *ngIf="false">
+        <div>
           <a id="facebook" href='https://www.facebook.com/wonderscale/' aria-label="facebook" rel="noopener"
             target="_blank">
             <span class="fab fa-facebook-square"></span></a>
-          <a id="instagram" href='https://www.instagram.com' target="_blank" aria-label="insta" rel="noopener"
+          <!-- <a id="instagram" href='https://www.instagram.com' target="_blank" aria-label="insta" rel="noopener"
             class='ml-3'>
             <span class="fab fa-instagram"></span>
           </a>
           <a id="twitter" href='https://www.twitter.com' target="_blank" aria-label="insta" rel="noopener" class='ml-3'>
             <span class="fab fa-twitter"></span>
-          </a>
+          </a> -->
         </div>
       </div>
       <div class="footer-box-center col-md-8 no-gutters row">
         <div class="col">
           <ul>
-            <li class="col">
+            <!-- <li class="col">
               <a class="font-weight-bold ws-white" routerLink="/">Wonder Scale</a>
-            </li>
-            <li class="col">
+            </li> -->
+            <!-- <li class="col">
               <a class="font-9" [routerLink]="['/contact-us']">Contact Us</a>
             </li>
             <li class="col">
@@ -109,7 +133,7 @@
             </li>
             <li *ngIf="false">
               <a routerLink="/help">Help</a>
-            </li>
+            </li> -->
           </ul>
         </div>
       </div>

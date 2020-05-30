@@ -31,8 +31,10 @@ export class FeatureUrl {
 }
 export class AuthUserUrl {
     static getUserUrl = URL.AUTH_USERS_URL + '/users';
+    static getProfileUrl = URL.AUTH_USERS_URL + '/users/profile';
     static getPasswordExistedUrl = URL.AUTH_USERS_URL + '/users/is-password';
-    static editProfileUrl = URL.AUTH_USERS_URL + '/users/edit/profile';
+    static removeProfileImageUrl = URL.AUTH_USERS_URL + '/users/remove/profile-image';
+    static editProfileUrl = URL.AUTH_USERS_URL + '/users/edit/profile-image';
     static editGeneralUrl = URL.AUTH_USERS_URL + '/users/edit/general';
     static changePasswordUrl = URL.AUTH_USERS_URL + '/users/edit/password';
     static savePasswordUrl = URL.AUTH_USERS_URL + '/users/save/password';
@@ -56,6 +58,7 @@ export class AuthShopContributorUrl {
     static getContributorsUrl = URL.AUTH_SHOP_CONTRIBUTOR_URL + '/contributors';
     static addBannerUrl = URL.AUTH_SHOP_CONTRIBUTOR_URL + '/add/banner-image';
     static editProfileUrl = URL.AUTH_SHOP_CONTRIBUTOR_URL + '/edit/profile-image';
+    static removeProfileUrl = URL.AUTH_SHOP_CONTRIBUTOR_URL + '/remove/profile-image';
     static editGeneralUrl = URL.AUTH_SHOP_CONTRIBUTOR_URL + '/edit/general';
     static editContactUrl = URL.AUTH_SHOP_CONTRIBUTOR_URL + '/edit/contact';
     static editBannerUrl = URL.AUTH_SHOP_CONTRIBUTOR_URL + '/edit/banner-image';
@@ -70,7 +73,7 @@ export class AuthShopContributorUrl {
     static editInformationImagesOrderUrl = URL.AUTH_SHOP_CONTRIBUTOR_URL + '/rearrange/information-image';
     static removeInformationImageUrl = URL.AUTH_SHOP_CONTRIBUTOR_URL + '/remove/information-image';
     static advertiseItemsUrl = URL.AUTH_SHOP_CONTRIBUTOR_URL + '/advupdate';
-    static changeNewItemMessageUrl = URL.AUTH_SHOP_CONTRIBUTOR_URL + '/updatemessage';
+    static updateNewItemMessageUrl = URL.AUTH_SHOP_CONTRIBUTOR_URL + '/updatemessage';
 }
 export class AuthReviewContributorUrl {
     static getReviewByShopIdUrl = URL.AUTH_REVIEW_CONTRIBUTOR_URL + '/shopid';
@@ -122,9 +125,9 @@ export class AuthItemContributorUrl {
     static getAuthenticatedAllItemsByShopIdUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/all';
     static getAuthenticatedNewItemsByShopIdUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/new';
     static getAuthenticatedDiscountItemsByShopIdUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/discount';
-    static getAuthenticatedPublishItemCategoryByShopIdUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/publish';
-    static getAuthenticatedUnpublishItemCategoryByShopIdUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/unpublish';
-    static getAuthenticatedUncategoriedItemCategoryByShopIdUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/uncategoried';
+    static getAuthenticatedPublishedItemCategoryByShopIdUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/published';
+    static getAuthenticatedUnpublishedItemCategoryByShopIdUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/unpublished';
+    static getAuthenticatedUncategorizedItemCategoryByShopIdUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/uncategorized';
     static activateItemsUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/publish/items';
     static inactivateItemsUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/unpublish/items';
     static addItemUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '';
@@ -132,12 +135,15 @@ export class AuthItemContributorUrl {
     static editItemTypesUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/item-types';
     static editMultipleItemsUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/edit-multiple';
     static removeItemsPermanantlyUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/remove/items/permanently';
+    static removeItemTypeUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/remove/item-type';
     static uploadItemsUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/upload/items'
     static editProfileImageUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/edit/profile-image';
     static editDescriptionImageUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/edit/description-image';
+    static editItemTypeImageUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/edit/item-type-image';
     static editProfileImageIndexUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/edit/profile-image-index';
     static removeProfileImageUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/remove/profile-image';
     static removeDescriptionImageUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/remove/description-image';
+    static removeItemTypeImageUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/remove/item-type-image';
 
 }
 export class AuthCartContributorUrl {
@@ -171,17 +177,18 @@ export class AuthCategoryContributorUrl {
     static addCategoryUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL;
     static editCategoryUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL;
     static removeCategoryUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL;
+    static removeCategoriesUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL + '/remove/categories';
     static getAuthenticatedCategoriesByShopIdUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL + '/shopid';
-    static addItemsToCategoryUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL + '/add-items';
+    static addItemsToCategoryUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL + '/items/add';
     static removeItemsFromCategoryUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL + '/remove/itemsfromcategory';
     static moveCategoryUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL + '/move';
     static rearrangeCategoriesUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL + '/rearrange';
     static getNumberOfAllItemsUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL + '/number_of_all_items';
     static getNumberOfNewItemsUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL + '/number_of_new_items';
     static getNumberOfDiscountItemsUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL + '/number_of_discount_items';
-    static getNumberOfPublishItemsUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL + '/number_of_publish_items';
-    static getNumberOfUnpublishItemsUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL + '/number_of_unpublish_items';
-    static getNumberOfUncategoriedItemsUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL + '/number_of_uncategoried_items';
+    static getNumberOfPublishedItemsUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL + '/number_of_published_items';
+    static getNumberOfUnpublishedItemsUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL + '/number_of_unpublished_items';
+    static getNumberOfUncategorizedItemsUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL + '/number_of_uncategorized_items';
 
 }
 
@@ -198,7 +205,7 @@ export class AuthShopAdminUrl {
     static inviteContributorUrl = URL.AUTH_SHOP_ADMIN_URL + '/contributor/invite';
     static editContributorUrl = URL.AUTH_SHOP_ADMIN_URL + '/contributor/edit';
     static removeContributorUrl = URL.AUTH_SHOP_ADMIN_URL + '/contributor/remove';
-    static closePermanentlyUrl = URL.AUTH_SHOP_ADMIN_URL + '/closepermanently';
+    static closePermanentlyUrl = URL.AUTH_SHOP_ADMIN_URL + '/close/permanently';
     static reactivateShopUrl = URL.AUTH_SHOP_ADMIN_URL + '/reactivate';
 }
 

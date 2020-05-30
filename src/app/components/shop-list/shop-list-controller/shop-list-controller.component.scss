@@ -30,14 +30,3 @@ ul li {
         }
     }
 }
-.fa-sync-alt{
-    color: map-get($ws-color, dark-grey);
-    transition: color .2s ease;
-    font-size: 1.3rem;
-    &:hover{
-        color: map-get($ws-color, secondary);
-    }
-    &.loading{
-        animation: rotate 8s infinite;
-    }
-}

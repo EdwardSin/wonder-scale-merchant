@@ -3,10 +3,10 @@ import { Title } from '@constants/title';
 import { Contactus } from '@objects/contactus';
 import { SendemailService } from '@services/http/general/sendemail.service';
 import { DocumentHelper } from '@helpers/documenthelper/document.helper';
-import { WsLoading } from '@components/elements/ws-loading/ws-loading';
+import { WsLoading } from '@elements/ws-loading/ws-loading';
 import { Subject } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
-import { WsToastService } from '../../elements/ws-toast/ws-toast.service';
+import { WsToastService } from '../../../elements/ws-toast/ws-toast.service';
 
 @Component({
   selector: 'app-contact-us',

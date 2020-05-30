@@ -1,0 +1,8 @@
+<div class="pagination">
+    <div class="pagination__padding"></div>
+    <div class="pagination__chevron-container" [class.pagination__chevron-container__nav-open]="expanded">
+      <span class="pagination__showing-info pl-3">Showing {{ ((currentPage-1) * pageSize) + 1}} to {{ currentDisplayTotal }} of  {{total}} entries</span>
+      <span (click)="setPage(+currentPage + 1)" class="pagination__chevron-left fas fa-chevron-right"></span>
+      <span (click)="setPage(+currentPage - 1)" class="pagination__chevron-right fas fa-chevron-left"></span>
+    </div>
+  </div>

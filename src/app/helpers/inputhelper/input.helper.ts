@@ -21,13 +21,13 @@ export class InputHelper {
     $("[tabIndex='" + nextIndex + "']").focus();
   }
 
-  public static decimalTo(event, digit: number = 2): String {
+  public static decimalTo(event, digit: number = 2): string {
     let value = event["target"]["value"];
-    return Number(value) ? String(Number(value).toLocaleString("en-US", { minimumFractionDigits: digit, maximumFractionDigits: digit })) : String(Number(0.00));
+    return +value ? string(+(value).toLocaleString("en-US", { minimumFractionDigits: digit, maximumFractionDigits: digit })) : string(0.00);
   }
 
   //Tested
-  public static getValidPrice(event): String {
+  public static getValidPrice(event): string {
     var MAX_VALUE = 10000000;
     var MIN_VALUE = 0;
     var valueAsString = InputHelper.decimalTo(event);

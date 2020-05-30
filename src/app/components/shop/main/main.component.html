@@ -1,6 +1,6 @@
 <div class="main-container-with-nav" [class.main-container-with-nav-icon]="!isNavOpen"
   *ngIf="shop && !loading.isRunning(); else loadingTemplate">
-  <ws-left-nav [(isNavOpen)]="isNavOpen" [isMobileSize]="isMobileSize">
+  <ws-left-nav [isNavOpen]="isNavOpen" (isNavOpenChange)="isNavOpenChange($event)" [isMobileSize]="isMobileSize">
     <ul class="ws-main-nav-list">
       <li *ngIf="false" class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
         <a [routerLink]="['']">
@@ -15,47 +15,47 @@
         </a>
         <ul class="ws-main-nav-sub-list">
           <li>
-            <a [routerLinkActive]="'active'" [routerLink]="['catalogue', 'all']">All
+            <a [routerLinkActive]="'active'" [routerLink]="['catalogue', 'all']" [queryParams]="{page: 1}">All
               <span class="badge ws-bg-secondary badge-pill float-right"
-                style="vertical-align: text-bottom">{{ numberOfAllItems }}</span>
+                style="margin-top: 3px">{{ numberOfAllItems }}</span>
             </a>
           </li>
           <li>
-            <a [routerLinkActive]="'active'" [routerLink]="['catalogue', 'new']">New
+            <a [routerLinkActive]="'active'" [routerLink]="['catalogue', 'new']" [queryParams]="{page: 1}">New
               <span class="badge ws-bg-secondary badge-pill float-right"
-                style="vertical-align: text-bottom">{{ numberOfNewItems }}</span>
+                style="margin-top: 3px">{{ numberOfNewItems }}</span>
             </a>
           </li>
           <li>
-            <a [routerLinkActive]="'active'" [routerLink]="['catalogue', 'discount']">Discount
+            <a [routerLinkActive]="'active'" [routerLink]="['catalogue', 'discount']" [queryParams]="{page: 1}">Discount
               <span class="badge ws-bg-secondary badge-pill float-right"
-                style="vertical-align: text-bottom">{{ numberOfDiscountItems }}</span>
+                style="margin-top: 3px">{{ numberOfDiscountItems }}</span>
             </a>
           </li>
           <li>
-            <a [routerLinkActive]="'active'" [routerLink]="['catalogue', 'publish']">Publish
+            <a [routerLinkActive]="'active'" [routerLink]="['catalogue', 'published']" [queryParams]="{page: 1}">Published
               <span class="badge ws-bg-secondary badge-pill float-right"
-                style="vertical-align: text-bottom">{{ numberOfPublishItems }}</span>
+                style="margin-top: 3px">{{ numberOfPublishedItems }}</span>
             </a>
           </li>
           <li>
-            <a [routerLinkActive]="'active'" [routerLink]="['catalogue', 'unpublish']">Unpublish
+            <a [routerLinkActive]="'active'" [routerLink]="['catalogue', 'unpublished']" [queryParams]="{page: 1}">Unpublished
               <span class="badge ws-bg-secondary badge-pill float-right"
-                style="vertical-align: text-bottom">{{ numberOfUnpublishItems }}</span>
+                style="margin-top: 3px">{{ numberOfUnpublishedItems }}</span>
             </a>
           </li>
           <li>
-            <a [routerLinkActive]="'active'" [routerLink]="['catalogue', 'uncategoried']">Uncategoried
+            <a [routerLinkActive]="'active'" [routerLink]="['catalogue', 'uncategorized']" [queryParams]="{page: 1}">Uncategorized
               <span class="badge ws-bg-secondary badge-pill float-right"
-                style="vertical-align: text-bottom">{{ numberOfUncategoriedItems }}</span>
+                style="margin-top: 3px">{{ numberOfUncategorizedItems }}</span>
             </a>
           </li>
           <hr class="m-0" />
           <li cdkDropList (cdkDropListDropped)="dropOrder($event)">
             <div *ngFor="let category of categories" class="ws-drag" cdkDrag>
-              <div class="input-group" *ngIf="isEditCategory(category?.name)">
-                <input (clickOutside)="setEditCategory('')" name="category" type='text'
-                  style="padding-left: 40px; height: 40px; margin-left: 4px;" class="col nooutline border-0"
+              <div (clickOutside)="setEditCategory('')" class="input-group" *ngIf="isEditCategory(category?.name)">
+                <input name="category" type='text'
+                  style="padding-left: 40px; height: 40px; margin-left: 4px;" class="col border-0"
                   autocomplete="off" [ngModel]="editname" (ngModelChange)="edit_new_name = $event" />
                 <a class="text-center p-0"
                   style="line-height:40px; width: 60px; vertical-align:middle; font-size: .8rem"
@@ -64,13 +64,15 @@
                 </a>
               </div>
               <span *ngIf="!isEditCategory(category?.name)" class="drag-handle" cdkDragHandle>
-                <span class="fas fa-bars" style="font-size: 1rem;"></span>
+                <span class="fas fa-bars" style="font-size: .9rem; margin-left: .25rem"></span>
               </span>
               <a href="javascript:void(0)" *ngIf="!isEditCategory(category?.name)" class="ws-secondary"
-                [routerLinkActive]="'active'" [routerLink]="['catalogue', 'custom', category.name]">
-                <span>{{ category?.name }}</span>
+                [routerLinkActive]="'active'" [routerLink]="['catalogue', 'custom', category.name]"
+                [queryParams]="{page: 1}">
+                <span style="overflow: hidden; width: 160px; text-overflow: ellipsis; display: inline-block">
+                  {{ category?.name }}</span>
                 <span class="badge ws-bg-secondary badge-pill float-right"
-                  style="vertical-align: text-bottom">{{category?.items?.length}}</span>
+                  style="margin-top: 3px">{{category?.items?.length}}</span>
                 <div>
                   <span class="edit-button d-inline-block ws-secondary" style="font-size: .8rem"
                     (click)="$event.preventDefault(); $event.stopPropagation(); setEditCategory(category?.name)">Edit</span>
@@ -82,7 +84,7 @@
           </li>
 
           <li class="row no-gutters">
-            <input placeholder="Add New Category" class="new-input col border-0 pl-4 nooutline"
+            <input placeholder="Add New Category" class="new-input col border-0 pl-4"
               (keydown.enter)="addCategory()" [(ngModel)]="new_name" />
             <span class="fas fa-plus pl-3 pr-3" (click)="addCategory()"></span>
           </li>
@@ -128,7 +130,7 @@
         <a [routerLink]="['quotation']">
           <span class="ws-main-nav-icon fas fa-file-invoice"></span>
           <span class="ws-main-nav-text">Quotations
-            <span class="badge ws-bg-secondary badge-pill float-right" style="vertical-align: text-bottom"
+            <span class="badge ws-bg-secondary badge-pill float-right" style="margin-top: 3px"
               *ngIf="unreplied_quotations.length">{{unreplied_quotations.length}}</span>
           </span>
         </a>
@@ -209,7 +211,7 @@
 </div>
 <ng-template #loadingTemplate>
   <ng-container *ngIf="loading.isRunning(); else noShop">
-    <ws-loading></ws-loading>
+    <ws-spinner class="text-center d-block w-100" style="padding-top: 30vh"></ws-spinner>
   </ng-container>
 </ng-template>
 
@@ -219,5 +221,6 @@
   </ng-container>
 </ng-template>
 
-<confirm-modal id="confirmModal" [message]="'Are you sure to remove category?'" [action]="removeCategory.bind(this)">
+<confirm-modal *ngIf="isRemoveCategoryConfirmationModalOpened" [(isOpened)]="isRemoveCategoryConfirmationModalOpened" id="confirmModal" [loading]="removeLoading.isRunning()" 
+[message]="'Are you sure to remove category?'" [action]="removeCategory.bind(this)">
 </confirm-modal>

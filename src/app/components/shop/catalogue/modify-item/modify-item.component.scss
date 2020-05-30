@@ -1,180 +1,76 @@
 @import '../../../../../assets/scss/variables.scss';
 
-.btn-item-upload{
-    height: 175px;
-    width: 175px;
-    background-color: #f5f5f5;
-    border-radius: 5px;
-    border: 0;
-    transition: .2s ease;
-    &:hover{
-        background-color: #E2E2E2;
-    }
-}
-.all-item-container{
-    overflow-x: auto; 
-    white-space: nowrap;
+.btn-item-upload {
+  height: 175px;
+  width: 175px;
+  background-color: #f5f5f5;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  transition: .2s ease;
 
-    &::-webkit-scrollbar {
-        height: 5px;
-    }
-    
-    /* Track */
-    &::-webkit-scrollbar-track {
-        border-radius: 10px;
-    }
-     
-    /* Handle */
-    &::-webkit-scrollbar-thumb {
-        background: map-get($ws-color, secondary); 
-        border-radius: 10px;
-    }
-    
-    /* Handle on hover */
-    &::-webkit-scrollbar-thumb:hover {
-        background: map-get($ws-color, secondary-hover); 
-    }
+  &:hover {
+    background-color: #E2E2E2;
+  }
 }
+
+.all-item-container {
+  overflow-x: auto;
+  white-space: nowrap;
+  max-width: 490px;
+
+  &::-webkit-scrollbar {
+    height: 5px;
+  }
+
+  /* Track */
+  &::-webkit-scrollbar-track {
+    border-radius: 10px;
+  }
+
+  /* Handle */
+  &::-webkit-scrollbar-thumb {
+    background: map-get($ws-color, secondary);
+    border-radius: 10px;
+  }
+
+  /* Handle on hover */
+  &::-webkit-scrollbar-thumb:hover {
+    background: map-get($ws-color, secondary-hover);
+  }
+}
+
 .item_div {
-    width: 175px;
-    height: 175px;
-    background-color: map-get($ws-color, white);
+  width: 173px;
+  height: 173px;
+  background-color: map-get($ws-color, white);
 }
-.image-upload{
-    background-color: #fff;
-    box-shadow: 0 0 5px #ccc; 
-    height: 175px; 
-    width: 175px; 
-    object-fit: cover;
-}
-.loading-cover {
-    height: calc(100% - .25rem);
-    width: calc(100% - .25rem);
-}
-.checkbox-div {
-    position: relative;
-    width: 80px;
-    height: 20px;
-    label {
-        background-color: map-get($ws-color, white);
-        border: map-get($ws-style, border);
-        position: absolute;
-        top: 0px;
-        width: 20px;
-        height: 20px;
-        display: block;
-        z-index: 1;
-        &:after {
-            content: " ";
-            opacity: 0;
-            width: 90%;
-            height: 50%;
-            top: 2px;
-            left: 1px;
-            position: absolute;
-            border: 3px solid map-get($ws-color, black);
-            border-top: none;
-            border-right: none;
-            background: transparent;
-            transform: rotate(-45deg);
-        }
-    }
-    input[type="checkbox"]:checked+label:after {
-        opacity: 1;
-    }
-}
-.corner-setting {
-    position: absolute;
-    right: 0;
-    top: 0;
-    z-index: 2;
-    cursor: pointer;
-    .corner-setting-item {
-      padding: .5rem;
-      width: 2rem;
-      line-height: .9rem;
-      text-align: center;
-      background-color: rgba(0, 0, 0, .3);
-      transition: background-color .3s ease;
-      color: #fff;
 
-      &:hover {
-        background-color: rgba(0, 0, 0, .5);
-      }
-    }
-  }
-  .btn-plus,
-  .btn-edit{
-    border-radius: 50%;
-    right: 1rem;
-    bottom: -.5rem;
-    width: 50px;
-    height: 50px;
-    position: absolute;
-    box-shadow: 3px 3px 3px rgba(0,0,0, .16);
+.image-upload {
+  background-color: #fff;
+  box-shadow: 0 0 3px #ccc;
+  height: 173px;
+  width: 173px;
+  object-fit: cover;
+}
+
+.corner-setting {
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 2;
+  cursor: pointer;
+
+  .corner-setting-item {
+    padding: .5rem;
+    width: 2rem;
+    line-height: .9rem;
     text-align: center;
-    transition: .2s ease;
-    cursor: pointer;
-    .fas{
-        font-size: 1.5rem;
-        color: #fff;
-        line-height: 50px;
-        vertical-align: middle;
+    background-color: rgba(0, 0, 0, .3);
+    transition: background-color .3s ease;
+    color: #fff;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, .5);
     }
   }
-  .btn-plus{
-      background-color: #FF6565;
-      z-index: 2;
-      &:hover{
-        background-color: #D85E5E;
-      }
-  }
-  .btn-edit{
-    opacity: 0;
-    transition: .2s ease;
-    background-color: brown;
-    z-index: 1;
-    &:hover{
-      background-color: saddlebrown;
-    }
-    &.selected{
-        opacity: 1;
-        transform: translateY(-3.75rem);
-    }
-  }
-  .mat-option-pseudo-checkbox.mat-pseudo-checkbox.mat-pseudo-checkbox-checked {
-    background : map-get($ws-color, secondary);
-  }
-  .mat-pseudo-checkbox-checked::after{
-      top: 1.5px !important;
-      height: 5px !important;
-      width: 11px !important;
-  }
-  
-  .type-container{
-    background-color: #f5f5f5; 
-    border-radius: 5px;
-    transition: .3s ease;
-    cursor: pointer;
-    &.selected{
-        background-color: #d9d9d9
-    }
-  }
-  .btn-image{
-    display: inline-table;
-    border-radius: 50%; 
-    font-size: 1.5rem; 
-    background: #f5f5f5;
-    cursor: pointer;
-    transition: ease .2s;
-    &:hover{
-        background-color: #d9d9d9;
-    }
-  }
-.color-span{
-    display: inline-block;
-    width: 15px;
-    height: 15px;
-    border-radius: 50%;
-    vertical-align: middle;
 }

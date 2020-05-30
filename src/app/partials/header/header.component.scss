@@ -3,7 +3,8 @@
 header {
     height: 41px;
     background-color: map-get($ws-color, secondary);
-    padding: 0 .5rem;
+    padding: 0 0 0 .5rem;
+
     .logo {
         display: inline-block;
         padding: .15rem .5rem;
@@ -13,33 +14,40 @@ header {
         border-radius: .5rem;
         cursor: pointer;
         margin: 6px 2px 5px 0px;
+
         &:hover {
             background-color: rgba(209, 209, 240, 0.2);
         }
     }
-    .ws-nav{
+
+    .ws-nav {
         display: inline-block;
         margin-left: .5rem;
         margin-bottom: 0;
         font-size: .9rem;
-        li{
+
+        li {
             display: inline-block;
             margin-right: .25rem;
         }
-        a{
+
+        a {
             color: #ccc;
             padding: 6px .5rem;
             font-weight: normal;
             border-radius: .5rem;
-            &:hover{
-                background-color: rgba(209,209,240,0.2);
+
+            &:hover {
+                background-color: rgba(209, 209, 240, 0.2);
             }
-            &.selected{
+
+            &.selected {
                 color: map-get($ws-color, secondary);
                 background-color: #fff;
             }
         }
     }
+
     .li-container {
         display: inline-block;
         padding: .15rem .5rem;
@@ -47,16 +55,88 @@ header {
         transition: background-color ease .2s;
         cursor: pointer;
         border-radius: .5rem;
+
         img {
             width: 23px;
             height: 23px;
             border-radius: 50%;
         }
+
         &:hover {
             background-color: rgba(209, 209, 240, 0.2);
         }
     }
+    .user-container {
+        float: right;
+        background-color: rgba(255, 255, 255, .2);
+
+        .user-container__link {
+            font-size: 1rem;
+            line-height: 41px;
+            color: #fff;
+            padding-left: 2rem;
+            padding-right: 2rem;
+            transition: all .5s ease, color .1s ease;
+
+            &:hover {
+                color: #aaa;
+            }
+        }
+
+        .user-container__profile-container {
+            display: inline-block;
+            padding: .5rem 1.5rem;
+            transition: background-color ease .5s;
+            cursor: pointer;
+
+            .user-container__profile {
+                width: 25px;
+                height: 25px;
+                border-radius: 50%;
+                user-select: none;
+                transition: all ease .5s;
+            }
+
+            .user-container__chevron-icon {
+                margin-left: .5rem;
+            }
+
+            &:hover {
+                background-color: rgba(209, 209, 240, 0.2);
+            }
+        }
+
+        .dropdown-menu {
+            margin-top: 19px;
+            right: 0;
+            left: inherit;
+            z-index: 999;
+            border-radius: 0;
+            padding-top: 0;
+            padding-bottom: 0;
+            transition: margin-top ease .5s;
+
+            .dropdown-item {
+                font-size: .9rem;
+                padding-top: .5rem;
+                padding-bottom: .5rem;
+            }
+
+            .dropdown-divider {
+                margin: 0;
+            }
+        }
+
+        .dropdown-toggle::after {
+            display: none;
+        }
+
+        .user-container__text {
+            color: white;
+        }
+    }
 }
-.dropdown-toggle:after{
-    display:none;
+
+.dropdown-toggle:after {
+    display: none;
 }

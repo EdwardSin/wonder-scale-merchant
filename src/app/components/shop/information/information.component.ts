@@ -3,10 +3,9 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { environment } from '@environments/environment';
 import { AuthShopContributorService } from '@services/http/auth-shop/contributor/auth-shop-contributor.service';
 import { SharedShopService } from '@services/shared/shared-shop.service';
-import { WsLoading } from '@components/elements/ws-loading/ws-loading';
+import { WsLoading } from '@elements/ws-loading/ws-loading';
 import { DocumentHelper } from '@helpers/documenthelper/document.helper';
-import { WsModalService } from '@components/elements/ws-modal/ws-modal.service';
-import { WsToastService } from '@components/elements/ws-toast/ws-toast.service';
+import { WsToastService } from '@elements/ws-toast/ws-toast.service';
 import { UploadHelper } from '@helpers/uploadhelper/upload.helper';
 import { ImageHelper } from '@helpers/imagehelper/image.helper';
 import _ from 'lodash';
@@ -23,6 +22,7 @@ export class InformationComponent implements OnInit {
   allImages: Array<any> = [];
   editedFlag: boolean;
   isImagesUploading: boolean;
+  isDeletedConfirmationModalOpened: boolean;
   selectedInformation;
   environment = environment;
   removeLoading: WsLoading = new WsLoading;
@@ -30,7 +30,6 @@ export class InformationComponent implements OnInit {
   @ViewChild('informationUploadInput', { static: true }) informationUploadInput: ElementRef;
   private ngUnsubscribe: Subject<any> = new Subject();
   constructor(private sharedShopService: SharedShopService,
-    private modalService: WsModalService,
     private authShopContributorService: AuthShopContributorService) { }
 
   ngOnInit() {
@@ -40,10 +39,10 @@ export class InformationComponent implements OnInit {
     this.loading.start();
     this.sharedShopService.shop.pipe(takeUntil(this.ngUnsubscribe)).subscribe(res => {
       if (res) {
-        DocumentHelper.setWindowTitleWithWonderScale('Informations | ' + res.name);
+        DocumentHelper.setWindowTitleWithWonderScale('Information Banner - ' + res.name);
         this.shop = res;
-        this.numOfTotalImages = this.shop['informationImages'].length;
-        this.allImages = this.shop['informationImages'].map(image => { return { url: image, type: 'url' } });
+        this.numOfTotalImages = this.shop.informationImages.length;
+        this.allImages = this.shop.informationImages.map(image => { return { url: image, type: 'url' } });
         this.loading.stop();
       }
     });
@@ -74,12 +73,12 @@ export class InformationComponent implements OnInit {
         result => {
           this.shop.informationImages.splice(result['index'], 0, result['image']);
           this.allImages[result['index']] = { url: result['image'], type: 'url' };
-          WsToastService.toastSubject.next({ content: "Banner has been changed!", type: 'success' });
         },
         err => { },
         () => {
           this.isImagesUploading = false;
           this.editedFlag = this.allImages.filter(image => image.type === 'blob').length > 0;
+          WsToastService.toastSubject.next({ content: "Banner has been changed!", type: 'success' });
           this.editShop();
         }
       );
@@ -103,11 +102,9 @@ export class InformationComponent implements OnInit {
       this.uploadImagesAndEdit();
     }
   }
-  removePreUploadImage(item, event) {
-    _.remove(this.allImages, item);
-    this.numOfTotalImages--;
-    event.stopPropagation();
-    this.editedFlag = this.allImages.filter(image => image.type === 'blob').length > 0;
+  removePreUploadImage(item) {
+    _.remove(this.allImages, (x) => x.name == item.name);
+    this.editedFlag = this.allImages.find(image => image.type == 'blob');
   }
   removeUploadedImage(image) {
     if (this.shop && this.shop['informationImages']) {
@@ -122,35 +119,29 @@ export class InformationComponent implements OnInit {
           _.remove(this.allImages, image);
           _.remove(this.shop['informationImages'], image.url);
           this.numOfTotalImages--;
-          this.closeModal('deleteItemModal');
+          this.isDeletedConfirmationModalOpened = false;
           this.removeLoading.stop();
         });
     }
   }
   fileChangeEvent(event) {
-    var preInformationFiles = <Array<File>>event.target.files;
-    var ableUploadImages = UploadHelper.getMaxAbleUploadProfileFiles(this.numOfTotalImages, preInformationFiles, 10);
-
-    UploadHelper.notificationIfOver(ableUploadImages, preInformationFiles);
-    UploadHelper.showImages([], ableUploadImages, images => { callBack.bind(this)(images); }, true);
-
-    function callBack(image) {
-      this.allImages.unshift(image);
-      this.numOfTotalImages++;
-      this.editedFlag = this.allImages.filter(image => image.type === 'blob').length;
-      this.informationUploadInput.nativeElement.value = '';
-    }
+    event.forEach(item => {
+      let exist = this.allImages.find(image => {
+        return image.name == item.name && image.file.size == item.file.size;
+      })
+      if (!exist) {
+        this.allImages.push(item);
+        this.editedFlag = true;
+      }
+    });
   }
   drop(event: CdkDragDrop<string[]>) {
     this.editedFlag = true;
     moveItemInArray(this.allImages, event.previousIndex, event.currentIndex);
   }
-  openModal(id, selectedInformation) {
+  openInformationModal(selectedInformation) {
+    this.isDeletedConfirmationModalOpened = true;
     this.selectedInformation = selectedInformation;
-    this.modalService.open(id);
-  }
-  closeModal(id) {
-    this.modalService.close(id);
   }
   ngOnDestroy() {
     this.ngUnsubscribe.next();

@@ -1,0 +1,31 @@
+<h4 class="ws-title">Uncategorized<span title="Display all uncategorized items" class='fas fa-info-circle ml-2 font-9'></span></h4>
+
+<item-controller></item-controller>
+<div *ngIf="numberOfUncategorizedItems && !loading.isRunning(); else loadingTemplate">
+    <div *ngIf="displayItems.length; else searchLoadingTemplate">
+        <item-view></item-view>
+    </div>
+</div>
+
+<ng-template #noItem>
+    <div class="py-5 text-center">
+        <p class="ws-no-title">No uncategorized item</p>
+        <span class="text-muted">Uncategorized item will not be published.</span>
+    </div>
+</ng-template>
+<ng-template #noSearchItem>
+    <div class="text-center">
+        <h6 class="py-5">No items found.</h6>
+    </div>
+</ng-template>
+<ng-template #loadingTemplate>
+    <ng-container *ngIf="loading.isRunning(); else noItem">
+        <ws-spinner class="text-center d-block w-100" style="padding-top: 30vh"></ws-spinner>
+    </ng-container>
+</ng-template>
+
+<ng-template #searchLoadingTemplate>
+    <ng-container *ngIf="loading.isRunning(); else noSearchItem">
+        <ws-spinner class="text-center d-block w-100" style="padding-top: 30vh"></ws-spinner>
+    </ng-container>
+</ng-template>

@@ -6,6 +6,8 @@ import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { SharedShopService } from '../../shared/shared-shop.service';
 import { SharedUserService } from '../../shared/shared-user.service';
+import { CurrencyService } from '../general/currency.service';
+import { environment } from '@environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +15,8 @@ import { SharedUserService } from '../../shared/shared-user.service';
 export class AuthShopUserService {
 
 
-  constructor(private http: HttpClient, private sharedShopService: SharedShopService, private sharedUserService: SharedUserService) { }
+  constructor(private http: HttpClient, private sharedShopService: SharedShopService, 
+    private currencyService: CurrencyService) { }
 
   isAuthenticatedShopByShopUsername(username) {
     return this.http.get(AuthShopUserUrl.isAuthenticatedShopByShopUsernameUrl + '/' + username);
@@ -28,6 +31,7 @@ export class AuthShopUserService {
   getAuthenticatedShopByShopUsername(username) {
     return this.http.get<Shop>(AuthShopUserUrl.getAuthenticatedShopByShopUsernameUrl + '/' + username)
       .pipe(tap(shop => {
+        this.currencyService.selectedCurrency.next(shop['currency']);
         this.sharedShopService.shop.next(shop);
       }));
   }
@@ -40,9 +44,10 @@ export class AuthShopUserService {
     }));
   }
   addShop(shop) {
-    return this.http.post(AuthShopUserUrl.addShopUrl, shop);
+    let source = environment.SOURCE || 'website';
+    return this.http.post(AuthShopUserUrl.addShopUrl, {...shop, source});
   }
   getContributorRole(shop, user) {
-    return shop.contributors.find(contributor => contributor.user._id == user._id);
+    return shop.contributors.find(contributor => contributor.user == user._id);
   }
 }

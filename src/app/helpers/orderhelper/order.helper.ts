@@ -65,6 +65,6 @@ export class OrderHelper {
             default:
                 list = itemList;
         }
-        return orderBy === 'asc' ? list : list.reverse();;
+        return orderBy === 'asc' ? list : list.reverse();
     }
 }

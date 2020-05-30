@@ -8,6 +8,6 @@ export class SharedLoadingService {
   loading: Subject<Boolean> = new Subject;
   refreshPromotion: Subject<Boolean> = new Subject;
 
-  screenLoading: Subject<Boolean> = new Subject;
+  screenLoading: Subject<{loading: boolean, label?: string}> = new Subject;
   constructor() { }
 }

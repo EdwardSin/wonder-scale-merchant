@@ -6,8 +6,11 @@
 .ws-bg-primary{
     background-color: map-get($ws-color, primary);
 }
-.ws-bg-light-grey{
-    background-color: map-get($ws-color, light-grey);
+.ws-bg-light-grey-1{
+    background-color: map-get($ws-color, light-grey-1);
+}
+.ws-bg-light-grey-4{
+    background-color: map-get($ws-color, light-grey-4);
 }
 .ws-bg-dark-grey {
     background-color: map-get($ws-color, dark-grey);
@@ -19,7 +22,7 @@
     background-color: grey;
 }
 .ws-bg-clear{
-    background-color: map-get($ws-color, white);
+    background-color: map-get($ws-color, clear);
 }
 .ws-primary{
     color: map-get($ws-color, primary);
@@ -27,15 +30,17 @@
 .ws-secondary{
     color: map-get($ws-color, secondary);
 }
-
-.ws-clear-color{
-    color: map-get($ws-color, white);
+.ws-dark-color{
+    color: map-get($ws-color, dark);
 }
-.ws-background {
-    // background-color: map-get($ws-color, lighter-grey);
-    // padding: 25px;
-    // border-radius: .25rem;
-    // border: 1px solid map-get($ws-color, light-grey);
+.ws-clear-color{
+    color: map-get($ws-color, clear);
+}
+.ws-grey{
+    color: map-get($ws-color, grey);
+}
+.ws-light-grey-1{
+    color: map-get($ws-color, light-grey-1);
 }
 .ws-link {
     cursor: pointer;
@@ -84,22 +89,18 @@ select.nooutline:focus,
         right: 6px;
         min-width: 80px;
         font-size: 14px;
-        color: #000;
-        background-color: #fff;
+        color: #505f79;
+        background-color: #f7f7f7;
         text-transform: unset;
-        border: 1px solid #e5e5e5;
         border-radius: 3px;
-        box-shadow: none;
-        transition: background-color ease .1s;
+        transition: background-color .2s ease-out, color .2s ease-out;
         padding: 6px 10px;
         &:hover{
-            background-color: #f0f0f0;
-            border-color: #e3e3e3;
-            color: #2e2e2e;
+            background-color: #ebecf0;
         }
         &:active{
-            box-shadow: none !important;
-            background-color: #eaeaea;
+            color: #fff;
+            background-color: #282c35;
         }
     }
 }
@@ -107,15 +108,69 @@ select.nooutline:focus,
     background-color: #f5f5f5; 
     border-radius: 5px;
     display: block;
-    padding: .5rem .75rem;
+    padding: 0;
     margin-top: .75rem;
+    border: 1px solid #ddd;
+    .input-group-prepend {
+        color: #6c757d;
+        padding: .3rem .5rem .3rem .35rem; 
+        border-right: 2px solid #ddd;
+        font-size: .9rem;
+    }
     input, textarea, select, mat-select{
         outline: none;
         width: 100%;
-        background: transparent;
         border: 0;
     }
 }
+
+.ws-circle-button {
+    padding: .25rem;
+    position: relative;
+    display: inline-block;
+    &:first-child{
+        padding-left: 0;
+    }
+    .dropdown-menu{
+        position: absolute;
+        top: -10px;
+        left: inherit;
+        .dropdown-item {
+            font-size: .8rem;
+            &:hover{
+                color: #000;
+                background-color: #ebecf0;
+            }
+        }
+    }
+    .btn.btn-controller {
+        border-radius: 5px;
+        width: 38px;
+        height: 30px;
+        padding: 0;
+        margin: 0;
+        background-color: map-get($ws-color, light-grey-4);
+        color: #505f79;
+        transition: background-color .2s ease-out, color .2s ease-out;
+        &:hover {
+            background-color: #ebecf0;
+        }
+        &:active{
+            color: #fff;
+            background-color: #282C35;
+        }
+        span {
+            display: block;
+            justify-content: center;
+        }
+        &.btn-selected-item {
+            color: map-get($ws-color, clear);
+            background-color: map-get($ws-color, primary);
+        }
+    }
+    
+}
+
 ws-loading{
     margin-top: 2.5rem;
     margin-bottom: 2.5rem;
@@ -136,6 +191,9 @@ ws-loading{
     margin-bottom: .5rem;
 }
 .btn-second{
+    border-radius: 4px;
+    font-size: .9rem;
+    transition: background-color .2s ease-out, color .2s ease-out;
     background-color: map-get($ws-color, secondary);
     color: map-get($ws-color, white);
     &:hover{
