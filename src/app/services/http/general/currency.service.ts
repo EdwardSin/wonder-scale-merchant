@@ -23,7 +23,7 @@ export class CurrencyService {
       this.selectedCurrency = new BehaviorSubject(localStorage.getItem('currency') || 'MYR');
     }
   }
-  getCurrencyWithCode(code) {
+  getCurrencyWithCode(code='MYR') {
     return this.currencies.find(currency => currency.code == code);
   }
 
