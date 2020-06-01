@@ -6,6 +6,9 @@
         (click)="onNavbarOpen()">
         <span class="fas fa-bars d-inline-block pr-3 pl-3"></span>
       </span>
+      <a [href]="environment.URL + 'shop?id=' + shop?._id" target="_blank" title="View your page" class="float-icon btn btn-controller">
+        <span class="fas fa-eye"></span>
+      </a>
       <breadcrumb class="col"></breadcrumb>
     </div>
     <div *ngIf="shop?.status?.status == 'closed'" class="alert-danger p-3 mt-2">
