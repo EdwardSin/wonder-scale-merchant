@@ -46,6 +46,7 @@ export class MainComponent implements OnInit {
   numberOfAllItems: number = 0;
   numberOfDiscountItems: number = 0;
   numberOfNewItems: number = 0;
+  numberOfTodaySpecialItems: number = 0;
   numberOfPublishedItems: number = 0;
   numberOfUnpublishedItems: number = 0;
   numberOfUncategorizedItems: number = 0;
@@ -135,6 +136,7 @@ export class MainComponent implements OnInit {
           this.numberOfAllItems = this.shop.number_of_all_items;
           this.numberOfDiscountItems = this.shop.number_of_discount_items;
           this.numberOfNewItems = this.shop.number_of_new_items;
+          this.numberOfTodaySpecialItems = this.shop.number_of_today_special_items;
           this.numberOfPublishedItems = this.shop.number_of_published_items;
           this.numberOfUnpublishedItems = this.shop.number_of_unpublished_items;
           this.numberOfUncategorizedItems = this.shop.number_of_uncategorized_items;
@@ -155,6 +157,10 @@ export class MainComponent implements OnInit {
     this.sharedCategoryService.numberOfNewItems.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(res => {
         this.numberOfNewItems = res;
+      })
+    this.sharedCategoryService.numberOfTodaySpecialItems.pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(res => {
+        this.numberOfTodaySpecialItems = res;
       })
     this.sharedCategoryService.numberOfPublishedItems.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(res => {

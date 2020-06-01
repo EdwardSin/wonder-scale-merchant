@@ -223,6 +223,30 @@ export class ItemControllerComponent implements OnInit {
         WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
       });
   }
+  markAsTodaySpecial() {
+    this.previousEditedItems = [...this.editItems];
+    this.authItemContributorService.markAsTodaySpecial(this.editItems)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(results => {
+        this.sharedCategoryService.refreshCategories(() => {
+          WsToastService.toastSubject.next({ content: "Mark as today special!", type: 'success' });
+        })
+      }, (err) => {
+        WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
+      });
+  }
+  unmarkTodaySpecial() {
+    this.previousEditedItems = [...this.editItems];
+    this.authItemContributorService.unmarkTodaySpecial(this.editItems)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(results => {
+        this.sharedCategoryService.refreshCategories(() => {
+          WsToastService.toastSubject.next({ content: "Unmark from today special!", type: 'success' });
+        })
+      }, (err) => {
+        WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
+      });
+  }
   onAddItemToCategory() {
     this.previousEditedItems = [...this.editItems];
     var editCategoryList = this.editCategoryList;

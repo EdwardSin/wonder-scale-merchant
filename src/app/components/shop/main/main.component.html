@@ -26,6 +26,12 @@
                 style="margin-top: 3px">{{ numberOfNewItems }}</span>
             </a>
           </li>
+          <li *ngIf="shop?.type == 'restaurant'">
+            <a [routerLinkActive]="'active'" [routerLink]="['catalogue', 'todayspecial']" [queryParams]="{page: 1}">Today Special
+              <span class="badge ws-bg-secondary badge-pill float-right"
+                style="margin-top: 3px">{{ numberOfTodaySpecialItems }}</span>
+            </a>
+          </li>
           <li>
             <a [routerLinkActive]="'active'" [routerLink]="['catalogue', 'discount']" [queryParams]="{page: 1}">Discount
               <span class="badge ws-bg-secondary badge-pill float-right"
