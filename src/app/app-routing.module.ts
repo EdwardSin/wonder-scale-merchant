@@ -33,6 +33,7 @@ import { ResetPasswordComponent } from '@components/feature/authentication/reset
 import { ModifyItemComponent } from '@components/shop/catalogue/modify-item/modify-item.component';
 import { ModifyItemTypeComponent } from '@components/shop/catalogue/modify-item-type/modify-item-type.component';
 import { ShopGuard } from './shop.guard';
+import { TodaySpecialItemsComponent } from '@components/shop/catalogue/today-special-items/today-special-items.component';
 
 
 const routes: Routes = [{
@@ -101,6 +102,7 @@ const routes: Routes = [{
       children: [{ path: '', redirectTo: 'all', pathMatch: 'full' },
       { path: 'all', component: AllItemsComponent, data: { title: 'all', breadcrumb: 'All' } },
       { path: 'new', component: NewItemsComponent, data: { title: 'new', breadcrumb: 'New' } },
+      { path: 'todayspecial', component: TodaySpecialItemsComponent, data: { title: 'todayspecial', breadcrumb: 'Today Special' } },
       { path: 'discount', component: DiscountItemsComponent, data: { title: 'discount', breadcrumb: 'Discount' } },
       { path: 'published', component: PublishedItemsComponent, data: { title: 'published', breadcrumb: 'Published' } },
       { path: 'unpublished', component: UnpublishedItemsComponent, data: { title: 'unpublished', breadcrumb: 'Unpublished' } },

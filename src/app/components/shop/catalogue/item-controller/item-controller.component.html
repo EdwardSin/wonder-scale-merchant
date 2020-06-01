@@ -35,6 +35,8 @@
                     <button *ngIf="param != 'uncategorized'" class="dropdown-item" (click)="unpublishItems()">Unpublish</button>
                     <button *ngIf="param != 'uncategorized' && param != 'new'" class="dropdown-item" (click)="markAsNew()">Mark as New</button>
                     <button *ngIf="param != 'uncategorized'" class="dropdown-item" (click)="unmarkNew()">Unmark from New</button>
+                    <button class="dropdown-item" (click)="markAsTodaySpecial()">Mark as Today Special</button>
+                    <button class="dropdown-item" (click)="unmarkTodaySpecial()">Unmark from Today Special</button>
                     <button class="dropdown-item" (click)="openAddToModal()">Add to</button>
                     <button *ngIf="param == 'custom'" class="dropdown-item" (click)="openMoveModal()">Move to</button>
                     <button *ngIf="param != 'uncategorized'" class="dropdown-item" (click)="openRemoveModal()">Remove from categories</button>

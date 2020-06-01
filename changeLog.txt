@@ -9,6 +9,7 @@
 .: WSM: BugFix: QR code image slow render issue (WSM-79)
 .: WSM: Task: Minimize data entry (WSM-86)
 .: WSM: Task: A button to view your shop (WSM-88)
+.: WSM: Task: Add Today special if page is a restaurant (WSM-66)
 
 - v1.0.1000                                 -
 ---------------------------------------------
