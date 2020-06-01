@@ -10,6 +10,7 @@
 .: WSM: Task: Minimize data entry (WSM-86)
 .: WSM: Task: A button to view your shop (WSM-88)
 .: WSM: Task: Add Today special if page is a restaurant (WSM-66)
+.: WSM: Task: Working hours should display to indicate users (WSM-91)
 
 - v1.0.1000                                 -
 ---------------------------------------------
