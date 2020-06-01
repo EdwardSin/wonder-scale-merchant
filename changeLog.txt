@@ -8,6 +8,7 @@
 ---------------------------------------------
 .: WSM: BugFix: QR code image slow render issue (WSM-79)
 .: WSM: Task: Minimize data entry (WSM-86)
+.: WSM: Task: A button to view your shop (WSM-88)
 
 - v1.0.1000                                 -
 ---------------------------------------------
