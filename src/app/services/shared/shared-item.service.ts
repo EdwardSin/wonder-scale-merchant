@@ -8,6 +8,8 @@ import { BehaviorSubject } from 'rxjs';
 export class SharedItemService {
     displayItems: BehaviorSubject<Item[]> = new BehaviorSubject<Item[]>([]);
     editItems: BehaviorSubject<Item[]> = new BehaviorSubject<Item[]>([]);
+    _columns = sessionStorage.getItem('shownColumns') || '["id", "name", "price", "discount", "status"]';
+    shownColumns: BehaviorSubject<Array<string>> = new BehaviorSubject<Array<string>>(JSON.parse(this._columns));
 
     _allItems: Item[] = [];
     _displayItems: Item[] = [];

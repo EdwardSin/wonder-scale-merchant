@@ -26,29 +26,29 @@
         <mat-checkbox [color]="'primary'" [checked]="editItems.length == displayItems.length"
           (change)="$event.checked ? selectAll(): deselectAll()"></mat-checkbox>
       </th>
-      <th width="200px">ID</th>
-      <th>Name</th>
-      <th width="200px">Price({{ currencySymbol }})</th>
-      <th width="200px">Discount Price({{ currencySymbol }})</th>
-      <th width="300px">Status</th>
+      <th *ngIf="columns.includes('id')" width="200px">ID</th>
+      <th *ngIf="columns.includes('name')">Name</th>
+      <th *ngIf="columns.includes('price')" width="200px">Price({{ currencySymbol }})</th>
+      <th *ngIf="columns.includes('discount')" width="200px">Discount Price({{ currencySymbol }})</th>
+      <th *ngIf="columns.includes('status')" width="300px">Status</th>
       <th width="120px">Actions</th>
       <tbody>
         <tr *ngFor="let item of displayItems; let i = index">
           <td>
             <mat-checkbox [color]="'primary'" [checked]="isInclude(item)" (change)="addToItemList(item)"></mat-checkbox>
           </td>
-          <td>{{ item?.refId}}</td>
-          <td>
+          <td *ngIf="columns.includes('id')">{{ item?.refId}}</td>
+          <td *ngIf="columns.includes('name')">
             <a class="default" href="javascript:void(0)" (click)="$event.stopPropagation();" 
             [routerLink]="['', { outlets: {modal: 'item'}}]" [queryParams]="{id: item?._id}" [queryParamsHandling]="'merge'">{{ item?.name | titlecase | limitTo: 128 }}</a>
           </td>
-          <td *ngIf="item.currency && selectedCurrencyCode">
+          <td *ngIf="item.currency && selectedCurrencyCode && columns.includes('price')">
             {{ item?.price | currency: currencyService.getCurrencyWithCode(item?.currency).rate: currencyService.getCurrencyWithCode(selectedCurrencyCode).rate }}
           </td>
-          <td *ngIf="item.currency && selectedCurrencyCode">
+          <td *ngIf="item.currency && selectedCurrencyCode && columns.includes('discount')">
             {{ item?.price | currency: currencyService.getCurrencyWithCode(item?.currency).rate: currencyService.getCurrencyWithCode(selectedCurrencyCode).rate | discountconverter : item?.discount }}
           </td>
-          <td>
+          <td *ngIf="columns.includes('status')">
             <span *ngIf="item?.isEntityNew" class="badge badge-warning mr-1">New</span>
             <span *ngIf="item?.isOffer" class="badge ws-clear-color ws-bg-offer mr-1">Discount</span>
             <span *ngIf="!item?.categories.length" class="badge ws-bg-light-grey-1 mr-1">Uncategorized</span>

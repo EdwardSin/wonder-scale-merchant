@@ -57,6 +57,7 @@ export class ItemControllerComponent implements OnInit {
   isMoveToCategoriesModalOpened: boolean;
   isEditMultipleItemsModalOpened: boolean;
   moment = moment;
+  columns = [];
   previousEditedItems: Array<any> = [];
   isAdvertiseDropdownOpened: boolean;
   action: Function;
@@ -110,6 +111,10 @@ export class ItemControllerComponent implements OnInit {
         if (res) {
           this.categories = res;
         }
+    })
+    this.sharedItemService.shownColumns.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+      this.columns = result;
+      this.ref.detectChanges();
     })
   }
   publishItems() {
@@ -267,6 +272,15 @@ export class ItemControllerComponent implements OnInit {
           this.loading.stop()
         })
       });
+  }
+  triggerColumns(value) {
+    if (this.columns.includes(value)) {
+      this.columns = this.columns.filter(x => x != value);
+    } else {
+      this.columns.push(value);
+    }
+    sessionStorage.setItem('shownColumns', JSON.stringify(this.columns));
+    this.sharedItemService.shownColumns.next(this.columns);
   }
   // getSearchItems(event) {
   //   this.sharedItemService.displayItems.next(event);
