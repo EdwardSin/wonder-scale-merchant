@@ -98,6 +98,30 @@
                     </button> -->
                 </div>
             </div>
+            <div class="ws-circle-button" mdbDropdown>
+                <button placement="right" id="sortButton" mdbDropdownToggle title="Order" wsTippy
+                    class="btn btn-controller small clickable d-inline">
+                    <span class="fa fa-chevron-down"></span>
+                </button>
+                <div class="dropdown-menu dropdown-menu-right mt-0 pb-0 pt-0" aria-labelledby="sortButton">
+                    <button class="dropdown-item" (click)="$event.stopPropagation()">
+                        <mat-checkbox (change)="triggerColumns('id')" [checked]="columns.includes('id')" [color]="'primary'" class="mr-2 d-inline-block" style="vertical-align: text-bottom"></mat-checkbox>ID
+                    </button>
+                    <button class="dropdown-item" (click)="$event.stopPropagation()">
+                        <mat-checkbox [disabled]="true" (change)="triggerColumns('name')" [checked]="columns.includes('name')" [color]="'primary'" class="mr-2 d-inline-block" style="vertical-align: text-bottom"></mat-checkbox>Name
+                    </button>
+                    <button class="dropdown-item" (click)="$event.stopPropagation()">
+                        <mat-checkbox (change)="triggerColumns('price')" [checked]="columns.includes('price')" [color]="'primary'" class="mr-2 d-inline-block" style="vertical-align: text-bottom"></mat-checkbox>Price
+                    </button>
+                    <button class="dropdown-item" (click)="$event.stopPropagation()">
+                        <mat-checkbox (change)="triggerColumns('discount')" [checked]="columns.includes('discount')" [color]="'primary'" class="mr-2 d-inline-block" style="vertical-align: text-bottom"></mat-checkbox>Discount
+                    </button>
+                    <button class="dropdown-item" (click)="$event.stopPropagation()">
+                        <mat-checkbox (change)="triggerColumns('status')" [checked]="columns.includes('status')" [color]="'primary'" class="mr-2 d-inline-block" style="vertical-align: text-bottom"></mat-checkbox>Status
+                    </button>
+                </div>
+            </div>
+            
             <!-- <div class="ws-circle-button" mdbDropdown>
                 <button id="listButton" mdbDropdownToggle title="Display" wsTippy
                     class="btn btn-controller small clickable d-inline">
