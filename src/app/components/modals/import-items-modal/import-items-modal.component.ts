@@ -203,6 +203,9 @@ export class ImportItemsModalComponent extends WsModalComponent implements OnIni
           this.maxWidth = 400;
           this.isUploadLoading.stop();
         });
+      }, err => {
+        WsToastService.toastSubject.next({ content: err.error.message || 'Error when uploading items!', type: 'danger' });
+        this.isUploadLoading.stop();
       })
   }
   ngOnDestroy() {
