@@ -64,7 +64,7 @@
         <button *ngIf="isUploadValid()" class="btn btn-sm btn-success float-right" [disabled]="isUploadLoading.isRunning()" (click)="uploadItems()">
             <ws-spinner *ngIf="isUploadLoading?.isRunning()" [width]="15" [height]="15" [spinnerColor]="'#fff'" [borderWidth]="3" class="mr-2"></ws-spinner>Upload
         </button>
-        <input id="importFile" type="file" hidden name="importFile" #importFile accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" (change)="importFileChangeEvent($event)" />
+        <input id="importFile" type="file" hidden name="importFile" #importFile accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" (change)="importFileChangeEvent($event)" />
     </div>
     <div modalBody *ngIf="phase == 1">
         <div class="text-center mt-5 mb-4">
