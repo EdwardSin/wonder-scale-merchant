@@ -250,7 +250,7 @@ export class ModifyItemComponent implements OnInit {
         this.router.navigate([{ outlets: {modal: 'item-types'}}], {queryParams: { id: this.itemId }, queryParamsHandling: 'merge'});
         this.sharedCategoryService.refreshCategories();
       }, err => {
-        WsToastService.toastSubject.next({ content: 'Error when creating item!', type: 'danger' });
+        WsToastService.toastSubject.next({ content: err.error.message || 'Error when creating item!', type: 'danger' });
       });
     }
   }

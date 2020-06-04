@@ -7,6 +7,7 @@
 - 2020-06-04                                -
 ---------------------------------------------
 .: WSM: Task: Import items with excel format (WSM-87)
+.: WSM: Task: Set a maximum items in each shop (WSM-96)
 
 - 2020-06-02                                -
 ---------------------------------------------
