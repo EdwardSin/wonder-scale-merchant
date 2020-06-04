@@ -18,7 +18,7 @@ export class SharedItemService {
     constructor() { }
 
     selectAll() {
-        this.editItems.next(this.displayItems.getValue());
+        this.editItems.next([...this.displayItems.getValue()]);
     }
     deselectAll() {
         this.editItems.next([]);
