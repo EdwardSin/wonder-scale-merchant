@@ -8,7 +8,9 @@
 ---------------------------------------------
 .: WSM: Task: Import items with excel format (WSM-87)
 .: WSM: Task: Set a maximum items in each shop (WSM-96)
+.: WSM: BugFix: Item is removed when deselect in uncategoried (WSM-97)
 
+---------------------------------------------
 - 2020-06-02                                -
 ---------------------------------------------
 .: WSM: Task: Optional Columns in Item module (WSM-40)
