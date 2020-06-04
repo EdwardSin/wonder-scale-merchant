@@ -63,6 +63,11 @@
     </div>
     <div class="col-auto">
         <div class="row no-gutters order-2 center">
+            <div class="ws-circle-button">
+                <button title="Upload Items" wsTippy class="btn btn-controller small" (click)="isImportItemsModalOpened = true">
+                    <span class="fa fa-upload"></span>
+                </button>
+            </div>
             <div class="ws-circle-button" [routerLink]="['',{outlets: {modal: 'item'}}]" [queryParams]="{id:null}" queryParamsHandling="merge">
                 <button title="Add New Item" wsTippy class="btn btn-controller small">
                     <span class="fa fa-plus"></span>
@@ -177,6 +182,7 @@
     [(editCategory)]="editCategory"></move-to-categories-modal>
 <edit-multiple-items-modal *ngIf="isEditMultipleItemsModalOpened" [(isOpened)]="isEditMultipleItemsModalOpened" [editItems]="editItems" id="editMultipleItemsModal" [action]="action">
 </edit-multiple-items-modal>
+<import-items-modal *ngIf="isImportItemsModalOpened" [(isOpened)]="isImportItemsModalOpened"></import-items-modal>
 
 <!-- <modal id="informationModal">
     <title modalHeader class="m-0" [title]="'item_controller.information'"></title>

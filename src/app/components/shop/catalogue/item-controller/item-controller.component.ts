@@ -56,6 +56,7 @@ export class ItemControllerComponent implements OnInit {
   isAddToCategoriesModalOpened: boolean;
   isMoveToCategoriesModalOpened: boolean;
   isEditMultipleItemsModalOpened: boolean;
+  isImportItemsModalOpened: boolean;
   moment = moment;
   columns = [];
   previousEditedItems: Array<any> = [];
@@ -384,10 +385,12 @@ export class ItemControllerComponent implements OnInit {
     this.authItemContributorService.removeItemsPermanantly({
       items: editItems.map(x => x['_id'])
     })
-      .pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.loading.stop()))
+      .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
         this.sharedCategoryService.refreshCategories(() => {
           WsToastService.toastSubject.next({ content: "Removed from category!", type: 'success' });
+          this.isRemoveAllSelectedItemModalConfirmationOpened = false;
+          this.loading.stop();
         })
       }, (err) => {
         WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
