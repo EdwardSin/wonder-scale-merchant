@@ -1,15 +1,78 @@
-<ws-modal [id]="id" [isCloseIconDisplayed]="false">
-  <header modalHeader>Import Items</header>
-  <div modalBody>
-    <div id="wrapper" #tableView></div>
-    <ul class="mt-3">
-      <li [class.text-success]="isHeaderValid" class="text-danger">Header is missing.</li>
-      <li [class.text-success]="isEmptyField" class="text-danger">Empty field is not allowed except description.</li>
-      <li [class.text-success]="isStockValid" class="text-danger">Only 'true' or 'false' are allowed in In-Stock field.
-      </li>
-      <li [class.text-success]="isNumberValid" class="text-danger">Only number is allowed in Price & Quantity fields.
-      </li>
-    </ul>
-    <button class="btn btn-md btn-second float-right" (click)="uploadItems()">Import</button>
-  </div>
+<ws-modal [id]="id" [isCloseIconDisplayed]="false" [maxWidth]="maxWidth">
+    <div modalBody *ngIf="phase == 0">
+        <div *ngIf="isUploaded && !isPreviewLoading.isRunning()">
+            <h1 class="h6 font-weight-bold">Configuration:</h1>
+            <div class="ws-input mb-2">
+                <mat-select class="form-control form-control-sm border-right-0" [(ngModel)]="selectedCategories" placeholder="Category Name" multiple>
+                    <mat-option *ngFor="let category of categories" [value]="category._id">{{category.name}}</mat-option>
+                </mat-select>
+            </div>
+            <div class="input-group d-inline-block mb-1 pl-2" style="flex-wrap: nowrap">
+                <mat-checkbox [color]="'primary'" class="mr-1 align-center" style="line-height: 1;" [(ngModel)]="isEntityNew">
+                </mat-checkbox>
+                Mark as New
+            </div>
+            <div class="input-group d-inline-block mb-4 pl-2" style="flex-wrap: nowrap">
+                <mat-checkbox [color]="'primary'" class="mr-1 align-center" style="line-height: 1;" [(ngModel)]="isPublished">
+                </mat-checkbox>
+                Mark item as published item
+            </div>
+
+            <ul *ngIf="!isUploadValid()" class="mb-3 list-unstyled alert alert-danger">
+                <li *ngIf="!isRowExistance" class="font-9">No item is uploaded. (Please fill in items)</li>
+                <li *ngIf="!isHeaderValid" class="font-9"><span class="fas fa-square mr-2" style="color: #ff9999"></span>Headers are invalid. (Please follow our template)</li>
+                <li *ngIf="!isEmptyField" class="font-9"><span class="fas fa-square mr-2" style="color: #ffbb33"></span>Empty field is not allowed except description.</li>
+                <!-- <li [class.text-success]="isStockValid" class="font-9">Only 'true' or 'false' are allowed in In-Stock field.
+      </li> -->
+                <li *ngIf="!isNumberValid" class="font-9"><span class="fas fa-square mr-2" style="color: #33b5e5"></span>Only number is allowed in Price fields.</li>
+                <li *ngIf="!isMaxLengthValid" class="font-9"><span class="fas fa-square mr-2" style="color: #6699ff"></span>Max 256 characters in Description fields.</li>
+            </ul>
+            <h1 class="h6 font-weight-bold">Preview:</h1>
+        </div>
+        <ws-spinner *ngIf="isPreviewLoading.isRunning()" class="text-center d-block w-100" style="padding-top: 10vh; padding-bottom: 10vh"></ws-spinner>
+        <div class="table-responsive mb-3" style="max-height:65vh; overflow-y: auto;" id="tableView"></div>
+        <div *ngIf="!isUploaded">
+            <h6 class="font-weight-bold">Tips:</h6>
+            <ul class="mb-3">
+                <li>Quick way to upload items details.</li>
+                <li>All details must to fill-in except description column.</li>
+            </ul>
+            <h6 class="font-weight-bold">Example:</h6>
+            <table class="table font-9 mb-4">
+                <thead>
+                    <th>SKU ID</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Description</th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>V000001</td>
+                        <td>Chinese Fried Rice</td>
+                        <td>9.80</td>
+                        <td>A short description about the product...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <a *ngIf="!isUploaded" href="/assets/template/wonder-scale-template.xlsx" download>
+            <button class="btn btn-sm btn-controller"><i class="fas fa-download mr-1"></i>
+                Download Template</button>
+        </a>
+        <button class="btn btn-sm btn-controller float-right ml-2" (click)="close()">Cancel</button>
+        <button *ngIf="!isUploadValid()" class="btn btn-sm btn-controller float-right" onclick="document.getElementById('importFile').click()">{{ !isUploaded ? 'Import': 'Import Again'}}</button>
+        <button *ngIf="isUploadValid()" class="btn btn-sm btn-success float-right" [disabled]="isUploadLoading.isRunning()" (click)="uploadItems()">
+            <ws-spinner *ngIf="isUploadLoading?.isRunning()" [width]="15" [height]="15" [spinnerColor]="'#fff'" [borderWidth]="3" class="mr-2"></ws-spinner>Upload
+        </button>
+        <input id="importFile" type="file" hidden name="importFile" #importFile accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" (change)="importFileChangeEvent($event)" />
+    </div>
+    <div modalBody *ngIf="phase == 1">
+        <div class="text-center mt-5 mb-4">
+            <span class="far fa-check-circle" style="font-size: 7rem; color:#68DC64"></span>
+        </div>
+        <p class="text-center mb-4"> Items are successfully uploaded.</p>
+        <div class="text-center">
+            <button class="btn btn-sm btn-controller mb-2" (click)="close()">Done!</button>
+        </div>
+    </div>
 </ws-modal>

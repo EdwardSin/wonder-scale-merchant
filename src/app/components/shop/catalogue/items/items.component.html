@@ -8,9 +8,7 @@
       Save Template</button>
   </a> -->
 </div>
-<input id="importFile" type="file" hidden name="importFile" #importFile
-  accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-  (change)="importFileChangeEvent($event)" />
+
 <div *ngIf="displayBanner" class="p-3 alert-danger mb-2">Published item to show to public!</div>
 <item-controller></item-controller>
 <div *ngIf="numberOfItems && !loading.isRunning(); else loadingTemplate">
