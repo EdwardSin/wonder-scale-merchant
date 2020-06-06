@@ -32,7 +32,10 @@ export class QrcodeComponent implements OnInit {
       .subscribe(result => {
         if (result) {
           this.shop = result;
-          this.displayImage = environment.IMAGE_URL + this.shop.profileImage;
+          this.displayImage = 'assets/images/png/dot.png';
+          if (this.shop.profileImage) {
+            this.displayImage = environment.IMAGE_URL + this.shop.profileImage;
+          }
         }
         this.loading.stop();
       })
