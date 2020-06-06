@@ -86,7 +86,7 @@ export class AboutComponent implements OnInit {
   userSuggestions = [];
   isProfileImageUploading: WsLoading = new WsLoading();
   isBannerImageUploading: WsLoading = new WsLoading();
-  profileImage;
+  profileImage = 'assets/images/png/shop.png';
   bannerImage;
   bannerImageFile;
   previewImage;
@@ -466,7 +466,7 @@ export class AboutComponent implements OnInit {
   removeProfileImage() {
     if (confirm('Are you sure to remove your profile image?')) {
       this.authShopContributorService.removeProfileImage().pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.loading.stop())).subscribe(result => {
-        this.profileImage = environment.IMAGE_URL + 'upload/images/shop.png';
+        this.profileImage = 'assets/images/png/shop.png';
       });
     }
   }
