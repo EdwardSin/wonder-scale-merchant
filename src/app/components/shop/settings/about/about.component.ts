@@ -514,7 +514,7 @@ export class AboutComponent implements OnInit {
     $('.croppie-container').remove();
   }
   async uploadImage() {
-    let result = await this.croppieObj.result();
+    let result = await this.croppieObj.result({size: 'original'});
     this.isProfileImageUploading.start();
 
     this.authShopContributorService.editProfileImage({ file: result }).pipe(takeUntil(this.ngUnsubscribe), finalize(() => { this.isProfileImageUploading.stop() }))
@@ -544,9 +544,9 @@ export class AboutComponent implements OnInit {
       let Croppie = window['Croppie'];
       this.croppieObj = new Croppie(document.getElementById('id-preview-image'), {
         viewport: {
-          width: 300,
-          height: 300,
-          type: 'circle'
+          width: 138,
+          height: 138,
+          type: 'square'
         }
       });
     });

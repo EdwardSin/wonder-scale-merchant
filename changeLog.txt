@@ -9,6 +9,7 @@
 .: WSM: Task: Add Today special if page is a restaurant (WSM-66)
 .: WSM: BugFix: Mark as offer is not shown (WSM-102)
 .: WSM: Task: Add default shop banner image (WSM-55)
+.: WSM: Task: Crop image as square to have better UI (WSM-99)
 
 ---------------------------------------------
 - 2020-06-04                                -
