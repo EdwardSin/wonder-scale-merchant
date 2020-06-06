@@ -49,11 +49,10 @@
             {{ item?.price | currency: currencyService.getCurrencyWithCode(item?.currency).rate: currencyService.getCurrencyWithCode(selectedCurrencyCode).rate | discountconverter : item?.discount }}
           </td>
           <td *ngIf="columns.includes('status')">
-            <span *ngIf="item?.isEntityNew" class="badge badge-warning mr-1">New</span>
-            <span *ngIf="item?.isOffer" class="badge ws-clear-color ws-bg-offer mr-1">Discount</span>
-            <span *ngIf="!item?.categories.length" class="badge ws-bg-light-grey-1 mr-1">Uncategorized</span>
-            <span *ngIf="item?.isPublished && item?.categories.length && param != 'uncategorized'" class="badge badge-success mr-1">Published</span>
-            <span *ngIf="!item?.isPublished && item?.categories.length && param != 'uncategorized'" class="badge ws-clear-color ws-bg-dark-grey">Unpublished</span>
+            <span [class.badge-default]="!item?.isEntityNew" class="badge badge-warning mr-1">New</span>
+            <span [class.badge-default]="!item?.isOffer" class="badge ws-clear-color ws-bg-offer mr-1">Discount</span>
+            <span [class.badge-default]="!item?.isPublished" class="badge badge-success mr-1">Published</span>
+            <span [class.badge-default]="!item?.categories.length" class="badge badge-info mr-1">Categorized</span>
           </td>
           <td width="100">
             <a title="Edit Item" href="javascript:void(0)" class="ws-dark-color btn-link p-2 mr-1" (click)="$event.stopPropagation();"

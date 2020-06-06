@@ -9,8 +9,8 @@
           <p class="mb-4">Choose your store type.</p>
           <div class="row no-gutters">
             <div class="col-lg-6 p-3 text-center">
-              <button class="btn-type p-3" (click)="storeType='physicalStore'"
-                [class.selected]="storeType=='physicalStore'">
+              <button class="btn-type p-3" (click)="storeServiceType='physicalStore'"
+                [class.selected]="storeServiceType=='physicalStore'">
                 <img class="mb-4 mt-4" style="height: 75px" src="assets/images/svg/store.svg" alt="physical store" />
                 <p class="font-weight-bold mb-2">Physical Store</p>
                 <p style="font-size: .8rem">Physical store is existed.<br />
@@ -18,8 +18,8 @@
               </button>
             </div>
             <div class="col-lg-6 p-3 text-center">
-              <button class="btn-type p-3" (click)="storeType='onlineStore'"
-                [class.selected]="storeType=='onlineStore'">
+              <button class="btn-type p-3" (click)="storeServiceType='onlineStore'"
+                [class.selected]="storeServiceType=='onlineStore'">
                 <img class="mb-4 mt-4" style="height: 75px" src="assets/images/svg/ecommerce.svg" alt="ecommerce" />
                 <p class="font-weight-bold mb-2">Online Store</p>
                 <p style="font-size: .8rem">Sell products online only.<br />
@@ -36,24 +36,24 @@
           <p class="mb-4">Choose your shop type for us to provide you specified services.</p>
           <div class="row no-gutters">
             <div class="col-lg-4 p-2 text-center">
-              <button class="btn-type p-4" (click)="storeServiceType='restaurant'"
-                [class.selected]="storeServiceType=='restaurant'">
+              <button class="btn-type p-4" (click)="storeType='restaurant'"
+                [class.selected]="storeType=='restaurant'">
                 <div class="fas fa-utensils mb-4" style="font-size: 4rem; color: #A52A2A"></div>
                 <p class="font-weight-bold mb-2">Restaurant</p>
                 <p style="font-size: .8rem">Examples: Foods, Beverages,<br /> Desserts, Cafe etc.</p>
               </button>
             </div>
             <div class="col-lg-4 p-2 text-center">
-              <button class="btn-type p-4" (click)="storeServiceType='shopping'"
-                [class.selected]="storeServiceType=='shopping'">
+              <button class="btn-type p-4" (click)="storeType='shopping'"
+                [class.selected]="storeType=='shopping'">
                 <div class="fas fa-shopping-bag mb-4" style="font-size: 4rem; color: #FF7F50"></div>
                 <p class="font-weight-bold mb-2">Shopping</p>
                 <p style="font-size: .8rem">Examples: Shirts, <br />Electronic products, Furniture etc.</p>
               </button>
             </div>
             <div class="col-lg-4 p-2 text-center">
-              <button class="btn-type p-4" (click)="storeServiceType='services'"
-                [class.selected]="storeServiceType=='services'">
+              <button class="btn-type p-4" (click)="storeType='services'"
+                [class.selected]="storeType=='services'">
                 <div class="fas fa-cog mb-4" style="font-size: 4rem; color: #EFD31A"></div>
                 <p class="font-weight-bold mb-2">Services</p>
                 <p style="font-size: .8rem">Examples: PC Repair, <br />Recycle Center, Cleaning Service etc.</p>
@@ -63,7 +63,7 @@
           <div class="row no-gutters">
             <button *ngIf="false" class="btn btn-md btn-second" type="button"
               (click)="phase.previous()">Previous</button>
-            <button [disabled]="storeServiceType == undefined" class="btn btn-md btn-second" type="button" style="margin-left: auto" (click)="next()">Next</button>
+            <button [disabled]="storeType == undefined" class="btn btn-md btn-second" type="button" style="margin-left: auto" (click)="next()">Next</button>
           </div>
         </form>
 
