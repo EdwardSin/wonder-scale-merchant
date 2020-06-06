@@ -354,7 +354,7 @@
 <ws-modal *ngIf="isProfileUploaderOpened" [isCloseIconDisplayed]="false" [(isOpened)]="isProfileUploaderOpened" [maxWidth]="400">
     <div class="pt-3" modalBody>
         <div class='preview-image__container center'>
-            <span class="preview-image__remove-icon fas fa-times" (click)="removePreviewImage()"></span>
+            <span *ngIf="previewImage" class="preview-image__remove-icon fas fa-times" (click)="removePreviewImage()"></span>
             <div *ngIf="!previewImage" onclick="document.getElementById('id-profile-image-upload').click()" class="preview-image__text-container">
                 <span class="preview-image__text-icon fas fa-image"></span>
                 <span class="preview-image__text">Upload Image</span>
