@@ -10,6 +10,7 @@
 .: WSM: BugFix: Mark as offer is not shown (WSM-102)
 .: WSM: Task: Add default shop banner image (WSM-55)
 .: WSM: Task: Crop image as square to have better UI (WSM-99)
+.: WSM: Task: Change Share URL to username (WSM-101)
 
 ---------------------------------------------
 - 2020-06-04                                -
