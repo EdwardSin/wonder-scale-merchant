@@ -161,10 +161,20 @@
 
 .banner-image-container {
     position: relative;
-    background-color: rgba(0, 0, 0, .2);
+    background-image: url('/assets/images/png/background.png');
     width: 831px;
     height: 300px;
     margin-bottom: 3rem;
+    .banner-image-container__text{
+        line-height: 300px;
+        font-size: 3rem;
+        color: #bbb;
+        font-weight: bold;
+        text-align: center;
+        user-select: none;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+    }
 
     .img-banner__uploading {
         position: absolute;
@@ -274,6 +284,10 @@ button {
         margin-bottom: 0;
         margin-left: -1rem;
         object-fit: cover;
+        .banner-image-container__text{
+            font-size: 2rem;
+            line-height: calc(100vw * 0.361);
+        }
     }
 
     .img-profile__mobile-container {
