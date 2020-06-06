@@ -9,6 +9,7 @@
 .: WSM: Task: Import items with excel format (WSM-87)
 .: WSM: Task: Set a maximum items in each shop (WSM-96)
 .: WSM: BugFix: Item is removed when deselect in uncategoried (WSM-97)
+.: WSM: Add Today special if page is a restaurant (WSM-66)
 
 ---------------------------------------------
 - 2020-06-02                                -
