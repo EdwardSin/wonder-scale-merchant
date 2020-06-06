@@ -25,6 +25,12 @@ export class AuthItemContributorService {
   unmarkTodaySpecial(items) {
     return this.http.put(AuthItemContributorUrl.unmarkTodaySpecialUrl, { items }, this.accessTokenService.getAccessToken());
   }
+  markAsOffer(items) {
+    return this.http.put(AuthItemContributorUrl.markAsOfferUrl, { items }, this.accessTokenService.getAccessToken());
+  }
+  unmarkOffer(items) {
+    return this.http.put(AuthItemContributorUrl.unmarkOfferUrl, { items }, this.accessTokenService.getAccessToken());
+  }
   getItemById(id: string): Observable<Result<Item>>{
     return this.http.get<Result<Item>>(AuthItemContributorUrl.getItemById + '/' + id, this.accessTokenService.getAccessToken());
   }

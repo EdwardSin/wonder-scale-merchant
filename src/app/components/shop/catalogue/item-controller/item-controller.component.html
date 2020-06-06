@@ -35,6 +35,8 @@
                     <button class="dropdown-item" (click)="unpublishItems()">Unpublish</button>
                     <button *ngIf="param != 'new'" class="dropdown-item" (click)="markAsNew()">Mark as New</button>
                     <button class="dropdown-item" (click)="unmarkNew()">Unmark from New</button>
+                    <button *ngIf="param != 'discount'" class="dropdown-item" (click)="markAsOffer()">Mark as Offer</button>
+                    <button class="dropdown-item" (click)="unmarkOffer()">Unmark from offer</button>
                     <button *ngIf="shop.type == 'restaurant'" class="dropdown-item" (click)="markAsTodaySpecial()">Mark as Today Special</button>
                     <button *ngIf="shop.type == 'restaurant'" class="dropdown-item" (click)="unmarkTodaySpecial()">Unmark from Today Special</button>
                     <button class="dropdown-item" (click)="openAddToModal()">Add to</button>
