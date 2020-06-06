@@ -40,7 +40,8 @@
                 </div>
             </div>
         </div>
-        <div class="w-100 h-100" style="background-color: rgba(0,0,0,.2);">
+        <div class="w-100 h-100">
+            <p *ngIf="!bannerImage" class="banner-image-container__text mb-0">{{shop?.name}}</p>
             <div *ngIf="!bannerImage" style="height: 279px"></div>
             <img *ngIf="bannerImage" class="banner-image" [src]="bannerImage" alt="Shop Banner" />
             <span *ngIf="isBannerImageUploading.isRunning()" class="img-banner__uploading">
