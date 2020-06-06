@@ -2,7 +2,7 @@
 <div class="row no-gutters center" style="width: fit-content">
     <div class="col-lg-auto mb-3">
         <div *ngIf="!isMobileSize" class="img-profile__container">
-            <img *ngIf="shop?.profileImage" class="img-profile__profile" [src]="profileImage" alt="profile-image" />
+            <img class="img-profile__profile" [src]="profileImage" alt="profile-image" />
             <img class="img-profile__profile-background my-1 center" src="assets/images/png/icon-with-profile-image-borderless.png" alt="profile-background" />
             <p class="img-profile__name mb-0 text-break">{{ shop?.name }}</p>
             <p class="img-profile__username mb-0">@{{ shop?.username }}</p>
