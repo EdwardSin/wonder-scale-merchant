@@ -4,12 +4,17 @@
 
 - v1.0.1010                                 -
 ---------------------------------------------
+- 2020-06-06                                -
+---------------------------------------------
+.: WSM: Task: Add Today special if page is a restaurant (WSM-66)
+.: WSM: BugFix: Mark as offer is not shown (WSM-102)
+
+---------------------------------------------
 - 2020-06-04                                -
 ---------------------------------------------
 .: WSM: Task: Import items with excel format (WSM-87)
 .: WSM: Task: Set a maximum items in each shop (WSM-96)
 .: WSM: BugFix: Item is removed when deselect in uncategoried (WSM-97)
-.: WSM: Task: Add Today special if page is a restaurant (WSM-66)
 
 ---------------------------------------------
 - 2020-06-02                                -

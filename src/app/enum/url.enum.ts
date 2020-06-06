@@ -122,6 +122,8 @@ export class AuthItemContributorUrl {
     static unmarkNewUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/unmarknew/items';
     static markAsTodaySpecialUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/markastodayspecial/items';
     static unmarkTodaySpecialUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/unmarktodayspecial/items';
+    static markAsOfferUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/markasoffer/items';
+    static unmarkOfferUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/unmarkoffer/items';
     static getItemById = URL.AUTH_ITEM_CONTRIBUTOR_URL + '';
     static getItemsByCategoryIdUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/items-by-categoryid';
     static getAuthenticatedAllItemsByShopIdUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/all';

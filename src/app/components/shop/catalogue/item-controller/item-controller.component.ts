@@ -253,6 +253,30 @@ export class ItemControllerComponent implements OnInit {
         WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
       });
   }
+  markAsOffer() {
+    this.previousEditedItems = [...this.editItems];
+    this.authItemContributorService.markAsOffer(this.editItems)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(results => {
+        this.sharedCategoryService.refreshCategories(() => {
+          WsToastService.toastSubject.next({ content: "Mark as offer!", type: 'success' });
+        })
+      }, (err) => {
+        WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
+      });
+  }
+  unmarkOffer() {
+    this.previousEditedItems = [...this.editItems];
+    this.authItemContributorService.unmarkOffer(this.editItems)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(results => {
+        this.sharedCategoryService.refreshCategories(() => {
+          WsToastService.toastSubject.next({ content: "Unmark from offer!", type: 'success' });
+        })
+      }, (err) => {
+        WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
+      });
+  }
   onAddItemToCategory() {
     this.previousEditedItems = [...this.editItems];
     var editCategoryList = this.editCategoryList;
