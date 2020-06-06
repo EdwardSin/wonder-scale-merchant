@@ -18,6 +18,7 @@ export class QrcodeComponent implements OnInit {
   shop;
   qrSize: number = 200;
   loading: WsLoading = new WsLoading;
+  isQrcodeLoading: WsLoading = new WsLoading;
   displayImage = '';
   environment = environment;
   @ViewChild('urlInput', { static: true }) urlInput: ElementRef;
@@ -40,13 +41,13 @@ export class QrcodeComponent implements OnInit {
   }
   ngAfterViewInit() {
     this.renderQrcode();
-    console.log(this.displayImage);
   }
   copyToPrint() {
     let canvas = <HTMLCanvasElement>document.getElementById('canvas1');
     (<HTMLImageElement>document.getElementById('copyimage')).src = canvas.toDataURL('image/png');
   }
   renderQrcode() {
+    this.isQrcodeLoading.start();
     this.qrSize = Math.max(72, this.qrSize);
     this.qrSize = Math.min(300, this.qrSize);
     $('.qrcode').html('');
@@ -56,9 +57,10 @@ export class QrcodeComponent implements OnInit {
       image.src = this.displayImage;
       image.alt = 'profile-image';
       image.addEventListener('load', e => {
-        QRCodeBuilder.createQRcode('.qrcode', this.shop.username, this.shop._id, { width: this.qrSize, height: this.qrSize})
+        QRCodeBuilder.createQRcode('.qrcode', this.shop.username, { width: this.qrSize, height: this.qrSize})
         .then(() => {
           this.renderProfileImageToQrcode(image);
+          this.isQrcodeLoading.stop();
         });
       });
     });
