@@ -137,7 +137,11 @@ export class ItemViewComponent implements OnInit {
   isInclude(it) {
     return this.editItems.findIndex(x => it._id === x['_id']) > -1;
   }
-
+  isOffer(item) {
+    return item.isOffer && (item.discount > 0 || item.types.some(type => {
+      return type.discount > 0;
+    }));
+  }
   trackByFn(index, item) {
     return index;
   }
