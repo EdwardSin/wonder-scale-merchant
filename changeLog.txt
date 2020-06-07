@@ -14,6 +14,7 @@
 .: WSM: Task: Update QRcode crossOrigin (WSM-79)
 .: WSM: Task: Fix import issue (WSM-87)
 .: WSM: Task: Update dot image (WSM-79)
+.: WSM: Task: Profile image is not displayed in mobile size (WSM-108)
 
 ---------------------------------------------
 - 2020-06-06                                -

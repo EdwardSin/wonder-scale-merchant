@@ -286,6 +286,7 @@ button {
         .banner-image-container__text{
             font-size: 2rem;
             line-height: calc(100vw * 0.361);
+            white-space: nowrap;
         }
     }
 
