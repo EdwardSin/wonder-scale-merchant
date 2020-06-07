@@ -12,6 +12,7 @@
 .: WSM: Task: Add default mark for discount (WSM-92)
 .: WSM: BugFix: Fixing import items issue (WSM-87)
 .: WSM: Task: Update QRcode crossOrigin (WSM-79)
+.: WSM: Task: Fix import issue (WSM-87)
 
 ---------------------------------------------
 - 2020-06-06                                -

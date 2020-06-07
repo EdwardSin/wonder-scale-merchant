@@ -9,7 +9,7 @@ export class PriceHelper {
 
   public static getDisplayPrice(items: Array<any>, currencies, rate: number) {
     for (let item of items) {
-      if (item['show_offer']) {
+      if (item['isOffer']) {
         item.discount_price = this.priceAfterDiscount(item['price'], item['discount']);
       }
       item.display_price = +(this.getDisplayCurrencyPrice(item.price, currencies[item.currency], rate).toFixed(2));
