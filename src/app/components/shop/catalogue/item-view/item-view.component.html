@@ -42,10 +42,10 @@
             <a class="default" href="javascript:void(0)" (click)="$event.stopPropagation();" 
             [routerLink]="['', { outlets: {modal: 'item'}}]" [queryParams]="{id: item?._id}" [queryParamsHandling]="'merge'">{{ item?.name | titlecase | limitTo: 128 }}</a>
           </td>
-          <td *ngIf="item.currency && selectedCurrencyCode && columns.includes('price')">
+          <td *ngIf="currencyService.getCurrencyWithCode(item?.currency) && currencyService.getCurrencyWithCode(selectedCurrencyCode) && item.currency && selectedCurrencyCode && columns.includes('price')">
             {{ item?.price | currency: currencyService.getCurrencyWithCode(item?.currency).rate: currencyService.getCurrencyWithCode(selectedCurrencyCode).rate }}
           </td>
-          <td *ngIf="item.currency && selectedCurrencyCode && columns.includes('discount')">
+          <td *ngIf="currencyService.getCurrencyWithCode(item?.currency) && currencyService.getCurrencyWithCode(selectedCurrencyCode) &&  item.currency && selectedCurrencyCode && columns.includes('discount')">
             {{ item?.price | currency: currencyService.getCurrencyWithCode(item?.currency).rate: currencyService.getCurrencyWithCode(selectedCurrencyCode).rate | discountconverter : item?.discount }}
           </td>
           <td *ngIf="columns.includes('status')">

@@ -10,6 +10,7 @@
 .: WSM: Task: A button to view your shop (WSM-88)
 .: WSM: Task: Create build scripts (WSM-15)
 .: WSM: Task: Add default mark for discount (WSM-92)
+.: WSM: BugFix: Fixing import items issue (WSM-87)
 
 ---------------------------------------------
 - 2020-06-06                                -

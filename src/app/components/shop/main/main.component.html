@@ -15,43 +15,43 @@
         </a>
         <ul class="ws-main-nav-sub-list">
           <li>
-            <a [routerLinkActive]="'active'" [routerLink]="['catalogue', 'all']" [queryParams]="{page: 1}">All
+            <a [class.active]="isLinkActive('/shops/' + shop?.username + '/catalogue/all')" [routerLink]="['catalogue', 'all']" [queryParams]="{page: 1}">All
               <span class="badge ws-bg-secondary badge-pill float-right"
                 style="margin-top: 3px">{{ numberOfAllItems }}</span>
             </a>
           </li>
           <li>
-            <a [routerLinkActive]="'active'" [routerLink]="['catalogue', 'new']" [queryParams]="{page: 1}">New
+            <a [class.active]="isLinkActive('/shops/' + shop?.username + '/catalogue/new')" [routerLink]="['catalogue', 'new']" [queryParams]="{page: 1}">New
               <span class="badge ws-bg-secondary badge-pill float-right"
                 style="margin-top: 3px">{{ numberOfNewItems }}</span>
             </a>
           </li>
           <li *ngIf="shop?.type == 'restaurant'">
-            <a [routerLinkActive]="'active'" [routerLink]="['catalogue', 'todayspecial']" [queryParams]="{page: 1}">Today Special
+            <a [class.active]="isLinkActive('/shops/' + shop?.username + '/catalogue/todayspecial')" [routerLink]="['catalogue', 'todayspecial']" [queryParams]="{page: 1}">Today Special
               <span class="badge ws-bg-secondary badge-pill float-right"
                 style="margin-top: 3px">{{ numberOfTodaySpecialItems }}</span>
             </a>
           </li>
           <li>
-            <a [routerLinkActive]="'active'" [routerLink]="['catalogue', 'discount']" [queryParams]="{page: 1}">Discount
+            <a [class.active]="isLinkActive('/shops/' + shop?.username + '/catalogue/discount')" [routerLink]="['catalogue', 'discount']" [queryParams]="{page: 1}">Discount
               <span class="badge ws-bg-secondary badge-pill float-right"
                 style="margin-top: 3px">{{ numberOfDiscountItems }}</span>
             </a>
           </li>
           <li>
-            <a [routerLinkActive]="'active'" [routerLink]="['catalogue', 'published']" [queryParams]="{page: 1}">Published
+            <a [class.active]="isLinkActive('/shops/' + shop?.username + '/catalogue/published')" [routerLink]="['catalogue', 'published']" [queryParams]="{page: 1}">Published
               <span class="badge ws-bg-secondary badge-pill float-right"
                 style="margin-top: 3px">{{ numberOfPublishedItems }}</span>
             </a>
           </li>
           <li>
-            <a [routerLinkActive]="'active'" [routerLink]="['catalogue', 'unpublished']" [queryParams]="{page: 1}">Unpublished
+            <a [class.active]="isLinkActive('/shops/' + shop?.username + '/catalogue/unpublished')" [routerLink]="['catalogue', 'unpublished']" [queryParams]="{page: 1}">Unpublished
               <span class="badge ws-bg-secondary badge-pill float-right"
                 style="margin-top: 3px">{{ numberOfUnpublishedItems }}</span>
             </a>
           </li>
           <li>
-            <a [routerLinkActive]="'active'" [routerLink]="['catalogue', 'uncategorized']" [queryParams]="{page: 1}">Uncategorized
+            <a [class.active]="isLinkActive('/shops/' + shop?.username + '/catalogue/uncategorized')" [routerLink]="['catalogue', 'uncategorized']" [queryParams]="{page: 1}">Uncategorized
               <span class="badge ws-bg-secondary badge-pill float-right"
                 style="margin-top: 3px">{{ numberOfUncategorizedItems }}</span>
             </a>
@@ -73,7 +73,7 @@
                 <span class="fas fa-bars" style="font-size: .9rem; margin-left: .25rem"></span>
               </span>
               <a href="javascript:void(0)" *ngIf="!isEditCategory(category?.name)" class="ws-secondary"
-                [routerLinkActive]="'active'" [routerLink]="['catalogue', 'custom', category.name]"
+                [class.active]="isLinkActive('/shops/' + shop?.username + '/catalogue/custom/' + category.name)" [routerLink]="['catalogue', 'custom', category.name]"
                 [queryParams]="{page: 1}">
                 <span style="overflow: hidden; width: 160px; text-overflow: ellipsis; display: inline-block">
                   {{ category?.name }}</span>
