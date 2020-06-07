@@ -6,7 +6,7 @@
         "start": "ng serve",
         "dev": "ng serve",
         "build": "ng build --prod --aot",
-        "upload": "aws s3 cp dist/wonder-scale-merchant s3://merchant.wonderscale.com --recursive",
+        "upload": "aws s3 cp dist/wonder-scale-merchant s3://merchant-testing.wonderscale.com --recursive",
         "deploy": "npm run build && npm run upload",
         "test": "ng test",
         "lint": "ng lint",
