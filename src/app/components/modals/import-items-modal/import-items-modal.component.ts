@@ -110,8 +110,6 @@ export class ImportItemsModalComponent extends WsModalComponent implements OnIni
       this.isPreviewLoading.stop();
     };
     reader.readAsArrayBuffer(file);
-    // event.category_id = this.category_id;
-    // this.importFile.nativeElement.value = '';
   }
   isValidated(wb) {
     let sheet = wb.Sheets[wb.SheetNames[0]];

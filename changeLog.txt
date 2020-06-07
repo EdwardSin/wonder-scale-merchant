@@ -9,6 +9,7 @@
 .: WSM: Task: Update shop profile image (WSM-105)
 .: WSM: Task: A button to view your shop (WSM-88)
 .: WSM: Task: Create build scripts (WSM-15)
+.: WSM: Task: Add default mark for discount (WSM-92)
 
 ---------------------------------------------
 - 2020-06-06                                -

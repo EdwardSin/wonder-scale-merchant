@@ -50,7 +50,7 @@
           </td>
           <td *ngIf="columns.includes('status')">
             <span [class.badge-default]="!item?.isEntityNew" class="badge badge-warning mr-1">New</span>
-            <span [class.badge-default]="!item?.isOffer" class="badge ws-clear-color ws-bg-offer mr-1">Discount</span>
+            <span [class.badge-default]="!isOffer(item)" class="badge ws-clear-color ws-bg-offer mr-1">Discount</span>
             <span [class.badge-default]="!item?.isPublished" class="badge badge-success mr-1">Published</span>
             <span [class.badge-default]="!item?.categories.length" class="badge badge-info mr-1">Categorized</span>
           </td>
