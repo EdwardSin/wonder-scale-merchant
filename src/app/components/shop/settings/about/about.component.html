@@ -8,7 +8,7 @@
             <p class="img-profile__username mb-0">@{{ shop?.username }}</p>
         </div>
         <div *ngIf="isMobileSize" class="img-profile__mobile-container">
-            <img *ngIf="shop?.profileImage" class="img-profile__profile" [src]="profileImage" alt="profile-image" />
+            <img class="img-profile__profile" [src]="profileImage" alt="profile-image" />
             <div class="img-profile__name-container">
                 <p class="img-profile__name mb-0 text-break">{{ shop?.name }}</p>
                 <p class="img-profile__username mb-0">@{{ shop?.username }}</p>
