@@ -342,6 +342,11 @@ export class MainComponent implements OnInit {
     this.isNavOpen = event;
     this.sharedNavbarService.isNavSubject.next(event);
   }
+  isLinkActive(url): boolean {
+    const queryParamsIndex = this.router.url.indexOf('?');
+    const baseUrl = queryParamsIndex === -1 ? this.router.url : this.router.url.slice(0, queryParamsIndex);
+    return baseUrl === url;
+ }
   ngOnDestroy() {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
