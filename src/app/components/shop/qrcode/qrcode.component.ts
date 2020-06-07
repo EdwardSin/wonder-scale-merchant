@@ -41,9 +41,9 @@ export class QrcodeComponent implements OnInit {
       })
   }
   ngOnInit() {
+    this.renderQrcode();
   }
   ngAfterViewInit() {
-    this.renderQrcode();
   }
   copyToPrint() {
     let canvas = <HTMLCanvasElement>document.getElementById('canvas1');
@@ -56,7 +56,7 @@ export class QrcodeComponent implements OnInit {
     $('.qrcode').html('');
     $(() => {
       let image = <HTMLImageElement>document.createElement('img');
-      image.crossOrigin = 'Anonymous';
+      image.crossOrigin = 'anonymous';
       image.src = this.displayImage;
       image.alt = 'profile-image';
       image.addEventListener('load', e => {
