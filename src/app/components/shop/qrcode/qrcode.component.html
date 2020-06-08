@@ -12,9 +12,6 @@
             <a id="id-qrcode" hidden href="#" download="ws-qr-code.png"></a>
         </div>
     </div>
-    <!-- <img id="id-image"
-    [src]="environment.IMAGE_URL + shop.profileImage" 
-    hidden style="object-fit: contain; border-radius: 50%" alt="profile-image" /> -->
     <ws-uploader [id]="'qrcode-profile'" [max]="1" [input]="[]" (output)="imageChangeEvent($event)"></ws-uploader>
     <div class="row no-gutters">
         <div class="col-sm-4">

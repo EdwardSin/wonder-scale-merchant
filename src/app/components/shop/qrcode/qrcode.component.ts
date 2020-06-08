@@ -55,15 +55,16 @@ export class QrcodeComponent implements OnInit {
     this.qrSize = Math.min(300, this.qrSize);
     $('.qrcode').html('');
     $(() => {
-      let image = <HTMLImageElement>document.createElement('img');
-      image.crossOrigin = 'anonymous';
-      image.src = this.displayImage;
-      image.alt = 'profile-image';
-      image.addEventListener('load', e => {
-        QRCodeBuilder.createQRcode('.qrcode', this.shop.username, { width: this.qrSize, height: this.qrSize})
-        .then(() => {
-          this.renderProfileImageToQrcode(image);
-          this.isQrcodeLoading.stop();
+      QRCodeBuilder.toDataURL(this.displayImage, (dataUrl) => {
+        let newImage = <HTMLImageElement>document.createElement('img');
+        newImage.alt = 'profile-image';
+        newImage.src = dataUrl;
+        newImage.addEventListener('load', e => {
+          QRCodeBuilder.createQRcode('.qrcode', this.shop.username, { width: this.qrSize, height: this.qrSize})
+          .then(() => {
+            this.renderProfileImageToQrcode(newImage);
+            this.isQrcodeLoading.stop();
+          });
         });
       });
     });
