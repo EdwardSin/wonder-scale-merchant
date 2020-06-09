@@ -5,7 +5,10 @@
     color: rgba(0, 0, 0, .7);
   }
 }
-
+.badge-default {
+  background-color: #ddd;
+  color: #000;
+}
 .item-checkbox {
   position: absolute;
   right: 10px;

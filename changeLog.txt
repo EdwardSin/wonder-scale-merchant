@@ -2,6 +2,53 @@
 - Wonder Scale Merchant                     -
 ---------------------------------------------
 
+- v1.0.1010                                 -
+---------------------------------------------
+- 2020-06-07                                -
+---------------------------------------------
+.: WSM: Task: Update shop profile image (WSM-105)
+.: WSM: Task: A button to view your shop (WSM-88)
+.: WSM: Task: Create build scripts (WSM-15)
+.: WSM: Task: Add default mark for discount (WSM-92)
+.: WSM: BugFix: Fixing import items issue (WSM-87)
+.: WSM: Task: Update QRcode crossOrigin (WSM-79)
+.: WSM: Task: Fix import issue (WSM-87)
+.: WSM: Task: Update dot image (WSM-79)
+.: WSM: Task: Profile image is not displayed in mobile size (WSM-108)
+.: WSM: Task: Fix CORS Issue (WSM-79)
+
+---------------------------------------------
+- 2020-06-06                                -
+---------------------------------------------
+.: WSM: Task: Add Today special if page is a restaurant (WSM-66)
+.: WSM: BugFix: Mark as offer is not shown (WSM-102)
+.: WSM: Task: Add default shop banner image (WSM-55)
+.: WSM: Task: Crop image as square to have better UI (WSM-99)
+.: WSM: Task: Change Share URL to username (WSM-101)
+.: WSM: Task: Update shop profile image (WSM-105)
+
+---------------------------------------------
+- 2020-06-04                                -
+---------------------------------------------
+.: WSM: Task: Import items with excel format (WSM-87)
+.: WSM: Task: Set a maximum items in each shop (WSM-96)
+.: WSM: BugFix: Item is removed when deselect in uncategoried (WSM-97)
+
+---------------------------------------------
+- 2020-06-02                                -
+---------------------------------------------
+.: WSM: Task: Optional Columns in Item module (WSM-40)
+
+---------------------------------------------
+- 2020-06-01                                -
+---------------------------------------------
+.: WSM: BugFix: QR code image slow render issue (WSM-79)
+.: WSM: Task: Minimize data entry (WSM-86)
+.: WSM: Task: A button to view your shop (WSM-88)
+.: WSM: Task: Add Today special if page is a restaurant (WSM-66)
+.: WSM: Task: Working hours should display to indicate users (WSM-91)
+.: WSM: Task: Disable item marking (WSM-92)
+
 - v1.0.1000                                 -
 ---------------------------------------------
 - 2020-05-31                                -

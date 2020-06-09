@@ -19,6 +19,18 @@ export class AuthItemContributorService {
   unmarkNew(items) {
     return this.http.put(AuthItemContributorUrl.unmarkNewUrl, { items }, this.accessTokenService.getAccessToken());
   }
+  markAsTodaySpecial(items) {
+    return this.http.put(AuthItemContributorUrl.markAsTodaySpecialUrl, { items }, this.accessTokenService.getAccessToken());
+  }
+  unmarkTodaySpecial(items) {
+    return this.http.put(AuthItemContributorUrl.unmarkTodaySpecialUrl, { items }, this.accessTokenService.getAccessToken());
+  }
+  markAsOffer(items) {
+    return this.http.put(AuthItemContributorUrl.markAsOfferUrl, { items }, this.accessTokenService.getAccessToken());
+  }
+  unmarkOffer(items) {
+    return this.http.put(AuthItemContributorUrl.unmarkOfferUrl, { items }, this.accessTokenService.getAccessToken());
+  }
   getItemById(id: string): Observable<Result<Item>>{
     return this.http.get<Result<Item>>(AuthItemContributorUrl.getItemById + '/' + id, this.accessTokenService.getAccessToken());
   }
@@ -41,6 +53,13 @@ export class AuthItemContributorService {
   }
   getAuthenticatedNewItemsByShopId(params) {
     return this.http.get<{result: Item[]}>(AuthItemContributorUrl.getAuthenticatedNewItemsByShopIdUrl,
+      {
+        ...this.accessTokenService.getAccessToken(),
+        params
+      });
+  }
+  getAuthenticatedTodaySpecialItemsByShopId(params) {
+    return this.http.get<{result: Item[]}>(AuthItemContributorUrl.getAuthenticatedTodaySpecialItemsByShopIdUrl,
       {
         ...this.accessTokenService.getAccessToken(),
         params

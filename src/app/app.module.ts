@@ -86,6 +86,7 @@ import { WsPaginationComponent } from './elements/ws-pagination/ws-pagination.co
 import { AutofocusDirective } from './directives/autofocus.directive';
 import { DebounceClickDirective } from './directives/debounce-click.directive';
 import { ModifyItemTypeComponent } from './components/shop/catalogue/modify-item-type/modify-item-type.component';
+import { TodaySpecialItemsComponent } from './components/shop/catalogue/today-special-items/today-special-items.component';
 export function jwtOptionsFactory(platformId) {
   return {
     tokenGetter: () => {
@@ -192,7 +193,8 @@ export function provideConfig() {
     MoveToCategoriesModalComponent,
     ImportItemsModalComponent,
     EditContributorModalComponent,
-    ModifyItemTypeComponent
+    ModifyItemTypeComponent,
+    TodaySpecialItemsComponent
   ],
   imports: [
     BrowserModule,

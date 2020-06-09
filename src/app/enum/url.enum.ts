@@ -120,10 +120,15 @@ export class AuthImageContributorUrl {
 export class AuthItemContributorUrl {
     static markAsNewUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/markasnew/items';
     static unmarkNewUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/unmarknew/items';
+    static markAsTodaySpecialUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/markastodayspecial/items';
+    static unmarkTodaySpecialUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/unmarktodayspecial/items';
+    static markAsOfferUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/markasoffer/items';
+    static unmarkOfferUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/unmarkoffer/items';
     static getItemById = URL.AUTH_ITEM_CONTRIBUTOR_URL + '';
     static getItemsByCategoryIdUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/items-by-categoryid';
     static getAuthenticatedAllItemsByShopIdUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/all';
     static getAuthenticatedNewItemsByShopIdUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/new';
+    static getAuthenticatedTodaySpecialItemsByShopIdUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/todayspecial';
     static getAuthenticatedDiscountItemsByShopIdUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/discount';
     static getAuthenticatedPublishedItemCategoryByShopIdUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/published';
     static getAuthenticatedUnpublishedItemCategoryByShopIdUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/unpublished';
@@ -183,8 +188,10 @@ export class AuthCategoryContributorUrl {
     static removeItemsFromCategoryUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL + '/remove/itemsfromcategory';
     static moveCategoryUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL + '/move';
     static rearrangeCategoriesUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL + '/rearrange';
+    static getNumberOfAllCategoriesItemsUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL + '/number_of_all_categories_items';
     static getNumberOfAllItemsUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL + '/number_of_all_items';
     static getNumberOfNewItemsUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL + '/number_of_new_items';
+    static getNumberOfTodaySpecialItemsUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL + '/number_of_today_special_items';
     static getNumberOfDiscountItemsUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL + '/number_of_discount_items';
     static getNumberOfPublishedItemsUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL + '/number_of_published_items';
     static getNumberOfUnpublishedItemsUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL + '/number_of_unpublished_items';

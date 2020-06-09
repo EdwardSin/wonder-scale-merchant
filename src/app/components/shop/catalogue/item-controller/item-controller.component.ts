@@ -56,7 +56,9 @@ export class ItemControllerComponent implements OnInit {
   isAddToCategoriesModalOpened: boolean;
   isMoveToCategoriesModalOpened: boolean;
   isEditMultipleItemsModalOpened: boolean;
+  isImportItemsModalOpened: boolean;
   moment = moment;
+  columns = [];
   previousEditedItems: Array<any> = [];
   isAdvertiseDropdownOpened: boolean;
   action: Function;
@@ -110,6 +112,10 @@ export class ItemControllerComponent implements OnInit {
         if (res) {
           this.categories = res;
         }
+    })
+    this.sharedItemService.shownColumns.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+      this.columns = result;
+      this.ref.detectChanges();
     })
   }
   publishItems() {
@@ -223,6 +229,54 @@ export class ItemControllerComponent implements OnInit {
         WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
       });
   }
+  markAsTodaySpecial() {
+    this.previousEditedItems = [...this.editItems];
+    this.authItemContributorService.markAsTodaySpecial(this.editItems)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(results => {
+        this.sharedCategoryService.refreshCategories(() => {
+          WsToastService.toastSubject.next({ content: "Mark as today special!", type: 'success' });
+        })
+      }, (err) => {
+        WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
+      });
+  }
+  unmarkTodaySpecial() {
+    this.previousEditedItems = [...this.editItems];
+    this.authItemContributorService.unmarkTodaySpecial(this.editItems)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(results => {
+        this.sharedCategoryService.refreshCategories(() => {
+          WsToastService.toastSubject.next({ content: "Unmark from today special!", type: 'success' });
+        })
+      }, (err) => {
+        WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
+      });
+  }
+  markAsOffer() {
+    this.previousEditedItems = [...this.editItems];
+    this.authItemContributorService.markAsOffer(this.editItems)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(results => {
+        this.sharedCategoryService.refreshCategories(() => {
+          WsToastService.toastSubject.next({ content: "Mark as offer!", type: 'success' });
+        })
+      }, (err) => {
+        WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
+      });
+  }
+  unmarkOffer() {
+    this.previousEditedItems = [...this.editItems];
+    this.authItemContributorService.unmarkOffer(this.editItems)
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(results => {
+        this.sharedCategoryService.refreshCategories(() => {
+          WsToastService.toastSubject.next({ content: "Unmark from offer!", type: 'success' });
+        })
+      }, (err) => {
+        WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
+      });
+  }
   onAddItemToCategory() {
     this.previousEditedItems = [...this.editItems];
     var editCategoryList = this.editCategoryList;
@@ -243,6 +297,15 @@ export class ItemControllerComponent implements OnInit {
           this.loading.stop()
         })
       });
+  }
+  triggerColumns(value) {
+    if (this.columns.includes(value)) {
+      this.columns = this.columns.filter(x => x != value);
+    } else {
+      this.columns.push(value);
+    }
+    sessionStorage.setItem('shownColumns', JSON.stringify(this.columns));
+    this.sharedItemService.shownColumns.next(this.columns);
   }
   // getSearchItems(event) {
   //   this.sharedItemService.displayItems.next(event);
@@ -346,10 +409,12 @@ export class ItemControllerComponent implements OnInit {
     this.authItemContributorService.removeItemsPermanantly({
       items: editItems.map(x => x['_id'])
     })
-      .pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.loading.stop()))
+      .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
         this.sharedCategoryService.refreshCategories(() => {
           WsToastService.toastSubject.next({ content: "Removed from category!", type: 'success' });
+          this.isRemoveAllSelectedItemModalConfirmationOpened = false;
+          this.loading.stop();
         })
       }, (err) => {
         WsToastService.toastSubject.next({ content: err.error, type: 'danger' });

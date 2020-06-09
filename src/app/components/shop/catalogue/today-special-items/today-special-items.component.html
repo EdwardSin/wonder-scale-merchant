@@ -1,16 +1,15 @@
-<h4 class="ws-title">Discount<span title="Items marked as offer and discount is greater than zero will be shown here." class='fas fa-info-circle ml-2 font-9'></span></h4>
-
+<h4 class="ws-title">Today Special<span title="Display all marked as today special items" class='fas fa-info-circle ml-2 font-9'></span></h4>
 <item-controller></item-controller>
-<div *ngIf="numberOfDiscountItems && !loading.isRunning(); else loadingTemplate">
-    <div *ngIf="displayItems.length; else searchLoadingTemplate">
+<div *ngIf="numberOfTodaySpecialItems && !loading.isRunning(); else loadingTemplate">
+    <div *ngIf="displayItems.length && !loading.isRunning(); else searchLoadingTemplate">
         <item-view [showCategory]="true"></item-view>
     </div>
 </div>
 
 <ng-template #noItem>
     <div class="py-5 text-center">
-        <p class="ws-no-title">Discount items</p>
-        <span class="text-muted">Items which currently provide discount to public.</span>
+        <p class="ws-no-title">Today special</p>
+        <span class="text-muted">Display your today special in your page.</span>
     </div>
 </ng-template>
 <ng-template #noSearchItem>

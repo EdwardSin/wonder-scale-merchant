@@ -137,6 +137,7 @@ export class WSFormBuilder {
             isInStock: [true, [Validators.required]],
             isPriceDisplayed: [false, [Validators.required]],
             isPublished: [false, Validators.required],
+            isOffer: [false, Validators.required],
             isEcommerce: [false],
             isPickup: [false]
         })
@@ -168,6 +169,7 @@ export class WSFormBuilder {
             isInStock: [''],
             isPriceDisplayed: [''],
             isPublished: [''],
+            isOffer: [''],
             isEcommerce: [''],
             isPickup: [''],
             defaultCurrency: ['']

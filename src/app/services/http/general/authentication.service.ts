@@ -5,6 +5,7 @@ import { AuthService, FacebookLoginProvider, GoogleLoginProvider } from 'angular
 import decode from 'jwt-decode';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { CookieService } from 'ngx-cookie-service';
 import { SharedUserService } from '@services/shared/shared-user.service';
 
 @Injectable({
@@ -19,10 +20,16 @@ export class AuthenticationService {
         private http: HttpClient,
         private sharedUserService: SharedUserService,
         private jwtHelper: JwtHelperService,
-        private authService: AuthService
+        private authService: AuthService,
+        private cookieService: CookieService
     ) {
     }
     isAuthenticated(): Promise<boolean> {
+        if (!this.cookieService.get('accessJwt')) {
+            return new Promise<boolean>(resolve => {
+                resolve(false);
+            })
+        }
         if(!AuthenticationService.token){
             return new Promise<boolean>((resolve, reject) => {
                 this.http.get('/api/users/is-authenticated').subscribe(result => {

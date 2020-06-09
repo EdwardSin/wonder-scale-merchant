@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Item } from '@objects/item';
 import { AuthCategoryContributorService } from '@services/http/auth-shop/contributor/auth-category-contributor.service';
-import { AuthItemContributorService } from '@services/http/auth-shop/contributor/auth-item-contributor.service';
-import { BehaviorSubject, forkJoin, Subject } from 'rxjs';
-import { filter, tap } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { SharedItemService } from './shared-item.service';
 import { SharedLoadingService } from './shared-loading.service';
 
@@ -15,12 +14,14 @@ export class SharedCategoryService {
     numberOfAllItems: BehaviorSubject<number> = new BehaviorSubject<number>(0);
     numberOfDiscountItems: BehaviorSubject<number> = new BehaviorSubject<number>(0);
     numberOfNewItems: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+    numberOfTodaySpecialItems: BehaviorSubject<number> = new BehaviorSubject<number>(0);
     numberOfPublishedItems: BehaviorSubject<number> = new BehaviorSubject<number>(0);
     numberOfUnpublishedItems: BehaviorSubject<number> = new BehaviorSubject<number>(0);
     numberOfUncategorizedItems: BehaviorSubject<number> = new BehaviorSubject<number>(0);
     numberOfCurrentTotalItems: BehaviorSubject<number> = new BehaviorSubject<number>(0);
     allItemsRefresh: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
     newItemsRefresh: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    todaySpecialItemsRefresh: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
     discountItemsRefresh: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
     publishedItemsRefresh: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
     unpublishedItemsRefresh: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
@@ -39,18 +40,12 @@ export class SharedCategoryService {
         if(isLoading) {
             this.sharedLoadingService.screenLoading.next({loading: true});
         }
-        forkJoin([
-            this.authCategoryContributorService.getNumberOfAllItems(),
-            this.authCategoryContributorService.getNumberOfNewItems(),
-            this.authCategoryContributorService.getNumberOfDiscountItems(),
-            this.authCategoryContributorService.getNumberOfPublishedItems(),
-            this.authCategoryContributorService.getNumberOfUnpublishedItems(),
-            this.authCategoryContributorService.getNumberOfUncategorizedItems(),
-            this.authCategoryContributorService.getAuthenticatedCategoriesByShopId().pipe(filter(x => x != null))
-        ]).pipe(tap(() =>{
+        this.authCategoryContributorService.getNumberOfAllCategoriesItems()
+        .pipe(tap(() =>{
             if(isRefreshCategory) {
                 this.allItemsRefresh.next(true);
                 this.newItemsRefresh.next(true);
+                this.todaySpecialItemsRefresh.next(true);
                 this.discountItemsRefresh.next(true);
                 this.publishedItemsRefresh.next(true);
                 this.unpublishedItemsRefresh.next(true);
@@ -58,15 +53,16 @@ export class SharedCategoryService {
                 this.categoryRefresh.next({refresh: true, loading: false});
             }
         }))
-            .subscribe(results => {
+            .subscribe(result => {
                 this.sharedItemService.editItems.next([]);
-                this.numberOfAllItems.next(results[0]['result']);
-                this.numberOfNewItems.next(results[1]['result']);
-                this.numberOfDiscountItems.next(results[2]['result']);
-                this.numberOfPublishedItems.next(results[3]['result']);
-                this.numberOfUnpublishedItems.next(results[4]['result']);
-                this.numberOfUncategorizedItems.next(results[5]['result']);
-                this.categories.next(results[6]['result']);
+                this.numberOfAllItems.next(result['number_of_all_items']);
+                this.numberOfNewItems.next(result['number_of_new_items']);
+                this.numberOfTodaySpecialItems.next(result['number_of_today_special_items']);
+                this.numberOfDiscountItems.next(result['number_of_discount_items']);
+                this.numberOfPublishedItems.next(result['number_of_published_items']);
+                this.numberOfUnpublishedItems.next(result['number_of_unpublished_items']);
+                this.numberOfUncategorizedItems.next(result['number_of_uncategorized_items']);
+                this.categories.next(result['categories']);
                 this.sharedLoadingService.screenLoading.next({loading: false});
                 if (callback) {
                     callback();
