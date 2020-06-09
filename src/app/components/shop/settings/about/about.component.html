@@ -2,13 +2,13 @@
 <div class="row no-gutters center" style="width: fit-content">
     <div class="col-lg-auto mb-3">
         <div *ngIf="!isMobileSize" class="img-profile__container">
-            <img *ngIf="shop?.profileImage" class="img-profile__profile" [src]="profileImage" alt="profile-image" />
+            <img class="img-profile__profile" [src]="profileImage" alt="profile-image" />
             <img class="img-profile__profile-background my-1 center" src="assets/images/png/icon-with-profile-image-borderless.png" alt="profile-background" />
             <p class="img-profile__name mb-0 text-break">{{ shop?.name }}</p>
             <p class="img-profile__username mb-0">@{{ shop?.username }}</p>
         </div>
         <div *ngIf="isMobileSize" class="img-profile__mobile-container">
-            <img *ngIf="shop?.profileImage" class="img-profile__profile" [src]="profileImage" alt="profile-image" />
+            <img class="img-profile__profile" [src]="profileImage" alt="profile-image" />
             <div class="img-profile__name-container">
                 <p class="img-profile__name mb-0 text-break">{{ shop?.name }}</p>
                 <p class="img-profile__username mb-0">@{{ shop?.username }}</p>
@@ -40,7 +40,8 @@
                 </div>
             </div>
         </div>
-        <div class="w-100 h-100" style="background-color: rgba(0,0,0,.2);">
+        <div class="w-100 h-100">
+            <p *ngIf="!bannerImage" class="banner-image-container__text mb-0">{{shop?.name}}</p>
             <div *ngIf="!bannerImage" style="height: 279px"></div>
             <img *ngIf="bannerImage" class="banner-image" [src]="bannerImage" alt="Shop Banner" />
             <span *ngIf="isBannerImageUploading.isRunning()" class="img-banner__uploading">
@@ -140,13 +141,21 @@
                     </tr>
                     <tr>
                         <td class="pr-3">
-                            <span>Mark as published item</span>
+                            <span>Mark as published</span>
                         </td>
                         <td class="pt-1 text-right">
                             <mat-checkbox [color]="'primary'" formControlName="isPublished"></mat-checkbox>
                         </td>
                     </tr>
                     <tr>
+                        <td class="pr-3">
+                            <span>Mark as offer</span>
+                        </td>
+                        <td class="pt-1 text-right">
+                            <mat-checkbox [color]="'primary'" formControlName="isOffer"></mat-checkbox>
+                        </td>
+                    </tr>
+                    <!-- <tr>
                         <td class="pr-3">
                             <span>Set displayed price to public</span>
                         </td>
@@ -161,7 +170,7 @@
                         <td class="pt-1 text-right">
                             <mat-checkbox [color]="'primary'" formControlName="isInStock"></mat-checkbox>
                         </td>
-                    </tr>
+                    </tr> -->
                     <!-- <tr>
             <td class="pr-3">
               <span>E-Commerce available</span>
@@ -353,7 +362,7 @@
 <ws-modal *ngIf="isProfileUploaderOpened" [isCloseIconDisplayed]="false" [(isOpened)]="isProfileUploaderOpened" [maxWidth]="400">
     <div class="pt-3" modalBody>
         <div class='preview-image__container center'>
-            <span class="preview-image__remove-icon fas fa-times" (click)="removePreviewImage()"></span>
+            <span *ngIf="previewImage" class="preview-image__remove-icon fas fa-times" (click)="removePreviewImage()"></span>
             <div *ngIf="!previewImage" onclick="document.getElementById('id-profile-image-upload').click()" class="preview-image__text-container">
                 <span class="preview-image__text-icon fas fa-image"></span>
                 <span class="preview-image__text">Upload Image</span>

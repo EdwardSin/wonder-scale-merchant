@@ -18,6 +18,7 @@ export class QrcodeComponent implements OnInit {
   shop;
   qrSize: number = 200;
   loading: WsLoading = new WsLoading;
+  isQrcodeLoading: WsLoading = new WsLoading;
   displayImage = '';
   environment = environment;
   @ViewChild('urlInput', { static: true }) urlInput: ElementRef;
@@ -31,13 +32,16 @@ export class QrcodeComponent implements OnInit {
       .subscribe(result => {
         if (result) {
           this.shop = result;
-          this.displayImage = environment.IMAGE_URL + this.shop.profileImage;
-          this.renderQrcode();
+          this.displayImage = 'assets/images/png/dot.png';
+          if (this.shop.profileImage) {
+            this.displayImage = environment.IMAGE_URL + this.shop.profileImage;
+          }
         }
         this.loading.stop();
       })
   }
   ngOnInit() {
+    this.renderQrcode();
   }
   ngAfterViewInit() {
   }
@@ -46,22 +50,23 @@ export class QrcodeComponent implements OnInit {
     (<HTMLImageElement>document.getElementById('copyimage')).src = canvas.toDataURL('image/png');
   }
   renderQrcode() {
+    this.isQrcodeLoading.start();
     this.qrSize = Math.max(72, this.qrSize);
     this.qrSize = Math.min(300, this.qrSize);
     $('.qrcode').html('');
     $(() => {
-      let image = <HTMLImageElement>document.createElement('img');
-      image.crossOrigin = 'anonymous';
-      image.src = this.displayImage;
-      image.alt = 'profile-image';
-      QRCodeBuilder.createQRcode('.qrcode', this.shop.username, this.shop._id, { width: this.qrSize, height: this.qrSize});
-      // $(() => {
-      image.addEventListener('load', e => {
-        setTimeout(() => {
-          this.renderProfileImageToQrcode(image);
-        }, 500);
+      QRCodeBuilder.toDataURL(this.displayImage, (dataUrl) => {
+        let newImage = <HTMLImageElement>document.createElement('img');
+        newImage.alt = 'profile-image';
+        newImage.src = dataUrl;
+        newImage.addEventListener('load', e => {
+          QRCodeBuilder.createQRcode('.qrcode', this.shop.username, { width: this.qrSize, height: this.qrSize})
+          .then(() => {
+            this.renderProfileImageToQrcode(newImage);
+            this.isQrcodeLoading.stop();
+          });
+        });
       });
-      // });
     });
   }
   imageChangeEvent(event) {
@@ -71,8 +76,8 @@ export class QrcodeComponent implements OnInit {
   renderProfileImageToQrcode(image) {
     let canvas = document.getElementById('canvas1');
     let context =(<HTMLCanvasElement>canvas).getContext('2d');
-    let width = this.qrSize / 3 * 185 / 300;
-    let height = this.qrSize / 3 * 185 / 300;
+    let width = this.qrSize / 3 * 190 / 300;
+    let height = this.qrSize / 3 * 190 / 300;
     let offsetyY = this.qrSize * 9 / 300;
     let offsetX = this.qrSize/2 - width/2;
     let offsetY = this.qrSize/2 - height/2 - offsetyY;

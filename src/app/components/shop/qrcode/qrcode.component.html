@@ -4,7 +4,7 @@
     <div class="col-sm-4 px-0 mb-3">
         <label class="font-weight-bold">URL:</label>
         <div class="input-group">
-            <input id="urlInput" class="form-control" style="background-color: #fff" readonly="readonly" [value]="'https://www.wonderscale.com/shop?id=' + shop?._id"/>
+            <input id="urlInput" class="form-control" style="background-color: #fff" readonly="readonly" [value]="environment.URL + 'shop/' + shop?.username"/>
             <div class="input-group-append">
                 <button class="btn input-group-text" (click)="copyURL()"><span class="fas fa-copy"></span></button>
                 <!-- <button class="btn input-group-text"><span class="fas fa-share-alt"></span></button> -->
@@ -12,9 +12,6 @@
             <a id="id-qrcode" hidden href="#" download="ws-qr-code.png"></a>
         </div>
     </div>
-    <!-- <img id="id-image"
-    [src]="environment.IMAGE_URL + shop.profileImage" 
-    hidden style="object-fit: contain; border-radius: 50%" alt="profile-image" /> -->
     <ws-uploader [id]="'qrcode-profile'" [max]="1" [input]="[]" (output)="imageChangeEvent($event)"></ws-uploader>
     <div class="row no-gutters">
         <div class="col-sm-4">
@@ -54,7 +51,11 @@
                 </div>
                 
                 <div class="clearfix"></div>
-                <div class="qrcode text-center"></div>
+                <div>
+                    <div class="qrcode text-center">
+                        <ws-spinner style='line-height: 150px' class="text-center d-block" *ngIf="isQrcodeLoading.isRunning()"></ws-spinner>
+                    </div>
+                </div>
                 <p style="text-align: center; margin-top: .25rem; margin-bottom: 0">@{{ shop?.username }}</p>
             </div>
         </div>

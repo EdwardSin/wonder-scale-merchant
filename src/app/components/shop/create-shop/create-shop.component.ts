@@ -21,8 +21,8 @@ import * as _ from 'lodash';
   styleUrls: ['./create-shop.component.scss']
 })
 export class CreateShopComponent implements OnInit {
-  storeType: 'physicalStore' | 'onlineStore' = 'physicalStore';
-  storeServiceType: 'restaurant' | 'shopping' | 'services';
+  storeServiceType: 'physicalStore' | 'onlineStore' = 'physicalStore';
+  storeType: 'restaurant' | 'shopping' | 'services';
   phase: Phase<number> = new Phase(1, 7);
   mapController: MapController;
   loading: WsLoading = new WsLoading;
@@ -63,7 +63,7 @@ export class CreateShopComponent implements OnInit {
   }
   next() {
     if (this.phase.isStep(0)) {
-      if (this.storeType != undefined) {
+      if (this.storeServiceType != undefined) {
         this.phase.next();
       }
       else {
@@ -71,7 +71,7 @@ export class CreateShopComponent implements OnInit {
       }
     }
     else if (this.phase.isStep(1)) {
-      if (this.storeServiceType != undefined) {
+      if (this.storeType != undefined) {
         this.phase.next();
       }
       else {

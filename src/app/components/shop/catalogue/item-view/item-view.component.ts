@@ -33,6 +33,7 @@ export class ItemViewComponent implements OnInit {
   environment = environment;
   displayItems: Item[] = [];
   editItems: Item[] = [];
+  columns: Array<string> = [];
   isNavOpen: Boolean = false;
   total: number = 0;
   currentPage: number = 1;
@@ -116,6 +117,10 @@ export class ItemViewComponent implements OnInit {
       this.isNavOpen = res;
       this.ref.detectChanges();
     });
+    this.sharedItemService.shownColumns.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+      this.columns = result;
+      this.ref.detectChanges();
+    });
   }
   selectAll() {
     this.sharedItemService.selectAll();
@@ -132,14 +137,17 @@ export class ItemViewComponent implements OnInit {
   isInclude(it) {
     return this.editItems.findIndex(x => it._id === x['_id']) > -1;
   }
-
+  isOffer(item) {
+    return item.isOffer && (item.discount > 0 || item.types.some(type => {
+      return type.discount > 0;
+    }));
+  }
   trackByFn(index, item) {
     return index;
   }
   navigate(event) {
     this.router.navigate([], { queryParams: {page: event}, queryParamsHandling: 'merge' });
   }
-
   ngOnDestroy() {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();

@@ -31,10 +31,14 @@
                     <span class="fas fa-ellipsis-h"></span>
                 </button>
                 <div class="dropdown-menu mt-0 pb-0 pt-0">
-                    <button *ngIf="param != 'uncategorized'" class="dropdown-item" (click)="publishItems()">Publish</button>
-                    <button *ngIf="param != 'uncategorized'" class="dropdown-item" (click)="unpublishItems()">Unpublish</button>
-                    <button *ngIf="param != 'uncategorized' && param != 'new'" class="dropdown-item" (click)="markAsNew()">Mark as New</button>
-                    <button *ngIf="param != 'uncategorized'" class="dropdown-item" (click)="unmarkNew()">Unmark from New</button>
+                    <button class="dropdown-item" (click)="publishItems()">Publish</button>
+                    <button class="dropdown-item" (click)="unpublishItems()">Unpublish</button>
+                    <button *ngIf="param != 'new'" class="dropdown-item" (click)="markAsNew()">Mark as New</button>
+                    <button class="dropdown-item" (click)="unmarkNew()">Unmark from New</button>
+                    <button *ngIf="param != 'discount'" class="dropdown-item" (click)="markAsOffer()">Mark as Offer</button>
+                    <button class="dropdown-item" (click)="unmarkOffer()">Unmark from offer</button>
+                    <button *ngIf="shop.type == 'restaurant'" class="dropdown-item" (click)="markAsTodaySpecial()">Mark as Today Special</button>
+                    <button *ngIf="shop.type == 'restaurant'" class="dropdown-item" (click)="unmarkTodaySpecial()">Unmark from Today Special</button>
                     <button class="dropdown-item" (click)="openAddToModal()">Add to</button>
                     <button *ngIf="param == 'custom'" class="dropdown-item" (click)="openMoveModal()">Move to</button>
                     <button *ngIf="param != 'uncategorized'" class="dropdown-item" (click)="openRemoveModal()">Remove from categories</button>
@@ -61,6 +65,11 @@
     </div>
     <div class="col-auto">
         <div class="row no-gutters order-2 center">
+            <div class="ws-circle-button">
+                <button title="Upload Items" wsTippy class="btn btn-controller small" (click)="isImportItemsModalOpened = true">
+                    <span class="fa fa-upload"></span>
+                </button>
+            </div>
             <div class="ws-circle-button" [routerLink]="['',{outlets: {modal: 'item'}}]" [queryParams]="{id:null}" queryParamsHandling="merge">
                 <button title="Add New Item" wsTippy class="btn btn-controller small">
                     <span class="fa fa-plus"></span>
@@ -96,6 +105,30 @@
                     </button> -->
                 </div>
             </div>
+            <div class="ws-circle-button" mdbDropdown>
+                <button placement="right" id="sortButton" mdbDropdownToggle title="Order" wsTippy
+                    class="btn btn-controller small clickable d-inline">
+                    <span class="fa fa-chevron-down"></span>
+                </button>
+                <div class="dropdown-menu dropdown-menu-right mt-0 pb-0 pt-0" aria-labelledby="sortButton">
+                    <button class="dropdown-item" (click)="$event.stopPropagation()">
+                        <mat-checkbox (change)="triggerColumns('id')" [checked]="columns.includes('id')" [color]="'primary'" class="mr-2 d-inline-block" style="vertical-align: text-bottom"></mat-checkbox>ID
+                    </button>
+                    <button class="dropdown-item" (click)="$event.stopPropagation()">
+                        <mat-checkbox [disabled]="true" (change)="triggerColumns('name')" [checked]="columns.includes('name')" [color]="'primary'" class="mr-2 d-inline-block" style="vertical-align: text-bottom"></mat-checkbox>Name
+                    </button>
+                    <button class="dropdown-item" (click)="$event.stopPropagation()">
+                        <mat-checkbox (change)="triggerColumns('price')" [checked]="columns.includes('price')" [color]="'primary'" class="mr-2 d-inline-block" style="vertical-align: text-bottom"></mat-checkbox>Price
+                    </button>
+                    <button class="dropdown-item" (click)="$event.stopPropagation()">
+                        <mat-checkbox (change)="triggerColumns('discount')" [checked]="columns.includes('discount')" [color]="'primary'" class="mr-2 d-inline-block" style="vertical-align: text-bottom"></mat-checkbox>Discount
+                    </button>
+                    <button class="dropdown-item" (click)="$event.stopPropagation()">
+                        <mat-checkbox (change)="triggerColumns('status')" [checked]="columns.includes('status')" [color]="'primary'" class="mr-2 d-inline-block" style="vertical-align: text-bottom"></mat-checkbox>Status
+                    </button>
+                </div>
+            </div>
+            
             <!-- <div class="ws-circle-button" mdbDropdown>
                 <button id="listButton" mdbDropdownToggle title="Display" wsTippy
                     class="btn btn-controller small clickable d-inline">
@@ -151,6 +184,7 @@
     [(editCategory)]="editCategory"></move-to-categories-modal>
 <edit-multiple-items-modal *ngIf="isEditMultipleItemsModalOpened" [(isOpened)]="isEditMultipleItemsModalOpened" [editItems]="editItems" id="editMultipleItemsModal" [action]="action">
 </edit-multiple-items-modal>
+<import-items-modal *ngIf="isImportItemsModalOpened" [(isOpened)]="isImportItemsModalOpened"></import-items-modal>
 
 <!-- <modal id="informationModal">
     <title modalHeader class="m-0" [title]="'item_controller.information'"></title>

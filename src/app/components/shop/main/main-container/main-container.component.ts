@@ -1,6 +1,5 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { SharedShopService } from '@services/shared/shared-shop.service';
-import { ScreenHelper } from '@helpers/screenhelper/screen.helper';
 import { SharedNavbarService } from '@services/shared/shared-nav-bar.service';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
@@ -8,6 +7,7 @@ import { ShopAuthorizationService } from '@services/http/general/shop-authorizat
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthShopAdminService } from '@services/http/auth-shop/admin/auth-shop-admin.service';
 import { ScreenService } from '@services/general/screen.service';
+import { environment } from '@environments/environment';
 
 @Component({
   selector: 'main-container',
@@ -20,6 +20,7 @@ export class MainContainerComponent implements OnInit {
   isAdminAuthorized: boolean;
   isConfirmReactivateShopModalOpened: boolean;
   isMobileSize: boolean;
+  environment = environment;
   private ngUnsubscribe: Subject<any> = new Subject;
   constructor(private router: Router,
     private route: ActivatedRoute,
