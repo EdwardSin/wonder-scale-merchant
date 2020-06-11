@@ -321,7 +321,7 @@
         <button class="btn btn-expand float-right" (click)="isAdvancedExpanded = !isAdvancedExpanded">Expand</button>
         <p>Perform advanced options such as unpublishing, quit or removing your page.</p>
         <div [@expand]="'down'" *ngIf="isAdvancedExpanded" style="height: 100%">
-            <form *ngIf="isAdminAuthorized" class="mb-4">
+            <form *ngIf="isAdminAuthorized">
                 <p *ngIf="shop?.isPublished" class="alert alert-secondary ws-bg-light-grey-4 mb-1" style="font-size: .9rem">
                     <button class="btn btn-primary btn-sm m-0 mb-2" (click)="isConfirmUnpublishedModalOpened = true">Unpublish Page</button>
                     <br />
