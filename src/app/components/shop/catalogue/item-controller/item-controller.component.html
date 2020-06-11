@@ -81,6 +81,10 @@
                     <span class="fa fa-ellipsis-v"></span>
                 </button>
                 <div class="dropdown-menu dropdown-menu-right mt-0 pb-0 pt-0" aria-labelledby="sortButton">
+                    <button class="dropdown-item" [class.orderSelected]="isOrder('refId')"
+                        (click)="setOrderAndSwitchAscending('refId')">SKU (ID)
+                        <span *ngIf="isOrder('refId')" class="pl-3 fas fa-sort"></span>
+                    </button>
                     <button class="dropdown-item" [class.orderSelected]="isOrder('alphabet') || isOrder(undefined)"
                         (click)="setOrderAndSwitchAscending('alphabet')">Alphabet
                         <span *ngIf="isOrder('alphabet')" class="pl-3 fas fa-sort"></span>
