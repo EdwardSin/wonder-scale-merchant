@@ -7,6 +7,7 @@
 - 2020-06-11                                -
 ---------------------------------------------
 .: WSM: Task: Loading top bar (WSM-116)
+.: WSM: BugFix: Shop not found if username has changed when scan qr code (WSM-121)
 
 - v1.0.1010                                 -
 ---------------------------------------------
