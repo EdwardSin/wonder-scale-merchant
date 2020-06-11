@@ -10,6 +10,7 @@
 .: WSM: BugFix: Shop not found if username has changed when scan qr code (WSM-121)
 .: WSM: Task: Remove icon in QR code (WSM-126)
 .: WSM: Task: Got black background when upload transparent png image (WSM-109)
+.: WSM: Task: Unpublish page to not show to public (WSM-118)
 
 - v1.0.1010                                 -
 ---------------------------------------------
