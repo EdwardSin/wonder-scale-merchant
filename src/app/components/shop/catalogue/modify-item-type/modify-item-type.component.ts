@@ -94,7 +94,6 @@ export class ModifyItemTypeComponent implements OnInit {
       }));
   }
   removeItemTypeImage(filename, itemTypeControl, itemType) {
-    console.log();
     var file = ImageHelper.getUploadProfileItem(itemType.images, filename);
     if (file) {
       if(file.type == 'blob') {
