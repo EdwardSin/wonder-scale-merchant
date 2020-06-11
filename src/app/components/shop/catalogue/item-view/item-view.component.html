@@ -68,5 +68,5 @@
       </tbody>
     </table>
   </div>
-  <ws-pagination [expanded]="isNavOpen" [currentPage]="currentPage" [pageSize]="environment.ITEMS_PER_PAGE" [total]="total" (getPageNumber)="navigate($event)"></ws-pagination>
+  <ws-pagination [expanded]="isNavOpen" [currentPage]="currentPage" [numberOfSelectedItems]="editItems.length" [pageSize]="environment.ITEMS_PER_PAGE" [total]="total" (getPageNumber)="navigate($event)"></ws-pagination>
 </div>

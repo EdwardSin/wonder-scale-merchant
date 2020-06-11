@@ -19,6 +19,13 @@
         vertical-align: middle;
         font-size: .8rem;
       }
+      .pagination__selected-item-info{
+        line-height: 50px;
+        vertical-align: middle;
+        display: inline-block;
+        text-align: center;
+        font-size: .8rem;
+      }
       .pagination__chevron-left,
       .pagination__chevron-right{
         width: 50px;

@@ -10,6 +10,7 @@ export class WsPaginationComponent implements OnInit {
   @Input() expanded: Boolean = false;
   @Input() pageSize: number = 20;
   @Input() total: number = 0;
+  @Input() numberOfSelectedItems: number = 0;
   @Input() currentPage: number = 1;
   @Output() getPageNumber = new EventEmitter();
   currentDisplayTotal: number = 0;
@@ -26,6 +27,9 @@ export class WsPaginationComponent implements OnInit {
       if (changes['total'] && !!this.total) {
         if (Math.ceil(this.total / this.pageSize) == this.currentPage) {
           this.currentDisplayTotal = this.pageSize * (this.currentPage - 1) + this.total % this.pageSize
+          if (this.total != 0 && this.total % this.pageSize == 0) {
+            this.currentDisplayTotal += this.pageSize;
+          }
         } else if (this.pageSize >= this.total) {
           this.currentDisplayTotal = this.total * this.currentPage;
         } else {
