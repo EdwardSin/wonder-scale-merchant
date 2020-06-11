@@ -35,9 +35,6 @@ export class QrcodeComponent implements OnInit {
           this.shop = result;
           this.displayImage = 'assets/images/png/dot.png';
           this.url = environment.URL + 'shop/' + this.shop.username + '?id=' + this.shop.id;
-          if (this.shop.profileImage) {
-            this.displayImage = environment.IMAGE_URL + this.shop.profileImage;
-          }
         }
         this.loading.stop();
       })
