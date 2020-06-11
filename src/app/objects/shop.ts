@@ -23,6 +23,7 @@ export class Shop {
         type?: string,
         coordinates: [number, number]
     };
+    isPublished: boolean;
     status?: {
         status: StatusType,
         expiryDate?: Date

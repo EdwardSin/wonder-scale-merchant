@@ -8,6 +8,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { AuthShopAdminService } from '@services/http/auth-shop/admin/auth-shop-admin.service';
 import { ScreenService } from '@services/general/screen.service';
 import { environment } from '@environments/environment';
+import { WsToastService } from '@elements/ws-toast/ws-toast.service';
 
 @Component({
   selector: 'main-container',
@@ -63,5 +64,20 @@ export class MainContainerComponent implements OnInit {
       this.sharedShopService.shop.next(this.shop);
       this.isConfirmReactivateShopModalOpened = false;
     });
+  }
+  publishPage() {
+    if (confirm('Are you sure to publish your page?')) {
+      this.authShopAdminService.publishPage().pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+        this.shop.isPublished = true;
+        this.sharedShopService.shop.next(this.shop);
+        WsToastService.toastSubject.next({content: result['message'], type: 'success'});
+      }, err => {
+        WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
+      });
+    }
+  }
+  ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 }
