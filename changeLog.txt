@@ -9,6 +9,7 @@
 .: WSM: Task: Add a number of selections in item controller (WSM-110)
 .: WSM: Task: Order by id (WSM-117)
 .: WSM: Task: Multiple page selections (WSM-111)
+.: WSM: Task: Change advertisement image to other name (WSM-107)
 
 ---------------------------------------------
 - 2020-06-11                                -
