@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from '@environments/environment';
 import { Item } from '@objects/item';
 import { AuthItemContributorService } from '@services/http/auth-shop/contributor/auth-item-contributor.service';
@@ -10,6 +10,7 @@ import { WsLoading } from '@elements/ws-loading/ws-loading';
 import { DocumentHelper } from '@helpers/documenthelper/document.helper';
 import { Subject, timer, combineLatest } from 'rxjs';
 import { takeUntil, map, finalize } from 'rxjs/operators';
+import { SharedNavbarService } from '@services/shared/shared-nav-bar.service';
 
 @Component({
   selector: 'app-discount-items',
@@ -17,29 +18,38 @@ import { takeUntil, map, finalize } from 'rxjs/operators';
   styleUrls: ['./discount-items.component.scss']
 })
 export class DiscountItemsComponent implements OnInit {
-  editItemList: Item[] = [];
   displayItems: Item[] = [];
   queryParams = { page: 1, keyword: '', order: '', orderBy: 'asc' };
   numberOfDiscountItems = 0;
+  numberOfCurrentTotalItems = 0;
+  isNavOpen: Boolean = false;
+  editItems: Item[] = [];
+  currentPage: number = 1;
   loading: WsLoading = new WsLoading;
   environment = environment;
 
   private ngUnsubscribe: Subject<any> = new Subject();
   constructor(
+    private router: Router,
+    private ref: ChangeDetectorRef,
+    private route: ActivatedRoute,
     private sharedItemService: SharedItemService,
+    private sharedNavbarService: SharedNavbarService,
     private sharedCategoryService: SharedCategoryService,
     private sharedShopService: SharedShopService,
-    private authItemContributorService: AuthItemContributorService,
-    private route: ActivatedRoute) {
+    private authItemContributorService: AuthItemContributorService) {
   }
 
   ngOnInit() {
     let shop_name = this.sharedShopService.shop_name;
+    this.sharedItemService.editItems.next([]);
+    this.sharedCategoryService.numberOfCurrentTotalItems.next(0);
     DocumentHelper.setWindowTitleWithWonderScale('Discount - ' + shop_name);
     this.loading.start();
     this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(queryParam => {
         if (this.queryParams.keyword != queryParam.s_keyword || this.queryParams.page != queryParam.page || this.queryParams.order != queryParam.order || this.queryParams.orderBy != queryParam.by) {
+          this.currentPage = queryParam['page'] || 1;
           this.queryParams = { keyword: queryParam['s_keyword'], page: queryParam['page'], order: queryParam['order'], orderBy: queryParam['by'] };
           this.getAllDiscountItems(this.queryParams.keyword, this.queryParams.page, this.queryParams.order, this.queryParams.orderBy);
         }
@@ -53,6 +63,23 @@ export class DiscountItemsComponent implements OnInit {
     this.sharedCategoryService.numberOfDiscountItems.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(res => {
         this.numberOfDiscountItems = res;
+      })
+    this.sharedCategoryService.numberOfCurrentTotalItems.pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(res => {
+        this.numberOfCurrentTotalItems = res;
+        this.ref.detectChanges();
+      })
+    this.sharedNavbarService.isNavSubject.pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(res => {
+        this.isNavOpen = res;
+        this.ref.detectChanges();
+      });
+    this.sharedItemService.editItems.pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(res => {
+        if (res) {
+          this.editItems = res;
+          this.ref.detectChanges();
+        }
       })
   }
 
@@ -69,6 +96,12 @@ export class DiscountItemsComponent implements OnInit {
         this.sharedItemService.displayItems.next(this.displayItems);
         this.sharedCategoryService.numberOfCurrentTotalItems.next(result['total']);
       })
+  }
+  navigate(event) {
+    this.router.navigate([], { queryParams: {page: event}, queryParamsHandling: 'merge' });
+  }
+  deselectAll() {
+    this.sharedItemService.deselectAll();
   }
   ngOnDestroy() {
     this.ngUnsubscribe.next();

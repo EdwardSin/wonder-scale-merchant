@@ -23,8 +23,8 @@
   <div class="w-100" *ngIf="display === 'list'">
     <table class="table table-hover w-100 font-9">
       <th width="40px">
-        <mat-checkbox [color]="'primary'" [checked]="editItems.length == displayItems.length"
-          (change)="$event.checked ? selectAll(): deselectAll()"></mat-checkbox>
+        <mat-checkbox [color]="'primary'" [checked]="isAllInclude()"
+          (change)="$event.checked ? selectItems(): deselectItems()"></mat-checkbox>
       </th>
       <th *ngIf="columns.includes('id')" width="200px">ID</th>
       <th *ngIf="columns.includes('name')">Name</th>
@@ -68,5 +68,4 @@
       </tbody>
     </table>
   </div>
-  <ws-pagination [expanded]="isNavOpen" [currentPage]="currentPage" [numberOfSelectedItems]="editItems.length" [pageSize]="environment.ITEMS_PER_PAGE" [total]="total" (getPageNumber)="navigate($event)"></ws-pagination>
 </div>

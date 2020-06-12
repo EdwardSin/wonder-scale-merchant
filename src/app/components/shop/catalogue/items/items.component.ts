@@ -12,12 +12,12 @@ import { SharedLoadingService } from '@services/shared/shared-loading.service';
 import { SharedShopService } from '@services/shared/shared-shop.service';
 import { WsLoading } from '@elements/ws-loading/ws-loading';
 import { DocumentHelper } from '@helpers/documenthelper/document.helper';
-import { ArrayHelper } from '@helpers/arrayhelper/array.helper';
 import { PriceHelper } from '@helpers/pricehelper/price.helper';
 import { WsToastService } from '@elements/ws-toast/ws-toast.service';
 // import { saveAs } from 'file-saver';
 import { Subject, combineLatest, timer } from 'rxjs';
-import { filter, finalize, takeUntil, map, switchMap } from 'rxjs/operators';
+import { finalize, takeUntil, map, switchMap } from 'rxjs/operators';
+import { SharedNavbarService } from '@services/shared/shared-nav-bar.service';
 // import * as XLSX from 'xlsx';
 
 @Component({
@@ -34,22 +34,27 @@ export class ItemsComponent implements OnInit {
   categoryFound: boolean;
   selectedCategory: Category;
   numberOfItems = 0;
+  numberOfCurrentTotalItems = 0;
+  isNavOpen: Boolean = false;
+  editItems: Item[] = [];
+  currentPage: number = 1;
   queryParams = { page: 1, keyword: '', order: '', orderBy: 'asc' };
   @ViewChild('importFile', { static: true }) importFile: ElementRef;
   environment = environment;
 
   private ngUnsubscribe: Subject<any> = new Subject();
   constructor(
+    private router: Router,
+    private ref: ChangeDetectorRef,
+    private route: ActivatedRoute,
     private sharedShopService: SharedShopService,
     private sharedLoadingService: SharedLoadingService,
     private sharedItemService: SharedItemService,
+    private sharedNavbarService: SharedNavbarService,
     private sharedCategoryService: SharedCategoryService,
     private authShopContributorService: AuthShopContributorService,
     private authItemContributorService: AuthItemContributorService,
-    private authCategoryContributorService: AuthCategoryContributorService,
-    private ref: ChangeDetectorRef,
-    private router: Router,
-    private route: ActivatedRoute) {
+    private authCategoryContributorService: AuthCategoryContributorService) {
   }
 
   ngOnInit() {
@@ -59,6 +64,8 @@ export class ItemsComponent implements OnInit {
 
     this.route.params.pipe(takeUntil(this.ngUnsubscribe)).subscribe(res => {
       this.categoryName = this.route.snapshot.params.name;
+      this.sharedItemService.editItems.next([]);
+      this.sharedCategoryService.numberOfCurrentTotalItems.next(0);
       DocumentHelper.setWindowTitleWithWonderScale(this.categoryName + ' - ' + shop_name);
       this.sharedCategoryService.categoryRefresh.next({refresh: true, loading: true});
     })
@@ -66,6 +73,7 @@ export class ItemsComponent implements OnInit {
     this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(queryParam => {
         if (this.queryParams.keyword != queryParam.s_keyword || this.queryParams.page != queryParam.page || this.queryParams.order != queryParam.order || this.queryParams.orderBy != queryParam.by) {
+          this.currentPage = queryParam['page'] || 1;
           this.queryParams = { keyword: queryParam['s_keyword'], page: queryParam['page'], order: queryParam['order'], orderBy: queryParam['by'] };
           if (this.selectedCategory) {
             this.getItems(this.queryParams.keyword, this.queryParams.page, this.queryParams.order, this.queryParams.orderBy);
@@ -77,6 +85,23 @@ export class ItemsComponent implements OnInit {
         this.getCategoryByNameAndShopId(this.queryParams.keyword, this.queryParams.page, this.queryParams.order, this.queryParams.orderBy, result.loading);
       }
     })
+    this.sharedCategoryService.numberOfCurrentTotalItems.pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe(res => {
+      this.numberOfCurrentTotalItems = res;
+      this.ref.detectChanges();
+    })
+    this.sharedNavbarService.isNavSubject.pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(res => {
+        this.isNavOpen = res;
+        this.ref.detectChanges();
+      });
+    this.sharedItemService.editItems.pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(res => {
+        if (res) {
+          this.editItems = res;
+          this.ref.detectChanges();
+        }
+      })
   }
   getCategoryByNameAndShopId(keyword = '', page = 1, order = 'alphabet', orderBy, isLoading=true) {
     if(isLoading) {
@@ -92,7 +117,7 @@ export class ItemsComponent implements OnInit {
         this.selectedCategory = result[1];
         this.categoryId = this.selectedCategory._id;
         if (result && result[1] && result[1]['items'].length) {
-          this.numberOfItems = result[1]['items'];
+          this.numberOfItems = result[1]['items'].length;
         }
         return this.authItemContributorService.getItemsByCategoryId(this.categoryId, keyword, page, order, orderBy);
       }), 
@@ -172,6 +197,12 @@ export class ItemsComponent implements OnInit {
     //   for (var i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xFF; //convert to octet
     //   return buf;
     // }
+  }
+  navigate(event) {
+    this.router.navigate([], { queryParams: {page: event}, queryParamsHandling: 'merge' });
+  }
+  deselectAll() {
+    this.sharedItemService.deselectAll();
   }
   ngOnDestroy() {
     this.ngUnsubscribe.next();

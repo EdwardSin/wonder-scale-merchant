@@ -26,7 +26,7 @@
                         *ngIf="editItems?.length == allItems.length">({{editItems?.length}})All Selected</span>
                 </button>
             </div> -->
-            <div [isDisabled]="!editItems.length" (click)="checkSelectedItems()" class="ws-circle-button" #dropdown="bs-dropdown" mdbDropdown>
+            <div [class.banned]="!editItems.length" [isDisabled]="!editItems.length" (click)="checkSelectedItems()" class="ws-circle-button" #dropdown="bs-dropdown" mdbDropdown>
                 <button title="Actions" mdbDropdownToggle wsTippy class="btn btn-controller small">
                     <span class="fas fa-ellipsis-h"></span>
                 </button>

@@ -16,6 +16,8 @@
     <item-view></item-view>
   </div>
 </div>
+<ws-pagination *ngIf="numberOfCurrentTotalItems" [expanded]="isNavOpen" [currentPage]="currentPage" [numberOfSelectedItems]="editItems.length" 
+            [pageSize]="environment.ITEMS_PER_PAGE" [dbTotal]="numberOfItems" [total]="numberOfCurrentTotalItems" (deselectAll)="deselectAll()" (getPageNumber)="navigate($event)"></ws-pagination>
 <ng-template #noItem>
   <ng-container *ngIf="categoryFound; else noCategoryFound">
     <div class="text-center">

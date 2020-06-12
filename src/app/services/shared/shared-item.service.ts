@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Item } from '@objects/item';
 import { BehaviorSubject } from 'rxjs';
+import * as _ from 'lodash';
 
 @Injectable({
     providedIn: 'root'
@@ -17,16 +18,25 @@ export class SharedItemService {
 
     constructor() { }
 
-    selectAll() {
-        this.editItems.next([...this.displayItems.getValue()]);
+    selectItems() {
+        let items = _.unionBy([...this.editItems.getValue(), ...this.displayItems.getValue()], '_id');
+        this.editItems.next(items);
+    }
+    deselectItems() {
+        let items = this.editItems.getValue();
+        let displayItems = this.displayItems.getValue();
+        if (displayItems) {
+            items = items.filter(item => !displayItems.find(_item => _item._id == item._id));
+        }
+        this.editItems.next(items);
     }
     deselectAll() {
         this.editItems.next([]);
     }
     addToItemList(item) {
         this._editItems = this.editItems.getValue();
-        if (this._editItems.findIndex(x => item._id === x['_id']) > -1) {
-            this._editItems.splice(this._editItems.indexOf(item), 1);
+        if (this._editItems.find(x => item._id === x._id)) {
+            this._editItems = this._editItems.filter(_editItem => _editItem._id != item._id);
         } else {
             this._editItems.push(item);
         }

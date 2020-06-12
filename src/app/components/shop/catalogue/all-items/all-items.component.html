@@ -4,8 +4,10 @@
 <div *ngIf="numberOfAllItems && !loading.isRunning(); else loadingTemplate">
     <div *ngIf="displayItems?.length; else searchLoadingTemplate">
         <item-view [showCategory]="true"></item-view>
+    </div>
 </div>
-</div>
+<ws-pagination *ngIf="numberOfCurrentTotalItems" [expanded]="isNavOpen" [currentPage]="currentPage" [numberOfSelectedItems]="editItems.length" 
+            [pageSize]="environment.ITEMS_PER_PAGE" [dbTotal]="numberOfAllItems" [total]="numberOfCurrentTotalItems" (deselectAll)="deselectAll()" (getPageNumber)="navigate($event)"></ws-pagination>
 
 <ng-template #noItem>
     <div class="py-5 text-center">
