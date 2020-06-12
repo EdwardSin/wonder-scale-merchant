@@ -9,7 +9,7 @@ import * as _ from 'lodash';
 export class SharedItemService {
     displayItems: BehaviorSubject<Item[]> = new BehaviorSubject<Item[]>([]);
     editItems: BehaviorSubject<Item[]> = new BehaviorSubject<Item[]>([]);
-    _columns = sessionStorage.getItem('shownColumns') || '["id", "name", "price", "discount", "status"]';
+    _columns = sessionStorage.getItem('shownColumns') || '["id", "name", "price", "discount", "uploaded_images", "status"]';
     shownColumns: BehaviorSubject<Array<string>> = new BehaviorSubject<Array<string>>(JSON.parse(this._columns));
 
     _allItems: Item[] = [];

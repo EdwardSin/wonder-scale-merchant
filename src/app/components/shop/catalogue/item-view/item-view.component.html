@@ -30,6 +30,7 @@
       <th *ngIf="columns.includes('name')">Name</th>
       <th *ngIf="columns.includes('price')" width="200px">Price({{ currencySymbol }})</th>
       <th *ngIf="columns.includes('discount')" width="200px">Discount Price({{ currencySymbol }})</th>
+      <th *ngIf="columns.includes('uploaded_images')" width="150px">Uploaded Images</th>
       <th *ngIf="columns.includes('status')" width="300px">Status</th>
       <th width="120px">Actions</th>
       <tbody>
@@ -47,6 +48,9 @@
           </td>
           <td *ngIf="currencyService.getCurrencyWithCode(item?.currency) && currencyService.getCurrencyWithCode(selectedCurrencyCode) &&  item.currency && selectedCurrencyCode && columns.includes('discount')">
             {{ item?.price | currency: currencyService.getCurrencyWithCode(item?.currency).rate: currencyService.getCurrencyWithCode(selectedCurrencyCode).rate | discountconverter : item?.discount }}
+          </td>
+          <td *ngIf="columns.includes('uploaded_images')">
+            <span>{{ totalNoImages(item) }}</span>
           </td>
           <td *ngIf="columns.includes('status')">
             <span [class.badge-default]="!item?.isEntityNew" class="badge badge-warning mr-1">New</span>
