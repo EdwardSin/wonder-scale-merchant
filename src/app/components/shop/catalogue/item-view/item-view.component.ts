@@ -14,6 +14,7 @@ import { SharedNavbarService } from '@services/shared/shared-nav-bar.service';
 import { SharedCategoryService } from '@services/shared/shared-category.service';
 import { Currency } from '@objects/currency';
 import { ScreenService } from '@services/general/screen.service';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'item-view',
@@ -139,6 +140,18 @@ export class ItemViewComponent implements OnInit {
   }
   trackByFn(index, item) {
     return index;
+  }
+  totalNoImages(item) {
+    let profileImages = item.profileImages || [];
+    let descriptionImages = item.descriptionImages || [];
+    let noOfItemTypeImages = 0;
+    if (item.types && item.types.length) {
+      noOfItemTypeImages = _.sumBy(item.types, function (type) {
+        let images = type.images || [];
+        return images.length;
+      });
+    }
+    return profileImages.length + descriptionImages.length + noOfItemTypeImages;
   }
   ngOnDestroy() {
     this.ngUnsubscribe.next();

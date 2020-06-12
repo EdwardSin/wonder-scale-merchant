@@ -128,6 +128,9 @@
                         <mat-checkbox (change)="triggerColumns('discount')" [checked]="columns.includes('discount')" [color]="'primary'" class="mr-2 d-inline-block" style="vertical-align: text-bottom"></mat-checkbox>Discount
                     </button>
                     <button class="dropdown-item" (click)="$event.stopPropagation()">
+                        <mat-checkbox (change)="triggerColumns('uploaded_images')" [checked]="columns.includes('uploaded_images')" [color]="'primary'" class="mr-2 d-inline-block" style="vertical-align: text-bottom"></mat-checkbox>Uploaded Images
+                    </button>
+                    <button class="dropdown-item" (click)="$event.stopPropagation()">
                         <mat-checkbox (change)="triggerColumns('status')" [checked]="columns.includes('status')" [color]="'primary'" class="mr-2 d-inline-block" style="vertical-align: text-bottom"></mat-checkbox>Status
                     </button>
                 </div>
