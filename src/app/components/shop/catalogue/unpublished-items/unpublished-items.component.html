@@ -6,6 +6,8 @@
         <item-view [showCategory]="true"></item-view>
     </div>
 </div>
+<ws-pagination *ngIf="numberOfCurrentTotalItems" [expanded]="isNavOpen" [currentPage]="currentPage" [numberOfSelectedItems]="editItems.length" 
+            [pageSize]="environment.ITEMS_PER_PAGE" [dbTotal]="numberOfUnpublishedItems" [total]="numberOfCurrentTotalItems" (deselectAll)="deselectAll()" (getPageNumber)="navigate($event)"></ws-pagination>
 
 <ng-template #noItem>
     <div class="py-5 text-center">

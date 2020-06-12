@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { environment } from '@environments/environment';
 import { AuthItemContributorService } from '@services/http/auth-shop/contributor/auth-item-contributor.service';
 import { SharedCategoryService } from '@services/shared/shared-category.service';
@@ -9,6 +9,8 @@ import { DocumentHelper } from '@helpers/documenthelper/document.helper';
 import { Subject, combineLatest, timer } from 'rxjs';
 import { takeUntil, map } from 'rxjs/operators';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
+import { Item } from '@objects/item';
+import { SharedNavbarService } from '@services/shared/shared-nav-bar.service';
 
 @Component({
   selector: 'app-new-items',
@@ -19,26 +21,36 @@ export class NewItemsComponent implements OnInit {
   displayItems: Array<any> = [];
   loading: WsLoading = new WsLoading;
   numberOfNewItems = 0;
+  numberOfCurrentTotalItems = 0;
+  isNavOpen: Boolean = false;
+  editItems: Item[] = [];
+  currentPage: number = 1;
   queryParams = { page: 1, keyword: '', order: '', orderBy: 'asc' };
   environment = environment;
 
   private ngUnsubscribe: Subject<any> = new Subject();
 
   constructor(
+    private router: Router,
+    private ref: ChangeDetectorRef,
     private route: ActivatedRoute,
     private authItemContributorService: AuthItemContributorService,
     private sharedItemService: SharedItemService,
+    private sharedNavbarService: SharedNavbarService,
     private sharedCategoryService: SharedCategoryService,
     private sharedShopService: SharedShopService) {
   }
 
   ngOnInit() {
     let shop_name = this.sharedShopService.shop_name;
+    this.sharedItemService.editItems.next([]);
+    this.sharedCategoryService.numberOfCurrentTotalItems.next(0);
     DocumentHelper.setWindowTitleWithWonderScale('New - ' + shop_name);
     this.loading.start();
     this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(queryParam => {
         if (this.queryParams.keyword != queryParam.s_keyword || this.queryParams.page != queryParam.page || this.queryParams.order != queryParam.order || this.queryParams.orderBy != queryParam.by) {
+          this.currentPage = queryParam['page'] || 1;
           this.queryParams = { keyword: queryParam['s_keyword'], page: queryParam['page'], order: queryParam['order'], orderBy: queryParam['by'] };
           this.getNewItems(this.queryParams.keyword, this.queryParams.page, this.queryParams.order, this.queryParams.orderBy);
         }
@@ -52,6 +64,23 @@ export class NewItemsComponent implements OnInit {
     this.sharedCategoryService.numberOfNewItems.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(res => {
         this.numberOfNewItems = res;
+      })
+    this.sharedCategoryService.numberOfCurrentTotalItems.pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(res => {
+        this.numberOfCurrentTotalItems = res;
+        this.ref.detectChanges();
+      })
+    this.sharedNavbarService.isNavSubject.pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(res => {
+        this.isNavOpen = res;
+        this.ref.detectChanges();
+      });
+    this.sharedItemService.editItems.pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(res => {
+        if (res) {
+          this.editItems = res;
+          this.ref.detectChanges();
+        }
       })
   }
 
@@ -69,6 +98,12 @@ export class NewItemsComponent implements OnInit {
         this.sharedCategoryService.numberOfCurrentTotalItems.next(result['total']);
         this.loading.stop();
       })
+  }
+  navigate(event) {
+    this.router.navigate([], { queryParams: {page: event}, queryParamsHandling: 'merge' });
+  }
+  deselectAll() {
+    this.sharedItemService.deselectAll();
   }
   ngOnDestroy() {
     this.ngUnsubscribe.next();
