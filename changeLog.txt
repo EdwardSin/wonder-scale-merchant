@@ -9,6 +9,7 @@
 .: WSM: Task: Improvement: Item list image indicator (WSM-124)
 .: WSM: Task: Customize item status (WSM-103)
 .: WSM: Task: CLONE - Add Item Type Concept into website (WSM-129)
+.: WSM: Task: Label import excel files (WSM-123)
 
 ---------------------------------------------
 - 2020-06-12                                -
