@@ -15,7 +15,7 @@ import { DocumentHelper } from '@helpers/documenthelper/document.helper';
 import { PriceHelper } from '@helpers/pricehelper/price.helper';
 import { WsToastService } from '@elements/ws-toast/ws-toast.service';
 // import { saveAs } from 'file-saver';
-import { Subject, combineLatest, timer } from 'rxjs';
+import { Subject, combineLatest, timer, Subscription } from 'rxjs';
 import { finalize, takeUntil, map, switchMap } from 'rxjs/operators';
 import { SharedNavbarService } from '@services/shared/shared-nav-bar.service';
 // import * as XLSX from 'xlsx';
@@ -41,8 +41,8 @@ export class ItemsComponent implements OnInit {
   queryParams = { page: 1, keyword: '', order: '', orderBy: 'asc' };
   @ViewChild('importFile', { static: true }) importFile: ElementRef;
   environment = environment;
-
   private ngUnsubscribe: Subject<any> = new Subject();
+  getItemsSubscription: Subscription = new Subscription;
   constructor(
     private router: Router,
     private ref: ChangeDetectorRef,
@@ -75,6 +75,7 @@ export class ItemsComponent implements OnInit {
         if (this.queryParams.keyword != queryParam.s_keyword || this.queryParams.page != queryParam.page || this.queryParams.order != queryParam.order || this.queryParams.orderBy != queryParam.by) {
           this.currentPage = queryParam['page'] || 1;
           this.queryParams = { keyword: queryParam['s_keyword'], page: queryParam['page'], order: queryParam['order'], orderBy: queryParam['by'] };
+          this.getItemsSubscription.unsubscribe();
           if (this.selectedCategory) {
             this.getItems(this.queryParams.keyword, this.queryParams.page, this.queryParams.order, this.queryParams.orderBy);
           }
@@ -137,7 +138,7 @@ export class ItemsComponent implements OnInit {
       this.loading.start();
       this.displayBanner = false;
     }
-    combineLatest(timer(500), this.authItemContributorService.getItemsByCategoryId(this.categoryId, keyword, page, order, orderBy))
+    this.getItemsSubscription = combineLatest(timer(500), this.authItemContributorService.getItemsByCategoryId(this.categoryId, keyword, page, order, orderBy))
       .pipe(takeUntil(this.ngUnsubscribe),
         map(x => x[1]),
         finalize(() => { this.loading.stop(); }))

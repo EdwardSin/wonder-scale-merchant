@@ -52,6 +52,7 @@ export class AllItemsComponent implements OnInit {
       if (this.queryParams.keyword != queryParam.s_keyword || this.queryParams.page != queryParam.page || this.queryParams.order != queryParam.order || this.queryParams.orderBy != queryParam.by) {
         this.currentPage = queryParam['page'] || 1;
         this.queryParams = { keyword: queryParam['s_keyword'], page: queryParam['page'], order: queryParam['order'], orderBy: queryParam['by'] };
+        this.getAllItemsSubscribe.unsubscribe();
         this.getAllItems(this.queryParams.keyword, this.queryParams.page, this.queryParams.order, this.queryParams.orderBy);
       }
     });
@@ -89,7 +90,7 @@ export class AllItemsComponent implements OnInit {
     if (isLoading) {
       this.loading.start();
     }
-    combineLatest(timer(500), this.authItemContributorService.getAuthenticatedAllItemsByShopId({ keyword, page, order, orderBy }))
+    this.getAllItemsSubscribe = combineLatest(timer(500), this.authItemContributorService.getAuthenticatedAllItemsByShopId({ keyword, page, order, orderBy }))
       .pipe(takeUntil(this.ngUnsubscribe),
         map(x => x[1]),
         finalize(() => { this.loading.stop(); }))

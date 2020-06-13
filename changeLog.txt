@@ -7,6 +7,7 @@
 - 2020-06-13                                -
 ---------------------------------------------
 .: WSM: Task: Improvement: Item list image indicator (WSM-124)
+.: WSM: Task: Customize item status (WSM-103)
 
 ---------------------------------------------
 - 2020-06-12                                -

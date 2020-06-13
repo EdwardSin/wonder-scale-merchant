@@ -6,7 +6,7 @@ import { SharedItemService } from '@services/shared/shared-item.service';
 import { SharedShopService } from '@services/shared/shared-shop.service';
 import { WsLoading } from '@elements/ws-loading/ws-loading';
 import { DocumentHelper } from '@helpers/documenthelper/document.helper';
-import { Subject, combineLatest, timer } from 'rxjs';
+import { Subject, combineLatest, timer, Subscription } from 'rxjs';
 import { takeUntil, map } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Item } from '@objects/item';
@@ -29,6 +29,7 @@ export class TodaySpecialItemsComponent implements OnInit {
   environment = environment;
 
   private ngUnsubscribe: Subject<any> = new Subject();
+  getTodaySpecialItemsSubscription: Subscription = new Subscription();
 
   constructor(
     private router: Router,
@@ -52,6 +53,7 @@ export class TodaySpecialItemsComponent implements OnInit {
         if (this.queryParams.keyword != queryParam.s_keyword || this.queryParams.page != queryParam.page || this.queryParams.order != queryParam.order || this.queryParams.orderBy != queryParam.by) {
           this.currentPage = queryParam['page'] || 1;
           this.queryParams = { keyword: queryParam['s_keyword'], page: queryParam['page'], order: queryParam['order'], orderBy: queryParam['by'] };
+          this.getTodaySpecialItemsSubscription.unsubscribe();
           this.getTodaySpecialItems(this.queryParams.keyword, this.queryParams.page, this.queryParams.order, this.queryParams.orderBy);
         }
       })
@@ -88,7 +90,7 @@ export class TodaySpecialItemsComponent implements OnInit {
     if (isLoading) {
       this.loading.start();
     }
-    combineLatest(timer(500),
+    this.getTodaySpecialItemsSubscription = combineLatest(timer(500),
       this.authItemContributorService.getAuthenticatedTodaySpecialItemsByShopId({ keyword, page, order, orderBy }))
       .pipe(map(x => x[1]),
         takeUntil(this.ngUnsubscribe))

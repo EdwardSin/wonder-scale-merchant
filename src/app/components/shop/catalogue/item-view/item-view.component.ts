@@ -35,6 +35,7 @@ export class ItemViewComponent implements OnInit {
   displayItems: Item[] = [];
   editItems: Item[] = [];
   columns: Array<string> = [];
+  statusItems: Array<string> = [];
   total: number = 0;
   private ngUnsubscribe: Subject<any> = new Subject();
 
@@ -115,6 +116,10 @@ export class ItemViewComponent implements OnInit {
       this.columns = result;
       this.ref.detectChanges();
     });
+    this.sharedItemService.shownStatusItems.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+      this.statusItems = result;
+      this.ref.detectChanges();
+    });
   }
   selectItems() {
     this.sharedItemService.selectItems();
@@ -128,6 +133,15 @@ export class ItemViewComponent implements OnInit {
   isAllInclude(){
     let items = this.editItems.filter(item => this.displayItems.find(_item => _item._id == item._id));
     return items.length == this.displayItems.length;
+  }
+  triggerStatusItem(value) {
+    if (this.statusItems.includes(value)) {
+      this.statusItems = this.statusItems.filter(x => x != value);
+    } else {
+      this.statusItems.push(value);
+    }
+    sessionStorage.setItem('shownStatusItems', JSON.stringify(this.statusItems));
+    this.sharedItemService.shownStatusItems.next(this.statusItems);
   }
 
   isInclude(it) {

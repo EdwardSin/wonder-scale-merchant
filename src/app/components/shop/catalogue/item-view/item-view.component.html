@@ -26,17 +26,45 @@
         <mat-checkbox [color]="'primary'" [checked]="isAllInclude()"
           (change)="$event.checked ? selectItems(): deselectItems()"></mat-checkbox>
       </th>
+      <th *ngIf="columns.includes('status')" width="130px">Status
+        <span #dropdown="bs-dropdown" mdbDropdown>
+          <span mdbDropdownToggle class="column btn btn-controller fas fa-chevron-down"></span>
+            <div class="dropdown-menu mt-0 pb-0 pt-0">
+              <button class="dropdown-item" (click)="$event.stopPropagation()">
+                <mat-checkbox (change)="triggerStatusItem('published')" [checked]="statusItems.includes('published')" [color]="'primary'" class="mr-2 d-inline-block" style="vertical-align: text-bottom"></mat-checkbox>Published
+              </button>
+              <button class="dropdown-item" (click)="$event.stopPropagation()">
+                <mat-checkbox (change)="triggerStatusItem('new')" [checked]="statusItems.includes('new')" [color]="'primary'" class="mr-2 d-inline-block" style="vertical-align: text-bottom"></mat-checkbox>New
+              </button>
+              <button class="dropdown-item" (click)="$event.stopPropagation()">
+                <mat-checkbox (change)="triggerStatusItem('todaySpecial')" [checked]="statusItems.includes('todaySpecial')" [color]="'primary'" class="mr-2 d-inline-block" style="vertical-align: text-bottom"></mat-checkbox>Today Special
+              </button>
+              <button class="dropdown-item" (click)="$event.stopPropagation()">
+                <mat-checkbox (change)="triggerStatusItem('discount')" [checked]="statusItems.includes('discount')" [color]="'primary'" class="mr-2 d-inline-block" style="vertical-align: text-bottom"></mat-checkbox>Discount
+              </button>
+              <button class="dropdown-item" (click)="$event.stopPropagation()">
+                <mat-checkbox (change)="triggerStatusItem('categorized')" [checked]="statusItems.includes('categorized')" [color]="'primary'" class="mr-2 d-inline-block" style="vertical-align: text-bottom"></mat-checkbox>Categorized
+              </button>
+            </div>
+          </span>
+      </th>
       <th *ngIf="columns.includes('id')" width="200px">ID</th>
       <th *ngIf="columns.includes('name')">Name</th>
       <th *ngIf="columns.includes('price')" width="200px">Price({{ currencySymbol }})</th>
       <th *ngIf="columns.includes('discount')" width="200px">Discount Price({{ currencySymbol }})</th>
       <th *ngIf="columns.includes('uploaded_images')" width="150px">Uploaded Images</th>
-      <th *ngIf="columns.includes('status')" width="300px">Status</th>
       <th width="120px">Actions</th>
       <tbody>
         <tr *ngFor="let item of displayItems; let i = index">
           <td>
             <mat-checkbox [color]="'primary'" [checked]="isInclude(item)" (change)="addToItemList(item)"></mat-checkbox>
+          </td>
+          <td *ngIf="columns.includes('status')">
+            <span *ngIf="statusItems.includes('published')" [class.badge-default]="!item?.isPublished" class="badge badge-success default mr-1" title="Published/Unpublished">P</span>
+            <span *ngIf="statusItems.includes('new')" [class.badge-default]="!item?.isEntityNew" class="badge badge-warning default mr-1" title="New">N</span>
+            <span *ngIf="shop?.type == 'restaurant' && statusItems.includes('todaySpecial')" [class.badge-default]="!item?.isTodaySpecial" class="badge badge-primary default mr-1" title="Today Special">T</span>
+            <span *ngIf="statusItems.includes('discount')" [class.badge-default]="!isOffer(item)" class="badge default ws-clear-color ws-bg-offer mr-1" title="Discount">D</span>
+            <span *ngIf="statusItems.includes('categorized')" [class.badge-default]="!item?.categories.length" class="badge badge-info default mr-1" title="Categorized/Uncategorized">C</span>
           </td>
           <td *ngIf="columns.includes('id')">{{ item?.refId}}</td>
           <td *ngIf="columns.includes('name')">
@@ -51,12 +79,6 @@
           </td>
           <td *ngIf="columns.includes('uploaded_images')">
             <span>{{ totalNoImages(item) }}</span>
-          </td>
-          <td *ngIf="columns.includes('status')">
-            <span [class.badge-default]="!item?.isEntityNew" class="badge badge-warning mr-1">New</span>
-            <span [class.badge-default]="!isOffer(item)" class="badge ws-clear-color ws-bg-offer mr-1">Discount</span>
-            <span [class.badge-default]="!item?.isPublished" class="badge badge-success mr-1">Published</span>
-            <span [class.badge-default]="!item?.categories.length" class="badge badge-info mr-1">Categorized</span>
           </td>
           <td width="100">
             <a title="Edit Item" href="javascript:void(0)" class="ws-dark-color btn-link p-2 mr-1" (click)="$event.stopPropagation();"

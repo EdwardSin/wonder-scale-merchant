@@ -8,7 +8,7 @@ import { SharedItemService } from '@services/shared/shared-item.service';
 import { SharedShopService } from '@services/shared/shared-shop.service';
 import { WsLoading } from '@elements/ws-loading/ws-loading';
 import { DocumentHelper } from '@helpers/documenthelper/document.helper';
-import { Subject, combineLatest, timer } from 'rxjs';
+import { Subject, combineLatest, timer, Subscription } from 'rxjs';
 import { takeUntil, map, finalize } from 'rxjs/operators';
 import { SharedNavbarService } from '@services/shared/shared-nav-bar.service';
 
@@ -28,8 +28,8 @@ export class PublishedItemsComponent implements OnInit {
   currentPage: number = 1;
   loading: WsLoading = new WsLoading;
   environment = environment;
-
   private ngUnsubscribe: Subject<any> = new Subject();
+  getPublishedItemsSubscription: Subscription = new Subscription;
 
   constructor(
     private router: Router,
@@ -54,6 +54,7 @@ export class PublishedItemsComponent implements OnInit {
         if (this.queryParams.keyword != queryParam.s_keyword || this.queryParams.page != queryParam.page || this.queryParams.order != queryParam.order || this.queryParams.orderBy != queryParam.by) {
           this.currentPage = queryParam['page'] || 1;
           this.queryParams = { keyword: queryParam['s_keyword'], page: queryParam['page'], order: queryParam['order'], orderBy: queryParam['by'] };
+          this.getPublishedItemsSubscription.unsubscribe();
           this.getPublishedItems(this.queryParams.keyword, this.queryParams.page, this.queryParams.order, this.queryParams.orderBy);
         }
       })
@@ -90,7 +91,7 @@ export class PublishedItemsComponent implements OnInit {
     if (isLoading) {
       this.loading.start();
     }
-    combineLatest(timer(500),
+    this.getPublishedItemsSubscription = combineLatest(timer(500),
       this.authItemContributorService.getAuthenticatedPublishedItemCategoryByShopId({ keyword, page, order, orderBy }))
       .pipe(map(x => x[1]),
         takeUntil(this.ngUnsubscribe),

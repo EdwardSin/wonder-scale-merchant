@@ -6,7 +6,7 @@ import { SharedItemService } from '@services/shared/shared-item.service';
 import { SharedShopService } from '@services/shared/shared-shop.service';
 import { WsLoading } from '@elements/ws-loading/ws-loading';
 import { DocumentHelper } from '@helpers/documenthelper/document.helper';
-import { Subject, combineLatest, timer } from 'rxjs';
+import { Subject, combineLatest, timer, Subscription } from 'rxjs';
 import { takeUntil, map, finalize } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SharedNavbarService } from '@services/shared/shared-nav-bar.service';
@@ -29,8 +29,8 @@ export class UnpublishedItemsComponent implements OnInit {
   queryParams = { page: 1, keyword: '', order: '', orderBy: 'asc' };
   loading: WsLoading = new WsLoading;
   environment = environment;
-
   private ngUnsubscribe: Subject<any> = new Subject();
+  getUnpublishedItemsSubscription: Subscription = new Subscription;
 
   constructor(
     private router: Router,
@@ -54,6 +54,7 @@ export class UnpublishedItemsComponent implements OnInit {
         if (this.queryParams.keyword != queryParam.s_keyword || this.queryParams.page != queryParam.page || this.queryParams.order != queryParam.order || this.queryParams.orderBy != queryParam.by) {
           this.currentPage = queryParam['page'] || 1;
           this.queryParams = { keyword: queryParam['s_keyword'], page: queryParam['page'], order: queryParam['order'], orderBy: queryParam['by'] };
+          this.getUnpublishedItemsSubscription.unsubscribe();
           this.getUnpublishedItems(this.queryParams.keyword, this.queryParams.page, this.queryParams.order, this.queryParams.orderBy);
         }
       })
@@ -89,7 +90,7 @@ export class UnpublishedItemsComponent implements OnInit {
     if (isLoading) {
       this.loading.start();
     }
-    combineLatest(timer(500),
+    this.getUnpublishedItemsSubscription = combineLatest(timer(500),
       this.authItemContributorService.getAuthenticatedUnpublishedItemCategoryByShopId({ keyword, page, order, orderBy }))
       .pipe(map(x => x[1]),
         takeUntil(this.ngUnsubscribe),
