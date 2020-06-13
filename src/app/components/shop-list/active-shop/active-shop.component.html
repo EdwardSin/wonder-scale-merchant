@@ -1,6 +1,7 @@
-<img class="mr-3" style="width: 64px; height: 64px; border-radius: 50%; background-color: #f7f7f7"
-  [defaultImage]="'assets/images/png/shop.png'"
-  [lazyLoad]="environment.IMAGE_URL + shop?.profileImage" alt="shop profile" />
+<img *ngIf="!shop?.profileImage" class="mr-3" style="width: 64px; height: 64px; border-radius: 50%; background-color: #f7f7f7"
+  [src]="'assets/images/png/shop.png'" alt="shop profile" />
+<img *ngIf="shop?.profileImage" class="mr-3" style="width: 64px; height: 64px; border-radius: 50%; background-color: #f7f7f7"
+  [src]="environment.IMAGE_URL + shop?.profileImage" alt="shop profile" />
 <div class="col">
   <div class="d-flex mt-2">
     <a class="default" href="javascript:void(0)" (click)="navigateToShop(shop?.username)">
