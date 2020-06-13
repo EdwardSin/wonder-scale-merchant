@@ -20,7 +20,7 @@
         (click)="onNavbarOpen()">
         <span class="fas fa-bars d-inline-block pr-3 pl-3"></span>
       </span>
-      <a [href]="environment.URL + 'shop/' + shop?.username" target="_blank" title="View your page" class="float-icon btn btn-controller">
+      <a [href]="environment.URL + 'shop/' + shop?.username + '?id=' + shop?._id + '&preview=true'" target="_blank" title="View your page" class="float-icon btn btn-controller">
         <span class="fas fa-eye"></span>
       </a>
       <breadcrumb class="col"></breadcrumb>
