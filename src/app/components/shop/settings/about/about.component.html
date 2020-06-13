@@ -1,9 +1,8 @@
 <h4 class="ws-title">About</h4>
 <div class="row no-gutters center" style="width: fit-content">
-    <div class="col-lg-auto mb-3">
+    <div class="col-lg-auto mt-3 order-12 order-lg-1">
         <div *ngIf="!isMobileSize" class="img-profile__container">
             <img class="img-profile__profile" [src]="profileImage" alt="profile-image" />
-            <img class="img-profile__profile-background my-1 center" src="assets/images/png/icon-with-profile-image-borderless.png" alt="profile-background" />
             <p class="img-profile__name mb-0 text-break">{{ shop?.name }}</p>
             <p class="img-profile__username mb-0">@{{ shop?.username }}</p>
         </div>
@@ -29,7 +28,7 @@
             </span>
         </span>
     </div>
-    <div class="banner-image-container">
+    <div class="col-lg banner-image-container order-1 order-lg-12">
         <div class="hover p-3">
             <div class="profile-settings__profile-image-upload" mdbDropdown>
                 <label *ngIf="!isBannerImageUploading.isRunning()" class="btn-upload btn-upload-camera mr-2" mdbDropdownToggle>
