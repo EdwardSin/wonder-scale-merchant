@@ -73,6 +73,8 @@ export class ModifyItemTypeComponent implements OnInit {
       }
       form.patchValue(type);
       itemTypes.push(form);
+      itemTypes.controls[0]['controls']['price'].disable();
+      itemTypes.controls[0]['controls']['discount'].disable();
     });
   }
   uploadItemImages(allImages, images, itemTypeId) {

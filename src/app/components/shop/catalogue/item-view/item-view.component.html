@@ -36,7 +36,7 @@
               <button class="dropdown-item" (click)="$event.stopPropagation()">
                 <mat-checkbox (change)="triggerStatusItem('new')" [checked]="statusItems.includes('new')" [color]="'primary'" class="mr-2 d-inline-block" style="vertical-align: text-bottom"></mat-checkbox>New
               </button>
-              <button class="dropdown-item" (click)="$event.stopPropagation()">
+              <button *ngIf="shop?.type == 'restaurant'" class="dropdown-item" (click)="$event.stopPropagation()">
                 <mat-checkbox (change)="triggerStatusItem('todaySpecial')" [checked]="statusItems.includes('todaySpecial')" [color]="'primary'" class="mr-2 d-inline-block" style="vertical-align: text-bottom"></mat-checkbox>Today Special
               </button>
               <button class="dropdown-item" (click)="$event.stopPropagation()">
@@ -60,11 +60,11 @@
             <mat-checkbox [color]="'primary'" [checked]="isInclude(item)" (change)="addToItemList(item)"></mat-checkbox>
           </td>
           <td *ngIf="columns.includes('status')">
-            <span *ngIf="statusItems.includes('published')" [class.badge-default]="!item?.isPublished" class="badge badge-success default mr-1" title="Published/Unpublished">P</span>
-            <span *ngIf="statusItems.includes('new')" [class.badge-default]="!item?.isEntityNew" class="badge badge-warning default mr-1" title="New">N</span>
-            <span *ngIf="shop?.type == 'restaurant' && statusItems.includes('todaySpecial')" [class.badge-default]="!item?.isTodaySpecial" class="badge badge-primary default mr-1" title="Today Special">T</span>
-            <span *ngIf="statusItems.includes('discount')" [class.badge-default]="!isOffer(item)" class="badge default ws-clear-color ws-bg-offer mr-1" title="Discount">D</span>
-            <span *ngIf="statusItems.includes('categorized')" [class.badge-default]="!item?.categories.length" class="badge badge-info default mr-1" title="Categorized/Uncategorized">C</span>
+            <span *ngIf="statusItems.includes('published')" [class.badge-default]="!item?.isPublished" class="badge badge-success default mr-1" style="padding-top: 5px" title="Published/Unpublished">P</span>
+            <span *ngIf="statusItems.includes('new')" [class.badge-default]="!item?.isEntityNew" class="badge badge-warning default mr-1" style="padding-top: 5px" title="New">N</span>
+            <span *ngIf="shop?.type == 'restaurant' && statusItems.includes('todaySpecial')" [class.badge-default]="!item?.isTodaySpecial" class="badge badge-primary default mr-1" style="padding-top: 5px" title="Today Special">T</span>
+            <span *ngIf="statusItems.includes('discount')" [class.badge-default]="!isOffer(item)" class="badge default ws-clear-color ws-bg-offer mr-1" style="padding-top: 5px" title="Discount">D</span>
+            <span *ngIf="statusItems.includes('categorized')" [class.badge-default]="!item?.categories.length" class="badge badge-info default mr-1" style="padding-top: 5px" title="Categorized/Uncategorized">C</span>
           </td>
           <td *ngIf="columns.includes('id')">{{ item?.refId}}</td>
           <td *ngIf="columns.includes('name')">
