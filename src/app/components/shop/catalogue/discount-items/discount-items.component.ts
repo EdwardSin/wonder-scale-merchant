@@ -8,7 +8,7 @@ import { SharedItemService } from '@services/shared/shared-item.service';
 import { SharedShopService } from '@services/shared/shared-shop.service';
 import { WsLoading } from '@elements/ws-loading/ws-loading';
 import { DocumentHelper } from '@helpers/documenthelper/document.helper';
-import { Subject, timer, combineLatest } from 'rxjs';
+import { Subject, timer, combineLatest, Subscription } from 'rxjs';
 import { takeUntil, map, finalize } from 'rxjs/operators';
 import { SharedNavbarService } from '@services/shared/shared-nav-bar.service';
 
@@ -27,8 +27,8 @@ export class DiscountItemsComponent implements OnInit {
   currentPage: number = 1;
   loading: WsLoading = new WsLoading;
   environment = environment;
-
   private ngUnsubscribe: Subject<any> = new Subject();
+  getDiscountItemsSubscription: Subscription = new Subscription;
   constructor(
     private router: Router,
     private ref: ChangeDetectorRef,
@@ -51,6 +51,7 @@ export class DiscountItemsComponent implements OnInit {
         if (this.queryParams.keyword != queryParam.s_keyword || this.queryParams.page != queryParam.page || this.queryParams.order != queryParam.order || this.queryParams.orderBy != queryParam.by) {
           this.currentPage = queryParam['page'] || 1;
           this.queryParams = { keyword: queryParam['s_keyword'], page: queryParam['page'], order: queryParam['order'], orderBy: queryParam['by'] };
+          this.getDiscountItemsSubscription.unsubscribe();
           this.getAllDiscountItems(this.queryParams.keyword, this.queryParams.page, this.queryParams.order, this.queryParams.orderBy);
         }
       })
@@ -87,7 +88,7 @@ export class DiscountItemsComponent implements OnInit {
     if (isLoading) {
       this.loading.start();
     }
-    combineLatest(timer(500), this.authItemContributorService.getAuthenticatedDiscountItemsByShopId({ keyword, page, order, orderBy }))
+    this.getDiscountItemsSubscription = combineLatest(timer(500), this.authItemContributorService.getAuthenticatedDiscountItemsByShopId({ keyword, page, order, orderBy }))
       .pipe(takeUntil(this.ngUnsubscribe),
         map(x => x[1]),
         finalize(() => { this.loading.stop(); }))

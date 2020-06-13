@@ -10,7 +10,9 @@ export class SharedItemService {
     displayItems: BehaviorSubject<Item[]> = new BehaviorSubject<Item[]>([]);
     editItems: BehaviorSubject<Item[]> = new BehaviorSubject<Item[]>([]);
     _columns = sessionStorage.getItem('shownColumns') || '["id", "name", "price", "discount", "uploaded_images", "status"]';
+    _showsStatusItems = sessionStorage.getItem('shownStatusItems') || '["new", "discount", "published", "categorized"]';
     shownColumns: BehaviorSubject<Array<string>> = new BehaviorSubject<Array<string>>(JSON.parse(this._columns));
+    shownStatusItems: BehaviorSubject<Array<string>> = new BehaviorSubject<Array<string>>(JSON.parse(this._showsStatusItems));
 
     _allItems: Item[] = [];
     _displayItems: Item[] = [];
