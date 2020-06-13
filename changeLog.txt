@@ -11,6 +11,7 @@
 .: WSM: Task: CLONE - Add Item Type Concept into website (WSM-129)
 .: WSM: Task: Label import excel files (WSM-123)
 .: WSM: Task: Adding component displayed preview (WSM-77)
+.: WSM: Task: CLONE - Change profile bezel (WSM-130)
 
 ---------------------------------------------
 - 2020-06-12                                -
