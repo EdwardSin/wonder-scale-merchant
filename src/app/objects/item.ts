@@ -17,5 +17,6 @@ export class Item {
     isEntityNew: boolean;
     isInStock: boolean;
     isOffer: boolean;
+    priceAfterDiscount?: number;
     categories: string[];
 }

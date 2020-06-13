@@ -81,11 +81,11 @@
             <span>{{ totalNoImages(item) }}</span>
           </td>
           <td width="100">
-            <a title="Edit Item" href="javascript:void(0)" class="ws-dark-color btn-link p-2 mr-1" (click)="$event.stopPropagation();"
+            <a title="Edit Item" href="javascript:void(0)" class="d-inline-block d-sm-inline-flex ws-dark-color btn-link p-2 mb-1 mb-sm-0 mr-sm-2" (click)="$event.stopPropagation();"
               [routerLink]="['', { outlets: {modal: 'item'}}]" [queryParams]="{id: item?._id}" [queryParamsHandling]="'merge'">
               <span class="fas fa-edit"></span>
             </a>
-            <a title="Edit Item Types" href="javascript:void(0)" class="ws-dark-color btn-link p-2" (click)="$event.stopPropagation();"
+            <a title="Edit Item Types" href="javascript:void(0)" class="d-inline-block d-sm-inline-flex ws-dark-color btn-link p-2" (click)="$event.stopPropagation();"
               [routerLink]="['', { outlets: {modal: 'item-types'}}]" [queryParams]="{id: item?._id}" [queryParamsHandling]="'merge'">
               <span class="fas fa-sitemap"></span>
             </a>

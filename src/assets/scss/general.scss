@@ -72,6 +72,7 @@
 }
 .dropdown.show .dropdown-menu {
     transition-duration: .2s !important;
+    transition-property: opacity !important;
 }
 
 @media (max-width: 992px) {
