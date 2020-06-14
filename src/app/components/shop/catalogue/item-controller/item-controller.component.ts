@@ -258,8 +258,15 @@ export class ItemControllerComponent implements OnInit {
     this.authItemContributorService.markAsOffer(this.editItems)
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(results => {
+        let items = this.editItems.filter(item => !item.discount);
         this.sharedCategoryService.refreshCategories(() => {
-          WsToastService.toastSubject.next({ content: "Mark as offer!", type: 'success' });
+          WsToastService.toastSubject.next({ content: "Mark as discount!", type: 'success' });
+          console.log(items);
+          if (items.length > 1) {
+            WsToastService.toastSubject.next({ content: items.length + " items don't have discount value!", type: 'warning' });
+          } else if (items.length == 1) {
+            WsToastService.toastSubject.next({ content: "Item doesn't have discount value!", type: 'warning' });
+          }
         })
       }, (err) => {
         WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
