@@ -25,6 +25,7 @@
                 <!-- <li [class.text-success]="isStockValid" class="font-9">Only 'true' or 'false' are allowed in In-Stock field.
       </li> -->
                 <li *ngIf="!isNumberValid" class="font-9"><span class="fas fa-square mr-2" style="color: #33b5e5"></span>Only number is allowed in Price fields.</li>
+                <li *ngIf="!isNameMaxLengthValid" class="font-9"><span class="fas fa-square mr-2" style="color: #e58341"></span>Max 128 characters in Name fields.</li>
                 <li *ngIf="!isMaxLengthValid" class="font-9"><span class="fas fa-square mr-2" style="color: #6699ff"></span>Max 256 characters in Description fields.</li>
             </ul>
             <h1 class="h6 font-weight-bold">Preview:</h1>

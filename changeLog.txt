@@ -11,6 +11,7 @@
 .: WSM: Task: Add publish button in setting (WSM-118)
 .: WSM: Task: Prevent empty page when page number more than 1 (WSM-111)
 .: WSM: Task: Selected items mobile UI issue (WSM-110)
+.: WSM: Task: Upload maximum length of items (WSM-134)
 
 ---------------------------------------------
 - 2020-06-13                                -
