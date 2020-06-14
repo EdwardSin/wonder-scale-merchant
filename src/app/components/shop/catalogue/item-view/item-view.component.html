@@ -1,4 +1,4 @@
-<div class="row no-gutters w-100 mt-2 position-relative" style="z-index:1" *ngIf="displayItems.length">
+<div class="row no-gutters w-100 mt-2 position-relative" style="z-index:1; overflow-x: auto" *ngIf="displayItems.length">
   <!-- <div class="row col-12 no-gutters mb-3" *ngIf="display === 'block'">
     <ws-item [item]="item" [showSetting]="true" [showNew]="item?.isEntityNew" [showOffer]="item?.isOffer"
       [showSimilar]="false" [style.z-index]="displayItems?.length - i" [class.inactiveItem]="item?.status === 'active'"
