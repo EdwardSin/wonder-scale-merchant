@@ -24,17 +24,8 @@ export class WsLeftNavComponent implements OnInit {
   }
 
   ngOnInit() {
-  }
-  @HostListener('window:resize', ['$event'])
-  onResize(event) {
     if (window.innerWidth < 992) {
-      if (!this.isMobileSize) {
-        this.isNavOpen = false;
-      }
-      this.isMobileSize = true;
-    }
-    else {
-      this.isMobileSize = false;
+      this.isNavOpen = false;
     }
   }
 }
