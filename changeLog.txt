@@ -6,8 +6,9 @@
 ---------------------------------------------
 - 2020-06-14                                -
 ---------------------------------------------
-.: WSM: Action icon UI (WSM-131)
-.: WSM: Navigation is closed when click on add new category input (WSM-132)
+.: WSM: Task: Action icon UI (WSM-131)
+.: WSM: Task: Navigation is closed when click on add new category input (WSM-132)
+.: WSM: Task: Add publish item in setting (WSM-118)
 
 ---------------------------------------------
 - 2020-06-13                                -

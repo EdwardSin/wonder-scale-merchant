@@ -148,7 +148,7 @@
                     </tr>
                     <tr>
                         <td class="pr-3">
-                            <span>Mark as offer</span>
+                            <span>Mark as discount</span>
                         </td>
                         <td class="pt-1 text-right">
                             <mat-checkbox [color]="'primary'" formControlName="isOffer"></mat-checkbox>
@@ -321,8 +321,13 @@
         <p>Perform advanced options such as unpublishing, quit or removing your page.</p>
         <div [@expand]="'down'" *ngIf="isAdvancedExpanded" style="height: 100%">
             <form *ngIf="isAdminAuthorized">
+                <p *ngIf="!shop?.isPublished" class="alert alert-secondary ws-bg-light-grey-4 mb-1" style="font-size: .9rem">
+                <button class="btn btn-primary btn-sm m-0 mb-2" (click)="isConfirmPublishedModalOpened = true">Publish Page</button>
+                    <br />
+                    Published page to start showing in public.
+                </p>
                 <p *ngIf="shop?.isPublished" class="alert alert-secondary ws-bg-light-grey-4 mb-1" style="font-size: .9rem">
-                    <button class="btn btn-primary btn-sm m-0 mb-2" (click)="isConfirmUnpublishedModalOpened = true">Unpublish Page</button>
+                    <button class="btn btn-secondary btn-sm m-0 mb-2" (click)="isConfirmUnpublishedModalOpened = true">Unpublish Page</button>
                     <br />
                     Unpublished page will not be shown to public.
                     <br />
@@ -360,6 +365,7 @@
     </div> -->
 </div>
 <edit-contributor-modal *ngIf="isEditContributorModalOpened" [contributorController]="contributorController" [(isOpened)]="isEditContributorModalOpened" id="editModal"></edit-contributor-modal>
+<confirm-modal *ngIf="isConfirmPublishedModalOpened" [(isOpened)]="isConfirmPublishedModalOpened" [loading]="isPublishLoading.isRunning()" id="confirmPublishShopModal" [message]="'Are you sure to publish the page?'" [action]="publishPage.bind(this)"></confirm-modal>
 <confirm-modal *ngIf="isConfirmUnpublishedModalOpened" [(isOpened)]="isConfirmUnpublishedModalOpened" [loading]="isUnpublishLoading.isRunning()" id="confirmUnpublishShopModal" [message]="'Are you sure to unpublish the page?'" [action]="unpublishPage.bind(this)"></confirm-modal>
 <confirm-modal *ngIf="isConfirmCloseShopModalOpened" [(isOpened)]="isConfirmCloseShopModalOpened" id="confirmCloseShopModal" [message]="'Are you sure to close the page permanently?'" [action]="closePermanently.bind(this)"></confirm-modal>
 <confirm-modal *ngIf="isConfirmReactivateModalOpened" [(isOpened)]="isConfirmReactivateModalOpened" id="confirmReactivateModal" [message]="'Are you sure to reactivate the page?'" [action]="reactivateFromInactive.bind(this)"></confirm-modal>
