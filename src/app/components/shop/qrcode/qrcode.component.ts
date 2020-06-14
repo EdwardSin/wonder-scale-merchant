@@ -20,6 +20,7 @@ export class QrcodeComponent implements OnInit {
   loading: WsLoading = new WsLoading;
   isQrcodeLoading: WsLoading = new WsLoading;
   displayImage = '';
+  url = '';
   environment = environment;
   @ViewChild('urlInput', { static: true }) urlInput: ElementRef;
   @ViewChild('printContent', { static: true }) printContent: ElementRef;
@@ -33,9 +34,7 @@ export class QrcodeComponent implements OnInit {
         if (result) {
           this.shop = result;
           this.displayImage = 'assets/images/png/dot.png';
-          if (this.shop.profileImage) {
-            this.displayImage = environment.IMAGE_URL + this.shop.profileImage;
-          }
+          this.url = environment.URL + 'shop/' + this.shop.username + '?id=' + this.shop.id;
         }
         this.loading.stop();
       })
@@ -60,7 +59,7 @@ export class QrcodeComponent implements OnInit {
         newImage.alt = 'profile-image';
         newImage.src = dataUrl;
         newImage.addEventListener('load', e => {
-          QRCodeBuilder.createQRcode('.qrcode', this.shop.username, { width: this.qrSize, height: this.qrSize})
+          QRCodeBuilder.createQRcode('.qrcode', this.url,{ width: this.qrSize, height: this.qrSize})
           .then(() => {
             this.renderProfileImageToQrcode(newImage);
             this.isQrcodeLoading.stop();

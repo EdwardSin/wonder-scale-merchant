@@ -28,6 +28,7 @@ export class ImportItemsModalComponent extends WsModalComponent implements OnIni
   isEmptyField: boolean;
   isStockValid: boolean;
   isNumberValid: boolean;
+  isNameMaxLengthValid: boolean;
   isMaxLengthValid: boolean;
   maxWidth: number = 800;
   upload_obj;
@@ -36,6 +37,7 @@ export class ImportItemsModalComponent extends WsModalComponent implements OnIni
   invalidHeadersErrors = [];
   emptyFieldsErrors = [];
   numberFieldsErrors = [];
+  nameMaxLengthErrors = [];
   maxLengthErrors = [];
   isUploadLoading: WsLoading = new WsLoading;
   isPreviewLoading: WsLoading = new WsLoading;
@@ -85,7 +87,7 @@ export class ImportItemsModalComponent extends WsModalComponent implements OnIni
       this.ref.detectChanges();
       let wb = read(data, { type: 'array', raw: true });
       let sheet = wb.Sheets[wb.SheetNames[0]];
-      let htmlstr = XLSX.utils.sheet_to_html(sheet, {editable: true});
+      let htmlstr = XLSX.utils.sheet_to_html(sheet, {editable: false});
       try {
         this.isValidated(wb);
       }
@@ -104,6 +106,9 @@ export class ImportItemsModalComponent extends WsModalComponent implements OnIni
       if (!this.isNumberValid) {
         $(this.numberFieldsErrors.join(', ')).css({ 'background-color': '#33b5e5' });
       }
+      if (!this.isNameMaxLengthValid) {
+        $(this.nameMaxLengthErrors.join(', ')).css({ 'background-color': '#e58341' });
+      }
       if (!this.isMaxLengthValid) {
         $(this.maxLengthErrors.join(', ')).css({ 'background-color': '#6699ff' });
       }
@@ -121,16 +126,18 @@ export class ImportItemsModalComponent extends WsModalComponent implements OnIni
     this.invalidHeadersErrors = this.getInvalidHeader(sheet);
     this.emptyFieldsErrors = this.getEmptyFields(rows);
     this.numberFieldsErrors = this.getInvalidNumberFields(rows);
+    this.nameMaxLengthErrors = this.getNameMaxLengthFields(rows);
     this.maxLengthErrors = this.getMaxLengthFields(rows);
     this.isRowExistance = rows.length > 0;
     this.isHeaderValid = !this.invalidHeadersErrors.length;
     this.isEmptyField = !this.emptyFieldsErrors.length;
     this.isNumberValid = !this.numberFieldsErrors.length;
+    this.isNameMaxLengthValid = !this.nameMaxLengthErrors.length;
     this.isMaxLengthValid = !this.maxLengthErrors.length;
-    return this.isHeaderValid && this.isEmptyField && this.isNumberValid && this.isMaxLengthValid;
+    return this.isHeaderValid && this.isEmptyField && this.isNumberValid && this.isNameMaxLengthValid && this.isMaxLengthValid;
   }
   isUploadValid() {
-    return this.isRowExistance && this.isHeaderValid && this.isEmptyField && this.isNumberValid && this.isMaxLengthValid;
+    return this.isRowExistance && this.isHeaderValid && this.isEmptyField && this.isNumberValid && this.isNameMaxLengthValid && this.isMaxLengthValid;
   }
   getInvalidHeader(sheet) {
     let errors = [];
@@ -167,6 +174,16 @@ export class ImportItemsModalComponent extends WsModalComponent implements OnIni
       let row = rows[i];
       if (typeof row['C'] != 'number') {
         errors.push('#sjs-C' + (i + 2));
+      }
+    }
+    return errors;
+  }
+  getNameMaxLengthFields(rows) {
+    let errors = [];
+    for (let i = 0; i < rows.length; i++) {
+      let row = rows[i];
+      if (row['B'] && row['B'].length > 128) {
+        errors.push('#sjs-B' + (i + 2));
       }
     }
     return errors;

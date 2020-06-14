@@ -56,6 +56,8 @@ export class AboutComponent implements OnInit {
   isShopClosable: boolean;
   element: string;
   loading: WsLoading = new WsLoading;
+  isPublishLoading: WsLoading = new WsLoading;
+  isUnpublishLoading: WsLoading = new WsLoading;
   refreshLoading: WsLoading = new WsLoading;
   address: Address = new Address;
   timetable: Timetable = new Timetable;
@@ -91,6 +93,8 @@ export class AboutComponent implements OnInit {
   bannerImageFile;
   previewImage;
   croppieObj;
+  isConfirmUnpublishedModalOpened: boolean;
+  isConfirmPublishedModalOpened: boolean;
   isConfirmCloseShopModalOpened: boolean;
   isConfirmReactivateModalOpened: boolean;
   isConfirmQuitShopModalOpened: boolean;
@@ -454,6 +458,31 @@ export class AboutComponent implements OnInit {
       }, err => {
         WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
       })
+  }
+  publishPage() {
+    this.isPublishLoading.start();
+    this.authShopAdminService.publishPage()
+    .pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.isPublishLoading.stop())).subscribe(result => {
+      this.shop.isPublished = true;
+      this.sharedShopService.shop.next(this.shop);
+      this.isConfirmPublishedModalOpened = false;
+      WsToastService.toastSubject.next({content: result['message'], type: 'success'});
+    }, err => {
+      WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
+    });
+  }
+  unpublishPage() {
+    this.isUnpublishLoading.start();
+    this.authShopAdminService.unpublishPage()
+    .pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.isUnpublishLoading.stop()))
+    .subscribe(result => {
+      this.shop.isPublished = false;
+      this.sharedShopService.shop.next(this.shop);
+      this.isConfirmUnpublishedModalOpened = false;
+      WsToastService.toastSubject.next({ content: result['message'], type: 'success' });
+    }, err => {
+      WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
+    });
   }
   openEditContributorModal(contributor) {
     this.isEditContributorModalOpened = true;

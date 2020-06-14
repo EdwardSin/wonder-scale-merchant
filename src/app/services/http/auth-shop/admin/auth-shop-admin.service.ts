@@ -25,6 +25,12 @@ export class AuthShopAdminService {
   removeContributor(obj) {
     return this.http.put(AuthShopAdminUrl.removeContributorUrl, obj, this.accessTokenService.getAccessToken());
   }
+  publishPage() {
+    return this.http.put(AuthShopAdminUrl.publishPageUrl, {}, this.accessTokenService.getAccessToken());
+  }
+  unpublishPage() {
+    return this.http.put(AuthShopAdminUrl.unpublishPageUrl, {}, this.accessTokenService.getAccessToken());
+  }
   closePermanently() {
     return this.http.put(AuthShopAdminUrl.closePermanentlyUrl, {}, this.accessTokenService.getAccessToken());
   }

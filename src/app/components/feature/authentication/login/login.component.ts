@@ -156,9 +156,15 @@ export class LoginComponent implements OnInit {
   }
 
   getReturnUrl() {
-    let returnUrl = this.route.snapshot.queryParams['returnUrl']
+    let returnUrl = this.route.snapshot.queryParams['returnUrl'];
+    let preview = this.route.snapshot.queryParams['preview'];
+    let id = this.route.snapshot.queryParams['id'];
+    let username = this.route.snapshot.params['username'];
     if (returnUrl !== undefined) {
       return returnUrl;
+    }
+    if (preview == 'true' && id) {
+      return '/shop/' + username + '?id=' + id + '&preview=true';
     }
     return environment.RETURN_URL;
   }
