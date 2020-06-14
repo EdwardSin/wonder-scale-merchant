@@ -14,6 +14,7 @@ import { SharedNavbarService } from '@services/shared/shared-nav-bar.service';
 import { SharedCategoryService } from '@services/shared/shared-category.service';
 import { Currency } from '@objects/currency';
 import { ScreenService } from '@services/general/screen.service';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'item-view',
@@ -34,9 +35,8 @@ export class ItemViewComponent implements OnInit {
   displayItems: Item[] = [];
   editItems: Item[] = [];
   columns: Array<string> = [];
-  isNavOpen: Boolean = false;
+  statusItems: Array<string> = [];
   total: number = 0;
-  currentPage: number = 1;
   private ngUnsubscribe: Subject<any> = new Subject();
 
 
@@ -58,7 +58,6 @@ export class ItemViewComponent implements OnInit {
     this.param = this.route.snapshot['url'] && this.route.snapshot['url'][0] && this.route.snapshot['url'][0]['path'];
     this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe(queryParams => {
       this.display = queryParams['display'] || 'list';
-      this.currentPage = queryParams['page'] || 1;
       this.ref.detectChanges();
     })
     this.sharedShopService.shop.pipe(takeUntil(this.ngUnsubscribe))
@@ -112,26 +111,37 @@ export class ItemViewComponent implements OnInit {
     .subscribe(result => {
       this.selectedCurrencyCode = result;
     });
-    this.sharedNavbarService.isNavSubject.pipe(takeUntil(this.ngUnsubscribe))
-    .subscribe(res => {
-      this.isNavOpen = res;
-      this.ref.detectChanges();
-    });
+    
     this.sharedItemService.shownColumns.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       this.columns = result;
       this.ref.detectChanges();
     });
+    this.sharedItemService.shownStatusItems.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+      this.statusItems = result;
+      this.ref.detectChanges();
+    });
   }
-  selectAll() {
-    this.sharedItemService.selectAll();
+  selectItems() {
+    this.sharedItemService.selectItems();
   }
-  deselectAll() {
-    this.sharedItemService.deselectAll();
+  deselectItems() {
+    this.sharedItemService.deselectItems();
   }
-
-
   addToItemList(item) {
     this.sharedItemService.addToItemList(item);
+  }
+  isAllInclude(){
+    let items = this.editItems.filter(item => this.displayItems.find(_item => _item._id == item._id));
+    return items.length == this.displayItems.length;
+  }
+  triggerStatusItem(value) {
+    if (this.statusItems.includes(value)) {
+      this.statusItems = this.statusItems.filter(x => x != value);
+    } else {
+      this.statusItems.push(value);
+    }
+    sessionStorage.setItem('shownStatusItems', JSON.stringify(this.statusItems));
+    this.sharedItemService.shownStatusItems.next(this.statusItems);
   }
 
   isInclude(it) {
@@ -145,8 +155,17 @@ export class ItemViewComponent implements OnInit {
   trackByFn(index, item) {
     return index;
   }
-  navigate(event) {
-    this.router.navigate([], { queryParams: {page: event}, queryParamsHandling: 'merge' });
+  totalNoImages(item) {
+    let profileImages = item.profileImages || [];
+    let descriptionImages = item.descriptionImages || [];
+    let noOfItemTypeImages = 0;
+    if (item.types && item.types.length) {
+      noOfItemTypeImages = _.sumBy(item.types, function (type) {
+        let images = type.images || [];
+        return images.length;
+      });
+    }
+    return profileImages.length + descriptionImages.length + noOfItemTypeImages;
   }
   ngOnDestroy() {
     this.ngUnsubscribe.next();

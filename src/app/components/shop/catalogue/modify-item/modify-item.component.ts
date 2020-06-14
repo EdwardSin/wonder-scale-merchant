@@ -220,15 +220,17 @@ export class ModifyItemComponent implements OnInit {
       ...this.currentItem,
       ...this.itemGroup.value,
       profileImageIndex: this.profileImageIndex
-    };
+    },
+    allProfileItems = [],
+    allDescriptionItems = [];
     if (this.allProfileItems.length) {
-       let allProfileItems = this.allProfileItems.filter(x => x.type == 'url');
-       currentItem.profileImages = allProfileItems.map(x => x.name);
+       allProfileItems = this.allProfileItems.filter(x => x.type == 'url');
     }
     if (this.allDescriptionItems.length) {
-       let allDescriptionItems = this.allDescriptionItems.filter(x => x.type == 'url');
-       currentItem.descriptionImages = allDescriptionItems.map(x => x.name);
+       allDescriptionItems = this.allDescriptionItems.filter(x => x.type == 'url');
     }
+    currentItem.profileImages = allProfileItems.map(x => x.name);
+    currentItem.descriptionImages = allDescriptionItems.map(x => x.name);
     return this.authItemContributorService.editItem(currentItem);
   }
   uploadAndAddItem() {

@@ -70,3 +70,15 @@
     border: 0;
     box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.31) 0px 0px 1px;
 }
+.dropdown.show .dropdown-menu {
+    transition-duration: .2s !important;
+    transition-property: opacity !important;
+}
+
+@media (max-width: 992px) {
+    .pagination {
+        .pagination__chevron-container {
+        width: calc(100%);
+        }
+    }
+}

@@ -9,7 +9,8 @@ import { WsLoading } from '@elements/ws-loading/ws-loading';
 import { DocumentHelper } from '@helpers/documenthelper/document.helper';
 import { Subject, combineLatest, Observable, Subscription, timer } from 'rxjs';
 import { takeUntil, switchMap, debounce, debounceTime, tap, delay, share, finalize, bufferTime, map } from 'rxjs/operators';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { SharedNavbarService } from '@services/shared/shared-nav-bar.service';
 
 @Component({
   selector: 'app-all-items',
@@ -23,25 +24,35 @@ export class AllItemsComponent implements OnInit {
   environment = environment;
   queryParams = { page: 1, keyword: '', order: '', orderBy: 'asc' };
   numberOfAllItems = 0;
+  numberOfCurrentTotalItems = 0;
+  isNavOpen: Boolean = false;
+  editItems: Item[] = [];
+  currentPage: number = 1;
   shop_id: string;
   private ngUnsubscribe: Subject<any> = new Subject();
   getAllItemsSubscribe: Subscription = new Subscription();
   constructor(
+    private router: Router,
     private ref: ChangeDetectorRef,
     private route: ActivatedRoute,
     private authItemContributorService: AuthItemContributorService,
     private sharedItemService: SharedItemService,
+    private sharedNavbarService: SharedNavbarService,
     private sharedCategoryService: SharedCategoryService,
     private sharedShopService: SharedShopService) {
   }
 
   ngOnInit() {
     let shop_name = this.sharedShopService.shop_name;
+    this.sharedItemService.editItems.next([]);
+    this.sharedCategoryService.numberOfCurrentTotalItems.next(0);
     DocumentHelper.setWindowTitleWithWonderScale('All - ' + shop_name);
     this.loading.start();
     this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe(queryParam => {
       if (this.queryParams.keyword != queryParam.s_keyword || this.queryParams.page != queryParam.page || this.queryParams.order != queryParam.order || this.queryParams.orderBy != queryParam.by) {
+        this.currentPage = queryParam['page'] || 1;
         this.queryParams = { keyword: queryParam['s_keyword'], page: queryParam['page'], order: queryParam['order'], orderBy: queryParam['by'] };
+        this.getAllItemsSubscribe.unsubscribe();
         this.getAllItems(this.queryParams.keyword, this.queryParams.page, this.queryParams.order, this.queryParams.orderBy);
       }
     });
@@ -57,12 +68,29 @@ export class AllItemsComponent implements OnInit {
       .subscribe(res => {
         this.numberOfAllItems = res;
       })
+    this.sharedCategoryService.numberOfCurrentTotalItems.pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(res => {
+        this.numberOfCurrentTotalItems = res;
+        this.ref.detectChanges();
+      })
+    this.sharedNavbarService.isNavSubject.pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(res => {
+        this.isNavOpen = res;
+        this.ref.detectChanges();
+      });
+    this.sharedItemService.editItems.pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(res => {
+        if (res) {
+          this.editItems = res;
+          this.ref.detectChanges();
+        }
+      })
   }
   getAllItems(keyword = '', page = 1, order = 'alphabet', orderBy, isLoading = true) {
     if (isLoading) {
       this.loading.start();
     }
-    combineLatest(timer(500), this.authItemContributorService.getAuthenticatedAllItemsByShopId({ keyword, page, order, orderBy }))
+    this.getAllItemsSubscribe = combineLatest(timer(500), this.authItemContributorService.getAuthenticatedAllItemsByShopId({ keyword, page, order, orderBy }))
       .pipe(takeUntil(this.ngUnsubscribe),
         map(x => x[1]),
         finalize(() => { this.loading.stop(); }))
@@ -72,6 +100,12 @@ export class AllItemsComponent implements OnInit {
         this.sharedCategoryService.numberOfCurrentTotalItems.next(result['total']);
         this.ref.detectChanges();
       });
+  }
+  navigate(event) {
+    this.router.navigate([], { queryParams: {page: event}, queryParamsHandling: 'merge' });
+  }
+  deselectAll() {
+    this.sharedItemService.deselectAll();
   }
   ngOnDestroy() {
     this.ngUnsubscribe.next();

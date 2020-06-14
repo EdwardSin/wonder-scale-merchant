@@ -96,10 +96,10 @@ export class MainComponent implements OnInit {
 
   ngOnInit() {
     this.shop_username = this.route.snapshot.params['username'];
+    this.isNavOpen = !ScreenHelper.isMobileSize();
     this.router.events.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(event => {
         if (event instanceof NavigationEnd) {
-          this.sharedItemService.editItems.next([]);
           if (this.isMobileSize) {
             this.isNavOpen = false;
             this.sharedNavbarService.isNavSubject.next(this.isNavOpen);
@@ -111,10 +111,8 @@ export class MainComponent implements OnInit {
         }
       })
     this.screenService.isMobileSize.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
-      this.isMobileSize = result; 
-      this.isNavOpen = true;
+      this.isMobileSize = result;
       if (this.isMobileSize) {
-        this.isNavOpen = false;
         this.sharedNavbarService.isNavSubject.next(this.isNavOpen);
       }
     })
@@ -345,7 +343,7 @@ export class MainComponent implements OnInit {
   isLinkActive(url): boolean {
     const queryParamsIndex = this.router.url.indexOf('?');
     const baseUrl = queryParamsIndex === -1 ? this.router.url : this.router.url.slice(0, queryParamsIndex);
-    return baseUrl === url;
+    return decodeURIComponent(baseUrl) === url;
  }
   ngOnDestroy() {
     this.ngUnsubscribe.next();

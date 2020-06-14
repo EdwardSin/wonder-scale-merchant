@@ -1,11 +1,10 @@
 <div class="main-div-mobile-block" [class.is-closed]="isMobileSize"></div>
-
-<div [style.top]="offsetHeight + 'px'" class="main-nav" [class.is-slided]="!isNavOpen"
-  [class.is-closed]="isMobileSize && !isNavOpen">
+<div [style.top]="offsetHeight + 'px'" class="main-nav" [class.is-slided]="!isMobileSize && !isNavOpen" [class.is-closed]="!isNavOpen">
   <div class="main-nav-background">
     <div class='main-nav-list' [class.nav-closed]="!isNavOpen">
       <ng-content select="['.ws-main-nav-list']"></ng-content>
     </div>
+    <div style="padding-top: 50px"></div>
     <a *ngIf="!isMobileSize" href="javascript: void(0)" class="main-nav-arrow" [class.is-closed]="!isNavOpen"
       (click)="isNavOpen = !isNavOpen">
       <span [ngClass]="isNavOpen? 'fa-angle-double-left': 'fa-angle-double-right'" class="fas"></span><span

@@ -2,6 +2,44 @@
 - Wonder Scale Merchant                     -
 ---------------------------------------------
 
+- v1.0.1011                                 -
+---------------------------------------------
+- 2020-06-14                                -
+---------------------------------------------
+.: WSM: Task: Action icon UI (WSM-131)
+.: WSM: Task: Navigation is closed when click on add new category input (WSM-132)
+.: WSM: Task: Add publish button in setting (WSM-118)
+.: WSM: Task: Prevent empty page when page number more than 1 (WSM-111)
+.: WSM: Task: Selected items mobile UI issue (WSM-110)
+.: WSM: Task: Upload maximum length of items (WSM-134)
+
+---------------------------------------------
+- 2020-06-13                                -
+---------------------------------------------
+.: WSM: Task: Improvement: Item list image indicator (WSM-124)
+.: WSM: Task: Customize item status (WSM-103)
+.: WSM: Task: CLONE - Add Item Type Concept into website (WSM-129)
+.: WSM: Task: Label import excel files (WSM-123)
+.: WSM: Task: Adding component displayed preview (WSM-77)
+.: WSM: Task: CLONE - Change profile bezel (WSM-130)
+
+---------------------------------------------
+- 2020-06-12                                -
+---------------------------------------------
+.: WSM: Task: Add a number of selections in item controller (WSM-110)
+.: WSM: Task: Order by id (WSM-117)
+.: WSM: Task: Multiple page selections (WSM-111)
+.: WSM: Task: Change advertisement image to other name (WSM-107)
+
+---------------------------------------------
+- 2020-06-11                                -
+---------------------------------------------
+.: WSM: Task: Loading top bar (WSM-116)
+.: WSM: BugFix: Shop not found if username has changed when scan qr code (WSM-121)
+.: WSM: Task: Remove icon in QR code (WSM-126)
+.: WSM: Task: Got black background when upload transparent png image (WSM-109)
+.: WSM: Task: Unpublish page to not show to public (WSM-118)
+
 - v1.0.1010                                 -
 ---------------------------------------------
 - 2020-06-07                                -

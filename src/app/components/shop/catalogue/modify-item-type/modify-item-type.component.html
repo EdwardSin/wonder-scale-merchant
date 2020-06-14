@@ -52,7 +52,7 @@
                             <img src="{{environment.IMAGE_URL + image?.name}}" class="image-upload" alt="item.png" />
                             <div class="corner-setting">
                               <span class="corner-setting-item fas fa-times" (click)="$event.stopPropagation();removeItemTypeImage(image?.name, 
-                              itemTypesForm.controls.itemTypes.get(i),
+                              itemTypesForm.controls.itemTypes['controls'][i],
                         itemTypesForm.controls.itemTypes.value[i])"></span>
                             </div>
                           </div>
@@ -68,7 +68,7 @@
                             <img [src]="image?.url" data-upload='img_upload' class="image-upload" alt="item.png" />
                             <div class="corner-setting">
                               <span class="corner-setting-item fas fa-times" (click)="$event.stopPropagation();removeItemTypeImage(image?.name, 
-                              itemTypesForm.controls.itemTypes.get(i),
+                              itemTypesForm.controls.itemTypes['controls'][i],
                         itemTypesForm.controls.itemTypes.value[i])"></span>
                             </div>
                           </div>
@@ -116,7 +116,7 @@
                         <div class="input-group-prepend" style="width: 100px">
                           <span>Price</span>
                         </div>
-                        <input class="form-control form-control-sm" tabIndex="1" placeholder="Blank to use default"
+                        <input class="form-control form-control-sm" tabIndex="1" placeholder="Blank to use default price"
                           formControlName="price" />
                       </div>
                     </div>
@@ -127,7 +127,7 @@
                         <div class="input-group-prepend" style="width: 100px">
                           <span>Discount (%)</span>
                         </div>
-                        <input class="form-control form-control-sm" tabIndex="1" placeholder="Blank to use default"
+                        <input class="form-control form-control-sm" tabIndex="1" placeholder="Blank to use default discount"
                           formControlName="discount" />
                       </div>
                     </div>
@@ -138,7 +138,7 @@
                         <div class="input-group-prepend" style="width: 100px">
                           <span>Quantity</span>
                         </div>
-                        <input class="form-control form-control-sm" tabIndex="1" placeholder="Blank to use default"
+                        <input class="form-control form-control-sm" tabIndex="1" placeholder="Blank to use default quantity"
                           formControlName="quantity" />
                       </div>
                     </div>
@@ -149,7 +149,7 @@
                         <div class="input-group-prepend" style="width: 100px">
                           <span>Weight (kg)</span>
                         </div>
-                        <input class="form-control form-control-sm" tabIndex="1" placeholder="Blank to use default"
+                        <input class="form-control form-control-sm" tabIndex="1" placeholder="Blank to use default weight"
                           formControlName="weight" />
                       </div>
                     </div>

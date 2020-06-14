@@ -1,9 +1,8 @@
 <h4 class="ws-title">About</h4>
 <div class="row no-gutters center" style="width: fit-content">
-    <div class="col-lg-auto mb-3">
+    <div class="col-lg-auto mt-3 order-12 order-lg-1">
         <div *ngIf="!isMobileSize" class="img-profile__container">
             <img class="img-profile__profile" [src]="profileImage" alt="profile-image" />
-            <img class="img-profile__profile-background my-1 center" src="assets/images/png/icon-with-profile-image-borderless.png" alt="profile-background" />
             <p class="img-profile__name mb-0 text-break">{{ shop?.name }}</p>
             <p class="img-profile__username mb-0">@{{ shop?.username }}</p>
         </div>
@@ -29,7 +28,7 @@
             </span>
         </span>
     </div>
-    <div class="banner-image-container">
+    <div class="col-lg banner-image-container order-1 order-lg-12">
         <div class="hover p-3">
             <div class="profile-settings__profile-image-upload" mdbDropdown>
                 <label *ngIf="!isBannerImageUploading.isRunning()" class="btn-upload btn-upload-camera mr-2" mdbDropdownToggle>
@@ -149,7 +148,7 @@
                     </tr>
                     <tr>
                         <td class="pr-3">
-                            <span>Mark as offer</span>
+                            <span>Mark as discount</span>
                         </td>
                         <td class="pt-1 text-right">
                             <mat-checkbox [color]="'primary'" formControlName="isOffer"></mat-checkbox>
@@ -319,30 +318,42 @@
     <div class="settings-header">
         <h4 class="ws-subtitle mb-3">Advanced</h4>
         <button class="btn btn-expand float-right" (click)="isAdvancedExpanded = !isAdvancedExpanded">Expand</button>
-        <p>Perform advanced options such as removing your shop.</p>
+        <p>Perform advanced options such as unpublishing, quit or removing your page.</p>
         <div [@expand]="'down'" *ngIf="isAdvancedExpanded" style="height: 100%">
-            <form *ngIf="isAdminAuthorized" class="mb-3">
+            <form *ngIf="isAdminAuthorized">
+                <p *ngIf="!shop?.isPublished" class="alert alert-secondary ws-bg-light-grey-4 mb-1" style="font-size: .9rem">
+                <button class="btn btn-primary btn-sm m-0 mb-2" (click)="isConfirmPublishedModalOpened = true">Publish Page</button>
+                    <br />
+                    Published page to start showing in public.
+                </p>
+                <p *ngIf="shop?.isPublished" class="alert alert-secondary ws-bg-light-grey-4 mb-1" style="font-size: .9rem">
+                    <button class="btn btn-secondary btn-sm m-0 mb-2" (click)="isConfirmUnpublishedModalOpened = true">Unpublish Page</button>
+                    <br />
+                    Unpublished page will not be shown to public.
+                    <br />
+                    You can unpublish your page to do maintenance.
+                </p>
                 <p *ngIf="shop?.status?.status == 'closed' && timeDifference > 0" class="alert alert-secondary ws-bg-light-grey-4 mb-1" style="font-size: .9rem">
                     <button *ngIf="shop.status.status == 'closed' && timeDifference > 0" class="btn btn-primary btn-sm m-0 mb-2" (click)="isConfirmReactivateModalOpened = true">Reactivate</button>
                     <br />
-                    Shop will be removed permanently <span class="text-danger font-weight-bold">{{timeDifferenceString}}</span>.
+                    Page will be removed permanently <span class="text-danger font-weight-bold">{{timeDifferenceString}}</span>.
                     <br />
-                    You can reactivate anytime before shop is removed permanently.
+                    You can reactivate anytime before page is removed permanently.
                 </p>
                 <p *ngIf="shop?.status?.status != 'closed'" class="alert alert-secondary ws-bg-light-grey-4 mb-1" style="font-size: .9rem">
                     <button *ngIf="shop.status.status != 'closed'" class="btn btn-sm btn-danger m-0 mb-2" (click)="isConfirmCloseShopModalOpened = true">Remove
-                        Shop Permanently</button>
+                        Page Permanently</button>
                     <br />
-                    You can reactivate shop within 1 hour.<br>
-                    Shop will not be displayed to public.</p>
+                    You can reactivate page within 1 hour.<br>
+                    Page will not be displayed to public.</p>
             </form>
 
             <form class="mb-3">
                 <p class="alert alert-secondary ws-bg-light-grey-4 mb-1" style="font-size: .9rem">
-                    <button class="btn btn-warning btn-sm m-0 mb-2" (click)="isConfirmQuitShopModalOpened = true">Leave Shop</button>
+                    <button class="btn btn-warning btn-sm m-0 mb-2" (click)="isConfirmQuitShopModalOpened = true">Leave Page</button>
                     <br />
-                    All contributors can leave the shop.<br />
-                    At least 1 admin should be in the shop.
+                    All contributors can leave the page.<br />
+                    At least 1 admin should be in the page.
                 </p>
             </form>
         </div>
@@ -354,9 +365,11 @@
     </div> -->
 </div>
 <edit-contributor-modal *ngIf="isEditContributorModalOpened" [contributorController]="contributorController" [(isOpened)]="isEditContributorModalOpened" id="editModal"></edit-contributor-modal>
-<confirm-modal *ngIf="isConfirmCloseShopModalOpened" [(isOpened)]="isConfirmCloseShopModalOpened" id="confirmCloseShopModal" [message]="'Are you sure to close the shop permanently?'" [action]="closePermanently.bind(this)"></confirm-modal>
-<confirm-modal *ngIf="isConfirmReactivateModalOpened" [(isOpened)]="isConfirmReactivateModalOpened" id="confirmReactivateModal" [message]="'Are you sure to reactivate the shop?'" [action]="reactivateFromInactive.bind(this)"></confirm-modal>
-<confirm-modal *ngIf="isConfirmQuitShopModalOpened" [(isOpened)]="isConfirmQuitShopModalOpened" id="confirmQuitShopModal" [message]="'Are you sure to quit the shop?'" [action]="quitShop.bind(this)">
+<confirm-modal *ngIf="isConfirmPublishedModalOpened" [(isOpened)]="isConfirmPublishedModalOpened" [loading]="isPublishLoading.isRunning()" id="confirmPublishShopModal" [message]="'Are you sure to publish the page?'" [action]="publishPage.bind(this)"></confirm-modal>
+<confirm-modal *ngIf="isConfirmUnpublishedModalOpened" [(isOpened)]="isConfirmUnpublishedModalOpened" [loading]="isUnpublishLoading.isRunning()" id="confirmUnpublishShopModal" [message]="'Are you sure to unpublish the page?'" [action]="unpublishPage.bind(this)"></confirm-modal>
+<confirm-modal *ngIf="isConfirmCloseShopModalOpened" [(isOpened)]="isConfirmCloseShopModalOpened" id="confirmCloseShopModal" [message]="'Are you sure to close the page permanently?'" [action]="closePermanently.bind(this)"></confirm-modal>
+<confirm-modal *ngIf="isConfirmReactivateModalOpened" [(isOpened)]="isConfirmReactivateModalOpened" id="confirmReactivateModal" [message]="'Are you sure to reactivate the page?'" [action]="reactivateFromInactive.bind(this)"></confirm-modal>
+<confirm-modal *ngIf="isConfirmQuitShopModalOpened" [(isOpened)]="isConfirmQuitShopModalOpened" id="confirmQuitShopModal" [message]="'Are you sure to quit the page?'" [action]="quitShop.bind(this)">
 </confirm-modal>
 
 <ws-modal *ngIf="isProfileUploaderOpened" [isCloseIconDisplayed]="false" [(isOpened)]="isProfileUploaderOpened" [maxWidth]="400">

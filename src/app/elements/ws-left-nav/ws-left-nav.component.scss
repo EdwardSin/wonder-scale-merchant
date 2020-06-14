@@ -13,11 +13,11 @@
     overflow-x: hidden;
     white-space: nowrap;
     background-color: #fafafa;
+    &.is-closed {
+        width: 0px;
+    }
     &.is-slided {
         width: 50px;
-    }
-    &.is-closed {
-        width: 0px !important;
     }
     .main-nav-background {
         width: 100%;
@@ -147,7 +147,7 @@
             }
         }
         .main-nav-list {
-            height: calc(100vh - 50px);
+            height: 100%;
         }
     }
     .main-wrapper{

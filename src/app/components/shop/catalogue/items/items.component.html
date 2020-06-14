@@ -16,6 +16,8 @@
     <item-view></item-view>
   </div>
 </div>
+<ws-pagination *ngIf="numberOfCurrentTotalItems" [expanded]="isNavOpen" [currentPage]="currentPage" [numberOfSelectedItems]="editItems.length" 
+            [pageSize]="environment.ITEMS_PER_PAGE" [dbTotal]="numberOfItems" [total]="numberOfCurrentTotalItems" (deselectAll)="deselectAll()" (getPageNumber)="navigate($event)"></ws-pagination>
 <ng-template #noItem>
   <ng-container *ngIf="categoryFound; else noCategoryFound">
     <div class="text-center">
@@ -26,7 +28,7 @@
 
 <ng-template #noSearchItem>
   <div class="text-center">
-    <h6 class="py-5">No items found.</h6>
+    <h6 class="py-5">No item found.</h6>
   </div>
   <!-- <notitle [titles]="['no.found_item']"></notitle> -->
 </ng-template>
@@ -44,7 +46,7 @@
 </ng-template>
 
 <ng-template #noCategoryFound>
-  <h4 class="mt-5 mb-5 text-center">No item found!!</h4>
+  <h4 class="mt-5 mb-5 text-center">No item found.</h4>
 </ng-template>
 
 <!-- <import-items-modal id="importItemsModal"></import-items-modal> -->

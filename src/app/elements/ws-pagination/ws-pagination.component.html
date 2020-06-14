@@ -1,8 +1,19 @@
+<div *ngIf="numberOfSelectedItems > 0" class="d-sm-none d-block" style="padding-top: 40px"></div>
+<div *ngIf="numberOfSelectedItems > 0" class="d-block d-sm-none pagination__selected-items__no">
+  <span *ngIf="numberOfSelectedItems && numberOfSelectedItems != dbTotal" class="pagination__selected-item-info col">{{ numberOfSelectedItems }} item<span *ngIf="numberOfSelectedItems > 1">s</span> selected <span (click)="deselectAll.emit($event)" class="pagination__remove fas fa-times"></span></span>
+  <span *ngIf="numberOfSelectedItems && numberOfSelectedItems == dbTotal" class="pagination__selected-item-info col">({{numberOfSelectedItems}}) All items are selected <span (click)="deselectAll.emit($event)" class="pagination__remove fas fa-times"></span></span>
+</div>
 <div class="pagination">
-    <div class="pagination__padding"></div>
-    <div class="pagination__chevron-container" [class.pagination__chevron-container__nav-open]="expanded">
+    <div class="pagination__chevron-container row no-gutters" [class.pagination__chevron-container__nav-open]="expanded">
       <span class="pagination__showing-info pl-3">Showing {{ ((currentPage-1) * pageSize) + 1}} to {{ currentDisplayTotal }} of  {{total}} entries</span>
-      <span (click)="setPage(+currentPage + 1)" class="pagination__chevron-left fas fa-chevron-right"></span>
-      <span (click)="setPage(+currentPage - 1)" class="pagination__chevron-right fas fa-chevron-left"></span>
+      <span *ngIf="numberOfSelectedItems == 0" class="col"></span>
+      <span class="d-inline-block d-sm-none col"></span>
+      <span *ngIf="numberOfSelectedItems && numberOfSelectedItems != dbTotal" class="d-none d-sm-inline-block pagination__selected-item-info col">{{ numberOfSelectedItems }} item<span *ngIf="numberOfSelectedItems > 1">s</span> selected <span (click)="deselectAll.emit($event)" class="pagination__remove fas fa-times"></span></span>
+      <span *ngIf="numberOfSelectedItems && numberOfSelectedItems == dbTotal" class="d-none d-sm-inline-block pagination__selected-item-info col">({{numberOfSelectedItems}}) All items are selected <span (click)="deselectAll.emit($event)" class="pagination__remove fas fa-times"></span></span>
+      <span *ngIf="currentPage != 1" (click)="setPage(+currentPage - 1)" class="pagination__chevron-right fas fa-chevron-left"></span>
+      <span *ngIf="currentPage == 1" class="pagination__chevron-right" style="pointer-events: none;"></span>
+      <span *ngIf="pager.totalPages > 1" class="pagination__showing-info px-2">{{ currentPage }} / {{ pager.totalPages }}</span>
+      <span *ngIf="currentPage != pager.totalPages" (click)="setPage(+currentPage + 1)" class="pagination__chevron-left fas fa-chevron-right"></span>
+      <span *ngIf="currentPage == pager.totalPages && pager.totalPages > 0" class="pagination__chevron-left" style="pointer-events: none;"></span>
     </div>
   </div>

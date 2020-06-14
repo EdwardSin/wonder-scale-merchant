@@ -73,6 +73,8 @@ export class ModifyItemTypeComponent implements OnInit {
       }
       form.patchValue(type);
       itemTypes.push(form);
+      itemTypes.controls[0]['controls']['price'].disable();
+      itemTypes.controls[0]['controls']['discount'].disable();
     });
   }
   uploadItemImages(allImages, images, itemTypeId) {
@@ -94,7 +96,6 @@ export class ModifyItemTypeComponent implements OnInit {
       }));
   }
   removeItemTypeImage(filename, itemTypeControl, itemType) {
-    console.log();
     var file = ImageHelper.getUploadProfileItem(itemType.images, filename);
     if (file) {
       if(file.type == 'blob') {

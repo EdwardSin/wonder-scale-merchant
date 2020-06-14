@@ -13,6 +13,8 @@ import { JwtModule, JWT_OPTIONS } from '@auth0/angular-jwt';
 import { LazyLoadImageModule } from 'ng-lazyload-image';
 import { SocialLoginModule, AuthServiceConfig, FacebookLoginProvider, GoogleLoginProvider } from 'angular-6-social-login';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NgProgressModule } from 'ngx-progressbar';
+import { NgProgressRouterModule } from 'ngx-progressbar/router';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -210,6 +212,8 @@ export function provideConfig() {
     DragDropModule,
     LazyLoadImageModule,
     SocialLoginModule,
+    NgProgressModule,
+    NgProgressRouterModule,
     MDBBootstrapModule.forRoot(),
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyBTVuemjzI8vqXoCPeJhtt0WgFQ9TNizLQ'
