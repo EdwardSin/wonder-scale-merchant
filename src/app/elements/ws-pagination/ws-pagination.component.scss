@@ -1,3 +1,22 @@
+.pagination__selected-items__no{
+  position: fixed;
+  bottom: 50px;
+  background-color: #282c35;
+  color: #fff;
+  left: 0;
+  width: 100%;
+  z-index: 1;
+  .pagination__selected-item-info{
+    line-height: 30px;
+    vertical-align: middle;
+    display: inline-block;
+    text-align: center;
+    font-size: .8rem;
+  }
+}
+.pagination__remove{
+  margin-left: .25rem;
+}
 .pagination{
     .pagination__chevron-container{
       height: 50px;
@@ -39,7 +58,6 @@
       }
       .pagination__remove {
         transition: transform ease .1s;
-        margin-left: .25rem;
         cursor: pointer;
         &:hover{
           transform: scale(1.5);
