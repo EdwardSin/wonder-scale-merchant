@@ -102,6 +102,11 @@ export class ItemControllerComponent implements OnInit {
     this.sharedItemService.displayItems.pipe(takeUntil(this.ngUnsubscribe)).subscribe(res => {
       if (res) {
         this.displayItems = res;
+        if(!this.displayItems.length) {
+          _.delay(() => {
+            this.router.navigate([], {queryParams: {page: 1}, queryParamsHandling: 'merge'});
+          }, 500);
+        }
       }
     })
     this.screenService.isMobileSize.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {

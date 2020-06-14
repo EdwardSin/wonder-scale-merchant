@@ -7,7 +7,7 @@ import * as _ from 'lodash';
     providedIn: 'root'
 })
 export class SharedItemService {
-    displayItems: BehaviorSubject<Item[]> = new BehaviorSubject<Item[]>([]);
+    displayItems: BehaviorSubject<Item[]> = new BehaviorSubject<Item[]>(null);
     editItems: BehaviorSubject<Item[]> = new BehaviorSubject<Item[]>([]);
     _columns = sessionStorage.getItem('shownColumns') || '["id", "name", "price", "discount", "uploaded_images", "status"]';
     _showsStatusItems = sessionStorage.getItem('shownStatusItems') || '["new", "discount", "published", "categorized"]';
