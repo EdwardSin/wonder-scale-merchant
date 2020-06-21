@@ -34,6 +34,7 @@ import { ModifyItemComponent } from '@components/shop/catalogue/modify-item/modi
 import { ModifyItemTypeComponent } from '@components/shop/catalogue/modify-item-type/modify-item-type.component';
 import { ShopGuard } from './shop.guard';
 import { TodaySpecialItemsComponent } from '@components/shop/catalogue/today-special-items/today-special-items.component';
+import { DashboardComponent } from '@components/shop/dashboard/dashboard.component';
 
 
 const routes: Routes = [{
@@ -93,7 +94,13 @@ const routes: Routes = [{
   resolve: { shop: ShopResolver },
   data: { title: 'username', breadcrumb: '{{username}}' },
   children: [
-    { path: '', redirectTo: 'catalogue', pathMatch: 'full' },
+    { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+    {
+      path: 'dashboard',
+      component: DashboardComponent,
+      canActivate: [ShopGuard],
+      data: {title: 'dashboard', breadcrumb: 'Dashboard'}
+    },
     {
       path: 'catalogue',
       component: CatalogueComponent,

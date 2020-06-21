@@ -4,7 +4,7 @@ import { SharedNavbarService } from '@services/shared/shared-nav-bar.service';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { ShopAuthorizationService } from '@services/http/general/shop-authorization.service';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { AuthShopAdminService } from '@services/http/auth-shop/admin/auth-shop-admin.service';
 import { ScreenService } from '@services/general/screen.service';
 import { environment } from '@environments/environment';
@@ -24,6 +24,7 @@ export class MainContainerComponent implements OnInit {
   isConfirmReactivateShopModalOpened: boolean;
   isMobileSize: boolean;
   isClear: boolean = true;
+  isCatalogueRoute: boolean;
   numberOfAllItems: number;
   environment = environment; 
   @ViewChild('alert', { static: true }) alert: ElementRef;
@@ -59,6 +60,12 @@ export class MainContainerComponent implements OnInit {
     this.sharedCategoryService.numberOfAllItems.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       this.numberOfAllItems = result;
     })
+    this.router.events.pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(event => {
+        if (event instanceof NavigationEnd) {
+          this.isCatalogueRoute = this.router.url.includes('/catalogue');
+        }
+    });
   }
   onNavbarOpen() {
     this.isNavOpen = !this.isNavOpen
