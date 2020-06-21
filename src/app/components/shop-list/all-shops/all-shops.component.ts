@@ -21,7 +21,9 @@ export class AllShopsComponent implements OnInit {
   constructor(private sharedUserService: SharedUserService,
     private sharedLoadingService: SharedLoadingService,
     private sharedShopService: SharedShopService,
-    private authShopUserService: AuthShopUserService) { }
+    private authShopUserService: AuthShopUserService) { 
+      sessionStorage.removeItem('qrcodeTipsClear');
+    }
 
   ngOnInit() {
     DocumentHelper.setWindowTitleWithWonderScale('Joined Shops');

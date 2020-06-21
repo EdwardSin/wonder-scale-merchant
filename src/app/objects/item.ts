@@ -19,4 +19,5 @@ export class Item {
     isOffer: boolean;
     priceAfterDiscount?: number;
     categories: string[];
+    isDiscountExisting: boolean;
 }

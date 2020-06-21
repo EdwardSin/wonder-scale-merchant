@@ -6,7 +6,7 @@
         You may click <a href="javascript:void(0)" (click)="publishPage()" class="font-weight-bold">here</a> to show to public once your page is ready.
       </div>
     </div>
-    <div *ngIf="!isClear && !shop?.isPublished && !numberOfAllItems" class="pt-3">
+    <div *ngIf="isCatalogueRoute && !isClear && !shop?.isPublished && !numberOfAllItems" class="pt-3">
       <div class="alert alert-warning alert-dismissible fade show font-8 mb-0" role="alert">
         Click on <span class="fas fa-upload px-2"></span> button to import items quickly.
         <button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="closeAlert()">

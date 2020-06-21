@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, ViewChildren, QueryList, ChangeDetectorRef } from '@angular/core';
 import { QRCodeBuilder } from '@builders/qrcodebuilder';
 import { SharedShopService } from '@services/shared/shared-shop.service';
 import { WsLoading } from '@elements/ws-loading/ws-loading';
@@ -8,6 +8,7 @@ import { takeUntil } from 'rxjs/operators';
 import * as $ from 'jquery';
 import { WsToastService } from '@elements/ws-toast/ws-toast.service';
 import { environment } from '@environments/environment';
+import { AuthTrackContributorService } from '@services/http/auth-shop/contributor/auth-track-contributor.service';
 
 @Component({
   selector: 'app-qrcode',
@@ -18,14 +19,38 @@ export class QrcodeComponent implements OnInit {
   shop;
   qrSize: number = 200;
   loading: WsLoading = new WsLoading;
-  isQrcodeLoading: WsLoading = new WsLoading;
+  isCreateQRcodeLoading: WsLoading = new WsLoading;
+  isEditQRcodeLoading: WsLoading = new WsLoading;
+  isRemovedQRcodeLoading: WsLoading = new WsLoading;
+  isQRcodeLoading: WsLoading = new WsLoading;
+  isActivateQRcodeLoading: WsLoading = new WsLoading;
+  isInactivateQRcodeLoading: WsLoading = new WsLoading;
   displayImage = '';
   url = '';
+  tracks = [];
+  selectedTrack;
+  newTrackName: string = '';
+  editTrackName: string = '';
+  isNewQRcodeOpened: boolean;
+  isEditQRcodeOpened: boolean;
+  isRemovedQRcodeOpened: boolean;
+  isActivateQRcodeOpened: boolean;
+  isInactivateQRcodeOpened: boolean;
+  isQRcodeOpened: boolean;
+  isInactiveExisted: boolean;
+  remainingCount: number;
+  isClear: boolean = sessionStorage.getItem('qrcodeTipsClear') == 'true';
+  purpose: string = '';
+  downloadURL: string = '';
   environment = environment;
   @ViewChild('urlInput', { static: true }) urlInput: ElementRef;
-  @ViewChild('printContent', { static: true }) printContent: ElementRef;
+  @ViewChild('downloadQRcode', {static: false}) downloadQRcode: ElementRef;
+  @ViewChildren('qrcode') qrcodes: QueryList<any>;
   private ngUnsubscribe: Subject<any> = new Subject;
-  constructor(private sharedShopService: SharedShopService, ) {
+  constructor(
+    private ref: ChangeDetectorRef,
+    private sharedShopService: SharedShopService, 
+    private authTrackContributor: AuthTrackContributorService) {
     this.loading.start();
     let shop_name = this.sharedShopService.shop_name;
     DocumentHelper.setWindowTitleWithWonderScale('QR Code - ' + shop_name);
@@ -40,29 +65,22 @@ export class QrcodeComponent implements OnInit {
       })
   }
   ngOnInit() {
-    this.renderQrcode();
+    this.getTracks();
   }
-  ngAfterViewInit() {
-  }
-  copyToPrint() {
-    let canvas = <HTMLCanvasElement>document.getElementById('canvas1');
-    (<HTMLImageElement>document.getElementById('copyimage')).src = canvas.toDataURL('image/png');
-  }
-  renderQrcode() {
-    this.isQrcodeLoading.start();
-    this.qrSize = Math.max(72, this.qrSize);
-    this.qrSize = Math.min(300, this.qrSize);
-    $('.qrcode').html('');
+  renderQrcode(target, url, size) {
+    $(target).html('');
+    size = Math.max(75, size);
+    size = Math.min(300, size);
+    this.qrSize = size;
     $(() => {
       QRCodeBuilder.toDataURL(this.displayImage, (dataUrl) => {
         let newImage = <HTMLImageElement>document.createElement('img');
         newImage.alt = 'profile-image';
         newImage.src = dataUrl;
         newImage.addEventListener('load', e => {
-          QRCodeBuilder.createQRcode('.qrcode', this.url,{ width: this.qrSize, height: this.qrSize})
+          QRCodeBuilder.createQRcode(target, url, {width: size, height: size})
           .then(() => {
-            this.renderProfileImageToQrcode(newImage);
-            this.isQrcodeLoading.stop();
+            this.renderProfileImageToQrcode(target, newImage, size);
           });
         });
       });
@@ -70,43 +88,166 @@ export class QrcodeComponent implements OnInit {
   }
   imageChangeEvent(event) {
     this.displayImage = event[0].url.changingThisBreaksApplicationSecurity;
-    this.renderQrcode();
   }
-  renderProfileImageToQrcode(image) {
-    let canvas = document.getElementById('canvas1');
-    let context =(<HTMLCanvasElement>canvas).getContext('2d');
-    let width = this.qrSize / 3 * 190 / 300;
-    let height = this.qrSize / 3 * 190 / 300;
-    let offsetyY = this.qrSize * 9 / 300;
-    let offsetX = this.qrSize/2 - width/2;
-    let offsetY = this.qrSize/2 - height/2 - offsetyY;
-    context.save();
-    context.beginPath();
-    context.arc(offsetX + width/2, offsetY + width/2, width/2, 0, 2*Math.PI);
-    context.fill();
-    context.clip();
-    context.drawImage(image, offsetX, offsetY, width, height);
-    context.restore();
+  renderProfileImageToQrcode(target, image, size) {
+    let canvas = $(target).find('canvas')[0];
+    if (canvas) {
+      let context =(<HTMLCanvasElement>canvas).getContext('2d');
+      let width = size / 3 * 190 / 300;
+      let height = size / 3 * 190 / 300;
+      let offsetyY = size * 9 / 300;
+      let offsetX = size/2 - width/2;
+      let offsetY = size/2 - height/2 - offsetyY;
+      context.save();
+      context.beginPath();
+      context.arc(offsetX + width/2, offsetY + width/2, width/2, 0, 2*Math.PI);
+      context.fill();
+      context.clip();
+      context.drawImage(image, offsetX, offsetY, width, height);
+      context.restore();
+    }
   }
-  copyURL() {
-    $('#urlInput').select();
+  copyURL(url) {
+    var tempInput = document.createElement("input");
+    tempInput.style.cssText = "position: absolute; left: -1000px; top: -1000px";
+    tempInput.value = url;
+    document.body.appendChild(tempInput);
+    tempInput.select();
     document.execCommand("copy");
+    document.body.removeChild(tempInput);
     WsToastService.toastSubject.next({ content: 'URL is copied!', type: 'success'});
   }  
-  downloadQrcode() {
+  download() {
     let elementQrcode = document.getElementById('id-qrcode');
-    let canvas = document.getElementById('canvas1');
-    let dataURL = (<HTMLCanvasElement>canvas).toDataURL('image/png');
-    (<HTMLLinkElement>elementQrcode).href = dataURL;
-    (<HTMLLinkElement>elementQrcode).click();
+    let canvas = $(this.downloadQRcode.nativeElement).find('canvas');
+    if (canvas.length) {
+      let dataURL = (<HTMLCanvasElement>canvas[0]).toDataURL('image/jpeg', 1.0);
+      (<HTMLLinkElement>elementQrcode).href = dataURL;
+      (<HTMLLinkElement>elementQrcode).click();
+    }
   }
-  printQrCode() {
-    const WindowPrt = window.open('', '', 'left=0,top=0,width=900,height=900,toolbar=0,scrollbars=0,status=0');
-    WindowPrt.document.write(this.printContent.nativeElement.innerHTML);
-    WindowPrt.document.close();
-    WindowPrt.focus();
-    WindowPrt.print();
-    WindowPrt.close();
+  onPurposeChange(event) {
+    let reg = new RegExp('[a-zA-Z0-9 -]');
+    if (reg.test(event.key) || event.inputType == "deleteContentBackward") {
+      return true;
+    }
+    return false;
+  }
+  onValueChange(value){
+    value = value.replace(/[ -]/g, '_');
+    value = value.toLowerCase();
+    value = value.trim();
+    return value;
+  }
+  openQRcodeModal(url) {
+    this.isQRcodeOpened = true;
+    this.isQRcodeLoading.start();
+    this.ref.detectChanges();
+    this.downloadURL = url;
+    setTimeout(() => {
+      this.renderQrcode(this.downloadQRcode.nativeElement, url, 200);
+      this.isQRcodeLoading.stop();
+    }, 300);
+  }
+  openEditQRcodeModal(track) {
+    this.isEditQRcodeOpened = true;
+    this.selectedTrack = track;
+    this.editTrackName = track.name;
+  }
+  openRemoveQRcodeModal(track) {
+    this.isRemovedQRcodeOpened = true;
+    this.selectedTrack = track;
+  }
+  openActivateModal(track) {
+    this.isActivateQRcodeOpened = true;
+    this.selectedTrack = track;
+  }
+  openInactivateModal(track) {
+    this.isInactivateQRcodeOpened = true;
+    this.selectedTrack = track;
+  }
+  getTracks() {
+    this.authTrackContributor.getTracks().pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe(result => {
+      this.tracks = result['result'];
+      this.remainingCount = result['count'];
+      this.ref.detectChanges();
+      this.isInactiveExisted = this.tracks.find(x => x.status == 'inactive');
+      this.qrcodes.forEach(qrcode => {
+        this.renderQrcode(qrcode.nativeElement, qrcode.nativeElement.dataset.url, 116);
+      });
+    });
+  }
+  createNewQRcode() {
+    this.isCreateQRcodeLoading.start();
+    this.authTrackContributor.addNewTrack({ name: this.newTrackName }).pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe(result => {
+      this.newTrackName = '';
+      this.isInactiveExisted = true;
+      this.isNewQRcodeOpened = false;
+      this.isCreateQRcodeLoading.stop();
+      this.tracks.push(result['result']);
+      this.ref.detectChanges();
+      this.qrcodes.forEach(qrcode => {
+        this.renderQrcode(qrcode.nativeElement, qrcode.nativeElement.dataset.url, 116);
+      });
+    }, err => {
+      this.isCreateQRcodeLoading.stop();
+      WsToastService.toastSubject.next({content: err.error, type: 'danger'});
+    });
+  }
+  editQRcode() {
+    this.isEditQRcodeLoading.start();
+    this.authTrackContributor.editTrack({ name: this.editTrackName, _id: this.selectedTrack._id }).pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe(result => {
+      this.selectedTrack.name = this.editTrackName;
+      this.editTrackName = '';
+      this.isEditQRcodeOpened = false;
+      this.isEditQRcodeLoading.stop();
+    }, err => {
+      this.isEditQRcodeLoading.stop();
+      WsToastService.toastSubject.next({content: err.error, type: 'danger'});
+    })
+  }
+  activateQRcode() {
+    this.isActivateQRcodeLoading.start();
+    this.authTrackContributor.activateTrack({id: this.selectedTrack._id}).pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe(result => {
+      this.isActivateQRcodeOpened = false;
+      this.isActivateQRcodeLoading.stop();
+      this.getTracks();
+    }, err => {
+      this.isActivateQRcodeLoading.stop();
+      WsToastService.toastSubject.next({ content: err.error, type: 'danger'});
+    })
+  }
+  inactivateQRcode() {
+    this.isInactivateQRcodeLoading.start();
+    this.authTrackContributor.inactivateTrack({id: this.selectedTrack._id}).pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe(result => {
+      this.isInactivateQRcodeOpened = false;
+      this.isInactivateQRcodeLoading.stop();
+      this.getTracks();
+    }, err => {
+      this.isInactivateQRcodeLoading.stop();
+      WsToastService.toastSubject.next({ content: err.error, type: 'danger'});
+    })
+  }
+  removeQRcode() {
+    this.isRemovedQRcodeLoading.start();
+    this.authTrackContributor.removeTrack(this.selectedTrack).pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe(result => {
+      this.getTracks();
+      this.isRemovedQRcodeOpened = false;
+      this.isRemovedQRcodeLoading.stop();
+    }, err => {
+      this.isRemovedQRcodeLoading.stop();
+      WsToastService.toastSubject.next({content: err.error, type: 'danger'});
+    })
+  }
+  closeAlert(){
+    this.isClear = true;
+    sessionStorage.setItem('qrcodeTipsClear', 'true');
   }
   ngOnDestroy() {
     this.ngUnsubscribe.next();

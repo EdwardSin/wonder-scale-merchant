@@ -9,12 +9,15 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { ChartsModule } from 'ng2-charts';
 import { JwtModule, JWT_OPTIONS } from '@auth0/angular-jwt';
 import { LazyLoadImageModule } from 'ng-lazyload-image';
 import { SocialLoginModule, AuthServiceConfig, FacebookLoginProvider, GoogleLoginProvider } from 'angular-6-social-login';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgProgressModule } from 'ngx-progressbar';
 import { NgProgressRouterModule } from 'ngx-progressbar/router';
+import { MatNativeDateModule } from '@angular/material/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -89,6 +92,7 @@ import { AutofocusDirective } from './directives/autofocus.directive';
 import { DebounceClickDirective } from './directives/debounce-click.directive';
 import { ModifyItemTypeComponent } from './components/shop/catalogue/modify-item-type/modify-item-type.component';
 import { TodaySpecialItemsComponent } from './components/shop/catalogue/today-special-items/today-special-items.component';
+import { DashboardComponent } from './components/shop/dashboard/dashboard.component';
 export function jwtOptionsFactory(platformId) {
   return {
     tokenGetter: () => {
@@ -196,7 +200,8 @@ export function provideConfig() {
     ImportItemsModalComponent,
     EditContributorModalComponent,
     ModifyItemTypeComponent,
-    TodaySpecialItemsComponent
+    TodaySpecialItemsComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,
@@ -209,7 +214,10 @@ export function provideConfig() {
     MatSelectModule,
     MatRadioModule,
     MatCheckboxModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
     DragDropModule,
+    ChartsModule,
     LazyLoadImageModule,
     SocialLoginModule,
     NgProgressModule,
