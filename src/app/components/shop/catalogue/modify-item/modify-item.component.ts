@@ -118,7 +118,7 @@ export class ModifyItemComponent implements OnInit {
       })
   }
   setDefaultCategory(categories) {
-    let routeParts = this.routePartsService.generateRouteParts(this.route.parent.snapshot);
+    let routeParts = this.routePartsService.generateRouteParts(this.route.root.snapshot);
     if (routeParts[1]['title'] == 'cat') {
       let categoryName = RoutePartsService.parseText(routeParts[0]);
       let category = categories.find(category => category.name == categoryName);
