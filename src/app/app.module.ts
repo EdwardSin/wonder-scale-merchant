@@ -62,8 +62,7 @@ export function provideConfig() {
     // Elements
     WsLeftNavComponent,
     BreadcrumbComponent,
-    
-    // Modals
+
     ComponentmoduleproxyComponent
   ],
   imports: [
