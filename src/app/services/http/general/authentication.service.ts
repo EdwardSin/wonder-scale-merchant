@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { AuthService, FacebookLoginProvider, GoogleLoginProvider } from 'angular-6-social-login';
+import { FacebookLoginProvider, GoogleLoginProvider, SocialAuthService } from 'angularx-social-login';
 import decode from 'jwt-decode';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -20,7 +20,7 @@ export class AuthenticationService {
         private http: HttpClient,
         private sharedUserService: SharedUserService,
         private jwtHelper: JwtHelperService,
-        private authService: AuthService,
+        private authService: SocialAuthService,
         private cookieService: CookieService
     ) {
     }
