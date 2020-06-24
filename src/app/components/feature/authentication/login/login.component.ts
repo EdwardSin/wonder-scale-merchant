@@ -16,6 +16,7 @@ import { ScreenService } from '@services/general/screen.service';
 import { Subject } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
 import { environment } from '@environments/environment';
+import { SocialAuthService } from 'angularx-social-login';
 
 
 @Component({
@@ -42,6 +43,7 @@ export class LoginComponent implements OnInit {
     private userService: UserService,
     private jwtHelper: JwtHelperService,
     private authUserService: AuthUserService,
+    private authService: SocialAuthService,
     private screenService: ScreenService,
     private sharedUserService: SharedUserService) { }
 
@@ -74,61 +76,63 @@ export class LoginComponent implements OnInit {
       })
   }
   loginWithFb() {
-    this.authenticationService.loginWithFb().then(user => {
-      if (user) {
-        let firstName = "";
-        let lastName = "";
-        if (user.name) {
-          let name = user.name.trim();
-          firstName = user.name.substring(0, user.name.lastIndexOf(" ")).trim();
-          lastName = user.name.substring(user.name.lastIndexOf(" ")).trim();
-        }
-        let userObj = {
-          firstName: firstName,
-          lastName: lastName,
-          email: user.email,
-          profileImage: user.image
-        };
-        this.userService.addUserByFb(userObj).subscribe(result => {
-          AuthenticationService.token = result['token'];
-          if (AuthenticationService.token && decode(AuthenticationService.token)) {
-            AuthenticationService.user_id = decode(AuthenticationService.token).user_id;
+    this.authenticationService.loginWithFb()
+      .then(user => {
+        if (user) {
+          let firstName = "";
+          let lastName = "";
+          if (user.name) {
+            let name = user.name.trim();
+            firstName = user.name.substring(0, user.name.lastIndexOf(" ")).trim();
+            lastName = user.name.substring(user.name.lastIndexOf(" ")).trim();
           }
-          this.getUser();
-          let returnUrl = this.getReturnUrl();
-          this.router.navigateByUrl(returnUrl);
-        }, (err) => {
-          WsToastService.toastSubject.next({ content: err.error.message, type: 'danger' });
-        });
-      }
-    });
+          let userObj = {
+            firstName: firstName,
+            lastName: lastName,
+            email: user.email,
+            profileImage: user.photoUrl
+          };
+          this.userService.addUserByFb(userObj).subscribe(result => {
+            AuthenticationService.token = result['token'];
+            if (AuthenticationService.token && decode(AuthenticationService.token)) {
+              AuthenticationService.user_id = decode(AuthenticationService.token).user_id;
+            }
+            this.getUser();
+            let returnUrl = this.getReturnUrl();
+            this.router.navigateByUrl(returnUrl);
+          }, (err) => {
+            WsToastService.toastSubject.next({ content: err.error.message, type: 'danger' });
+          });
+        }
+      });
   }
   loginWithGoogle() {
-    this.authenticationService.loginWithGoogle().then(user => {
-      if (user) {
-        let decodedUser = this.jwtHelper.decodeToken(user['idToken']);
-        let userObj = {
-          firstName: decodedUser.given_name,
-          lastName: decodedUser.family_name,
-          email: decodedUser.email,
-          profileImage: decodedUser.picture,
-          receiveInfo: true
-        };
-        this.userService.addUserByGoogle(userObj).subscribe(result => {
-          AuthenticationService.token = result['token'];
-          if (AuthenticationService.token && decode(AuthenticationService.token)) {
-            AuthenticationService.user_id = decode(AuthenticationService.token).user_id;
-          }
-          this.getUser();
-          let returnUrl = this.getReturnUrl();
+    this.authenticationService.loginWithGoogle()
+      .then(user => {
+        if (user) {
+          let decodedUser = this.jwtHelper.decodeToken(user['idToken']);
+          let userObj = {
+            firstName: decodedUser.given_name,
+            lastName: decodedUser.family_name,
+            email: decodedUser.email,
+            profileImage: decodedUser.picture,
+            receiveInfo: true
+          };
+          this.userService.addUserByGoogle(userObj).subscribe(result => {
+            AuthenticationService.token = result['token'];
+            if (AuthenticationService.token && decode(AuthenticationService.token)) {
+              AuthenticationService.user_id = decode(AuthenticationService.token).user_id;
+            }
+            this.getUser();
+            let returnUrl = this.getReturnUrl();
 
-          this.router.navigateByUrl(returnUrl);
+            this.router.navigateByUrl(returnUrl);
 
-        }, (err) => {
-          WsToastService.toastSubject.next({ content: err.error.message, type: 'danger' });
-        });
-      }
-    });
+          }, (err) => {
+            WsToastService.toastSubject.next({ content: err.error.message, type: 'danger' });
+          });
+        }
+      });
   }
   resendActiveLink() {
     this.resendLoading.start();
