@@ -16,7 +16,6 @@ import { ScreenService } from '@services/general/screen.service';
 import { Subject } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
 import { environment } from '@environments/environment';
-import { SocialAuthService } from 'angularx-social-login';
 
 
 @Component({
@@ -43,7 +42,6 @@ export class LoginComponent implements OnInit {
     private userService: UserService,
     private jwtHelper: JwtHelperService,
     private authUserService: AuthUserService,
-    private authService: SocialAuthService,
     private screenService: ScreenService,
     private sharedUserService: SharedUserService) { }
 
@@ -64,7 +62,9 @@ export class LoginComponent implements OnInit {
       .subscribe(result => {
         this.getUser();
         this.returnUrl = this.getReturnUrl();
-        this.router.navigateByUrl(this.returnUrl);
+        if (this.returnUrl)  {
+          this.router.navigateByUrl(this.returnUrl);
+        }
       }, err => {
         if (err.error.message == 'Please activate your account!') {
           this.resend = true;
@@ -99,7 +99,9 @@ export class LoginComponent implements OnInit {
             }
             this.getUser();
             let returnUrl = this.getReturnUrl();
-            this.router.navigateByUrl(returnUrl);
+            if (returnUrl) {
+              this.router.navigateByUrl(returnUrl);
+            }
           }, (err) => {
             WsToastService.toastSubject.next({ content: err.error.message, type: 'danger' });
           });
@@ -125,9 +127,9 @@ export class LoginComponent implements OnInit {
             }
             this.getUser();
             let returnUrl = this.getReturnUrl();
-
-            this.router.navigateByUrl(returnUrl);
-
+            if (returnUrl)  {
+              this.router.navigateByUrl(returnUrl);
+            }
           }, (err) => {
             WsToastService.toastSubject.next({ content: err.error.message, type: 'danger' });
           });
@@ -141,7 +143,6 @@ export class LoginComponent implements OnInit {
         WsToastService.toastSubject.next({ content: "Activation Email is sent!", type: 'success' });
         this.resend = false;
         this.resendLoading.stop();
-
       });
     });
   }
@@ -163,12 +164,12 @@ export class LoginComponent implements OnInit {
     let returnUrl = this.route.snapshot.queryParams['returnUrl'];
     let preview = this.route.snapshot.queryParams['preview'];
     let id = this.route.snapshot.queryParams['id'];
-    let username = this.route.snapshot.params['username'];
     if (returnUrl !== undefined) {
       return returnUrl;
     }
     if (preview == 'true' && id) {
-      return '/shop/' + username + '?id=' + id + '&preview=true';
+      this.router.navigate(['', { outlets: { modal: null } }], {queryParamsHandling: 'merge'});
+      return;
     }
     return environment.RETURN_URL;
   }
