@@ -41,7 +41,7 @@ export class ActivateComponent implements OnInit {
   activateUser() {
     this.loading.start();
 
-    let token = this.route.snapshot.params["token"];
+    let token = this.route.snapshot.queryParams["token"];
     this.userService.activateAccount(token).pipe(takeUntil(this.ngUnsubscribe), finalize(() => {this.loading.stop();}))
       .subscribe(result => {
         this.activateSuccess = true;
@@ -56,7 +56,7 @@ export class ActivateComponent implements OnInit {
   }
 
   resendLink() {
-    let token = this.route.snapshot.params["token"];
+    let token = this.route.snapshot.queryParams["token"];
     let decoded = this.jwtHelperService.decodeToken(token);
     this.resendLoading.start();
     this.userService.resendActivationEmail(decoded.email).pipe(takeUntil(this.ngUnsubscribe))

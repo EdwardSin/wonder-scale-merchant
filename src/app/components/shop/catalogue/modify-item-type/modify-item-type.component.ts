@@ -154,7 +154,7 @@ export class ModifyItemTypeComponent implements OnInit {
       }), takeUntil(this.ngUnsubscribe),
       finalize(() => this.itemTypeLoading.stop())).subscribe(result => {
           this.sharedCategoryService.refreshCategories();
-          this.router.navigate([{ outlets: { modal: null } }], {queryParams: {id: null}, queryParamsHandling: 'merge'});
+          this.router.navigate([], {queryParams: {id: null, modal: null}, queryParamsHandling: 'merge'});
       });
     }
   }
@@ -213,7 +213,7 @@ export class ModifyItemTypeComponent implements OnInit {
     }
   }
   navigateToEditItem(){
-    this.router.navigate([{ outlets: {modal: 'item'}}], {queryParams: { id: this.itemId }, queryParamsHandling: 'merge'});
+    this.router.navigate([], {queryParams: { id: this.itemId, modal: 'modify-item' }, queryParamsHandling: 'merge'});
   }
   doneUpload(allItems, _id, filename) {
     var item = allItems.find(item => item.id == _id);

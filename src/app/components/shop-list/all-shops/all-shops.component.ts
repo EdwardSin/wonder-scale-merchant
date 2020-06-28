@@ -6,7 +6,7 @@ import { SharedUserService } from '@services/shared/shared-user.service';
 import { WsLoading } from '@elements/ws-loading/ws-loading';
 import { DocumentHelper } from '@helpers/documenthelper/document.helper';
 import { Subject, combineLatest, timer } from 'rxjs';
-import { finalize, takeUntil, delay, tap, map } from 'rxjs/operators';
+import { takeUntil, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-all-shops',
@@ -21,7 +21,9 @@ export class AllShopsComponent implements OnInit {
   constructor(private sharedUserService: SharedUserService,
     private sharedLoadingService: SharedLoadingService,
     private sharedShopService: SharedShopService,
-    private authShopUserService: AuthShopUserService) { }
+    private authShopUserService: AuthShopUserService) { 
+      sessionStorage.removeItem('qrcodeTipsClear');
+    }
 
   ngOnInit() {
     DocumentHelper.setWindowTitleWithWonderScale('Joined Shops');

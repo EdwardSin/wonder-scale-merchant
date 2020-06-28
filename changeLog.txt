@@ -2,6 +2,36 @@
 - Wonder Scale Merchant                     -
 ---------------------------------------------
 
+- v1.0.1020                                 -
+---------------------------------------------
+- 2020-06-28                                -
+---------------------------------------------
+.: WSM: Task: Update Home page (WSM-147)
+.: WSM: Task: Update Mobile Size (WSM-120)
+.: WSM: Task: Remove modal outlet from project (WSM-151)
+.: WSM: Task: Navigate to shop list when click on Join US after login (WSM-151)
+
+---------------------------------------------
+- 2020-06-24                                -
+---------------------------------------------
+.: WSM: Task: Change angular social login package to support Angular 9 Ivy (WSM-139)
+.: WSM: Task: CLONE - Change URL from "shop" to "page" (WSM-144)
+
+---------------------------------------------
+- 2020-06-23                                -
+---------------------------------------------
+.: WSM: Task: Preview information banner scroll width issue (WSM-112)
+
+---------------------------------------------
+- 2020-06-22                                -
+---------------------------------------------
+.: WSM: Task: Module lazy load (WSM-135)
+
+---------------------------------------------
+- 2020-06-21                                -
+---------------------------------------------
+.: WSM: Story: Data collect Module (WSM-120)
+
 - v1.0.1011                                 -
 ---------------------------------------------
 - 2020-06-14                                -

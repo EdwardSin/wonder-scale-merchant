@@ -201,7 +201,7 @@ export class CreateShopComponent implements OnInit {
     }
   }
   navigateToShop() {
-    this.router.navigate([{ outlets: { modal: null } }]).then(nav => {
+    this.router.navigate([], {queryParams: {modal: null}}).then(nav => {
       this.router.navigate(['/shops', this.shop.username]);
     });
   }

@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit, ViewContainerRef, ComponentFactoryResolver } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 import { AuthUserService } from '@services/http/general/auth-user.service';
 import { AuthenticationService } from '@services/http/general/authentication.service';
 import { SharedLoadingService } from '@services/shared/shared-loading.service';
@@ -8,6 +8,7 @@ import { SharedUserService } from '@services/shared/shared-user.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ScreenService } from '@services/general/screen.service';
+import { VisitorGuard } from 'src/app/guards/visitor.guard';
 
 @Component({
   selector: 'app-header',
@@ -18,7 +19,11 @@ export class HeaderComponent implements OnInit {
   user;
   isMobileSize;
   private ngUnsubscribe: Subject<any> = new Subject;
-  constructor(private router: Router,
+  constructor(private route: ActivatedRoute,
+    private router: Router,
+    private visitorGuard: VisitorGuard,
+    private viewContainerRef: ViewContainerRef,
+    private cfr: ComponentFactoryResolver,
     private screenService: ScreenService,
     private authUserService: AuthUserService,
     private authenticationService: AuthenticationService,
@@ -38,6 +43,31 @@ export class HeaderComponent implements OnInit {
     this.screenService.isMobileSize.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       this.isMobileSize = result;
     })
+    this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe(queryParams => {
+      let isModal = queryParams['modal'];
+      if (isModal && this.isAuthenticateUrl(isModal)) {
+        this.visitorGuard.canActivate().then(result => {
+          if (result) {
+            if (isModal == 'login') {
+              this.createLazyLoginComponent();
+            } else if (isModal == 'register') {
+              this.createLazyRegisterComponent();
+            } else if (isModal == 'forgot-password') {
+              this.createLazyForgotPasswordComponent();
+            } else if (isModal == 'activate') {
+              this.createLazyActivateComponent();
+            } else if (isModal == 'reset-password') {
+              this.createLazyResetPasswordComponent();
+            }
+          } else {
+            this.getUser();
+            this.router.navigate([], {queryParams: {modal: null}});
+          }
+        })
+      } else {
+        this.viewContainerRef.clear();
+      }
+    });
   }
   getUser() {
     this.authUserService.getUser().pipe(takeUntil(this.ngUnsubscribe))
@@ -47,16 +77,42 @@ export class HeaderComponent implements OnInit {
         }
       })
   }
+  isAuthenticateUrl(url) {
+    return url =='login' || url == 'register' || url == 'forgot-password' || url == 'activate' || url == 'reset-password';
+  }
+  async createLazyLoginComponent() {
+    this.viewContainerRef.clear();
+    await import ('../../modules/authentication/login/login.module');
+    const { LoginComponent } = await import('@components/feature/authentication/login/login.component');
+    this.viewContainerRef.createComponent(this.cfr.resolveComponentFactory(LoginComponent));
+  }
+  async createLazyRegisterComponent() {
+    this.viewContainerRef.clear();
+    await import('../../modules/authentication/register/register.module');
+    const { RegisterComponent } = await import('@components/feature/authentication/register/register.component');
+    this.viewContainerRef.createComponent(this.cfr.resolveComponentFactory(RegisterComponent));
+  }
+  async createLazyForgotPasswordComponent() {
+    this.viewContainerRef.clear();
+    await import('../../modules/authentication/forgot-password/forgot-password.module');
+    const { ForgotPasswordComponent } = await import('@components/feature/authentication/forgot-password/forgot-password.component');
+    this.viewContainerRef.createComponent(this.cfr.resolveComponentFactory(ForgotPasswordComponent));
+  }
+  async createLazyActivateComponent() {
+    this.viewContainerRef.clear();
+    await import('../../modules/authentication/activate/activate.module');
+    const { ActivateComponent } = await import('@components/feature/authentication/activate/activate.component');
+    this.viewContainerRef.createComponent(this.cfr.resolveComponentFactory(ActivateComponent));
+  }
+  async createLazyResetPasswordComponent() {
+    this.viewContainerRef.clear();
+    await import('../../modules/authentication/reset-password/reset-password.module');
+    const { ResetPasswordComponent } = await import('@components/feature/authentication/reset-password/reset-password.component');
+    this.viewContainerRef.createComponent(this.cfr.resolveComponentFactory(ResetPasswordComponent));
+  }
   navigateToHome() {
     this.router.navigate(['/shops/all']);
     this.sharedShopService.shop.next(null);
-  }
-  navigateToLogin() {
-    this.router.navigate([{ outlets: { modal: 'login' } }]);
-
-  }
-  navigateToSignup() {
-    this.router.navigate([{ outlets: { modal: 'register' } }]);
   }
   displayPreview() {
 
