@@ -9,6 +9,7 @@
 .: WSM: Task: Update Home page (WSM-147)
 .: WSM: Task: Update Mobile Size (WSM-120)
 .: WSM: Task: Remove modal outlet from project (WSM-151)
+.: WSM: Task: Navigate to shop list when click on Join US after login (WSM-151)
 
 ---------------------------------------------
 - 2020-06-24                                -

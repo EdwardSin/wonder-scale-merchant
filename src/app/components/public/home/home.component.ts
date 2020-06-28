@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DocumentHelper } from '@helpers/documenthelper/document.helper';
+import { Router } from '@angular/router';
+import { VisitorGuard } from 'src/app/guards/visitor.guard';
 
 @Component({
   selector: 'app-home',
@@ -10,10 +12,17 @@ export class HomeComponent implements OnInit {
 
 
   year = new Date().getFullYear();
-  constructor() { }
+  constructor(private router: Router,
+    private visitorGuard: VisitorGuard) { }
 
   ngOnInit() {
     DocumentHelper.setWindowTitleWithWonderScale('Merchant');
   }
-
+  navigateToJoinUs() {
+    this.visitorGuard.canActivate().then(result => {
+      if (result) {
+        this.router.navigate([], {queryParams: {modal: 'login'}});
+      }
+    })
+  }
 }
