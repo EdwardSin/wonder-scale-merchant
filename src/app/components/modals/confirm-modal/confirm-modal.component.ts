@@ -12,6 +12,8 @@ export class ConfirmModalComponent extends WsModalComponent implements OnInit {
   @Input() header: string = "Confirmation";
   @Input() loading: boolean;
   @Input() message: string;
+  @Input() submessage: string;
+  @Input() maxWidth: number = 400;
   @Input() action: Function;
   @Input() closeCallback: Function;
 

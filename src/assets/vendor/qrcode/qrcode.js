@@ -51,7 +51,6 @@ for(function(a){
 			var c,d,e,f,g,h,i,j,k,a=new QRCode(b.typeNumber,b.correctLevel);
 			for(a.addData(utf16to8(b.text)),a.make(),
 					c=document.createElement("canvas"),
-					c.id = 'canvas1',
 					c.width=b.width,c.height=b.height,d=c.getContext("2d"),
 					b.src&&(e=new Image(),e.src=b.src,e.onload=function(){
 						d.drawImage(e,(b.width-b.imgWidth)/2,(b.height-b.imgHeight)/2,

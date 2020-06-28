@@ -44,6 +44,7 @@ export class Shop {
     viewed?: number;
     contributors: [];
     categoryList?: Array<string>;
+    trackExpiration: string;
      constructor(){
          this.location = {
              type: 'Point',

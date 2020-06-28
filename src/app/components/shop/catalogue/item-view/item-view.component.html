@@ -69,7 +69,7 @@
           <td *ngIf="columns.includes('id')">{{ item?.refId}}</td>
           <td *ngIf="columns.includes('name')">
             <a class="default" href="javascript:void(0)" (click)="$event.stopPropagation();" 
-            [routerLink]="['', { outlets: {modal: 'item'}}]" [queryParams]="{id: item?._id}" [queryParamsHandling]="'merge'">{{ item?.name | titlecase | limitTo: 128 }}</a>
+            [routerLink]="[]" [queryParams]="{id: item?._id, modal: 'modify-item'}" [queryParamsHandling]="'merge'">{{ item?.name | titlecase | limitTo: 128 }}</a>
           </td>
           <td *ngIf="currencyService.getCurrencyWithCode(item?.currency) && currencyService.getCurrencyWithCode(selectedCurrencyCode) && item.currency && selectedCurrencyCode && columns.includes('price')">
             {{ item?.price | currency: currencyService.getCurrencyWithCode(item?.currency).rate: currencyService.getCurrencyWithCode(selectedCurrencyCode).rate }}
@@ -82,11 +82,11 @@
           </td>
           <td width="100">
             <a title="Edit Item" href="javascript:void(0)" class="d-inline-block d-sm-inline-flex ws-dark-color btn-link p-2 mb-1 mb-sm-0 mr-sm-2" (click)="$event.stopPropagation();"
-              [routerLink]="['', { outlets: {modal: 'item'}}]" [queryParams]="{id: item?._id}" [queryParamsHandling]="'merge'">
+              [routerLink]="[]" [queryParams]="{id: item?._id, modal: 'modify-item'}" [queryParamsHandling]="'merge'">
               <span class="fas fa-edit"></span>
             </a>
             <a title="Edit Item Types" href="javascript:void(0)" class="d-inline-block d-sm-inline-flex ws-dark-color btn-link p-2" (click)="$event.stopPropagation();"
-              [routerLink]="['', { outlets: {modal: 'item-types'}}]" [queryParams]="{id: item?._id}" [queryParamsHandling]="'merge'">
+              [routerLink]="[]" [queryParams]="{id: item?._id, modal: 'modify-item-type'}" [queryParamsHandling]="'merge'">
               <span class="fas fa-sitemap"></span>
             </a>
           </td>

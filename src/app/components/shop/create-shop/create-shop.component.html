@@ -4,7 +4,7 @@
       <div [ngSwitch]="phase.step" class="modal-body-content">
         <form *ngSwitchCase="0" class="modal-content">
           <div class="modal-close">
-            <span class="fas fa-times" [routerLink]="['', {outlets: {modal:null}}]"></span>
+            <span class="fas fa-times" [routerLink]="[]" [queryParams]="{modal: null}"></span>
           </div>
           <p class="mb-4">Choose your store type.</p>
           <div class="row no-gutters">
@@ -31,7 +31,7 @@
         </form>
         <form *ngSwitchCase="1" class="modal-content">
           <div class="modal-close">
-            <span class="fas fa-times" [routerLink]="['', {outlets: {modal:null}}]"></span>
+            <span class="fas fa-times" [routerLink]="[]" [queryParams]="{modal: null}"></span>
           </div>
           <p class="mb-4">Choose your shop type for us to provide you specified services.</p>
           <div class="row no-gutters">
@@ -70,7 +70,7 @@
         <form *ngSwitchCase="2" class="modal-content" style="max-width: 500px" [formGroup]="basicFormGroup"
           (keydown.enter)="$event.preventDefault()">
           <div class="modal-close">
-            <span class="fas fa-times" [routerLink]="['', {outlets: {modal:null}}]"></span>
+            <span class="fas fa-times" [routerLink]="[]" [queryParams]="{modal: null}"></span>
           </div>
           <div class="ws-input">
             <input placeholder="Business Name*" formControlName="name" class="form-control font-9">
@@ -151,7 +151,7 @@
         <form *ngSwitchCase="3" class="modal-content" [formGroup]="addressFormGroup"
           (keydown.enter)="$event.preventDefault()">
           <div class="modal-close">
-            <span class="fas fa-times" [routerLink]="['', {outlets: {modal:null}}]"></span>
+            <span class="fas fa-times" [routerLink]="[]" [queryParams]="{modal: null}"></span>
           </div>
           <div>
             <mat-checkbox [color]="'primary'" (change)="disabledControls()" class="mr-2 d-inline-block"  style="vertical-align: text-top"
@@ -237,7 +237,7 @@
         <form *ngSwitchCase="4" class="modal-content" style="width: fit-content" [formGroup]="openingInfoFormGroup"
           (keydown.enter)="$event.preventDefault()">
           <div class="modal-close">
-            <span class="fas fa-times" [routerLink]="['', {outlets: {modal:null}}]"></span>
+            <span class="fas fa-times" [routerLink]="[]" [queryParams]="{modal: null}"></span>
           </div>
           <h3 class="h5 mb-0">Business Hour:</h3>
           <business-timetable [(timetable)]="timetable"></business-timetable>
@@ -250,7 +250,7 @@
         <form *ngSwitchCase="5" class="modal-content" [formGroup]="termAndConfitionsFormGroup"
           (keydown.enter)="$event.preventDefault()">
           <div class="modal-close">
-            <span class="fas fa-times" [routerLink]="['', {outlets: {modal:null}}]"></span>
+            <span class="fas fa-times" [routerLink]="[]" [queryParams]="{modal: null}"></span>
           </div>
           <div class="termContainer mb-3 ">{{termAndCondition}}
           </div>
@@ -271,7 +271,7 @@
         </form>
 
         <div *ngSwitchCase="6" class="modal-content" style="max-width: 500px">
-          <div class="modal-close" [routerLink]="['', {outlets: {modal:null}}]">
+          <div class="modal-close" [routerLink]="[]" [queryParams]="{modal: null}">
             <span class="fas fa-times"></span>
           </div>
           <div class="text-center mt-5 mb-4">

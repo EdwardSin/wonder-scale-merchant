@@ -1,0 +1,86 @@
+<div class="dashboard">
+    <div class="row no-gutters">
+        <div class="row no-gutters col-lg order-12 order-lg-1">
+            <div class="col-lg-5  col pr-lg-3 mb-2 mb-lg-0">
+                <div class="dashboard__today my-lg-3">
+                    <h3 class="h6 font-9 mb-0 font-weight-bold" style="min-width: 200px">
+                        Number of customer today:
+                    </h3>
+                    <span class="dashboard__today__figure mb-3" #numberOfCustomer>{{ totalNumberOfCustomerToday }}</span>
+                    <h3 class="h6 font-9" style="min-width: 200px">
+                        <span class="font-weight-bold">Last updated:</span>
+                    </h3>
+                    <span class="font-9">{{ moment(updatedDate).format('llll') }}</span>
+                </div>
+            </div>
+            <div class="col-lg-7 px-lg-3">
+                <label class="dashboard__label">Start Hour:</label>
+                <mat-select class="form-control form-control-sm d-inline-block" style="max-width: 100px" [(ngModel)]="startHour" (selectionChange)="getTodayTrack()">
+                    <mat-option *ngFor="let hour of allHours" [value]="hour.value">{{hour.text}}</mat-option>
+                </mat-select>
+                <div style="width: 100%">
+                    <div *ngIf="todayTrackLoading.isRunning()" class="dashboard__analyzer__overlay">
+                        <div class="dashboard__analyzer__overlay-spinner">
+                            <ws-spinner [width]="60" [height]="60" [spinnerColor]="'#282C35'"></ws-spinner>
+                        </div>
+                    </div>
+                    <canvas baseChart [data]="numberOfCustomersToday" [legend]="false" [labels]="hours" [chartType]="lineGraphType" [colors]="lineChartColors"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-2 col mb-2 mb-lg-0 float-right order-1 order-lg-12">
+            <button [disabled]="loading.isRunning()" (click)="getTodayTrack()" title="Refresh" class="btn btn-controller float-right">
+                <span [class.loading]="loading.isRunning()" class="fas fa-sync-alt"></span>
+            </button>
+            <a href="javascript:void(0)" [routerLink]="['../../../qrcode']" title="QR code configuration" class="btn btn-controller float-right mr-2">
+                <span class="fas fa-qrcode"></span>
+            </a>
+        </div>
+    </div>
+    <hr />
+    <button [disabled]="loading.isRunning()" (click)="getBetweenTracks()" title="Refresh" class="btn btn-controller float-right">
+        <span [class.loading]="loading.isRunning()" class="fas fa-sync-alt"></span>
+    </button>
+    <div class="row no-gutters">
+        <div class="d-inline-block col-auto">
+            <div class="mb-2">
+                <label class="dashboard__label">From Date: </label>
+                <input (click)="fromPicker.open()" class="form-control form-control-sm d-inline-block" style="max-width: 300px" [(ngModel)]="fromDate" [matDatepicker]="fromPicker" [max]="maxDate" />
+                <mat-datepicker #fromPicker startView="month" [startAt]="fromDate" (opened)="openCalendar()"></mat-datepicker>
+            </div>
+            <div class="mb-2">
+                <label class="dashboard__label">To Date: </label>
+                <input (click)="toPicker.open()" class="form-control form-control-sm d-inline-block" style="max-width: 300px" [(ngModel)]="toDate" [matDatepicker]="toPicker" [min]="fromDate" [max]="maxDate" />
+                <mat-datepicker #toPicker startView="month" [startAt]="toDate" (opened)="openCalendar()"></mat-datepicker>
+            </div>
+            <div class="mb-3">
+                <label class="dashboard__label">Target: </label>
+                <mat-select class="form-control form-control-sm d-inline-block" style="max-width: 300px" [(ngModel)]="targets" (openedChange)="selectionOpenedChange($event)" (selectionChange)="selectionChange()" multiple>
+                    <mat-option *ngFor="let track of tracks" [disabled]="'Number of Total Customers' == track.name" [value]="track?.name">{{track?.name}}</mat-option>
+                    <div *ngIf="tracksLoading.isRunning()" class="text-center py-3">
+                        <ws-spinner [width]="30" [height]="30" [spinnerColor]="'#282C35'"></ws-spinner>
+                    </div>
+                </mat-select>
+            </div>
+            <div class="mb-3">
+                <button class="btn btn-sm btn-controller w-100" (click)="getBetweenTracks()">Search</button>
+            </div>
+        </div>
+    </div>
+    <ws-spinner *ngIf="loading.isRunning()" class="text-center d-block w-100 py-5"></ws-spinner>
+    <div *ngIf="charts.length && !loading.isRunning()" class="row no-gutters">
+        <div class="col-lg-4 pr-3 mb-2" *ngFor="let chart of charts">
+            <span class="dashboard__analyzer-header d-inline-block font-9 font-weight-bold">{{ chart.title }}:</span>
+            <div class="dashboard__analyzer">
+                <div *ngIf="chart.isLoading || chart.isUnavailable" class="dashboard__analyzer__overlay">
+                    <div *ngIf="chart.isLoading" class="dashboard__analyzer__overlay-spinner">
+                        <ws-spinner [width]="60" [height]="60" [spinnerColor]="'#282C35'"></ws-spinner>
+                    </div>
+                    <p *ngIf="chart.isUnavailable" class="dashboard__analyzer__unavailble-label">Unavailable in your current package.</p>
+                </div>
+                <canvas baseChart [data]="chart.data" [labels]="chart.labels" [legend]="chart.legend" [chartType]="chart.chartType" [colors]="chart.colors">
+                </canvas>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from '@environments/environment';
 import { AuthShopContributorService } from '@services/http/auth-shop/contributor/auth-shop-contributor.service';
@@ -21,9 +21,6 @@ export class PendingShopComponent implements OnInit {
   contributor: Contributor;
   private ngUnsubscribe: Subject<any> = new Subject;
   constructor(
-    private router: Router,
-    private ref: ChangeDetectorRef,
-    private sharedUserService: SharedUserService,
     private sharedShopService: SharedShopService,
     private authShopContributorService: AuthShopContributorService) { }
 

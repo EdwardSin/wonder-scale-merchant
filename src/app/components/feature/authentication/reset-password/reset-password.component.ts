@@ -39,13 +39,15 @@ export class ResetPasswordComponent implements OnInit {
     this.getResetPasswordUser();
   }
   getResetPasswordUser() {
-    this.resetToken = this.route.snapshot.params.token;
+    this.resetToken = this.route.snapshot.queryParams.token;
     this.userLoading.start();
     this.userService.resetUserFromLink(this.resetToken).pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       this.user = result;
       _.delay(() => {
         this.userLoading.stop();
       },2000);
+    }, err => {
+      this.userLoading.stop();
     })
   }
   resetPassword() {
@@ -78,7 +80,7 @@ export class ResetPasswordComponent implements OnInit {
     }
   }
   close() {
-    this.router.navigate([{ outlets: {modal: null}} ]);
+    this.router.navigate([], {queryParams: {modal: 'null'}});
   }
   get password() { return this.resetPasswordForm.get("password"); }
   getUser(callback) {

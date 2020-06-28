@@ -27,7 +27,6 @@ export class LoginComponent implements OnInit {
   email: string;
   password: string;
   isMobileSize: boolean;
-  returnUrl: string;
   resend: boolean;
   loading: WsLoading = new WsLoading;
   resendLoading: WsLoading = new WsLoading;
@@ -61,8 +60,7 @@ export class LoginComponent implements OnInit {
       .pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.loading.stop()))
       .subscribe(result => {
         this.getUser();
-        this.returnUrl = this.getReturnUrl();
-        this.router.navigateByUrl(this.returnUrl);
+        this.navigateToReturnUrl();
       }, err => {
         if (err.error.message == 'Please activate your account!') {
           this.resend = true;
@@ -74,61 +72,59 @@ export class LoginComponent implements OnInit {
       })
   }
   loginWithFb() {
-    this.authenticationService.loginWithFb().then(user => {
-      if (user) {
-        let firstName = "";
-        let lastName = "";
-        if (user.name) {
-          let name = user.name.trim();
-          firstName = user.name.substring(0, user.name.lastIndexOf(" ")).trim();
-          lastName = user.name.substring(user.name.lastIndexOf(" ")).trim();
-        }
-        let userObj = {
-          firstName: firstName,
-          lastName: lastName,
-          email: user.email,
-          profileImage: user.image
-        };
-        this.userService.addUserByFb(userObj).subscribe(result => {
-          AuthenticationService.token = result['token'];
-          if (AuthenticationService.token && decode(AuthenticationService.token)) {
-            AuthenticationService.user_id = decode(AuthenticationService.token).user_id;
+    this.authenticationService.loginWithFb()
+      .then(user => {
+        if (user) {
+          let firstName = "";
+          let lastName = "";
+          if (user.name) {
+            let name = user.name.trim();
+            firstName = user.name.substring(0, user.name.lastIndexOf(" ")).trim();
+            lastName = user.name.substring(user.name.lastIndexOf(" ")).trim();
           }
-          this.getUser();
-          let returnUrl = this.getReturnUrl();
-          this.router.navigateByUrl(returnUrl);
-        }, (err) => {
-          WsToastService.toastSubject.next({ content: err.error.message, type: 'danger' });
-        });
-      }
-    });
+          let userObj = {
+            firstName: firstName,
+            lastName: lastName,
+            email: user.email,
+            profileImage: user.photoUrl
+          };
+          this.userService.addUserByFb(userObj).subscribe(result => {
+            AuthenticationService.token = result['token'];
+            if (AuthenticationService.token && decode(AuthenticationService.token)) {
+              AuthenticationService.user_id = decode(AuthenticationService.token).user_id;
+            }
+            this.getUser();
+            this.navigateToReturnUrl();
+          }, (err) => {
+            WsToastService.toastSubject.next({ content: err.error.message, type: 'danger' });
+          });
+        }
+      });
   }
   loginWithGoogle() {
-    this.authenticationService.loginWithGoogle().then(user => {
-      if (user) {
-        let decodedUser = this.jwtHelper.decodeToken(user['idToken']);
-        let userObj = {
-          firstName: decodedUser.given_name,
-          lastName: decodedUser.family_name,
-          email: decodedUser.email,
-          profileImage: decodedUser.picture,
-          receiveInfo: true
-        };
-        this.userService.addUserByGoogle(userObj).subscribe(result => {
-          AuthenticationService.token = result['token'];
-          if (AuthenticationService.token && decode(AuthenticationService.token)) {
-            AuthenticationService.user_id = decode(AuthenticationService.token).user_id;
-          }
-          this.getUser();
-          let returnUrl = this.getReturnUrl();
-
-          this.router.navigateByUrl(returnUrl);
-
-        }, (err) => {
-          WsToastService.toastSubject.next({ content: err.error.message, type: 'danger' });
-        });
-      }
-    });
+    this.authenticationService.loginWithGoogle()
+      .then(user => {
+        if (user) {
+          let decodedUser = this.jwtHelper.decodeToken(user['idToken']);
+          let userObj = {
+            firstName: decodedUser.given_name,
+            lastName: decodedUser.family_name,
+            email: decodedUser.email,
+            profileImage: decodedUser.picture,
+            receiveInfo: true
+          };
+          this.userService.addUserByGoogle(userObj).subscribe(result => {
+            AuthenticationService.token = result['token'];
+            if (AuthenticationService.token && decode(AuthenticationService.token)) {
+              AuthenticationService.user_id = decode(AuthenticationService.token).user_id;
+            }
+            this.getUser();
+            this.navigateToReturnUrl();
+          }, (err) => {
+            WsToastService.toastSubject.next({ content: err.error.message, type: 'danger' });
+          });
+        }
+      });
   }
   resendActiveLink() {
     this.resendLoading.start();
@@ -137,7 +133,6 @@ export class LoginComponent implements OnInit {
         WsToastService.toastSubject.next({ content: "Activation Email is sent!", type: 'success' });
         this.resend = false;
         this.resendLoading.stop();
-
       });
     });
   }
@@ -154,18 +149,24 @@ export class LoginComponent implements OnInit {
         this.sharedUserService.user.next(result.result);
       })
   }
-
   getReturnUrl() {
     let returnUrl = this.route.snapshot.queryParams['returnUrl'];
-    let preview = this.route.snapshot.queryParams['preview'];
-    let id = this.route.snapshot.queryParams['id'];
-    let username = this.route.snapshot.params['username'];
     if (returnUrl !== undefined) {
       return returnUrl;
     }
-    if (preview == 'true' && id) {
-      return '/shop/' + username + '?id=' + id + '&preview=true';
-    }
     return environment.RETURN_URL;
+  }
+  navigateToReturnUrl() {
+    let returnUrl = this.getReturnUrl();
+    let preview = this.route.snapshot.queryParams['preview'];
+    let id = this.route.snapshot.queryParams['id'];
+    if (returnUrl)  {
+      this.router.navigateByUrl(returnUrl);
+    } else if (preview == 'true' && id) {
+      this.router.navigate([], { queryParams: {modal: null}, queryParamsHandling: 'merge'});
+      return;
+    } else {
+      this.router.navigate([], { queryParams: {modal: null}, queryParamsHandling: 'merge'});
+    }
   }
 }

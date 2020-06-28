@@ -1,14 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { environment } from '@environments/environment';
-import { AuthShopUserService } from '@services/http/auth-user/auth-shop-user.service';
-import { SharedLoadingService } from '@services/shared/shared-loading.service';
 import { SharedShopService } from '@services/shared/shared-shop.service';
-import { SharedUserService } from '@services/shared/shared-user.service';
-import { WsLoading } from '@elements/ws-loading/ws-loading';
 import { DocumentHelper } from '@helpers/documenthelper/document.helper';
-import { Subject, combineLatest, timer, interval } from 'rxjs';
-import { finalize, takeUntil, map, switchMap } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { WsLoading } from '@elements/ws-loading/ws-loading';
 
 @Component({
   selector: 'app-pending-shops',

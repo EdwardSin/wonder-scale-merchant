@@ -1,0 +1,35 @@
+.qrcode-info{
+    padding: 1rem;
+    background-color: #f7f7f7;
+    border: 1px solid #e5e5e5;
+    border-radius: 3px;
+    .qrcode-info__editable{
+        margin-top: -5px;
+        margin-left: .5rem;
+    }
+    textarea{
+        resize: none;
+        background-color: #fff;
+    }
+}
+.qrcode-container{
+    padding: 1rem;
+    border-radius: 5px;
+    background-color: #fff;
+    border: 1px solid #e5e5e5;
+    width: 150px;
+    height: 150px;
+    margin-left: auto;
+    margin-right: auto;
+    
+    .qrcode{
+        transition: transform ease .2s;
+        cursor: pointer;
+        &.qrcode-info__inactive{
+            opacity: .4;
+        }
+    }
+    .qrcode:hover{
+        transform: scale(1.1);
+    }
+}

@@ -17,7 +17,7 @@
     }
     .background__image{
         width: 100%;
-        max-width: 300px;
+        max-width: 50vw;
         margin-top: -5%;
         margin-left: auto;
         margin-right: auto;
@@ -43,6 +43,9 @@
     &:hover{
         transform: scale(1.03);
         .icon {
+            &.icon-dashboard {
+                color: #4d0099;
+            }
             &.icon-item {
                 color: #CC8500;
             }
@@ -185,5 +188,10 @@ footer {
     }
     .footer-box-right {
         text-align: center;
+    }
+}
+@media (max-width: 576px) {
+    .feature__container{
+        padding: 2rem 0;
     }
 }

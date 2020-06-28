@@ -32,6 +32,7 @@
               "node_modules/angular-bootstrap-md/assets/scss/bootstrap/bootstrap.scss",
               "node_modules/angular-bootstrap-md/assets/scss/mdb.scss",
               "node_modules/croppie/croppie.css",
+              "node_modules/chart.js/dist/Chart.min.css",
               "src/assets/vendor/fontawesome/css/all.min.css",
               "src/assets/vendor/heremap/scss/mapsjs-ui.minify.css",
               "src/assets/scss/animate.scss",
@@ -44,6 +45,7 @@
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
               "node_modules/croppie/croppie.min.js",
+              "node_modules/chart.js/dist/Chart.min.js",
               "src/assets/vendor/heremap/js/mapsjs-core.js",
               "src/assets/vendor/heremap/js/mapsjs-mapevents.js",
               "src/assets/vendor/heremap/js/mapsjs-pano.js",
@@ -73,7 +75,7 @@
                 {
                   "type": "initial",
                   "maximumWarning": "2mb",
-                  "maximumError": "10mb"
+                  "maximumError": "5mb"
                 },
                 {
                   "type": "anyComponentStyle",
