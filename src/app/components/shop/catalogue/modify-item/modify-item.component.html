@@ -4,12 +4,12 @@
             <div class="modal-body-content">
                 <form [formGroup]="itemGroup" class="center modal-content">
                     <div class="modal-close">
-                        <span class="fas fa-times" [routerLink]="['', {outlets: {modal:null}}]" [queryParams]="{id: null}" [queryParamsHandling]="'merge'"></span>
+                        <span class="fas fa-times" [routerLink]="[]" [queryParams]="{id: null, modal: null}" [queryParamsHandling]="'merge'"></span>
                     </div>
                     <div *ngIf="currentItem">
                         <h4 class="d-inline-block mt-1">{{ currentItem.name}}</h4>
                         <div class="ws-circle-button float-right">
-                            <button type="button" title="Edit Item Type" class="btn btn-controller small" [routerLink]="['', {outlets: { modal: 'item-types'}}]" [queryParams]="{id: currentItem._id}" [queryParamsHandling]="'merge'">
+                            <button type="button" title="Edit Item Type" class="btn btn-controller small" [routerLink]="[]" [queryParams]="{id: currentItem._id, modal: 'modify-item-type'}" [queryParamsHandling]="'merge'">
                                 <span class="fas fa-sitemap"></span>
                             </button>
                         </div>

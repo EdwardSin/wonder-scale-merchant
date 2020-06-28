@@ -63,13 +63,21 @@ export class AuthenticationService {
         return new Promise((resolve) => {
             AuthenticationService.token = null;
             AuthenticationService.user_id = null;
-            this.http.post('/api/auth-users/users/logout', {}).subscribe(result => {
+            if (this.cookieService.get('accessJwt')) {
+                this.http.post('/api/auth-users/users/logout', {}).subscribe(result => {
+                    this.sharedUserService.user.next(null);
+                    this.sharedUserService.followPages.next([]);
+                    this.sharedUserService.followItems.next([]);
+                    resolve(result['loggedIn']);
+                })
+                if (this.authService['_user']) {
+                    this.authService.signOut();
+                }
+            } else {
                 this.sharedUserService.user.next(null);
+                this.sharedUserService.followPages.next([]);
                 this.sharedUserService.followItems.next([]);
-                resolve(result['loggedIn']);
-            })
-            if (this.authService['_user']) {
-                this.authService.signOut();
+                resolve(true);
             }
         })
     }

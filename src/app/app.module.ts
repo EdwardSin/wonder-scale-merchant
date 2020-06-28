@@ -19,7 +19,6 @@ import { MainComponent } from '@components/shop/main/main.component';
 import { MainContainerComponent } from '@components/shop/main/main-container/main-container.component';
 import { WsLeftNavComponent } from '@elements/ws-left-nav/ws-left-nav.component';
 import { BreadcrumbComponent } from '@elements/breadcrumb/breadcrumb.component';
-import { ComponentmoduleproxyComponent } from './components/feature/proxy/componentmoduleproxy/componentmoduleproxy.component';
 import { SharedModule } from './modules/public/shared/shared.module';
 
 export function jwtOptionsFactory(platformId) {
@@ -48,9 +47,7 @@ export function jwtOptionsFactory(platformId) {
 
     // Elements
     WsLeftNavComponent,
-    BreadcrumbComponent,
-
-    ComponentmoduleproxyComponent
+    BreadcrumbComponent
   ],
   imports: [
     BrowserModule,

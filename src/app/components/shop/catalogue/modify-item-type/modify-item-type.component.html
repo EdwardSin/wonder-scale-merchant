@@ -4,7 +4,7 @@
       <div class="modal-body-content">
         <form class="modal-content" [formGroup]="itemTypesForm">
           <div class="modal-close">
-            <span class="fas fa-times" [routerLink]="['', {outlets: {modal:null}}]" [queryParams]="{id: null}" [queryParamsHandling]="'merge'"></span>
+            <span class="fas fa-times" [routerLink]="[]" [queryParams]="{id: null, modal: null}" [queryParamsHandling]="'merge'"></span>
           </div>
           <ng-container formArrayName="itemTypes" *ngIf="!loading.isRunning() && currentItem; let i = index" >
             <div>

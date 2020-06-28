@@ -1,10 +1,10 @@
 <div modal class="modal">
   <div class="modal-wrap">
     <div class="modal-body">
-      <div (click)="$event.stopPropagation()" class="modal-body-content">
+      <div class="modal-body-content">
         <form class="px-lg-5 p-4 pt-5 modal-content" style="max-width: 500px" [formGroup]="loginForm">
           <div class="modal-close">
-            <span class="fas fa-times" [routerLink]="['', {outlets: {modal:null}}]" [queryParamsHandling]="'merge'"></span>
+            <span class="fas fa-times" [routerLink]="[]" [queryParams]="{modal: null}" [queryParamsHandling]="'merge'"></span>
           </div>
           <div class="ws-input">
             <input placeholder="Login Email" class="form-control" formControlName="email" required>
@@ -22,7 +22,7 @@
             *ngIf="loginForm.controls['password'].hasError('required') && loginForm.controls['password'].touched">
             Please enter a password.</mat-error>
           <a href="javascript: void(0)" class="font-weight-light text-center pt-2 pb-2 mb-0"
-            [routerLink]="['', {outlets: {modal: 'forgot-password'}}]" skipLocationChange>Forgot Password?</a>
+            [routerLink]="[]" [queryParams]="{modal: 'forgot-password'}">Forgot Password?</a>
           <div class="text-center center w-100">
             <ws-loading-button [class]="'btn btn-block btn-second mb-2'" [loading]="loading.isRunning()"
               (click)="login()">Login
@@ -50,7 +50,7 @@
             Google</button>
           <p class="mb-0 font-weight-light">Don't have an account?
             <a href="javascript:void(0)" class="font-weight-bold default"
-              [routerLink]="['',{outlets:{modal: 'register'}}]" skipLocationChange>Sign
+              [routerLink]="[]" [queryParams]="{modal: 'register'}">Sign
               up</a></p>
         </form>
       </div>

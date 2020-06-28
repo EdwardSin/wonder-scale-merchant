@@ -6,7 +6,7 @@
       <h1 class="background__title mb-4">Merchant | Wonder Scale</h1>
       <p class="mb-4" style="color: #888; font-size: 1.5rem">A platform for merchants to manage and advertise your shop.</p>
       <p style="color: #888; font-size: 1rem; margin-bottom: 2rem">- We promise to provide the best services to our customers.</p>
-      <button class="btn btn-second" [routerLink]="['', { outlets: {modal: 'login'}}]">Join us now!</button>
+      <button class="btn btn-second" [routerLink]="[]" [queryParams]="{modal: 'login'}">Join us now!</button>
     </div>
     <div class="col-lg-3 order-1 order-lg-12 mb-3">
       <img class="background__image" src="/assets/images/png/icon.png" alt="home icon" />
@@ -17,7 +17,7 @@
 <!-- <div class="container text-center pt-5 pb-5">
   <h4>Promotion Now</h4>
   <p>We offer our first 100 merchants for free advertising!</p>
-  <button class="btn btn-second" [routerLink]="['', { outlets: {modal: 'login'}}]">Get offer now!</button>
+  <button class="btn btn-second" [routerLink]="[]" [queryParams]="{modal: 'login'}">Get offer now!</button>
 </div> -->
 <div class="pt-4 pb-4" style="background-color: #f5f5f5">
   <div class="container">

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, HostListener, OnInit, ViewContainerRef, ComponentFactoryResolver } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UnitAnimation } from '@animations/unit.animation';
 import { environment } from '@environments/environment';
@@ -67,6 +67,8 @@ export class ItemControllerComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private viewContainerRef: ViewContainerRef,
+    private cfr: ComponentFactoryResolver,
     private authShopContributorService: AuthShopContributorService,
     private sharedCategoryService: SharedCategoryService,
     private sharedShopService: SharedShopService,
@@ -79,13 +81,22 @@ export class ItemControllerComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.param = this.route.snapshot['url'] && this.route.snapshot['url'][0] && this.route.snapshot['url'][0]['path'];
+    this.param = this.route.snapshot.data.title;
     this.searchController.order = this.route.snapshot.queryParams['order'];
     this.searchController.orderBy = this.route.snapshot.queryParams['by'];
     this.searchController.display = this.route.snapshot.queryParams['display'];
     this.searchController.searchKeyword = this.route.snapshot['queryParams']['s_keyword'];
     this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe(queryParams => {
       this.searchController.searchKeyword = queryParams['s_keyword'];
+      if(queryParams['modal']) {
+        if (queryParams['modal'] == 'modify-item') {
+          this.createLazyModifyItemComponent();
+        } else if (queryParams['modal'] == 'modify-item-type') {
+          this.createLazyModifyItemTypeComponent();
+        }
+      } else {
+        this.viewContainerRef.clear();
+      }
     })
     this.sharedShopService.shop.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
@@ -122,6 +133,18 @@ export class ItemControllerComponent implements OnInit {
       this.columns = result;
       this.ref.detectChanges();
     })
+  }
+  async createLazyModifyItemComponent() {
+    this.viewContainerRef.clear();
+    await import ('../../../../modules/shop/catalogue/modify-item/modify-item.module');
+    const { ModifyItemComponent } = await import('@components/shop/catalogue/modify-item/modify-item.component');
+    this.viewContainerRef.createComponent(this.cfr.resolveComponentFactory(ModifyItemComponent));
+  }
+  async createLazyModifyItemTypeComponent() {
+    this.viewContainerRef.clear();
+    await import ('../../../../modules/shop/catalogue/modify-item-type/modify-item-type.module');
+    const { ModifyItemTypeComponent } = await import('@components/shop/catalogue/modify-item-type/modify-item-type.component');
+    this.viewContainerRef.createComponent(this.cfr.resolveComponentFactory(ModifyItemTypeComponent));
   }
   publishItems() {
     var editItems = this.editItems;

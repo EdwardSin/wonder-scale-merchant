@@ -13,9 +13,9 @@
   <div class="user-container float-right d-inline-block">
     <div *ngIf="!user" class="user__login-container d-inline-block"
       style="font-size: .9rem; line-height: 41px; vertical-align: middle">
-      <a class="user-container__link" href="javascript:void(0)" (click)="navigateToLogin()">Login</a>
+      <a class="user-container__link" href="javascript:void(0)" [routerLink]="[]" [queryParams]="{modal: 'login'}">Login</a>
       <span class="ws-white">|</span>
-      <a class="user-container__link" href="javascript:void(0)" (click)="navigateToSignup()">Sign-up</a>
+      <a class="user-container__link" href="javascript:void(0)" [routerLink]="[]" [queryParams]="{modal: 'register'}">Sign-up</a>
     </div>
     <div *ngIf="false" class="btn-group mr-1 d-none d-md-inline-block" mdbDropdown>
       <div mdbDropdownToggle class="li-container dropdown-toggle">
