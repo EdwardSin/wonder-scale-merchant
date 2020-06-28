@@ -5,7 +5,7 @@
         <form class="px-lg-5 p-4 pt-5 modal-content" style="max-width: 600px" [formGroup]="registerForm" (ngSubmit)="register()"
           *ngIf="!registerSuccess; else successContent">
           <div class="modal-close">
-            <span class="fas fa-times" [routerLink]="['', {outlets: {modal:null}}]"></span>
+            <span class="fas fa-times" [routerLink]="[]" [queryParams]="{modal: null}"></span>
           </div>
           <div class="ws-input">
             <input name="firstName" type="text" placeholder="First Name" class="form-control form-control-sm"
@@ -89,7 +89,7 @@
             </ws-loading-button>
           </div>
           <p class="font-weight-light">Already have a Wonder Scale account? <a class="font-weight-bold default"
-              href="javascript:void(0)" [routerLink]="['',{ outlets: { modal: 'login' } }]">Log in</a></p>
+              href="javascript:void(0)" [routerLink]="[]" [queryParams]="{modal: 'login'}">Log in</a></p>
         </form>
       </div>
     </div>
@@ -107,7 +107,7 @@
       Please check your email to activate.
     </p>
     <a href="javascript:void(0)" style="color: #000; font-size: 1.1rem; font-weight: 400"
-      [routerLink]="['',{ outlets: { modal: 'login' } }]"><span class="fas fa-chevron-left mr-2"></span>Back to
+      [routerLink]="[]" [queryParams]="{modal: 'login'}"><span class="fas fa-chevron-left mr-2"></span>Back to
       login</a>
   </div>
 </ng-template>

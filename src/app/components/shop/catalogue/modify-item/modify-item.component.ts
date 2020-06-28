@@ -249,7 +249,7 @@ export class ModifyItemComponent implements OnInit {
       finalize(() => { this.addItemLoading.stop() }))
       .subscribe(result => {
         this.currentItem = this.tempItem;
-        this.router.navigate([{ outlets: {modal: 'item-types'}}], {queryParams: { id: this.itemId }, queryParamsHandling: 'merge'});
+        this.router.navigate([], {queryParams: { id: this.itemId, modal: 'modify-item-type' }, queryParamsHandling: 'merge'});
         this.sharedCategoryService.refreshCategories();
       }, err => {
         WsToastService.toastSubject.next({ content: err.error.message || 'Error when creating item!', type: 'danger' });
@@ -272,7 +272,7 @@ export class ModifyItemComponent implements OnInit {
       finalize(() => { this.addItemLoading.stop(); }))
       .subscribe(result => {
         this.sharedCategoryService.refreshCategories();
-        this.router.navigate([{ outlets: {modal: null}}], {queryParams: {id: null}, queryParamsHandling: 'merge'});
+        this.router.navigate([], {queryParams: {id: null, modal: null}, queryParamsHandling: 'merge'});
       }, err => {
         WsToastService.toastSubject.next({ content: 'Error when editing item!', type: 'danger' });
       });

@@ -1,12 +1,10 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
 import { HomeComponent } from './components/public/home/home.component';
-import { VisitorGuard } from './guards/visitor.guard';
 import { MainComponent } from '@components/shop/main/main.component';
 import { AuthGuard } from './guards/auth.guard';
 import { ShopResolver } from '@components/resolvers/shopResolver.service';
 import { ShopGuard } from './shop.guard';
-import { ComponentmoduleproxyComponent } from '@components/feature/proxy/componentmoduleproxy/componentmoduleproxy.component';
 
 
 const routes: Routes = [{
@@ -22,80 +20,6 @@ const routes: Routes = [{
   //   path: 'about-us',
   //   component: AboutUsComponent
 }, {
-  path: 'login',
-  canActivate: [VisitorGuard],
-  outlet: 'modal',
-  component: ComponentmoduleproxyComponent,
-  children: [
-    {
-      path: '',
-      loadChildren: () => import('./modules/authentication/login/login.module').then(m => m.LoginModule)
-    }
-  ]
-},
-{
-  path: 'activate/:token',
-  outlet: 'modal',
-  component: ComponentmoduleproxyComponent,
-  children: [
-    {
-      path: '',
-      loadChildren: () => import('./modules/authentication/activate/activate.module').then(m => m.ActivateModule)
-    }
-  ]
-}, {
-  path: 'register',
-  outlet: 'modal',
-  component: ComponentmoduleproxyComponent,
-  children: [
-    {
-      path: '',
-      loadChildren: () => import('./modules/authentication/register/register.module').then(m => m.RegisterModule)
-    }
-  ]
-}, {
-  path: 'forgot-password',
-  outlet: 'modal',
-  component: ComponentmoduleproxyComponent,
-  children: [
-    {
-      path: '',
-      loadChildren: () => import('./modules/authentication/forgot-password/forgot-password.module').then(m => m.ForgotPasswordModule)
-    }
-  ]
-}, {
-  path: 'reset-password/:token',
-  outlet: 'modal',
-  component: ComponentmoduleproxyComponent,
-  children: [
-    {
-      path: '',
-      loadChildren: () => import('./modules/authentication/reset-password/reset-password.module').then(m => m.ResetPasswordModule)
-    }
-  ]
-}, {
-  path: 'item',
-  outlet: 'modal',
-  component: ComponentmoduleproxyComponent,
-  data: { title: 'cat', breadcrumb: 'Catalogue' },
-  children: [
-    {
-      path: '',
-      loadChildren: () => import('./modules/shop/catalogue/modify-item/modify-item.module').then(m => m.ModifyItemModule)
-    }
-  ]
-}, {
-  path: 'item-types',
-  outlet: 'modal',
-  component: ComponentmoduleproxyComponent,
-  data: { title: 'cat', breadcrumb: 'Catalogue' },
-  children: [
-    {
-      path: '',
-      loadChildren: () => import('./modules/shop/catalogue/modify-item-type/modify-item-type.module').then(m => m.ModifyItemTypeModule)
-    }
-  ]
-}, {
   path: 'shops/:username',
   component: MainComponent,
   canActivate: [AuthGuard],
@@ -105,21 +29,21 @@ const routes: Routes = [{
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     {
       path: 'dashboard',
-      loadChildren: () => import('./modules/shop/dashboard/dashboard.module').then(m => m.DashboardModule),
       canActivate: [ShopGuard],
-      data: { title: 'dashboard', breadcrumb: 'Dashboard' }
+      data: { title: 'dashboard', breadcrumb: 'Dashboard' },
+      loadChildren: () => import('./modules/shop/dashboard/dashboard.module').then(m => m.DashboardModule)
     },
     {
       path: 'catalogue',
-      loadChildren: () => import('./modules/shop/catalogue/catalogue.module').then(m => m.CatalogueModule),
       canActivate: [ShopGuard],
-      data: { title: 'cat', breadcrumb: 'Catalogue' }
+      data: { title: 'cat', breadcrumb: 'Catalogue' },
+      loadChildren: () => import('./modules/shop/catalogue/catalogue.module').then(m => m.CatalogueModule)
     },
     {
       path: 'information',
       canActivate: [ShopGuard],
-      loadChildren: () => import('./modules/shop/information/information.module').then(m => m.InformationModule),
-      data: { title: 'information', breadcrumb: 'Information' }
+      data: { title: 'information', breadcrumb: 'Information' },
+      loadChildren: () => import('./modules/shop/information/information.module').then(m => m.InformationModule)
     },
     // {
     //   path: 'advertising',
@@ -174,9 +98,8 @@ const routes: Routes = [{
     {
       path: 'settings',
       canActivate: [ShopGuard],
-      loadChildren: () => import('./modules/shop/settings/settings.module').then(m => m.SettingsModule),
-      // component: SettingsComponent,
-      data: { title: 'settings', breadcrumb: 'Settings' }
+      data: { title: 'settings', breadcrumb: 'Settings' },
+      loadChildren: () => import('./modules/shop/settings/settings.module').then(m => m.SettingsModule)
     },
     {
       path: 'qrcode',
@@ -188,17 +111,6 @@ const routes: Routes = [{
 },
 { path: 'not-found', loadChildren: () => import('./modules/error/error.module').then(m => m.ErrorModule) },
 {
-  path: 'new-shop',
-  outlet: 'modal',
-  component: ComponentmoduleproxyComponent,
-  children: [
-    {
-      path: '',
-      loadChildren: () => import('./modules/create-shop/create-shop.module').then(m => m.CreateShopModule)
-    }
-  ]
-}
-  , {
   path: '**',
   redirectTo: 'not-found'
 }];

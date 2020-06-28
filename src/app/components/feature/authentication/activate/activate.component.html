@@ -24,7 +24,7 @@
       <p class="text-center mb-0 text-muted">Redirecting...</p>
       <p class="text-center mb-4 text-muted">{{ environment.ACTIVATED_MESSAGE }}</p>
       <!-- <a href="javascript:void(0)" style="color: #000; font-size: 1.1rem; font-weight: 400"
-        [routerLink]="['',{ outlets: { modal: 'login' } }]"><span class="fas fa-chevron-left mr-2"></span>Back to
+        [routerLink]="[]" [queryParams]="{modal: 'login'}"><span class="fas fa-chevron-left mr-2"></span>Back to
         login</a> -->
     </div>
   </ng-container>
@@ -33,7 +33,7 @@
   <ng-container *ngIf="!resend; else resendContent">
     <div class="modal-content" style="max-width: 500px;">
       <div class="modal-close">
-        <span class="fas fa-times" [routerLink]="['', {outlets: {modal:null}}]"></span>
+        <span class="fas fa-times" [routerLink]="[]" [queryParams]="{modal: null}"></span>
       </div>
       <h3 class="font-weight-bold">Activation</h3>
       <div class="text-center mt-5 mb-4">
@@ -50,7 +50,7 @@
 
   <div class="modal-content">
     <div class="modal-close">
-      <span class="fas fa-times" [routerLink]="['', {outlets: {modal:null}}]"></span>
+      <span class="fas fa-times" [routerLink]="[]" [queryParams]="{modal: null}"></span>
     </div>
     <h3 class="font-weight-bold">Resend Activation</h3>
     <div class="text-center mt-4 mb-4">
@@ -60,7 +60,7 @@
       Please check your email.
     </p>
     <a href="javascript:void(0)" style="color: #000; font-size: 1.1rem; font-weight: 400"
-      [routerLink]="['',{ outlets: { modal: 'login' } }]"><span class="fas fa-chevron-left mr-2"></span>Back to
+      [routerLink]="[]" [queryParams]="{modal: 'login'}"><span class="fas fa-chevron-left mr-2"></span>Back to
       login</a>
   </div>
 </ng-template>
