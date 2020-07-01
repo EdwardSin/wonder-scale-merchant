@@ -28,7 +28,6 @@
                 </a>
                 <div class="divider dropdown-divider"></div>
                 <a class="dropdown-item" [routerLink]="['shops/all']">All pages</a>
-                <a class="dropdown-item" [routerLink]="['contact-us']">Contact Us</a>
                 <a *ngIf="false" class="dropdown-item" href="https://www.wonderscale.com">To Wonder Scale</a>
                 <!-- <a class="dropdown-item" [routerLink]="['settings']">Settings</a> -->
                 <div class="divider dropdown-divider"></div>
@@ -44,7 +43,8 @@
         <div class="dropdown-menu dropdown-primary font-9" style="margin-top: 20px; right:0; left: inherit">
             <a class="dropdown-item" *ngIf="false" href="#">Help</a>
             <!-- <div class="divider dropdown-divider"></div> -->
-            <a class="dropdown-item" routerLink="contact-us">Contact Us</a>
+            <a class="dropdown-item" [routerLink]="['/policy']">Policy</a>
+            <a class="dropdown-item" [routerLink]="['/contact-us']">Contact Us</a>
             <!-- <a class="dropdown-item" routerLink="about-us">About Us</a> -->
         </div>
     </div>
