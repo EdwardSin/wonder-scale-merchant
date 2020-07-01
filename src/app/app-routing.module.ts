@@ -13,9 +13,10 @@ const routes: Routes = [{
 }, {
   path: 'shops',
   loadChildren: () => import('./modules/shop-list/shop-list.module').then(m => m.ShopListModule)
-  // }, {
-  //   path: 'contact-us',
-  //   component: ContactUsComponent
+}, {
+  path: 'contact-us',
+  loadChildren: () => import('./modules/contact-us/contact-us.module').then(m => m.ContactUsModule)
+    // component: ContactUsComponent
   // }, {
   //   path: 'about-us',
   //   component: AboutUsComponent
