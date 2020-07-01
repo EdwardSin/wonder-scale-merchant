@@ -16,10 +16,9 @@ const routes: Routes = [{
 }, {
   path: 'contact-us',
   loadChildren: () => import('./modules/contact-us/contact-us.module').then(m => m.ContactUsModule)
-    // component: ContactUsComponent
-  // }, {
-  //   path: 'about-us',
-  //   component: AboutUsComponent
+}, {
+  path: 'policy',
+  loadChildren: () => import('./modules/policy/policy.module').then(m => m.PolicyModule)
 }, {
   path: 'shops/:username',
   component: MainComponent,
