@@ -31,9 +31,7 @@
                             </div>
                             <div class="image-item d-table h-100 position-relative clear-d-color">
                                 <div style="background-color: white; display: table-cell; vertical-align: middle; border: 1px solid #ccc;">
-                                    <img style="height: 175px; width: 175px; object-fit: contain"
-                                        [defaultImage]="environment.LOADING_UPLOAD_DATA" [lazyLoad]="environment.IMAGE_URL + image.url"
-                                        [src]="environment.IMAGE_URL + image.url" data-upload='img_upload'
+                                    <img style="height: 175px; width: 175px; object-fit: contain" [src]="environment.IMAGE_URL + image.url" data-upload='img_upload'
                                         alt="item.png" />
                                 </div>
                             </div>
@@ -42,7 +40,7 @@
                             <div *ngIf="isImagesUploading" class="w-100 h-100 position-absolute text-center"
                                 style="z-index:2; top:0; background-color: rgba(0, 0, 0, .3)">
                                 <ws-spinner-dot class="position-absolute d-block" style="top: 50%; left: 50%;" 
-                                [color]="'rgba(255,255,255,.8)'"></ws-spinner-dot>
+                                [color]="'rgba(0,0,0,.8)'"></ws-spinner-dot>
                             </div>
                             <div class="corner-setting">
                                 <span class="corner-setting-item fas fa-times"
@@ -74,8 +72,7 @@
                 <div style="max-width: 100%; width:fit-content" class="mb-3 center pl-1 pr-1 position-relative"
                     *ngFor="let image of allImages; let i = index">
                     <div [ngSwitch]="image?.type">
-                        <img *ngSwitchCase="'url'" style="border: 1px solid #ccc" class="w-100"
-                            [defaultImage]="environment.LOADING_UPLOAD_DATA" [lazyLoad]="environment.IMAGE_URL + image.url"
+                        <img *ngSwitchCase="'url'" style="border: 1px solid #ccc" class="w-100" [src]="environment.IMAGE_URL + image.url"
                             alt="item.png" />
                         <img *ngSwitchCase="'blob'" style="border: 1px solid #ccc" class="w-100"
                             data-upload='img_upload' [src]="image.url" alt="item.png" />
