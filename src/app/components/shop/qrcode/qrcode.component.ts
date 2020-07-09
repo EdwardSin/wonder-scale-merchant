@@ -59,7 +59,7 @@ export class QrcodeComponent implements OnInit {
         if (result) {
           this.shop = result;
           this.displayImage = 'assets/images/png/dot.png';
-          this.url = environment.URL + 'page/' + this.shop.username + '?id=' + this.shop.id;
+          this.url = environment.URL + 'page/' + this.shop.username + '?id=' + this.shop.id + '&type=qr_scan';
         }
         this.loading.stop();
       })
