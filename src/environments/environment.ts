@@ -8,6 +8,7 @@ export const environment = {
   URL: 'https://192.168.0.101:4200/',
   IMAGE_URL: 'https://assets.wonderscale.com/',
   INFORMATION_IMG_PATH: 'env_development/information_thumbnails',
+  MENU_IMG_PATH: 'env_development/menu_thumbnails',
   HERE_APP_API: 'h9LLOE7i3CG3y1OKhWxw',
   HERE_APP_CODE: 'ERx9SWBfCHLlbN1vKOvlng',
   ITEMS_PER_PAGE: 25,
