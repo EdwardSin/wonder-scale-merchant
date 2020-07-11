@@ -8,6 +8,12 @@
           <span class="ws-main-nav-text">Dashboard</span>
         </a>
       </li>
+      <li *ngIf="shop?.type == 'restaurant'" class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
+        <a [routerLink]="['quick-menu']">
+          <span class="ws-main-nav-icon fas fa-book-open"></span>
+          <span class="ws-main-nav-text">Quick Menu</span>
+        </a>
+      </li>
       <li class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
         <a [routerLink]="['catalogue']">
           <span class="ws-main-nav-icon fas fa-th"></span>

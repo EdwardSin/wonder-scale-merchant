@@ -72,6 +72,10 @@ export class AuthShopContributorUrl {
     static editInformationImagesUrl = URL.AUTH_SHOP_CONTRIBUTOR_URL + '/edit/information-image';
     static editInformationImagesOrderUrl = URL.AUTH_SHOP_CONTRIBUTOR_URL + '/rearrange/information-image';
     static removeInformationImageUrl = URL.AUTH_SHOP_CONTRIBUTOR_URL + '/remove/information-image';
+    static editMenuImagesUrl = URL.AUTH_SHOP_CONTRIBUTOR_URL + '/edit/menu-image';
+    static editMenuImagesOrderUrl = URL.AUTH_SHOP_CONTRIBUTOR_URL + '/rearrange/menu-image';
+    static removeMenuImageUrl = URL.AUTH_SHOP_CONTRIBUTOR_URL + '/remove/menu-image';
+
     static advertiseItemsUrl = URL.AUTH_SHOP_CONTRIBUTOR_URL + '/advupdate';
     static updateNewItemMessageUrl = URL.AUTH_SHOP_CONTRIBUTOR_URL + '/updatemessage';
 }

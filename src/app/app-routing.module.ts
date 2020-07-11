@@ -34,6 +34,12 @@ const routes: Routes = [{
       loadChildren: () => import('./modules/shop/dashboard/dashboard.module').then(m => m.DashboardModule)
     },
     {
+      path: 'quick-menu',
+      canActivate: [ShopGuard],
+      data: { title: 'quick-menu', breadcrumb: 'Quick Menu' },
+      loadChildren: () => import('./modules/shop/quick-menu/quick-menu.module').then(m => m.QuickMenuModule)
+    },
+    {
       path: 'catalogue',
       canActivate: [ShopGuard],
       data: { title: 'cat', breadcrumb: 'Catalogue' },

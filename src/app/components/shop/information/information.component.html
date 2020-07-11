@@ -11,7 +11,7 @@
                     (output)="fileChangeEvent($event)"></ws-uploader>
     </div>
     <div class="ws-circle-button">
-        <button *ngIf="editedFlag" [disabled]="isImagesUploading" class="btn btn-controller small" title="Save"
+        <button [disabled]="!editedFlag || isImagesUploading" class="btn btn-controller small" title="Save"
             (click)="editShop()">
             <span class="fas fa-save"></span>
         </button>
@@ -22,21 +22,15 @@
         <div class="row no-gutters w-100 center">
             <div *ngIf="allImages?.length; else noImage" class="all-item-container pb-2 ws-drag-list" cdkDropList
                 cdkDropListOrientation="horizontal" (cdkDropListDropped)="drop($event)">
-                <div class="ml-1 mr-1 ws-drag-box" *ngFor="let image of allImages; let i = index" cdkDrag>
-                    <div [ngSwitch]="image?.type" class="position-relative w-100 h-100">
-                        <div *ngSwitchCase="'url'" class="h-100">
+                <div class="ws-drag-box mx-1 " *ngFor="let image of allImages; let i = index" cdkDrag>
+                    <div [ngSwitch]="image?.type" class="position-relative">
+                        <div *ngSwitchCase="'url'">
                             <div class="corner-setting">
-                                <span class="corner-setting-item fas fa-times"
-                                    (click)="openInformationModal(image)"></span>
+                                <span class="corner-setting-item fas fa-times" (click)="openInformationModal(image)"></span>
                             </div>
-                            <div class="image-item d-table h-100 position-relative clear-d-color">
-                                <div style="background-color: white; display: table-cell; vertical-align: middle; border: 1px solid #ccc;">
-                                    <img style="height: 175px; width: 175px; object-fit: contain" [src]="environment.IMAGE_URL + image.url" data-upload='img_upload'
-                                        alt="item.png" />
-                                </div>
-                            </div>
+                            <img class="image-item" [src]="environment.IMAGE_URL + image.url" data-upload='img_upload' alt="item.png" />
                         </div>
-                        <div *ngSwitchCase="'blob'" class="h-100">
+                        <div *ngSwitchCase="'blob'">
                             <div *ngIf="isImagesUploading" class="w-100 h-100 position-absolute text-center"
                                 style="z-index:2; top:0; background-color: rgba(0, 0, 0, .3)">
                                 <ws-spinner-dot class="position-absolute d-block" style="top: 50%; left: 50%;" 
@@ -46,13 +40,7 @@
                                 <span class="corner-setting-item fas fa-times"
                                 (click)="removePreUploadImage(image)"></span>
                             </div>
-                            <div class="image-item d-table h-100 position-relative clear-d-color">
-                                <div style="background-color: white; display: table-cell; vertical-align: middle; border: 1px solid #ccc;">
-                                    <img style="height: 175px; width: 175px; object-fit: contain"
-                                        [src]="image.url"
-                                        data-upload='img_upload' alt="item.png" />
-                                </div>
-                            </div>
+                            <img class="image-item" [src]="image.url" data-upload='img_upload' alt="item.png" />
                         </div>
                     </div>
                 </div>

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+import { SwiperModule } from 'ngx-swiper-wrapper';
 import { AgmCoreModule } from '@agm/core';
 import { MatNativeDateModule } from '@angular/material/core';
 
@@ -46,6 +47,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     ReactiveFormsModule,
     ElementModule,
     PipeModule,
+    SwiperModule,
     DirectiveModule,
     DragDropModule,
     MatInputModule,

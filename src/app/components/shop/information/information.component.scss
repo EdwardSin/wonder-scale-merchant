@@ -28,9 +28,12 @@
 }
 
 .image-item{
-    height: 175px; 
+    height: 175px;
     width: 175px;
+    object-fit: contain;
     transition: all ease .2s;
+    box-shadow: 0 0 3px #888;
+    background-color: #fff;
     &:hover{
         opacity: .7;
     }
