@@ -50,6 +50,7 @@
     cursor: move;
     display: block;
     .fa-bars {
+        border-right: 0;
         cursor: move;
         transition: all .2s ease;
         &:hover {
