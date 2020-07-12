@@ -1,0 +1,79 @@
+
+@import '../../../../assets/scss/variables.scss';
+.quick-menu__container{
+    ::ng-deep .swiper-slide {
+        width: fit-content !important;
+        overflow: hidden !important;
+    }
+    .preview__container{
+        max-width: 100%;
+        width:fit-content;
+        position: relative;
+
+        .preview__image{
+            width: 100%;
+            border: 1px solid #ccc;
+            max-width: 1280px;
+        }
+    }
+}
+.image-item{
+    height: 175px;
+    width: 175px;
+    object-fit: contain;
+    position: relative;
+    transition: all ease .2s;
+    box-shadow: 0 0 3px #888;
+    background-color: #fff;
+    &:hover{
+        opacity: .7;
+    }
+}
+.all-item-container{
+    overflow-x: auto; 
+    white-space: nowrap;
+    max-width: inherit;
+
+    &::-webkit-scrollbar {
+        height: 5px;
+    }
+    
+    /* Track */
+    &::-webkit-scrollbar-track {
+        border-radius: 10px;
+    }
+     
+    /* Handle */
+    &::-webkit-scrollbar-thumb {
+        background: map-get($ws-color, secondary); 
+        border-radius: 10px;
+    }
+    
+    /* Handle on hover */
+    &::-webkit-scrollbar-thumb:hover {
+        background: map-get($ws-color, secondary-hover); 
+    }
+
+}
+
+.corner-setting {
+    position: absolute;
+    right: 1px;
+    top: 1px;
+    z-index: 2;
+    cursor: pointer;
+  
+    .corner-setting-item {
+      padding: .5rem;
+      width: 2rem;
+      line-height: .9rem;
+      text-align: center;
+      background-color: rgba(0, 0, 0, .3);
+      transition: background-color .3s ease;
+      color: #fff;
+  
+      &:hover {
+        background-color: rgba(0, 0, 0, .5);
+      }
+    }
+  }

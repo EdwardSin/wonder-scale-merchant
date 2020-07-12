@@ -11,7 +11,7 @@
                     (output)="fileChangeEvent($event)"></ws-uploader>
     </div>
     <div class="ws-circle-button">
-        <button *ngIf="editedFlag" [disabled]="isImagesUploading" class="btn btn-controller small" title="Save"
+        <button [disabled]="!editedFlag || isImagesUploading" class="btn btn-controller small" title="Save"
             (click)="editShop()">
             <span class="fas fa-save"></span>
         </button>
@@ -22,39 +22,25 @@
         <div class="row no-gutters w-100 center">
             <div *ngIf="allImages?.length; else noImage" class="all-item-container pb-2 ws-drag-list" cdkDropList
                 cdkDropListOrientation="horizontal" (cdkDropListDropped)="drop($event)">
-                <div class="ml-1 mr-1 ws-drag-box" *ngFor="let image of allImages; let i = index" cdkDrag>
-                    <div [ngSwitch]="image?.type" class="position-relative w-100 h-100">
-                        <div *ngSwitchCase="'url'" class="h-100">
+                <div class="ws-drag-box mx-1 " *ngFor="let image of allImages; let i = index" cdkDrag>
+                    <div [ngSwitch]="image?.type" class="position-relative">
+                        <div *ngSwitchCase="'url'">
                             <div class="corner-setting">
-                                <span class="corner-setting-item fas fa-times"
-                                    (click)="openInformationModal(image)"></span>
+                                <span class="corner-setting-item fas fa-times" (click)="openInformationModal(image)"></span>
                             </div>
-                            <div class="image-item d-table h-100 position-relative clear-d-color">
-                                <div style="background-color: white; display: table-cell; vertical-align: middle; border: 1px solid #ccc;">
-                                    <img style="height: 175px; width: 175px; object-fit: contain"
-                                        [defaultImage]="environment.LOADING_UPLOAD_DATA" [lazyLoad]="environment.IMAGE_URL + image.url"
-                                        [src]="environment.IMAGE_URL + image.url" data-upload='img_upload'
-                                        alt="item.png" />
-                                </div>
-                            </div>
+                            <img class="image-item" [src]="environment.IMAGE_URL + image.url" data-upload='img_upload' alt="item.png" />
                         </div>
-                        <div *ngSwitchCase="'blob'" class="h-100">
+                        <div *ngSwitchCase="'blob'">
                             <div *ngIf="isImagesUploading" class="w-100 h-100 position-absolute text-center"
                                 style="z-index:2; top:0; background-color: rgba(0, 0, 0, .3)">
                                 <ws-spinner-dot class="position-absolute d-block" style="top: 50%; left: 50%;" 
-                                [color]="'rgba(255,255,255,.8)'"></ws-spinner-dot>
+                                [color]="'rgba(0,0,0,.8)'"></ws-spinner-dot>
                             </div>
                             <div class="corner-setting">
                                 <span class="corner-setting-item fas fa-times"
                                 (click)="removePreUploadImage(image)"></span>
                             </div>
-                            <div class="image-item d-table h-100 position-relative clear-d-color">
-                                <div style="background-color: white; display: table-cell; vertical-align: middle; border: 1px solid #ccc;">
-                                    <img style="height: 175px; width: 175px; object-fit: contain"
-                                        [src]="image.url"
-                                        data-upload='img_upload' alt="item.png" />
-                                </div>
-                            </div>
+                            <img class="image-item" [src]="image.url" data-upload='img_upload' alt="item.png" />
                         </div>
                     </div>
                 </div>
@@ -74,8 +60,7 @@
                 <div style="max-width: 100%; width:fit-content" class="mb-3 center pl-1 pr-1 position-relative"
                     *ngFor="let image of allImages; let i = index">
                     <div [ngSwitch]="image?.type">
-                        <img *ngSwitchCase="'url'" style="border: 1px solid #ccc" class="w-100"
-                            [defaultImage]="environment.LOADING_UPLOAD_DATA" [lazyLoad]="environment.IMAGE_URL + image.url"
+                        <img *ngSwitchCase="'url'" style="border: 1px solid #ccc" class="w-100" [src]="environment.IMAGE_URL + image.url"
                             alt="item.png" />
                         <img *ngSwitchCase="'blob'" style="border: 1px solid #ccc" class="w-100"
                             data-upload='img_upload' [src]="image.url" alt="item.png" />

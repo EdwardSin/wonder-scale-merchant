@@ -110,7 +110,7 @@ footer {
                     text-decoration: none;
                 }
                 &:hover {
-                    color: map-get($ws-color, darker-grey);
+                    color: map-get($ws-color, light-grey-1);
                 }
                 &:focus {
                     text-decoration: none;
@@ -119,7 +119,7 @@ footer {
             &:first-child {
                 display: block;
                 font-size: 20px;
-                color: map-get($ws-color, primary);
+                color: #fff;
                 margin-bottom: 12px;
             }
         }

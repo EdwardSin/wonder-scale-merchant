@@ -1,60 +1,56 @@
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { environment } from '@environments/environment';
-import { AuthShopContributorService } from '@services/http/auth-shop/contributor/auth-shop-contributor.service';
-import { SharedShopService } from '@services/shared/shared-shop.service';
+import { Component, OnInit } from '@angular/core';
 import { WsLoading } from '@elements/ws-loading/ws-loading';
-import { DocumentHelper } from '@helpers/documenthelper/document.helper';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { Subject, forkJoin, from } from 'rxjs';
+import { SharedShopService } from '@services/shared/shared-shop.service';
+import { takeUntil, mergeMap, map } from 'rxjs/operators';
+import { Shop } from '@objects/shop';
+import { environment } from '@environments/environment';
+import * as _ from 'lodash';
+import { AuthShopContributorService } from '@services/http/auth-shop/contributor/auth-shop-contributor.service';
 import { WsToastService } from '@elements/ws-toast/ws-toast.service';
 import { ImageHelper } from '@helpers/imagehelper/image.helper';
-import _ from 'lodash';
-import { from as observableFrom, Subject } from 'rxjs';
-import { map, mergeMap, takeUntil } from 'rxjs/operators';
-@Component({
-  selector: 'app-information',
-  templateUrl: './information.component.html',
-  styleUrls: ['./information.component.scss']
-})
-export class InformationComponent implements OnInit {
-  shop;
-  numOfTotalImages: number = 0;
-  allImages: Array<any> = [];
-  editedFlag: boolean;
-  isImagesUploading: boolean;
-  isDeletedConfirmationModalOpened: boolean;
-  selectedInformation;
-  environment = environment;
-  removeLoading: WsLoading = new WsLoading;
-  loading: WsLoading = new WsLoading;
-  @ViewChild('informationUploadInput', { static: true }) informationUploadInput: ElementRef;
-  private ngUnsubscribe: Subject<any> = new Subject();
-  constructor(private sharedShopService: SharedShopService,
-    private authShopContributorService: AuthShopContributorService) { }
+import { DocumentHelper } from '@helpers/documenthelper/document.helper';
 
-  ngOnInit() {
-    this.getShop();
-  }
-  getShop() {
-    this.loading.start();
-    this.sharedShopService.shop.pipe(takeUntil(this.ngUnsubscribe)).subscribe(res => {
-      if (res) {
-        DocumentHelper.setWindowTitleWithWonderScale('Information Banner - ' + res.name);
-        this.shop = res;
-        this.numOfTotalImages = this.shop.informationImages.length;
-        this.allImages = this.shop.informationImages.map(image => { return { url: image, type: 'url' } });
+@Component({
+  selector: 'app-quick-menu',
+  templateUrl: './quick-menu.component.html',
+  styleUrls: ['./quick-menu.component.scss']
+})
+export class QuickMenuComponent implements OnInit {
+  environment = environment;
+  loading: WsLoading = new WsLoading;
+  allImages = [];
+  selectedMenu;
+  isImagesUploading: boolean = false;
+  removeLoading: WsLoading = new WsLoading;
+  numOfTotalImages: number = 0;
+  isDeletedConfirmationModalOpened: boolean = false;
+  editedFlag: boolean = false;
+  shop: Shop;
+  private ngUnsubscribe: Subject<any> = new Subject;
+  constructor(private authShopContributorService: AuthShopContributorService, private sharedShopService: SharedShopService) { 
+    this.sharedShopService.shop.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+      if (result) {
+        DocumentHelper.setWindowTitleWithWonderScale('Quick Menu - ' + result.name);
+        this.shop = result;
+        this.numOfTotalImages = this.shop.menuImages.length;
+        this.allImages = this.shop.menuImages.map(image => { return { url: image, type: 'url' } });
         this.loading.stop();
       }
     });
+  }
+  ngOnInit(): void {
   }
   uploadImagesAndEdit() {
     let images_blob = this.allImages.filter(image => image.type === 'blob');
     this.isImagesUploading = true;
 
-    observableFrom(images_blob)
+    from(images_blob)
       .pipe(
         mergeMap(image => {
           return this.authShopContributorService
-            .editInformationImages({
+            .editMenuImages({
               file: image.base64,
               fileext: image['ext'],
               index: this.allImages.indexOf(image)
@@ -70,7 +66,7 @@ export class InformationComponent implements OnInit {
       )
       .subscribe(
         result => {
-          this.shop.informationImages.splice(result['index'], 0, result['image']);
+          this.shop.menuImages.splice(result['index'], 0, result['image']);
           this.allImages[result['index']] = { url: result['image'], type: 'url' };
         },
         err => { },
@@ -84,43 +80,48 @@ export class InformationComponent implements OnInit {
   editShop() {
     if (this.allImages.filter(image => image.type === 'blob').length == 0) {
       var obj = {
-        informationImages: this.allImages.map(image => image.url)
+        menuImages: this.allImages.map(image => image.url)
       };
       this.authShopContributorService
-        .editInformationImagesOrder(obj)
+        .editMenuImagesOrder(obj)
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(result => {
           this.editedFlag = false;
           this.shop = result['result'];
           this.sharedShopService.shop.next(this.shop);
-          WsToastService.toastSubject.next({ content: 'Banner is updated!', type: 'success' });
+          WsToastService.toastSubject.next({ content: 'Menu is updated!', type: 'success' });
         });
     }
     else {
       this.uploadImagesAndEdit();
     }
   }
-  removePreUploadImage(item) {
-    _.remove(this.allImages, (x) => x.name == item.name);
-    this.editedFlag = this.allImages.find(image => image.type == 'blob');
-  }
+  
   removeUploadedImage(image) {
-    if (this.shop && this.shop['informationImages']) {
+    if (this.shop && this.shop['menuImages']) {
       this.removeLoading.start();
       var image_id = ImageHelper.getFormattedImage(
         image.url,
-        environment.INFORMATION_IMG_PATH
+        environment.MENU_IMG_PATH
       );
-      this.authShopContributorService.removeInformationImage({ filename: image.url })
+      this.authShopContributorService.removeMenuImage({ filename: image.url })
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(result => {
           _.remove(this.allImages, image);
-          _.remove(this.shop['informationImages'], image.url);
+          _.remove(this.shop['menuImages'], image.url);
           this.numOfTotalImages--;
           this.isDeletedConfirmationModalOpened = false;
           this.removeLoading.stop();
         });
     }
+  }
+  removePreUploadImage(item) {
+    _.remove(this.allImages, (x) => x.name == item.name);
+    this.editedFlag = this.allImages.find(image => image.type == 'blob');
+  }
+  drop(event: CdkDragDrop<string[]>) {
+    this.editedFlag = true;
+    moveItemInArray(this.allImages, event.previousIndex, event.currentIndex);
   }
   fileChangeEvent(event) {
     event.forEach(item => {
@@ -133,13 +134,9 @@ export class InformationComponent implements OnInit {
       }
     });
   }
-  drop(event: CdkDragDrop<string[]>) {
-    this.editedFlag = true;
-    moveItemInArray(this.allImages, event.previousIndex, event.currentIndex);
-  }
-  openInformationModal(selectedInformation) {
+  openMenuModal(selectedMenu) {
     this.isDeletedConfirmationModalOpened = true;
-    this.selectedInformation = selectedInformation;
+    this.selectedMenu = selectedMenu;
   }
   ngOnDestroy() {
     this.ngUnsubscribe.next();

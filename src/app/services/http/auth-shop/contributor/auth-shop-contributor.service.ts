@@ -60,6 +60,15 @@ export class AuthShopContributorService {
   removeInformationImage(obj) {
     return this.http.put(AuthShopContributorUrl.removeInformationImageUrl, obj, this.accessTokenService.getAccessToken());
   }
+  editMenuImages(obj) {
+    return this.http.put(AuthShopContributorUrl.editMenuImagesUrl, obj, this.accessTokenService.getAccessToken());
+  }
+  editMenuImagesOrder(obj) {
+    return this.http.put(AuthShopContributorUrl.editMenuImagesOrderUrl, obj, this.accessTokenService.getAccessToken());
+  }
+  removeMenuImage(obj) {
+    return this.http.put(AuthShopContributorUrl.removeMenuImageUrl, obj, this.accessTokenService.getAccessToken());
+  }
   advertiseItems(obj) {
     return this.http.post(AuthShopContributorUrl.advertiseItemsUrl, obj, this.accessTokenService.getAccessToken());
   }
