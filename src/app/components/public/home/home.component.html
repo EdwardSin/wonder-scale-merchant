@@ -4,12 +4,12 @@
   <div class="background row no-gutters">
     <div class="col-lg-9 background__texture order-12 order-lg-1 text-center text-lg-left">
       <h1 class="background__title mb-4">Merchant | Wonder Scale</h1>
-      <p class="mb-4" style="color: #888; font-size: 1.5rem">A platform for merchants to manage and advertise your shop.</p>
+      <p class="mb-4 font-weight-bold" style="font-size: 1.5rem">A platform for merchants to manage and advertise your shop.</p>
       <p style="color: #888; font-size: 1rem; margin-bottom: 2rem">- We promise to provide the best services to our customers.</p>
       <button class="btn btn-second" (click)="navigateToJoinUs()">Join us now!</button>
     </div>
     <div class="col-lg-3 order-1 order-lg-12 mb-3">
-      <img class="background__image" src="/assets/images/png/icon.png" alt="home icon" />
+      <img class="background__image" src="/assets/images/svg/icon.svg" alt="home icon" />
     </div>
   </div>
 </div>
@@ -129,17 +129,17 @@
       <div class="footer-box-center col-md-8 no-gutters row">
         <div class="col">
           <ul>
-            <!-- <li class="col">
-              <a class="font-weight-bold ws-white" routerLink="/">Wonder Scale</a>
-            </li> -->
-            <!-- <li class="col">
+            <li class="col">
+              <a class="font-weight-bold ws-white" style="pointer-events: none;">Wonder Scale</a>
+            </li>
+            <li class="col mb-0">
               <a class="font-9" [routerLink]="['/contact-us']">Contact Us</a>
             </li>
-            <li class="col">
-              <a class="font-9" routerLink="/about-us">About Us</a>
+            <li class="col mb-0">
+              <a class="font-9" [routerLink]="['/policy']">Policy</a>
             </li>
-            <li class="col">
-              <a class="font-9" routerLink="/policy">Policy</a>
+            <!-- <li class="col">
+              <a class="font-9" routerLink="/about-us">About Us</a>
             </li>
             <li *ngIf="false">
               <a routerLink="/help">Help</a>

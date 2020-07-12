@@ -58,8 +58,8 @@ export class QrcodeComponent implements OnInit {
       .subscribe(result => {
         if (result) {
           this.shop = result;
-          this.displayImage = 'assets/images/png/dot.png';
-          this.url = environment.URL + 'page/' + this.shop.username + '?id=' + this.shop.id;
+          this.displayImage = 'assets/images/svg/dot.svg';
+          this.url = environment.URL + 'page/' + this.shop.username + '?id=' + this.shop.id + '&type=qr_scan';
         }
         this.loading.stop();
       })
@@ -93,11 +93,11 @@ export class QrcodeComponent implements OnInit {
     let canvas = $(target).find('canvas')[0];
     if (canvas) {
       let context =(<HTMLCanvasElement>canvas).getContext('2d');
-      let width = size / 3 * 190 / 300;
-      let height = size / 3 * 190 / 300;
-      let offsetyY = size * 9 / 300;
+      let width = size / 3 * 46.7 / 70;
+      let height = size / 3 * 46.7 / 70;
+      let offsetInnerY = size / 3 * 4.9 / 70;
       let offsetX = size/2 - width/2;
-      let offsetY = size/2 - height/2 - offsetyY;
+      let offsetY = size/2 - height/2 - offsetInnerY;
       context.save();
       context.beginPath();
       context.arc(offsetX + width/2, offsetY + width/2, width/2, 0, 2*Math.PI);

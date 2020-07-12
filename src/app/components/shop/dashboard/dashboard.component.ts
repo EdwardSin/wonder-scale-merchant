@@ -21,6 +21,14 @@ export class DashboardComponent implements OnInit {
       backgroundColor: 'rgba(132, 163, 225, .5)',
     },
   ];
+  lineChartOptions = {scales: {
+    yAxes: [{
+        ticks: {
+            beginAtZero: true,
+            callback: function (value) { if (Number.isInteger(value)) { return value; } }
+        }
+    }]
+  }}
 
   hours: string[];
   numberOfCustomersToday: number[] = [];
@@ -134,6 +142,13 @@ export class DashboardComponent implements OnInit {
       isLoading: false,
       legend: false,
       chartType: 'line',
+      scales: {
+        yAxes: [{
+            ticks: {
+                beginAtZero: true
+            }
+        }]
+      },
       colors: [
         this.colorSchema[i % this.colorSchema.length]
       ]

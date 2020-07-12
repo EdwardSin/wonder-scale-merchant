@@ -24,7 +24,7 @@
                             <ws-spinner [width]="60" [height]="60" [spinnerColor]="'#282C35'"></ws-spinner>
                         </div>
                     </div>
-                    <canvas baseChart [data]="numberOfCustomersToday" [legend]="false" [labels]="hours" [chartType]="lineGraphType" [colors]="lineChartColors"></canvas>
+                    <canvas baseChart [data]="numberOfCustomersToday" [legend]="false" [options]="lineChartOptions" [labels]="hours" [chartType]="lineGraphType" [colors]="lineChartColors"></canvas>
                 </div>
             </div>
         </div>
@@ -78,7 +78,7 @@
                     </div>
                     <p *ngIf="chart.isUnavailable" class="dashboard__analyzer__unavailble-label">Unavailable in your current package.</p>
                 </div>
-                <canvas baseChart [data]="chart.data" [labels]="chart.labels" [legend]="chart.legend" [chartType]="chart.chartType" [colors]="chart.colors">
+                <canvas baseChart [data]="chart.data" [labels]="chart.labels" [legend]="chart.legend" [options]="lineChartOptions" [chartType]="chart.chartType" [colors]="chart.colors">
                 </canvas>
             </div>
         </div>

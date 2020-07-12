@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, PLATFORM_ID } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
+import { SWIPER_CONFIG, SwiperConfigInterface } from 'ngx-swiper-wrapper';
 import { JwtModule, JWT_OPTIONS } from '@auth0/angular-jwt';
 import { SocialLoginModule, GoogleLoginProvider, FacebookLoginProvider, SocialAuthServiceConfig } from 'angularx-social-login';
 import { NgProgressModule } from 'ngx-progressbar';
@@ -20,6 +21,18 @@ import { MainContainerComponent } from '@components/shop/main/main-container/mai
 import { WsLeftNavComponent } from '@elements/ws-left-nav/ws-left-nav.component';
 import { BreadcrumbComponent } from '@elements/breadcrumb/breadcrumb.component';
 import { SharedModule } from './modules/public/shared/shared.module';
+
+const DEFAULT_SWIPER_CONFIG: SwiperConfigInterface = {
+  direction: 'horizontal',
+  slidesPerView: 'auto',
+  observer: true,
+  observeParents: true,
+  pagination: true,
+  navigation: {
+    nextEl: '.swiper-button-next',
+    prevEl: '.swiper-button-prev',
+  },
+}
 
 export function jwtOptionsFactory(platformId) {
   return {
@@ -82,6 +95,10 @@ export function jwtOptionsFactory(platformId) {
           }
         ]
       } as SocialAuthServiceConfig
+    },
+    {
+      provide: SWIPER_CONFIG,
+      useValue: DEFAULT_SWIPER_CONFIG
     }
   ],
   bootstrap: [AppComponent]

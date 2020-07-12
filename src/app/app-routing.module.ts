@@ -13,12 +13,12 @@ const routes: Routes = [{
 }, {
   path: 'shops',
   loadChildren: () => import('./modules/shop-list/shop-list.module').then(m => m.ShopListModule)
-  // }, {
-  //   path: 'contact-us',
-  //   component: ContactUsComponent
-  // }, {
-  //   path: 'about-us',
-  //   component: AboutUsComponent
+}, {
+  path: 'contact-us',
+  loadChildren: () => import('./modules/contact-us/contact-us.module').then(m => m.ContactUsModule)
+}, {
+  path: 'policy',
+  loadChildren: () => import('./modules/policy/policy.module').then(m => m.PolicyModule)
 }, {
   path: 'shops/:username',
   component: MainComponent,
@@ -32,6 +32,12 @@ const routes: Routes = [{
       canActivate: [ShopGuard],
       data: { title: 'dashboard', breadcrumb: 'Dashboard' },
       loadChildren: () => import('./modules/shop/dashboard/dashboard.module').then(m => m.DashboardModule)
+    },
+    {
+      path: 'quick-menu',
+      canActivate: [ShopGuard],
+      data: { title: 'quick-menu', breadcrumb: 'Quick Menu' },
+      loadChildren: () => import('./modules/shop/quick-menu/quick-menu.module').then(m => m.QuickMenuModule)
     },
     {
       path: 'catalogue',

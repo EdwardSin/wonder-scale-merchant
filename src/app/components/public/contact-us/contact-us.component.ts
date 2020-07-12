@@ -38,7 +38,7 @@ export class ContactUsComponent implements OnInit {
       this.loading.start();
       this.sendEmailService.sendEmail(email_content).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.loading.stop())
       ).subscribe(result => {
-        if (result["success"]) {
+        if (result['result']) {
           WsToastService.toastSubject.next({ content: result["message"], type: 'success' });
           this.contactus.reset();
           Object.keys(this.contactus.form.controls).forEach(key => {
@@ -49,6 +49,8 @@ export class ContactUsComponent implements OnInit {
           WsToastService.toastSubject.next({ content: result['message'], type: 'danger' });
         }
       });
+    } else {
+      WsToastService.toastSubject.next({ content: 'Please fill in the fields!', type: 'danger'});
     }
   }
   ngOnDestroy() {
