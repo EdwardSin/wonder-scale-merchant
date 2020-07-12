@@ -8,6 +8,7 @@
 ---------------------------------------------
 .: WSM: Task: Update sentences (WSM-159)
 .: WSW: Task: Update home icon (WSW-69)
+.: WSM: FixBug: Fix the button margin (WSM-83)
 
 ---------------------------------------------
 - 2020-07-11                                -

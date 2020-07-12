@@ -35,9 +35,9 @@
                 {{contactus.form.controls['comment'].errors.minlength.requiredLength}} characters.</mat-error>
         </div>
         <div class='form-group mt-4'>
-            <ws-loading-button type='submit' [class]="'btn btn-primary btn-sm mr-2'" [loading]="loading.isRunning()">
+            <ws-loading-button type='submit' [class]="'btn btn-primary btn-sm'" [loading]="loading.isRunning()">
                 Submit</ws-loading-button>
-            <button type='reset' class='btn btn-danger btn-sm'>Reset</button>
+            <button type='reset' class='btn btn-danger btn-sm ml-2'>Reset</button>
         </div>
     </form>
 </div>
