@@ -10,7 +10,6 @@
     height: 100%;
     position: relative;
     transition: width .3s ease;
-    overflow-x: hidden;
     white-space: nowrap;
     background-color: #fafafa;
     &.is-closed {
@@ -22,7 +21,6 @@
     .main-nav-background {
         width: 100%;
         z-index: 2;
-        overflow-x: hidden;
         position: relative;
         border-right: 1px solid #e5e5e5;
     }
@@ -45,12 +43,6 @@
         a {
             transition: none;
         }
-        &.nav-closed {
-            .ws-main-nav-text,
-            .ws-main-nav-sub-list {
-                display: none !important;
-            }
-        }
         .ws-main-nav-list {
             background-color: #fafafa;
             list-style: none;
@@ -59,6 +51,7 @@
             cursor: pointer;
             .ws-main-nav-list-item {
                 font-size: .9rem;
+                position: relative;
                 >a {
                     color: #222;
                     padding: 1rem;
@@ -74,6 +67,22 @@
                     margin-right: .5rem;
                     color: #222;
                 }
+                &:hover .ws-main-nav-sub-list {
+                    display: block;
+                    position: fixed;
+                    left: 249px;
+                    border-left: 1px solid #e5e5e5;
+                    margin-top: -45px;
+                    background-color: #fff;
+                    box-shadow: 2px 1px 3px rgba(0, 0, 0, .3);
+                }
+                &.selected:hover .ws-main-nav-sub-list {
+                    position: static;
+                    box-shadow: none;
+                    margin-top: 0;
+                    border-left: inherit;
+                    background-color: rgba(0, 0, 0, 0.01);
+                }
                 &.selected {
                     box-shadow: inset 4px 0 0 map-get($ws-color, secondary);
                     background-color: rgba(0, 0, 0, 0.04);
@@ -87,15 +96,64 @@
                 list-style: none;
                 padding: 0;
                 margin: 0;
+                max-height: 500px;
+                overflow-y: auto;
+                .ws-main-nav-sub-list__title{
+                    display: none;
+                    padding: .2rem 0rem;
+                }
+                &::-webkit-scrollbar {
+                    width: 5px;
+                }
+                &::-webkit-scrollbar-thumb {
+                    background-color: map-get($ws-color, secondary);
+                }
                 &>li a {
                     display: inline-block;
-                    padding: 8px 16px 8px 40px;
+                    padding: 8px 16px;
                     width: 100%;
                     color: #222;
                     font-size: .9rem;
                     &.active,
                     &:hover {
                         background-color: rgba(0, 0, 0, .04);
+                    }
+                }
+                &.ws-main-nav-sub-list__padding{
+                    &>li a{
+                        padding: 8px 16px 8px 40px;
+                    }
+                }
+            }
+        }
+        &.nav-closed {
+            .ws-main-nav-list {
+                .ws-main-nav-list-item {
+                    .ws-main-nav-text,
+                    .ws-main-nav-sub-list {
+                        display: none;
+                    }
+                    &:hover {
+                        .ws-main-nav-sub-list {
+                            display: block;
+                            position: fixed;
+                            left: 49px;
+                            margin-top: -45px;
+                            background-color: #fff;
+                            box-shadow: 3px 1px 3px rgba(0, 0, 0, .3);
+                            .ws-main-nav-sub-list__title{
+                                display: block;
+                                font-weight: bold;
+                                font-size: .9rem;
+                            }
+                            li:nth-child(2){
+                                border-top: 1px solid #ccc;
+                                padding-top: .2rem;
+                            }
+                            li:hover{
+                                background-color: rgba(0, 0, 0, .02);
+                            }
+                        }
                     }
                 }
             }
@@ -147,7 +205,18 @@
             }
         }
         .main-nav-list {
-            height: 100%;
+            height: calc(100vh - 50px);
+            &.nav-closed,
+            .ws-main-nav-list {
+                .ws-main-nav-sub-list {
+                    max-height: 100%;
+                }
+                .ws-main-nav-list-item:hover {
+                    .ws-main-nav-sub-list {
+                        display: none !important;
+                    }
+                }
+            }
         }
     }
     .main-wrapper{

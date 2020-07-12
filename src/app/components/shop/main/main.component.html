@@ -7,19 +7,32 @@
           <span class="ws-main-nav-icon fas fa-chart-line"></span>
           <span class="ws-main-nav-text">Dashboard</span>
         </a>
+        <ul class="ws-main-nav-sub-list">
+          <li class="ws-main-nav-sub-list__title">
+            <a [routerLink]="['dashboard']">Dashboard</a>
+          </li>
+        </ul>
       </li>
       <li *ngIf="shop?.type == 'restaurant'" class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
         <a [routerLink]="['quick-menu']">
           <span class="ws-main-nav-icon fas fa-book-open"></span>
           <span class="ws-main-nav-text">Quick Menu</span>
         </a>
+        <ul class="ws-main-nav-sub-list">
+          <li class="ws-main-nav-sub-list__title">
+            <a [routerLink]="['quick-menu']">Quick Menu</a>
+          </li>
+        </ul>
       </li>
       <li class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
         <a [routerLink]="['catalogue']">
           <span class="ws-main-nav-icon fas fa-th"></span>
           <span class="ws-main-nav-text">Catalogue</span>
         </a>
-        <ul class="ws-main-nav-sub-list">
+        <ul class="ws-main-nav-sub-list ws-main-nav-sub-list__padding">
+          <li class="ws-main-nav-sub-list__title">
+            <a [routerLink]="['catalogue']">Catalogue</a>
+          </li>
           <li>
             <a [class.active]="isLinkActive('/shops/' + shop?.username + '/catalogue/all')" [routerLink]="['catalogue', 'all']" [queryParams]="{page: 1}">All
               <span class="badge ws-bg-secondary badge-pill float-right"
@@ -94,7 +107,6 @@
               </a>
             </div>
           </li>
-
           <li class="row no-gutters">
             <input placeholder="Add New Category" class="new-input col border-0 pl-4"
               (keydown.enter)="addCategory()" [(ngModel)]="new_name" />
@@ -107,12 +119,22 @@
           <span class="ws-main-nav-icon fas fa-qrcode"></span>
           <span class="ws-main-nav-text">QR Code</span>
         </a>
+        <ul class="ws-main-nav-sub-list">
+          <li class="ws-main-nav-sub-list__title">
+            <a [routerLink]="['qrcode']">QR Code</a>
+          </li>
+        </ul>
       </li>
       <li class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
         <a [routerLink]="['information']">
           <span class="ws-main-nav-icon fas fa-image"></span>
           <span class="ws-main-nav-text">Information Banner</span>
         </a>
+        <ul class="ws-main-nav-sub-list">
+          <li class="ws-main-nav-sub-list__title">
+            <a [routerLink]="['information']">Information Banner</a>
+          </li>
+        </ul>
       </li>
       <li *ngIf="false" class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
         <a [routerLink]="['reviews']">
@@ -209,6 +231,9 @@
           <span class="ws-main-nav-text">Settings</span>
         </a>
         <ul class="ws-main-nav-sub-list">
+          <li class="ws-main-nav-sub-list__title">
+            <a [routerLink]="['settings', 'about']">Settings</a>
+          </li>
           <li>
             <a [routerLinkActive]="'active'" [routerLink]="['settings', 'about']">About</a>
           </li>
