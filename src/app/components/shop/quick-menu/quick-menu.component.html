@@ -5,7 +5,7 @@
 </div>
 <div *ngIf="shop?.number_of_all_items < 11" class="alert alert-danger font-9">
     You are advised to add items into catalogue instead of just adding menu picture to the quick menu.
-    <p class="mb-0">- Added items can be easily searched by search engine.</p>
+    <p class="mb-0 font-weight-bold">Added items can be easily searched by search engine.</p>
 </div>
 <button [disabled]="!editedFlag || isImagesUploading" class="btn btn-controller float-right ml-2" title="Save"
     (click)="editShop()">

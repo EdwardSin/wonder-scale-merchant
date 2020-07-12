@@ -5,6 +5,7 @@ export const environment = {
     IMAGE_URL: 'https://assets.wonderscale.com/',
     SHOP_THUMBNAILS_PATH: 'shop_thumbnails',
     INFORMATION_IMG_PATH: 'information_thumbnails',
+    MENU_IMG_PATH: 'menu_thumbnails',
     ITEM_THUMBNAILS_PATH: 'item_thumbnails',
     USER_THUMBNAILS_PATH: 'user_thumbnails',
     HERE_APP_API: 'h9LLOE7i3CG3y1OKhWxw',
