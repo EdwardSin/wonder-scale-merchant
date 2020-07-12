@@ -8,7 +8,8 @@
 ---------------------------------------------
 .: WSM: Task: Update sentences (WSM-159)
 .: WSW: Task: Update home icon (WSW-69)
-.: WSM: FixBug: Fix the button margin (WSM-83)
+.: WSM: BugFix: Fix the button margin (WSM-83)
+.: WSM: BugFix: Error is occurred when inserting page information (WSM-160)
 
 ---------------------------------------------
 - 2020-07-11                                -

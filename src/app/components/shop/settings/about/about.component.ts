@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UnitAnimation } from '@animations/unit.animation';
 import { WSFormBuilder } from '@builders/wsformbuilder';
@@ -12,12 +12,10 @@ import { AuthShopAdminService } from '@services/http/auth-shop/admin/auth-shop-a
 import { AuthShopContributorService } from '@services/http/auth-shop/contributor/auth-shop-contributor.service';
 import { AuthShopUserService } from '@services/http/auth-user/auth-shop-user.service';
 import { ShopAuthorizationService } from '@services/http/general/shop-authorization.service';
-import { UserService } from '@services/http/general/user.service';
 import { SharedUserService } from '@services/shared/shared-user.service';
 import { SharedShopService } from '@services/shared/shared-shop.service';
 import { WsLoading } from '@elements/ws-loading/ws-loading';
 import { DocumentHelper } from '@helpers/documenthelper/document.helper';
-import { UploadHelper } from '@helpers/uploadhelper/upload.helper';
 import { Address } from '@objects/address';
 import { Timetable } from '@objects/ws-timetable';
 import { MapController } from '@objects/map.controller';
@@ -216,9 +214,9 @@ export class AboutComponent implements OnInit {
   }
   editContact() {
     let obj = {
-      email: this.shop.email,
-      phone: this.shop.phone,
-      website: this.shop.website,
+      email: this.filterEmptyValue(this.shop.email),
+      phone: this.filterEmptyValue(this.shop.phone),
+      website: this.filterEmptyValue(this.shop.website).length ? this.filterEmptyValue(this.shop.website) : [''],
       showAddress: this.shop.showAddress,
       fullAddress: this.mapController.address,
       openingInfoType: this.timetable.operatingHourRadio,
@@ -288,6 +286,11 @@ export class AboutComponent implements OnInit {
       return false;
     }
     return true;
+  }
+  filterEmptyValue(arr) {
+    return _.filter(arr, item => {
+        return !_.isEmpty(item);
+    });
   }
   removeBannerImage() {
     if (this.shop.bannerImage) {
