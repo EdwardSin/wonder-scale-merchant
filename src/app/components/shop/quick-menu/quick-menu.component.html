@@ -3,7 +3,7 @@
 <div *ngIf="!allImages?.length" class="alert alert-info font-9">
     Upload your restaurant menu instantly to start promoting your page.
 </div>
-<div *ngIf="shop?.number_of_all_items < 11" class="alert alert-danger font-9">
+<div *ngIf="shop['number_of_all_items'] < 11" class="alert alert-danger font-9">
     You are advised to add items into catalogue instead of just adding menu picture to the quick menu.
     <p class="mb-0 font-weight-bold">Added items can be easily searched by search engine.</p>
 </div>
