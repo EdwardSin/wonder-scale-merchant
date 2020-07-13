@@ -9,6 +9,7 @@ import * as $ from 'jquery';
 import { WsToastService } from '@elements/ws-toast/ws-toast.service';
 import { environment } from '@environments/environment';
 import { AuthTrackContributorService } from '@services/http/auth-shop/contributor/auth-track-contributor.service';
+import { AuthShopUserService } from '@services/http/auth-user/auth-shop-user.service';
 
 @Component({
   selector: 'app-qrcode',
@@ -49,39 +50,42 @@ export class QrcodeComponent implements OnInit {
   private ngUnsubscribe: Subject<any> = new Subject;
   constructor(
     private ref: ChangeDetectorRef,
+    private authShopUserService: AuthShopUserService,
     private sharedShopService: SharedShopService, 
     private authTrackContributor: AuthTrackContributorService) {
     this.loading.start();
     let shop_name = this.sharedShopService.shop_name;
+    let shop_username = this.sharedShopService.shop_username;
     DocumentHelper.setWindowTitleWithWonderScale('QR Code - ' + shop_name);
-    this.sharedShopService.shop.pipe(takeUntil(this.ngUnsubscribe))
+    this.authShopUserService.getAuthenticatedShopByShopUsername(shop_username).pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
         if (result) {
           this.shop = result;
-          this.displayImage = 'assets/images/svg/dot.svg';
+          this.displayImage = this.shop.profileImage ? 'api/images/' + encodeURIComponent(this.shop.profileImage) : 'assets/images/svg/dot.svg';
           this.url = environment.URL + 'page/' + this.shop.username + '?id=' + this.shop.id + '&type=qr_scan';
+          this.getTracks();
         }
         this.loading.stop();
       })
   }
   ngOnInit() {
-    this.getTracks();
   }
   renderQrcode(target, url, size) {
-    $(target).html('');
+    $(target).find('canvas').remove();
+    $(target).find('ws-spinner').css({display: 'block'});
     size = Math.max(75, size);
     size = Math.min(300, size);
     this.qrSize = size;
-    $(() => {
-      QRCodeBuilder.toDataURL(this.displayImage, (dataUrl) => {
-        let newImage = <HTMLImageElement>document.createElement('img');
-        newImage.alt = 'profile-image';
-        newImage.src = dataUrl;
-        newImage.addEventListener('load', e => {
-          QRCodeBuilder.createQRcode(target, url, {width: size, height: size})
-          .then(() => {
-            this.renderProfileImageToQrcode(target, newImage, size);
-          });
+    setTimeout(() => {
+      let newImage = <HTMLImageElement>document.createElement('img');
+      newImage.alt = 'profile-image';
+      newImage.src = this.displayImage;
+      newImage.addEventListener('load', e => {
+        QRCodeBuilder.createQRcode(target, url, {width: size, height: size, callback: () => {
+          $(target).find('ws-spinner').css({display: 'none'});
+        }})
+        .then(() => {
+          this.renderProfileImageToQrcode(target, newImage, size);
         });
       });
     });
@@ -144,10 +148,7 @@ export class QrcodeComponent implements OnInit {
     this.isQRcodeLoading.start();
     this.ref.detectChanges();
     this.downloadURL = url;
-    setTimeout(() => {
-      this.renderQrcode(this.downloadQRcode.nativeElement, url, 200);
-      this.isQRcodeLoading.stop();
-    }, 300);
+    this.renderQrcode(this.downloadQRcode.nativeElement, url, 200);
   }
   openEditQRcodeModal(track) {
     this.isEditQRcodeOpened = true;

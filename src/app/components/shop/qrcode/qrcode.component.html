@@ -42,7 +42,7 @@
                     <div class="float-right order-1 order-lg-12 center mb-2 mb-lg-0 ml-lg-0 ml-lg-2" style="width: 150px">
                         <div class="qrcode-container">
                             <div #qrcode [attr.data-url]="url" class="qrcode" (click)="openQRcodeModal(url)">
-                                <ws-spinner style='line-height: 116px' class="text-center d-block" *ngIf="true"></ws-spinner>
+                                <ws-spinner style='line-height: 116px; display: block' class="text-center"></ws-spinner>
                             </div>
                         </div>
                     </div>
@@ -115,7 +115,7 @@
             <div class="float-right order-1 order-lg-12 center mb-2 mb-lg-0 ml-lg-0 ml-lg-2" style="width: 150px">
                 <div class="qrcode-container">
                     <div #qrcode [attr.data-url]="url + '&from=' + track._id" class="qrcode" [class.qrcode-info__inactive]="track.status == 'inactive'" (click)="openQRcodeModal(url + '&from=' + track._id)">
-                        <ws-spinner style='line-height: 116px' class="text-center d-block"></ws-spinner>
+                        <ws-spinner style='line-height: 116px; display: block' class="text-center"></ws-spinner>
                     </div>
                 </div>
             </div>
@@ -185,7 +185,7 @@
             </button>
         </div> 
         <div [style.width.px]="qrSize" [style.height.px]="qrSize" class="center mb-4" #downloadQRcode>
-            <ws-spinner style='line-height: 200px' class="text-center d-block" *ngIf="isQRcodeLoading.isRunning()"></ws-spinner>
+            <ws-spinner style='line-height: 200px; display: block' class="text-center" *ngIf="isQRcodeLoading.isRunning()"></ws-spinner>
         </div>
         <button class="btn btn-sm btn-controller float-right" (click)="isQRcodeOpened = false">Close</button>
     </div>
