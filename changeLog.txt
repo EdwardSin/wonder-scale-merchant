@@ -7,6 +7,7 @@
 - 2020-07-13                                -
 ---------------------------------------------
 .: WSM: Task: Put image to icon (WSM-48)
+.: WSM: BugFix: When image has been changed in settings, switching to other page doesn't update the details (WSM-164)
 
 ---------------------------------------------
 - 2020-07-12                                -
