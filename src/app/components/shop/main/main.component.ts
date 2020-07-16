@@ -81,15 +81,11 @@ export class MainComponent implements OnInit {
     private sharedCategoryService: SharedCategoryService,
     private sharedShopService: SharedShopService,
     private sharedUserService: SharedUserService,
-    private userService: UserService,
     private routePartsService: RoutePartsService,
     private shopAuthorizationService: ShopAuthorizationService,
     private activeRoute: ActivatedRoute,
     private screenService: ScreenService,
-    private sharedLoadingService: SharedLoadingService,
-    private authShopUserService: AuthShopUserService,
     private sharedNavbarService: SharedNavbarService,
-    private sharedItemService: SharedItemService,
     private ref: ChangeDetectorRef) {
 
   }
@@ -320,7 +316,7 @@ export class MainComponent implements OnInit {
   }
 
   refreshCategories() {
-    this.sharedCategoryService.refreshCategories(null, true, false);
+    this.sharedCategoryService.refreshCategories(null, false, false);
   }
   // getUnrepliedRequests() {
   //   this.authRequestContributorService.getUnrepliedRequests().pipe(takeUntil(this.ngUnsubscribe))

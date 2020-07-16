@@ -11,6 +11,7 @@ import { AuthShopContributorService } from '@services/http/auth-shop/contributor
 import { WsToastService } from '@elements/ws-toast/ws-toast.service';
 import { ImageHelper } from '@helpers/imagehelper/image.helper';
 import { DocumentHelper } from '@helpers/documenthelper/document.helper';
+import { AuthShopUserService } from '@services/http/auth-user/auth-shop-user.service';
 
 @Component({
   selector: 'app-quick-menu',
@@ -29,8 +30,10 @@ export class QuickMenuComponent implements OnInit {
   editedFlag: boolean = false;
   shop: Shop;
   private ngUnsubscribe: Subject<any> = new Subject;
-  constructor(private authShopContributorService: AuthShopContributorService, private sharedShopService: SharedShopService) { 
-    this.sharedShopService.shop.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+  constructor(private authShopUserService: AuthShopUserService, private authShopContributorService: AuthShopContributorService, private sharedShopService: SharedShopService) { 
+    let shop_username = this.sharedShopService.shop_username;
+    this.loading.start();
+    this.authShopUserService.getAuthenticatedShopByShopUsername(shop_username).pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       if (result) {
         DocumentHelper.setWindowTitleWithWonderScale('Quick Menu - ' + result.name);
         this.shop = result;
