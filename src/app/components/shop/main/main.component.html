@@ -24,7 +24,7 @@
           </li>
         </ul>
       </li>
-      <li class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
+      <li *ngIf="isAdminAuthorized" class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
         <a [routerLink]="['packages']">
           <span class="ws-main-nav-icon fas fa-box"></span>
           <span class="ws-main-nav-text">Packages</span>
