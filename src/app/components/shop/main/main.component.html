@@ -25,6 +25,13 @@
         </ul>
       </li>
       <li class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
+        <a [routerLink]="['packages']">
+          <span class="ws-main-nav-icon fas fa-box"></span>
+          <span class="ws-main-nav-text">Packages</span>
+          <span *ngIf="isNavOpen" class="fas fa-crown position-absolute" style="color: gold; right: 10px; top: 15px;"></span>
+        </a>
+      </li>
+      <li class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
         <a [routerLink]="['catalogue']">
           <span class="ws-main-nav-icon fas fa-th"></span>
           <span class="ws-main-nav-text">Catalogue</span>
@@ -198,30 +205,20 @@
           </li>
         </ul>
       </li>
-
       <li *ngIf="false" class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
-        <a [routerLink]="['features']">
-          <span class="ws-main-nav-icon fas fa-wrench"></span>
-          <span class="ws-main-nav-text">Features</span>
-        </a>
-      </li>
-      <li  *ngIf="false" class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
         <a [routerLink]="['billing']">
           <span class="ws-main-nav-icon fas fa-coins"></span>
           <span class="ws-main-nav-text">Billing</span>
         </a>
         <ul class="ws-main-nav-sub-list">
           <li>
-            <a [routerLinkActive]="'active'" [routerLink]="['billing', 'history']">History
-            </a>
+            <a [routerLinkActive]="'active'" [routerLink]="['billing', 'history']">History</a>
           </li>
-          <li *ngIf="false">
-            <a [routerLinkActive]="'active'" [routerLink]="['billing', 'payment-methods']">Payment Methods
-            </a>
+          <li>
+            <a [routerLinkActive]="'active'" [routerLink]="['billing', 'payment-methods']">Payment Methods</a>
           </li>
-          <li *ngIf="false">
-            <a [routerLinkActive]="'active'" [routerLink]="['billing', 'subscription']">Subscription
-            </a>
+          <li>
+            <a [routerLinkActive]="'active'" [routerLink]="['billing', 'subscription']">Subscription</a>
           </li>
         </ul>
       </li>

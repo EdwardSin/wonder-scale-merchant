@@ -48,11 +48,11 @@
     padding: 0;
     padding-left: 4vw;
     padding-right: 4vw;
-    overflow: scroll;
+    overflow: auto;
 
     .modal-body-content {
       max-width: 800px;
-      width: 92vw !important;
+      width: 90vw !important;
       margin: 48px 0 80px;
       margin-left: auto;
       margin-right: auto;

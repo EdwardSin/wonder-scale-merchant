@@ -1,0 +1,14 @@
+[
+    {
+      "label": "Ordering System",
+      "class": "fas fa-clipboard-list",
+      "targets": ["Restaurant", "Coming Soon"],
+      "description": "The system provide a systematic way for your users to make order.<br/>Digitalize your shops, less staff is needed to manage your restaurant.<br/>Payment gateway can be included for customers to pay after making order."
+    },
+    {
+      "label": "E-commerce",
+      "class": "fas fa-globe",
+      "targets": ["General", "Coming Soon"],
+      "description": "Provide a payment gateway for you to sell items online"
+    }
+]
