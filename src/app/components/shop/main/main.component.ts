@@ -59,7 +59,7 @@ export class MainComponent implements OnInit {
 
   category_name: string;
   search_keyword: string = '';
-
+  isAdminAuthorized: boolean;
   selectedCategory;
   new_name: string = '';
   editname: string;
@@ -175,6 +175,10 @@ export class MainComponent implements OnInit {
           this.isAdminAuthorizedRefresh(this.user._id);
         }
       })
+    this.shopAuthorizationService.isAdminAuthorized.pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(result => {
+        this.isAdminAuthorized = result;
+    });
     this.sharedShopService.refreshContributor.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
         if (result) {

@@ -1,0 +1,95 @@
+.packages__container {
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    .packages__list {
+        width: 100%;
+        list-style: none;
+        padding-left: 0rem;
+        margin-bottom: 0;
+        font-size: .9rem;
+    
+        .packages__list-item {
+            padding: 1rem;
+            margin-bottom: .25rem;
+            font-weight: bold;
+    
+            &:nth-child(odd) {
+                background-color: #f0f2f4;
+            }
+    
+            &:nth-child(even) {
+                background-color: #fff;
+            }
+            .packages__info{
+                font-size: .8rem;
+                font-weight: normal;
+                white-space: pre-line;
+            }
+            .packages__button{
+                margin-top: .5rem;
+                border-radius: 0;
+                font-size: .9rem;
+                color: #fff;
+                background-color: #4169e1;
+                &.package__button-disabled{
+                    background-color: #aaa;
+                }
+                &.package__button-selected{
+                    opacity: .8;
+                    pointer-events: none;
+                }
+    
+                &:hover,
+                &:active {
+                    background-color: #2452dc;
+                }
+            }
+        }
+    }
+}
+
+.package{
+    background-color: #f0f2f4;
+    padding: 2rem 3rem;
+
+    .package__header{
+        text-align: center;
+        font-size: 1.3rem;
+        margin-bottom: 0;
+    }
+
+    .package__price{
+        text-align: center;
+        font-weight: bold;
+        font-size: 1.8rem;
+        margin-bottom: 0;
+    }
+
+    .package__discount {
+        text-align: center;
+        font-size: 1.1rem;
+        color: #ff0000;
+        margin-bottom: 1rem;
+    }
+
+    .package__button{
+            margin-top: .5rem;
+            border-radius: 0;
+            font-size: .9rem;
+            color: #fff;
+            background-color: #4169e1;
+            &.package__button-disabled{
+                background-color: #aaa;
+            }
+            &.package__button-selected{
+                opacity: .8;
+                pointer-events: none;
+            }
+
+            &:hover,
+            &:active {
+                background-color: #2452dc;
+            }
+    }
+}

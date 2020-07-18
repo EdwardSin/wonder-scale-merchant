@@ -23,10 +23,11 @@ import * as _ from 'lodash';
 export class CreateShopComponent implements OnInit {
   storeServiceType: 'physicalStore' | 'onlineStore' = 'physicalStore';
   storeType: 'restaurant' | 'shopping' | 'services';
-  phase: Phase<number> = new Phase(1, 7);
+  phase: Phase<number> = new Phase(0, 7);
   mapController: MapController;
   loading: WsLoading = new WsLoading;
   shop: Shop;
+  selectedPackage: string;
   timetable: Timetable = new Timetable;
   currency = {
     currencies: Constants.currencyFullnames,
@@ -139,7 +140,10 @@ export class CreateShopComponent implements OnInit {
         }
       });
   }
-
+  selectPackage(event) {
+    this.selectedPackage = event;
+    this.phase.next();
+  }
   clear() {
     this.mapController.displayed = false;
     this.mapController.suggestions = [];
@@ -160,6 +164,7 @@ export class CreateShopComponent implements OnInit {
     shop.website = [this.basicFormGroup.value.website];
     shop['currency'] = this.basicFormGroup.value.currency;
     shop.showAddress = this.addressFormGroup.value.isShowLocation;
+    shop.selectedPackage = this.selectedPackage;
     if (this.addressFormGroup.value.isShowLocation) {
       shop.fullAddress = {
         address: this.addressFormGroup.value.address,
@@ -181,7 +186,7 @@ export class CreateShopComponent implements OnInit {
             this.navigateToShop();
           }, 3000);
         }, (err) => {
-          WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
+          WsToastService.toastSubject.next({ content: err.error.message, type: 'danger' });
         })
     }
   }

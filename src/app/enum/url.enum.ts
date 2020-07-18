@@ -1,5 +1,6 @@
 export class URL {
     static AUTH_DEFAULT_SETTING_ADMIN_URL = '/api/auth-shops/default-setting-admins';
+    static AUTH_PACKAGE_ADMIN_URL = '/api/auth-shops/package-admins';
     static AUTH_SHOP_ADMIN_URL = '/api/auth-shops/shop-admins';
     static AUTH_ADVERTISING_CONTRIBUTOR_URL = '/api/auth-shops/advertising-contributors';
     static AUTH_CATEGORY_CONTRIBUTOR_URL = '/api/auth-shops/category-contributors';
@@ -225,4 +226,8 @@ export class AuthShopAdminUrl {
 export class AuthDefaultSettingAdminUrl {
     static getDefaultSettingByShopIdUrl = URL.AUTH_DEFAULT_SETTING_ADMIN_URL;
     static setDefaultSettingByShopIdUrl = URL.AUTH_DEFAULT_SETTING_ADMIN_URL + '/edit';
+}
+
+export class AuthPackageAdminUrl {
+    static getShopPackage = URL.AUTH_PACKAGE_ADMIN_URL + '/';
 }
