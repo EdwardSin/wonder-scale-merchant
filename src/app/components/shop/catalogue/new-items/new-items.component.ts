@@ -46,6 +46,7 @@ export class NewItemsComponent implements OnInit {
     let shop_name = this.sharedShopService.shop_name;
     this.sharedItemService.editItems.next([]);
     this.sharedCategoryService.numberOfCurrentTotalItems.next(0);
+    this.sharedCategoryService.refreshCategories(() => {}, false, false);
     DocumentHelper.setWindowTitleWithWonderScale('New - ' + shop_name);
     this.loading.start();
     this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe))
@@ -98,7 +99,6 @@ export class NewItemsComponent implements OnInit {
         this.displayItems = result.result;
         this.sharedItemService.displayItems.next(this.displayItems);
         this.sharedCategoryService.numberOfCurrentTotalItems.next(result['total']);
-        this.sharedCategoryService.numberOfNewItems.next(result['total']);
         this.loading.stop();
       })
   }

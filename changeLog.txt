@@ -12,6 +12,7 @@
 .: WSM: BugFix: Submenu is hidden when hovering (WSM-58)
 .: WSM: BugFix: QR code icon not working in firefox (WSM-165)
 .: WSM: BugFix: Submenu display position issue (WSM-58)
+.: WSM: BugFix: Refresh numbers when navigate between categories (WSM-164)
 
 ---------------------------------------------
 - 2020-07-18                                -
