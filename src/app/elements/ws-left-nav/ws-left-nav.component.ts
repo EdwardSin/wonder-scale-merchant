@@ -22,8 +22,13 @@ export class WsLeftNavComponent implements OnInit {
 
   constructor() {
   }
-
+  
   ngOnInit() {
+    if (window) {
+      $('.main-nav-list').css({
+        height: (window.innerHeight - 50) + 'px'
+      });
+    }
     if (window.innerWidth < 992) {
       this.isNavOpen = false;
     }

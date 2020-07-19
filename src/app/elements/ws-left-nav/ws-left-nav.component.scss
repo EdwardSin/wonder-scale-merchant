@@ -27,6 +27,7 @@
     .main-nav-list {
         background-color: #fafafa;
         overflow-y: auto;
+        overflow-x: hidden;
         height: calc(100vh - 90px);
         width: 100%;
         &::-webkit-scrollbar {
@@ -206,15 +207,24 @@
             }
         }
         .main-nav-list {
-            height: calc(100vh - 50px);
             &.nav-closed,
             .ws-main-nav-list {
                 .ws-main-nav-sub-list {
                     max-height: 100%;
+                    left: -10000px !important;
                 }
-                .ws-main-nav-list-item:hover {
-                    .ws-main-nav-sub-list {
-                        display: none !important;
+            }
+        }
+        &.is-closed{
+            .main-nav-list {
+                &.nav-closed,
+                .ws-main-nav-list {
+                    .ws-main-nav-list-item:hover,
+                    .ws-main-nav-list-item:focus,
+                    .ws-main-nav-list-item:active {
+                        .ws-main-nav-sub-list {
+                            display: none !important;
+                        }
                     }
                 }
             }
