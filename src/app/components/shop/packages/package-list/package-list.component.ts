@@ -12,20 +12,21 @@ import { HttpClient } from '@angular/common/http';
 export class PackageListComponent implements OnInit {
   @Output('select') selectedPackageChange: EventEmitter<any> = new EventEmitter;
   @Input('selected') selected: Package;
+  @Input('loading') loading: boolean;
   selectedPackage: string;
   packageLoading: WsLoading = new WsLoading;
   infos = [];
-  loading: WsLoading = new WsLoading;
+  packagesLoading: WsLoading = new WsLoading;
   addonInfos = [];
   constructor(private http: HttpClient) { }
 
   ngOnInit(): void {
-    this.loading.start();
+    this.packagesLoading.start();
     this.http.get('assets/json/services.json').subscribe(result => {
       this.infos = <Array<any>>result;
       this.http.get('assets/json/addon-services.json').subscribe(result => {
         this.addonInfos = <Array<any>>result;
-        this.loading.stop();
+        this.packagesLoading.stop();
       });
     });
   }
