@@ -55,8 +55,9 @@
 
     .package__header{
         text-align: center;
-        font-size: 1.3rem;
-        margin-bottom: 0;
+        font-size: 1rem;
+        margin-bottom: 1rem;
+        font-weight: bold;
     }
 
     .package__price{
@@ -64,6 +65,9 @@
         font-weight: bold;
         font-size: 1.8rem;
         margin-bottom: 0;
+        .package__sub-price{
+            font-size: 1rem;
+        }
     }
 
     .package__discount {

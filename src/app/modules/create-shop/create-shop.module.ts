@@ -11,13 +11,11 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ElementModule } from '../public/element/element.module';
 import { SharedModule } from '../public/shared/shared.module';
-import { PackageListComponent } from '@components/shop/packages/package-list/package-list.component';
 
 
 @NgModule({
   declarations: [
-    CreateShopComponent,
-    PackageListComponent
+    CreateShopComponent
   ],
   imports: [
     CommonModule,

@@ -1,6 +1,7 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { WsLoading } from '@elements/ws-loading/ws-loading';
 import { Subject } from 'rxjs';
+import { Package } from '@objects/package';
 import { HttpClient } from '@angular/common/http';
 
 @Component({
@@ -10,9 +11,8 @@ import { HttpClient } from '@angular/common/http';
 })
 export class PackageListComponent implements OnInit {
   @Output('select') selectedPackageChange: EventEmitter<any> = new EventEmitter;
-  @Input('selected') selected: string;
+  @Input('selected') selected: Package;
   selectedPackage: string;
-  private ngUnsubscribe: Subject<any> = new Subject;
   packageLoading: WsLoading = new WsLoading;
   infos = [];
   loading: WsLoading = new WsLoading;

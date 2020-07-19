@@ -26,6 +26,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { PackageListComponent } from '@components/shop/packages/package-list/package-list.component';
 
 
 
@@ -48,6 +49,7 @@ import { MatNativeDateModule } from '@angular/material/core';
     BusinessLocationComponent,
     BusinessTimetableComponent,
     ConfirmModalComponent,
+    PackageListComponent
   ],
   imports: [
     AgmCoreModule,
@@ -77,7 +79,8 @@ import { MatNativeDateModule } from '@angular/material/core';
     SearchBarComponent,
     BusinessLocationComponent,
     BusinessTimetableComponent,
-    ConfirmModalComponent
+    ConfirmModalComponent,
+    PackageListComponent
   ]
 })
 export class ElementModule { }

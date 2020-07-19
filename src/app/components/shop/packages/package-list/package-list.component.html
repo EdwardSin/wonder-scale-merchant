@@ -3,8 +3,8 @@
     <div class="row no-gutters center w-100">
         <div class="col-lg-3 py-3 pr-lg-3 pl-0">
             <div class="package trial">
-                <p class="package__header">6-month Trial</p>
-                <p class="package__price">Free</p>
+                <p class="package__header">6-month Free Trial</p>
+                <p class="package__price">RM 0</p>
                 <p class="package__discount" style="padding: .8rem"></p>
                 <button class="package__button btn btn-block" [class.package__button-selected]="selected" (click)="selectPackage('trial')">
                     {{ selected?.name == 'trial' ? 'Subscribed: ' + (selected?.expiryDate | date:'dd-MMM-yyyy') : 'Select'}}</button>
@@ -13,7 +13,7 @@
         <div class="col-lg-3 py-3 px-lg-3">
             <div class="package trial">
                 <p class="package__header">Monthly</p>
-                <p class="package__price">RM 18.80</p>
+                <p class="package__price">RM 18<span class="package__sub-price">.80</span><span class="ml-1" style="font-size: .8rem; color: #666">/MO</span></p>
                 <p class="package__discount" style="padding: .8rem"></p>
                 <button class="package__button btn btn-block package__button-disabled" disabled>Coming Soon</button>
             </div>
@@ -21,7 +21,7 @@
         <div class="col-lg-3 py-3 px-lg-3">
             <div class="package trial">
                 <p class="package__header">6 Months</p>
-                <p class="package__price">RM 16.80</p>
+                <p class="package__price">RM 16<span class="package__sub-price">.80</span><span class="ml-1" style="font-size: .8rem; color: #666">/MO</span></p>
                 <p class="package__discount">Save 10.64%</p>
                 <button class="package__button btn btn-block package__button-disabled" disabled>Coming Soon</button>
             </div>
@@ -29,7 +29,7 @@
         <div class="col-lg-3 py-3 pl-lg-3 pr-0 ">
             <div class="package trial">
                 <p class="package__header">12 Months</p>
-                <p class="package__price">RM 14.80</p>
+                <p class="package__price">RM 14<span class="package__sub-price">.80</span><span class="ml-1" style="font-size: .8rem; color: #666">/MO</span></p>
                 <p class="package__discount">Save 21.28%</p>
                 <button class="package__button btn btn-block package__button-disabled" disabled>Coming Soon</button>
             </div>
