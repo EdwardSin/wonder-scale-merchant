@@ -10,6 +10,7 @@
 .: WSM: Task: Update package description (WSM-170)
 .: WSM: Task: Update catalogue items when navigate to them (WSM-164)
 .: WSM: BugFix: Submenu is hidden when hovering (WSM-58)
+.: WSM: BugFix: QR code icon not working in firefox (WSM-165)
 
 ---------------------------------------------
 - 2020-07-18                                -
