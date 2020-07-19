@@ -100,6 +100,7 @@ export class UnpublishedItemsComponent implements OnInit {
         this.displayItems = result.result;
         this.sharedItemService.displayItems.next(this.displayItems);
         this.sharedCategoryService.numberOfCurrentTotalItems.next(result['total']);
+        this.sharedCategoryService.numberOfUnpublishedItems.next(result['total']);
       })
   }
   navigate(event) {

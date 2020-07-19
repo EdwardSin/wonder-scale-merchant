@@ -98,6 +98,7 @@ export class TodaySpecialItemsComponent implements OnInit {
         this.displayItems = result.result;
         this.sharedItemService.displayItems.next(this.displayItems);
         this.sharedCategoryService.numberOfCurrentTotalItems.next(result['total']);
+        this.sharedCategoryService.numberOfTodaySpecialItems.next(result['total']);
         this.loading.stop();
       })
   }

@@ -96,6 +96,7 @@ export class UncategorizedItemsComponent implements OnInit {
         this.displayItems = result.result;
         this.sharedItemService.displayItems.next(this.displayItems);
         this.sharedCategoryService.numberOfCurrentTotalItems.next(result['total']);
+        this.sharedCategoryService.numberOfUncategorizedItems.next(result['total']);
         this.loading.stop();
       })
   }
