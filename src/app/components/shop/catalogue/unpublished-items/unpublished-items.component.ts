@@ -47,6 +47,7 @@ export class UnpublishedItemsComponent implements OnInit {
     let shop_name = this.sharedShopService.shop_name;
     this.sharedItemService.editItems.next([]);
     this.sharedCategoryService.numberOfCurrentTotalItems.next(0);
+    this.sharedCategoryService.refreshCategories(() => {}, false, false);
     DocumentHelper.setWindowTitleWithWonderScale('Unpublished - ' + shop_name);
     this.loading.start();
     this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe))
@@ -100,7 +101,6 @@ export class UnpublishedItemsComponent implements OnInit {
         this.displayItems = result.result;
         this.sharedItemService.displayItems.next(this.displayItems);
         this.sharedCategoryService.numberOfCurrentTotalItems.next(result['total']);
-        this.sharedCategoryService.numberOfUnpublishedItems.next(result['total']);
       })
   }
   navigate(event) {
