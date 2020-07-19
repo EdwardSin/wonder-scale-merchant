@@ -13,6 +13,7 @@
 .: WSM: BugFix: QR code icon not working in firefox (WSM-165)
 .: WSM: BugFix: Submenu display position issue (WSM-58)
 .: WSM: BugFix: Refresh numbers when navigate between categories (WSM-164)
+.: WSM: BugFix: Loading when getting packages (WSM-170)
 
 ---------------------------------------------
 - 2020-07-18                                -

@@ -1,5 +1,5 @@
 <h4 class="ws-title">Packages</h4>
-<div *ngIf="!loading.isRunning(); else loadingTemplate" style="width: 100%; overflow-x: auto;">
+<div *ngIf="!packagesLoading.isRunning(); else loadingTemplate" style="width: 100%; overflow-x: auto;">
     <div class="row no-gutters center w-100">
         <div class="col-lg-3 py-3 pr-lg-3 pl-0">
             <div class="package trial">
@@ -7,7 +7,11 @@
                 <p class="package__price">RM 0</p>
                 <p class="package__discount" style="padding: .8rem"></p>
                 <button class="package__button btn btn-block" [class.package__button-selected]="selected" (click)="selectPackage('trial')">
-                    {{ selected?.name == 'trial' ? 'Subscribed: ' + (selected?.expiryDate | date:'dd-MMM-yyyy') : 'Select'}}</button>
+                    <ws-spinner *ngIf="loading" [width]="15" [height]="15" [borderWidth]="2" [spinnerColor]="'#fff'"></ws-spinner>
+                    <span *ngIf="!loading">
+                        {{ selected?.name == 'trial' ? 'Subscribed: ' + (selected?.expiryDate | date:'dd-MMM-yyyy') : 'Select'}}
+                    </span>
+                    </button>
             </div>
         </div>
         <div class="col-lg-3 py-3 px-lg-3">
@@ -74,7 +78,7 @@
 </div>
 
 <ng-template #loadingTemplate>
-    <ng-container *ngIf="loading.isRunning()">
+    <ng-container *ngIf="packagesLoading.isRunning()">
         <ws-spinner class="text-center d-block w-100" style="padding-top: 30vh; padding-bottom: 30vh"></ws-spinner>
     </ng-container>
 </ng-template>
