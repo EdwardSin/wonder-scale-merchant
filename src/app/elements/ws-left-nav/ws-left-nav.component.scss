@@ -26,9 +26,8 @@
     }
     .main-nav-list {
         background-color: #fafafa;
-        overflow-y: auto;
-        overflow-x: hidden;
         height: calc(100vh - 90px);
+        overflow-y: auto;
         width: 100%;
         &::-webkit-scrollbar {
             width: 5px;
@@ -74,7 +73,6 @@
                     position: fixed;
                     left: 249px;
                     border-left: 1px solid #e5e5e5;
-                    margin-top: -45px;
                     background-color: #fff;
                     box-shadow: 2px 1px 3px rgba(0, 0, 0, .3);
                 }
@@ -140,7 +138,6 @@
                             display: block;
                             position: fixed;
                             left: 49px;
-                            margin-top: -45px;
                             background-color: #fff;
                             box-shadow: 3px 1px 3px rgba(0, 0, 0, .3);
                             .ws-main-nav-sub-list__title{

@@ -25,12 +25,21 @@ export class WsLeftNavComponent implements OnInit {
   
   ngOnInit() {
     if (window) {
-      $('.main-nav-list').css({
-        height: (window.innerHeight - 50) + 'px'
-      });
+      $(window).on('resize', function () {
+        let isMobileSize = window.innerWidth < 992;
+        $('.main-nav-list').css({
+          height: (window.innerHeight - (isMobileSize ? 50 : 91)) + 'px'
+        });
+      })
     }
     if (window.innerWidth < 992) {
       this.isNavOpen = false;
     }
+    $('.ws-main-nav-list-item').hover(function (event) {
+      let top = $(event.target).offset().top - $(window).scrollTop();
+      $(event.target).next('.ws-main-nav-sub-list').css({
+        top: top + 'px'
+      });
+    });
   }
 }
