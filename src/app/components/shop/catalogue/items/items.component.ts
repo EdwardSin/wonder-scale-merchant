@@ -61,13 +61,13 @@ export class ItemsComponent implements OnInit {
     let shop_name = this.sharedShopService.shop_name;
     this.categoryName = this.route.snapshot.params.name;
     DocumentHelper.setWindowTitleWithWonderScale(this.categoryName + ' - ' + shop_name);
-
     this.route.params.pipe(takeUntil(this.ngUnsubscribe)).subscribe(res => {
       this.categoryName = this.route.snapshot.params.name;
       this.sharedItemService.editItems.next([]);
       this.sharedCategoryService.numberOfCurrentTotalItems.next(0);
       DocumentHelper.setWindowTitleWithWonderScale(this.categoryName + ' - ' + shop_name);
       this.sharedCategoryService.categoryRefresh.next({refresh: true, loading: true});
+      this.sharedCategoryService.refreshCategories(() => {}, false, false);
     })
     this.loading.start();
     this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe))

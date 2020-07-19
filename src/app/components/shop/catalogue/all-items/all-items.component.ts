@@ -98,6 +98,7 @@ export class AllItemsComponent implements OnInit {
         this.displayItems = result['result'];
         this.sharedItemService.displayItems.next(this.displayItems);
         this.sharedCategoryService.numberOfCurrentTotalItems.next(result['total']);
+        this.sharedCategoryService.numberOfAllItems.next(result['total']);
         this.ref.detectChanges();
       });
   }

@@ -101,6 +101,7 @@ export class PublishedItemsComponent implements OnInit {
         this.displayItems = result.result;
         this.sharedItemService.displayItems.next(this.displayItems);
         this.sharedCategoryService.numberOfCurrentTotalItems.next(result['total']);
+        this.sharedCategoryService.numberOfPublishedItems.next(result['total']);
       })
   }
   navigate(event) {

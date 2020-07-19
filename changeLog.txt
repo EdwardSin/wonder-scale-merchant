@@ -8,6 +8,7 @@
 ---------------------------------------------
 .: WSM: BugFix: Close page permanently not redirect to page list (WSM-167)
 .: WSM: Task: Update package description (WSM-170)
+.: WSM: Task: Update catalogue items when navigate to them (WSM-164)
 
 ---------------------------------------------
 - 2020-07-18                                -
