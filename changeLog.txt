@@ -7,6 +7,7 @@
 - 2020-07-19                                -
 ---------------------------------------------
 .: WSM: BugFix: Close page permanently not redirect to page list (WSM-167)
+.: WSM: Task: Update package description (WSM-170)
 
 ---------------------------------------------
 - 2020-07-18                                -
