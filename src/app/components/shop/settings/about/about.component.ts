@@ -435,7 +435,7 @@ export class AboutComponent implements OnInit {
         this.shop.status.expiryDate = date;
         this.sharedShopService.shop.next(this.shop);
         this.isConfirmCloseShopModalOpened = false;
-        this.router.navigate(['../../catalogue', 'all'], { relativeTo: this.route });
+        this.router.navigate(['/shops/' + this.shop.username + '/dashboard']);
       }, err => {
         WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
       });
@@ -449,7 +449,7 @@ export class AboutComponent implements OnInit {
         this.shop.status.expiryDate = null;
         this.sharedShopService.shop.next(this.shop);
         this.isConfirmReactivateModalOpened = false;
-        this.router.navigate(['../../catalogue', 'all'], { relativeTo: this.route });
+        this.router.navigate(['/shops/' + this.shop.username + '/dashboard']);
       });
   }
   quitShop() {
