@@ -17,9 +17,13 @@ export class NavItemDirective {
     $(this.el.nativeElement).find('.ws-main-nav-sub-list').css({
       top: maxHeight > minHeight ? 41 : top + 'px'
     });
-    if (!$(this.el.nativeElement).hasClass('selected')) {
+    if (!$(this.el.nativeElement).hasClass('selected') || $('.is-closed').find(this.el.nativeElement).length > 0) {
       $(this.el.nativeElement).find('.ws-main-nav-sub-list').css({
         'max-height': window.innerWidth < 992 ? '100%' : maxHeight > 500 ? 500 : (maxHeight > minHeight ? minHeight : maxHeight) + 'px'
+      });
+    } else {
+      $(this.el.nativeElement).find('.ws-main-nav-sub-list').css({
+        'max-height': '100%'
       });
     }
   }

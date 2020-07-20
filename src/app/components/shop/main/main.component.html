@@ -45,46 +45,46 @@
           <li class="ws-main-nav-sub-list__title">
             <a [routerLink]="['catalogue']">Catalogue</a>
           </li>
-          <li>
+          <li class="position-relative">
             <a [class.active]="isLinkActive('/shops/' + shop?.username + '/catalogue/all')" [routerLink]="['catalogue', 'all']" [queryParams]="{page: 1}">All
-              <span class="badge ws-bg-secondary badge-pill float-right"
-                style="margin-top: 3px">{{ numberOfAllItems }}</span>
+              <span class="badge ws-bg-secondary badge-pill float-right position-absolute"
+                style="margin-top: 3px; right: 10px; top: .5rem">{{ numberOfAllItems }}</span>
             </a>
           </li>
-          <li>
+          <li class="position-relative">
             <a [class.active]="isLinkActive('/shops/' + shop?.username + '/catalogue/new')" [routerLink]="['catalogue', 'new']" [queryParams]="{page: 1}">New
-              <span class="badge ws-bg-secondary badge-pill float-right"
-                style="margin-top: 3px">{{ numberOfNewItems }}</span>
+              <span class="badge ws-bg-secondary badge-pill float-right position-absolute"
+                style="margin-top: 3px; right: 10px; top: .5rem">{{ numberOfNewItems }}</span>
             </a>
           </li>
-          <li *ngIf="shop?.type == 'restaurant'">
+          <li *ngIf="shop?.type == 'restaurant'" class="position-relative">
             <a [class.active]="isLinkActive('/shops/' + shop?.username + '/catalogue/todayspecial')" [routerLink]="['catalogue', 'todayspecial']" [queryParams]="{page: 1}">Today Special
-              <span class="badge ws-bg-secondary badge-pill float-right"
-                style="margin-top: 3px">{{ numberOfTodaySpecialItems }}</span>
+              <span class="badge ws-bg-secondary badge-pill float-right position-absolute"
+                style="margin-top: 3px; right: 10px; top: .5rem">{{ numberOfTodaySpecialItems }}</span>
             </a>
           </li>
-          <li>
+          <li class="position-relative">
             <a [class.active]="isLinkActive('/shops/' + shop?.username + '/catalogue/discount')" [routerLink]="['catalogue', 'discount']" [queryParams]="{page: 1}">Discount
-              <span class="badge ws-bg-secondary badge-pill float-right"
-                style="margin-top: 3px">{{ numberOfDiscountItems }}</span>
+              <span class="badge ws-bg-secondary badge-pill float-right position-absolute"
+                style="margin-top: 3px; right: 10px; top: .5rem">{{ numberOfDiscountItems }}</span>
             </a>
           </li>
-          <li>
+          <li class="position-relative">
             <a [class.active]="isLinkActive('/shops/' + shop?.username + '/catalogue/published')" [routerLink]="['catalogue', 'published']" [queryParams]="{page: 1}">Published
-              <span class="badge ws-bg-secondary badge-pill float-right"
-                style="margin-top: 3px">{{ numberOfPublishedItems }}</span>
+              <span class="badge ws-bg-secondary badge-pill float-right position-absolute"
+                style="margin-top: 3px; right: 10px; top: .5rem">{{ numberOfPublishedItems }}</span>
             </a>
           </li>
-          <li>
+          <li class="position-relative">
             <a [class.active]="isLinkActive('/shops/' + shop?.username + '/catalogue/unpublished')" [routerLink]="['catalogue', 'unpublished']" [queryParams]="{page: 1}">Unpublished
-              <span class="badge ws-bg-secondary badge-pill float-right"
-                style="margin-top: 3px">{{ numberOfUnpublishedItems }}</span>
+              <span class="badge ws-bg-secondary badge-pill float-right position-absolute"
+                style="margin-top: 3px; right: 10px; top: .5rem">{{ numberOfUnpublishedItems }}</span>
             </a>
           </li>
-          <li>
+          <li class="position-relative">
             <a [class.active]="isLinkActive('/shops/' + shop?.username + '/catalogue/uncategorized')" [routerLink]="['catalogue', 'uncategorized']" [queryParams]="{page: 1}">Uncategorized
-              <span class="badge ws-bg-secondary badge-pill float-right"
-                style="margin-top: 3px">{{ numberOfUncategorizedItems }}</span>
+              <span class="badge ws-bg-secondary badge-pill float-right position-absolute"
+                style="margin-top: 3px; right: 10px; top: .5rem">{{ numberOfUncategorizedItems }}</span>
             </a>
           </li>
           <hr class="m-0" />
@@ -108,8 +108,8 @@
                 [queryParams]="{page: 1}">
                 <span style="overflow: hidden; width: 160px; text-overflow: ellipsis; display: inline-block">
                   {{ category?.name }}</span>
-                <span class="badge ws-bg-secondary badge-pill float-right"
-                  style="margin-top: 3px">{{category?.items?.length}}</span>
+                <span class="badge ws-bg-secondary badge-pill float-right position-absolute"
+                  style="margin-top: 3px; right: 10px; top: .5rem">{{category?.items?.length}}</span>
                 <div>
                   <span class="edit-button d-inline-block ws-secondary" style="font-size: .8rem"
                     (click)="$event.preventDefault(); $event.stopPropagation(); setEditCategory(category?.name)">Edit</span>
@@ -175,8 +175,8 @@
       <li wsNavItem *ngIf="false" class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
         <a [routerLink]="['quotation']">
           <span class="ws-main-nav-icon fas fa-file-invoice"></span>
-          <span class="ws-main-nav-text">Quotations
-            <span class="badge ws-bg-secondary badge-pill float-right" style="margin-top: 3px"
+          <span class="ws-main-nav-text">Quotation
+            <span class="badge ws-bg-secondary badge-pill float-right" style="margin-top: 3px;"
               *ngIf="unreplied_quotations.length">{{unreplied_quotations.length}}</span>
           </span>
         </a>
