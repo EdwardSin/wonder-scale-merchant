@@ -26,7 +26,6 @@
     }
     .main-nav-list {
         background-color: #fafafa;
-        height: calc(100vh - 90px);
         overflow-y: auto;
         width: 100%;
         &::-webkit-scrollbar {
@@ -68,15 +67,15 @@
                     margin-right: .5rem;
                     color: #222;
                 }
-                &:hover .ws-main-nav-sub-list {
+                &.hovered .ws-main-nav-sub-list {
                     display: block;
                     position: fixed;
                     left: 249px;
                     border-left: 1px solid #e5e5e5;
-                    background-color: #fff;
+                    background-color: #fff; 
                     box-shadow: 2px 1px 3px rgba(0, 0, 0, .3);
                 }
-                &.selected:hover .ws-main-nav-sub-list {
+                &.selected.hovered .ws-main-nav-sub-list {
                     position: static;
                     box-shadow: none;
                     margin-top: 0;
@@ -98,12 +97,14 @@
                 margin: 0;
                 max-height: 500px;
                 overflow-y: auto;
+
                 .ws-main-nav-sub-list__title{
                     display: none;
                     padding: .2rem 0rem;
                 }
                 &::-webkit-scrollbar {
                     width: 5px;
+                    height: 5px;
                 }
                 &::-webkit-scrollbar-thumb {
                     background-color: map-get($ws-color, secondary);
@@ -133,7 +134,7 @@
                     .ws-main-nav-sub-list {
                         display: none;
                     }
-                    &:hover {
+                    &.hovered {
                         .ws-main-nav-sub-list {
                             display: block;
                             position: fixed;
@@ -216,7 +217,7 @@
             .main-nav-list {
                 &.nav-closed,
                 .ws-main-nav-list {
-                    .ws-main-nav-list-item:hover,
+                    .ws-main-nav-list-item.hovered,
                     .ws-main-nav-list-item:focus,
                     .ws-main-nav-list-item:active {
                         .ws-main-nav-sub-list {

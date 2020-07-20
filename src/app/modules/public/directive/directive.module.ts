@@ -5,6 +5,7 @@ import { ModalDirective } from '../../../directives/modal.directive';
 import { ClickoutsideDirective } from '../../../directives/clickoutside.directive';
 import { AutofocusDirective } from '../../../directives/autofocus.directive';
 import { DebounceClickDirective } from '../../../directives/debounce-click.directive';
+import { NavItemDirective } from '../../../directives/nav-item.directive';
 
 
 @NgModule({
@@ -12,7 +13,8 @@ import { DebounceClickDirective } from '../../../directives/debounce-click.direc
     ModalDirective,
     ClickoutsideDirective,
     AutofocusDirective,
-    DebounceClickDirective
+    DebounceClickDirective,
+    NavItemDirective
   ],
   imports: [
     CommonModule
@@ -21,7 +23,8 @@ import { DebounceClickDirective } from '../../../directives/debounce-click.direc
     ModalDirective,
     ClickoutsideDirective,
     AutofocusDirective,
-    DebounceClickDirective
+    DebounceClickDirective,
+    NavItemDirective
   ]
 })
 export class DirectiveModule { }
