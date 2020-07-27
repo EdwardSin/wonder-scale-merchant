@@ -5,6 +5,6 @@ import { Subject, BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class SharedNavbarService {
-  isNavSubject: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  isNavSubject: BehaviorSubject<boolean> = new BehaviorSubject(true);
   constructor() { }
 }

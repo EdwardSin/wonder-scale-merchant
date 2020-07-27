@@ -10,6 +10,7 @@ import { ImageHelper } from '@helpers/imagehelper/image.helper';
 import _ from 'lodash';
 import { from as observableFrom, Subject } from 'rxjs';
 import { map, mergeMap, takeUntil } from 'rxjs/operators';
+import { AuthShopUserService } from '@services/http/auth-user/auth-shop-user.service';
 @Component({
   selector: 'app-information',
   templateUrl: './information.component.html',
@@ -29,6 +30,7 @@ export class InformationComponent implements OnInit {
   @ViewChild('informationUploadInput', { static: true }) informationUploadInput: ElementRef;
   private ngUnsubscribe: Subject<any> = new Subject();
   constructor(private sharedShopService: SharedShopService,
+    private authShopUserService: AuthShopUserService,
     private authShopContributorService: AuthShopContributorService) { }
 
   ngOnInit() {
@@ -36,7 +38,8 @@ export class InformationComponent implements OnInit {
   }
   getShop() {
     this.loading.start();
-    this.sharedShopService.shop.pipe(takeUntil(this.ngUnsubscribe)).subscribe(res => {
+    let shop_username = this.sharedShopService.shop_username;
+    this.authShopUserService.getAuthenticatedShopByShopUsername(shop_username).pipe(takeUntil(this.ngUnsubscribe)).subscribe(res => {
       if (res) {
         DocumentHelper.setWindowTitleWithWonderScale('Information Banner - ' + res.name);
         this.shop = res;

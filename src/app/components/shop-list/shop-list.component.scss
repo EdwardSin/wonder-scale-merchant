@@ -1,6 +1,6 @@
 .main-container {
     width: 100%;
-    height: calc(100vh - 41px);
+    min-height: calc(100vh - 41px);
     padding-left: 1.5rem;
     padding-right: 1.5rem;
 }

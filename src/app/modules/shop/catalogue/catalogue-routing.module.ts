@@ -1,9 +1,11 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { CatalogueComponent } from '@components/shop/catalogue/catalogue.component';
 
 
 const routes: Routes = [{
   path: '',
+  component: CatalogueComponent,
   children: [{ path: '', redirectTo: 'all', pathMatch: 'full' },
   { path: 'all', loadChildren: () => import('./all-items/all-items.module').then(m => m.AllItemsModule), data: { title: 'all', breadcrumb: 'All' } },
   { path: 'new', loadChildren: () => import('./new-items/new-items.module').then(m => m.NewItemsModule), data: { title: 'new', breadcrumb: 'New' } },

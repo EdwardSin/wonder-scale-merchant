@@ -11,6 +11,7 @@ import { environment } from '@environments/environment';
 import { WsToastService } from '@elements/ws-toast/ws-toast.service';
 import { SharedCategoryService } from '@services/shared/shared-category.service';
 import { WsLoading } from '@elements/ws-loading/ws-loading';
+import { SharedLoadingService } from '@services/shared/shared-loading.service';
 
 @Component({
   selector: 'main-container',
@@ -32,6 +33,7 @@ export class MainContainerComponent implements OnInit {
   constructor(private router: Router,
     private route: ActivatedRoute,
     private screenService: ScreenService,
+    private sharedLoadingService: SharedLoadingService,
     private authShopAdminService: AuthShopAdminService,
     private sharedShopService: SharedShopService,
     private sharedCategoryService: SharedCategoryService,
@@ -79,6 +81,7 @@ export class MainContainerComponent implements OnInit {
       this.shop.status.status = 'active';
       this.shop.status.expiryDate = null;
       this.sharedShopService.shop.next(this.shop);
+      this.sharedLoadingService.screenLoading.next({loading: true});
       this.isConfirmReactivateShopModalOpened = false;
     });
   }

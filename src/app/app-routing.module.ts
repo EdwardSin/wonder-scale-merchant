@@ -87,11 +87,11 @@ const routes: Routes = [{
     //   { path: 'payment-methods', component: EPaymentMethodsComponent, data: { title: 'payment-methods', breadcrumb: 'Payment Methods' } },
     //   { path: 'billing-history', component: EBillingHistoryComponent, data: { title: 'billing-history', breadcrumb: 'Billing History' } }]
     // },
-    // {
-    //   path: 'features',
-    //   component: FeaturesComponent,
-    //   data: { title: 'features', breadcrumb: 'Features' }
-    // },
+    {
+      path: 'packages',
+      data: { title: 'packages', breadcrumb: 'Packages' },
+      loadChildren: () => import('./modules/shop/packages/packages.module').then(m => m.PackagesModule)
+    },
     // {
     //   path: 'billing',
     //   component: BillingComponent,

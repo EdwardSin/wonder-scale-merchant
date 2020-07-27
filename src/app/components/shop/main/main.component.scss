@@ -38,6 +38,7 @@
     background-color: transparent;
     height: 40px;
     margin-left: 4px;
+    width: 183px;
     &:focus {
         background-color: #fff;
     }
@@ -50,6 +51,7 @@
     cursor: move;
     display: block;
     .fa-bars {
+        border-right: 0;
         cursor: move;
         transition: all .2s ease;
         &:hover {
