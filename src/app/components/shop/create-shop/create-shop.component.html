@@ -1,8 +1,14 @@
 <div modal class="modal">
   <div class="modal-wrap">
     <div class="modal-body">
-      <div [ngSwitch]="phase.step" class="modal-body-content">
-        <form *ngSwitchCase="0" class="modal-content">
+      <div [ngSwitch]="phase.step" class="modal-body-content" style="max-width: 100%;">
+        <form *ngSwitchCase="0" style="max-width: 1190px" class="modal-content">
+          <div class="modal-close">
+            <span class="fas fa-times" [routerLink]="[]" [queryParams]="{modal: null}"></span>
+          </div>
+          <package-list (select)="selectPackage($event)"></package-list>
+        </form>
+        <!-- <form *ngSwitchCase="0" class="modal-content">
           <div class="modal-close">
             <span class="fas fa-times" [routerLink]="[]" [queryParams]="{modal: null}"></span>
           </div>
@@ -28,8 +34,8 @@
             </div>
           </div>
           <button class="btn btn-md btn-second" type="button" style="margin-left: auto" (click)="next()">Next</button>
-        </form>
-        <form *ngSwitchCase="1" class="modal-content">
+        </form> -->
+        <form *ngSwitchCase="1" class="modal-content" style="max-width: 800px;">
           <div class="modal-close">
             <span class="fas fa-times" [routerLink]="[]" [queryParams]="{modal: null}"></span>
           </div>
@@ -61,7 +67,7 @@
             </div>
           </div>
           <div class="row no-gutters">
-            <button *ngIf="false" class="btn btn-md btn-second" type="button"
+            <button class="btn btn-md btn-second" type="button"
               (click)="phase.previous()">Previous</button>
             <button [disabled]="storeType == undefined" class="btn btn-md btn-second" type="button" style="margin-left: auto" (click)="next()">Next</button>
           </div>
@@ -148,7 +154,7 @@
           </div>
         </form>
 
-        <form *ngSwitchCase="3" class="modal-content" [formGroup]="addressFormGroup"
+        <form *ngSwitchCase="3" class="modal-content" style="max-width: 800px;"[formGroup]="addressFormGroup"
           (keydown.enter)="$event.preventDefault()">
           <div class="modal-close">
             <span class="fas fa-times" [routerLink]="[]" [queryParams]="{modal: null}"></span>
@@ -247,7 +253,7 @@
           </div>
         </form>
 
-        <form *ngSwitchCase="5" class="modal-content" [formGroup]="termAndConfitionsFormGroup"
+        <form *ngSwitchCase="5" class="modal-content" style="max-width: 800px;" [formGroup]="termAndConfitionsFormGroup"
           (keydown.enter)="$event.preventDefault()">
           <div class="modal-close">
             <span class="fas fa-times" [routerLink]="[]" [queryParams]="{modal: null}"></span>

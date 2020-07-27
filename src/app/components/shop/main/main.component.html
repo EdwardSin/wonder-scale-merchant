@@ -2,64 +2,89 @@
   *ngIf="shop && !loading.isRunning(); else loadingTemplate">
   <ws-left-nav [isNavOpen]="isNavOpen" (isNavOpenChange)="isNavOpenChange($event)" [isMobileSize]="isMobileSize">
     <ul class="ws-main-nav-list">
-      <li class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
+      <li wsNavItem class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
         <a [routerLink]="['dashboard']">
           <span class="ws-main-nav-icon fas fa-chart-line"></span>
           <span class="ws-main-nav-text">Dashboard</span>
         </a>
+        <ul class="ws-main-nav-sub-list">
+          <li class="ws-main-nav-sub-list__title">
+            <a [routerLink]="['dashboard']">Dashboard</a>
+          </li>
+        </ul>
       </li>
-      <li *ngIf="shop?.type == 'restaurant'" class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
+      <li wsNavItem *ngIf="shop?.type == 'restaurant'" class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
         <a [routerLink]="['quick-menu']">
           <span class="ws-main-nav-icon fas fa-book-open"></span>
           <span class="ws-main-nav-text">Quick Menu</span>
         </a>
+        <ul class="ws-main-nav-sub-list">
+          <li class="ws-main-nav-sub-list__title">
+            <a [routerLink]="['quick-menu']">Quick Menu</a>
+          </li>
+        </ul>
       </li>
-      <li class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
+      <li wsNavItem *ngIf="isAdminAuthorized" class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
+        <a [routerLink]="['packages']">
+          <span class="ws-main-nav-icon fas fa-box"></span>
+          <span class="ws-main-nav-text">Packages</span>
+          <span *ngIf="isNavOpen" class="fas fa-crown position-absolute" style="color: gold; right: 10px; top: 15px;"></span>
+        </a>
+        <ul class="ws-main-nav-sub-list">
+          <li class="ws-main-nav-sub-list__title">
+            <a [routerLink]="['packages']">Packages</a>
+          </li>
+        </ul>
+      </li>
+      <li wsNavItem class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
         <a [routerLink]="['catalogue']">
           <span class="ws-main-nav-icon fas fa-th"></span>
           <span class="ws-main-nav-text">Catalogue</span>
         </a>
-        <ul class="ws-main-nav-sub-list">
-          <li>
+        <ul class="ws-main-nav-sub-list ws-main-nav-sub-list__padding">
+          <li class="ws-main-nav-sub-list__title">
+            <a [routerLink]="['catalogue']">Catalogue</a>
+          </li>
+          <li class="position-relative">
             <a [class.active]="isLinkActive('/shops/' + shop?.username + '/catalogue/all')" [routerLink]="['catalogue', 'all']" [queryParams]="{page: 1}">All
-              <span class="badge ws-bg-secondary badge-pill float-right"
-                style="margin-top: 3px">{{ numberOfAllItems }}</span>
+              <span class="badge ws-bg-secondary badge-pill float-right position-absolute"
+                style="margin-top: 3px; right: 10px; top: .5rem">{{ numberOfAllItems }}</span>
             </a>
           </li>
-          <li>
+          <li class="position-relative">
             <a [class.active]="isLinkActive('/shops/' + shop?.username + '/catalogue/new')" [routerLink]="['catalogue', 'new']" [queryParams]="{page: 1}">New
-              <span class="badge ws-bg-secondary badge-pill float-right"
-                style="margin-top: 3px">{{ numberOfNewItems }}</span>
+              <span class="badge ws-bg-secondary badge-pill float-right position-absolute"
+                style="margin-top: 3px; right: 10px; top: .5rem">{{ numberOfNewItems }}</span>
             </a>
           </li>
-          <li *ngIf="shop?.type == 'restaurant'">
+          <li *ngIf="shop?.type == 'restaurant'" class="position-relative">
             <a [class.active]="isLinkActive('/shops/' + shop?.username + '/catalogue/todayspecial')" [routerLink]="['catalogue', 'todayspecial']" [queryParams]="{page: 1}">Today Special
-              <span class="badge ws-bg-secondary badge-pill float-right"
-                style="margin-top: 3px">{{ numberOfTodaySpecialItems }}</span>
+              <span class="badge ws-bg-secondary badge-pill float-right position-absolute"
+                style="margin-top: 3px; right: 10px; top: .5rem">{{ numberOfTodaySpecialItems }}</span>
             </a>
           </li>
-          <li>
+          <li class="position-relative">
             <a [class.active]="isLinkActive('/shops/' + shop?.username + '/catalogue/discount')" [routerLink]="['catalogue', 'discount']" [queryParams]="{page: 1}">Discount
-              <span class="badge ws-bg-secondary badge-pill float-right"
-                style="margin-top: 3px">{{ numberOfDiscountItems }}</span>
+              <span class="badge ws-bg-secondary badge-pill float-right position-absolute"
+                style="margin-top: 3px; right: 10px; top: .5rem">{{ numberOfDiscountItems }}</span>
             </a>
           </li>
-          <li>
+          <li class="position-relative">
             <a [class.active]="isLinkActive('/shops/' + shop?.username + '/catalogue/published')" [routerLink]="['catalogue', 'published']" [queryParams]="{page: 1}">Published
-              <span class="badge ws-bg-secondary badge-pill float-right"
-                style="margin-top: 3px">{{ numberOfPublishedItems }}</span>
+              <span class="badge ws-bg-secondary badge-pill float-right position-absolute"
+                style="margin-top: 3px; right: 10px; top: .5rem">{{ numberOfPublishedItems }}</span>
             </a>
           </li>
-          <li>
+          <li class="position-relative">
             <a [class.active]="isLinkActive('/shops/' + shop?.username + '/catalogue/unpublished')" [routerLink]="['catalogue', 'unpublished']" [queryParams]="{page: 1}">Unpublished
-              <span class="badge ws-bg-secondary badge-pill float-right"
-                style="margin-top: 3px">{{ numberOfUnpublishedItems }}</span>
+              <span class="badge ws-bg-secondary badge-pill float-right position-absolute"
+                style="margin-top: 3px; right: 10px; top: .5rem">{{ numberOfUnpublishedItems }}</span>
             </a>
           </li>
-          <li>
+          <li class="position-relative">
             <a [class.active]="isLinkActive('/shops/' + shop?.username + '/catalogue/uncategorized')" [routerLink]="['catalogue', 'uncategorized']" [queryParams]="{page: 1}">Uncategorized
-              <span class="badge ws-bg-secondary badge-pill float-right"
-                style="margin-top: 3px">{{ numberOfUncategorizedItems }}</span>
+              <span class="badge ws-bg-secondary badge-pill float-right position-absolute"
+                style="margin-top: 3px; right: 10px; top: .5rem">{{ numberOfUncategorizedItems }}</span>
             </a>
           </li>
           <hr class="m-0" />
@@ -83,8 +108,8 @@
                 [queryParams]="{page: 1}">
                 <span style="overflow: hidden; width: 160px; text-overflow: ellipsis; display: inline-block">
                   {{ category?.name }}</span>
-                <span class="badge ws-bg-secondary badge-pill float-right"
-                  style="margin-top: 3px">{{category?.items?.length}}</span>
+                <span class="badge ws-bg-secondary badge-pill float-right position-absolute"
+                  style="margin-top: 3px; right: 10px; top: .5rem">{{category?.items?.length}}</span>
                 <div>
                   <span class="edit-button d-inline-block ws-secondary" style="font-size: .8rem"
                     (click)="$event.preventDefault(); $event.stopPropagation(); setEditCategory(category?.name)">Edit</span>
@@ -94,61 +119,70 @@
               </a>
             </div>
           </li>
-
           <li class="row no-gutters">
-            <input placeholder="Add New Category" class="new-input col border-0 pl-4"
+            <input placeholder="Add New Category" class="new-input border-0 px-2"
               (keydown.enter)="addCategory()" [(ngModel)]="new_name" />
-            <span class="fas fa-plus pl-3 pr-3" (click)="addCategory()"></span>
+            <span class="fas fa-plus pl-2 pr-2 text-center" style="flex: 1" (click)="addCategory()"></span>
           </li>
         </ul>
       </li>
-      <li class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
+      <li wsNavItem class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
         <a [routerLink]="['qrcode']">
           <span class="ws-main-nav-icon fas fa-qrcode"></span>
           <span class="ws-main-nav-text">QR Code</span>
         </a>
+        <ul class="ws-main-nav-sub-list">
+          <li class="ws-main-nav-sub-list__title">
+            <a [routerLink]="['qrcode']">QR Code</a>
+          </li>
+        </ul>
       </li>
-      <li class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
+      <li wsNavItem class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
         <a [routerLink]="['information']">
           <span class="ws-main-nav-icon fas fa-image"></span>
           <span class="ws-main-nav-text">Information Banner</span>
         </a>
+        <ul class="ws-main-nav-sub-list">
+          <li class="ws-main-nav-sub-list__title">
+            <a [routerLink]="['information']">Information Banner</a>
+          </li>
+        </ul>
       </li>
-      <li *ngIf="false" class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
+      <li wsNavItem *ngIf="false" class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
         <a [routerLink]="['reviews']">
           <span class="ws-main-nav-icon far fa-comment"></span>
           <span class="ws-main-nav-text">Reviews</span>
         </a>
       </li>
-      <li *ngIf="false" class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
+      <li wsNavItem *ngIf="false" class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
         <a [routerLink]="['advertising']">
           <span class="ws-main-nav-icon fas fa-bullhorn"></span>
           <span class="ws-main-nav-text">Advertising</span>
         </a>
       </li>
-      <li *ngIf="false" class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
+      <li wsNavItem *ngIf="false" class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
         <a [routerLink]="['promotion']">
           <span class="ws-main-nav-icon fas fa-tags"></span>
           <span class="ws-main-nav-text">Promotions</span>
         </a>
       </li>
-      <li *ngIf="false" class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
+      <li wsNavItem *ngIf="false" class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
         <a [routerLink]="['recruitment']">
           <span class="ws-main-nav-icon fas fa-user-tie"></span>
           <span class="ws-main-nav-text">Recruitments</span>
         </a>
       </li>
-      <li *ngIf="false" class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
+      <li wsNavItem *ngIf="false" class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
         <a [routerLink]="['quotation']">
           <span class="ws-main-nav-icon fas fa-file-invoice"></span>
-          <span class="ws-main-nav-text">Quotations
-            <span class="badge ws-bg-secondary badge-pill float-right" style="margin-top: 3px"
+          <span class="ws-main-nav-text">Quotation
+            <span class="badge ws-bg-secondary badge-pill float-right" style="margin-top: 3px;"
               *ngIf="unreplied_quotations.length">{{unreplied_quotations.length}}</span>
           </span>
         </a>
       </li>
 
-      <li *ngIf="false" class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
+      <li wsNavItem *ngIf="false" class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
         <a [routerLink]="['ecommerce']">
           <span class="ws-main-nav-icon fas fa-th"></span>
           <span class="ws-main-nav-text">E-Commerce</span>
@@ -176,39 +210,32 @@
           </li>
         </ul>
       </li>
-
-      <li *ngIf="false" class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
-        <a [routerLink]="['features']">
-          <span class="ws-main-nav-icon fas fa-wrench"></span>
-          <span class="ws-main-nav-text">Features</span>
-        </a>
-      </li>
-      <li  *ngIf="false" class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
+      <li wsNavItem *ngIf="false" class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
         <a [routerLink]="['billing']">
           <span class="ws-main-nav-icon fas fa-coins"></span>
           <span class="ws-main-nav-text">Billing</span>
         </a>
         <ul class="ws-main-nav-sub-list">
           <li>
-            <a [routerLinkActive]="'active'" [routerLink]="['billing', 'history']">History
-            </a>
+            <a [routerLinkActive]="'active'" [routerLink]="['billing', 'history']">History</a>
           </li>
-          <li *ngIf="false">
-            <a [routerLinkActive]="'active'" [routerLink]="['billing', 'payment-methods']">Payment Methods
-            </a>
+          <li>
+            <a [routerLinkActive]="'active'" [routerLink]="['billing', 'payment-methods']">Payment Methods</a>
           </li>
-          <li *ngIf="false">
-            <a [routerLinkActive]="'active'" [routerLink]="['billing', 'subscription']">Subscription
-            </a>
+          <li>
+            <a [routerLinkActive]="'active'" [routerLink]="['billing', 'subscription']">Subscription</a>
           </li>
         </ul>
       </li>
-      <li class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
+      <li wsNavItem class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
         <a [routerLink]="['settings']">
           <span class="ws-main-nav-icon fas fa-cog"></span>
           <span class="ws-main-nav-text">Settings</span>
         </a>
         <ul class="ws-main-nav-sub-list">
+          <li class="ws-main-nav-sub-list__title">
+            <a [routerLink]="['settings', 'about']">Settings</a>
+          </li>
           <li>
             <a [routerLinkActive]="'active'" [routerLink]="['settings', 'about']">About</a>
           </li>

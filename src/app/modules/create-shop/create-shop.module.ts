@@ -15,7 +15,7 @@ import { SharedModule } from '../public/shared/shared.module';
 
 @NgModule({
   declarations: [
-    CreateShopComponent,
+    CreateShopComponent
   ],
   imports: [
     CommonModule,

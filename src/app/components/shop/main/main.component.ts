@@ -59,7 +59,7 @@ export class MainComponent implements OnInit {
 
   category_name: string;
   search_keyword: string = '';
-
+  isAdminAuthorized: boolean;
   selectedCategory;
   new_name: string = '';
   editname: string;
@@ -81,15 +81,11 @@ export class MainComponent implements OnInit {
     private sharedCategoryService: SharedCategoryService,
     private sharedShopService: SharedShopService,
     private sharedUserService: SharedUserService,
-    private userService: UserService,
     private routePartsService: RoutePartsService,
     private shopAuthorizationService: ShopAuthorizationService,
     private activeRoute: ActivatedRoute,
     private screenService: ScreenService,
-    private sharedLoadingService: SharedLoadingService,
-    private authShopUserService: AuthShopUserService,
     private sharedNavbarService: SharedNavbarService,
-    private sharedItemService: SharedItemService,
     private ref: ChangeDetectorRef) {
 
   }
@@ -179,6 +175,10 @@ export class MainComponent implements OnInit {
           this.isAdminAuthorizedRefresh(this.user._id);
         }
       })
+    this.shopAuthorizationService.isAdminAuthorized.pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(result => {
+        this.isAdminAuthorized = result;
+    });
     this.sharedShopService.refreshContributor.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
         if (result) {
@@ -320,7 +320,7 @@ export class MainComponent implements OnInit {
   }
 
   refreshCategories() {
-    this.sharedCategoryService.refreshCategories(null, true, false);
+    this.sharedCategoryService.refreshCategories(null, false, false);
   }
   // getUnrepliedRequests() {
   //   this.authRequestContributorService.getUnrepliedRequests().pipe(takeUntil(this.ngUnsubscribe))
