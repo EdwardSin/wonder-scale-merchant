@@ -9,6 +9,7 @@ export class WsLoadingButtonComponent implements OnInit {
   @Input() type: string;
   @Input() class;
   @Input() disabled;
+  @Input() color = '#fff';
   @Input() loading: boolean;
   @Input() debounceClick;
   constructor() { }

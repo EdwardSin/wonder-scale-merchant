@@ -1,0 +1,134 @@
+<h4 class="ws-title">Configurations</h4>
+
+<ng-container *ngIf="configuration; else loadingTemplate">
+    <p class="font-9 m-4">Merchant Code:
+        <span class="ml-3 font-weight-bold" style="font-size: 1.2rem">{{ configuration?.merchantCode || '-' }}</span>
+        <button class="ml-3 btn btn-sm btn-controller" (click)="isRenewMerchantCodeConfirmationModalOpened = true">
+            <span class="fas fa-sync-alt"></span>
+        </button>
+    </p>
+
+    <p class="font-weight-bold">Page Role:</p>
+    <div class="row no-gutters mb-3">
+        <div class="input-group input-group-sm col-4">
+            <div class="ws-dropdown-container col p-0">
+                <div class="row no-gutters w-100">
+                    <input autocomplete="off" class="ws-dropdown-input form-control form-control-sm" name="contributor" [(ngModel)]="searchText" (input)="valueChanged($event.target.value)" />
+                    <span class="ws-dropdown-tag mr-1" *ngIf="tempContributor">
+                        <img class="ws-dropdown-img mr-2" [defaultImage]="environment.LAZY_LOAD_IMAGE" [lazyLoad]="tempContributor?.profileImage" alt="profile image" />
+                        <span class="align-middle">{{tempContributor?.firstName }} {{tempContributor?.lastName}}</span>
+                        <span class="fas fa-times ml-2 clickable float-right" style="margin-top: .4rem" (click)="removeTempPageRole()"></span>
+                    </span>
+                </div>
+                <ul *ngIf="userSuggestions?.length" class="ws-dropdown list-unstyled mb-0">
+                    <li *ngFor="let user of userSuggestions" class="ws-dropdown-item" (click)="addTempPageRole(user)">
+                        <img class="mr-2" style="width:24px; height:24px; object-fit: contain; border-radius: 50%;" [defaultImage]="environment.LAZY_LOAD_IMAGE" [lazyLoad]="user?.profileImage" alt="profile image" />
+                        <div class="d-inline-block">{{user?.firstName }} {{user?.lastName}}</div>
+                    </li>
+                </ul>
+            </div>
+            <mat-select class="input-group-append form-control form-control-sm" style="width: 100px; flex: none" [(ngModel)]="tempRole">
+                <mat-option value="">Role</mat-option>
+                <mat-option value="admin">Admin</mat-option>
+                <mat-option value="waiter">Waiter</mat-option>
+                <mat-option value="chef">Chef</mat-option>
+            </mat-select>
+            <button class="btn btn-sm btn-controller ml-3" (click)="addPageRole()">Add</button>
+        </div>
+        <span class="px-4 font-8 align-middle" style="line-height: 31px">OR</span>
+        <button class="btn btn-sm btn-controller" (click)="openAnonymousUserModal()">Create an anonymous user</button>
+    </div>
+
+
+    <p class="font-weight-bold">Existing Page roles</p>
+    <div class="mb-4" *ngIf="adminContributors.length">
+        <ng-container *ngTemplateOutlet="contributorTypeTemplate; context: {contributors: adminContributors, title: 'Admin'}"></ng-container>
+    </div>
+    <div class="mb-4" *ngIf="chefContributors.length">
+        <ng-container *ngTemplateOutlet="contributorTypeTemplate; context: {contributors: chefContributors, title: 'Chef'}"></ng-container>
+    </div>
+    <div class="mb-4" *ngIf="waiterContributors.length">
+        <ng-container *ngTemplateOutlet="contributorTypeTemplate; context: {contributors: waiterContributors, title: 'Waiter'}"></ng-container>
+    </div>
+
+
+    <div>
+        <p class="font-weight-bold">Bank Details</p>
+        <label class="mb-0 font-9">Bank Account</label>
+        <input class="form-control form-control-sm" name="bank account" [(ngModel)]="bankAccount" />
+        <label class="mb-0 font-9">Bank Name</label>
+        <input class="form-control form-control-sm" name="bank name" [(ngModel)]="bankName" />
+        <label class="mb-0 font-9">Country</label>
+        <input class="form-control form-control-sm" name="bank country" [(ngModel)]="bankCountry" />
+        <label class="mb-0 font-9">Country</label>
+        <input class="form-control form-control-sm" name="bank name" [(ngModel)]="bankCountry" />
+    </div>
+</ng-container>
+
+<ng-template #loadingTemplate>
+    <ng-container *ngIf="loading.isRunning(); else noConfiguration">
+        <ws-spinner class="text-center d-block w-100" style="padding-top: 10vh; padding-bottom: 10vh"></ws-spinner>
+    </ng-container>
+</ng-template>
+
+<ng-template #noConfiguration>
+    <div class="w-100">
+        <div class="h5 text-muted text-center font-weight-light" style="padding-top: 10vh; padding-bottom: 10vh">
+            No Configuration
+        </div>
+    </div>
+</ng-template>
+
+<confirm-modal *ngIf="isRenewMerchantCodeConfirmationModalOpened" [(isOpened)]="isRenewMerchantCodeConfirmationModalOpened" [loading]="merchantCodeLoading.isRunning()" [message]="'Are you sure to renew merchant code?'" [submessage]="'All logged-in users from Ordering Apps will logout.'" [action]="renewMerchantCode.bind(this)">
+</confirm-modal>
+
+<ws-modal *ngIf="isAnonymousUserModalOpened" [(opened)]="isAnonymousUserModalOpened" [isCloseIconDisplayed]="false" [maxWidth]="400">
+    <div modalBody>
+        <h6 class="mb-3">{{ selectedContributor? 'Update User' : 'Create Anonymous User' }}</h6>
+        <p *ngIf="!selectedContributor || selectedContributor.username" class="text-muted font-8">Anonymous user can only be assigned as <span class="font-weight-bold">waiter</span> and <span class="font-weight-bold">chef</span>.</p>
+        <input *ngIf="!selectedContributor || selectedContributor?.username" name="username" placeholder="Username" class="form-control form-control-sm mb-2" [(ngModel)]="username" />
+        <input *ngIf="!selectedContributor" name="password" placeholder="Password" type="password" class="form-control form-control-sm mb-2" [(ngModel)]="password" />
+        <mat-select class="form-control form-control-sm mb-3 float-right" [(ngModel)]="role">
+            <mat-option *ngIf="selectedContributor && !selectedContributor.username" value="admin">Admin</mat-option>
+            <mat-option value="waiter">Waiter</mat-option>
+            <mat-option value="chef">Chef</mat-option>
+        </mat-select>
+        <button [disabled]="removeUserLoading.isRunning() || userLoading.isRunning()" *ngIf="selectedContributor" class="btn btn-sm btn-danger mr-2" (click)="removePageRole()">
+            <ws-spinner class="mr-2" *ngIf="removeUserLoading.isRunning()" [width]="15" [height]="15" [spinnerColor]="'#fff'" [borderWidth]="3"></ws-spinner>Remove
+        </button>
+        <div class="row no-gutters float-right">
+            <button *ngIf="!selectedContributor" [disabled]="removeUserLoading.isRunning() && userLoading.isRunning()" class="btn btn-sm btn-controller mr-2" (click)="addAnonymousPageRole()">
+                <ws-spinner class="mr-2" *ngIf="userLoading.isRunning()" [width]="15" [height]="15" [borderWidth]="3"></ws-spinner>Add
+            </button>
+            <button *ngIf="selectedContributor" [disabled]="removeUserLoading.isRunning() && userLoading.isRunning()" class="btn btn-sm btn-controller mr-2" (click)="updatePageRole()">
+                <ws-spinner class="mr-2" *ngIf="userLoading.isRunning()" [width]="15" [height]="15" [borderWidth]="3"></ws-spinner>Edit
+            </button>
+            <button class="btn btn-sm btn-controller" (click)="closeAnonymousUserModal()">Cancel</button>
+        </div>
+    </div>
+</ws-modal>
+
+<ng-template #contributorTypeTemplate let-contributors="contributors" let-title="title">
+    <p class="font-9 font-weight-bold pl-2">{{ title }}</p>
+    <div class="row no-gutters">
+        <div class="col-lg-3" *ngFor="let contributor of contributors">
+            <div class="row no-gutters">
+                <ng-container *ngIf="contributor.user; else contributorTemplate">
+                    <img class="mx-5" style="border-radius: 50%; width: 75px; height: 75px; box-shadow: 0 0 5px #ccc" [src]="contributor.user.profileImage" alt="profile image" />
+                    <div class="col">
+                        <p class="font-weight-bold font-9 mb-1">{{contributor.user.firstName}} {{contributor.user.lastName}}</p>
+                        <button class="btn btn-sm btn-controller text-center" (click)="openEditUser(contributor)">Edit</button>
+                    </div>
+                </ng-container>
+                <ng-template #contributorTemplate>
+                    <img class="mx-5" style="border-radius: 50%; width: 75px; height: 75px; box-shadow: 0 0 5px #ccc" src="assets/images/png/shop.png" alt="profile image" />
+                    <div class="col">
+                        <p class="font-weight-bold font-9 mb-0">{{contributor.username}}</p>
+                        <p class="font-8 text-muted mb-1">Anonymous</p>
+                        <button class="btn btn-sm btn-controller text-center" (click)="openEditAnonymousUser(contributor)">Edit</button>
+                    </div>
+                </ng-template>
+            </div>
+        </div>
+    </div>
+</ng-template>

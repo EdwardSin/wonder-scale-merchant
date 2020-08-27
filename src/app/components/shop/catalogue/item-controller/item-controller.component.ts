@@ -93,6 +93,8 @@ export class ItemControllerComponent implements OnInit {
           this.createLazyModifyItemComponent();
         } else if (queryParams['modal'] == 'modify-item-type') {
           this.createLazyModifyItemTypeComponent();
+        } else if (queryParams['modal'] == 'modify-menu-item') {
+          this.createLazyModifyMenuItemComponent();
         }
       } else {
         this.viewContainerRef.clear();
@@ -145,6 +147,12 @@ export class ItemControllerComponent implements OnInit {
     await import ('../../../../modules/shop/catalogue/modify-item-type/modify-item-type.module');
     const { ModifyItemTypeComponent } = await import('@components/shop/catalogue/modify-item-type/modify-item-type.component');
     this.viewContainerRef.createComponent(this.cfr.resolveComponentFactory(ModifyItemTypeComponent));
+  }
+  async createLazyModifyMenuItemComponent() {
+    this.viewContainerRef.clear();
+    await import ('../../../../modules/shop/catalogue/modify-menu-item/modify-menu-item.module');
+    const { ModifyMenuItemComponent } = await import('@components/shop/catalogue/modify-menu-item/modify-menu-item.component');
+    this.viewContainerRef.createComponent(this.cfr.resolveComponentFactory(ModifyMenuItemComponent));
   }
   publishItems() {
     var editItems = this.editItems;

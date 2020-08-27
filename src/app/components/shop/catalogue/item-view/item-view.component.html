@@ -52,7 +52,7 @@
       <th *ngIf="columns.includes('name')">Name</th>
       <th *ngIf="columns.includes('price')" width="200px">Price({{ currencySymbol }})</th>
       <th *ngIf="columns.includes('discount')" width="200px">Discount Price({{ currencySymbol }})</th>
-      <th *ngIf="columns.includes('uploaded_images')" width="150px">Uploaded Images</th>
+      <th *ngIf="columns.includes('uploaded_images')" class="text-center"><span class="fas fa-images" title="Uploaded Images"></span></th>
       <th width="120px">Actions</th>
       <tbody>
         <tr *ngFor="let item of displayItems; let i = index">
@@ -69,26 +69,37 @@
           <td *ngIf="columns.includes('id')">{{ item?.refId}}</td>
           <td *ngIf="columns.includes('name')">
             <a class="default" href="javascript:void(0)" (click)="$event.stopPropagation();" 
-            [routerLink]="[]" [queryParams]="{id: item?._id, modal: 'modify-item'}" [queryParamsHandling]="'merge'">{{ item?.name | titlecase | limitTo: 128 }}</a>
+            [routerLink]="[]" [queryParams]="{id: item?._id, modal: shop?.type == 'restaurant' ? 'modify-menu-item' : 'modify-item'}" [queryParamsHandling]="'merge'">{{ item?.name | titlecase | limitTo: 128 }}</a>
           </td>
           <td *ngIf="currencyService.getCurrencyWithCode(item?.currency) && currencyService.getCurrencyWithCode(selectedCurrencyCode) && item.currency && selectedCurrencyCode && columns.includes('price')">
-            {{ item?.price | currency: currencyService.getCurrencyWithCode(item?.currency).rate: currencyService.getCurrencyWithCode(selectedCurrencyCode).rate }}
+            {{ item?.price | currency: currencyService.getCurrencyWithCode(item?.currency).rate: currencyService.getCurrencyWithCode(selectedCurrencyCode).rate | number: '1.2-2' }}
           </td>
           <td *ngIf="currencyService.getCurrencyWithCode(item?.currency) && currencyService.getCurrencyWithCode(selectedCurrencyCode) &&  item.currency && selectedCurrencyCode && columns.includes('discount')">
             {{ item?.price | currency: currencyService.getCurrencyWithCode(item?.currency).rate: currencyService.getCurrencyWithCode(selectedCurrencyCode).rate | discountconverter : item?.discount }}
           </td>
-          <td *ngIf="columns.includes('uploaded_images')">
+          <td class="text-center" *ngIf="columns.includes('uploaded_images')">
             <span>{{ totalNoImages(item) }}</span>
           </td>
           <td width="100">
-            <a title="Edit Item" href="javascript:void(0)" class="d-inline-block d-sm-inline-flex ws-dark-color btn-link p-2 mb-1 mb-sm-0 mr-sm-2" (click)="$event.stopPropagation();"
-              [routerLink]="[]" [queryParams]="{id: item?._id, modal: 'modify-item'}" [queryParamsHandling]="'merge'">
-              <span class="fas fa-edit"></span>
-            </a>
-            <a title="Edit Item Types" href="javascript:void(0)" class="d-inline-block d-sm-inline-flex ws-dark-color btn-link p-2" (click)="$event.stopPropagation();"
-              [routerLink]="[]" [queryParams]="{id: item?._id, modal: 'modify-item-type'}" [queryParamsHandling]="'merge'">
-              <span class="fas fa-sitemap"></span>
-            </a>
+            <ng-container *ngIf="shop.type == 'restaurant'; else modifyItemTemplate">
+              <ng-container *ngTemplateOutlet="modifyMenuItemTemplate"></ng-container>
+            </ng-container>
+            <ng-template #modifyMenuItemTemplate>
+              <a title="Edit Item" href="javascript:void(0)" class="d-inline-block d-sm-inline-flex ws-dark-color btn-link p-2 text-decoration-none mb-1 mb-sm-0 mr-sm-2" (click)="$event.stopPropagation();"
+                [routerLink]="[]" [queryParams]="{id: item?._id, modal: 'modify-menu-item'}" [queryParamsHandling]="'merge'">
+                <span class="fas fa-edit"></span>
+              </a>
+            </ng-template>
+            <ng-template #modifyItemTemplate>
+              <a title="Edit Item" href="javascript:void(0)" class="d-inline-block d-sm-inline-flex ws-dark-color btn-link p-2 text-decoration-none mb-1 mb-sm-0 mr-sm-2" (click)="$event.stopPropagation();"
+                [routerLink]="[]" [queryParams]="{id: item?._id, modal: 'modify-item'}" [queryParamsHandling]="'merge'">
+                <span class="fas fa-edit"></span>
+              </a>
+              <a title="Edit Item Types" href="javascript:void(0)" class="d-inline-block d-sm-inline-flex ws-dark-color btn-link p-2 text-decoration-none" (click)="$event.stopPropagation();"
+                [routerLink]="[]" [queryParams]="{id: item?._id, modal: 'modify-item-type'}" [queryParamsHandling]="'merge'">
+                <span class="fas fa-sitemap"></span>
+              </a>
+            </ng-template>
           </td>
         </tr>
       </tbody>

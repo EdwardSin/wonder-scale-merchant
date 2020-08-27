@@ -119,6 +119,24 @@ export class WSFormBuilder {
             openingHour: ['']
         });
     }
+    public static createMenuItemForm() {
+        let formBuilder = new FormBuilder();
+        return formBuilder.group({
+            refId: ['', [Validators.required, Validators.maxLength(36)]],
+            name: ['', [Validators.required, Validators.maxLength(128)]],
+            currency: ['', [Validators.required]],
+            price: ['', [Validators.required]],
+            discount: ['', []],
+            quantity: [''],
+            categories: [[]],
+            description: ['', [Validators.maxLength(256)]],
+            isEntityNew: [true, [Validators.required]],
+            isPriceDisplayed: [false, [Validators.required]],
+            isPublished: [false, Validators.required],
+            isOffer: [false, Validators.required],
+            isPickup: [false]
+        })
+    }
     public static createItemForm() {
         let formBuilder = new FormBuilder();
         return formBuilder.group({

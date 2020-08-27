@@ -11,6 +11,9 @@ export class AuthPackageAdminService {
   constructor(private http: HttpClient, private accessTokenService: AccessTokenService) { }
 
   getShopPackages() {
-    return this.http.get(AuthPackageAdminUrl.getShopPackage, this.accessTokenService.getAccessToken());
+    return this.http.get(AuthPackageAdminUrl.getShopPackageUrl, this.accessTokenService.getAccessToken());
+  }
+  addShopPackage(name) {
+    return this.http.post(AuthPackageAdminUrl.addShopPackageUrl, {name}, this.accessTokenService.getAccessToken());
   }
 }

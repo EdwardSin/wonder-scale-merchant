@@ -1,0 +1,57 @@
+<h4 class="ws-title">Statements</h4>
+<div>
+    <div class="row no-gutters mb-2">
+        <div style="width: 200px" class="">From:</div>
+        <input (click)="fromPicker.open()" class="form-control form-control-sm d-inline-block" style="max-width: 300px" [(ngModel)]="fromDate" [matDatepicker]="fromPicker" [max]="maxDate" />
+        <mat-datepicker #fromPicker startView="month" [startAt]="fromDate"></mat-datepicker>
+    </div>
+    <div class="row no-gutters mb-2">
+        <div style="width: 200px" class="">To:</div>
+        <input (click)="toPicker.open()" class="form-control form-control-sm d-inline-block" style="max-width: 300px" [(ngModel)]="toDate" [matDatepicker]="toPicker" [min]="fromDate" [max]="maxDate" />
+        <mat-datepicker #toPicker startView="month" [startAt]="toDate"></mat-datepicker>
+    </div>
+    <div class="row no-gutters mb-2">
+        <button [disabled]="loading.isRunning()" style="margin-left: 200px" class="btn btn-sm btn-controller" (click)="getStatements()">Search</button>
+        <!-- <button class="btn btn-controller float-right ml-auto">
+            <span class="fas fa-download"></span>
+        </button> -->
+    </div>
+</div>
+
+<table class="table table-hover w-100 font-9">
+    <thead>
+        <th>Statement ID</th>
+        <th>Details</th>
+        <th>Date</th>
+        <th>Amount</th>
+        <th>Commission(4%)</th>
+    </thead>
+    <tbody>
+        <tr *ngFor="let statement of statements">
+            <td>{{ statement.id }}</td>
+            <td>Statement</td>
+            <td>{{ statement.closeDate | date:'dd-MMM-yyyy HH:mm:ss'}}</td>
+            <td>{{ statement.total | number: '1.2-2' }}</td>
+            <td>{{ statement.commission | number: '1.2-2' }}</td>
+        </tr>
+        <tr *ngIf="statements.length">
+           <td></td>
+           <td></td>
+           <td></td>
+           <td class="font-weight-bold">{{ total | number: '1.2-2' }}</td>
+           <td class="font-weight-bold">{{ totalCommission | number: '1.2-2' }}</td>
+        </tr>
+    </tbody>
+</table>
+<ng-container *ngIf="statements.length && !loading.isRunning(); else loadingTemplate"></ng-container>
+
+<ng-template #loadingTemplate>
+    <ws-spinner *ngIf="loading.isRunning(); else noStatement" class="text-center d-block w-100" style="padding-top: 10vh; padding-bottom: 10vh"></ws-spinner>
+</ng-template>
+<ng-template #noStatement>
+    <div class="w-100">
+      <div class="h5 text-muted text-center font-weight-light" style="padding-top: 10vh; padding-bottom: 10vh">
+        No Statement
+      </div>
+    </div>
+</ng-template>

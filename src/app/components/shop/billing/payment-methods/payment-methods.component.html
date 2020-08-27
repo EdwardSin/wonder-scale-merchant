@@ -1,0 +1,36 @@
+<h4 class="ws-title">Payment Methods</h4>
+
+<div class="pt-4 mb-2">
+    <!-- <span class="d-inline-block font-9">Your payment currency is: USD</span> -->
+    <button class="btn btn-sm btn-controller float-right px-2" [routerLink]="['', { outlets: {modal: 'modify-card'}}]"><span class="fas fa-plus mr-2 d-inline-block"></span><span class="d-inline-block font-9">Add Card</span></button>
+    <div class="clearfix"></div>
+</div>
+<table class="table table-hover font-9">
+    <thead>
+        <th>Credit Card</th>
+        <th>Name on card</th>
+        <th class="text-center">Expires on</th>
+        <th></th>
+    </thead>
+    <tbody>
+        <tr *ngFor="let card of cards">
+            <td>Visa ending in {{ card.last_digit }} <span *ngIf="card.default">(Default)</span></td>
+            <td>{{ card.name }}</td>
+            <td class="text-center">{{ card.expiry_date }}</td>
+            <td class="text-center">
+                <a class="ml-4 mr-4" (click)="setDefault(card._id)">Set Default</a>
+                <a (click)="deleteCard(card._id)">Delete</a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<div *ngIf="cards.length; else loadingTemplate"></div>
+
+<ng-template #loadingTemplate>
+    <ng-container *ngIf="loading.isRunning();else noCardTemplate">
+        <ws-spinner [width]="60" [height]="60"></ws-spinner>
+    </ng-container>
+</ng-template>
+<ng-template #noCardTemplate>
+    <h6 class="text-center mt-5 pb-5">No Payment Method!</h6>
+</ng-template>

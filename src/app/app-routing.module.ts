@@ -5,6 +5,7 @@ import { MainComponent } from '@components/shop/main/main.component';
 import { AuthGuard } from './guards/auth.guard';
 import { ShopResolver } from '@components/resolvers/shopResolver.service';
 import { ShopGuard } from './shop.guard';
+import { BillingComponent } from '@components/shop/billing/billing/billing.component';
 
 
 const routes: Routes = [{
@@ -92,15 +93,12 @@ const routes: Routes = [{
       data: { title: 'packages', breadcrumb: 'Packages' },
       loadChildren: () => import('./modules/shop/packages/packages.module').then(m => m.PackagesModule)
     },
-    // {
-    //   path: 'billing',
-    //   component: BillingComponent,
-    //   data: { title: 'billing', breadcrumb: 'Billing' },
-    //   children: [{ path: '', redirectTo: 'history', pathMatch: 'full' },
-    //   { path: 'history', component: HistoryComponent, data: { title: 'history', breadcrumb: 'History' } },
-    //   { path: 'payment-methods', component: PaymentMethodsComponent, data: { title: 'payment-methods', breadcrumb: 'Payment Methods' } },
-    //   { path: 'subscription', component: SubscriptionComponent, data: { title: 'subscription', breadcrumb: 'Subscription' } }]
-    // },
+    {
+      path: 'billing',
+      canActivate: [ShopGuard],
+      data: { title: 'billing', breadcrumb: 'Billing' },
+      loadChildren: () => import('./modules/shop/billing/billing.module').then(m => m.BillingModule)
+    },
     {
       path: 'settings',
       canActivate: [ShopGuard],
@@ -113,6 +111,12 @@ const routes: Routes = [{
       data: { title: 'qrcode', breadcrumb: 'Qr Code' },
       loadChildren: () => import('./modules/shop/qrcode/qrcode.module').then(m => m.QrcodeModule)
     },
+    {
+      path: 'ordering',
+      canActivate: [ShopGuard],
+      data: { title: 'ordering', breadcrumb: 'Ordering'},
+      loadChildren: () => import('./modules/shop/ordering/ordering.module').then(m => m.OrderingModule)
+    }
   ]
 },
 { path: 'not-found', loadChildren: () => import('./modules/error/error.module').then(m => m.ErrorModule) },

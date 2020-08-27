@@ -6,6 +6,8 @@ import { JwtModule, JWT_OPTIONS } from '@auth0/angular-jwt';
 import { SocialLoginModule, GoogleLoginProvider, FacebookLoginProvider, SocialAuthServiceConfig } from 'angularx-social-login';
 import { NgProgressModule } from 'ngx-progressbar';
 import { NgProgressRouterModule } from 'ngx-progressbar/router';
+import { NgxDropzoneModule } from 'ngx-dropzone';
+import { SortablejsModule } from 'ngx-sortablejs';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -25,6 +27,7 @@ import { BillingComponent } from './components/shop/billing/billing/billing.comp
 import { HistoryComponent } from './components/shop/billing/history/history.component';
 import { PaymentMethodsComponent } from './components/shop/billing/payment-methods/payment-methods.component';
 import { SubscriptionComponent } from './components/shop/billing/subscription/subscription.component';
+import { ModifyMenuItemComponent } from './components/shop/catalogue/modify-menu-item/modify-menu-item.component';
 
 const DEFAULT_SWIPER_CONFIG: SwiperConfigInterface = {
   direction: 'horizontal',
@@ -68,7 +71,8 @@ export function jwtOptionsFactory(platformId) {
     BillingComponent,
     HistoryComponent,
     PaymentMethodsComponent,
-    SubscriptionComponent
+    SubscriptionComponent,
+    ModifyMenuItemComponent
   ],
   imports: [
     BrowserModule,
@@ -79,6 +83,10 @@ export function jwtOptionsFactory(platformId) {
     SocialLoginModule,
     NgProgressModule,
     NgProgressRouterModule,
+    NgxDropzoneModule,
+    SortablejsModule.forRoot({
+      animation: 150
+    }),
     JwtModule.forRoot({
       jwtOptionsProvider: {
         provide: JWT_OPTIONS,

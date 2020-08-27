@@ -1,0 +1,58 @@
+<h4 class="ws-title">History</h4>
+<div>
+    <table class="table table-hover font-9">
+        <thead>
+            <th>Receipt ID</th>
+            <th>Description</th>
+            <th class="text-center">{{'Amount(' + currency + ')'}}</th>
+            <th class="text-right">Action</th>
+        </thead>
+        <tbody>
+            <tr *ngFor="let receipt of receipts; let i = index" (click)="receiptClick[i] = !receiptClick[i]">
+                <td class="text-center">{{receipt._id}}</td>
+                <td class="pr-0">
+                    <a class="d-block font-weight-normal">Receipt
+                        <span>({{ receipt.createdAt | date: 'dd/MM/yyyy' }})</span>
+                    </a>
+                    <span class="border-top d-block mt-2 pt-2 pl-2" *ngIf="receipt.items?.length && receiptClick[i]">
+                        <span class="d-block font-8" *ngFor="let item of receipt.items">
+                            {{ item.description }}
+                        </span>
+                    </span>
+                </td>
+                <td class="text-center pl-0">
+                    <span class="font-weight-normal d-block">{{receipt.total}}</span>
+                    <span class="border-top d-block mt-2 pt-2" *ngIf="receipt.items?.length &&receiptClick[i]">
+                        <span class="d-block font-8" *ngFor="let item of receipt.items">
+                            {{ item.amount }}
+                        </span>
+                    </span>
+                </td>
+                <td>
+                    <a (click)="reprint(receipt)">Reprint</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div *ngIf="receipts.length; else loadingTemplate"></div>
+</div>
+<div hidden #printContent>
+    <div style="width:fit-content; padding: 1.5rem; margin-top: 40%; margin-left:auto; margin-right:auto;">
+        <p style="text-align: center; margin-bottom: .5rem">Scan me to view more items!</p>
+        <div style="position: relative">
+            <img id="copyimage" src="" alt="copy" />
+            <div style="width:50px; height:50px; position:absolute; border-radius: 50%; top: calc(50% - 25px - .75rem);left: calc(50% - 25px - .75rem);">
+                <img style="width: 72px; height: 72px" src="https://res.cloudinary.com/hdpveefqg/image/upload/v1544152336/icon-qrcode.png" alt="icon" />
+            </div>
+        </div>
+        <p style="text-align: center; margin-top: .25rem; margin-bottom: 0">@{{ shop?.username }}</p>
+    </div>
+</div>
+<ng-template #loadingTemplate>
+    <ng-container *ngIf="loading.isRunning();else noPaymentTemplate">
+        <ws-spinner [width]="60" [height]="60"></ws-spinner>
+    </ng-container>
+</ng-template>
+<ng-template #noPaymentTemplate>
+    <h6 class="text-center mt-5 pb-5">No Record!</h6>
+</ng-template>
