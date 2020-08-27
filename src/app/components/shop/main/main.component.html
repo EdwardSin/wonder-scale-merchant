@@ -39,11 +39,11 @@
       <li wsNavItem class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
         <a [routerLink]="['catalogue']">
           <span class="ws-main-nav-icon fas fa-th"></span>
-          <span class="ws-main-nav-text">Catalogue</span>
+          <span class="ws-main-nav-text">{{shop?.type == 'restaurant' ? 'Menu' : 'Catalogue'}}</span>
         </a>
         <ul class="ws-main-nav-sub-list ws-main-nav-sub-list__padding">
           <li class="ws-main-nav-sub-list__title">
-            <a [routerLink]="['catalogue']">Catalogue</a>
+            <a [routerLink]="['catalogue']">{{shop?.type == 'restaurant' ? 'Menu' : 'Catalogue'}}</a>
           </li>
           <li class="position-relative">
             <a [class.active]="isLinkActive('/shops/' + shop?.username + '/catalogue/all')" [routerLink]="['catalogue', 'all']" [queryParams]="{page: 1}">All
@@ -127,6 +127,29 @@
         </ul>
       </li>
       <li wsNavItem class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
+        <a [routerLink]="['ordering']">
+          <span class="ws-main-nav-icon fas fa-clipboard-list" style="margin-right: .65rem"></span>
+          <span class="ws-main-nav-text">Ordering</span>
+        </a>
+        <ul class="ws-main-nav-sub-list">
+          <li class="ws-main-nav-sub-list__title">
+            <a [routerLink]="['ordering']">Ordering</a>
+          </li>
+          <li>
+            <a [routerLinkActive]="'active'" [routerLink]="['ordering', 'tables']">Tables</a>
+          </li>
+          <li>
+            <a [routerLinkActive]="'active'" [routerLink]="['ordering', 'sales']">Sales</a>
+          </li>
+          <li>
+            <a [routerLinkActive]="'active'" [routerLink]="['ordering', 'statements']">Statements</a>
+          </li>
+          <li>
+            <a [routerLinkActive]="'active'" [routerLink]="['ordering', 'configurations']">Configurations</a>
+          </li>
+        </ul>
+      </li>
+      <li wsNavItem class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
         <a [routerLink]="['qrcode']">
           <span class="ws-main-nav-icon fas fa-qrcode"></span>
           <span class="ws-main-nav-text">QR Code</span>
@@ -182,7 +205,7 @@
         </a>
       </li>
 
-      <li wsNavItem *ngIf="false" class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
+      <!-- <li wsNavItem *ngIf="false" class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
         <a [routerLink]="['ecommerce']">
           <span class="ws-main-nav-icon fas fa-th"></span>
           <span class="ws-main-nav-text">E-Commerce</span>
@@ -209,8 +232,8 @@
             </a>
           </li>
         </ul>
-      </li>
-      <li wsNavItem *ngIf="false" class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
+      </li> -->
+      <li wsNavItem class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
         <a [routerLink]="['billing']">
           <span class="ws-main-nav-icon fas fa-coins"></span>
           <span class="ws-main-nav-text">Billing</span>

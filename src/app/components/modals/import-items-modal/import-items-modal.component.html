@@ -8,12 +8,12 @@
                 </mat-select>
             </div>
             <div class="input-group d-inline-block mb-1 pl-2" style="flex-wrap: nowrap">
-                <mat-checkbox [color]="'primary'" class="mr-1 align-center" style="line-height: 1;" [(ngModel)]="isEntityNew">
+                <mat-checkbox [color]="'primary'" class="mr-1 align-middle" style="line-height: 1;" [(ngModel)]="isEntityNew">
                 </mat-checkbox>
                 Mark as new
             </div>
             <div class="input-group d-inline-block mb-4 pl-2" style="flex-wrap: nowrap">
-                <mat-checkbox [color]="'primary'" class="mr-1 align-center" style="line-height: 1;" [(ngModel)]="isPublished">
+                <mat-checkbox [color]="'primary'" class="mr-1 align-middle" style="line-height: 1;" [(ngModel)]="isPublished">
                 </mat-checkbox>
                 Mark as published
             </div>
@@ -63,9 +63,9 @@
                 Download Template</button>
         </a>
         <button class="btn btn-sm btn-controller float-right ml-2" (click)="close()">Cancel</button>
-        <button *ngIf="!isUploadValid()" class="btn btn-sm btn-controller float-right" onclick="document.getElementById('importFile').click()">{{ !isUploaded ? 'Import': 'Import Again'}}</button>
-        <button *ngIf="isUploadValid()" class="btn btn-sm btn-success float-right" [disabled]="isUploadLoading.isRunning()" (click)="uploadItems()">
-            <ws-spinner *ngIf="isUploadLoading?.isRunning()" [width]="15" [height]="15" [spinnerColor]="'#fff'" [borderWidth]="3" class="mr-2"></ws-spinner>Upload
+        <button *ngIf="!isUploadValid()" class="btn btn-sm btn-controller float-right" onclick="document.getElementById('importFile').click()">{{ !isUploaded ? 'Upload': 'Upload Again'}}</button>
+        <button *ngIf="isUploadValid()" class="btn btn-sm btn-controller float-right" [disabled]="isUploadLoading.isRunning()" (click)="uploadItems()">
+            <ws-spinner *ngIf="isUploadLoading?.isRunning()" [width]="15" [height]="15" [spinnerColor]="'#fff'" [borderWidth]="3" class="mr-2"></ws-spinner>Confirm
         </button>
         <input id="importFile" type="file" hidden name="importFile" #importFile accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" (change)="importFileChangeEvent($event)" />
     </div>
@@ -73,7 +73,7 @@
         <div class="text-center mt-5 mb-4">
             <span class="far fa-check-circle" style="font-size: 7rem; color:#68DC64"></span>
         </div>
-        <p class="text-center mb-4"> Items are successfully uploaded.</p>
+        <p class="text-center mb-4">Items are uploaded successfully.</p>
         <div class="text-center">
             <button class="btn btn-sm btn-controller mb-2" (click)="close()">Done!</button>
         </div>

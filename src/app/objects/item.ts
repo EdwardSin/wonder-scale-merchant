@@ -20,4 +20,5 @@ export class Item {
     priceAfterDiscount?: number;
     categories: string[];
     isDiscountExisting: boolean;
+    kind?: string;
 }

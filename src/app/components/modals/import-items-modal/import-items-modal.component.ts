@@ -1,6 +1,5 @@
 import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AuthItemContributorService } from '@services/http/auth-shop/contributor/auth-item-contributor.service';
-import { SharedLoadingService } from '@services/shared/shared-loading.service';
 import { SharedShopService } from '@services/shared/shared-shop.service';
 import _ from 'lodash';
 import { takeUntil } from 'rxjs/operators';
@@ -53,8 +52,7 @@ export class ImportItemsModalComponent extends WsModalComponent implements OnIni
     private ref: ChangeDetectorRef,
     private authItemContributorService: AuthItemContributorService,
     private sharedShopService: SharedShopService,
-    private sharedCategoryService: SharedCategoryService,
-    private sharedLoadingService: SharedLoadingService) {
+    private sharedCategoryService: SharedCategoryService) {
     super();
   }
 
@@ -160,6 +158,7 @@ export class ImportItemsModalComponent extends WsModalComponent implements OnIni
     for (let i = 0; i < rows.length; i++) {
       let row = rows[i];
       let keys = Object.keys(row);
+      keys = keys.filter(x => x != 'D');
       for (let key of keys) {
         if (row[key] === undefined || row[key] === null || row[key].toString().trim() === '') {
           errors.push('#sjs-' + key + (i + 2));

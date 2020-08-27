@@ -51,7 +51,7 @@ export class QrcodeComponent implements OnInit {
   constructor(
     private ref: ChangeDetectorRef,
     private authShopUserService: AuthShopUserService,
-    private sharedShopService: SharedShopService, 
+    private sharedShopService: SharedShopService,
     private authTrackContributor: AuthTrackContributorService) {
     this.loading.start();
     let shop_name = this.sharedShopService.shop_name;
@@ -85,31 +85,13 @@ export class QrcodeComponent implements OnInit {
           $(target).find('ws-spinner').css({display: 'none'});
         }})
         .then(() => {
-          this.renderProfileImageToQrcode(target, newImage, size);
+          QRCodeBuilder.renderProfileImageToQrcode(target, newImage, size);
         });
       });
     });
   }
   imageChangeEvent(event) {
     this.displayImage = event[0].url.changingThisBreaksApplicationSecurity;
-  }
-  renderProfileImageToQrcode(target, image, size) {
-    let canvas = $(target).find('canvas')[0];
-    if (canvas) {
-      let context =(<HTMLCanvasElement>canvas).getContext('2d');
-      let width = size / 3 * 46.7 / 70;
-      let height = size / 3 * 46.7 / 70;
-      let offsetInnerY = size / 3 * 6 / 70;
-      let offsetX = size/2 - width/2;
-      let offsetY = size/2 - height/2 - offsetInnerY;
-      context.save();
-      context.beginPath();
-      context.arc(offsetX + width/2, offsetY + width/2, width/2, 0, 2*Math.PI);
-      context.fill();
-      context.clip();
-      context.drawImage(image, offsetX, offsetY, width, height);
-      context.restore();
-    }
   }
   copyURL(url) {
     var tempInput = document.createElement("input");
