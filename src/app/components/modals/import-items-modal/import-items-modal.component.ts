@@ -210,7 +210,8 @@ export class ImportItemsModalComponent extends WsModalComponent implements OnIni
         isPublished: this.isPublished
       }
     })
-    this.authItemContributorService.uploadItems({ items: obj, category_id: this.category_id, currency: this.shop.currency }).pipe(takeUntil(this.ngUnsubscribe))
+    //this.shop.currency
+    this.authItemContributorService.uploadItems({ items: obj, category_id: this.category_id, currency: 'MYR' }).pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
         this.sharedCategoryService.refreshCategories(() => {
           this.phase = 1;

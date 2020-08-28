@@ -124,7 +124,7 @@ export class WSFormBuilder {
         return formBuilder.group({
             refId: ['', [Validators.required, Validators.maxLength(36)]],
             name: ['', [Validators.required, Validators.maxLength(128)]],
-            currency: ['', [Validators.required]],
+            currency: ['MYR', [Validators.required]],
             price: ['', [Validators.required]],
             discount: ['', []],
             quantity: [''],
@@ -142,7 +142,7 @@ export class WSFormBuilder {
         return formBuilder.group({
             refId: ['', [Validators.required, Validators.maxLength(36)]],
             name: ['', [Validators.required, Validators.maxLength(128)]],
-            currency: ['', [Validators.required]],
+            currency: ['MYR', [Validators.required]],
             price: ['', [Validators.required]],
             discount: ['', []],
             quantity: [''],

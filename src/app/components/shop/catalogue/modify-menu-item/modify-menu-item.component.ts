@@ -78,7 +78,7 @@ export class ModifyMenuItemComponent implements OnInit {
     this.sharedShopService.shop.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       if (result) {
         this.shop = result;
-        this.itemGroup.get('currency').setValue(this.shop.currency);
+        // this.itemGroup.get('currency').setValue(this.shop.currency);
         this.getDefaultSetting();
       }
     });
@@ -136,7 +136,7 @@ export class ModifyMenuItemComponent implements OnInit {
   setupDefaultSetting() {
     this.itemGroup.patchValue({
       ...this.defaultSetting,
-      currency: this.defaultSetting.currency || this.shop.currency
+      // currency: this.defaultSetting.currency || this.shop.currency
     });
     if (this.currentItem) {
       this.itemGroup.patchValue({ ...this.currentItem });

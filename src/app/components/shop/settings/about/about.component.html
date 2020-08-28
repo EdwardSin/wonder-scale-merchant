@@ -73,9 +73,11 @@
                 <label class="settings-label">Currency</label>
 
                 <mat-select class="form-control form-control-sm" placeholder="Currency" formControlName="currency">
-                    <mat-option [value]="currency" *ngFor="let currency of currencyService.currencyFullnameArray">{{currency}}
-                        ({{currencyService.currencySymbols[currency]}})
-                    </mat-option>
+                    <ng-container  *ngFor="let currency of currencyService.currencyFullnameArray">
+                        <mat-option [value]="currency" *ngIf="currency == 'MYR' || currency == form.controls.currency.value">{{currency}}
+                            ({{currencyService.currencySymbols[currency]}})
+                        </mat-option>
+                    </ng-container>
                 </mat-select>
 
                 <!-- <div class="d-block mt-3 border p-3" style="background-color: #fafafa; border-radius: .25rem">
