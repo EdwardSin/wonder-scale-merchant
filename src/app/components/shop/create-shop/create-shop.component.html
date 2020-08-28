@@ -106,9 +106,11 @@
           </mat-error>
           <div class="ws-input">
             <mat-select placeholder="Selected Currency*" formControlName="currency" class="form-control font-9" style="padding-top: 8px">
-              <mat-option [value]="_currency" *ngFor="let _currency of currency.keys">
-                {{currency.currencies[_currency]}} ({{currency.values[_currency]}})
-              </mat-option>
+              <ng-container *ngFor="let _currency of currency.keys">
+                <mat-option [value]="_currency" *ngIf="_currency == 'MYR'">
+                  {{currency.currencies[_currency]}} ({{currency.values[_currency]}})
+                </mat-option>
+              </ng-container>
             </mat-select>
           </div>
           <mat-error

@@ -37,9 +37,12 @@
                                     <span>Price*</span>
                                 </div>
                                 <div class="input-group-prepend border-right-0 pr-0 ws-bg-clear">
-                                    <mat-select class="form-control form-control-sm border-right-0 py-0" style="width: 100px; height: 21px;" formControlName="currency" placeholder="Currency">
-                                        <mat-option *ngFor="let currency of currencies" [value]="currency.name">
-                                            {{currency.name + " (" + currency.symbol + ")"}}</mat-option>
+                                    <mat-select class="form-control form-control-sm border-right-0 py-0" style="width: 100px; height: 21px;"
+                                    formControlName="currency" >
+                                        <ng-container *ngFor="let currency of currencies">
+                                            <mat-option *ngIf="currency.name == 'MYR' || currentItem?.currency == currency.name" [value]="currency.name">
+                                                {{currency.name + " (" + currency.symbol + ")"}}</mat-option>
+                                        </ng-container>
                                     </mat-select>
                                 </div>
                                 <input name="price" autocomplete="off" tabIndex="2" class="form-control form-control-sm p-1" lang="en-150" placeholder="0.00" formControlName="price" />
