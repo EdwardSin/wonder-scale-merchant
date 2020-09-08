@@ -8,10 +8,10 @@
 //     width: 100%;
 // }
 .background{
-    padding-top: 17%;
+    padding-top: 10%;
     // min-height: 600px;
     z-index: 10;
-    padding-bottom: 17%;
+    padding-bottom: 10%;
     .background__title{
         font-size: 3rem;
     }
@@ -24,55 +24,54 @@
         display: block;
     }
     .background__texture{
+        justify-content: center;
+        display: flex;
+        flex-direction: column;
     }
 }
 .background-text {
     color: #fff;
 }
-.feature__container{
-    padding: 4rem 0;
-    transition: transform ease .3s;
-    .feature__title{
-        font-size: 1.5rem;
-    }
-    .icon {
-        filter: drop-shadow(0 3px 3px #999);
-        font-size: 5rem; 
-        transform: color .2s ease;
-    }
+.background-grey{
+    background-color: #f5f5f5;
+}
+.background-greyer{
+    background-color: #E1E1E1;
+}
+.btn-start{
+    border-radius: 2rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    font-size: 1rem;
+    transition: box-shadow .2s ease-out;
+    color: #fff;
+    background-color: map-get($ws-color, secondary);
+    box-shadow: 0 1px 5px #ccc;
     &:hover{
-        transform: scale(1.03);
-        .icon {
-            &.icon-dashboard {
-                color: #4d0099;
-            }
-            &.icon-item {
-                color: #CC8500;
-            }
-            &.icon-store {
-                color: #0ABCC9;
-            }
-            &.icon-qrcode{
-                color: #990000;
-            }
-            &.icon-bell{
-                color: #E6C300;
-            }
-            &.icon-right{
-                animation: swing;
-                animation-duration: 8s;
-            }
-            &.icon-left{
-                animation: swing;
-                animation-duration: 8s;
-                transform-origin: top;
-                animation-iteration-count: infinite;
-            }
-        }
+        box-shadow: 0 1px 5px #000;
+    }
+    &:active{
+        background-color: map-get($ws-color, secondary);
     }
 }
-.icon{
-    transition: transform ease-out .4s;
+.btn-type{
+    border-bottom: 5px solid transparent;
+    font-weight: bold;
+    cursor: pointer;
+    transition: border-bottom .2s ease;
+
+    &.btn-restaurant {
+        &:hover,
+        &.btn-selected{
+            border-bottom: 5px solid #F26522;
+        }
+    }
+    &.btn-shopping {
+        &:hover,
+        &.btn-selected {
+            border-bottom: 5px solid #00A99D;
+        }
+    }
 }
 .btn-background{
     background:transparent; 
@@ -91,8 +90,8 @@ footer {
     // bottom: 0px;
     width: 100%;
     opacity: 1;
-    border-top: 1px solid map-get($ws-color, lighten-grey);
-    background-color: map-get($ws-color, secondary) ;
+    border-top: 1px solid #EDF1F5;
+    // background-color: map-get($ws-color, secondary) ;
 }
 
 .footer-box-center {
@@ -105,7 +104,7 @@ footer {
             a {
                 &:link,
                 &:visited {
-                    color: map-get($ws-color, white);
+                    color: #000;
                     text-align: center;
                     text-decoration: none;
                 }
@@ -116,12 +115,12 @@ footer {
                     text-decoration: none;
                 }
             }
-            &:first-child {
-                display: block;
-                font-size: 20px;
-                color: #fff;
-                margin-bottom: 12px;
-            }
+            // &:first-child {
+            //     display: block;
+            //     font-size: 20px;
+            //     color: #fff;
+            //     margin-bottom: 12px;
+            // }
         }
     }
 }

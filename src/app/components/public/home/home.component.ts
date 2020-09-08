@@ -12,6 +12,7 @@ export class HomeComponent implements OnInit {
 
 
   year = new Date().getFullYear();
+  selectedType: string = 'restaurant';
   constructor(private router: Router,
     private visitorGuard: VisitorGuard) { }
 
@@ -24,5 +25,8 @@ export class HomeComponent implements OnInit {
         this.router.navigate([], {queryParams: {modal: 'login'}});
       }
     })
+  }
+  selectType(type) {
+    this.selectedType = type;
   }
 }
