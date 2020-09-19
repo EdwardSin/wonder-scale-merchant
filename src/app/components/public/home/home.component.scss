@@ -38,22 +38,7 @@
 .background-greyer{
     background-color: #E1E1E1;
 }
-.btn-start{
-    border-radius: 2rem;
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-    font-size: 1rem;
-    transition: box-shadow .2s ease-out;
-    color: #fff;
-    background-color: map-get($ws-color, secondary);
-    box-shadow: 0 1px 5px #ccc;
-    &:hover{
-        box-shadow: 0 1px 5px #000;
-    }
-    &:active{
-        background-color: map-get($ws-color, secondary);
-    }
-}
+
 .btn-type{
     border-bottom: 5px solid transparent;
     font-weight: bold;

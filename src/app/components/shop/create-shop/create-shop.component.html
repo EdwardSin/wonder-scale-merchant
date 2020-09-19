@@ -6,7 +6,7 @@
           <div class="modal-close">
             <span class="fas fa-times" [routerLink]="[]" [queryParams]="{modal: null}"></span>
           </div>
-          <package-list (select)="selectPackage($event)"></package-list>
+          <package-list [isNavigateToShopPage]="true" [canTrial]="canTrial"></package-list>
         </form>
         <!-- <form *ngSwitchCase="0" class="modal-content">
           <div class="modal-close">
@@ -152,7 +152,8 @@
           </mat-error>
           <div class="row no-gutters mt-4">
             <button class="btn btn-md btn-second" type="button" (click)="phase.previous()">Previous</button>
-            <button [disabled]="!basicFormGroup.valid" class="btn btn-md btn-second" type="button" style="margin-left: auto" (click)="next()">Next</button>
+            <!-- [disabled]="!basicFormGroup.valid"  -->
+            <button class="btn btn-md btn-second" type="button" style="margin-left: auto" (click)="next()">Next</button>
           </div>
         </form>
 
@@ -238,7 +239,8 @@
           </div>
           <div class="row no-gutters mt-4">
             <button class="btn btn-md btn-second" type="button" (click)="phase.previous()">Previous</button>
-            <button [disabled]="addressFormGroup.value.isShowLocation && !addressFormGroup.valid" class="btn btn-md btn-second" type="button" style="margin-left: auto" (click)="next()">Next</button>
+            <!-- [disabled]="addressFormGroup.value.isShowLocation && !addressFormGroup.valid"  -->
+            <button class="btn btn-md btn-second" type="button" style="margin-left: auto" (click)="next()">Next</button>
           </div>
         </form>
 
@@ -251,7 +253,8 @@
           <business-timetable [(timetable)]="timetable"></business-timetable>
           <div class="row no-gutters mt-2">
             <button class="btn btn-md btn-second" type="button" (click)="phase.previous()">Previous</button>
-            <button [disabled]="!openingInfoFormGroup.valid" class="btn btn-md btn-second" type="button" style="margin-left: auto" (click)="next()">Next</button>
+            <!-- [disabled]="!openingInfoFormGroup.valid" -->
+            <button class="btn btn-md btn-second" type="button" style="margin-left: auto" (click)="next()">Next</button>
           </div>
         </form>
 
@@ -273,12 +276,20 @@
           </div>
           <div class="row no-gutters mt-4">
             <button class="btn btn-md btn-second" type="button" (click)="phase.previous()">Previous</button>
-            <ws-loading-button [loading]='loading.isRunning()' [disabled]="!termAndConfitionsFormGroup.valid" [class]="'btn btn-md btn-second'" style="margin-left: auto"
-            (click)="createShop()">Next</ws-loading-button>
+            <!-- [disabled]="!termAndConfitionsFormGroup.valid" -->
+            <ws-loading-button [loading]='loading.isRunning()' [class]="'btn btn-md btn-second'" style="margin-left: auto"
+            (click)="next()">Next</ws-loading-button>
           </div>
         </form>
-
-        <div *ngSwitchCase="6" class="modal-content" style="max-width: 500px">
+        <div *ngSwitchCase="6" class="modal-content" style="max-width: 800px">
+          <div class="modal-close">
+            <span class="fas fa-times" [routerLink]="[]" [queryParams]="{modal: null}"></span>
+          </div>
+          <package-subscription [navigateToChangePlan]="navigateToChangePlan.bind(this)" [selectedPackage]="selectedPackage"
+            [(subscription)]="subscription"
+            [subscribePackageCallback]="createShopWithSubscription.bind(this)"></package-subscription>
+        </div>
+        <div *ngSwitchCase="7" class="modal-content" style="max-width: 500px">
           <div class="modal-close" [routerLink]="[]" [queryParams]="{modal: null}">
             <span class="fas fa-times"></span>
           </div>

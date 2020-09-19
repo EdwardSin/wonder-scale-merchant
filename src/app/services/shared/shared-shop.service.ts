@@ -12,7 +12,7 @@ export class SharedShopService {
   shop_username: string = '';
   currency: string = '';
 
-  activeShopList: Subject<any[]> = new Subject<any[]>();
+  activeShopList: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
   pendingShopList: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
 
 

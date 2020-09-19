@@ -1,26 +1,25 @@
 import { Component, OnInit } from '@angular/core';
-import { DocumentHelper } from '@helpers/documenthelper/document.helper';
 import { Router } from '@angular/router';
+import { SharedPackageService } from '@services/shared/shared-package.service';
 import { VisitorGuard } from 'src/app/guards/visitor.guard';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  selector: 'app-pricing',
+  templateUrl: './pricing.component.html',
+  styleUrls: ['./pricing.component.scss']
 })
-export class HomeComponent implements OnInit {
+export class PricingComponent implements OnInit {
 
-
-  year = new Date().getFullYear();
-  selectedType: string = 'restaurant';
   constructor(private router: Router,
+    private sharedPackageService: SharedPackageService,
     private visitorGuard: VisitorGuard) { }
 
-  ngOnInit() {
-    DocumentHelper.setWindowTitleWithWonderScale('Merchant');
+  ngOnInit(): void {
   }
+
   navigateToJoinUs() {
     this.visitorGuard.canActivate().then(result => {
+      this.sharedPackageService.selectedPackage.next(this.sharedPackageService.getTrialPackage());
       if (result) {
         this.router.navigate([], {queryParams: {modal: 'login', returnUrl: '/shops/all?modal=new-shop'}});
       } else {
@@ -28,7 +27,5 @@ export class HomeComponent implements OnInit {
       }
     })
   }
-  selectType(type) {
-    this.selectedType = type;
-  }
+
 }

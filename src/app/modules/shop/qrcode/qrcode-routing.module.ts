@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { ShopGuard } from 'src/app/shop.guard';
 import { QrcodeComponent } from '@components/shop/qrcode/qrcode.component';
 
 

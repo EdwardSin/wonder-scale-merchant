@@ -1,1 +1,12 @@
-<package-list [selected]="package" [loading]="loading.isRunning()"></package-list>
+<div *ngIf="!selectedPackage && subscribingPackage" class="col-lg-10 center alert alert-info font-9">
+    <span>Your current package: <span class="font-weight-bold">{{ getPackageName(subscribingPackage?.name) }}</span></span>
+    <p class="mb-0">Expired on {{subscribingPackage?.expiryDate | date: 'yyyy-MMM-dd'}}</p>
+</div>
+<div class="col-lg-10 center" *ngIf="!selectedPackage">
+    <package-list [subscribingPackage]="subscribingPackage" [loading]="loading.isRunning()"></package-list>
+</div>
+<div class="col-lg-6 center" *ngIf="selectedPackage && success == undefined">
+    <package-subscription [navigateToChangePlan]="navigateToChangePlan.bind(this)" [selectedPackage]="selectedPackage" [subscribePackageCallback]="subscribePackageCallback.bind(this)"></package-subscription>
+</div>
+
+<package-result [selectedPackage]="selectedPackage" class="center d-flex" style="justify-content: center; margin-top: 10vh" *ngIf="success"></package-result>
