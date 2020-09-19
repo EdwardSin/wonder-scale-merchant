@@ -10,6 +10,9 @@ export class AuthPackageAdminService {
 
   constructor(private http: HttpClient, private accessTokenService: AccessTokenService) { }
 
+  isShopExpiredByUsername(username) {
+    return this.http.get(AuthPackageAdminUrl.isPackageExpiredByUsernameUrl + '/' + username);
+  }
   getShopPackages() {
     return this.http.get(AuthPackageAdminUrl.getShopPackageUrl, this.accessTokenService.getAccessToken());
   }

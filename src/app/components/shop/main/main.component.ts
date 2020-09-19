@@ -30,6 +30,8 @@ import { SharedNavbarService } from '@services/shared/shared-nav-bar.service';
 import * as moment from 'moment';
 import { AuthShopUserService } from '@services/http/auth-user/auth-shop-user.service';
 import { ScreenService } from '@services/general/screen.service';
+import { AuthPackageAdminService } from '@services/http/auth-shop/admin/auth-package-admin.service';
+import { SharedPackageService } from '@services/shared/shared-package.service';
 
 @Component({
   selector: 'app-main',
@@ -72,6 +74,7 @@ export class MainComponent implements OnInit {
 
   btnSelectedItemList = [];
   unreplied_quotations = [];
+  isServiceExpired: boolean = true;
 
   private ngUnsubscribe: Subject<any> = new Subject;
   constructor(private router: Router, private route: ActivatedRoute,
@@ -83,6 +86,8 @@ export class MainComponent implements OnInit {
     private sharedUserService: SharedUserService,
     private routePartsService: RoutePartsService,
     private shopAuthorizationService: ShopAuthorizationService,
+    private authPackageAdminService: AuthPackageAdminService,
+    private sharedPackageService: SharedPackageService,
     private activeRoute: ActivatedRoute,
     private screenService: ScreenService,
     private sharedNavbarService: SharedNavbarService,
@@ -138,6 +143,7 @@ export class MainComponent implements OnInit {
           this.refreshContributors();
           // this.getUnrepliedRequests();
           this.refreshCategories();
+          this.getShopPackage();
         }
       })
     this.sharedCategoryService.numberOfAllItems.pipe(takeUntil(this.ngUnsubscribe))
@@ -221,6 +227,17 @@ export class MainComponent implements OnInit {
           this.ref.detectChanges();
         }
       });
+  }
+  getShopPackage() {
+    this.authPackageAdminService.getShopPackages().pipe(takeUntil(this.ngUnsubscribe)).
+    subscribe(result => {
+      if (result) {
+        this.sharedPackageService.subscribingPackage.next(result['result']);
+        if (result['result']) {
+          this.isServiceExpired = new Date(result['result'].expiryDate) < new Date;
+        }
+      }
+    })
   }
   getContributors() {
     if (this.shop) {

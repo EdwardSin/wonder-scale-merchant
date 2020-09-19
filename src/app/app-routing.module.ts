@@ -4,7 +4,8 @@ import { HomeComponent } from './components/public/home/home.component';
 import { MainComponent } from '@components/shop/main/main.component';
 import { AuthGuard } from './guards/auth.guard';
 import { ShopResolver } from '@components/resolvers/shopResolver.service';
-import { ShopGuard } from './shop.guard';
+import { ShopGuard } from './guards/shop.guard';
+import { PackageGuard } from './guards/package.guard';
 import { BillingComponent } from '@components/shop/billing/billing/billing.component';
 
 
@@ -14,6 +15,9 @@ const routes: Routes = [{
 }, {
   path: 'shops',
   loadChildren: () => import('./modules/shop-list/shop-list.module').then(m => m.ShopListModule)
+}, {
+  path: 'pricing',
+  loadChildren: () => import('./modules/pricing/pricing.module').then(m => m.PricingModule)
 }, {
   path: 'contact-us',
   loadChildren: () => import('./modules/contact-us/contact-us.module').then(m => m.ContactUsModule)
@@ -30,25 +34,25 @@ const routes: Routes = [{
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     {
       path: 'dashboard',
-      canActivate: [ShopGuard],
+      canActivate: [ShopGuard, PackageGuard],
       data: { title: 'dashboard', breadcrumb: 'Dashboard' },
       loadChildren: () => import('./modules/shop/dashboard/dashboard.module').then(m => m.DashboardModule)
     },
     {
       path: 'quick-menu',
-      canActivate: [ShopGuard],
+      canActivate: [ShopGuard, PackageGuard],
       data: { title: 'quick-menu', breadcrumb: 'Quick Menu' },
       loadChildren: () => import('./modules/shop/quick-menu/quick-menu.module').then(m => m.QuickMenuModule)
     },
     {
       path: 'catalogue',
-      canActivate: [ShopGuard],
+      canActivate: [ShopGuard, PackageGuard],
       data: { title: 'cat', breadcrumb: 'Catalogue' },
       loadChildren: () => import('./modules/shop/catalogue/catalogue.module').then(m => m.CatalogueModule)
     },
     {
       path: 'information',
-      canActivate: [ShopGuard],
+      canActivate: [ShopGuard, PackageGuard],
       data: { title: 'information', breadcrumb: 'Information' },
       loadChildren: () => import('./modules/shop/information/information.module').then(m => m.InformationModule)
     },
@@ -90,6 +94,7 @@ const routes: Routes = [{
     // },
     {
       path: 'packages',
+      canActivate: [ShopGuard],
       data: { title: 'packages', breadcrumb: 'Packages' },
       loadChildren: () => import('./modules/shop/packages/packages.module').then(m => m.PackagesModule)
     },
@@ -107,13 +112,13 @@ const routes: Routes = [{
     },
     {
       path: 'qrcode',
-      canActivate: [ShopGuard],
+      canActivate: [ShopGuard, PackageGuard],
       data: { title: 'qrcode', breadcrumb: 'Qr Code' },
       loadChildren: () => import('./modules/shop/qrcode/qrcode.module').then(m => m.QrcodeModule)
     },
     {
       path: 'ordering',
-      canActivate: [ShopGuard],
+      canActivate: [ShopGuard, PackageGuard],
       data: { title: 'ordering', breadcrumb: 'Ordering'},
       loadChildren: () => import('./modules/shop/ordering/ordering.module').then(m => m.OrderingModule)
     }

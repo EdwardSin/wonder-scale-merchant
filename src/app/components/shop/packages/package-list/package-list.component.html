@@ -1,84 +1,135 @@
-<h4 class="ws-title">Packages</h4>
-<div *ngIf="!packagesLoading.isRunning(); else loadingTemplate" style="width: 100%; overflow-x: auto;">
-    <div class="row no-gutters center w-100">
-        <div class="col-lg-3 py-3 pr-lg-3 pl-0">
-            <div class="package trial">
-                <p class="package__header">6-month Free Trial</p>
-                <p class="package__price">RM 0</p>
-                <p class="package__discount" style="padding: .8rem"></p>
-                <button class="package__button btn btn-block" [class.package__button-selected]="selected" (click)="selectPackage('trial')">
-                    <ws-spinner *ngIf="loading" [width]="15" [height]="15" [borderWidth]="2" [spinnerColor]="'#fff'"></ws-spinner>
-                    <span *ngIf="!loading">
-                        {{ selected?.name == 'trial' ? 'Subscribed: ' + (selected?.expiryDate | date:'dd-MMM-yyyy') : 'Select'}}
-                    </span>
-                    </button>
-            </div>
-        </div>
-        <div class="col-lg-3 py-3 px-lg-3">
-            <div class="package trial">
-                <p class="package__header">Monthly</p>
-                <p class="package__price">RM 18<span class="package__sub-price">.80</span><span class="ml-1" style="font-size: .8rem; color: #666">/MO</span></p>
-                <p class="package__discount" style="padding: .8rem"></p>
-                <button class="package__button btn btn-block package__button-disabled" disabled>Coming Soon</button>
-            </div>
-        </div>
-        <div class="col-lg-3 py-3 px-lg-3">
-            <div class="package trial">
-                <p class="package__header">6 Months</p>
-                <p class="package__price">RM 16<span class="package__sub-price">.80</span><span class="ml-1" style="font-size: .8rem; color: #666">/MO</span></p>
-                <p class="package__discount">Save 10.64%</p>
-                <button class="package__button btn btn-block package__button-disabled" disabled>Coming Soon</button>
-            </div>
-        </div>
-        <div class="col-lg-3 py-3 pl-lg-3 pr-0 ">
-            <div class="package trial">
-                <p class="package__header">12 Months</p>
-                <p class="package__price">RM 14<span class="package__sub-price">.80</span><span class="ml-1" style="font-size: .8rem; color: #666">/MO</span></p>
-                <p class="package__discount">Save 21.28%</p>
-                <button class="package__button btn btn-block package__button-disabled" disabled>Coming Soon</button>
-            </div>
-        </div>
+<div *ngIf="canTrial">
+    <div class="text-center px-3 background-greyer" style="padding: 3rem 0">
+        <h4 class="font-weight-bold">Try Wonder Scale free for 6 months</h4>
+        <p class="text-muted">With all features unlocked. No credit card required.</p>
+        <button class="btn btn-start" (click)="selectPackage()">Free Trial Now</button>
     </div>
-    <hr/>
-    <div class="row no-gutters center packages__container">
-        <h4 class="mb-3">Services</h4>
-        <ul class='packages__list'>
-            <li class="media packages__list-item" *ngFor="let info of infos">
-                <div class="d-inline-block px-3 px-lg-4 align-self-center">
-                    <span style="font-size: 2.5rem" [ngClass]="info.class"></span>
-                </div>
-                <div class="py-2 d-inline-block media-body">
-                    {{ info.label }}
-                    <p class="packages__info mb-0" [innerHTML]="info.description"></p>
-                </div>
-            </li>
-        </ul>
-    </div>
-    <hr/>
-    <div class="row no-gutters center packages__container">
-        <h4 class="mb-3">Add-on Services</h4>
-        <ul class='packages__list'>
-            <li class="media packages__list-item" *ngFor="let info of addonInfos">
-                <div class="d-inline-block px-3 px-lg-4 align-self-center">
-                    <span style="font-size: 2.5rem" [ngClass]="info.class"></span>
-                </div>
-                <div class="py-2 d-inline-block media-body">
-                    {{ info.label }}
-                    <div>
-                        <span class="badge badge-secondary mr-1" *ngFor="let target of info.targets">{{ target }}</span>
-                    </div>
-                    <p class="packages__info mb-0" [innerHTML]="info.description"></p>
-                </div>
-                <div class="d-none d-lg-inline-block px-3 px-lg-4 align-self-center">
-                    <button class="packages__button btn btn-sm package__button-disabled" disabled>Coming Soon</button>
-                </div>
-            </li>
-        </ul>
-    </div>
+</div>
+<div style="min-height: 700px" *ngIf="!packagesLoading.isRunning(); else loadingTemplate">
+    <mat-tab-group mat-align-tabs="center" animationDuration="0ms">
+        <mat-tab label="Bill Monthly">
+            <ng-container *ngTemplateOutlet="packageTemplate; context: {package: monthlyPackage}"></ng-container>
+        </mat-tab>
+        <mat-tab label="Bill 6 Months">
+            <ng-container *ngTemplateOutlet="packageTemplate; context: {package: sixMonthsPackage}"></ng-container>
+        </mat-tab>
+        <mat-tab label="Bill Yearly">
+            <ng-container *ngTemplateOutlet="packageTemplate; context: {package: yearlyPackage}"></ng-container>
+        </mat-tab>
+    </mat-tab-group>
 </div>
 
 <ng-template #loadingTemplate>
     <ng-container *ngIf="packagesLoading.isRunning()">
         <ws-spinner class="text-center d-block w-100" style="padding-top: 30vh; padding-bottom: 30vh"></ws-spinner>
     </ng-container>
+</ng-template>
+
+<ng-template #packageTemplate let-package="package">
+    <div class="row no-gutters center w-100 text-center">
+        <div class="col-lg-3 py-3 px-lg-2 px-1">
+            <div class="package__container shadow-sm">
+                <div class="mb-2" style="height: 120px; display: flex; justify-content: center; align-items: center;">
+                    <div class="mb-2">
+                        <span class="fas fa-th-large d-block mb-2" style="font-size: 3rem;"></span>
+                        <span class="font-8 d-block">Basic Package</span>
+                    </div>
+                </div>
+                <p class="mb-0" style="font-size: 1.5rem"><span>RM</span> {{ (+package.packages[0].price / package.month).toFixed(2) | slice:0:-3 }} <span class="font-8">{{ (+package.packages[0].price / package.month).toFixed(2) | slice: -2}}</span> <span> / MO</span></p>
+                <p  *ngIf="package.type !== 'monthly'"class="mb-0 font-9 text-danger">Save {{((18.8 * package.month) - package.packages[0].price) / (18.8 * package.month) * 100 | number: '1.2-2' }}%</p>
+                <button *ngIf="!subscribingPackage" class="btn btn-second mb-3 mt-2" (click)="selectPackage(package.packages[0])">Subscribe</button>
+                <button *ngIf="subscribingPackage" [disabled]="subscribingPackage == package.packages[0].type" class="btn btn-second mb-3 mt-2" (click)="selectPackage(package.packages[0])">{{subscribingPackage == package.packages[1].type ? 'Subscribing': 'Upgrade'}}</button>
+                <p class="package__list-item"><span class="fas fa-check mr-2"></span>QR-code linked to the store</p>
+                <p class="package__list-item"><span class="fas fa-check mr-2"></span>Customer tracking</p>
+                <p class="package__list-item"><span class="fas fa-check mr-2"></span>Promoting in Wonder Scale</p>
+                <p class="package__list-item"><span class="fas fa-check mr-2"></span>500 maximum items</p>
+                <p class="package__list-item"><span class="fas fa-check mr-2"></span>Search Engine Optimization (coming soon)</p>
+                <p class="package__list-item"><span class="fas fa-check mr-2"></span>Custom Theme (coming soon)</p>
+            </div>
+        </div>
+        <div class="col-lg-3 py-3 px-lg-2 px-1">
+            <div class="package__container shadow-sm">
+                <div class="mb-2" style="height: 120px; display: flex; justify-content: center; align-items: center;">
+                    <div>
+                        <div class="mb-2">
+                            <span class="fas fa-th-large mr-2" style="font-size: 1.5rem; width: 40px"></span>
+                            <span class="font-8 d-inline-block" style="width: 100px">Basic Package</span>
+                        </div>
+                        <div class="mb-2">
+                            <span class="fas fa-clipboard-list mr-2" style="font-size: 1.5rem; width: 40px"></span>
+                            <span class="font-8 d-inline-block" style="width: 100px">Ordering System</span>
+                        </div>
+                    </div>
+                </div>
+                <p class="mb-0" style="font-size: 1.5rem"><span>RM</span> {{ (+package.packages[1].price / package.month).toFixed(2) | slice:0:-3 }} <span class="font-8">{{ (+package.packages[1].price / package.month).toFixed(2) | slice: -2}}</span> <span> / MO</span></p>
+                <p *ngIf="package.type !== 'monthly'" class="mb-0 font-9 text-danger">Save {{((38.8 * package.month) - package.packages[1].price) / (38.8 * package.month) * 100 | number: '1.2-2' }}%</p>
+                <button *ngIf="!subscribingPackage" class="btn btn-second mb-3 mt-2" (click)="selectPackage(package.packages[1])">Subscribe</button>
+                <button *ngIf="subscribingPackage" [disabled]="subscribingPackage == package.packages[1].type" class="btn btn-second mb-3 mt-2" (click)="selectPackage(package.packages[1])">{{subscribingPackage == package.packages[1].type ? 'Subscribing': 'Upgrade'}}</button>
+                <p class="package__list-item"><span class="fas fa-check mr-2"></span>QR-code linked to the store</p>
+                <p class="package__list-item"><span class="fas fa-check mr-2"></span>Customer tracking</p>
+                <p class="package__list-item"><span class="fas fa-check mr-2"></span>Promoting in Wonder Scale</p>
+                <p class="package__list-item"><span class="fas fa-check mr-2"></span>500 maximum items</p>
+                <p class="package__list-item"><span class="fas fa-check mr-2"></span>Search Engine Optimization (coming soon)</p>
+                <p class="package__list-item"><span class="fas fa-check mr-2"></span>Custom Theme (coming soon)</p>
+                <p class="package__list-item"><span class="fas fa-check mr-2"></span>Ordering system (Restaurant)</p>
+            </div>
+        </div>
+        <div class="col-lg-3 py-3 px-lg-2 px-1">
+            <div class="package__container shadow-sm">
+                <div class="mb-2" style="height: 120px; display: flex; justify-content: center; align-items: center;">
+                    <div>
+                        <div class="mb-2">
+                            <span class="fas fa-th-large mr-2" style="font-size: 1.5rem; width: 40px"></span>
+                            <span class="font-8 d-inline-block" style="width: 100px">Basic Package</span>
+                        </div>
+                        <div class="mb-2">
+                            <span class="fas fa-globe mr-2" style="font-size: 1.5rem; width: 40px"></span>
+                            <span class="font-8 d-inline-block" style="width: 100px">Ecommerce</span>
+                        </div>
+                    </div>
+                </div>
+                <p class="mb-0" style="font-size: 1.5rem"><span>RM</span> {{ (+package.packages[2].price / package.month).toFixed(2) | slice:0:-3 }} <span class="font-8">{{ (+package.packages[2].price / package.month).toFixed(2) | slice: -2}}</span> <span> / MO</span></p>
+                <p *ngIf="package.type !== 'monthly'" class="mb-0 font-9 text-danger">Save {{((38.8 * package.month) - package.packages[2].price) / (38.8 * package.month) * 100 | number: '1.2-2' }}%</p>
+                <button class="btn btn-second mb-3 mt-2" disabled>Coming soon</button>
+                <p class="package__list-item"><span class="fas fa-check mr-2"></span>QR-code linked to the store</p>
+                <p class="package__list-item"><span class="fas fa-check mr-2"></span>Customer tracking</p>
+                <p class="package__list-item"><span class="fas fa-check mr-2"></span>Promoting in Wonder Scale</p>
+                <p class="package__list-item"><span class="fas fa-check mr-2"></span>500 maximum items</p>
+                <p class="package__list-item"><span class="fas fa-check mr-2"></span>Search Engine Optimization (coming soon)</p>
+                <p class="package__list-item"><span class="fas fa-check mr-2"></span>Custom Theme (coming soon)</p>
+                <p class="package__list-item"><span class="fas fa-check mr-2"></span>Ecommerce (Shopping)</p>
+            </div>
+        </div>
+        <div class="col-lg-3 py-3 px-lg-2 px-1">
+            <div class="package__container shadow-sm">
+                <div class="mb-2" style="height: 120px; display: flex; justify-content: center; align-items: center;">
+                    <div>
+                        <div class="mb-2">
+                            <span class="fas fa-th-large mr-2" style="font-size: 1.5rem; width: 40px"></span>
+                            <span class="font-8 d-inline-block" style="width: 100px">Basic Package</span>
+                        </div>
+                        <div class="mb-2">
+                            <span class="fas fa-clipboard-list mr-2" style="font-size: 1.5rem; width: 40px"></span>
+                            <span class="font-8 d-inline-block" style="width: 100px">Ordering System</span>
+                        </div>
+                        <div class="mb-2">
+                            <span class="fas fa-globe mr-2" style="font-size: 1.5rem; width: 40px"></span>
+                            <span class="font-8 d-inline-block" style="width: 100px">Ecommerce</span>
+                        </div>
+                    </div>
+                </div>
+                <p class="mb-0" style="font-size: 1.5rem"><span>RM</span> {{ (package.packages[3].price / package.month).toFixed(2) | slice:0:-3 }} <span class="font-8">{{ (package.packages[3].price / package.month).toFixed(2) | slice: -2}}</span> <span> / MO</span></p>
+                <p *ngIf="package.type !== 'monthly'" class="mb-0 font-9 text-danger">Save {{((58.8 * package.month) - package.packages[3].price) / (58.8 * package.month) * 100 | number: '1.2-2' }}%</p>
+                <button class="btn btn-second mb-3 mt-2" disabled>Coming soon</button>
+                <p class="package__list-item"><span class="fas fa-check mr-2"></span>QR-code linked to the store</p>
+                <p class="package__list-item"><span class="fas fa-check mr-2"></span>Customer tracking</p>
+                <p class="package__list-item"><span class="fas fa-check mr-2"></span>Promoting in Wonder Scale</p>
+                <p class="package__list-item"><span class="fas fa-check mr-2"></span>500 maximum items</p>
+                <p class="package__list-item"><span class="fas fa-check mr-2"></span>Search Engine Optimization (coming soon)</p>
+                <p class="package__list-item"><span class="fas fa-check mr-2"></span>Custom Theme (coming soon)</p>
+                <p class="package__list-item"><span class="fas fa-check mr-2"></span>Ordering system (Restaurant)</p>
+                <p class="package__list-item"><span class="fas fa-check mr-2"></span>Ecommerce (Shopping)</p>
+            </div>
+        </div>
+    </div>
 </ng-template>

@@ -1,13 +1,13 @@
 <header>
-    <div class="d-inline-block" style="line-height: 41px">
+    <div class="d-inline-block clickable" style="line-height: 41px" [routerLink]="['/']">
         <img class="mx-1" style="width: 24px; height:24px; margin-top: -2px" src="../../assets/images/png/icon.png" alt="icon.png" />
     </div>
     <div class="logo" [routerLink]="['/']">
         <span *ngIf="!isMobileSize" style="vertical-align: middle">Wonder Scale</span>
     </div>
-    <ul *ngIf="user" class="ws-nav list-unstyled">
+    <ul class="ws-nav list-unstyled">
         <li>
-            <a href="javascript:void(0)" (click)="navigateToHome()">Pages</a>
+            <a [routerLink]="'/pricing'">Pricing</a>
         </li>
     </ul>
 

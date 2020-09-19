@@ -18,4 +18,10 @@ export class ActiveShopComponent implements OnInit {
   navigateToShop(username) {
     this.router.navigate(['shops', username]);
   }
+  get isExpired() {
+    if (this.shop && this.shop.package && this.shop.package.length) {
+      return new Date(this.shop.package[0].expiryDate) < new Date();
+    }
+    return true;
+  }
 }

@@ -1,27 +1,92 @@
 [
     {
-        "label": "Max QR-codes provided",
-        "class": "fas fa-qrcode",
-        "description": "Up to 30 QR-codes along with URLS can be generated to track each platform where customer search from. <br/>This can be linked to any social media, Facebook, Twitter, Instagram or even Youtube."
+        "name": "Monthly",
+        "type": "monthly",
+        "month": 1,
+        "packages": [{
+            "name": "Basic package - monthly",
+            "type": "basic_monthly",
+            "month": 1,
+            "ori_price_per_unit": 18.8,
+            "price": "18.80"
+        }, {
+            "name": "Basic + Ordering package - monthly",
+            "type": "basic_ordering_monthly",
+            "month": 1,
+            "ori_price_per_unit": 38.8,
+            "price": "38.80"
+        }, {
+            "name": "Basic + eCommerce package - monthly",
+            "type": "basic_ecommerce_monthly",
+            "month": 1,
+            "ori_price_per_unit": 38.8,
+            "price": "38.80"
+        }, {
+            "name": "Basic + Ordering + eCommerce package - monthly",
+            "type": "basic_ordering_ecommerce_monthly",
+            "month": 1,
+            "ori_price_per_unit": 58.8,
+            "price": "58.80"
+        }]
     },
     {
-        "label": "Customer Tracking History",
-        "class": "fas fa-chart-line",
-        "description": "View number of customer visit your webpage by daily, weekly and annually."
+        "name": "6 Months",
+        "type": "6-month",
+        "month": 6,
+        "packages": [{
+            "name": "Basic package - 6 months",
+            "type": "basic_6_months",
+            "month": 6,
+            "ori_price_per_unit": 18.8,
+            "price": "99.80"
+        }, {
+            "name": "Basic + Ordering package - 6 months",
+            "type": "basic_ordering_6_months",
+            "month": 6,
+            "ori_price_per_unit": 38.8,
+            "price": "199.80"
+        }, {
+            "name": "Basic + eCommerce package - 6 months",
+            "type": "basic_ecommerce_6_months",
+            "month": 6,
+            "ori_price_per_unit": 38.8,
+            "price": "199.80"
+        }, {
+            "name": "Basic + Ordering + eCommerce package - 6 months",
+            "type": "basic_ordering_ecommerce_6_months",
+            "month": 6,
+            "ori_price_per_unit": 58.8,
+            "price": "299.80"
+        }]
     },
     {
-        "label": "Google SEO",
-        "class": "fab fa-google",
-        "description": "Make your page easily get be searched on Google. <br/>Higher chance to let people view your products and services."
-    },
-    {
-        "label": "Maximum items",
-        "class": "fas fa-th-large",
-        "description": "Maximum 500 items can be added and displayed to public."
-    },
-    {
-        "label": "Upload the page to Wonder Scale",
-        "class": "fas fa-bullhorn",
-        "description": "Users are able to search the page on Wonder Scale website."
+        "name": "Yearly",
+        "type": "yearly",
+        "month": 12,
+        "packages": [{
+            "name": "Basic package - yearly",
+            "type": "basic_yearly",
+            "month": 12,
+            "ori_price_per_unit": 18.8,
+            "price": "169.80"
+        }, {
+            "name": "Basic + Ordering package - yearly",
+            "type": "basic_ordering_yearly",
+            "month": 12,
+            "ori_price_per_unit": 38.8,
+            "price": "349.80"
+        }, {
+            "name": "Basic + eCommerce package - yearly",
+            "type": "basic_ecommerce_yearly",
+            "month": 12,
+            "ori_price_per_unit": 38.8,
+            "price": "349.80"
+        }, {
+            "name": "Basic + Ordering + eCommerce package - yearly",
+            "type": "basic_ordering_ecommerce_yearly",
+            "month": 12,
+            "ori_price_per_unit": 58.8,
+            "price": "499.80"
+        }]
     }
 ]

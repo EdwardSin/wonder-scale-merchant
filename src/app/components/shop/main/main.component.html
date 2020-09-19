@@ -2,7 +2,7 @@
   *ngIf="shop && !loading.isRunning(); else loadingTemplate">
   <ws-left-nav [isNavOpen]="isNavOpen" (isNavOpenChange)="isNavOpenChange($event)" [isMobileSize]="isMobileSize">
     <ul class="ws-main-nav-list">
-      <li wsNavItem class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
+      <li wsNavItem *ngIf="!isServiceExpired" class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
         <a [routerLink]="['dashboard']">
           <span class="ws-main-nav-icon fas fa-chart-line"></span>
           <span class="ws-main-nav-text">Dashboard</span>
@@ -13,7 +13,7 @@
           </li>
         </ul>
       </li>
-      <li wsNavItem *ngIf="shop?.type == 'restaurant'" class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
+      <li wsNavItem *ngIf="shop?.type == 'restaurant' && !isServiceExpired" class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
         <a [routerLink]="['quick-menu']">
           <span class="ws-main-nav-icon fas fa-book-open"></span>
           <span class="ws-main-nav-text">Quick Menu</span>
@@ -36,7 +36,7 @@
           </li>
         </ul>
       </li>
-      <li wsNavItem class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
+      <li wsNavItem *ngIf="!isServiceExpired" class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
         <a [routerLink]="['catalogue']">
           <span class="ws-main-nav-icon fas fa-th"></span>
           <span class="ws-main-nav-text">{{shop?.type == 'restaurant' ? 'Menu' : 'Catalogue'}}</span>
@@ -126,7 +126,7 @@
           </li>
         </ul>
       </li>
-      <li wsNavItem class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
+      <li wsNavItem *ngIf="!isServiceExpired" class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
         <a [routerLink]="['ordering']">
           <span class="ws-main-nav-icon fas fa-clipboard-list" style="margin-right: .65rem"></span>
           <span class="ws-main-nav-text">Ordering</span>
@@ -149,7 +149,7 @@
           </li>
         </ul>
       </li>
-      <li wsNavItem class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
+      <li wsNavItem *ngIf="!isServiceExpired" class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
         <a [routerLink]="['qrcode']">
           <span class="ws-main-nav-icon fas fa-qrcode"></span>
           <span class="ws-main-nav-text">QR Code</span>
@@ -160,7 +160,7 @@
           </li>
         </ul>
       </li>
-      <li wsNavItem class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
+      <li wsNavItem *ngIf="!isServiceExpired" class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
         <a [routerLink]="['information']">
           <span class="ws-main-nav-icon fas fa-image"></span>
           <span class="ws-main-nav-text">Information Banner</span>

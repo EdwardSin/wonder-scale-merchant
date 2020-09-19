@@ -25,8 +25,11 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatTabsModule } from '@angular/material/tabs';
 import { MatNativeDateModule } from '@angular/material/core';
 import { PackageListComponent } from '@components/shop/packages/package-list/package-list.component';
+import { PackageSubscriptionComponent } from '@components/shop/packages/package-subscription/package-subscription.component';
+import { PackageResultComponent } from '@components/shop/packages/package-result/package-result.component';
 
 
 
@@ -49,7 +52,9 @@ import { PackageListComponent } from '@components/shop/packages/package-list/pac
     BusinessLocationComponent,
     BusinessTimetableComponent,
     ConfirmModalComponent,
-    PackageListComponent
+    PackageListComponent,
+    PackageSubscriptionComponent,
+    PackageResultComponent
   ],
   imports: [
     AgmCoreModule,
@@ -61,6 +66,7 @@ import { PackageListComponent } from '@components/shop/packages/package-list/pac
     MatRadioModule,
     MatCheckboxModule,
     MatDatepickerModule,
+    MatTabsModule,
     MatNativeDateModule
   ],
   exports: [WsSpinnerComponent,
@@ -80,7 +86,9 @@ import { PackageListComponent } from '@components/shop/packages/package-list/pac
     BusinessLocationComponent,
     BusinessTimetableComponent,
     ConfirmModalComponent,
-    PackageListComponent
+    PackageListComponent,
+    PackageSubscriptionComponent,
+    PackageResultComponent
   ]
 })
 export class ElementModule { }

@@ -7,6 +7,7 @@ import { WsLoading } from '@elements/ws-loading/ws-loading';
 import { DocumentHelper } from '@helpers/documenthelper/document.helper';
 import { Subject, combineLatest, timer } from 'rxjs';
 import { takeUntil, map } from 'rxjs/operators';
+import { SharedPackageService } from '@services/shared/shared-package.service';
 
 @Component({
   selector: 'app-all-shops',
@@ -19,6 +20,7 @@ export class AllShopsComponent implements OnInit {
   loading: WsLoading = new WsLoading;
   private ngUnsubscribe: Subject<any> = new Subject;
   constructor(private sharedUserService: SharedUserService,
+    private sharedPackageService: SharedPackageService,
     private sharedLoadingService: SharedLoadingService,
     private sharedShopService: SharedShopService,
     private authShopUserService: AuthShopUserService) { 
@@ -59,6 +61,7 @@ export class AllShopsComponent implements OnInit {
       })
   }
   ngOnDestroy() {
+    this.sharedPackageService.selectedPackage.next(null);
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
   }

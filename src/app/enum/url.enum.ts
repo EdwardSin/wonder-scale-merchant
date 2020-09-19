@@ -50,6 +50,7 @@ export class AuthShopUserUrl {
     static getNotActiveShopsByUserIdUrl = URL.AUTH_SHOP_USER_URL + '/contributor/not-active';
     static getInvitationShopsByUserIdUrl = URL.AUTH_SHOP_USER_URL + '/contributor/pending';
     static addShopUrl = URL.AUTH_SHOP_USER_URL + '/add';
+    static addShopWithSubscriptionUrl = URL.AUTH_SHOP_USER_URL + '/add-with-subscription';
 }
 export class AuthShopContributorUrl {
     static getContributorsUrl = URL.AUTH_SHOP_CONTRIBUTOR_URL + '/contributors';
@@ -163,6 +164,7 @@ export class AuthStatementAdminUrl {
     static getStatementsBetweenDateUrl = URL.AUTH_STATEMENT_CONTRIBUTOR_URL + '/statements-between-dates';
 }
 export class AuthPackageAdminUrl {
+    static isPackageExpiredByUsernameUrl = URL.AUTH_PACKAGE_ADMIN_URL + '/is-expired';
     static getShopPackageUrl = URL.AUTH_PACKAGE_ADMIN_URL + '/';
     static addShopPackageUrl = URL.AUTH_PACKAGE_ADMIN_URL + '/';
 }

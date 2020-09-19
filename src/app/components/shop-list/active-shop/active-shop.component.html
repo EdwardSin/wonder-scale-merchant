@@ -12,7 +12,8 @@
     <span title="Closed" *ngIf="shop?.status?.status == 'closed'" class="fas fa-circle ml-2 text-danger"
       style="filter: drop-shadow(0 0  1px red);line-height: 20px;"></span>
     
-    <span class="contributor-label ml-3">{{ shop?.currentContributor?.role}}</span>
+    <span class="contributor-label mx-2">{{ shop?.currentContributor?.role}}</span>
+    <span *ngIf="shop?.package?.length" class="contributor-label px-2" [class.text-danger]="isExpired" style="border-radius: 10px; font-size: .8rem">Expired on {{ shop?.package[0].expiryDate | date: 'yyyy-MMM-dd'}}</span>
   </div>
   <span class="mt-1 d-flex" style="font-size: .8rem">Updated {{ shop?.updatedAt | passDate}}</span>
 </div>
