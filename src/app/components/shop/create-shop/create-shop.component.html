@@ -285,9 +285,10 @@
           <div class="modal-close">
             <span class="fas fa-times" [routerLink]="[]" [queryParams]="{modal: null}"></span>
           </div>
-          <package-subscription [navigateToChangePlan]="navigateToChangePlan.bind(this)" [selectedPackage]="selectedPackage"
+          <package-subscription [navigateToChangePlan]="navigateToChangePlan.bind(this)"
+            [selectedPackage]="selectedPackage"
             [(subscription)]="subscription"
-            [subscribePackageCallback]="createShopWithSubscription.bind(this)"></package-subscription>
+            [subscribePackageCallback]="addShopWithSubscription.bind(this)"></package-subscription>
         </div>
         <div *ngSwitchCase="7" class="modal-content" style="max-width: 500px">
           <div class="modal-close" [routerLink]="[]" [queryParams]="{modal: null}">

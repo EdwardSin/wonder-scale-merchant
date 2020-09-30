@@ -43,19 +43,13 @@ export class OrderingConfigurationsComponent implements OnInit {
   valueChanged = _.debounce((value) => this.searchContributors(value), 300);
   private ngUnsubscribe: Subject<any> = new Subject<any>();
   constructor(private authShopAdminService: AuthShopAdminService,
-    private authPackageAdminService: AuthPackageAdminService,
     private sharedUserService: SharedUserService,
     private authOrderingConfigurationContributorService: AuthOrderingConfigurationContributorService) {
       this.loading.start();
       this.getOrderingContriburation();
       this.user = this.sharedUserService.user.getValue();
-    // this.addOrederingPackage();
   }
   ngOnInit(): void {
-  }
-  addOrederingPackage() {
-    this.authPackageAdminService.addShopPackage('ordering').pipe(takeUntil(this.ngUnsubscribe), finalize(() => {})).subscribe(result => {
-    });
   }
   getOrderingContriburation() {
     this.authOrderingConfigurationContributorService.getOrderingConfiguration().pipe(takeUntil(this.ngUnsubscribe), finalize(() => { this.loading.stop() })).subscribe(result => {

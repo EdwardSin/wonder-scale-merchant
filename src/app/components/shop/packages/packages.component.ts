@@ -1,9 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { AuthPackageAdminService } from '@services/http/auth-shop/admin/auth-package-admin.service';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { WsLoading } from '@elements/ws-loading/ws-loading';
 import { SharedPackageService } from '@services/shared/shared-package.service';
+import { WsToastService } from '@elements/ws-toast/ws-toast.service';
+import * as moment from 'moment';
+import * as _ from 'lodash';
+import { Package } from '@objects/package';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-packages',
@@ -14,9 +19,15 @@ export class PackagesComponent implements OnInit {
   subscribingPackage;
   loading: WsLoading = new WsLoading;
   success;
+  moment = moment;
   private ngUnsubscribe: Subject<any> = new Subject;
   selectedPackage;
-  constructor(private authPackageAdminService: AuthPackageAdminService,
+  packages: Array<any> = [];
+  isChangePackage: boolean;
+  todayDate: Date = new Date;
+  constructor(private http: HttpClient,
+    private ref: ChangeDetectorRef ,
+    private authPackageAdminService: AuthPackageAdminService,
     private sharedPackageService: SharedPackageService) { 
       this.sharedPackageService.selectedPackage.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
         this.selectedPackage = result;
@@ -27,6 +38,10 @@ export class PackagesComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.http.get('assets/json/services.json').subscribe(result => {
+      let packages = <Array<any>>result;
+      this.packages = _.flattenDeep(packages.map(x => x.packages));
+    });
   }
   navigateToChangePlan() {
     this.sharedPackageService.selectedPackage.next(null);
@@ -44,14 +59,14 @@ export class PackagesComponent implements OnInit {
           return 'Basic + eCommerce package - monthly'
       case 'basic_ordering_ecommerce_monthly':
           return 'Basic + Ordering + eCommerce package - monthly'
-      case 'basic_6_month':
-          return 'Basic package - 6 monthly'
-      case 'basic_ordering_6_month':
-          return 'Basic + Ordering package - 6 monthly'
-      case 'basic_ecommerce_6_month':
-          return 'Basic + eCommerce package - 6 monthly'
-      case 'basic_ordering_ecommerce_6_month':
-          return 'Basic + Ordering + eCommerce package - 6 monthly'
+      case 'basic_6_months':
+          return 'Basic package - 6 months'
+      case 'basic_ordering_6_months':
+          return 'Basic + Ordering package - 6 months'
+      case 'basic_ecommerce_6_months':
+          return 'Basic + eCommerce package - 6 months'
+      case 'basic_ordering_ecommerce_6_months':
+          return 'Basic + Ordering + eCommerce package - 6 months'
       case 'basic_yearly':
           return 'Basic package - yearly'
       case 'basic_ordering_yearly':
@@ -62,9 +77,31 @@ export class PackagesComponent implements OnInit {
           return 'Basic + Ordering + eCommerce package - yearly'
     }
   }
-  subscribePackageCallback() {
-    // subscribe current shop;
-    this.success = true;
+  subscribePackageCallback(callbackResult, callback) {
+    let obj = {
+      selectedPackage: this.selectedPackage,
+      paymentMethod: {...callbackResult}
+    }
+    this.authPackageAdminService.changePackage(obj).pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+      this.success = true;
+      if (callback) {
+        callback();
+      }
+    })
+  }
+  changeNextMonthPackageCallback(callback) {
+    this.authPackageAdminService.changePackage({selectedPackage: this.selectedPackage}).pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+      this.success = true;
+      if (callback) {
+        callback();
+      }
+    });
+  }
+  selectPackage() {
+    this.selectedPackage = this.packages.find(x => x.type == this.subscribingPackage.next);
+  }
+  get getPackageIsExpired() {
+    return moment(this.subscribingPackage.expiryDate).diff(moment(this.todayDate), 'days') < 0;
   }
   ngOnDestroy() {
     this.sharedPackageService.selectedPackage.next(null);

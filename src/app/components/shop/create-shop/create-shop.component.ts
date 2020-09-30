@@ -74,57 +74,54 @@ export class CreateShopComponent implements OnInit {
     });
     this.sharedShopService.activeShopList.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       this.canTrial = result.length == 0;
-      if (!this.canTrial && this.sharedPackageService.selectedPackage.getValue() == 'trial_6_months') {
+      if (!this.canTrial && this.sharedPackageService.selectedPackage.getValue() && this.sharedPackageService.selectedPackage.getValue().type == 'trial_6_months') {
         this.phase.setStep(0);
       }
     })
   }
   next() {
     if (this.phase.isStep(0)) {
-      // if (this.storeServiceType != undefined) {
+      if (this.storeServiceType != undefined) {
         this.phase.next();
-      // }
-      // else {
-      //   WsToastService.toastSubject.next({ content: 'Please choose  a store type.', type: 'danger' })
-      // }
+      }
+      else {
+        WsToastService.toastSubject.next({ content: 'Please choose  a store type.', type: 'danger' })
+      }
     }
     else if (this.phase.isStep(1)) {
-      // if (this.storeType != undefined) {
+      if (this.storeType != undefined) {
         this.phase.next();
-      // }
-      // else {
-      //   WsToastService.toastSubject.next({ content: 'Please choose  a store service type.', type: 'danger' })
-      // }
+      }
+      else {
+        WsToastService.toastSubject.next({ content: 'Please choose  a store service type.', type: 'danger' })
+      }
     }
     else if (this.phase.isStep(2)) {
-      // if (this.basicFormGroup.valid) {
+      if (this.basicFormGroup.valid) {
         this.phase.next();
-      // }
+      }
     }
     else if (this.phase.isStep(3)) {
-      // if (!this.addressFormGroup.value.isShowLocation || this.addressFormGroup.valid) {
+      if (!this.addressFormGroup.value.isShowLocation || this.addressFormGroup.valid) {
         this.phase.next();
-      // }
-      // else {
-      //   WsToastService.toastSubject.next({ content: 'Please complete the form.', type: 'danger' });
-      // }
+      }
+      else {
+        WsToastService.toastSubject.next({ content: 'Please complete the form.', type: 'danger' });
+      }
     }
     else if (this.phase.isStep(4)) {
-      // if (this.openingInfoFormGroup.valid) {
+      if (this.openingInfoFormGroup.valid) {
         this.phase.next();
-      // }
-      // else {
-      //   WsToastService.toastSubject.next({ content: 'Please complete the form.', type: 'danger' });
-      // }
+      }
+      else {
+        WsToastService.toastSubject.next({ content: 'Please complete the form.', type: 'danger' });
+      }
     } else if (this.phase.isStep(5)) {
       if (this.selectedPackage.type == 'trial_6_months') {
-        this.phase.next();
-        this.phase.next();
+        this.addShop(true);
       } else {
         this.phase.next();
       }
-    } else if (this.phase.isStep(6)) {
-      this.phase.next();
     }
   }
   createBasicForm() {
@@ -133,7 +130,7 @@ export class CreateShopComponent implements OnInit {
       tel: ['', [Validators.required, Validators.maxLength(30)]],
       email: ['', [Validators.minLength(3), Validators.maxLength(30), Validators.email]],
       website: ['', [Validators.minLength(3), Validators.maxLength(128)]],
-      currency: ['', [Validators.required]]
+      currency: ['MYR', [Validators.required]]
     });
   }
   createAddressForm() {
@@ -166,10 +163,6 @@ export class CreateShopComponent implements OnInit {
         }
       });
   }
-  // selectPackage(event) {
-  //   this.selectedPackage = event;
-  //   this.phase.next();
-  // }
   clear() {
     this.mapController.displayed = false;
     this.mapController.suggestions = [];
@@ -180,7 +173,7 @@ export class CreateShopComponent implements OnInit {
     this.addressFormGroup.controls.postcode.setValue(this.mapController.address.postcode);
     this.addressFormGroup.controls.country.setValue(this.mapController.address.country);
   }
-  createShop() {
+  createNewShop() {
     let shop = new Shop;
     shop.type = this.storeType;
     shop.serviceType = this.storeServiceType;
@@ -190,7 +183,6 @@ export class CreateShopComponent implements OnInit {
     shop.website = [this.basicFormGroup.value.website];
     shop['currency'] = this.basicFormGroup.value.currency;
     shop.showAddress = this.addressFormGroup.value.isShowLocation;
-    shop.selectedPackage = this.selectedPackage['type'];
     if (this.addressFormGroup.value.isShowLocation) {
       shop.fullAddress = {
         address: this.addressFormGroup.value.address,
@@ -202,9 +194,44 @@ export class CreateShopComponent implements OnInit {
     }
     shop.openingInfoType = this.timetable.operatingHourRadio;
     shop.openingInfo = shop.openingInfoType == 'selected_hours' ? this.timetable.operatingHours : [];
+    return shop;
+  }
+  addShop(skipPaymentGateway=false) {
+    let shop = this.createNewShop();
     this.loading.start();
     if (this.termAndConfitionsFormGroup.valid) {
       this.authShopUserService.addShop(shop).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.loading.stop()))
+        .subscribe(result => {
+          this.shop = <Shop>result['result'];
+          this.phase.next();
+          if (skipPaymentGateway) {
+            this.phase.next();
+          }
+          _.delay(() => {
+            this.navigateToShop();
+          }, 3000);
+        }, (err) => {
+          WsToastService.toastSubject.next({ content: err.error.message, type: 'danger' });
+        })
+    }
+  }
+  addShopWithSubscription(callbackResult) {
+    let shop = this.createNewShop();
+    let obj = {
+      ...shop,
+      selectedPackage: this.selectedPackage,
+      paymentMethod: {
+        firstName: callbackResult.firstName,
+        lastName: callbackResult.lastName,
+        email: callbackResult.email,
+        phone: callbackResult.phone,
+        countryName: callbackResult.countryName,
+        paymentMethodNonce: callbackResult.paymentMethodNonce
+      }
+    }
+    this.loading.start();
+    if (this.termAndConfitionsFormGroup.valid) {
+      this.authShopUserService.addShopWithSubscription(obj).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.loading.stop()))
         .subscribe(result => {
           this.shop = <Shop>result['result'];
           this.phase.next();
@@ -215,53 +242,6 @@ export class CreateShopComponent implements OnInit {
           WsToastService.toastSubject.next({ content: err.error.message, type: 'danger' });
         })
     }
-  }
-  createShopWithSubscription(callbackResult) {
-    this.next();
-    // let shop = new Shop;
-    // shop.type = this.storeType;
-    // shop.serviceType = this.storeServiceType;
-    // shop.name = this.basicFormGroup.value.name;
-    // shop.phone = [this.basicFormGroup.value.tel];
-    // shop.email = [this.basicFormGroup.value.email];
-    // shop.website = [this.basicFormGroup.value.website];
-    // shop['currency'] = this.basicFormGroup.value.currency;
-    // shop.showAddress = this.addressFormGroup.value.isShowLocation;
-    // shop.selectedPackage = this.selectedPackage['type'];
-    // if (this.addressFormGroup.value.isShowLocation) {
-    //   shop.fullAddress = {
-    //     address: this.addressFormGroup.value.address,
-    //     state: this.addressFormGroup.value.state,
-    //     postcode: this.addressFormGroup.value.postcode,
-    //     country: this.addressFormGroup.value.country
-    //   };
-    //   shop.location = { coordinates: [this.mapController.markerPoint.longitude, this.mapController.markerPoint.latitude] };
-    // }
-    // shop.openingInfoType = this.timetable.operatingHourRadio;
-    // shop.openingInfo = shop.openingInfoType == 'selected_hours' ? this.timetable.operatingHours : [];
-    // let obj = {
-    //   shop,
-    //   firstName: callbackResult.firstName,
-    //   lastName: callbackResult.lastName,
-    //   email: callbackResult.email,
-    //   phoneNo: callbackResult.phoneNo,
-    //   countryName: callbackResult.countryName,
-    //   postalCode: callbackResult.postalCode,
-    //   paymentMethodNonce: callbackResult.payload.nonce
-    // }
-    // this.loading.start();
-    // if (this.termAndConfitionsFormGroup.valid) {
-    //   this.authShopUserService.addShopWithSubscription(obj).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.loading.stop()))
-    //     .subscribe(result => {
-    //       this.shop = <Shop>result['result'];
-    //       this.phase.next();
-    //       _.delay(() => {
-    //         this.navigateToShop();
-    //       }, 3000);
-    //     }, (err) => {
-    //       WsToastService.toastSubject.next({ content: err.error.message, type: 'danger' });
-    //     })
-    // }
   }
   disabledControls() {
     if (!this.addressFormGroup.value.isShowLocation) {

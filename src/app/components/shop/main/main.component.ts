@@ -143,7 +143,10 @@ export class MainComponent implements OnInit {
           this.refreshContributors();
           // this.getUnrepliedRequests();
           this.refreshCategories();
-          this.getShopPackage();
+          this.sharedPackageService.subscribingPackage.next(result._package);
+        if (result._package) {
+          this.isServiceExpired = new Date(result._package.expiryDate) < new Date;
+        }
         }
       })
     this.sharedCategoryService.numberOfAllItems.pipe(takeUntil(this.ngUnsubscribe))
@@ -227,17 +230,6 @@ export class MainComponent implements OnInit {
           this.ref.detectChanges();
         }
       });
-  }
-  getShopPackage() {
-    this.authPackageAdminService.getShopPackages().pipe(takeUntil(this.ngUnsubscribe)).
-    subscribe(result => {
-      if (result) {
-        this.sharedPackageService.subscribingPackage.next(result['result']);
-        if (result['result']) {
-          this.isServiceExpired = new Date(result['result'].expiryDate) < new Date;
-        }
-      }
-    })
   }
   getContributors() {
     if (this.shop) {

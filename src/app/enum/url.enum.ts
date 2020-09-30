@@ -12,6 +12,7 @@ export class URL {
     static AUTH_TABLE_CONTRIBUTOR_URL = '/api/auth-shops/ordering-contributors/table-contributors';
     static AUTH_SALE_CONTRIBUTOR_URL = '/api/auth-shops/ordering-contributors/sale-contributors';
     static AUTH_ORDERING_CONFIGURATION_CONTRIBUTOR_URL = '/api/auth-shops/ordering-contributors/ordering-configuration-contributors';
+    static AUTH_PACKAGE_CONTRIBUTOR_URL = '/api/auth-shops/package-contributors'
     static AUTH_SHOP_USER_URL = '/api/auth-users/shop-users';
     static AUTH_USERS_URL = '/api/auth-users';
     static FEATURE_URL = '/api/features';
@@ -76,6 +77,7 @@ export class AuthShopContributorUrl {
 
     static advertiseItemsUrl = URL.AUTH_SHOP_CONTRIBUTOR_URL + '/advupdate';
     static updateNewItemMessageUrl = URL.AUTH_SHOP_CONTRIBUTOR_URL + '/updatemessage';
+    static isPackageExpiredByUsernameUrl = URL.AUTH_SHOP_CONTRIBUTOR_URL + '/is-expired';
 }
 export class AuthItemContributorUrl {
     static markAsNewUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/markasnew/items';
@@ -164,9 +166,9 @@ export class AuthStatementAdminUrl {
     static getStatementsBetweenDateUrl = URL.AUTH_STATEMENT_CONTRIBUTOR_URL + '/statements-between-dates';
 }
 export class AuthPackageAdminUrl {
-    static isPackageExpiredByUsernameUrl = URL.AUTH_PACKAGE_ADMIN_URL + '/is-expired';
     static getShopPackageUrl = URL.AUTH_PACKAGE_ADMIN_URL + '/';
-    static addShopPackageUrl = URL.AUTH_PACKAGE_ADMIN_URL + '/';
+    static changePackageUrl = URL.AUTH_PACKAGE_ADMIN_URL + '/';
+    static unsubscribePackageUrl = URL.AUTH_PACKAGE_ADMIN_URL + '/unsubscribe';
 }
 export class AuthTableContributorUrl {
     static getTablesUrl = URL.AUTH_TABLE_CONTRIBUTOR_URL + '/';
@@ -176,7 +178,9 @@ export class AuthTableContributorUrl {
     static uploadTablesUrl = URL.AUTH_TABLE_CONTRIBUTOR_URL + '/upload';
     static removeTableUrl = URL.AUTH_TABLE_CONTRIBUTOR_URL + '/';
 }
-
+export class AuthPackageContributorUrl {
+    static isPackageExpiredByUsernameUrl = URL.AUTH_PACKAGE_CONTRIBUTOR_URL + '/is-expired';
+}
 export class AuthSaleContributorUrl {
     static getSalesBetweenDateUrl = URL.AUTH_SALE_CONTRIBUTOR_URL + '/sales-between-dates';
 }

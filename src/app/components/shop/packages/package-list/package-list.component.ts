@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { AuthenticationService } from '@services/http/general/authentication.service';
 import { WsLoading } from '@elements/ws-loading/ws-loading';
 import { Subject } from 'rxjs';
@@ -6,6 +6,8 @@ import { Package } from '@objects/package';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { SharedPackageService } from '@services/shared/shared-package.service';
+import { AuthPackageAdminService } from '@services/http/auth-shop/admin/auth-package-admin.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'package-list',
@@ -20,10 +22,12 @@ export class PackageListComponent implements OnInit {
   selectedPackage: string;
   packageLoading: WsLoading = new WsLoading;
   packages = [];
+  products;
   monthlyPackage;
   sixMonthsPackage;
   yearlyPackage;
   packagesLoading: WsLoading = new WsLoading;
+  private ngUnsubscribe: Subject<any> = new Subject;
   constructor(private http: HttpClient,
     private authenticationService: AuthenticationService,
     private sharedPackageService: SharedPackageService,
@@ -53,5 +57,31 @@ export class PackageListComponent implements OnInit {
         }
       }
     });
+  }
+  addOrderingPackage() {
+    // this.authPackageAdminService.addShopPackage({name: 'ordering', price: 30, duration: 'monthly'}).pipe(takeUntil(this.ngUnsubscribe), finalize(() => {})).subscribe(result => {
+    //   if (result && result['result']) {
+    //     this.package.products.push('ordering');
+    //     this.ref.detectChanges();
+    //   }
+    // });
+  }
+  isProductIncluded(type) {
+    return this.products.find(product => {
+      return product.name == type
+    });
+  }
+  subscribeService(type) {
+    if (type == 'ordering') {
+      this.addOrderingPackage();
+    }
+  }
+  get isExpired() {
+    let todayDate = new Date;
+    return this.subscribingPackage && moment(this.subscribingPackage.expiryDate).diff(moment(todayDate), 'days') < 0;
+  }
+  ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 }

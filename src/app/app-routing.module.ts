@@ -6,7 +6,6 @@ import { AuthGuard } from './guards/auth.guard';
 import { ShopResolver } from '@components/resolvers/shopResolver.service';
 import { ShopGuard } from './guards/shop.guard';
 import { PackageGuard } from './guards/package.guard';
-import { BillingComponent } from '@components/shop/billing/billing/billing.component';
 
 
 const routes: Routes = [{
