@@ -57,6 +57,16 @@ export class WSFormBuilder {
             validator: DateValidation.Valid
         });
     }
+    public static createPaymentGatewayForm(): FormGroup {
+        let formBuilder = new FormBuilder();
+        return formBuilder.group({
+            firstName: ["", [Validators.required, Validators.maxLength(40)]],
+            lastName: ["", [Validators.required, Validators.maxLength(40)]],
+            email: ["", [Validators.required, Validators.email, Validators.maxLength(30)]],
+            phone: ["", [Validators.required, Validators.maxLength(20)]],
+            countryName: ["", [Validators.required]]
+        })
+    }
 
     public static createLoginForm(): FormGroup {
         let formBuilder = new FormBuilder();

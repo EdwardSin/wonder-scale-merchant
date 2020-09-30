@@ -4,4 +4,5 @@ export class Package{
     name: string;
     expiryDate: Date;
     products: Array<any>
+    next: string;
 }

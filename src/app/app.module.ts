@@ -23,11 +23,6 @@ import { MainContainerComponent } from '@components/shop/main/main-container/mai
 import { WsLeftNavComponent } from '@elements/ws-left-nav/ws-left-nav.component';
 import { BreadcrumbComponent } from '@elements/breadcrumb/breadcrumb.component';
 import { SharedModule } from './modules/public/shared/shared.module';
-import { BillingComponent } from './components/shop/billing/billing/billing.component';
-import { HistoryComponent } from './components/shop/billing/history/history.component';
-import { PaymentMethodsComponent } from './components/shop/billing/payment-methods/payment-methods.component';
-import { SubscriptionComponent } from './components/shop/billing/subscription/subscription.component';
-import { ModifyMenuItemComponent } from './components/shop/catalogue/modify-menu-item/modify-menu-item.component';
 
 const DEFAULT_SWIPER_CONFIG: SwiperConfigInterface = {
   direction: 'horizontal',
@@ -67,12 +62,7 @@ export function jwtOptionsFactory(platformId) {
 
     // Elements
     WsLeftNavComponent,
-    BreadcrumbComponent,
-    BillingComponent,
-    HistoryComponent,
-    PaymentMethodsComponent,
-    SubscriptionComponent,
-    ModifyMenuItemComponent
+    BreadcrumbComponent
   ],
   imports: [
     BrowserModule,

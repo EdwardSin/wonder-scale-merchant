@@ -1,12 +1,30 @@
-<div *ngIf="!selectedPackage && subscribingPackage" class="col-lg-10 center alert alert-info font-9">
-    <span>Your current package: <span class="font-weight-bold">{{ getPackageName(subscribingPackage?.name) }}</span></span>
-    <p class="mb-0">Expired on {{subscribingPackage?.expiryDate | date: 'yyyy-MMM-dd'}}</p>
+<div *ngIf="!selectedPackage && subscribingPackage && !getPackageIsExpired" class="col-lg-10 center alert alert-info font-9">
+    <span>Current package: <span class="font-weight-bold">{{ getPackageName(subscribingPackage?.name) }}</span></span>
+    <p class="mb-0" *ngIf="subscribingPackage?.next">Next recurring package: <span class="font-weight-bold">{{ getPackageName(subscribingPackage?.next) }}</span></p>
+    <p class="mb-0">Expired on <span class="font-weight-bold">{{subscribingPackage?.expiryDate | date: 'yyyy-MMM-dd'}}</span></p>
 </div>
-<div class="col-lg-10 center" *ngIf="!selectedPackage">
+<div class="col-lg-10 center font-9 mb-3" *ngIf="!selectedPackage && getPackageIsExpired">
+    <div class="row no-gutters">
+        <div class="center p-4 font-9 shadow" style="border-radius: 10px">
+            <p class="mb-0">Current package: <span class="font-weight-bold">{{ getPackageName(subscribingPackage?.next) }}</span></p>
+            <p class="mb-0">Expiry date: <span class="font-weight-bold">{{subscribingPackage?.expiryDate | date: 'yyyy-MMM-dd'}}</span></p>
+            <p class="text-danger">Your package is expired.</p>
+            <div>
+                <button class="btn btn-sm btn-controller mr-2" (click)="isChangePackage = true">Change package</button>
+                <button class="btn btn-sm btn-controller float-right" (click)="selectPackage()">Pay now</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-lg-10 center" *ngIf="!selectedPackage && (!getPackageIsExpired || isChangePackage)">
     <package-list [subscribingPackage]="subscribingPackage" [loading]="loading.isRunning()"></package-list>
 </div>
 <div class="col-lg-6 center" *ngIf="selectedPackage && success == undefined">
-    <package-subscription [navigateToChangePlan]="navigateToChangePlan.bind(this)" [selectedPackage]="selectedPackage" [subscribePackageCallback]="subscribePackageCallback.bind(this)"></package-subscription>
+    <package-subscription [navigateToChangePlan]="navigateToChangePlan.bind(this)"
+        [subscribingPackage]="subscribingPackage"
+        [selectedPackage]="selectedPackage"
+        [subscribePackageCallback]="subscribePackageCallback.bind(this)"
+        [changeNextMonthPackageCallback]="changeNextMonthPackageCallback.bind(this)"></package-subscription>
 </div>
 
 <package-result [selectedPackage]="selectedPackage" class="center d-flex" style="justify-content: center; margin-top: 10vh" *ngIf="success"></package-result>
