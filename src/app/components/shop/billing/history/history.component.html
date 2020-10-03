@@ -1,4 +1,22 @@
-<h4 class="ws-title">History</h4>
+<h4 class="ws-title">Payments Due</h4>
+<table class="table table-hover font-9">
+    <thead>
+        <th>Invoice Date</th>
+        <th>Invoice ID</th>
+        <th>Due Date</th>
+        <th>Status</th>
+        <th>Amount</th>
+        <th>Actions</th>
+    </thead>
+    <tbody>
+        <tr>
+            
+        </tr>
+    </tbody>
+</table>
+<p class="font-italic my-4 text-muted font-8">There are no payments required for this account.</p>
+
+<h4 class="ws-title">Order and invoice history</h4>
 <div>
     <table class="table table-hover font-9">
         <thead>
@@ -50,7 +68,7 @@
 </div>
 <ng-template #loadingTemplate>
     <ng-container *ngIf="loading.isRunning();else noPaymentTemplate">
-        <ws-spinner [width]="60" [height]="60"></ws-spinner>
+        <ws-spinner class="text-center d-block w-100" style="padding: 5vh 0" [width]="30" [height]="30"></ws-spinner>
     </ng-container>
 </ng-template>
 <ng-template #noPaymentTemplate>

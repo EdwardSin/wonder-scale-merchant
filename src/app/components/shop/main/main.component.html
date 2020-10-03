@@ -233,7 +233,7 @@
           </li>
         </ul>
       </li> -->
-      <li wsNavItem class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
+      <li *ngIf="shop?._package?.name !== 'trial_6_months'" wsNavItem class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
         <a [routerLink]="['billing']">
           <span class="ws-main-nav-icon fas fa-coins"></span>
           <span class="ws-main-nav-text">Billing</span>

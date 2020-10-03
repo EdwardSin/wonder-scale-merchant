@@ -1,11 +1,11 @@
 <h4 class="ws-title">Payment Methods</h4>
 
-<div class="pt-4 mb-2">
-    <!-- <span class="d-inline-block font-9">Your payment currency is: USD</span> -->
-    <button class="btn btn-sm btn-controller float-right px-2" [routerLink]="['', { outlets: {modal: 'modify-card'}}]"><span class="fas fa-plus mr-2 d-inline-block"></span><span class="d-inline-block font-9">Add Card</span></button>
+<div class="py-2">
+    <span class="d-inline-block font-9">Your payment currency is: MYR</span>
+    <button class="btn btn-sm btn-controller float-right px-2" (click)="openModifyPaymentMethodModal()"><span class="fas fa-plus mr-2 d-inline-block"></span><span class="d-inline-block font-9">Add Card</span></button>
     <div class="clearfix"></div>
 </div>
-<table class="table table-hover font-9">
+<table class="table font-9">
     <thead>
         <th>Credit Card</th>
         <th>Name on card</th>
@@ -13,24 +13,72 @@
         <th></th>
     </thead>
     <tbody>
-        <tr *ngFor="let card of cards">
-            <td>Visa ending in {{ card.last_digit }} <span *ngIf="card.default">(Default)</span></td>
-            <td>{{ card.name }}</td>
-            <td class="text-center">{{ card.expiry_date }}</td>
+        <tr *ngFor="let paymentMethod of paymentMethods; let i = index">
+            <td>Visa ending in {{ paymentMethod.last4 }} <span *ngIf="paymentMethod?.default">(Default)</span></td>
+            <td>{{ paymentMethod.name }}</td>
+            <td class="text-center">{{ paymentMethod.expirationDate }}</td>
             <td class="text-center">
-                <a class="ml-4 mr-4" (click)="setDefault(card._id)">Set Default</a>
-                <a (click)="deleteCard(card._id)">Delete</a>
+                <ws-spinner [class.invisible]="changeDefaultPaymentMethodIndex != i" class="mr-2" [width]="15" [height]="15" [borderWidth]="2" [spinnerColor]="'#282C35'"></ws-spinner>
+                <span *ngIf="paymentMethod.default" class="mr-4 d-inline-block" style="width: 70.53px"></span>
+                <button [hidden]="paymentMethod.default" class="btn btn-sm p-0 mr-4" [disabled]="changeDefaultPaymentMethodIndex == i" (click)="setDefaultPaymentMethod(paymentMethod.token, i)">Set Default</button>
+                <ws-spinner [class.invisible]="removePaymentMethodIndex != i" class="mr-2" [width]="15" [height]="15" [borderWidth]="2" [spinnerColor]="'#282C35'"></ws-spinner>
+                <button class="btn btn-sm p-0" [disabled]="removePaymentMethodIndex == i" (click)="deletePaymentMethod(paymentMethod, i)">Delete</button>
             </td>
         </tr>
     </tbody>
 </table>
-<div *ngIf="cards.length; else loadingTemplate"></div>
+<div *ngIf="paymentMethods.length; else loadingTemplate"></div>
 
 <ng-template #loadingTemplate>
-    <ng-container *ngIf="loading.isRunning();else noCardTemplate">
-        <ws-spinner [width]="60" [height]="60"></ws-spinner>
+    <ng-container *ngIf="loading.isRunning();else noPaymentMethodTemplate">
+        <ws-spinner class="text-center d-block w-100" style="padding: 30vh 0" [width]="30" [height]="30"></ws-spinner>
     </ng-container>
 </ng-template>
-<ng-template #noCardTemplate>
+<ng-template #noPaymentMethodTemplate>
     <h6 class="text-center mt-5 pb-5">No Payment Method!</h6>
 </ng-template>
+
+<!-- <ws-modal *ngIf="modifyPaymentMethodModalOpened" [isCloseIconDisplayed]="false" [maxWidth]="500">
+    <ng-container modalBody>
+    </ng-container>
+</ws-modal> -->
+
+<ws-modal *ngIf="modifyPaymentMethodModalOpened" [isCloseIconDisplayed]="false" [maxWidth]="500">
+    <ng-container modalBody>
+        <div [hidden]="paymentGatewayLoading.isRunning()">
+            <!-- <input class="form-control form-control-sm mb-2" placeholder="Credit Card Number" />
+            <input class="form-control form-control-sm mb-2" placeholder="Name of Cardholder" />
+            <input class="form-control form-control-sm mb-2" placeholder="Month" />
+            <input class="form-control form-control-sm mb-2" placeholder="Year" /> -->
+            <div class="row no-gutters">
+                <h5 class="h6 mb-3">Payment Method Details:</h5>
+                <input class="form-control form-control-sm mb-2" placeholder="Cardholder Name" name="cardholderName" maxlength="255" [(ngModel)]="cardholderName"/>
+                <div id="card-number" class="form-control form-control-sm mb-2"></div>
+                <div id="postal-code" class="form-control form-control-sm mb-2"></div>
+                <div class="row no-gutters mb-3">
+                    <div class="col-lg-6 pr-2">
+                        <div id="expiration-date" class="form-control form-control-sm"></div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div id="cvv" class="form-control form-control-sm"></div>
+                    </div>
+                </div>
+                <mat-checkbox input="makeDefault" [color]="'primary'" class="mr-2 d-inline-block" [(ngModel)]="makeDefault">
+                    Set as Default
+                </mat-checkbox>
+            </div>
+            <div>
+                <button class="btn btn-sm btn-controller float-right" (click)="modifyPaymentMethodModalOpened = false">
+                    Cancel
+                </button>
+                <button class="btn btn-sm btn-controller float-right mr-2" [disabled]="loading.isRunning()" (click)="confirmAddPaymentMethod()">
+                    <ws-spinner class="mr-2" *ngIf="loading.isRunning()" [width]="15" [height]="15" [spinnerColor]="'#282c35'" [borderWidth]="3"></ws-spinner>
+                    Confirm
+                </button>
+            </div>
+        </div>
+        <ng-container *ngIf="paymentGatewayLoading.isRunning()">
+            <ws-spinner class="text-center d-block w-100" style="padding-top: 100px; padding-bottom: 100px"></ws-spinner>
+        </ng-container>
+    </ng-container>
+</ws-modal>
