@@ -2,6 +2,7 @@ export class URL {
     static AUTH_DEFAULT_SETTING_ADMIN_URL = '/api/auth-shops/default-setting-admins';
     static AUTH_PACKAGE_ADMIN_URL = '/api/auth-shops/package-admins';
     static AUTH_SHOP_ADMIN_URL = '/api/auth-shops/shop-admins';
+    static AUTH_PAYMENT_METHOD_ADMIN_URL = '/api/auth-shops/payment-method-admins';
     static AUTH_STATEMENT_CONTRIBUTOR_URL = '/api/auth-shops/statement-admins';
     static AUTH_CATEGORY_CONTRIBUTOR_URL = '/api/auth-shops/category-contributors';
     static AUTH_CARD_CONTRIBUTOR_URL = '/api/auth-shops/card-contributors';
@@ -113,14 +114,6 @@ export class AuthItemContributorUrl {
     static removeItemTypeImageUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/remove/item-type-image';
 
 }
-export class AuthCardContributorUrl {
-    static getCardsByShopIdUrl = URL.AUTH_CARD_CONTRIBUTOR_URL;
-    static getCardByIdUrl = URL.AUTH_CARD_CONTRIBUTOR_URL;
-    static addCardUrl = URL.AUTH_CARD_CONTRIBUTOR_URL;
-    static editCardUrl = URL.AUTH_CARD_CONTRIBUTOR_URL;
-    static setDefaultUrl = URL.AUTH_CARD_CONTRIBUTOR_URL + '/default';
-    static deleteCardUrl = URL.AUTH_CARD_CONTRIBUTOR_URL;
-}
 export class AuthReceiptContributorUrl {
     static getAllReceiptsByShopIdUrl = URL.AUTH_RECEIPT_CONTRIBUTOR_URL;
 }
@@ -157,6 +150,12 @@ export class AuthShopAdminUrl {
     static unpublishPageUrl = URL.AUTH_SHOP_ADMIN_URL + '/unpublish';
     static closePermanentlyUrl = URL.AUTH_SHOP_ADMIN_URL + '/close/permanently';
     static reactivateShopUrl = URL.AUTH_SHOP_ADMIN_URL + '/reactivate';
+}
+export class AuthPaymentMethodAdminUrl {
+    static getPaymentMethodsByShopIdUrl = URL.AUTH_PAYMENT_METHOD_ADMIN_URL + '/';
+    static addPaymentMethodUrl = URL.AUTH_PAYMENT_METHOD_ADMIN_URL + '/';
+    static removePaymentMethodUrl = URL.AUTH_PAYMENT_METHOD_ADMIN_URL + '/remove';
+    static setDefaultPaymentMethodUrl = URL.AUTH_PAYMENT_METHOD_ADMIN_URL + '/set-default';
 }
 export class AuthDefaultSettingAdminUrl {
     static getDefaultSettingByShopIdUrl = URL.AUTH_DEFAULT_SETTING_ADMIN_URL;

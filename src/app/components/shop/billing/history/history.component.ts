@@ -32,7 +32,6 @@ export class HistoryComponent implements OnInit {
     this.shop = this.sharedShopService.shop.getValue();
     let shop_name = this.sharedShopService.shop_name;
     this.currency = this.currencyService.currencySymbols[this.shop.currency];
-    console.log(this.shop);
     DocumentHelper.setWindowTitleWithWonderScale('History - ' + shop_name);
     this.getHistory();
   }

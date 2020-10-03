@@ -5,4 +5,5 @@ export class Package{
     expiryDate: Date;
     products: Array<any>
     next: string;
+    forfeit: boolean;
 }

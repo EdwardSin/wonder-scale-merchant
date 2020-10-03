@@ -31,6 +31,8 @@ export class PackageListComponent implements OnInit {
   constructor(private http: HttpClient,
     private authenticationService: AuthenticationService,
     private sharedPackageService: SharedPackageService,
+    private authPackageAdminService: AuthPackageAdminService,
+    private ref: ChangeDetectorRef,
     private router: Router) { }
 
   ngOnInit(): void {
