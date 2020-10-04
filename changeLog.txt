@@ -8,6 +8,7 @@
 ---------------------------------------------
 .: WSM: Task: Payment Methods (WSM-189)
 .: WSM: Task: Fix subscriptions flow (WSM-190)
+.: WSM: Task: Billing Subscription Details Module (WSM-191)
 
 ---------------------------------------------
 - 2020-09-30                                -

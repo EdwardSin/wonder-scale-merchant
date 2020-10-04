@@ -22,6 +22,6 @@ export class AuthPackageAdminService {
     return this.http.post(AuthPackageAdminUrl.changePackageUrl, obj, this.accessTokenService.getAccessToken());
   }
   unsubscribeProduct(obj) {
-    // return this.http.put(AuthPackageAdminUrl.unsubscribePackageUrl, obj, this.accessTokenService.getAccessToken());
+    return this.http.put(AuthPackageAdminUrl.unsubscribePackageUrl, obj, this.accessTokenService.getAccessToken());
   }
 }
