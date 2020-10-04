@@ -23,10 +23,7 @@ export class PackageResultComponent implements OnInit {
   ngOnInit(): void {
   }
   navigateToContinue() {
-    let shop_username = this.sharedShopService.shop_username;
-    this.authShopUserService.getAuthenticatedShopByShopUsername(shop_username).pipe(takeUntil(this.ngUnsubscribe)).subscribe(() => {
-      this.router.navigate(['/shops', this.sharedShopService.shop.getValue().username, 'dashboard']);
-    });
+    this.router.navigate(['/shops', this.sharedShopService.shop.getValue().username, 'dashboard']);
   }
   ngOnDestroy(): void {
     this.ngUnsubscribe.next();

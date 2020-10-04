@@ -198,11 +198,15 @@ export class CreateShopComponent implements OnInit {
   }
   addShop(skipPaymentGateway=false) {
     let shop = this.createNewShop();
+    let obj = {
+      ...shop,
+      selectedPackage: this.selectedPackage
+    }
     this.loading.start();
     if (this.termAndConfitionsFormGroup.valid) {
-      this.authShopUserService.addShop(shop).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.loading.stop()))
+      this.authShopUserService.addShop(obj).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.loading.stop()))
         .subscribe(result => {
-          this.shop = <Shop>result['result'];
+          this.shop = <Shop>result['data'];
           this.phase.next();
           if (skipPaymentGateway) {
             this.phase.next();
@@ -233,7 +237,7 @@ export class CreateShopComponent implements OnInit {
     if (this.termAndConfitionsFormGroup.valid) {
       this.authShopUserService.addShopWithSubscription(obj).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.loading.stop()))
         .subscribe(result => {
-          this.shop = <Shop>result['result'];
+          this.shop = <Shop>result['data'];
           this.phase.next();
           _.delay(() => {
             this.navigateToShop();
