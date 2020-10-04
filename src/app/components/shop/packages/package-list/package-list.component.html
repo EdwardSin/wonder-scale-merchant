@@ -37,7 +37,7 @@
                 </div>
                 <p class="mb-0" style="font-size: 1.5rem"><span>RM</span> {{ (+package.packages[0].price / package.month).toFixed(2) | slice:0:-3 }} <span class="font-8">{{ (+package.packages[0].price / package.month).toFixed(2) | slice: -2}}</span> <span> / MO</span></p>
                 <p  *ngIf="package.type !== 'monthly'"class="mb-0 font-9 text-danger">Save {{((18.8 * package.month) - package.packages[0].price) / (18.8 * package.month) * 100 | number: '1.2-2' }}%</p>
-                <button *ngIf="!subscribingPackage" class="btn btn-second mb-3 mt-2" (click)="selectPackage(package.packages[0])">Subscribe</button>
+                <button *ngIf="!subscribingPackage || !subscribingPackage.next" class="btn btn-second mb-3 mt-2" (click)="selectPackage(package.packages[0])">Subscribe</button>
                 <button *ngIf="subscribingPackage?.next" [disabled]="subscribingPackage.next == package.packages[0].type && !isExpired" class="btn btn-second mb-3 mt-2" (click)="selectPackage(package.packages[0])">{{subscribingPackage.next == package.packages[0].type && !isExpired ? 'Subscribing': 'Change'}}</button>
                 <p class="package__list-item"><span class="fas fa-check mr-2"></span>QR-code linked to the store</p>
                 <p class="package__list-item"><span class="fas fa-check mr-2"></span>Customer tracking</p>

@@ -51,7 +51,9 @@ export class PackageSubscriptionComponent implements OnInit {
   }
   isUpgradePackageFunc() {
     let todayDate = new Date;
-    return !this.subscribingPackage || this.subscribingPackage == 'trial_6_months' || this.subscribingPackage != 'trial_6_months' && moment(this.subscribingPackage.expiryDate).diff(moment(todayDate), 'days') < 0;
+    return !this.subscribingPackage || 
+    (this.subscribingPackage.name == 'trial_6_months' && !this.subscribingPackage.next) || 
+    (moment(this.subscribingPackage.expiryDate).diff(moment(todayDate), 'days') < 0);
   }
   _changeNextMonthPackageCallback() {
     this.subscribeLoading.start();

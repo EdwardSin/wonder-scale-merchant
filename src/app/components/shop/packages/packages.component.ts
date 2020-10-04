@@ -9,6 +9,8 @@ import * as moment from 'moment';
 import * as _ from 'lodash';
 import { Package } from '@objects/package';
 import { HttpClient } from '@angular/common/http';
+import { SharedShopService } from '@services/shared/shared-shop.service';
+import { AuthShopUserService } from '@services/http/auth-user/auth-shop-user.service';
 
 @Component({
   selector: 'app-packages',
@@ -27,6 +29,8 @@ export class PackagesComponent implements OnInit {
   todayDate: Date = new Date;
   constructor(private http: HttpClient,
     private ref: ChangeDetectorRef ,
+    private sharedShopService: SharedShopService,
+    private authShopUserService: AuthShopUserService,
     private authPackageAdminService: AuthPackageAdminService,
     private sharedPackageService: SharedPackageService) { 
       this.sharedPackageService.selectedPackage.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
@@ -83,18 +87,24 @@ export class PackagesComponent implements OnInit {
       paymentMethod: {...callbackResult}
     }
     this.authPackageAdminService.changePackage(obj).pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
-      this.success = true;
-      if (callback) {
-        callback();
-      }
+      let shop_username = this.sharedShopService.shop_username;
+      this.authShopUserService.getAuthenticatedShopByShopUsername(shop_username).pipe(takeUntil(this.ngUnsubscribe)).subscribe(() => {
+        this.success = true;
+        if (callback) {
+          callback();
+        }
+      });
     })
   }
   changeNextMonthPackageCallback(callback) {
     this.authPackageAdminService.changePackage({selectedPackage: this.selectedPackage}).pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
-      this.success = true;
-      if (callback) {
-        callback();
-      }
+      let shop_username = this.sharedShopService.shop_username;
+      this.authShopUserService.getAuthenticatedShopByShopUsername(shop_username).pipe(takeUntil(this.ngUnsubscribe)).subscribe(() => {
+        this.success = true;
+        if (callback) {
+          callback();
+        }
+      });
     });
   }
   selectPackage() {

@@ -13,7 +13,7 @@ export class SharedPackageService {
       name: "Trial package - 6 months",
       type: "trial_6_months",
       month: 6,
-      ori_price_per_unit: 38.8,
+      ori_price_per_unit: 18.8,
       price: 0
     };
   }

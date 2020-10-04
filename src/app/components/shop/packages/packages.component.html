@@ -6,12 +6,12 @@
 <div class="col-lg-10 center font-9 mb-3" *ngIf="!selectedPackage && getPackageIsExpired">
     <div class="row no-gutters">
         <div class="center p-4 font-9 shadow" style="border-radius: 10px">
-            <p class="mb-0">Current package: <span class="font-weight-bold">{{ getPackageName(subscribingPackage?.next) }}</span></p>
+            <p *ngIf="subscribingPackage?.next" class="mb-0">Current package: <span class="font-weight-bold">{{ getPackageName(subscribingPackage?.next) }}</span></p>
             <p class="mb-0">Expiry date: <span class="font-weight-bold">{{subscribingPackage?.expiryDate | date: 'yyyy-MMM-dd'}}</span></p>
             <p class="text-danger">Your package is expired.</p>
-            <div>
-                <button class="btn btn-sm btn-controller mr-2" (click)="isChangePackage = true">Change package</button>
-                <button class="btn btn-sm btn-controller float-right" (click)="selectPackage()">Pay now</button>
+            <div style="justify-content: center; display: flex">
+                <button class="btn btn-sm btn-controller" (click)="isChangePackage = true">Change package</button>
+                <button *ngIf="subscribingPackage?.name !== 'trial_6_months'" class="btn btn-sm btn-controller float-right ml-2" (click)="selectPackage()">Pay now</button>
             </div>
         </div>
     </div>
