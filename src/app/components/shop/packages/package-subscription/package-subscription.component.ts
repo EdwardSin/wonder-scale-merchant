@@ -26,7 +26,7 @@ export class PackageSubscriptionComponent implements OnInit {
   paymentGatewayForm: FormGroup;
   _subscription;
   paymentInstance;
-  isUpgradePackage: boolean;
+  isPaymentGatewayDisplayed: boolean;
   countries = {
     values: Object.values(Constants.countries)
   }
@@ -41,19 +41,19 @@ export class PackageSubscriptionComponent implements OnInit {
   }
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['subscribingPackage'] && this.subscribingPackage || this.selectedPackage) {
-      this.isUpgradePackage = this.isUpgradePackageFunc();
+      this.isPaymentGatewayDisplayed = this._isPaymentGatewayDisplayed();
     }
   }
   ngAfterViewInit() {
-    if (this.isUpgradePackage) {
+    if (this.isPaymentGatewayDisplayed) {
       this.createPaymentForm();
     }
   }
-  isUpgradePackageFunc() {
+  _isPaymentGatewayDisplayed() {
     let todayDate = new Date;
-    return !this.subscribingPackage || 
-    (this.subscribingPackage.name == 'trial_6_months' && !this.subscribingPackage.next) || 
-    (moment(this.subscribingPackage.expiryDate).diff(moment(todayDate), 'days') < 0);
+    return !this.subscribingPackage ||
+          (moment(this.subscribingPackage.expiryDate).diff(moment(todayDate), 'days') < 0) ||
+          !this.subscribingPackage.subscriptionId;
   }
   _changeNextMonthPackageCallback() {
     this.subscribeLoading.start();

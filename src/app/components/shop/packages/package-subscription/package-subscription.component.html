@@ -2,11 +2,11 @@
     <ws-spinner class="text-center d-block w-100" style="padding: 30vh 0"></ws-spinner>
 </ng-container>
 <div [hidden]="paymentGatewayLoading.isRunning()" *ngIf="selectedPackage; else noPackageTemplate">
-    <div *ngIf="isUpgradePackage" class="text-center py-4">
+    <div *ngIf="isPaymentGatewayDisplayed" class="text-center py-4">
         <p class="mb-0">You have selected <span class="font-weight-bold">{{selectedPackage.name}}</span> plan</p>
         <a style="color: #0645AD" (click)="navigateToChangePlan()">Change plan</a>
     </div>
-    <div *ngIf="isUpgradePackage" class="row no-gutters">
+    <div *ngIf="isPaymentGatewayDisplayed" class="row no-gutters">
         <div class="w-100 center p-4 font-9 shadow" style="border-radius: 10px">
             <h6 class="font-9">Summary</h6>
             <p class="mb-0">{{selectedPackage.name}}
@@ -64,8 +64,7 @@
             <p class="font-8 text-muted">Your subscription will automatically renew on the new billing date.<br/>By purchasing, you agreed to Terms of Service.</p>
         </div>
     </div>
-
-    <div *ngIf="!isUpgradePackage" class="row no-gutters">
+    <div *ngIf="!isPaymentGatewayDisplayed" class="row no-gutters">
         <div class="center p-4 font-9 shadow" style="border-radius: 10px">
             <p class="mb-0">Your next month package will be charged on 
                 <span class="font-weight-bold">{{selectedPackage.name}}</span>.</p>

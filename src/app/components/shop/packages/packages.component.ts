@@ -19,6 +19,7 @@ import { AuthShopUserService } from '@services/http/auth-user/auth-shop-user.ser
 })
 export class PackagesComponent implements OnInit {
   subscribingPackage;
+  shop_username: string;
   loading: WsLoading = new WsLoading;
   success;
   moment = moment;
@@ -33,12 +34,14 @@ export class PackagesComponent implements OnInit {
     private authShopUserService: AuthShopUserService,
     private authPackageAdminService: AuthPackageAdminService,
     private sharedPackageService: SharedPackageService) { 
+      this.shop_username = this.sharedShopService.shop_username;
       this.sharedPackageService.selectedPackage.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
         this.selectedPackage = result;
       });
       this.sharedPackageService.subscribingPackage.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
         this.subscribingPackage = result;
       })
+      this.authShopUserService.getAuthenticatedShopByShopUsername(this.shop_username).pipe(takeUntil(this.ngUnsubscribe)).subscribe(() => {});
   }
 
   ngOnInit(): void {
@@ -87,8 +90,7 @@ export class PackagesComponent implements OnInit {
       paymentMethod: {...callbackResult}
     }
     this.authPackageAdminService.changePackage(obj).pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
-      let shop_username = this.sharedShopService.shop_username;
-      this.authShopUserService.getAuthenticatedShopByShopUsername(shop_username).pipe(takeUntil(this.ngUnsubscribe)).subscribe(() => {
+      this.authShopUserService.getAuthenticatedShopByShopUsername(this.shop_username).pipe(takeUntil(this.ngUnsubscribe)).subscribe(() => {
         this.success = true;
         if (callback) {
           callback();
@@ -98,8 +100,7 @@ export class PackagesComponent implements OnInit {
   }
   changeNextMonthPackageCallback(callback) {
     this.authPackageAdminService.changePackage({selectedPackage: this.selectedPackage}).pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
-      let shop_username = this.sharedShopService.shop_username;
-      this.authShopUserService.getAuthenticatedShopByShopUsername(shop_username).pipe(takeUntil(this.ngUnsubscribe)).subscribe(() => {
+      this.authShopUserService.getAuthenticatedShopByShopUsername(this.shop_username).pipe(takeUntil(this.ngUnsubscribe)).subscribe(() => {
         this.success = true;
         if (callback) {
           callback();
