@@ -24,7 +24,7 @@ export class ContributorController {
         var filteredContributors = this.existsContributors.filter(x => x != this.selectedContributor);
         if (this.newRole === Role.Maintainer && !filteredContributors.find(x => x.role === Role.Admin)
         ) {
-            this.errors.contributor = 'At least 1 admin in the shop!';
+            this.errors.contributor = 'At least 1 admin in the store!';
             valid = false;
         }
         return valid;

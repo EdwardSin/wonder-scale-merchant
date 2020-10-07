@@ -3,7 +3,6 @@ import { CurrencyService } from '@services/http/general/currency.service';
 import { SharedLoadingService } from '@services/shared/shared-loading.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { Currency } from './objects/currency';
 import { ScreenService } from '@services/general/screen.service';
 import { ScreenHelper } from '@helpers/screenhelper/screen.helper';
 

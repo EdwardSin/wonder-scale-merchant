@@ -18,8 +18,8 @@ import { HeaderComponent } from './partials/header/header.component';
 // import { AboutUsComponent } from '@components/public/about-us/about-us.component';
 
 import { isPlatformBrowser } from '@angular/common';
-import { MainComponent } from '@components/shop/main/main.component';
-import { MainContainerComponent } from '@components/shop/main/main-container/main-container.component';
+import { MainComponent } from '@components/store/main/main.component';
+import { MainContainerComponent } from '@components/store/main/main-container/main-container.component';
 import { WsLeftNavComponent } from '@elements/ws-left-nav/ws-left-nav.component';
 import { BreadcrumbComponent } from '@elements/breadcrumb/breadcrumb.component';
 import { SharedModule } from './modules/public/shared/shared.module';

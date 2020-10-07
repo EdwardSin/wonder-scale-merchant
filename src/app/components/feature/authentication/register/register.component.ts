@@ -1,9 +1,7 @@
-import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { DateBuilder } from '@builders/date.builder';
 import { WSFormBuilder } from '@builders/wsformbuilder';
 import { environment } from '@environments/environment';
-import { AuthenticationService } from '@services/http/general/authentication.service';
 import { UserService } from '@services/http/general/user.service';
 import { DateOfBirthValidator } from '@validations/user-validation/dateofbirth.validator';
 import { EmailValidator } from '@validations/user-validation/email.validator';

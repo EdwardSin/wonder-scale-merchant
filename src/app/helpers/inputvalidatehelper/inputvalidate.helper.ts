@@ -8,16 +8,16 @@ export class InputValidateHelper {
   constructor() {
   }
   // No Test
-  public static validateStartBusiness(shop){
-    return !this.isEmptyAndUndefinedAndNull(shop) &&
-      !this.isEmptyAndUndefinedAndNull(shop.phone) &&
-      !this.isEmptyAndUndefinedAndNull(shop.fullAddress) &&
-      !this.isEmptyAndUndefinedAndNull(shop.fullAddress.address) &&
-      !this.isEmptyAndUndefinedAndNull(shop.fullAddress.postcode) &&
-      !this.isEmptyAndUndefinedAndNull(shop.fullAddress.state) &&
-      !this.isEmptyAndUndefinedAndNull(shop.fullAddress.country) &&
-      (!this.isEmptyAndUndefinedAndNull(shop.openingHour) ||
-        !this.isEmptyAndUndefinedAndNull(shop.openingInfoType))
+  public static validateStartBusiness(store){
+    return !this.isEmptyAndUndefinedAndNull(store) &&
+      !this.isEmptyAndUndefinedAndNull(store.phone) &&
+      !this.isEmptyAndUndefinedAndNull(store.fullAddress) &&
+      !this.isEmptyAndUndefinedAndNull(store.fullAddress.address) &&
+      !this.isEmptyAndUndefinedAndNull(store.fullAddress.postcode) &&
+      !this.isEmptyAndUndefinedAndNull(store.fullAddress.state) &&
+      !this.isEmptyAndUndefinedAndNull(store.fullAddress.country) &&
+      (!this.isEmptyAndUndefinedAndNull(store.openingHour) ||
+        !this.isEmptyAndUndefinedAndNull(store.openingInfoType))
   }
   
 

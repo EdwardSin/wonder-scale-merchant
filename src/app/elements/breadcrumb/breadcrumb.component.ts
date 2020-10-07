@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { RoutePartsService } from '@services/general/route-parts.service';
-import { SharedShopService } from '@services/shared/shared-shop.service';
+import { SharedStoreService } from '@services/shared/shared-store.service';
 
 @Component({
   selector: 'breadcrumb',
@@ -10,14 +10,14 @@ import { SharedShopService } from '@services/shared/shared-shop.service';
 })
 export class BreadcrumbComponent implements OnInit {
   routeParts:any[];
-  shop;
+  store;
   constructor(
     private router: Router,
-    private sharedShopService: SharedShopService,
+    private sharedStoreService: SharedStoreService,
     private routePartsService: RoutePartsService, 
     private activeRoute: ActivatedRoute
   ) {
-    this.shop = this.sharedShopService.shop.getValue();
+    this.store = this.sharedStoreService.store.getValue();
     this.routeParts = this.routePartsService.generateRouteParts(this.activeRoute.snapshot);
     this.generateUrlFromParts();
 

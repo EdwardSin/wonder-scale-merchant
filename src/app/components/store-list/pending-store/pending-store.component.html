@@ -1,0 +1,33 @@
+<img class="mr-3" style="width: 64px; height: 64px; border-radius: 50%"
+  [defaultImage]="environment.LAZY_LOAD_IMAGE"
+  [lazyLoad]="environment.IMAGE_URL + store?.profileImage" alt="store profile" />
+<div class="col">
+  <div class="d-flex mt-2">
+    <a class="default" href="javascript:void(0)">
+      <span>{{store?.name}}</span>
+    </a>
+    <span *ngIf="store?.status?.status == 'active'" class="fas fa-circle ml-2 text-success"
+      style="filter: drop-shadow(0 0  2px #1e7b34);line-height: 20px;"></span>
+    <span *ngIf="store?.status?.status == 'closed'" class="fas fa-circle ml-2 text-danger"
+      style="filter: drop-shadow(0 0 2px #990000);line-height: 20px;"></span>
+    <span *ngIf="store?.status?.status == 'pending'" class="fas fa-circle ml-2 text-warning"
+      style="filter: drop-shadow(0 0 2px #ffbb33);line-height: 20px;"></span>
+    <span class="contributor-label ml-3">{{ store?.currentContributor?.role}}</span>
+  </div>
+  <span class="mt-1 d-flex" style="font-size: .8rem">Invited at 
+    {{ store?.currentContributor?.invitedDate | passDate}}</span>
+</div>
+<div class="col-auto float-right mt-3">
+  <div class='ws-circle-button'>
+    <button class="btn btn-controller" (click)="accept(store)">
+      <span class="fas fa-check"></span>
+    </button>
+  </div>
+  <div class='ws-circle-button'>
+    <button class="btn btn-controller" (click)="isRemoveModalOpen = true">
+      <span class="fas fa-times"></span>
+    </button>
+  </div>
+</div>
+<confirm-modal *ngIf="isRemoveModalOpen" [(isOpened)]="isRemoveModalOpen" id="confirmModal" [message]="'Are you sure to reject the invitation?'"
+  [action]="reject.bind(this, store)"></confirm-modal>

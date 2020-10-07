@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
 import { HomeComponent } from './components/public/home/home.component';
-import { MainComponent } from '@components/shop/main/main.component';
+import { MainComponent } from '@components/store/main/main.component';
 import { AuthGuard } from './guards/auth.guard';
-import { ShopResolver } from '@components/resolvers/shopResolver.service';
-import { ShopGuard } from './guards/shop.guard';
+import { StoreResolver } from '@components/resolvers/store-resolver.service';
+import { StoreGuard } from './guards/store.guard';
 import { PackageGuard } from './guards/package.guard';
 
 
@@ -12,8 +12,8 @@ const routes: Routes = [{
   path: '',
   component: HomeComponent
 }, {
-  path: 'shops',
-  loadChildren: () => import('./modules/shop-list/shop-list.module').then(m => m.ShopListModule)
+  path: 'stores',
+  loadChildren: () => import('./modules/store-list/store-list.module').then(m => m.StoreListModule)
 }, {
   path: 'pricing',
   loadChildren: () => import('./modules/pricing/pricing.module').then(m => m.PricingModule)
@@ -24,36 +24,36 @@ const routes: Routes = [{
   path: 'policy',
   loadChildren: () => import('./modules/policy/policy.module').then(m => m.PolicyModule)
 }, {
-  path: 'shops/:username',
+  path: 'stores/:username',
   component: MainComponent,
   canActivate: [AuthGuard],
-  resolve: { shop: ShopResolver },
+  resolve: { store: StoreResolver },
   data: { title: 'username', breadcrumb: '{{username}}' },
   children: [
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     {
       path: 'dashboard',
-      canActivate: [ShopGuard, PackageGuard],
+      canActivate: [StoreGuard, PackageGuard],
       data: { title: 'dashboard', breadcrumb: 'Dashboard' },
-      loadChildren: () => import('./modules/shop/dashboard/dashboard.module').then(m => m.DashboardModule)
+      loadChildren: () => import('./modules/store/dashboard/dashboard.module').then(m => m.DashboardModule)
     },
     {
       path: 'quick-menu',
-      canActivate: [ShopGuard, PackageGuard],
+      canActivate: [StoreGuard, PackageGuard],
       data: { title: 'quick-menu', breadcrumb: 'Quick Menu' },
-      loadChildren: () => import('./modules/shop/quick-menu/quick-menu.module').then(m => m.QuickMenuModule)
+      loadChildren: () => import('./modules/store/quick-menu/quick-menu.module').then(m => m.QuickMenuModule)
     },
     {
       path: 'catalogue',
-      canActivate: [ShopGuard, PackageGuard],
+      canActivate: [StoreGuard, PackageGuard],
       data: { title: 'cat', breadcrumb: 'Catalogue' },
-      loadChildren: () => import('./modules/shop/catalogue/catalogue.module').then(m => m.CatalogueModule)
+      loadChildren: () => import('./modules/store/catalogue/catalogue.module').then(m => m.CatalogueModule)
     },
     {
       path: 'information',
-      canActivate: [ShopGuard, PackageGuard],
+      canActivate: [StoreGuard, PackageGuard],
       data: { title: 'information', breadcrumb: 'Information' },
-      loadChildren: () => import('./modules/shop/information/information.module').then(m => m.InformationModule)
+      loadChildren: () => import('./modules/store/information/information.module').then(m => m.InformationModule)
     },
     // {
     //   path: 'advertising',
@@ -93,33 +93,33 @@ const routes: Routes = [{
     // },
     {
       path: 'packages',
-      canActivate: [ShopGuard],
+      canActivate: [StoreGuard],
       data: { title: 'packages', breadcrumb: 'Packages' },
-      loadChildren: () => import('./modules/shop/packages/packages.module').then(m => m.PackagesModule)
+      loadChildren: () => import('./modules/store/packages/packages.module').then(m => m.PackagesModule)
     },
     {
       path: 'billing',
-      canActivate: [ShopGuard],
+      canActivate: [StoreGuard],
       data: { title: 'billing', breadcrumb: 'Billing' },
-      loadChildren: () => import('./modules/shop/billing/billing.module').then(m => m.BillingModule)
+      loadChildren: () => import('./modules/store/billing/billing.module').then(m => m.BillingModule)
     },
     {
       path: 'settings',
-      canActivate: [ShopGuard],
+      canActivate: [StoreGuard],
       data: { title: 'settings', breadcrumb: 'Settings' },
-      loadChildren: () => import('./modules/shop/settings/settings.module').then(m => m.SettingsModule)
+      loadChildren: () => import('./modules/store/settings/settings.module').then(m => m.SettingsModule)
     },
     {
       path: 'qrcode',
-      canActivate: [ShopGuard, PackageGuard],
+      canActivate: [StoreGuard, PackageGuard],
       data: { title: 'qrcode', breadcrumb: 'Qr Code' },
-      loadChildren: () => import('./modules/shop/qrcode/qrcode.module').then(m => m.QrcodeModule)
+      loadChildren: () => import('./modules/store/qrcode/qrcode.module').then(m => m.QrcodeModule)
     },
     {
       path: 'ordering',
-      canActivate: [ShopGuard, PackageGuard],
+      canActivate: [StoreGuard, PackageGuard],
       data: { title: 'ordering', breadcrumb: 'Ordering'},
-      loadChildren: () => import('./modules/shop/ordering/ordering.module').then(m => m.OrderingModule)
+      loadChildren: () => import('./modules/store/ordering/ordering.module').then(m => m.OrderingModule)
     }
   ]
 },

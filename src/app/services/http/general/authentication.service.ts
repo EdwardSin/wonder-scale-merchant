@@ -66,7 +66,7 @@ export class AuthenticationService {
             if (this.cookieService.get('accessJwt')) {
                 this.http.post('/api/auth-users/users/logout', {}).subscribe(result => {
                     this.sharedUserService.user.next(null);
-                    this.sharedUserService.followPages.next([]);
+                    this.sharedUserService.followStores.next([]);
                     this.sharedUserService.followItems.next([]);
                     resolve(result['loggedIn']);
                 })
@@ -75,7 +75,7 @@ export class AuthenticationService {
                 }
             } else {
                 this.sharedUserService.user.next(null);
-                this.sharedUserService.followPages.next([]);
+                this.sharedUserService.followStores.next([]);
                 this.sharedUserService.followItems.next([]);
                 resolve(true);
             }

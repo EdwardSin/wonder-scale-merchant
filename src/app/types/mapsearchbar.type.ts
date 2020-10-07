@@ -1,1 +1,1 @@
-export type MapSearhBarType = 'find_shop' | 'find_item' ;
+export type MapSearhBarType = 'find_store' | 'find_item' ;

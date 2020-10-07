@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
-import { AuthPackageAdminService } from '@services/http/auth-shop/admin/auth-package-admin.service';
+import { AuthPackageAdminService } from '@services/http/auth-store/admin/auth-package-admin.service';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 
@@ -17,10 +17,10 @@ export class PackageGuard implements CanActivate {
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
       return new Promise((resolve) => {
         let username = next.parent.paramMap.get('username');
-        let subscribeObj = this.authPackageAdminService.isShopExpiredByUsername(username);
+        let subscribeObj = this.authPackageAdminService.isStoreExpiredByUsername(username);
         subscribeObj.pipe(take(1)).subscribe(result => {
           if(result['result']) {
-            this.router.navigate(['/shops', username, 'packages']);
+            this.router.navigate(['/stores', username, 'packages']);
             resolve(false);
           } else {
             resolve(true);

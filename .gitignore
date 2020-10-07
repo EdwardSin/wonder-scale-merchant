@@ -46,3 +46,4 @@ testem.log
 Thumbs.db
 
 /trash
+src/assets/json/services_1.json

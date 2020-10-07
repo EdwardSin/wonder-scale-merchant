@@ -27,9 +27,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatNativeDateModule } from '@angular/material/core';
-import { PackageListComponent } from '@components/shop/packages/package-list/package-list.component';
-import { PackageSubscriptionComponent } from '@components/shop/packages/package-subscription/package-subscription.component';
-import { PackageResultComponent } from '@components/shop/packages/package-result/package-result.component';
+import { PackageListComponent } from '@components/store/packages/package-list/package-list.component';
+import { PackageSubscriptionComponent } from '@components/store/packages/package-subscription/package-subscription.component';
+import { PackageResultComponent } from '@components/store/packages/package-result/package-result.component';
 
 
 

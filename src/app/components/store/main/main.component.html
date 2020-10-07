@@ -1,0 +1,288 @@
+<div class="main-container-with-nav" [class.main-container-with-nav-icon]="!isNavOpen"
+  *ngIf="store && !loading.isRunning(); else loadingTemplate">
+  <ws-left-nav [isNavOpen]="isNavOpen" (isNavOpenChange)="isNavOpenChange($event)" [isMobileSize]="isMobileSize">
+    <ul class="ws-main-nav-list">
+      <li wsNavItem *ngIf="!isServiceExpired" class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
+        <a [routerLink]="['dashboard']">
+          <span class="ws-main-nav-icon fas fa-chart-line"></span>
+          <span class="ws-main-nav-text">Dashboard</span>
+        </a>
+        <ul class="ws-main-nav-sub-list">
+          <li class="ws-main-nav-sub-list__title">
+            <a [routerLink]="['dashboard']">Dashboard</a>
+          </li>
+        </ul>
+      </li>
+      <li wsNavItem *ngIf="store?.type == 'restaurant' && !isServiceExpired" class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
+        <a [routerLink]="['quick-menu']">
+          <span class="ws-main-nav-icon fas fa-book-open"></span>
+          <span class="ws-main-nav-text">Quick Menu</span>
+        </a>
+        <ul class="ws-main-nav-sub-list">
+          <li class="ws-main-nav-sub-list__title">
+            <a [routerLink]="['quick-menu']">Quick Menu</a>
+          </li>
+        </ul>
+      </li>
+      <li wsNavItem *ngIf="isAdminAuthorized" class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
+        <a [routerLink]="['packages']">
+          <span class="ws-main-nav-icon fas fa-box"></span>
+          <span class="ws-main-nav-text">Packages</span>
+          <span *ngIf="isNavOpen" class="fas fa-crown position-absolute" style="color: gold; right: 10px; top: 15px;"></span>
+        </a>
+        <ul class="ws-main-nav-sub-list">
+          <li class="ws-main-nav-sub-list__title">
+            <a [routerLink]="['packages']">Packages</a>
+          </li>
+        </ul>
+      </li>
+      <li wsNavItem *ngIf="!isServiceExpired" class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
+        <a [routerLink]="['catalogue']">
+          <span class="ws-main-nav-icon fas fa-th"></span>
+          <span class="ws-main-nav-text">{{store?.type == 'restaurant' ? 'Menu' : 'Catalogue'}}</span>
+        </a>
+        <ul class="ws-main-nav-sub-list ws-main-nav-sub-list__padding">
+          <li class="ws-main-nav-sub-list__title">
+            <a [routerLink]="['catalogue']">{{store?.type == 'restaurant' ? 'Menu' : 'Catalogue'}}</a>
+          </li>
+          <li class="position-relative">
+            <a [class.active]="isLinkActive('/stores/' + store?.username + '/catalogue/all')" [routerLink]="['catalogue', 'all']" [queryParams]="{page: 1}">All
+              <span class="badge ws-bg-secondary badge-pill float-right position-absolute"
+                style="margin-top: 3px; right: 10px; top: .5rem">{{ numberOfAllItems }}</span>
+            </a>
+          </li>
+          <li class="position-relative">
+            <a [class.active]="isLinkActive('/stores/' + store?.username + '/catalogue/new')" [routerLink]="['catalogue', 'new']" [queryParams]="{page: 1}">New
+              <span class="badge ws-bg-secondary badge-pill float-right position-absolute"
+                style="margin-top: 3px; right: 10px; top: .5rem">{{ numberOfNewItems }}</span>
+            </a>
+          </li>
+          <li *ngIf="store?.type == 'restaurant'" class="position-relative">
+            <a [class.active]="isLinkActive('/stores/' + store?.username + '/catalogue/todayspecial')" [routerLink]="['catalogue', 'todayspecial']" [queryParams]="{page: 1}">Today Special
+              <span class="badge ws-bg-secondary badge-pill float-right position-absolute"
+                style="margin-top: 3px; right: 10px; top: .5rem">{{ numberOfTodaySpecialItems }}</span>
+            </a>
+          </li>
+          <li class="position-relative">
+            <a [class.active]="isLinkActive('/stores/' + store?.username + '/catalogue/discount')" [routerLink]="['catalogue', 'discount']" [queryParams]="{page: 1}">Discount
+              <span class="badge ws-bg-secondary badge-pill float-right position-absolute"
+                style="margin-top: 3px; right: 10px; top: .5rem">{{ numberOfDiscountItems }}</span>
+            </a>
+          </li>
+          <li class="position-relative">
+            <a [class.active]="isLinkActive('/stores/' + store?.username + '/catalogue/published')" [routerLink]="['catalogue', 'published']" [queryParams]="{page: 1}">Published
+              <span class="badge ws-bg-secondary badge-pill float-right position-absolute"
+                style="margin-top: 3px; right: 10px; top: .5rem">{{ numberOfPublishedItems }}</span>
+            </a>
+          </li>
+          <li class="position-relative">
+            <a [class.active]="isLinkActive('/stores/' + store?.username + '/catalogue/unpublished')" [routerLink]="['catalogue', 'unpublished']" [queryParams]="{page: 1}">Unpublished
+              <span class="badge ws-bg-secondary badge-pill float-right position-absolute"
+                style="margin-top: 3px; right: 10px; top: .5rem">{{ numberOfUnpublishedItems }}</span>
+            </a>
+          </li>
+          <li class="position-relative">
+            <a [class.active]="isLinkActive('/stores/' + store?.username + '/catalogue/uncategorized')" [routerLink]="['catalogue', 'uncategorized']" [queryParams]="{page: 1}">Uncategorized
+              <span class="badge ws-bg-secondary badge-pill float-right position-absolute"
+                style="margin-top: 3px; right: 10px; top: .5rem">{{ numberOfUncategorizedItems }}</span>
+            </a>
+          </li>
+          <hr class="m-0" />
+          <li cdkDropList (cdkDropListDropped)="dropOrder($event)">
+            <div *ngFor="let category of categories" class="ws-drag" cdkDrag>
+              <div (clickOutside)="setEditCategory('')" class="input-group" *ngIf="isEditCategory(category?.name)">
+                <input name="category" type='text'
+                  style="padding-left: 40px; height: 40px; margin-left: 4px;" class="col border-0"
+                  autocomplete="off" [ngModel]="editname" (ngModelChange)="edit_new_name = $event" />
+                <a class="text-center p-0"
+                  style="line-height:40px; width: 60px; vertical-align:middle; font-size: .8rem"
+                  (click)="editCategory(category)">
+                  <span style="vertical-align: sub">Confirm</span>
+                </a>
+              </div>
+              <span *ngIf="!isEditCategory(category?.name)" class="drag-handle" cdkDragHandle>
+                <span class="fas fa-bars" style="font-size: .9rem; margin-left: .25rem"></span>
+              </span>
+              <a href="javascript:void(0)" *ngIf="!isEditCategory(category?.name)" class="ws-secondary"
+                [class.active]="isLinkActive('/stores/' + store?.username + '/catalogue/custom/' + category.name)" [routerLink]="['catalogue', 'custom', category.name]"
+                [queryParams]="{page: 1}">
+                <span style="overflow: hidden; width: 160px; text-overflow: ellipsis; display: inline-block">
+                  {{ category?.name }}</span>
+                <span class="badge ws-bg-secondary badge-pill float-right position-absolute"
+                  style="margin-top: 3px; right: 10px; top: .5rem">{{category?.items?.length}}</span>
+                <div>
+                  <span class="edit-button d-inline-block ws-secondary" style="font-size: .8rem"
+                    (click)="$event.preventDefault(); $event.stopPropagation(); setEditCategory(category?.name)">Edit</span>
+                  <span class="edit-button d-inline-block ws-secondary ml-2" style="font-size: .8rem"
+                    (click)="$event.preventDefault(); $event.stopPropagation(); openRemoveModal(category)">Remove</span>
+                </div>
+              </a>
+            </div>
+          </li>
+          <li class="row no-gutters">
+            <input placeholder="Add New Category" class="new-input border-0 px-2"
+              (keydown.enter)="addCategory()" [(ngModel)]="new_name" />
+            <span class="fas fa-plus pl-2 pr-2 text-center" style="flex: 1" (click)="addCategory()"></span>
+          </li>
+        </ul>
+      </li>
+      <li wsNavItem *ngIf="!isServiceExpired" class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
+        <a [routerLink]="['ordering']">
+          <span class="ws-main-nav-icon fas fa-clipboard-list" style="margin-right: .65rem"></span>
+          <span class="ws-main-nav-text">Ordering</span>
+        </a>
+        <ul class="ws-main-nav-sub-list">
+          <li class="ws-main-nav-sub-list__title">
+            <a [routerLink]="['ordering']">Ordering</a>
+          </li>
+          <li>
+            <a [routerLinkActive]="'active'" [routerLink]="['ordering', 'tables']">Tables</a>
+          </li>
+          <li>
+            <a [routerLinkActive]="'active'" [routerLink]="['ordering', 'sales']">Sales</a>
+          </li>
+          <li>
+            <a [routerLinkActive]="'active'" [routerLink]="['ordering', 'statements']">Statements</a>
+          </li>
+          <li>
+            <a [routerLinkActive]="'active'" [routerLink]="['ordering', 'configurations']">Configurations</a>
+          </li>
+        </ul>
+      </li>
+      <li wsNavItem *ngIf="!isServiceExpired" class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
+        <a [routerLink]="['qrcode']">
+          <span class="ws-main-nav-icon fas fa-qrcode"></span>
+          <span class="ws-main-nav-text">QR Code</span>
+        </a>
+        <ul class="ws-main-nav-sub-list">
+          <li class="ws-main-nav-sub-list__title">
+            <a [routerLink]="['qrcode']">QR Code</a>
+          </li>
+        </ul>
+      </li>
+      <li wsNavItem *ngIf="!isServiceExpired" class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
+        <a [routerLink]="['information']">
+          <span class="ws-main-nav-icon fas fa-image"></span>
+          <span class="ws-main-nav-text">Information Banner</span>
+        </a>
+        <ul class="ws-main-nav-sub-list">
+          <li class="ws-main-nav-sub-list__title">
+            <a [routerLink]="['information']">Information Banner</a>
+          </li>
+        </ul>
+      </li>
+      <li wsNavItem *ngIf="false" class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
+        <a [routerLink]="['reviews']">
+          <span class="ws-main-nav-icon far fa-comment"></span>
+          <span class="ws-main-nav-text">Reviews</span>
+        </a>
+      </li>
+      <li wsNavItem *ngIf="false" class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
+        <a [routerLink]="['advertising']">
+          <span class="ws-main-nav-icon fas fa-bullhorn"></span>
+          <span class="ws-main-nav-text">Advertising</span>
+        </a>
+      </li>
+      <li wsNavItem *ngIf="false" class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
+        <a [routerLink]="['promotion']">
+          <span class="ws-main-nav-icon fas fa-tags"></span>
+          <span class="ws-main-nav-text">Promotions</span>
+        </a>
+      </li>
+      <li wsNavItem *ngIf="false" class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
+        <a [routerLink]="['recruitment']">
+          <span class="ws-main-nav-icon fas fa-user-tie"></span>
+          <span class="ws-main-nav-text">Recruitments</span>
+        </a>
+      </li>
+      <li wsNavItem *ngIf="false" class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
+        <a [routerLink]="['quotation']">
+          <span class="ws-main-nav-icon fas fa-file-invoice"></span>
+          <span class="ws-main-nav-text">Quotation
+            <span class="badge ws-bg-secondary badge-pill float-right" style="margin-top: 3px;"
+              *ngIf="unreplied_quotations.length">{{unreplied_quotations.length}}</span>
+          </span>
+        </a>
+      </li>
+
+      <!-- <li wsNavItem *ngIf="false" class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
+        <a [routerLink]="['ecommerce']">
+          <span class="ws-main-nav-icon fas fa-th"></span>
+          <span class="ws-main-nav-text">E-Commerce</span>
+        </a>
+        <ul class="ws-main-nav-sub-list">
+          <li>
+            <a [routerLinkActive]="'active'" [routerLink]="['e-commerce', 'orders']">Orders
+            </a>
+          </li>
+          <li>
+            <a [routerLinkActive]="'active'" [routerLink]="['e-commerce', 'items']">Items
+            </a>
+          </li>
+          <li>
+            <a [routerLinkActive]="'active'" [routerLink]="['e-commerce', 'delivery-methods']">Delivery Methods
+            </a>
+          </li>
+          <li>
+            <a [routerLinkActive]="'active'" [routerLink]="['e-commerce', 'payment-methods']">Payment Methods
+            </a>
+          </li>
+          <li>
+            <a [routerLinkActive]="'active'" [routerLink]="['e-commerce', 'billing-history']">Billing History
+            </a>
+          </li>
+        </ul>
+      </li> -->
+      <li *ngIf="store?._package?.name !== 'trial_6_months'" wsNavItem class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
+        <a [routerLink]="['billing']">
+          <span class="ws-main-nav-icon fas fa-coins"></span>
+          <span class="ws-main-nav-text">Billing</span>
+        </a>
+        <ul class="ws-main-nav-sub-list">
+          <li>
+            <a [routerLinkActive]="'active'" [routerLink]="['billing', 'history']">History</a>
+          </li>
+          <li>
+            <a [routerLinkActive]="'active'" [routerLink]="['billing', 'payment-methods']">Payment Methods</a>
+          </li>
+          <li>
+            <a [routerLinkActive]="'active'" [routerLink]="['billing', 'subscription']">Subscription</a>
+          </li>
+        </ul>
+      </li>
+      <li wsNavItem class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
+        <a [routerLink]="['settings']">
+          <span class="ws-main-nav-icon fas fa-cog"></span>
+          <span class="ws-main-nav-text">Settings</span>
+        </a>
+        <ul class="ws-main-nav-sub-list">
+          <li class="ws-main-nav-sub-list__title">
+            <a [routerLink]="['settings', 'about']">Settings</a>
+          </li>
+          <li>
+            <a [routerLinkActive]="'active'" [routerLink]="['settings', 'about']">About</a>
+          </li>
+          <li>
+            <a [routerLinkActive]="'active'" [routerLink]="['settings', 'social-media']">Social Media</a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </ws-left-nav>
+  <main-container></main-container>
+</div>
+<ng-template #loadingTemplate>
+  <ng-container *ngIf="loading.isRunning(); else noStoreTemplate">
+    <ws-spinner class="text-center d-block w-100" style="padding-top: 30vh"></ws-spinner>
+  </ng-container>
+</ng-template>
+
+<ng-template #noStoreTemplate>
+  <ng-container>
+    <h4 class="text-center mt-5 pb-5">Not authorized to access the store!</h4>
+  </ng-container>
+</ng-template>
+
+<confirm-modal *ngIf="isRemoveCategoryConfirmationModalOpened" [(isOpened)]="isRemoveCategoryConfirmationModalOpened" id="confirmModal" [loading]="removeLoading.isRunning()" 
+[message]="'Are you sure to remove category?'" [action]="removeCategory.bind(this)">
+</confirm-modal>
