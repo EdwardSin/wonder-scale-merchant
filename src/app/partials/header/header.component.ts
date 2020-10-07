@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { AuthUserService } from '@services/http/general/auth-user.service';
 import { AuthenticationService } from '@services/http/general/authentication.service';
 import { SharedLoadingService } from '@services/shared/shared-loading.service';
-import { SharedShopService } from '@services/shared/shared-shop.service';
+import { SharedStoreService } from '@services/shared/shared-store.service';
 import { SharedUserService } from '@services/shared/shared-user.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -27,7 +27,7 @@ export class HeaderComponent implements OnInit {
     private screenService: ScreenService,
     private authUserService: AuthUserService,
     private authenticationService: AuthenticationService,
-    private sharedShopService: SharedShopService,
+    private sharedStoreService: SharedStoreService,
     private sharedLoadingService: SharedLoadingService,
     private sharedUserService: SharedUserService) { }
   ngOnInit() {
@@ -111,8 +111,8 @@ export class HeaderComponent implements OnInit {
     this.viewContainerRef.createComponent(this.cfr.resolveComponentFactory(ResetPasswordComponent));
   }
   navigateToHome() {
-    this.router.navigate(['/shops/all']);
-    this.sharedShopService.shop.next(null);
+    this.router.navigate(['/stores/all']);
+    this.sharedStoreService.store.next(null);
   }
   displayPreview() {
 
@@ -123,7 +123,7 @@ export class HeaderComponent implements OnInit {
       setTimeout(() => {
         this.sharedLoadingService.screenLoading.next({loading: false});
         this.router.navigate(['']);
-        this.sharedShopService.shop.next(null);
+        this.sharedStoreService.store.next(null);
       }, 500);
     });
   }

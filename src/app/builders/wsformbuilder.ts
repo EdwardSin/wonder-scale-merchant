@@ -106,7 +106,7 @@ export class WSFormBuilder {
         });
     }
 
-    public static createShopForm() {
+    public static createStoreForm() {
         let formBuilder = new FormBuilder();
         return formBuilder.group({
             type: ["", [Validators.required]],

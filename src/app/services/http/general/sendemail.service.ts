@@ -12,8 +12,8 @@ export class SendemailService {
   sendReportReview(content) {
     return this.http.post(FeatureUrl.sendReportReviewUrl, content);
   }
-  sendShopInvitationEmail(obj) {
-    return this.http.post(FeatureUrl.sendShopInvitationEmailUrl, obj);
+  sendStoreInvitationEmail(obj) {
+    return this.http.post(FeatureUrl.sendStoreInvitationEmailUrl, obj);
   }
   sendInformation(obj) {
     return this.http.post(FeatureUrl.sendInformationUrl, obj);

@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Tag } from '@objects/tag';
 import { WsLoading } from '@elements/ws-loading/ws-loading';
 import { WsModalComponent } from '@elements/ws-modal/ws-modal.component';
@@ -9,7 +9,6 @@ import { WsModalComponent } from '@elements/ws-modal/ws-modal.component';
   styleUrls: ['./edit-multiple-items-modal.component.scss']
 })
 export class EditMultipleItemsModalComponent extends WsModalComponent implements OnInit {
-  @Input() isOpened: boolean;
   @Input() action: Function;
   @Input() editItems = [];
   tag: Tag = new Tag;

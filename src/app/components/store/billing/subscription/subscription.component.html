@@ -1,0 +1,60 @@
+<h4>Subscription</h4>
+
+<h5 class="h6">Current Subscription</h5>
+<div class="subscription-container p-4 font-9" *ngIf="subscribingPackage; else loadingTemplate">
+    <div class="row no-gutters">
+        <ng-container [ngSwitch]="subscribingPackage.name">
+            <span class="col" *ngSwitchCase="'trial_6_months'">6-month Trial Package ({{subscribingPackage?.expiryDate | date:'yyyy-MMM-dd'}})</span>
+            <span class="col" *ngSwitchCase="'basic_monthly'">Basic Monthly Package ({{subscribingPackage?.expiryDate | date:'yyyy-MMM-dd'}})</span>
+            <span class="col" *ngSwitchCase="'basic_6_months'">Basic 6-month Package ({{subscribingPackage?.expiryDate | date:'yyyy-MMM-dd'}})</span>
+            <span class="col" *ngSwitchCase="'basic_yearly'">Basic Yearly Package ({{subscribingPackage?.expiryDate | date:'yyyy-MMM-dd'}})</span>
+            <span>RM {{ subscribingPackage.price | number: '1.2-2' }}</span>
+        </ng-container>
+    </div>
+</div>
+<hr />
+
+<h5 class="h6">Next Month Subscription</h5>
+<p class="text-muted font-8 mb-2">This is showing the next month bill.</p>
+<!-- <p class="text-muted font-8">Bill will be charged every 1st of the month.</p> -->
+
+<div class="subscription-container p-4 font-9" *ngIf="subscribingPackage && subscribingPackage?.subscriptionId; else loadingTemplate">
+    <ng-container>
+        <div class="row no-gutters">
+            <ng-container [ngSwitch]="subscribingPackage.next">
+                <span class="col" *ngSwitchCase="'basic_monthly'">Basic Monthly Package
+                    <a href="javascript:void(0)" class="ml-3" [routerLink]="['/stores', username, 'packages']">Change</a>
+                    <a href="javascript:void(0)" class="ml-3" (click)="openUnsubscribe()">Unsubscribe</a>
+                </span>
+                <span *ngSwitchCase="'basic_monthly'">RM 18.80</span>
+                <span class="col" *ngSwitchCase="'basic_6_months'">Basic 6-month Package
+                    <a href="javascript:void(0)" class="ml-3" [routerLink]="['/stores', username, 'packages']">Change</a>
+                    <a href="javascript:void(0)" class="ml-3" (click)="openUnsubscribe()">Unsubscribe</a>
+                </span>
+                <span *ngSwitchCase="'basic_6_months'">RM 100.80</span>
+                <span class="col" *ngSwitchCase="'basic_yearly'">Basic Yearly Package
+                    <a href="javascript:void(0)" class="ml-3" [routerLink]="['/stores', username, 'packages']">Change</a>
+                    <a href="javascript:void(0)" class="ml-3" (click)="openUnsubscribe()">Unsubscribe</a>
+                </span>
+                <span *ngSwitchCase="'basic_yearly'">RM 177.60</span>
+            </ng-container>
+        </div>
+    </ng-container>
+</div>
+
+<ng-template #loadingTemplate>
+    <ng-container *ngIf="loading.isRunning(); else noNextSubscribingPackageTemplate">
+        <ws-spinner class="text-center d-block w-100" style="padding-top: 10vh; padding-bottom: 10vh"></ws-spinner>
+    </ng-container>
+</ng-template>
+
+<ng-template #noNextSubscribingPackageTemplate>
+    <div class="text-center">
+        <h6 class="pt-3 mb-2">No Subscription</h6>
+        <a href="javascript:void(0)" class="font-9" [routerLink]="['/stores', username, 'packages']">Add next subscription</a>
+    </div>
+</ng-template>
+
+<confirm-modal *ngIf="isUnsubscribedProductConfirmationOpenend" [(isOpened)]="isUnsubscribedProductConfirmationOpenend" [loading]="unsubscribeLoading.isRunning()"
+    [message]="'Are you sure to unsubscribe the product?'" [submessage]="'The service will be ended until the expiry date.'" [action]="unsubscribePackage.bind(this)">
+</confirm-modal>

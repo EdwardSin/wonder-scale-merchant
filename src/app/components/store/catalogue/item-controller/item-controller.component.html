@@ -1,0 +1,203 @@
+<div class="row no-gutters w-100 position-relative" style="z-index:2">
+    <div class="col-lg mr-1">
+        <search-bar class="d-inline-block mr-2" [placeholder]="'Search Item'" [searchAttributes]="['name', 'refId']" [items]="allItems"
+            [searchKeyword]="searchController.searchKeyword"></search-bar>
+            <!-- <div class="ws-circle-button" *ngIf="previousEditedItems.length">
+                <button title="Select Previous Edit Items" wsTippy class="btn btn-controller small"
+                    (click)="selectPrevious()">
+                    <span class="fa fa-angle-double-left"></span>
+                </button>
+            </div> -->
+            <!-- <div class="ws-circle-button" *ngIf="editItems.length != allItems.length">
+                <button title="Select All" wsTippy class="btn btn-controller small" (click)="selectAll()">
+                    <span class="fa fa-check-square"></span>
+                </button>
+            </div> -->
+            <!-- <div class="ws-circle-button" *ngIf="editItems.length">
+                <button title="Deselect All" wsTippy style="width:150px" class="btn btn-controller small"
+                    (click)="deselectAll()">
+                    <span class="fa fa-check-square d-inline-block mr-2"
+                        style="opacity:.3; vertical-align: inherit"></span>
+                    <span class="text-center d-inline-block" style="vertical-align: bottom; font-size: .9rem"
+                        *ngIf="editItems?.length >= 1 && editItems?.length < allItems.length">{{editItems?.length}}
+                        Selected<span class="d-inline-block" *ngIf="editItems?.length > 1">s</span>
+                    </span>
+                    <span class="text-center d-inline-block" style="vertical-align: bottom; font-size: .9rem"
+                        *ngIf="editItems?.length == allItems.length">({{editItems?.length}})All Selected</span>
+                </button>
+            </div> -->
+            <div [class.banned]="!editItems.length" [isDisabled]="!editItems.length" (click)="checkSelectedItems()" class="ws-circle-button" #dropdown="bs-dropdown" mdbDropdown>
+                <button title="Actions" mdbDropdownToggle wsTippy class="btn btn-controller small">
+                    <span class="fas fa-ellipsis-h"></span>
+                </button>
+                <div class="dropdown-menu mt-0 pb-0 pt-0">
+                    <button class="dropdown-item" (click)="publishItems()">Publish</button>
+                    <button class="dropdown-item" (click)="unpublishItems()">Unpublish</button>
+                    <button *ngIf="param != 'new'" class="dropdown-item" (click)="markAsNew()">Mark as new</button>
+                    <button class="dropdown-item" (click)="unmarkNew()">Unmark from new</button>
+                    <button *ngIf="param != 'discount'" class="dropdown-item" (click)="markAsOffer()">Mark as discount</button>
+                    <button class="dropdown-item" (click)="unmarkOffer()">Unmark from discount</button>
+                    <button *ngIf="store.type == 'restaurant'" class="dropdown-item" (click)="markAsTodaySpecial()">Mark as Today Special</button>
+                    <button *ngIf="store.type == 'restaurant'" class="dropdown-item" (click)="unmarkTodaySpecial()">Unmark from Today Special</button>
+                    <button class="dropdown-item" (click)="openAddToModal()">Add to</button>
+                    <button *ngIf="param == 'custom'" class="dropdown-item" (click)="openMoveModal()">Move to</button>
+                    <button *ngIf="param != 'uncategorized'" class="dropdown-item" (click)="openRemoveModal()">Remove from categories</button>
+                    <button *ngIf="param == 'uncategorized' " class="dropdown-item" (click)="openRemoveModal()">Remove Permanently</button>
+                </div>
+            </div>
+            <div *ngIf="param == 'new'" class="d-inline-block">
+                <button (click)="isAdvertiseDropdownOpened = !isAdvertiseDropdownOpened" title="Advertise" wsTippy class="btn btn-controller small">
+                    <span class="fas fa-bullhorn"></span>
+                </button>
+                <ws-dropdown [class]="'p-4 mt-2'" [styles]="{width: '400px'}" [(isOpen)]="isAdvertiseDropdownOpened">
+                    <p class="font-8 mb-1">Last Date: {{ moment(store?.new?.publishedAt).format('Y-MM-DD, hh:mm') }}</p>
+                    <p class="font-8 mb-2">Next Time: 
+                        <span *ngIf="moment(store?.new?.publishedAt).add(1,'days').diff(moment()) >= 0">{{ moment().to(moment(store?.new?.publishedAt).add(1,'days')) }}</span>
+                        <span style="color: goldenrod" class="font-weight-bold" *ngIf="moment(store?.new?.publishedAt).add(1,'days').diff(moment()) < 0">Current</span>
+                    </p>
+                    <textarea [(ngModel)]="message" class="form-control form-control-sm w-100 mb-2" style="height: 130px"
+                    placeholder="Advertise and notify your followers."></textarea>
+                    <button class="btn btn-sm btn-controller float-right ml-2" (click)="updateMessage()">Update</button>
+                    <button class="btn btn-sm btn-controller float-right" [disabled]="isAdvertised" (click)="advertiseItems()">Advertise</button>
+                    <span class="clearfix d-block"></span>
+                </ws-dropdown>
+            </div>
+    </div>
+    <div class="col-auto">
+        <div class="row no-gutters order-2 center">
+            <div class="ws-circle-button">
+                <button title="Upload Items" wsTippy class="btn btn-controller small" (click)="isImportItemsModalOpened = true">
+                    <span class="fa fa-upload"></span>
+                </button>
+            </div>
+            <div class="ws-circle-button" [routerLink]="[]" [queryParams]="{id:null, modal: store?.type == 'restaurant' ? 'modify-menu-item' : 'modify-item'}" queryParamsHandling="merge">
+                <button title="Add New Item" wsTippy class="btn btn-controller small">
+                    <span class="fa fa-plus"></span>
+                </button>
+            </div>
+            <div class="ws-circle-button" mdbDropdown>
+                <button placement="right" id="sortButton" mdbDropdownToggle title="Order" wsTippy
+                    class="btn btn-controller small clickable d-inline">
+                    <span class="fa fa-ellipsis-v"></span>
+                </button>
+                <div class="dropdown-menu dropdown-menu-right mt-0 pb-0 pt-0" aria-labelledby="sortButton">
+                    <button class="dropdown-item" [class.orderSelected]="isOrder('refId')"
+                        (click)="setOrderAndSwitchAscending('refId')">SKU (ID)
+                        <span *ngIf="isOrder('refId')" class="pl-3 fas fa-sort"></span>
+                    </button>
+                    <button class="dropdown-item" [class.orderSelected]="isOrder('alphabet') || isOrder(undefined)"
+                        (click)="setOrderAndSwitchAscending('alphabet')">Alphabet
+                        <span *ngIf="isOrder('alphabet')" class="pl-3 fas fa-sort"></span>
+                    </button>
+                    <button class="dropdown-item" [class.orderSelected]="isOrder('price_low_to_high')"
+                        (click)="setOrderAndSwitchAscending('price_low_to_high')">Price(Low to High)
+                    </button>
+                    <button class="dropdown-item" [class.orderSelected]="isOrder('price_high_to_low')"
+                        (click)="setOrderAndSwitchAscending('price_high_to_low')">Price(High to Low)
+                    </button>
+                    <button class="dropdown-item" [class.orderSelected]="isOrder('latest')"
+                        (click)="setOrderAndSwitchAscending('latest')">Last Update
+                        <span *ngIf="isOrder('latest')" class="pl-3 fas fa-sort"></span>
+                    </button>
+                    <!-- <button class="dropdown-item" [class.orderSelected]="isOrder('status')"
+                        (click)="setOrderAndSwitchAscending('status')">Status
+                        <span *ngIf="isOrder('status')" class="pl-3 fas fa-sort"></span>
+                    </button> -->
+                    <!-- <button class="dropdown-item" [class.orderSelected]="isOrder('custom order')" *ngIf="false && param !== 'defaultcategory'"
+                        (click)="setOrderAndSwitchAscending('custom order')">Custom Order
+                        <span *ngIf="isOrder('custom order')" class="pl-3 fas fa-sort"></span>
+                    </button> -->
+                </div>
+            </div>
+            <div class="ws-circle-button" mdbDropdown>
+                <button placement="right" id="sortButton" mdbDropdownToggle title="Order" wsTippy
+                    class="btn btn-controller small clickable d-inline">
+                    <span class="fa fa-chevron-down"></span>
+                </button>
+                <div class="dropdown-menu dropdown-menu-right mt-0 pb-0 pt-0" aria-labelledby="sortButton">
+                    <button class="dropdown-item" (click)="$event.stopPropagation()">
+                        <mat-checkbox (change)="triggerColumns('id')" [checked]="columns.includes('id')" [color]="'primary'" class="mr-2 d-inline-block" style="vertical-align: text-bottom"></mat-checkbox>ID
+                    </button>
+                    <button class="dropdown-item" (click)="$event.stopPropagation()">
+                        <mat-checkbox [disabled]="true" (change)="triggerColumns('name')" [checked]="columns.includes('name')" [color]="'primary'" class="mr-2 d-inline-block" style="vertical-align: text-bottom"></mat-checkbox>Name
+                    </button>
+                    <button class="dropdown-item" (click)="$event.stopPropagation()">
+                        <mat-checkbox (change)="triggerColumns('price')" [checked]="columns.includes('price')" [color]="'primary'" class="mr-2 d-inline-block" style="vertical-align: text-bottom"></mat-checkbox>Price
+                    </button>
+                    <button class="dropdown-item" (click)="$event.stopPropagation()">
+                        <mat-checkbox (change)="triggerColumns('discount')" [checked]="columns.includes('discount')" [color]="'primary'" class="mr-2 d-inline-block" style="vertical-align: text-bottom"></mat-checkbox>Discount
+                    </button>
+                    <button class="dropdown-item" (click)="$event.stopPropagation()">
+                        <mat-checkbox (change)="triggerColumns('uploaded_images')" [checked]="columns.includes('uploaded_images')" [color]="'primary'" class="mr-2 d-inline-block" style="vertical-align: text-bottom"></mat-checkbox>Uploaded Images
+                    </button>
+                    <button class="dropdown-item" (click)="$event.stopPropagation()">
+                        <mat-checkbox (change)="triggerColumns('status')" [checked]="columns.includes('status')" [color]="'primary'" class="mr-2 d-inline-block" style="vertical-align: text-bottom"></mat-checkbox>Status
+                    </button>
+                </div>
+            </div>
+            
+            <!-- <div class="ws-circle-button" mdbDropdown>
+                <button id="listButton" mdbDropdownToggle title="Display" wsTippy
+                    class="btn btn-controller small clickable d-inline">
+                    <span class="fa" [class.fa-th-large]="isDisplay('block')"
+                        [class.fa-list]="isDisplay('list') || isDisplay(undefined)"></span>
+                </button>
+                <div class="dropdown-menu dropdown-menu-right mt-0 pb-0 pt-0" aria-labelledby="listButton">
+                    <button class="dropdown-item" [class.orderSelected]="isDisplay('block')" (click)="setDisplay('block')">
+                        <span class="fas fa-th-large mr-2"></span>Block
+                    </button>
+                    <button class="dropdown-item" [class.orderSelected]="isDisplay('list') || isDisplay(undefined)"
+                        (click)="setDisplay('list')">
+                        <span class="fas fa-list mr-2"></span>List
+                    </button>
+                </div>
+            </div> -->
+        </div>
+    </div>
+</div>
+
+<div class="row no-gutters w-100 position-relative" style="z-index:1">
+            <!-- <div class="m-1">
+                <div *ngIf="editItems?.length && !isMobileSize" class="label col">
+                    <span class="text-center d-block" style="line-height: 36px"
+                        *ngIf="editItems?.length >= 1 && editItems?.length < allItems.length">{{editItems?.length}}
+                        Selected Item<span *ngIf="editItems?.length > 1">s</span>
+                    </span>
+                    <span class="text-center d-block" style="line-height: 36px"
+                        *ngIf="editItems?.length == allItems.length">({{editItems?.length}}) All Item Selected</span>
+                </div>
+            </div> -->
+</div>
+<!-- <div class="pl-1 pr-1" *ngIf="param == 'new'">
+    <textarea name="message" class="form form-control no-resize mt-2" placeholder="Advertising Message..."
+        [(ngModel)]="message"></textarea>
+    <button wsDebounceClick class="btn btn-second btn-md float-right" (debounceClick)="changeMessage()">Change</button>
+    <button title="Place your new items to the top of news feed of your followers" wsTippy
+        class="btn btn-md newitem float-right" wsDebounceClick [class.done]="isPublished"
+        (debounceClick)="advertiseItems()">{{ isPublished ? 'Done' : 'Advertise'}}</button>
+    <div class="clearfix"></div>
+</div> -->
+<confirm-modal *ngIf="isRemoveAllSelectedItemModalConfirmationOpened" [(isOpened)]="isRemoveAllSelectedItemModalConfirmationOpened" id="removeItemsModal" [loading]="loading.isRunning()" [message]="'Are you sure to remove all selected items?'" [action]="action">
+</confirm-modal>
+<add-to-categories-modal *ngIf="isAddToCategoriesModalOpened" [(isOpened)]="isAddToCategoriesModalOpened" id="addToCategoriesModal" [action]="action" 
+    [loading]="categoriesLoading.isRunning()"
+    [addingLoading]="loading.isRunning()"
+    [categories]="displayCategoryList"
+    [(editCategoryList)]="editCategoryList"></add-to-categories-modal>
+<move-to-categories-modal *ngIf="isMoveToCategoriesModalOpened" [(isOpened)]="isMoveToCategoriesModalOpened" id="moveToCategoriesModal" [action]="action"
+    [loading]="categoriesLoading.isRunning()"
+    [movingLoading]="loading.isRunning()"
+    [categories]="displayCategoryList"
+    [(editCategory)]="editCategory"></move-to-categories-modal>
+<edit-multiple-items-modal *ngIf="isEditMultipleItemsModalOpened" [(isOpened)]="isEditMultipleItemsModalOpened" [editItems]="editItems" id="editMultipleItemsModal" [action]="action">
+</edit-multiple-items-modal>
+<import-items-modal *ngIf="isImportItemsModalOpened" [(isOpened)]="isImportItemsModalOpened"></import-items-modal>
+
+<!-- <modal id="informationModal">
+    <title modalHeader class="m-0" [title]="'item_controller.information'"></title>
+    <div modalBody>
+        <div class="">
+            <p class="mb-0" style="white-space: pre-line">{{info_message}}</p>
+        </div>
+    </div>
+</modal> -->

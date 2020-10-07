@@ -3,5 +3,5 @@ export default class Table {
     tableNo: string;
     maxPersons: number;
     status: string;
-    shop?: any;
+    store?: any;
 }

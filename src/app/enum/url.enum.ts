@@ -1,38 +1,38 @@
 export class URL {
-    static AUTH_DEFAULT_SETTING_ADMIN_URL = '/api/auth-shops/default-setting-admins';
-    static AUTH_PACKAGE_ADMIN_URL = '/api/auth-shops/package-admins';
-    static AUTH_SHOP_ADMIN_URL = '/api/auth-shops/shop-admins';
-    static AUTH_PAYMENT_METHOD_ADMIN_URL = '/api/auth-shops/payment-method-admins';
-    static AUTH_STATEMENT_CONTRIBUTOR_URL = '/api/auth-shops/statement-admins';
-    static AUTH_CATEGORY_CONTRIBUTOR_URL = '/api/auth-shops/category-contributors';
-    static AUTH_CARD_CONTRIBUTOR_URL = '/api/auth-shops/card-contributors';
-    static AUTH_RECEIPT_CONTRIBUTOR_URL = '/api/auth-shops/receipt-contributors';
-    static AUTH_DEFAULT_SETTING_CONTRIBUTOR_URL = '/api/auth-shops/default-setting-contributors';
-    static AUTH_ITEM_CONTRIBUTOR_URL = '/api/auth-shops/item-contributors';
-    static AUTH_SHOP_CONTRIBUTOR_URL = '/api/auth-shops/shop-contributors';
-    static AUTH_TABLE_CONTRIBUTOR_URL = '/api/auth-shops/ordering-contributors/table-contributors';
-    static AUTH_SALE_CONTRIBUTOR_URL = '/api/auth-shops/ordering-contributors/sale-contributors';
-    static AUTH_ORDERING_CONFIGURATION_CONTRIBUTOR_URL = '/api/auth-shops/ordering-contributors/ordering-configuration-contributors';
-    static AUTH_PACKAGE_CONTRIBUTOR_URL = '/api/auth-shops/package-contributors'
-    static AUTH_SHOP_USER_URL = '/api/auth-users/shop-users';
+    static AUTH_DEFAULT_SETTING_ADMIN_URL = '/api/auth-stores/default-setting-admins';
+    static AUTH_PACKAGE_ADMIN_URL = '/api/auth-stores/package-admins';
+    static AUTH_STORE_ADMIN_URL = '/api/auth-stores/store-admins';
+    static AUTH_PAYMENT_METHOD_ADMIN_URL = '/api/auth-stores/payment-method-admins';
+    static AUTH_STATEMENT_CONTRIBUTOR_URL = '/api/auth-stores/statement-admins';
+    static AUTH_CATEGORY_CONTRIBUTOR_URL = '/api/auth-stores/category-contributors';
+    static AUTH_CARD_CONTRIBUTOR_URL = '/api/auth-stores/card-contributors';
+    static AUTH_RECEIPT_CONTRIBUTOR_URL = '/api/auth-stores/receipt-contributors';
+    static AUTH_DEFAULT_SETTING_CONTRIBUTOR_URL = '/api/auth-stores/default-setting-contributors';
+    static AUTH_ITEM_CONTRIBUTOR_URL = '/api/auth-stores/item-contributors';
+    static AUTH_STORE_CONTRIBUTOR_URL = '/api/auth-stores/store-contributors';
+    static AUTH_TABLE_CONTRIBUTOR_URL = '/api/auth-stores/ordering-contributors/table-contributors';
+    static AUTH_SALE_CONTRIBUTOR_URL = '/api/auth-stores/ordering-contributors/sale-contributors';
+    static AUTH_ORDERING_CONFIGURATION_CONTRIBUTOR_URL = '/api/auth-stores/ordering-contributors/ordering-configuration-contributors';
+    static AUTH_PACKAGE_CONTRIBUTOR_URL = '/api/auth-stores/package-contributors'
+    static AUTH_STORE_USER_URL = '/api/auth-users/store-users';
     static AUTH_USERS_URL = '/api/auth-users';
     static FEATURE_URL = '/api/features';
-    // static AUTH_ADVERTISING_CONTRIBUTOR_URL = '/api/auth-shops/advertising-contributors';
-    // static AUTH_CART_CONTRIBUTOR_URL = '/api/auth-shops/cart-contributors';
-    // static AUTH_CREDIT_CONTRIBUTOR_URL = '/api/auth-shops/credit-contributors';
-    // static AUTH_IMAGE_CONTRIBUTOR_URL = '/api/auth-shops/image-contributors';
-    // static Auth_FEATURE_CONTRIBUTOR_URL = '/api/auth-shops/feature-contributors';
-    // static AUTH_PROMOTION_CONTRIBUTOR_URL = '/api/auth-shops/promotion-contributors';
-    // static AUTH_RECRUITMENT_CONTRIBUTOR_URL = '/api/auth-shops/recruitment-contributors';
-    // static AUTH_QUOTATION_CONTRIBUTOR_URL = '/api/auth-shops/quotation-contributors';
-    // static AUTH_REVIEW_CONTRIBUTOR_URL = '/api/auth-shops/review-contributors';
-    // static AUTH_VOURCHER_CONTRIBUTOR_URL = '/api/auth-shops/voucher-contributors';
+    // static AUTH_ADVERTISING_CONTRIBUTOR_URL = '/api/auth-stores/advertising-contributors';
+    // static AUTH_CART_CONTRIBUTOR_URL = '/api/auth-stores/cart-contributors';
+    // static AUTH_CREDIT_CONTRIBUTOR_URL = '/api/auth-stores/credit-contributors';
+    // static AUTH_IMAGE_CONTRIBUTOR_URL = '/api/auth-stores/image-contributors';
+    // static Auth_FEATURE_CONTRIBUTOR_URL = '/api/auth-stores/feature-contributors';
+    // static AUTH_PROMOTION_CONTRIBUTOR_URL = '/api/auth-stores/promotion-contributors';
+    // static AUTH_RECRUITMENT_CONTRIBUTOR_URL = '/api/auth-stores/recruitment-contributors';
+    // static AUTH_QUOTATION_CONTRIBUTOR_URL = '/api/auth-stores/quotation-contributors';
+    // static AUTH_REVIEW_CONTRIBUTOR_URL = '/api/auth-stores/review-contributors';
+    // static AUTH_VOURCHER_CONTRIBUTOR_URL = '/api/auth-stores/voucher-contributors';
     // static REVIEW_URL = '/api/reviews';
 }
 export class FeatureUrl {
     static sendEmailUrl = URL.FEATURE_URL + '/send/email';
     static sendReportReviewUrl = URL.FEATURE_URL + '/send/report';
-    static sendShopInvitationEmailUrl = URL.FEATURE_URL + 'send/invitation';
+    static sendStoreInvitationEmailUrl = URL.FEATURE_URL + 'send/invitation';
     static sendInformationUrl = URL.FEATURE_URL + 'send/information';
 }
 export class AuthUserUrl {
@@ -45,40 +45,40 @@ export class AuthUserUrl {
     static changePasswordUrl = URL.AUTH_USERS_URL + '/users/edit/password';
     static savePasswordUrl = URL.AUTH_USERS_URL + '/users/save/password';
 }
-export class AuthShopUserUrl {
-    static isAuthenticatedShopByShopUsernameUrl = URL.AUTH_SHOP_USER_URL + '/is-authenticated';
-    static getShopsByUserIdUrl = URL.AUTH_SHOP_USER_URL + '/contributor';
-    static getAuthenticatedShopByShopUsernameUrl = URL.AUTH_SHOP_USER_URL + '/authenticated';
-    static getNotActiveShopsByUserIdUrl = URL.AUTH_SHOP_USER_URL + '/contributor/not-active';
-    static getInvitationShopsByUserIdUrl = URL.AUTH_SHOP_USER_URL + '/contributor/pending';
-    static addShopUrl = URL.AUTH_SHOP_USER_URL + '/add';
-    static addShopWithSubscriptionUrl = URL.AUTH_SHOP_USER_URL + '/add-with-subscription';
+export class AuthStoreUserUrl {
+    static isAuthenticatedStoreByStoreUsernameUrl = URL.AUTH_STORE_USER_URL + '/is-authenticated';
+    static getStoresByUserIdUrl = URL.AUTH_STORE_USER_URL + '/contributor';
+    static getAuthenticatedStoreByStoreUsernameUrl = URL.AUTH_STORE_USER_URL + '/authenticated';
+    static getNotActiveStoresByUserIdUrl = URL.AUTH_STORE_USER_URL + '/contributor/not-active';
+    static getInvitationStoresByUserIdUrl = URL.AUTH_STORE_USER_URL + '/contributor/pending';
+    static addStoreUrl = URL.AUTH_STORE_USER_URL + '/add';
+    static addStoreWithSubscriptionUrl = URL.AUTH_STORE_USER_URL + '/add-with-subscription';
 }
-export class AuthShopContributorUrl {
-    static getContributorsUrl = URL.AUTH_SHOP_CONTRIBUTOR_URL + '/contributors';
-    static addBannerUrl = URL.AUTH_SHOP_CONTRIBUTOR_URL + '/add/banner-image';
-    static editProfileUrl = URL.AUTH_SHOP_CONTRIBUTOR_URL + '/edit/profile-image';
-    static removeProfileUrl = URL.AUTH_SHOP_CONTRIBUTOR_URL + '/remove/profile-image';
-    static editGeneralUrl = URL.AUTH_SHOP_CONTRIBUTOR_URL + '/edit/general';
-    static editContactUrl = URL.AUTH_SHOP_CONTRIBUTOR_URL + '/edit/contact';
-    static editBannerUrl = URL.AUTH_SHOP_CONTRIBUTOR_URL + '/edit/banner-image';
-    static removeBannerUrl = URL.AUTH_SHOP_CONTRIBUTOR_URL + '/remove/banner-image';
-    static addMediaUrl = URL.AUTH_SHOP_CONTRIBUTOR_URL + '/media';
-    static removeMediaUrl = URL.AUTH_SHOP_CONTRIBUTOR_URL + '/media/remove';
-    static editMediaUrl = URL.AUTH_SHOP_CONTRIBUTOR_URL + '/media';
-    static joinContributorUrl = URL.AUTH_SHOP_CONTRIBUTOR_URL + '/contributor/join';
-    static rejectContributorUrl = URL.AUTH_SHOP_CONTRIBUTOR_URL + '/contributor/reject';
-    static leaveShopUrl = URL.AUTH_SHOP_CONTRIBUTOR_URL + '/leave';
-    static editInformationImagesUrl = URL.AUTH_SHOP_CONTRIBUTOR_URL + '/edit/information-image';
-    static editInformationImagesOrderUrl = URL.AUTH_SHOP_CONTRIBUTOR_URL + '/rearrange/information-image';
-    static removeInformationImageUrl = URL.AUTH_SHOP_CONTRIBUTOR_URL + '/remove/information-image';
-    static editMenuImagesUrl = URL.AUTH_SHOP_CONTRIBUTOR_URL + '/edit/menu-image';
-    static editMenuImagesOrderUrl = URL.AUTH_SHOP_CONTRIBUTOR_URL + '/rearrange/menu-image';
-    static removeMenuImageUrl = URL.AUTH_SHOP_CONTRIBUTOR_URL + '/remove/menu-image';
+export class AuthStoreContributorUrl {
+    static getContributorsUrl = URL.AUTH_STORE_CONTRIBUTOR_URL + '/contributors';
+    static addBannerUrl = URL.AUTH_STORE_CONTRIBUTOR_URL + '/add/banner-image';
+    static editProfileUrl = URL.AUTH_STORE_CONTRIBUTOR_URL + '/edit/profile-image';
+    static removeProfileUrl = URL.AUTH_STORE_CONTRIBUTOR_URL + '/remove/profile-image';
+    static editGeneralUrl = URL.AUTH_STORE_CONTRIBUTOR_URL + '/edit/general';
+    static editContactUrl = URL.AUTH_STORE_CONTRIBUTOR_URL + '/edit/contact';
+    static editBannerUrl = URL.AUTH_STORE_CONTRIBUTOR_URL + '/edit/banner-image';
+    static removeBannerUrl = URL.AUTH_STORE_CONTRIBUTOR_URL + '/remove/banner-image';
+    static addMediaUrl = URL.AUTH_STORE_CONTRIBUTOR_URL + '/media';
+    static removeMediaUrl = URL.AUTH_STORE_CONTRIBUTOR_URL + '/media/remove';
+    static editMediaUrl = URL.AUTH_STORE_CONTRIBUTOR_URL + '/media';
+    static joinContributorUrl = URL.AUTH_STORE_CONTRIBUTOR_URL + '/contributor/join';
+    static rejectContributorUrl = URL.AUTH_STORE_CONTRIBUTOR_URL + '/contributor/reject';
+    static leaveStoreUrl = URL.AUTH_STORE_CONTRIBUTOR_URL + '/leave';
+    static editInformationImagesUrl = URL.AUTH_STORE_CONTRIBUTOR_URL + '/edit/information-image';
+    static editInformationImagesOrderUrl = URL.AUTH_STORE_CONTRIBUTOR_URL + '/rearrange/information-image';
+    static removeInformationImageUrl = URL.AUTH_STORE_CONTRIBUTOR_URL + '/remove/information-image';
+    static editMenuImagesUrl = URL.AUTH_STORE_CONTRIBUTOR_URL + '/edit/menu-image';
+    static editMenuImagesOrderUrl = URL.AUTH_STORE_CONTRIBUTOR_URL + '/rearrange/menu-image';
+    static removeMenuImageUrl = URL.AUTH_STORE_CONTRIBUTOR_URL + '/remove/menu-image';
 
-    static advertiseItemsUrl = URL.AUTH_SHOP_CONTRIBUTOR_URL + '/advupdate';
-    static updateNewItemMessageUrl = URL.AUTH_SHOP_CONTRIBUTOR_URL + '/updatemessage';
-    static isPackageExpiredByUsernameUrl = URL.AUTH_SHOP_CONTRIBUTOR_URL + '/is-expired';
+    static advertiseItemsUrl = URL.AUTH_STORE_CONTRIBUTOR_URL + '/advupdate';
+    static updateNewItemMessageUrl = URL.AUTH_STORE_CONTRIBUTOR_URL + '/updatemessage';
+    static isPackageExpiredByUsernameUrl = URL.AUTH_STORE_CONTRIBUTOR_URL + '/is-expired';
 }
 export class AuthItemContributorUrl {
     static markAsNewUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/markasnew/items';
@@ -89,13 +89,13 @@ export class AuthItemContributorUrl {
     static unmarkOfferUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/unmarkoffer/items';
     static getItemById = URL.AUTH_ITEM_CONTRIBUTOR_URL + '';
     static getItemsByCategoryIdUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/items-by-categoryid';
-    static getAuthenticatedAllItemsByShopIdUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/all';
-    static getAuthenticatedNewItemsByShopIdUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/new';
-    static getAuthenticatedTodaySpecialItemsByShopIdUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/todayspecial';
-    static getAuthenticatedDiscountItemsByShopIdUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/discount';
-    static getAuthenticatedPublishedItemCategoryByShopIdUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/published';
-    static getAuthenticatedUnpublishedItemCategoryByShopIdUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/unpublished';
-    static getAuthenticatedUncategorizedItemCategoryByShopIdUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/uncategorized';
+    static getAuthenticatedAllItemsByStoreIdUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/all';
+    static getAuthenticatedNewItemsByStoreIdUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/new';
+    static getAuthenticatedTodaySpecialItemsByStoreIdUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/todayspecial';
+    static getAuthenticatedDiscountItemsByStoreIdUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/discount';
+    static getAuthenticatedPublishedItemCategoryByStoreIdUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/published';
+    static getAuthenticatedUnpublishedItemCategoryByStoreIdUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/unpublished';
+    static getAuthenticatedUncategorizedItemCategoryByStoreIdUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/uncategorized';
     static activateItemsUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/publish/items';
     static inactivateItemsUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/unpublish/items';
     static addItemUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '';
@@ -115,18 +115,18 @@ export class AuthItemContributorUrl {
 
 }
 export class AuthReceiptContributorUrl {
-    static getAllReceiptsByShopIdUrl = URL.AUTH_RECEIPT_CONTRIBUTOR_URL;
+    static getAllReceiptsByStoreIdUrl = URL.AUTH_RECEIPT_CONTRIBUTOR_URL;
 }
 export class AuthDefaultSettingContributorUrl {
-    static getDefaultItemSettingByShopIdUrl = URL.AUTH_DEFAULT_SETTING_CONTRIBUTOR_URL + '/item'
+    static getDefaultItemSettingByStoreIdUrl = URL.AUTH_DEFAULT_SETTING_CONTRIBUTOR_URL + '/item'
 }
 export class AuthCategoryContributorUrl {
-    static getCategoryByNameAndShopIdUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL + '/name';
+    static getCategoryByNameAndStoreIdUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL + '/name';
     static addCategoryUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL;
     static editCategoryUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL;
     static removeCategoryUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL;
     static removeCategoriesUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL + '/remove/categories';
-    static getAuthenticatedCategoriesByShopIdUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL + '/shopid';
+    static getAuthenticatedCategoriesByStoreIdUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL + '/storeid';
     static addItemsToCategoryUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL + '/items/add';
     static removeItemsFromCategoryUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL + '/remove/itemsfromcategory';
     static moveCategoryUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL + '/move';
@@ -141,31 +141,31 @@ export class AuthCategoryContributorUrl {
     static getNumberOfUncategorizedItemsUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL + '/number_of_uncategorized_items';
 
 }
-export class AuthShopAdminUrl {
-    static searchContributorUrl = URL.AUTH_SHOP_ADMIN_URL + '/search?query=';
-    static inviteContributorUrl = URL.AUTH_SHOP_ADMIN_URL + '/contributor/invite';
-    static editContributorUrl = URL.AUTH_SHOP_ADMIN_URL + '/contributor/edit';
-    static removeContributorUrl = URL.AUTH_SHOP_ADMIN_URL + '/contributor/remove';
-    static publishPageUrl = URL.AUTH_SHOP_ADMIN_URL + '/publish';
-    static unpublishPageUrl = URL.AUTH_SHOP_ADMIN_URL + '/unpublish';
-    static closePermanentlyUrl = URL.AUTH_SHOP_ADMIN_URL + '/close/permanently';
-    static reactivateShopUrl = URL.AUTH_SHOP_ADMIN_URL + '/reactivate';
+export class AuthStoreAdminUrl {
+    static searchContributorUrl = URL.AUTH_STORE_ADMIN_URL + '/search?query=';
+    static inviteContributorUrl = URL.AUTH_STORE_ADMIN_URL + '/contributor/invite';
+    static editContributorUrl = URL.AUTH_STORE_ADMIN_URL + '/contributor/edit';
+    static removeContributorUrl = URL.AUTH_STORE_ADMIN_URL + '/contributor/remove';
+    static publishStoreUrl = URL.AUTH_STORE_ADMIN_URL + '/publish';
+    static unpublishStoreUrl = URL.AUTH_STORE_ADMIN_URL + '/unpublish';
+    static closePermanentlyUrl = URL.AUTH_STORE_ADMIN_URL + '/close/permanently';
+    static reactivateStoreUrl = URL.AUTH_STORE_ADMIN_URL + '/reactivate';
 }
 export class AuthPaymentMethodAdminUrl {
-    static getPaymentMethodsByShopIdUrl = URL.AUTH_PAYMENT_METHOD_ADMIN_URL + '/';
+    static getPaymentMethodsByStoreIdUrl = URL.AUTH_PAYMENT_METHOD_ADMIN_URL + '/';
     static addPaymentMethodUrl = URL.AUTH_PAYMENT_METHOD_ADMIN_URL + '/';
     static removePaymentMethodUrl = URL.AUTH_PAYMENT_METHOD_ADMIN_URL + '/remove';
     static setDefaultPaymentMethodUrl = URL.AUTH_PAYMENT_METHOD_ADMIN_URL + '/set-default';
 }
 export class AuthDefaultSettingAdminUrl {
-    static getDefaultSettingByShopIdUrl = URL.AUTH_DEFAULT_SETTING_ADMIN_URL;
-    static setDefaultSettingByShopIdUrl = URL.AUTH_DEFAULT_SETTING_ADMIN_URL + '/edit';
+    static getDefaultSettingByStoreIdUrl = URL.AUTH_DEFAULT_SETTING_ADMIN_URL;
+    static setDefaultSettingByStoreIdUrl = URL.AUTH_DEFAULT_SETTING_ADMIN_URL + '/edit';
 }
 export class AuthStatementAdminUrl {
     static getStatementsBetweenDateUrl = URL.AUTH_STATEMENT_CONTRIBUTOR_URL + '/statements-between-dates';
 }
 export class AuthPackageAdminUrl {
-    static getShopPackageUrl = URL.AUTH_PACKAGE_ADMIN_URL + '/';
+    static getStorePackageUrl = URL.AUTH_PACKAGE_ADMIN_URL + '/';
     static changePackageUrl = URL.AUTH_PACKAGE_ADMIN_URL + '/';
     static unsubscribePackageUrl = URL.AUTH_PACKAGE_ADMIN_URL + '/unsubscribe';
 }
@@ -201,10 +201,10 @@ export class AuthOrderingConfigurationContributorUrl {
 // }
 
 // export class AuthReviewContributorUrl {
-//     static getReviewByShopIdUrl = URL.AUTH_REVIEW_CONTRIBUTOR_URL + '/shopid';
-//     static addReplyUrl = URL.AUTH_REVIEW_CONTRIBUTOR_URL + '/shop-reply';
-//     static editReplyUrl = URL.AUTH_REVIEW_CONTRIBUTOR_URL + '/shop-reply/edit';
-//     static removeReplyUrl = URL.AUTH_REVIEW_CONTRIBUTOR_URL + '/shop-reply/remove';
+//     static getReviewByStoreIdUrl = URL.AUTH_REVIEW_CONTRIBUTOR_URL + '/storeid';
+//     static addReplyUrl = URL.AUTH_REVIEW_CONTRIBUTOR_URL + '/store-reply';
+//     static editReplyUrl = URL.AUTH_REVIEW_CONTRIBUTOR_URL + '/store-reply/edit';
+//     static removeReplyUrl = URL.AUTH_REVIEW_CONTRIBUTOR_URL + '/store-reply/remove';
 //     static getRepliesByReviewIdUrl = URL.AUTH_REVIEW_CONTRIBUTOR_URL + '/replies';
 // }
 // export class AuthQuotationContributorUrl {
@@ -227,7 +227,7 @@ export class AuthOrderingConfigurationContributorUrl {
 //     static createRecruitmentUrl = URL.AUTH_RECRUITMENT_CONTRIBUTOR_URL + '/add';
 //     static editRecruitmentUrl = URL.AUTH_RECRUITMENT_CONTRIBUTOR_URL;
 //     static getRecruitmentByIdUrl = URL.AUTH_RECRUITMENT_CONTRIBUTOR_URL;
-//     static getRecruitmentsUrl = URL.AUTH_RECRUITMENT_CONTRIBUTOR_URL + '/shopid';
+//     static getRecruitmentsUrl = URL.AUTH_RECRUITMENT_CONTRIBUTOR_URL + '/storeid';
 //     static extendRecruitmentUrl = URL.AUTH_RECRUITMENT_CONTRIBUTOR_URL + '/extend';
 //     static postRecruitmentUrl = URL.AUTH_RECRUITMENT_CONTRIBUTOR_URL + '/post';
 // }
@@ -236,7 +236,7 @@ export class AuthOrderingConfigurationContributorUrl {
 //     static createPromotionUrl = URL.AUTH_PROMOTION_CONTRIBUTOR_URL;
 //     static editPromotionUrl = URL.AUTH_PROMOTION_CONTRIBUTOR_URL;
 //     static getPromotionUrl = URL.AUTH_PROMOTION_CONTRIBUTOR_URL;
-//     static getPromotionsByShopIdUrl = URL.AUTH_PROMOTION_CONTRIBUTOR_URL + '/shopid';
+//     static getPromotionsByStoreIdUrl = URL.AUTH_PROMOTION_CONTRIBUTOR_URL + '/storeid';
 // }
 // export class AuthImageContributorUrl {
 //     static uploadProfileImagesToItemUrl = URL.AUTH_IMAGE_CONTRIBUTOR_URL + '/upload/profileimage';

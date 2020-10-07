@@ -3,7 +3,7 @@ import { CartItem } from "./cart-item";
 export class Sale{
     _id: Number;
     date: Date;
-    shop: any;
+    store: any;
     commission: Number;
     discount: Array<any>;
     tax: Array<any>;

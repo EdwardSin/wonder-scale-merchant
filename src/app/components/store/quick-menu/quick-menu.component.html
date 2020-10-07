@@ -1,0 +1,74 @@
+<h4 class="ws-title d-inline-block mr-2">Quick Menu</h4>
+<span title="Display menu images to public. (Max 10)" wsTippy class="fa fa-question-circle"></span>
+<div *ngIf="!loading.isRunning() && !allImages?.length" class="alert alert-info font-9">
+    Upload your restaurant menu instantly to start promoting your store.
+</div>
+<div *ngIf="!loading.isRunning() && store?.number_of_all_items < 11" class="alert alert-danger font-9">
+    You are advised to add items into catalogue instead of just adding menu picture to the quick menu.
+    <p class="mb-0 font-weight-bold">Added items can be easily searched by search engine.</p>
+</div>
+<button [disabled]="!editedFlag || isImagesUploading" class="btn btn-controller float-right ml-2" title="Save"
+    (click)="editStore()">
+    <span class="fas fa-save"></span>
+</button>
+<button class="btn btn-controller float-right" onclick="document.getElementById('menu_upload_input').click();" title="Upload">
+    <span class="fas fa-upload"></span>
+</button>
+<ws-uploader [id]="'menu_upload_input'" [max]="10" [input]="allImages" (output)="fileChangeEvent($event)"></ws-uploader>
+<div class="clearfix"></div>
+
+<div class="quick-menu__container mt-2" *ngIf="allImages?.length; else loadingTemplate">
+    <div class="row no-gutters w-100 center">
+        <div class="all-item-container pb-2 ws-drag-list" cdkDropList
+            cdkDropListOrientation="horizontal" (cdkDropListDropped)="drop($event)">
+            <div class="ws-drag-box mx-1" *ngFor="let image of allImages; let i = index" cdkDrag>
+                <div [ngSwitch]="image?.type" class="position-relative">
+                    <ng-container *ngSwitchCase="'url'">
+                        <div class="corner-setting">
+                            <span class="corner-setting-item fas fa-times" (click)="openMenuModal(image)"></span>
+                        </div>
+                        <img class="image-item" [src]="environment.IMAGE_URL + image.url" data-upload='img_upload' alt="item.png" />
+                    </ng-container>
+                    <ng-container *ngSwitchCase="'blob'">
+                        <div *ngIf="isImagesUploading" class="w-100 h-100 position-absolute text-center"
+                            style="z-index:2; top:0; background-color: rgba(0, 0, 0, .3)">
+                            <ws-spinner-dot class="position-absolute d-block" style="top: 50%; left: 50%;" 
+                            [color]="'rgba(0,0,0,.8)'"></ws-spinner-dot>
+                        </div>
+                        <div class="corner-setting">
+                            <span class="corner-setting-item fas fa-times" (click)="removePreUploadImage(image)"></span>
+                        </div>
+                        <img class="image-item" [src]="image.url" data-upload='img_upload' alt="item.png" />
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="w-100 mt-3" *ngIf="allImages?.length">
+        <h4>Preview:</h4>
+        <div class="mt-3">
+            <div class="preview__container mb-3 center px-1" *ngFor="let image of allImages; let i = index">
+                <ng-container [ngSwitch]="image?.type">
+                    <img *ngSwitchCase="'url'" class="preview__image" [src]="environment.IMAGE_URL + image.url" alt="item.png" />
+                    <img *ngSwitchCase="'blob'" class="preview__image" data-upload='img_upload' [src]="image.url" alt="item.png" />
+                </ng-container>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #loadingTemplate>
+    <ng-container *ngIf="loading.isRunning(); else noMenu">
+        <ws-spinner class="text-center d-block w-100" style="padding-top: 30vh"></ws-spinner>
+    </ng-container>
+</ng-template>
+
+<ng-template #noMenu>
+    <ng-container>
+        <div class="text-center">
+            <h6 class="py-5">No uploaded menu.</h6>
+        </div>
+    </ng-container>
+</ng-template>
+<confirm-modal *ngIf="isDeletedConfirmationModalOpened" [(isOpened)]="isDeletedConfirmationModalOpened" id="deleteItemModal" [message]="'Are you sure to remove the images?'"
+   [loading]="removeLoading.isRunning()" [action]="removeUploadedImage.bind(this, selectedMenu)"></confirm-modal>

@@ -16,13 +16,13 @@ export class User {
 	existsPassword?: boolean;
 	blacklist?: Array<string>
 	follow?: {
-		items: Array<string>,
-		shops: Array<string>,
-		jobs: Array<string>
+		item: Array<string>,
+		store: Array<string>,
+		job: Array<string>
 	}
 	like?: {
-		items: Array<string>,
-		shops: Array<string>,
-		jobs: Array<string>
+		item: Array<string>,
+		store: Array<string>,
+		job: Array<string>
 	}
 }

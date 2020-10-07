@@ -1,14 +1,13 @@
 import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { AuthItemContributorService } from '@services/http/auth-shop/contributor/auth-item-contributor.service';
-import { SharedShopService } from '@services/shared/shared-shop.service';
+import { AuthItemContributorService } from '@services/http/auth-store/contributor/auth-item-contributor.service';
+import { SharedStoreService } from '@services/shared/shared-store.service';
 import _ from 'lodash';
 import { takeUntil } from 'rxjs/operators';
 import * as XLSX from 'xlsx';
-import { read, write } from 'xlsx';
+import { read } from 'xlsx';
 import { Subject } from 'rxjs';
 import { WsModalComponent } from '@elements/ws-modal/ws-modal.component';
 import { WsLoading } from '@elements/ws-loading/ws-loading';
-import { SharedItemService } from '@services/shared/shared-item.service';
 import { SharedCategoryService } from '@services/shared/shared-category.service';
 import { WsToastService } from '@elements/ws-toast/ws-toast.service';
 
@@ -31,7 +30,7 @@ export class ImportItemsModalComponent extends WsModalComponent implements OnIni
   isMaxLengthValid: boolean;
   maxWidth: number = 800;
   upload_obj;
-  shop;
+  store;
   category_id;
   invalidHeadersErrors = [];
   emptyFieldsErrors = [];
@@ -51,17 +50,17 @@ export class ImportItemsModalComponent extends WsModalComponent implements OnIni
   constructor(
     private ref: ChangeDetectorRef,
     private authItemContributorService: AuthItemContributorService,
-    private sharedShopService: SharedShopService,
+    private sharedStoreService: SharedStoreService,
     private sharedCategoryService: SharedCategoryService) {
     super();
   }
 
   ngOnInit() {
     super.ngOnInit();
-    this.sharedShopService.shop.pipe(takeUntil(this.ngUnsubscribe))
+    this.sharedStoreService.store.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
         if (result) {
-          this.shop = result;
+          this.store = result;
         }
       })
     this.sharedCategoryService.categories.pipe(takeUntil(this.ngUnsubscribe))
@@ -210,7 +209,7 @@ export class ImportItemsModalComponent extends WsModalComponent implements OnIni
         isPublished: this.isPublished
       }
     })
-    //this.shop.currency
+    //this.store.currency
     this.authItemContributorService.uploadItems({ items: obj, category_id: this.category_id, currency: 'MYR' }).pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
         this.sharedCategoryService.refreshCategories(() => {

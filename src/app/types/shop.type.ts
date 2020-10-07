@@ -1,1 +1,1 @@
-export type ShopType = 'all' | 'restaurant' | 'service' | 'shopping';
+export type StoreType = 'all' | 'restaurant' | 'service' | 'shopping';

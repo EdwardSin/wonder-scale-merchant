@@ -6,7 +6,7 @@ import * as XLSX from 'xlsx';
 import { read, write } from 'xlsx';
 import { WsLoading } from '@elements/ws-loading/ws-loading';
 import { Subject } from 'rxjs';
-import { AuthTableContributorService } from '@services/http/auth-shop/ordering-contributor/auth-table-contributor.service';
+import { AuthTableContributorService } from '@services/http/auth-store/ordering-contributor/auth-table-contributor.service';
 import { SharedTableService } from '@services/shared/shared-table.service';
 
 @Component({
@@ -24,7 +24,6 @@ export class ImportTablesModalComponent extends WsModalComponent implements OnIn
   isMaximumPersonsMaxValid: boolean;
   maxWidth: number = 500;
   upload_obj;
-  shop;
   category_id;
   invalidHeadersErrors = [];
   emptyFieldsErrors = [];

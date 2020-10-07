@@ -21,9 +21,9 @@ export class PricingComponent implements OnInit {
     this.visitorGuard.canActivate().then(result => {
       this.sharedPackageService.selectedPackage.next(this.sharedPackageService.getTrialPackage());
       if (result) {
-        this.router.navigate([], {queryParams: {modal: 'login', returnUrl: '/shops/all?modal=new-shop'}});
+        this.router.navigate([], {queryParams: {modal: 'login', returnUrl: '/stores/all?modal=new-store'}});
       } else {
-        this.router.navigate(['/shops/all'], {queryParams:{modal: 'new-shop'}});
+        this.router.navigate(['/stores/all'], {queryParams:{modal: 'new-store'}});
       }
     })
   }
