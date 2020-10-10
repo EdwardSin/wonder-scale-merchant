@@ -6,7 +6,6 @@ export class URL {
     static AUTH_STATEMENT_CONTRIBUTOR_URL = '/api/auth-stores/statement-admins';
     static AUTH_CATEGORY_CONTRIBUTOR_URL = '/api/auth-stores/category-contributors';
     static AUTH_CARD_CONTRIBUTOR_URL = '/api/auth-stores/card-contributors';
-    static AUTH_RECEIPT_CONTRIBUTOR_URL = '/api/auth-stores/receipt-contributors';
     static AUTH_DEFAULT_SETTING_CONTRIBUTOR_URL = '/api/auth-stores/default-setting-contributors';
     static AUTH_ITEM_CONTRIBUTOR_URL = '/api/auth-stores/item-contributors';
     static AUTH_STORE_CONTRIBUTOR_URL = '/api/auth-stores/store-contributors';
@@ -113,9 +112,6 @@ export class AuthItemContributorUrl {
     static removeDescriptionImageUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/remove/description-image';
     static removeItemTypeImageUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/remove/item-type-image';
 
-}
-export class AuthReceiptContributorUrl {
-    static getAllReceiptsByStoreIdUrl = URL.AUTH_RECEIPT_CONTRIBUTOR_URL;
 }
 export class AuthDefaultSettingContributorUrl {
     static getDefaultItemSettingByStoreIdUrl = URL.AUTH_DEFAULT_SETTING_CONTRIBUTOR_URL + '/item'

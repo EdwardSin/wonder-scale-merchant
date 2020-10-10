@@ -204,7 +204,6 @@
           </span>
         </a>
       </li>
-
       <!-- <li wsNavItem *ngIf="false" class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
         <a [routerLink]="['ecommerce']">
           <span class="ws-main-nav-icon fas fa-th"></span>
@@ -233,23 +232,6 @@
           </li>
         </ul>
       </li> -->
-      <li *ngIf="store?._package?.name !== 'trial_6_months'" wsNavItem class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
-        <a [routerLink]="['billing']">
-          <span class="ws-main-nav-icon fas fa-coins"></span>
-          <span class="ws-main-nav-text">Billing</span>
-        </a>
-        <ul class="ws-main-nav-sub-list">
-          <li>
-            <a [routerLinkActive]="'active'" [routerLink]="['billing', 'history']">History</a>
-          </li>
-          <li>
-            <a [routerLinkActive]="'active'" [routerLink]="['billing', 'payment-methods']">Payment Methods</a>
-          </li>
-          <li>
-            <a [routerLinkActive]="'active'" [routerLink]="['billing', 'subscription']">Subscription</a>
-          </li>
-        </ul>
-      </li>
       <li wsNavItem class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
         <a [routerLink]="['settings']">
           <span class="ws-main-nav-icon fas fa-cog"></span>

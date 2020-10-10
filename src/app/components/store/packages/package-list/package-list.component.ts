@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { SharedPackageService } from '@services/shared/shared-package.service';
 import { AuthPackageAdminService } from '@services/http/auth-store/admin/auth-package-admin.service';
 import * as moment from 'moment';
+import { WsToastService } from '@elements/ws-toast/ws-toast.service';
 
 @Component({
   selector: 'package-list',
