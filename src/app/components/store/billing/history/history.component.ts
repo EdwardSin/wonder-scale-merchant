@@ -19,6 +19,8 @@ export class HistoryComponent implements OnInit {
   receipts: Receipt[] = [];
   loading: WsLoading = new WsLoading;
   receiptClick = [];
+  settledReceipts = [];
+  unpaidReceipts = [];
   @ViewChild('printContent', { static: true }) printContent: ElementRef;
 
   private ngUnsubscribe: Subject<any> = new Subject;
@@ -38,7 +40,8 @@ export class HistoryComponent implements OnInit {
   getHistory() {
     this.authReceiptContributorService.getAllReceiptsByStoreId().pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
-        this.receipts = result.result;
+        this.settledReceipts = result.result.filter(receipt => receipt['status'] === 'settled');
+        this.unpaidReceipts = result.result.filter(receipt => receipt['status'] === 'unpaid');
         this.loading.stop();
       }, error => {
         this.loading.stop();

@@ -9,50 +9,77 @@
         <th>Actions</th>
     </thead>
     <tbody>
-        <tr>
-            
+        <tr *ngFor="let receipt of unpaidReceipts; let i = index">
+            <td>
+                {{ receipt.createdAt | date: 'dd/MM/yyyy' }}
+            </td>
+            <td>{{receipt._id}}</td>
+            <td>
+                {{receipt.duedateAt}}
+            </td>
+            <td>
+                {{receipt.status}}
+            </td>
+            <td>
+                <span class="font-weight-normal d-block">{{receipt.amount}}</span>
+            </td>
+            <td class="text-right">
+                <a href="javascript:void(0)">Pay now</a>
+            </td>
         </tr>
     </tbody>
 </table>
-<p class="font-italic my-4 text-muted font-8">There are no payments required for this account.</p>
+<div *ngIf="loading.isRunning(); else noDuePaymentsTemplate">
+    <ws-spinner class="text-center d-block w-100" style="padding: 5vh 0" [width]="30" [height]="30"></ws-spinner>
+</div>
+
+<ng-template #noDuePaymentsTemplate>
+    <p *ngIf="!unpaidReceipts.length && !loading.isRunning()" class="font-italic my-4 text-muted font-8">There are no payments required for this account.</p>
+</ng-template>
 
 <h4 class="ws-title">Order and invoice history</h4>
 <div>
     <table class="table table-hover font-9">
         <thead>
-            <th>Receipt ID</th>
+            <th style="width: 200px">Receipt ID</th>
             <th>Description</th>
             <th class="text-center">{{'Amount(' + currency + ')'}}</th>
+            <th>Updated At</th>
             <th class="text-right">Action</th>
         </thead>
         <tbody>
-            <tr *ngFor="let receipt of receipts; let i = index" (click)="receiptClick[i] = !receiptClick[i]">
-                <td class="text-center">{{receipt._id}}</td>
+            <tr *ngFor="let receipt of settledReceipts; let i = index" (click)="receiptClick[i] = !receiptClick[i]">
+                <td>{{receipt._id}}</td>
                 <td class="pr-0">
                     <a class="d-block font-weight-normal">Receipt
-                        <span>({{ receipt.createdAt | date: 'dd/MM/yyyy' }})</span>
+                        <span>({{ receipt.description }})</span>
                     </a>
-                    <span class="border-top d-block mt-2 pt-2 pl-2" *ngIf="receipt.items?.length && receiptClick[i]">
+                    <!-- <span class="border-top d-block mt-2 pt-2 pl-2" *ngIf="receipt.items?.length && receiptClick[i]">
                         <span class="d-block font-8" *ngFor="let item of receipt.items">
                             {{ item.description }}
                         </span>
-                    </span>
+                    </span> -->
                 </td>
                 <td class="text-center pl-0">
-                    <span class="font-weight-normal d-block">{{receipt.total}}</span>
-                    <span class="border-top d-block mt-2 pt-2" *ngIf="receipt.items?.length &&receiptClick[i]">
+                    <span class="font-weight-normal d-block">{{receipt.amount}}</span>
+                    <!-- <span class="border-top d-block mt-2 pt-2" *ngIf="receipt.items?.length &&receiptClick[i]">
                         <span class="d-block font-8" *ngFor="let item of receipt.items">
                             {{ item.amount }}
                         </span>
-                    </span>
+                    </span> -->
                 </td>
                 <td>
-                    <a (click)="reprint(receipt)">Reprint</a>
+                    <a class="d-block font-weight-normal">
+                        {{ receipt.createdAt | date: 'dd/MM/yyyy' }}
+                    </a>
+                </td>
+                <td class="text-right">
+                    <a (click)="reprint(receipt)"><span class="fas fa-print"></span></a>
                 </td>
             </tr>
         </tbody>
     </table>
-    <div *ngIf="receipts.length; else loadingTemplate"></div>
+    <div *ngIf="settledReceipts.length; else loadingTemplate"></div>
 </div>
 <div hidden #printContent>
     <div style="width:fit-content; padding: 1.5rem; margin-top: 40%; margin-left:auto; margin-right:auto;">
