@@ -131,7 +131,7 @@
           <span class="ws-main-nav-icon fas fa-clipboard-list" style="margin-right: .65rem"></span>
           <span class="ws-main-nav-text">Ordering</span>
         </a>
-        <ul class="ws-main-nav-sub-list">
+        <ul *ngIf="store.isOrderingOn" class="ws-main-nav-sub-list">
           <li class="ws-main-nav-sub-list__title">
             <a [routerLink]="['ordering']">Ordering</a>
           </li>

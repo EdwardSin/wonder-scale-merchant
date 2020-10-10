@@ -180,6 +180,7 @@ export class AuthSaleContributorUrl {
     static getSalesBetweenDateUrl = URL.AUTH_SALE_CONTRIBUTOR_URL + '/sales-between-dates';
 }
 export class AuthOrderingConfigurationContributorUrl {
+    static startOrderingServiceUrl = URL.AUTH_ORDERING_CONFIGURATION_CONTRIBUTOR_URL + '/';
     static getOrderingConfigurationUrl = URL.AUTH_ORDERING_CONFIGURATION_CONTRIBUTOR_URL + '/configuration';
     static renewMerchantCodeUrl = URL.AUTH_ORDERING_CONFIGURATION_CONTRIBUTOR_URL + '/renew-merchant-code';
     static addPageRoleUrl = URL.AUTH_ORDERING_CONFIGURATION_CONTRIBUTOR_URL + '/add-page-role';

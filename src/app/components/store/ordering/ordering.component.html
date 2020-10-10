@@ -1,1 +1,18 @@
-<router-outlet></router-outlet>
+<div class="col-lg-6 center" *ngIf="!store?.isOrderingOn">
+    <h4 class="h6">Ordering System</h4>
+    <div class="text-center my-4">
+        <img style="max-width: 800px" src="assets/images/png/ordering-system.png" alt="Ordering System"/>
+    </div>
+    <div class="text-center mx-3">
+        <div class="mb-3">
+            <p class="mb-0 font-9">This feature is main for restaurant.</p>
+            <p class="font-9 mb-0">Digitalize your restaurant, your customer can order and pay immediately.</p>
+        </div>
+        <button class="btn-controller btn btn-sm" [disabled]="startLoading.isRunning()" (click)="startOrderingService()">
+            <ws-spinner class="mr-2" *ngIf="startLoading.isRunning()" [width]="15" [height]="15" [borderWidth]="3"></ws-spinner>Start Now</button>
+    </div>
+</div>
+
+<div *ngIf="store?.isOrderingOn">
+    <router-outlet></router-outlet>
+</div>
