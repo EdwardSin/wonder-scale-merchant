@@ -97,12 +97,7 @@ const routes: Routes = [{
       data: { title: 'packages', breadcrumb: 'Packages' },
       loadChildren: () => import('./modules/store/packages/packages.module').then(m => m.PackagesModule)
     },
-    {
-      path: 'billing',
-      canActivate: [StoreGuard],
-      data: { title: 'billing', breadcrumb: 'Billing' },
-      loadChildren: () => import('./modules/store/billing/billing.module').then(m => m.BillingModule)
-    },
+    
     {
       path: 'settings',
       canActivate: [StoreGuard],
