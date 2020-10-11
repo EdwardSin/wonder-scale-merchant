@@ -1,6 +1,5 @@
 import { OpeningInfoType } from "../types/opening-info.type";
 import { OpeningInfo } from "./opening-info";
-import { Package } from './package';
 
 export class Store {
     _id?: string;
@@ -49,7 +48,6 @@ export class Store {
     categoryList?: Array<string>;
     trackExpiration: string;
     number_of_all_items: number;
-    selectedPackage: Package;
      constructor(){
          this.location = {
              type: 'Point',

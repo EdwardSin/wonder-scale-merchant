@@ -24,8 +24,6 @@ import { Subject } from 'rxjs';
 import { takeUntil, finalize } from 'rxjs/operators';
 import { SharedNavbarService } from '@services/shared/shared-nav-bar.service';
 import { ScreenService } from '@services/general/screen.service';
-import { AuthPackageAdminService } from '@services/http/auth-store/admin/auth-package-admin.service';
-import { SharedPackageService } from '@services/shared/shared-package.service';
 
 @Component({
   selector: 'app-main',
@@ -68,7 +66,6 @@ export class MainComponent implements OnInit {
 
   btnSelectedItemList = [];
   unreplied_quotations = [];
-  isServiceExpired: boolean = true;
 
   private ngUnsubscribe: Subject<any> = new Subject;
   constructor(private router: Router, private route: ActivatedRoute,
@@ -80,8 +77,6 @@ export class MainComponent implements OnInit {
     private sharedUserService: SharedUserService,
     private routePartsService: RoutePartsService,
     private storeAuthorizationService: StoreAuthorizationService,
-    private authPackageAdminService: AuthPackageAdminService,
-    private sharedPackageService: SharedPackageService,
     private activeRoute: ActivatedRoute,
     private screenService: ScreenService,
     private sharedNavbarService: SharedNavbarService,
@@ -137,10 +132,6 @@ export class MainComponent implements OnInit {
           this.refreshContributors();
           // this.getUnrepliedRequests();
           this.refreshCategories();
-          this.sharedPackageService.subscribingPackage.next(result._package);
-        if (result._package) {
-          this.isServiceExpired = new Date(result._package.expiryDate) < new Date;
-        }
         }
       })
     this.sharedCategoryService.numberOfAllItems.pipe(takeUntil(this.ngUnsubscribe))

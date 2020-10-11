@@ -15,7 +15,6 @@ import { Subject } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
 import * as _ from 'lodash';
 import { SharedStoreService } from '@services/shared/shared-store.service';
-import { SharedPackageService } from '@services/shared/shared-package.service';
 
 @Component({
   selector: 'create-store',
@@ -25,12 +24,11 @@ import { SharedPackageService } from '@services/shared/shared-package.service';
 export class CreateStoreComponent implements OnInit {
   storeServiceType: 'physicalStore' | 'onlineStore' = 'physicalStore';
   storeType: 'restaurant' | 'shopping' | 'services';
-  phase: Phase<number> = new Phase(0, 8);
+  phase: Phase<number> = new Phase(0, 6);
   mapController: MapController;
   loading: WsLoading = new WsLoading;
   store: Store;
   selectedPackage: any;
-  canTrial: boolean;
   timetable: Timetable = new Timetable;
   currency = {
     currencies: Constants.currencyFullnames,
@@ -52,7 +50,6 @@ export class CreateStoreComponent implements OnInit {
     private gpsService: WsGpsService,
     private router: Router,
     private route: ActivatedRoute,
-    private sharedPackageService: SharedPackageService,
     private sharedStoreService: SharedStoreService,
     private authStoreUserService: AuthStoreUserService,
     private http: HttpClient) {
@@ -66,42 +63,31 @@ export class CreateStoreComponent implements OnInit {
     this.createOpeningInfoForm();
     this.createTermAndConditionForm();
     this.getTermAndCondition();
-    this.sharedPackageService.selectedPackage.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
-      if (result) {
-        this.selectedPackage = result;
-        this.phase.next();
-      }
-    });
-    this.sharedStoreService.activeStoreList.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
-      this.canTrial = result.length == 0;
-      if (!this.canTrial && this.sharedPackageService.selectedPackage.getValue() && this.sharedPackageService.selectedPackage.getValue().type == 'trial_6_months') {
-        this.phase.setStep(0);
-      }
-    })
   }
   next() {
+    // if (this.phase.isStep()) {
+    //   if (this.storeServiceType != undefined) {
+    //     this.phase.next();
+    //   }
+    //   else {
+    //     WsToastService.toastSubject.next({ content: 'Please choose a store type.', type: 'danger' })
+    //   }
+    // }
+    // else 
     if (this.phase.isStep(0)) {
-      if (this.storeServiceType != undefined) {
-        this.phase.next();
-      }
-      else {
-        WsToastService.toastSubject.next({ content: 'Please choose  a store type.', type: 'danger' })
-      }
-    }
-    else if (this.phase.isStep(1)) {
       if (this.storeType != undefined) {
         this.phase.next();
       }
       else {
-        WsToastService.toastSubject.next({ content: 'Please choose  a store service type.', type: 'danger' })
+        WsToastService.toastSubject.next({ content: 'Please choose a store service type.', type: 'danger' })
       }
     }
-    else if (this.phase.isStep(2)) {
+    else if (this.phase.isStep(1)) {
       if (this.basicFormGroup.valid) {
         this.phase.next();
       }
     }
-    else if (this.phase.isStep(3)) {
+    else if (this.phase.isStep(2)) {
       if (!this.addressFormGroup.value.isShowLocation || this.addressFormGroup.valid) {
         this.phase.next();
       }
@@ -109,19 +95,15 @@ export class CreateStoreComponent implements OnInit {
         WsToastService.toastSubject.next({ content: 'Please complete the form.', type: 'danger' });
       }
     }
-    else if (this.phase.isStep(4)) {
+    else if (this.phase.isStep(3)) {
       if (this.openingInfoFormGroup.valid) {
         this.phase.next();
       }
       else {
         WsToastService.toastSubject.next({ content: 'Please complete the form.', type: 'danger' });
       }
-    } else if (this.phase.isStep(5)) {
-      if (this.selectedPackage.type == 'trial_6_months') {
-        this.addStore(true);
-      } else {
-        this.phase.next();
-      }
+    } else if (this.phase.isStep(4)) {
+      this.addStore(true);
     }
   }
   createBasicForm() {
@@ -211,34 +193,6 @@ export class CreateStoreComponent implements OnInit {
           if (skipPaymentGateway) {
             this.phase.next();
           }
-          _.delay(() => {
-            this.navigateToStore();
-          }, 3000);
-        }, (err) => {
-          WsToastService.toastSubject.next({ content: err.error.message, type: 'danger' });
-        })
-    }
-  }
-  addStoreWithSubscription(callbackResult) {
-    let store = this.createNewStore();
-    let obj = {
-      ...store,
-      selectedPackage: this.selectedPackage,
-      paymentMethod: {
-        firstName: callbackResult.firstName,
-        lastName: callbackResult.lastName,
-        email: callbackResult.email,
-        phone: callbackResult.phone,
-        countryName: callbackResult.countryName,
-        paymentMethodNonce: callbackResult.paymentMethodNonce
-      }
-    }
-    this.loading.start();
-    if (this.termAndConfitionsFormGroup.valid) {
-      this.authStoreUserService.addStoreWithSubscription(obj).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.loading.stop()))
-        .subscribe(result => {
-          this.store = <Store>result['data'];
-          this.phase.next();
           _.delay(() => {
             this.navigateToStore();
           }, 3000);

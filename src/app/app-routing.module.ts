@@ -5,7 +5,6 @@ import { MainComponent } from '@components/store/main/main.component';
 import { AuthGuard } from './guards/auth.guard';
 import { StoreResolver } from '@components/resolvers/store-resolver.service';
 import { StoreGuard } from './guards/store.guard';
-import { PackageGuard } from './guards/package.guard';
 
 
 const routes: Routes = [{
@@ -14,9 +13,6 @@ const routes: Routes = [{
 }, {
   path: 'stores',
   loadChildren: () => import('./modules/store-list/store-list.module').then(m => m.StoreListModule)
-}, {
-  path: 'pricing',
-  loadChildren: () => import('./modules/pricing/pricing.module').then(m => m.PricingModule)
 }, {
   path: 'contact-us',
   loadChildren: () => import('./modules/contact-us/contact-us.module').then(m => m.ContactUsModule)
@@ -33,25 +29,25 @@ const routes: Routes = [{
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     {
       path: 'dashboard',
-      canActivate: [StoreGuard, PackageGuard],
+      canActivate: [StoreGuard],
       data: { title: 'dashboard', breadcrumb: 'Dashboard' },
       loadChildren: () => import('./modules/store/dashboard/dashboard.module').then(m => m.DashboardModule)
     },
     {
       path: 'quick-menu',
-      canActivate: [StoreGuard, PackageGuard],
+      canActivate: [StoreGuard],
       data: { title: 'quick-menu', breadcrumb: 'Quick Menu' },
       loadChildren: () => import('./modules/store/quick-menu/quick-menu.module').then(m => m.QuickMenuModule)
     },
     {
       path: 'catalogue',
-      canActivate: [StoreGuard, PackageGuard],
+      canActivate: [StoreGuard],
       data: { title: 'cat', breadcrumb: 'Catalogue' },
       loadChildren: () => import('./modules/store/catalogue/catalogue.module').then(m => m.CatalogueModule)
     },
     {
       path: 'information',
-      canActivate: [StoreGuard, PackageGuard],
+      canActivate: [StoreGuard],
       data: { title: 'information', breadcrumb: 'Information' },
       loadChildren: () => import('./modules/store/information/information.module').then(m => m.InformationModule)
     },
@@ -92,13 +88,6 @@ const routes: Routes = [{
     //   { path: 'billing-history', component: EBillingHistoryComponent, data: { title: 'billing-history', breadcrumb: 'Billing History' } }]
     // },
     {
-      path: 'packages',
-      canActivate: [StoreGuard],
-      data: { title: 'packages', breadcrumb: 'Packages' },
-      loadChildren: () => import('./modules/store/packages/packages.module').then(m => m.PackagesModule)
-    },
-    
-    {
       path: 'settings',
       canActivate: [StoreGuard],
       data: { title: 'settings', breadcrumb: 'Settings' },
@@ -106,7 +95,7 @@ const routes: Routes = [{
     },
     {
       path: 'qrcode',
-      canActivate: [StoreGuard, PackageGuard],
+      canActivate: [StoreGuard],
       data: { title: 'qrcode', breadcrumb: 'Qr Code' },
       loadChildren: () => import('./modules/store/qrcode/qrcode.module').then(m => m.QrcodeModule)
     }

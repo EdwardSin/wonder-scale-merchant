@@ -46,10 +46,6 @@ export class AuthStoreUserService {
     let source = environment.SOURCE || 'website';
     return this.http.post(AuthStoreUserUrl.addStoreUrl, {...store, source});
   }
-  addStoreWithSubscription(store) {
-    let source = environment.SOURCE || 'website';
-    return this.http.post(AuthStoreUserUrl.addStoreWithSubscriptionUrl, {...store, source});
-  }
   getContributorRole(store, user) {
     return store.contributors.find(contributor => contributor.user == user._id);
   }
