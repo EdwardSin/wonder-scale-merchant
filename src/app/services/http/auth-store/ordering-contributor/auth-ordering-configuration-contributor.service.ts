@@ -9,6 +9,9 @@ import { AccessTokenService } from '../access-token.service';
 export class AuthOrderingConfigurationContributorService {
 
   constructor(private http: HttpClient, private accessTokenService: AccessTokenService) { }
+  startOrderingService() {
+    return this.http.post(AuthOrderingConfigurationContributorUrl.startOrderingServiceUrl, {}, this.accessTokenService.getAccessToken());
+  }
   getOrderingConfiguration() {
     return this.http.get(AuthOrderingConfigurationContributorUrl.getOrderingConfigurationUrl, this.accessTokenService.getAccessToken());
   }

@@ -109,12 +109,6 @@ const routes: Routes = [{
       canActivate: [StoreGuard, PackageGuard],
       data: { title: 'qrcode', breadcrumb: 'Qr Code' },
       loadChildren: () => import('./modules/store/qrcode/qrcode.module').then(m => m.QrcodeModule)
-    },
-    {
-      path: 'ordering',
-      canActivate: [StoreGuard, PackageGuard],
-      data: { title: 'ordering', breadcrumb: 'Ordering'},
-      loadChildren: () => import('./modules/store/ordering/ordering.module').then(m => m.OrderingModule)
     }
   ]
 },

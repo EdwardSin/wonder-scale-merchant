@@ -26,6 +26,7 @@ export class Store {
         coordinates: [number, number]
     };
     isPublished: boolean;
+    isOrderingOn?: boolean;
     status?: {
         status: StatusType,
         expiryDate?: Date
