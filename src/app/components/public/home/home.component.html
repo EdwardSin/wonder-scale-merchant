@@ -1,122 +1,142 @@
-<div class="background-container"></div>
-
-<div class="container position-relative">
-  <div class="background row no-gutters">
-    <div class="col-lg-7 background__texture order-12 order-lg-1 text-center text-lg-left">
-      <h1 class="background__title mb-4">Merchant | Wonder Scale</h1>
-      <p class="mb-4 font-weight-bold" style="font-size: 1.4rem">A platform for merchants to manage and advertise your store.</p>
-      <p style="color: #888; font-size: 1rem; margin-bottom: 2rem">- We promise to provide the best services to our customers.</p>
-      <div>
-        <button class="btn btn-start" (click)="navigateToJoinUs()">Join us now!</button>
+<div class="background-container">
+  <div class="container position-relative">
+    <div class="background">
+      <div class="background__texture text-center">
+        <div>
+          <h1 class="background__title mb-4">Merchant | Wonder Scale</h1>
+          <p style="font-size: 1.4rem;">A platform for merchants to manage and advertise your store.</p>
+          <p style="color: #888; font-size: 1rem; margin-bottom: 2rem">We promise to provide the best services to our customers.</p>
+          <div>
+            <button class="btn btn-start" (click)="navigateToJoinUs()">Join us now!</button>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="col-lg-5 order-1 order-lg-12 mb-3">
-      <img class="background__image" src="/assets/images/png/home.png" alt="home icon" />
-    </div>
   </div>
 </div>
-
-<div class="text-center py-5 background-grey">
-  <h4 class="mb-4 font-weight-bold">We are offering <span class="text-danger">6-month trial</span> package now!</h4>
-  <button class="btn btn-start" (click)="navigateToJoinUs()">Start now</button>
-</div>
-
-<div class="py-5 text-center">
-  <div class="row no-gutters container center">
-    <img class="col-lg-5" src="/assets/images/png/qrcode-step-1.png" alt="qrcode 1"/>
-    <div class="col-lg-7" style="justify-content: center; display: flex; flex-direction: column; text-align: center">
-      <p class="font-weight-bold">Place QR code in your store.</p>
-    </div>
-  </div>
-  <div class="row no-gutters container center">
-    <img class="col-lg-5 order-1 order-lg-12" src="/assets/images/png/qrcode-step-2.png" alt="qrcode 1"/>
-    <div class="col-lg-7 order-12 order-lg-1" style="justify-content: center; display: flex; flex-direction: column; text-align: center">
-      <p class="font-weight-bold">Customer can scan through to your store.</p>
-    </div>
-  </div>
-  <div class="row no-gutters container center">
-    <img class="col-lg-5" src="/assets/images/png/qrcode-step-3.png" alt="qrcode 1"/>
-    <div class="col-lg-7" style="justify-content: center; display: flex; flex-direction: column; text-align: center">
-      <p class="font-weight-bold">Customer can follow your store instantly.</p>
-    </div>
-  </div>
-  <h4 class="mb-4 font-weight-bold"><span class="text-danger">Scan QR code</span> to reach your store!</h4>
-  <button class="btn btn-start" (click)="navigateToJoinUs()">Start now</button>
-</div>
-
-<div class="text-center py-5 background-grey">
-  <div class="container">
+<div class="container">
+  <div class="text-center py-5 px-3">
+    <h4>Here's Why You Should Start Listing</h4>
     <div class="row no-gutters">
-      <div class="col-lg-3">
-        <img class="mb-4" style="width: 100px" src="/assets/images/png/excel-upload.png" alt="excel upload" />
-        <h6 class="font-weight-bold">Upload items through excel</h6>
-        <p class="font-9">Easily to upload items</p>
+      <div class="start-listing-container col-lg-4 offset-lg-2">
+        <div class="start-listing">
+          <div class="start-listing-icon-container">
+            <span class="fas fa-bullhorn start-listing-icon" style="transform: rotate(-20deg);"></span>
+          </div>
+          <p class="start-listing-label">Advertise Your Business</p>
+          <p class="start-listing-text">Make more people know your business with low cost.</p>
+        </div>
       </div>
-      <div class="offset-lg-3 col-lg-3">
-        <img class="mb-4" style="width: 100px" src="/assets/images/png/new.png" alt="new" />
-        <h6 class="font-weight-bold">Mark items as "New"</h6>
-        <p class="font-9">Highlight the new items and notify your customers</p>
-      </div>
-    </div>
-    <div class="row no-gutters">
-      <div class="offset-lg-3 col-lg-3">
-        <img class="mb-4" style="width: 100px" src="/assets/images/png/catalogue.png" alt="catalogue" />
-        <h6 class="font-weight-bold">Catalogue your items</h6>
-        <p class="font-9">Easily to mange your items</p>
-      </div>
-      <div class="offset-lg-3 col-lg-3">
-        <img class="mb-4" style="width: 100px" src="/assets/images/png/promotion.png" alt="promotion" />
-        <h6 class="font-weight-bold">Mark items as "Discount"</h6>
-        <p class="font-9">Provide a discount item to your customer to increase the sales</p>
+      <div class="start-listing-container col-lg-4">
+        <div class="start-listing">
+          <div class="start-listing-icon-container">
+            <span class="fas fa-desktop start-listing-icon"></span>
+            <span class="fas fa-globe start-listing-sub-icon"></span>
+          </div>
+          <p class="start-listing-label">Digitalize Your Business</p>
+          <p class="start-listing-text">Combine technology with your business regardless E-Commerce or Physical store.</p>
+        </div>
       </div>
     </div>
   </div>
 </div>
-
-<div class="text-center mb-5">
-  <img style="max-width: 1000px" class="w-100" src="/assets/images/png/viewing.png" alt="viewing"/>
-  <h4 class="mb-4 font-weight-bold"><span class="text-danger">View the tracks</span> of your customers!</h4>
-  <button class="btn btn-start" (click)="navigateToJoinUs()">Start now</button>
-</div>
-
-<div class="text-center pt-4 pb-2 background-grey">
-  <div class="btn-type btn-restaurant d-inline-block pt-3 pb-1 mb-3 px-1 mr-3" [class.btn-selected]="selectedType == 'restaurant'" (click)="selectType('restaurant')">Restaurant</div>
-  <div class="btn-type btn-shopping d-inline-block pt-3 pb-1 mb-3 px-1 ml-3" [class.btn-selected]="selectedType == 'shopping'" (click)="selectType('shopping')">Shopping</div>
-</div>
-
-
-<div *ngIf="selectedType == 'restaurant'">
-  <div class="row no-gutters container center pb-5">
-    <img class="col-lg-5" src="/assets/images/png/quick-menu.png" alt="quick menu"/>
-    <div class="col-lg-7" style="justify-content: center; display: flex; flex-direction: column; text-align: center">
-      <h4 class="font-weight-bold"><span class="text-danger">Digitalize</span> your menu instantly!</h4>
-      <p>No hassle on updating your menu anymore</p>
+<div class="subbackground">
+  <div class="background__texture text-center">
+    <div>
+      <h1 class="mb-4 text-white h3 font-weight-light">Advertise Your Business</h1>
+      <p class="text-white mb-0" style="font-size: 1rem;">Add your products and your store information, publish on the website.</p>
+      <p class="text-white" style="font-size: 1rem; margin-bottom: 2rem">Customers can view your products in digitalized way.</p>
       <div>
-        <button class="btn btn-start" (click)="navigateToJoinUs()">Start now</button>
+        <button class="btn btn-start-revert" (click)="navigateToJoinUs()">Start now!</button>
       </div>
     </div>
   </div>
-  
-  <div class="text-center background-grey pb-5 px-2">
-    <img style="max-width: 800px" class="py-5 w-100" src="/assets/images/png/ordering-system.png" alt="ordering-system"/>
-    <h4 class="font-weight-bold">Ordering System (Optional)</h4>
-    <p>We take orders & settle payment, you prepare food</p>
-    <button class="btn btn-start" (click)="navigateToJoinUs()">Start now</button>
-  </div>
 </div>
 
-<div *ngIf="selectedType == 'shopping'">
-  <div class="text-center pb-5">
-    <img style="max-width: 800px; filter: grayscale(1)" class="py-5" src="/assets/images/png/e-commerce.png" alt="e-commerce"/>
-    <h4 class="mb-4 font-weight-bold">E-commerce (Coming soon)</h4>
-    <button disabled class="btn btn-start" (click)="navigateToJoinUs()">Start now</button>
+<div class="container">
+  <div style="padding: 3% 0">
+    <div class="text-center">
+      <h1 class="mb-4 h3 font-weight-light">Digitalize Your Business</h1>
+      <div class="row no-gutters">
+        <div class="col-lg-2 p-4 offset-lg-1">
+          <div class="digitalize" [class.active]="selectedTab == 'qrcode'" (click)="selectedTab = 'qrcode'">
+            <span class="fas fa-qrcode digitalize-icon"></span>
+            <p class="digitalize-text" style="line-height: 2rem">QR Code</p>
+          </div>
+        </div>
+        <div class="col-lg-2 p-4">
+          <div class="digitalize" [class.active]="selectedTab == 'productManagement'" (click)="selectedTab = 'productManagement'">
+            <span class="fas fa-th-large digitalize-icon"></span>
+            <p class="digitalize-text">Product Management</p>
+          </div>
+        </div>
+        <div class="col-lg-2 p-4">
+          <div class="digitalize" [class.active]="selectedTab == 'displayingInformation'" (click)="selectedTab = 'displayingInformation'">
+            <span class="fas fa-info-circle digitalize-icon"></span>
+            <p class="digitalize-text">Displaying Information</p>
+          </div>
+        </div>
+        <div class="col-lg-2 p-4">
+          <div class="digitalize" [class.active]="selectedTab == 'mainCatalogue'" (click)="selectedTab = 'mainCatalogue'">
+            <span class="fas fa-book-open digitalize-icon"></span>
+            <p class="digitalize-text">Menu / Catalogue</p>
+          </div>
+        </div>
+        <div class="col-lg-2 p-4">
+          <div class="digitalize" [class.active]="selectedTab == 'customerTacking'" (click)="selectedTab = 'customerTacking'">
+            <span class="fas fa-chart-line digitalize-icon"></span>
+            <p class="digitalize-text">Customer Tracking</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="tab-container">
+      <ng-container [ngSwitch]="selectedTab" class="center">
+        <div *ngSwitchCase="'qrcode'" [@openClose]="'open'">
+          <div class="mb-3 tab">
+            <span class="fas fa-qrcode tab-icon mr-3"></span>
+            <span class="tab-label">QR Code</span>
+          </div>
+            <p class="tab-text">A QR code is provided for every store to make user easily access to the store.</p>
+            <button class="btn btn-start" (click)="navigateToJoinUs()">Start now!</button>
+        </div>
+        <div *ngSwitchCase="'productManagement'" [@openClose]="'open'">
+          <div class="mb-3 tab">
+            <span class="fas fa-th-large tab-icon mr-3"></span>
+            <span class="tab-label">Product Management</span>
+          </div>
+          <p class="tab-text">Users can easily upload the products and display to the public.</p>
+          <button class="btn btn-start" (click)="navigateToJoinUs()">Start now!</button>
+        </div>
+        <div *ngSwitchCase="'displayingInformation'" [@openClose]="'open'">
+          <div class="mb-3 tab">
+            <span class="fas fa-info-circle tab-icon mr-3"></span>
+            <span class="tab-label">Displaying Information</span>
+          </div>
+          <p class="tab-text">Display the basic information of your store.<br/>
+            It can make your customer easily find you and view your products.</p>
+            <button class="btn btn-start" (click)="navigateToJoinUs()">Start now!</button>
+        </div>
+        <div *ngSwitchCase="'mainCatalogue'" [@openClose]="'open'">
+          <div class="mb-3 tab">
+            <span class="fas fa-book-open tab-icon mr-3"></span>
+            <span class="tab-label">Main / Catalogue</span>
+          </div>
+          <p class="tab-text">Can view as food menu or product catalogue to display for customers.<br/>
+            Quickly update the menu without any hassle.</p>
+            <button class="btn btn-start" (click)="navigateToJoinUs()">Start now!</button>
+        </div>
+        <div *ngSwitchCase="'customerTacking'" [@openClose]="'open'">
+          <div class="mb-3 tab">
+            <span class="fas fa-chart-line tab-icon mr-3"></span>
+            <span class="tab-label">Customer Tracking</span>
+          </div>
+          <p class="tab-text">View the number daily customers who viewing your page.</p>
+          <button class="btn btn-start" (click)="navigateToJoinUs()">Start now!</button>
+        </div>
+      </ng-container>
+    </div>
   </div>
-</div>
-
-<div class="text-center py-5 px-3 background-greyer">
-  <h4 class="font-weight-bold">Try Wonder Scale <span class="text-danger">free for 6 months</span></h4>
-  <p>With all features unlocked. No credit card required.</p>
-  <button class="btn btn-start" (click)="navigateToJoinUs()">Get Started</button>
 </div>
 
 <footer class="pt-3">
@@ -140,7 +160,7 @@
       <div class="col-md-8 no-gutters row text-center text-lg-left" style="display: flex; align-items: center">
             <span class="col-lg-auto" style="display: flex; align-items: center; justify-content: center">
               <img style="width: 25px" class="mr-2" src="/assets/images/svg/icon.svg" alt="icon"/>
-              <span class="font-weight-bold">Wonder Scale</span>
+              <span class="logo">Wonder Scale</span>
             </span>
             <div class="col-lg mt-lg-0 mt-3">
               <span class="col-lg">
