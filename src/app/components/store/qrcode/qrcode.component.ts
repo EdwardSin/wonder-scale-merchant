@@ -39,7 +39,6 @@ export class QrcodeComponent implements OnInit {
   isInactivateQRcodeOpened: boolean;
   isQRcodeOpened: boolean;
   isInactiveExisted: boolean;
-  remainingCount: number;
   isClear: boolean = sessionStorage.getItem('qrcodeTipsClear') == 'true';
   purpose: string = '';
   downloadURL: string = '';
@@ -153,7 +152,6 @@ export class QrcodeComponent implements OnInit {
     this.authTrackContributor.getTracks().pipe(takeUntil(this.ngUnsubscribe))
     .subscribe(result => {
       this.tracks = result['result'];
-      this.remainingCount = result['count'];
       this.ref.detectChanges();
       this.isInactiveExisted = this.tracks.find(x => x.status == 'inactive');
       this.qrcodes.forEach(qrcode => {

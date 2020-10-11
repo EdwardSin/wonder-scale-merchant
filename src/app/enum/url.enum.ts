@@ -51,7 +51,6 @@ export class AuthStoreUserUrl {
     static getNotActiveStoresByUserIdUrl = URL.AUTH_STORE_USER_URL + '/contributor/not-active';
     static getInvitationStoresByUserIdUrl = URL.AUTH_STORE_USER_URL + '/contributor/pending';
     static addStoreUrl = URL.AUTH_STORE_USER_URL + '/add';
-    static addStoreWithSubscriptionUrl = URL.AUTH_STORE_USER_URL + '/add-with-subscription';
 }
 export class AuthStoreContributorUrl {
     static getContributorsUrl = URL.AUTH_STORE_CONTRIBUTOR_URL + '/contributors';

@@ -83,7 +83,7 @@
                     background-color: rgba(0, 0, 0, 0.01);
                 }
                 &.selected {
-                    box-shadow: inset 4px 0 0 map-get($ws-color, secondary);
+                    box-shadow: inset 4px 0 0 #7f0000;
                     background-color: rgba(0, 0, 0, 0.04);
                     .ws-main-nav-sub-list {
                         display: block;
@@ -107,7 +107,7 @@
                     height: 5px;
                 }
                 &::-webkit-scrollbar-thumb {
-                    background-color: map-get($ws-color, secondary);
+                    background-color: #7f0000;
                 }
                 &>li a {
                     display: inline-block;
