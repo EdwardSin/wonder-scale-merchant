@@ -24,13 +24,6 @@ export class SocialMediaComponent implements OnInit {
   @Input() store;
   isMediaMax;
   error = '';
-
-  fbmedia;
-  instamedia;
-  twittermedia;
-  wechatmedia;
-  weibomedia;
-  whatsappmedia;
   editmedia;
 
   private ngUnsubscribe: Subject<any> = new Subject();
@@ -53,14 +46,14 @@ export class SocialMediaComponent implements OnInit {
   ngOnInit() {
   }
 
-  editMedia(media, form, index) {
-    var account = form.value[media];
+  editMedia(type, form, index) {
+    var account = form.value[type];
     var obj = {
-      type: media,
+      type: type,
       value: account,
       index: index
     };
-    if (validateMedia.bind(this)(account)) {
+    if (validateMedia.bind(this)(type, account)) {
       this.authStoreContributorService
         .editMedia(obj)
         .pipe(takeUntil(this.ngUnsubscribe))
@@ -73,13 +66,17 @@ export class SocialMediaComponent implements OnInit {
         });
     }
 
-    function validateMedia(account) {
-      if (!account || (account && account.trim() === '')) {
+    function validateMedia(type, value) {
+      if (!value || (value && value.trim() === '')) {
         this.error = 'Account is required!';
         return false;
       }
-      else if (account.length > 30) {
+      else if (value.length > 30) {
         this.error = 'Account is too long!';
+        return false;
+      }
+      else if (this.store.media.find(media => {return media.type === type && media.value === value})) {
+        this.error = 'Account is existing!';
         return false;
       }
       return true;
@@ -94,35 +91,35 @@ export class SocialMediaComponent implements OnInit {
     $('#' + name + 'input').focus();
   }
 
-  addMedia(media, account) {
-    if (validateMedia.bind(this)(account)) {
+  addMedia(type, form) {
+    let value = form.value.mediavalue;
+    if (validateMedia.bind(this)(type, value)) {
       this.authStoreContributorService
-        .addMedia({ type: media, value: account })
+        .addMedia({ type, value })
         .pipe(takeUntil(this.ngUnsubscribe))
         .subscribe(result => {
           if (!this.store.media) this.store.media = [];
-          this.store.media.push({ type: media, value: account });
+          this.store.media.push({ type, value });
           this.selectedMedia = undefined;
-          this.fbmedia = '';
-          this.instamedia = '';
-          this.twittermedia = '';
-          this.wechatmedia = '';
-          this.weibomedia = '';
-          this.whatsappmedia = '';
           this.editmedia = '';
+          this.error = '';
           this.isMediaMax = this.isMediaMaximum();
           WsToastService.toastSubject.next({ content: "Media is updated!", type: 'success' });
         }, (err) => {
           WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
         });
     }
-    function validateMedia(account) {
-      if (!account || (account && account.trim() === '')) {
+    function validateMedia(type, value) {
+      if (!value || (value && value.trim() === '')) {
         this.error = 'Account is required!';
         return false;
       }
-      else if (account.length > 30) {
+      else if (value.length > 30) {
         this.error = 'Account is too long!';
+        return false;
+      }
+      else if (this.store.media.find(media => {return media.type === type && media.value === value})) {
+        this.error = 'Account is existing!';
         return false;
       }
       return true;
@@ -135,8 +132,8 @@ export class SocialMediaComponent implements OnInit {
       .subscribe(result => {
         _.remove(this.store.media, (x) => x.type == type && x.value == value);
         this.isMediaMax = this.isMediaMaximum();
+        this.error = '';
         WsToastService.toastSubject.next({ content: "Media is removed successfully!", type: 'success' });
-
       }, (err) => {
         WsToastService.toastSubject.next({ content: "Media is failed to remove!", type: 'danger' });
       });
