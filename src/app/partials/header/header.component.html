@@ -1,7 +1,15 @@
 <header>
-    <div class="container">
-        <div class="logo" [routerLink]="['/']">
-            <span style="vertical-align: middle">Wonder Scale</span>
+    <div class="row no-gutters px-3">
+        <div class="float-left col row no-gutters">
+            <a class="logo" [routerLink]="['/']">Wonder Scale</a>
+            <ul class="nav d-none d-lg-flex align-items-center">
+                <li class="nav-item">
+                    <a target="_blank" [href]="environment.URL" class="nav-link">Home</a>
+                </li>
+                <li *ngIf="user" class="nav-item">
+                    <a [routerLink]="['/stores']" class="nav-link">All Stores</a>
+                </li>
+            </ul>
         </div>
         <div class="user-container float-right">
             <div *ngIf="!user" class="user__login-container" style="font-size: .9rem; line-height: 70px; vertical-align: middle">
@@ -27,18 +35,18 @@
                 </div>
             </div>
         </div>
-        <!-- <div class="btn-group mr-1 d-none d-md-inline-block float-right" mdbDropdown>
-            <div mdbDropdownToggle class="li-container dropdown-toggle">
-                <span class="fas fa-question-circle mr-1" style="color: #888; font-size: 1rem; vertical-align: middle"></span>
-                <span class="fas fa-chevron-down" style="color: #888; font-size: .6rem; vertical-align: sub"></span>
-            </div>
-            <div class="dropdown-menu dropdown-primary font-9" style="margin-top: 20px; right:0; left: inherit">
-                <a class="dropdown-item" *ngIf="false" href="#">Help</a>
-                <div class="divider dropdown-divider"></div>
-                <a class="dropdown-item" [routerLink]="['/policy']">Policy</a>
-                <a class="dropdown-item" [routerLink]="['/contact-us']">Contact Us</a>
-                <a class="dropdown-item" routerLink="about-us">About Us</a>
-            </div>
-        </div> -->
     </div>
+    <!-- <div class="btn-group mr-1 d-none d-md-inline-block float-right" mdbDropdown>
+        <div mdbDropdownToggle class="li-container dropdown-toggle">
+            <span class="fas fa-question-circle mr-1" style="color: #888; font-size: 1rem; vertical-align: middle"></span>
+            <span class="fas fa-chevron-down" style="color: #888; font-size: .6rem; vertical-align: sub"></span>
+        </div>
+        <div class="dropdown-menu dropdown-primary font-9" style="margin-top: 20px; right:0; left: inherit">
+            <a class="dropdown-item" *ngIf="false" href="#">Help</a>
+            <div class="divider dropdown-divider"></div>
+            <a class="dropdown-item" [routerLink]="['/policy']">Policy</a>
+            <a class="dropdown-item" [routerLink]="['/contact-us']">Contact Us</a>
+            <a class="dropdown-item" routerLink="about-us">About Us</a>
+        </div>
+    </div> -->
 </header>

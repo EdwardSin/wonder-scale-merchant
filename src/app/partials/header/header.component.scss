@@ -4,18 +4,15 @@ header {
     height: 70px;
     background-color: #fff;
     box-shadow: 0 3px 5px rgba(0, 0, 0, .16);
-    padding: 0 0 0 .5rem;
     font-family: 'Segoe UI';
 
     .logo {
-        display: inline-block;
         font-family: 'Bauhaus 93';
         color: #7F0000;
-        font-weight: normal;
         border-radius: .5rem;
-        cursor: pointer;
-        line-height: 70px;
         font-size: 1.5rem;
+        display: flex;
+        align-items: center;
 
         &:active,
         &:focus{
@@ -48,6 +45,31 @@ header {
                 color: map-get($ws-color, secondary);
                 background-color: #fff;
             }
+        }
+    }
+
+    .nav {
+        padding-left: 2rem;
+      
+        .nav-item {
+          text-align: center;
+          padding: 0 1rem;
+    
+          .nav-link{
+            padding: .5rem 1rem;
+            border-radius: 20px;
+            transition: all ease .15s;
+            color: #7f0000;
+    
+            &:hover {
+              background-color: #f7f7f7;
+            }
+          }
+        }
+    
+        .nav-link {
+          padding-top: 0;
+          padding-bottom: 0;
         }
     }
 
@@ -101,6 +123,7 @@ header {
             transition: background-color ease .5s;
             border-radius: 20px;
             cursor: pointer;
+            background-color: #f7f7f7;
 
             .user-container__profile {
                 width: 25px;
@@ -115,7 +138,7 @@ header {
             }
 
             &:hover {
-                background-color: #f7f7f7;
+                background-color: #ddd;
             }
         }
 
