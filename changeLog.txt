@@ -7,6 +7,7 @@
 - 2020-10-16                                -
 ---------------------------------------------
 .: WSM: Task: Add social medias (WSM-203)
+.: WSM: Task: Change the flow from home to store page (WSM-200)
 
 ---------------------------------------------
 - 2020-10-11                                -

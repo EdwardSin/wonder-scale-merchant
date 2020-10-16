@@ -9,6 +9,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ScreenService } from '@services/general/screen.service';
 import { VisitorGuard } from 'src/app/guards/visitor.guard';
+import { environment } from '@environments/environment';
 
 @Component({
   selector: 'app-header',
@@ -17,6 +18,7 @@ import { VisitorGuard } from 'src/app/guards/visitor.guard';
 })
 export class HeaderComponent implements OnInit {
   user;
+  environment = environment;
   isMobileSize;
   private ngUnsubscribe: Subject<any> = new Subject;
   constructor(private route: ActivatedRoute,
