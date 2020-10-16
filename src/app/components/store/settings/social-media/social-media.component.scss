@@ -20,29 +20,13 @@
 }
 .ws-icon {
 	width:20px;
-	height:20px;
 	display:inline-block;
-	margin-right: 1rem;
 	margin-bottom: 0;
-	filter: drop-shadow(0 0 2px #888);
-	&#fb{
-		background: url(/assets/images/png/media-sprite-20.png) 0 0;
-	}
-	&#instagram{
-		background: url(/assets/images/png/media-sprite-20.png) -20px 0;
-	}
-	&#twitter{
-		background: url(/assets/images/png/media-sprite-20.png) -40px 0;
-	}
-	&#wechat{
-		background: url(/assets/images/png/media-sprite-20.png) -60px 0;
-	}
-	&#weibo{
-		background: url(/assets/images/png/media-sprite-20.png) -80px 0;
-	}
-	&#whatsapp{
-		background: url(/assets/images/png/media-sprite-20.png) -100px 0;
-	}
+	margin-right: .75rem;
+	color: transparent;
+	-webkit-text-fill-color: transparent;
+	-webkit-text-stroke-width: .5px;
+	-webkit-text-stroke-color: #222;
 }
 
 p{
