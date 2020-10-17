@@ -41,12 +41,6 @@ const routes: Routes = [{
       loadChildren: () => import('./modules/store/tracking/tracking.module').then(m => m.TrackingModule)
     },
     {
-      path: 'dashboard',
-      canActivate: [StoreGuard],
-      data: { title: 'dashboard', breadcrumb: 'Dashboard' },
-      loadChildren: () => import('./modules/store/dashboard/dashboard.module').then(m => m.DashboardModule)
-    },
-    {
       path: 'quick-menu',
       canActivate: [StoreGuard],
       data: { title: 'quick-menu', breadcrumb: 'Quick Menu' },
