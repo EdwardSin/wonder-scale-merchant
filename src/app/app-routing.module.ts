@@ -35,10 +35,10 @@ const routes: Routes = [{
       component: HomeControlComponent
     },
     {
-      path: 'dashboard',
+      path: 'tracking',
       canActivate: [StoreGuard],
-      data: { title: 'dashboard', breadcrumb: 'Dashboard' },
-      loadChildren: () => import('./modules/store/dashboard/dashboard.module').then(m => m.DashboardModule)
+      data: { title: 'tracking', breadcrumb: 'Tracking' },
+      loadChildren: () => import('./modules/store/tracking/tracking.module').then(m => m.TrackingModule)
     },
     {
       path: 'quick-menu',
@@ -99,12 +99,6 @@ const routes: Routes = [{
       canActivate: [StoreGuard],
       data: { title: 'settings', breadcrumb: 'Settings' },
       loadChildren: () => import('./modules/store/settings/settings.module').then(m => m.SettingsModule)
-    },
-    {
-      path: 'qrcode',
-      canActivate: [StoreGuard],
-      data: { title: 'qrcode', breadcrumb: 'Qr Code' },
-      loadChildren: () => import('./modules/store/qrcode/qrcode.module').then(m => m.QrcodeModule)
     }
   ]
 },

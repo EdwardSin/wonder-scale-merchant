@@ -429,7 +429,7 @@ export class AboutComponent implements OnInit {
         this.store.status.expiryDate = date;
         this.sharedStoreService.store.next(this.store);
         this.isConfirmCloseStoreModalOpened = false;
-        this.router.navigate(['/stores/' + this.store.username + '/dashboard']);
+        this.router.navigate(['/stores/' + this.store.username + '']);
       }, err => {
         WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
       });
@@ -443,7 +443,7 @@ export class AboutComponent implements OnInit {
         this.store.status.expiryDate = null;
         this.sharedStoreService.store.next(this.store);
         this.isConfirmReactivateModalOpened = false;
-        this.router.navigate(['/stores/' + this.store.username + '/dashboard']);
+        this.router.navigate(['/stores/' + this.store.username + '']);
       });
   }
   quitStore() {

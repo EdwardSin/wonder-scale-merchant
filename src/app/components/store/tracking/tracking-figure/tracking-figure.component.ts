@@ -8,27 +8,35 @@ import { Subject, timer } from 'rxjs';
 import { takeUntil, delay, switchMap } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss']
+  selector: 'app-tracking-figure',
+  templateUrl: './tracking-figure.component.html',
+  styleUrls: ['./tracking-figure.component.scss']
 })
-export class DashboardComponent implements OnInit {
+export class TrackingFigureComponent implements OnInit {
   @ViewChild('numberOfCustomer', { static: true }) numberOfCustomer: ElementRef;
   public lineGraphType: string = 'line';
   lineChartColors: Color[] = [
     {
-      borderColor: '#3366cc',
-      backgroundColor: 'rgba(132, 163, 225, .5)',
+      borderColor: '#7f0000',
+      backgroundColor: 'rgba(127, 0, 0, .5)',
     },
   ];
-  lineChartOptions = {scales: {
-    yAxes: [{
+  lineChartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      yAxes: [{
         ticks: {
-            beginAtZero: true,
-            callback: function (value) { if (Number.isInteger(value)) { return value; } }
+          beginAtZero: true,
+          callback: function (value) { if (Number.isInteger(value)) { return value; } }
         }
-    }]
-  }}
+      }]
+    },
+    tooltips: {
+        mode: 'index',
+        axis: 'y'
+    }
+  }
 
   hours: string[];
   numberOfCustomersToday: number[] = [];
@@ -48,6 +56,9 @@ export class DashboardComponent implements OnInit {
   totalNumberOfCustomerToday: number = 0;
   tracks = [{ name: 'Number of Total Customers' }];
   colorSchema = [{
+    borderColor: '#7f0000',
+    backgroundColor: 'rgba(127, 0, 0, .5)',
+  }, {
     borderColor: '#b380ff',
     backgroundColor: 'rgba(179, 128, 255, .5)'
   }, {
@@ -71,7 +82,14 @@ export class DashboardComponent implements OnInit {
   todayTrackSubscription;
   dateBetweenTrackSubscription;
   REFRESH_TRACK_INTERVAL = 30 * 60 * 1000;
-  charts = [];
+  historyChart = {
+    data: [],
+    labels: [],
+    legend: [],
+    options: this.lineChartOptions,
+    chartType: this.lineGraphType,
+    colors: this.colorSchema
+  }
   private ngUnsubscribe: Subject<any> = new Subject;
   constructor(private authTrackContributorService: AuthTrackContributorService) {
     this.getTargetsInSession();
@@ -108,10 +126,13 @@ export class DashboardComponent implements OnInit {
       takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
         if (result['result']) {
-          this.charts = [];
-          result['result'].forEach((track, index) => {
-            this.renderChart(track, index);
-          })
+          this.historyChart.data = result['result'].map(item => {
+            return {
+              data: item.value.map(_value => _value.value.length),
+              label: item.name
+            };
+          });
+          this.historyChart.labels = this.getDateRange(this.fromDate, this.toDate);
         }
         this.loading.stop();
       }, () => {
@@ -132,27 +153,6 @@ export class DashboardComponent implements OnInit {
         this.todayTrackLoading.stop();
         this.updatedDate = new Date;
       })
-  }
-  renderChart(track, i) {
-    this.charts.push({
-      title: track.name,
-      data: track.value.map(_value => _value.value.length),
-      labels: this.getDateRange(this.fromDate, this.toDate),
-      isUnavailable: false,
-      isLoading: false,
-      legend: false,
-      chartType: 'line',
-      scales: {
-        yAxes: [{
-            ticks: {
-                beginAtZero: true
-            }
-        }]
-      },
-      colors: [
-        this.colorSchema[i % this.colorSchema.length]
-      ]
-    });
   }
   getHourRange() {
     let toHour = this.startHour - 1;

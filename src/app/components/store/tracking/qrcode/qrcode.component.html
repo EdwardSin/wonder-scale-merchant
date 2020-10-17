@@ -2,9 +2,6 @@
 <button class="btn btn-controller float-right mb-2" (click)="isNewQRcodeOpened = true">
     <span class="fas fa-plus"></span>
 </button>
-<a [routerLink]="['../../../dashboard']" class="btn btn-controller float-right mr-2">
-    <span class="fas fa-chart-line"></span>
-</a>
 <span class="clearfix"></span>
 <div *ngIf="!isClear" class="alert alert-info mb-2">
     <label class="font-weight-bold">Tips:</label>
@@ -15,7 +12,6 @@
         <li class="font-9">Place QR-code at the obvious place to easily catch your customers' eyes.</li>
         <li class="font-9">Try to scan the QR-code after printing out.</li>
         <li class="font-9">Copy QR-code or URL to your website or any social media to start tracking the number of customer visiting your store.</li>
-        <li class="font-9">Result can be viewed in dashboard.</li>
         <!-- <ol>Share the QR code to be referral in order to earn credits.</ol> -->
     </ol>
 </div>
