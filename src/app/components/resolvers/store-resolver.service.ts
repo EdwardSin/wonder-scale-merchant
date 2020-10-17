@@ -11,9 +11,9 @@ export class StoreResolver implements Resolve<Store>{
 
     }
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Store> | Promise<Store> | Store {
-        let username = route.params.username || this.sharedStoreService.store_username;
+        let username = route.params.username || this.sharedStoreService.storeUsername;
         if (route.params.username) {
-            this.sharedStoreService.store_username = route.params.username;
+            this.sharedStoreService.storeUsername = route.params.username;
         }
         return this.authStoreUserService.getAuthenticatedStoreByStoreUsername(username);
     }

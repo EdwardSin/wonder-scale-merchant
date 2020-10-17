@@ -54,9 +54,9 @@ export class QrcodeComponent implements OnInit {
     private authTrackContributor: AuthTrackContributorService) {
     this.loading.start();
     let store_name = this.sharedStoreService.store_name;
-    let store_username = this.sharedStoreService.store_username;
+    let storeUsername = this.sharedStoreService.storeUsername;
     DocumentHelper.setWindowTitleWithWonderScale('QR Code - ' + store_name);
-    this.authStoreUserService.getAuthenticatedStoreByStoreUsername(store_username).pipe(takeUntil(this.ngUnsubscribe))
+    this.authStoreUserService.getAuthenticatedStoreByStoreUsername(storeUsername).pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
         if (result) {
           this.store = result;

@@ -31,9 +31,9 @@ export class QuickMenuComponent implements OnInit {
   store: Store;
   private ngUnsubscribe: Subject<any> = new Subject;
   constructor(private authStoreUserService: AuthStoreUserService, private authStoreContributorService: AuthStoreContributorService, private sharedStoreService: SharedStoreService) { 
-    let store_username = this.sharedStoreService.store_username;
+    let storeUsername = this.sharedStoreService.storeUsername;
     this.loading.start();
-    this.authStoreUserService.getAuthenticatedStoreByStoreUsername(store_username).pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+    this.authStoreUserService.getAuthenticatedStoreByStoreUsername(storeUsername).pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       if (result) {
         DocumentHelper.setWindowTitleWithWonderScale('Quick Menu - ' + result.name);
         this.store = result;

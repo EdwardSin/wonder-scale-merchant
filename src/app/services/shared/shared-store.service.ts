@@ -9,7 +9,7 @@ export class SharedStoreService {
   store: BehaviorSubject<any> = new BehaviorSubject<any>(null);
   store_id: string = '';
   store_name: string = '';
-  store_username: string = '';
+  storeUsername: string = '';
   currency: string = '';
 
   activeStoreList: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
