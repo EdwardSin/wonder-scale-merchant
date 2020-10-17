@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { QrcodeComponent } from '@components/store/qrcode/qrcode.component';
+import { QrcodeComponent } from '@components/store/tracking/qrcode/qrcode.component';
 
 
 const routes: Routes = [
