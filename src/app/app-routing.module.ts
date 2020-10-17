@@ -5,6 +5,7 @@ import { MainComponent } from '@components/store/main/main.component';
 import { AuthGuard } from './guards/auth.guard';
 import { StoreResolver } from '@components/resolvers/store-resolver.service';
 import { StoreGuard } from './guards/store.guard';
+import { HomeControlComponent } from '@components/store/home-control/home-control.component';
 
 
 const routes: Routes = [{
@@ -26,7 +27,13 @@ const routes: Routes = [{
   resolve: { store: StoreResolver },
   data: { title: 'username', breadcrumb: '{{username}}' },
   children: [
-    { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+    { path: '', redirectTo: 'home', pathMatch: 'full' },
+    {
+      path: 'home',
+      canActivate: [StoreGuard],
+      data: { title: 'home', breadcrumb: 'Home' },
+      component: HomeControlComponent
+    },
     {
       path: 'dashboard',
       canActivate: [StoreGuard],

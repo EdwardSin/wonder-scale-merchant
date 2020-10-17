@@ -1,0 +1,46 @@
+<div class="d-flex justify-content-center align-items-center">
+    <div>
+        <h3 class="my-4 text-center">A quick setup guide for your business</h3>
+        <ul class="list-unstyled mb-0 setup-list">
+            <li class="row no-gutters setup-list-item">
+                <span class="setup-list-item-icon fas fa-tag"></span>
+                <div class="mr-auto">
+                    <div class="row no-gutters mb-1 d-flex align-items-center">
+                        <p class="setup-list-item-label">First Product</p>
+                        <span class="setup-list-item-checked fas fa-check-circle" [class.text-success]="store.number_of_all_items > 0"></span>
+                    </div>
+                    <p class="setup-list-item-text">Add your first product</p>
+                </div>
+                <button class="btn btn-setup ml-5" [routerLink]="['/stores', storeUsername, 'catalogue', 'all']" [queryParams]="{modal: 'modify-item'}">Add Product</button>
+            </li>
+            <li class="row no-gutters setup-list-item">
+                <span class="setup-list-item-icon fas fa-store"></span>
+                <div class="mr-auto">
+                    <div class="row no-gutters mb-1 d-flex align-items-center">
+                        <p class="setup-list-item-label">Store Information</p>
+                        <span class="setup-list-item-checked fas fa-check-circle" [class.text-success]="isStoreDetailsCompleted()"></span>
+                    </div>
+                    <p class="setup-list-item-text">Complete your store information</p>
+                    <ul class="setup-sublist font-9">
+                        <li class="setup-sublist-item" [class.text-dark]="store.profileImage">Profile Image</li>
+                        <li class="setup-sublist-item" [class.text-dark]="store.description">Store Introduction</li>
+                        <li class="setup-sublist-item" [class.text-dark]="isContactDetailsCompleted()">Contact Details</li>
+                        <li class="setup-sublist-item" [class.text-dark]="isLocationDetailsCompleted()">Location Details</li>
+                        <li class="setup-sublist-item" [class.text-dark]="store.openingInfoType">Operation Hours</li>
+                    </ul>
+                </div>
+                <button class="btn btn-setup ml-5" [routerLink]="['/stores', storeUsername, 'settings', 'about']" [queryParams]="{modal: 'modify-item'}">Change Details</button>
+            </li>
+            <li class="row no-gutters setup-list-item">
+                <span class="setup-list-item-icon fas fa-qrcode"></span>
+                <div class="mr-auto">
+                    <div class="row no-gutters mb-1 d-flex align-items-center">
+                        <p class="setup-list-item-label">QR code</p>
+                    </div>
+                    <p class="setup-list-item-text">Place your QR code in obvious place</p>
+                </div>
+                <button class="btn btn-setup ml-5" [routerLink]="['/stores', storeUsername, 'qrcode']" [queryParams]="{modal: 'modify-item'}">View QR code</button>
+            </li>
+        </ul>
+    </div>
+</div>

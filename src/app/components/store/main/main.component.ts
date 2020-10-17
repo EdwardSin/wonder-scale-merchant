@@ -34,7 +34,7 @@ import { ScreenService } from '@services/general/screen.service';
 export class MainComponent implements OnInit {
 
   isNavOpen: boolean;
-  store_username: string;
+  storeUsername: string;
   store;
   user;
   numberOfAllItems: number = 0;
@@ -85,7 +85,7 @@ export class MainComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.store_username = this.route.snapshot.params['username'];
+    this.storeUsername = this.route.snapshot.params['username'];
     this.isNavOpen = !ScreenHelper.isMobileSize();
     this.router.events.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(event => {
@@ -120,7 +120,7 @@ export class MainComponent implements OnInit {
           this.store = result;
           this.sharedStoreService.store_id = this.store._id;
           this.sharedStoreService.store_name = this.store.name;
-          this.sharedStoreService.store_username = this.store.username;
+          this.sharedStoreService.storeUsername = this.store.username;
           this.numberOfAllItems = this.store.number_of_all_items;
           this.numberOfDiscountItems = this.store.number_of_discount_items;
           this.numberOfNewItems = this.store.number_of_new_items;
@@ -128,7 +128,7 @@ export class MainComponent implements OnInit {
           this.numberOfPublishedItems = this.store.number_of_published_items;
           this.numberOfUnpublishedItems = this.store.number_of_unpublished_items;
           this.numberOfUncategorizedItems = this.store.number_of_uncategorized_items;
-          this.store_username = this.store.username;
+          this.storeUsername = this.store.username;
           this.refreshContributors();
           // this.getUnrepliedRequests();
           this.refreshCategories();

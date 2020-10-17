@@ -3,6 +3,17 @@
   <ws-left-nav [isNavOpen]="isNavOpen" (isNavOpenChange)="isNavOpenChange($event)" [isMobileSize]="isMobileSize">
     <ul class="ws-main-nav-list">
       <li wsNavItem class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
+        <a [routerLink]="['home']">
+          <span class="ws-main-nav-icon fas fa-home"></span>
+          <span class="ws-main-nav-text">Home</span>
+        </a>
+        <ul class="ws-main-nav-sub-list">
+          <li class="ws-main-nav-sub-list__title">
+            <a [routerLink]="['home']">Home</a>
+          </li>
+        </ul>
+      </li>
+      <li wsNavItem class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
         <a [routerLink]="['dashboard']">
           <span class="ws-main-nav-icon fas fa-chart-line"></span>
           <span class="ws-main-nav-text">Dashboard</span>

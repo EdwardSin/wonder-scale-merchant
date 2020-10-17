@@ -23,6 +23,7 @@ import { MainContainerComponent } from '@components/store/main/main-container/ma
 import { WsLeftNavComponent } from '@elements/ws-left-nav/ws-left-nav.component';
 import { BreadcrumbComponent } from '@elements/breadcrumb/breadcrumb.component';
 import { SharedModule } from './modules/public/shared/shared.module';
+import { HomeControlComponent } from './components/store/home-control/home-control.component';
 
 const DEFAULT_SWIPER_CONFIG: SwiperConfigInterface = {
   direction: 'horizontal',
@@ -62,7 +63,8 @@ export function jwtOptionsFactory(platformId) {
 
     // Elements
     WsLeftNavComponent,
-    BreadcrumbComponent
+    BreadcrumbComponent,
+    HomeControlComponent
   ],
   imports: [
     BrowserModule,

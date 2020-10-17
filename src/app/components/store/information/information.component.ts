@@ -38,8 +38,8 @@ export class InformationComponent implements OnInit {
   }
   getStore() {
     this.loading.start();
-    let store_username = this.sharedStoreService.store_username;
-    this.authStoreUserService.getAuthenticatedStoreByStoreUsername(store_username).pipe(takeUntil(this.ngUnsubscribe)).subscribe(res => {
+    let storeUsername = this.sharedStoreService.storeUsername;
+    this.authStoreUserService.getAuthenticatedStoreByStoreUsername(storeUsername).pipe(takeUntil(this.ngUnsubscribe)).subscribe(res => {
       if (res) {
         DocumentHelper.setWindowTitleWithWonderScale('Information Banner - ' + res.name);
         this.store = res;
