@@ -7,7 +7,7 @@ export class QRCodeBuilder {
         let code = url;
         return new Promise((resolve) => {
             (<any>jQuery(target)).qrcode({
-                width: option['width'] || 196, height: option['height'] || 196, foreground: "#000",
+                width: option['width'] || 196, height: option['height'] || 196, foreground: option['color'] || "#000",
                 correctLevel: 0,
                 text: code,
                 src: 'assets/images/png/icon-with-profile-image-borderless.png',
@@ -23,7 +23,7 @@ export class QRCodeBuilder {
     public static createPromotionQrCode(target, url, option = {}) {
         let code = url;
         (<any>jQuery(target)).qrcode({
-            width: option['width'] || 196, height: option['height'] || 196, foreground: "#000",
+            width: option['width'] || 196, height: option['height'] || 196, foreground: option['color'] || "#000",
             correctLevel: 0,
             text: code,
             src: 'assets/images/svg/icon-with-profile-image-borderless.svg'

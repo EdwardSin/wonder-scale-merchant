@@ -55,6 +55,7 @@ export class AuthStoreUserUrl {
 export class AuthStoreContributorUrl {
     static getContributorsUrl = URL.AUTH_STORE_CONTRIBUTOR_URL + '/contributors';
     static addBannerUrl = URL.AUTH_STORE_CONTRIBUTOR_URL + '/add/banner-image';
+    static editStoreByIdUrl = URL.AUTH_STORE_CONTRIBUTOR_URL + '/';
     static editProfileUrl = URL.AUTH_STORE_CONTRIBUTOR_URL + '/edit/profile-image';
     static removeProfileUrl = URL.AUTH_STORE_CONTRIBUTOR_URL + '/remove/profile-image';
     static editGeneralUrl = URL.AUTH_STORE_CONTRIBUTOR_URL + '/edit/general';

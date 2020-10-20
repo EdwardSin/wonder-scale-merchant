@@ -1,0 +1,451 @@
+<h4 class="ws-title">Store Page</h4>
+<div class="p-4">
+    <div class="mb-3 d-flex align-items-center justify-content-between">
+        <h5>Preview:</h5>
+        <div class="btn-group" role="group">
+            <button type="button" class="btn btn-controller" style="width: 50px; font-size: 1.2rem" (click)="selectedPreview = 'website'" [class.selected]="selectedPreview == 'website'"><span class="fas fa-desktop"></span></button>
+            <button type="button" class="btn btn-controller" style="width: 50px; font-size: 1.2rem" (click)="selectedPreview = 'mobile'" [class.selected]="selectedPreview == 'mobile'"><span class="fas fa-mobile-alt"></span></button>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div *ngIf="selectedPreview == 'website'" class="merchant-preview">
+        <div *ngIf="isChanged" class="merchant-preview__save p-2">
+            <p class="d-inline-block mb-0">Save to confirm changes</p>
+            <button class="btn btn-sm btn-controller" style="opacity: 1; width: 80px" [disabled]="isSaveStoreLoading.isRunning()" (click)="onConfirmStoreSaved($event)">
+                <ws-spinner *ngIf="isSaveStoreLoading?.isRunning()" class="align-center" [width]="15" [height]="15" [borderWidth]="2" [spinnerColor]="'#888'"></ws-spinner>
+                <span *ngIf="!isSaveStoreLoading.isRunning()"><span class="fas fa-save mr-2 d-inline-block"></span>Save</span>
+            </button>
+        </div>
+        <div class="clearfix"></div>
+        <merchant-page
+        [store]="store"
+        [isEditing]="true"
+        [isAuthenticated]="false"
+        [editingBanners]="editingBanners"
+        (onEditBannersClicked)="onEditBannersClicked($event)"
+        (onEditProfileImageClicked)="onEditProfileImageClicked($event)"
+        (onEditOpeningHoursClicked)="onEditOpeningHoursClicked($event)"
+        (onEditDescriptionClicked)="onEditDescriptionClicked($event)"
+        (onEditStoreTypeClicked)="onEditStoreTypeClicked($event)"
+        (onEditAddressClicked)="onEditAddressClicked($event)"
+        (onEditTagsClicked)="onEditTagsClicked($event)"
+        (onEditPhoneClicked)="onEditPhoneClicked($event)"
+        (onEditEmailClicked)="onEditEmailClicked($event)"
+        (onEditWebsiteClicked)="onEditWebsiteClicked($event)"
+        (onEditFacebookClicked)="onEditFacebookClicked($event)"
+        (onEditInstagramClicked)="onEditInstagramClicked($event)"
+        (onEditTwitterClicked)="onEditTwitterClicked($event)"
+        (onEditWhatsappClicked)="onEditWhatsappClicked($event)"
+        (onEditMessengerClicked)="onEditMessengerClicked($event)"
+        (onEditYoutubeClicked)="onEditYoutubeClicked($event)"
+        (onEditSnapchatClicked)="onEditSnapchatClicked($event)"
+        (onEditTelegramClicked)="onEditTelegramClicked($event)"
+        (onEditWeiboClicked)="onEditWeiboClicked($event)"
+        (onEditWechatClicked)="onEditWechatClicked($event)"
+        (onAddMediaClicked)="onAddMediaClicked($event)"
+        ></merchant-page>
+    </div>
+    <div *ngIf="selectedPreview == 'mobile'"></div>
+</div>
+
+<ws-modal *ngIf="isBannersOpened" [isCloseIconDisplayed]="false" [(isOpened)]="isBannersOpened" [maxWidth]="600">
+    <div class="pt-3" modalBody>
+        <div class="ws-circle-button">
+            <button class="btn btn-controller small" title="Upload"
+                onclick="document.getElementById('information_upload_input').click();">
+                <span class="fas fa-upload"></span>
+            </button>
+            <ws-uploader [id]="'information_upload_input'" [max]="10"
+                        [input]="editingAllBanners"
+                        (output)="fileBannerChangeEvent($event)"></ws-uploader>
+        </div>
+        <div class="row no-gutters w-100 center">
+            <div *ngIf="editingAllBanners?.length; else noImage" class="all-item-container pb-2" cdkDropList (cdkDropListDropped)="dropBanner($event)">
+                <div class="ws-drag-box mx-1 " *ngFor="let image of editingAllBanners; let i = index" cdkDrag>
+                    <div [ngSwitch]="image?.type" class="position-relative">
+                        <ng-container *ngSwitchCase="'url'">
+                            <div class="corner-setting">
+                                <span class="corner-setting-item fas fa-times" (click)="removeBanner(image)"></span>
+                            </div>
+                            <img class="image-item" [src]="environment.IMAGE_URL + image.url" data-upload='img_upload' alt="item.png" />
+                        </ng-container>
+                        <ng-container *ngSwitchCase="'blob'">
+                            <div *ngIf="isImagesUploading" class="w-100 h-100 position-absolute text-center"
+                                style="z-index:2; top:0; background-color: rgba(0, 0, 0, .3)">
+                                <ws-spinner-dot class="position-absolute d-block" style="top: 50%; left: 50%;" 
+                                [color]="'rgba(0,0,0,.8)'"></ws-spinner-dot>
+                            </div>
+                            <div class="corner-setting">
+                                <span class="corner-setting-item fas fa-times"
+                                (click)="removeBanner(image)"></span>
+                            </div>
+                            <img class="image-item" [src]="image.url" data-upload='img_upload' alt="item.png" />
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+
+            <ng-template #noImage>
+                <div class="text-center col" style="width: 100%; height: 175px; padding-top: 3rem;">
+                    <p class="ws-no-title">Upload Banner</p>
+                    <span class="text-muted mb-2 d-inline-block">Information, Promotion, Job Vacancy, etc.</span>
+                </div>
+            </ng-template>
+        </div>
+        <div>
+            <button class="btn btn-sm btn-controller float-right" (click)="isBannersOpened = false">Close</button>
+            <button [disabled]="isEdingLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditBannersClicked()">
+                <ws-spinner *ngIf="isEdingLoading?.isRunning()" [width]="15" [height]="15" [spinnerColor]="'#fff'" [borderWidth]="3" class="mr-2"></ws-spinner>Confirm</button>
+        </div>
+    </div>
+</ws-modal>
+<ws-modal *ngIf="isProfileImageOpened" [isCloseIconDisplayed]="false" [(isOpened)]="isProfileImageOpened" [maxWidth]="400">
+    <div class="pt-3" modalBody>
+        <div class="mb-3">
+            <div class='preview-image__container center'>
+                <span *ngIf="previewImage" class="preview-image__remove-icon fas fa-times" (click)="removePreviewImage()"></span>
+                <div *ngIf="!previewImage" onclick="document.getElementById('id-profile-image-upload').click()" class="preview-image__text-container">
+                    <span class="preview-image__text-icon fas fa-image"></span>
+                    <span class="preview-image__text">Upload Image</span>
+                </div>
+                <img *ngIf="previewImage" id="id-preview-image" class="preview-image" [src]="previewImage" alt="preview profile image" />
+            </div>
+            <input hidden id="id-profile-image-upload" type="file" accept="image/*" name="profile-image" (change)="fileChangeEvent($event)" />
+        </div>
+        <div class="mt-5">
+            <button class="btn btn-sm btn-controller" [disabled]="!isUploadProfileImage" (click)="onResetProfileImageClicked()">Reset</button>
+            <button class="btn btn-sm btn-controller float-right" (click)="isProfileImageOpened = false">Close</button>
+            <button [disabled]="isEdingLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditProfileImageClicked()">
+                <ws-spinner *ngIf="isEdingLoading?.isRunning()" [width]="15" [height]="15" [spinnerColor]="'#fff'" [borderWidth]="3" class="mr-2"></ws-spinner>Confirm</button>
+        </div>
+    </div>
+</ws-modal>
+<ws-modal *ngIf="isOpeningHoursOpened" [isCloseIconDisplayed]="false" [(isOpened)]="isOpeningHoursOpened" [maxWidth]="500">
+    <div class="pt-3" modalBody>
+        <div class="mb-3">
+            <business-timetable [(timetable)]="editingTimetable"></business-timetable>
+        </div>
+        <div>
+            <button class="btn btn-sm btn-controller float-right" (click)="isOpeningHoursOpened = false">Close</button>
+            <button [disabled]="isEdingLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditOpeningHoursClicked()">
+                <ws-spinner *ngIf="isEdingLoading?.isRunning()" [width]="15" [height]="15" [spinnerColor]="'#fff'" [borderWidth]="3" class="mr-2"></ws-spinner>Confirm</button>
+        </div>
+    </div>
+</ws-modal>
+<ws-modal *ngIf="isDescriptionOpened" [isCloseIconDisplayed]="false" [(isOpened)]="isDescriptionOpened" [maxWidth]="500">
+    <div class="pt-3" modalBody>
+        <textarea name="description" class="form-control mb-3" rows="8" [(ngModel)]="editingStore.description"></textarea>
+        <div>
+            <button class="btn btn-sm btn-controller float-right" (click)="isDescriptionOpened = false">Close</button>
+            <button [disabled]="isEdingLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditDescriptionClicked()">
+                <ws-spinner *ngIf="isEdingLoading?.isRunning()" [width]="15" [height]="15" [spinnerColor]="'#fff'" [borderWidth]="3" class="mr-2"></ws-spinner>Confirm</button>
+        </div>
+    </div>
+</ws-modal>
+<ws-modal *ngIf="isStoreTypeOpened" [isCloseIconDisplayed]="false" [(isOpened)]="isStoreTypeOpened" [maxWidth]="400">
+    <div class="pt-3" modalBody>
+        <div>
+            <button class="btn btn-sm btn-controller float-right" (click)="isStoreTypeOpened = false">Close</button>
+            <button [disabled]="isEdingLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditStoreTypeClicked()">
+                <ws-spinner *ngIf="isEdingLoading?.isRunning()" [width]="15" [height]="15" [spinnerColor]="'#fff'" [borderWidth]="3" class="mr-2"></ws-spinner>Confirm</button>
+        </div>
+    </div>
+</ws-modal>
+<ws-modal *ngIf="isAddressOpened" [isCloseIconDisplayed]="false" [(isOpened)]="isAddressOpened" [maxWidth]="600">
+    <div class="pt-3" modalBody>
+        <div>
+            <mat-checkbox [color]="'primary'" [checked]="store.showAddress" (change)="editingStore.showAddress = !editingStore.showAddress" class="mr-2 d-inline-block" style="vertical-align: text-top"></mat-checkbox>
+            <label class="mb-0 font-9" style="display: inline-flex">Show Store Location</label>
+            <business-location [disabled]="!editingStore.showAddress" [address]="address" [mapController]="editingMapController"></business-location>
+        </div>
+        <div>
+            <button class="btn btn-sm btn-controller float-right" (click)="isAddressOpened = false">Close</button>
+            <button [disabled]="isEdingLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditAddressClicked()">
+                <ws-spinner *ngIf="isEdingLoading?.isRunning()" [width]="15" [height]="15" [spinnerColor]="'#fff'" [borderWidth]="3" class="mr-2"></ws-spinner>Confirm</button>
+        </div>
+    </div>
+</ws-modal>
+<ws-modal *ngIf="isTagsOpened" [isCloseIconDisplayed]="false" [(isOpened)]="isTagsOpened" [maxWidth]="600">
+    <div class="pt-3" modalBody>
+        <div class="mb-3">
+            <div class="d-block mt-3 border p-3" style="background-color: #fff; border-radius: .25rem">
+                <h4 class="w-100 font-weight-normal h6">Tag Recommendation:</h4>
+                <label class="font-9 font-weight-normal">Restaurants:</label>
+                <div class="mb-2" style="line-height: 1rem">
+                  <span (click)="tag.addTag(rtag)" *ngFor="let rtag of restaurantTags"
+                    class="badge noselect pt-1 pb-1 mr-2 mb-1 clickable" style="color: #7f0000; background-color: #f7f7f7">{{
+                    rtag }}</span>
+                </div>
+                <label class="font-9 font-weight-normal">Shopping:</label>
+                <div class="mb-2" style="line-height: 1rem">
+                  <span (click)="tag.addTag(stag)" *ngFor="let stag of shoppingTags"
+                    class="badge noselect pt-1 pb-1 mr-2 mb-1 clickable" style="color: #7f0000; background-color: #f7f7f7">{{
+                    stag }}</span>
+                </div>
+                <label class="font-9 font-weight-normal">Services:</label>
+                <div style="line-height: 1rem">
+                  <span (click)="tag.addTag(stag)" *ngFor="let stag of serviceTags"
+                    class="badge noselect pt-1 pb-1 mr-2 mb-1 clickable" style="color: #7f0000; background-color: #f7f7f7">{{
+                    stag }}</span>
+                </div>
+              </div>
+              <label class="settings-label">Feature</label>
+              <div class="input-group input-group-sm mb-1" style="z-index:0">
+                <input name='tag' [disabled]="tag.tags.length > 9" (focus)="tag.reset()" (input)="tag.reset()"
+                  placeholder="Related Tag (Max 10)" autocomplete="off" class='form-control' maxlength="30"
+                  [ngModelOptions]="{standalone: true}" [(ngModel)]="tag.input" (keydown.enter)="tag.addTag()" />
+                <div class="input-group-append">
+                  <button [disabled]="tag.tags.length > 9" class="m-0 input-group-text clickable" type="button"
+                    (click)="tag.addTag()">
+                    <i class="fa fa-plus"></i>
+                  </button>
+                </div>
+              </div>
+              <span class="badge mr-2 mb-2" style="color: #7f0000; background-color: #f7f7f7" *ngFor="let rtag of tag.tags">
+                {{rtag}}
+                <span class="fas fa-times clickable"
+                  (click)="$event.stopPropagation(); tag.removeTag(rtag); tag.reset();"></span>
+              </span>
+        </div>
+        <div>
+            <button class="btn btn-sm btn-controller float-right" (click)="isTagsOpened = false">Close</button>
+            <button [disabled]="isEdingLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditTagsClicked()">
+                <ws-spinner *ngIf="isEdingLoading?.isRunning()" [width]="15" [height]="15" [spinnerColor]="'#fff'" [borderWidth]="3" class="mr-2"></ws-spinner>Confirm</button>
+        </div>
+    </div>
+</ws-modal>
+<ws-modal *ngIf="isPhoneOpened" [isCloseIconDisplayed]="false" [(isOpened)]="isPhoneOpened" [maxWidth]="400">
+    <div class="pt-3" modalBody>
+        <div class="mb-3">
+            <h6>Phone</h6>
+            <ws-multiple-input [maxlength]="30" [(items)]="editingStore.phone" [type]="'tel'" [placeholder]="'+60 12345678'" [maxItems]="3" [name]="'tel'"></ws-multiple-input>
+        </div>
+        <div>
+            <button class="btn btn-sm btn-controller float-right" (click)="isPhoneOpened = false">Close</button>
+            <button [disabled]="isEdingLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditPhoneClicked()">
+                <ws-spinner *ngIf="isEdingLoading?.isRunning()" [width]="15" [height]="15" [spinnerColor]="'#fff'" [borderWidth]="3" class="mr-2"></ws-spinner>Confirm</button>
+        </div>
+    </div>
+</ws-modal>
+<ws-modal *ngIf="isEmailOpened" [isCloseIconDisplayed]="false" [(isOpened)]="isEmailOpened" [maxWidth]="400">
+    <div class="pt-3" modalBody>
+        <div class="mb-3">
+            <h6>Email</h6>
+            <ws-multiple-input [maxlength]="30" [(items)]="editingStore.email" [type]="'email'" [placeholder]="'Email'" [maxItems]="3" [name]="'email'"></ws-multiple-input>
+        </div>
+        <div>
+            <button class="btn btn-sm btn-controller float-right" (click)="isEmailOpened = false">Close</button>
+            <button [disabled]="isEdingLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditEmailClicked()">
+                <ws-spinner *ngIf="isEdingLoading?.isRunning()" [width]="15" [height]="15" [spinnerColor]="'#fff'" [borderWidth]="3" class="mr-2"></ws-spinner>Confirm</button>
+        </div>
+    </div>
+</ws-modal>
+<ws-modal *ngIf="isWebsiteOpened" [isCloseIconDisplayed]="false" [(isOpened)]="isWebsiteOpened" [maxWidth]="400">
+    <div class="pt-3" modalBody>
+        <div class="mb-3">
+            <h6>Website URL</h6>
+            <ws-multiple-input [maxlength]="30" [(items)]="editingStore.website" [type]="'url'" [placeholder]="'Url (Example: https://www.example.com)'" [maxItems]="3" [name]="'website'"></ws-multiple-input>
+        </div>
+        <div>
+            <button class="btn btn-sm btn-controller float-right" (click)="isWebsiteOpened = false">Close</button>
+            <button [disabled]="isEdingLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditWebsiteClicked()">
+                <ws-spinner *ngIf="isEdingLoading?.isRunning()" [width]="15" [height]="15" [spinnerColor]="'#fff'" [borderWidth]="3" class="mr-2"></ws-spinner>Confirm</button>
+        </div>
+    </div>
+</ws-modal>
+<ws-modal *ngIf="isFacebookOpened" [isCloseIconDisplayed]="false" [(isOpened)]="isFacebookOpened" [maxWidth]="400">
+    <div class="pt-3" modalBody>
+        <div class="mb-3">
+            <h6>Facebook</h6>
+            <ws-multiple-input [maxlength]="30" [(items)]="editingMedias" [type]="'facebook'" [placeholder]="'Username'" [name]="'facebook'"></ws-multiple-input>
+        </div>
+        <div>
+            <button class="btn btn-sm btn-controller float-right" (click)="isFacebookOpened = false">Close</button>
+            <button [disabled]="isEdingLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditFacebookClicked()">
+                <ws-spinner *ngIf="isEdingLoading?.isRunning()" [width]="15" [height]="15" [spinnerColor]="'#fff'" [borderWidth]="3" class="mr-2"></ws-spinner>Confirm</button>
+        </div>
+    </div>
+</ws-modal>
+<ws-modal *ngIf="isInstagramOpened" [isCloseIconDisplayed]="false" [(isOpened)]="isInstagramOpened" [maxWidth]="400">
+    <div class="pt-3" modalBody>
+        <div class="mb-3">
+            <h6>Instagram</h6>
+            <ws-multiple-input [maxlength]="30" [(items)]="editingMedias" [type]="'instagram'" [placeholder]="'Username'" [name]="'instagram'"></ws-multiple-input>
+        </div>
+        <div>
+            <button class="btn btn-sm btn-controller float-right" (click)="isInstagramOpened = false">Close</button>
+            <button [disabled]="isEdingLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditInstagramClicked()">
+                <ws-spinner *ngIf="isEdingLoading?.isRunning()" [width]="15" [height]="15" [spinnerColor]="'#fff'" [borderWidth]="3" class="mr-2"></ws-spinner>Confirm</button>
+        </div>
+    </div>
+</ws-modal>
+<ws-modal *ngIf="isTwitterOpened" [isCloseIconDisplayed]="false" [(isOpened)]="isTwitterOpened" [maxWidth]="400">
+    <div class="pt-3" modalBody>
+        <div class="mb-3">
+            <h6>Twitter</h6>
+            <ws-multiple-input [maxlength]="30" [(items)]="editingMedias" [type]="'twitter'" [placeholder]="'Account'" [name]="'twitter'"></ws-multiple-input>
+        </div>
+        <div>
+            <button class="btn btn-sm btn-controller float-right" (click)="isTwitterOpened = false">Close</button>
+            <button [disabled]="isEdingLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditTwitterClicked()">
+                <ws-spinner *ngIf="isEdingLoading?.isRunning()" [width]="15" [height]="15" [spinnerColor]="'#fff'" [borderWidth]="3" class="mr-2"></ws-spinner>Confirm</button>
+        </div>
+    </div>
+</ws-modal>
+<ws-modal *ngIf="isWhatsappOpened" [isCloseIconDisplayed]="false" [(isOpened)]="isWhatsappOpened" [maxWidth]="400">
+    <div class="pt-3" modalBody>
+        <div class="mb-3">
+            <h6>Whatsapp</h6>
+            <ws-multiple-input [maxlength]="30" [(items)]="editingMedias" [type]="'whastapp'" [placeholder]="'Phone Number'" [name]="'whastapp'"></ws-multiple-input>
+        </div>
+        <div>
+            <button class="btn btn-sm btn-controller float-right" (click)="isWhatsappOpened = false">Close</button>
+            <button [disabled]="isEdingLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditWhatsappClicked()">
+                <ws-spinner *ngIf="isEdingLoading?.isRunning()" [width]="15" [height]="15" [spinnerColor]="'#fff'" [borderWidth]="3" class="mr-2"></ws-spinner>Confirm</button>
+        </div>
+    </div>
+</ws-modal>
+<ws-modal *ngIf="isMessengerOpened" [isCloseIconDisplayed]="false" [(isOpened)]="isMessengerOpened" [maxWidth]="400">
+    <div class="pt-3" modalBody>
+        <div class="mb-3">
+            <h6>Facebook Messenger</h6>
+            <ws-multiple-input [maxlength]="30" [(items)]="editingMedias" [type]="'messenger'" [placeholder]="'Username'" [name]="'messenger'"></ws-multiple-input>
+        </div>
+        <div>
+            <button class="btn btn-sm btn-controller float-right" (click)="isMessengerOpened = false">Close</button>
+            <button [disabled]="isEdingLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditMessengerClicked()">
+                <ws-spinner *ngIf="isEdingLoading?.isRunning()" [width]="15" [height]="15" [spinnerColor]="'#fff'" [borderWidth]="3" class="mr-2"></ws-spinner>Confirm</button>
+        </div>
+    </div>
+</ws-modal>
+<ws-modal *ngIf="isYoutubeOpened" [isCloseIconDisplayed]="false" [(isOpened)]="isYoutubeOpened" [maxWidth]="400">
+    <div class="pt-3" modalBody>
+        <div class="mb-3">
+            <h6>Youtube</h6>
+            <ws-multiple-input [maxlength]="30" [(items)]="editingMedias" [type]="'youtube'" [placeholder]="'Youtube URL'" [name]="'youtube'"></ws-multiple-input>
+        </div>
+        <div>
+            <button class="btn btn-sm btn-controller float-right" (click)="isYoutubeOpened = false">Close</button>
+            <button [disabled]="isEdingLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditYoutubeClicked()">
+                <ws-spinner *ngIf="isEdingLoading?.isRunning()" [width]="15" [height]="15" [spinnerColor]="'#fff'" [borderWidth]="3" class="mr-2"></ws-spinner>Confirm</button>
+        </div>
+    </div>
+</ws-modal>
+<ws-modal *ngIf="isSnapchatOpened" [isCloseIconDisplayed]="false" [(isOpened)]="isSnapchatOpened" [maxWidth]="400">
+    <div class="pt-3" modalBody>
+        <div class="mb-3">
+            <h6>Snapchat</h6>
+            <ws-multiple-input [maxlength]="30" [(items)]="editingMedias" [type]="'snapchat'" [placeholder]="'Snapchat Account'" [name]="'snapchat'"></ws-multiple-input>
+        </div>
+        <div>
+            <button class="btn btn-sm btn-controller float-right" (click)="isSnapchatOpened = false">Close</button>
+            <button [disabled]="isEdingLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditSnapchatClicked()">
+                <ws-spinner *ngIf="isEdingLoading?.isRunning()" [width]="15" [height]="15" [spinnerColor]="'#fff'" [borderWidth]="3" class="mr-2"></ws-spinner>Confirm</button>
+        </div>
+    </div>
+</ws-modal>
+<ws-modal *ngIf="isTelegramOpened" [isCloseIconDisplayed]="false" [(isOpened)]="isTelegramOpened" [maxWidth]="400">
+    <div class="pt-3" modalBody>
+        <div class="mb-3">
+            <h6>Telergram</h6>
+            <ws-multiple-input [maxlength]="30" [(items)]="editingMedias" [type]="'telegram'" [placeholder]="'Telegram Account'" [name]="'telegram'"></ws-multiple-input>
+        </div>
+        <div>
+            <button class="btn btn-sm btn-controller float-right" (click)="isTelegramOpened = false">Close</button>
+            <button [disabled]="isEdingLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditTelegramClicked()">
+                <ws-spinner *ngIf="isEdingLoading?.isRunning()" [width]="15" [height]="15" [spinnerColor]="'#fff'" [borderWidth]="3" class="mr-2"></ws-spinner>Confirm</button>
+        </div>
+    </div>
+</ws-modal>
+<ws-modal *ngIf="isWeiboOpened" [isCloseIconDisplayed]="false" [(isOpened)]="isWeiboOpened" [maxWidth]="400">
+    <div class="pt-3" modalBody>
+        <div class="mb-3">
+            <h6>Weibo</h6>
+            <ws-multiple-input [maxlength]="30" [(items)]="editingMedias" [type]="'weibo'" [placeholder]="'Weibo Username'" [name]="'weibo'"></ws-multiple-input>
+        </div>
+        <div>
+            <button class="btn btn-sm btn-controller float-right" (click)="isWeiboOpened = false">Close</button>
+            <button [disabled]="isEdingLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditWeiboClicked()">
+                <ws-spinner *ngIf="isEdingLoading?.isRunning()" [width]="15" [height]="15" [spinnerColor]="'#fff'" [borderWidth]="3" class="mr-2"></ws-spinner>Confirm</button>
+        </div>
+    </div>
+</ws-modal>
+<ws-modal *ngIf="isWechatOpened" [isCloseIconDisplayed]="false" [(isOpened)]="isWechatOpened" [maxWidth]="400">
+    <div class="pt-3" modalBody>
+        <div class="mb-3">
+            <h6>Wechat</h6>
+            <ws-multiple-input [maxlength]="30" [(items)]="editingMedias" [type]="'wechat'" [placeholder]="'Wechat Username'" [name]="'wechat'"></ws-multiple-input>
+        </div>
+        <div>
+            <button class="btn btn-sm btn-controller float-right" (click)="isWechatOpened = false">Close</button>
+            <button [disabled]="isEdingLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditWechatClicked()">
+                <ws-spinner *ngIf="isEdingLoading?.isRunning()" [width]="15" [height]="15" [spinnerColor]="'#fff'" [borderWidth]="3" class="mr-2"></ws-spinner>Confirm</button>
+        </div>
+    </div>
+</ws-modal>
+<ws-modal *ngIf="isAddMediaOpened" [isCloseIconDisplayed]="false" [(isOpened)]="isAddMediaOpened" [maxWidth]="400">
+    <form #form="ngForm" class="pt-3" modalBody>
+        <div class="mb-3">
+            <div class="ws-input mb-3" style="max-width: 300px">
+                <mat-select name="media" [disabled]="isMediaMax" class="form-control" [(ngModel)]="selectedMedia"
+                    (change)="mediaChange()" placeholder="Select Social Media">
+                    <mat-option [value]="'facebook'">Facebook</mat-option>
+                    <mat-option [value]="'instagram'">Instagram</mat-option>
+                    <mat-option [value]="'twitter'">Twitter</mat-option>
+                    <mat-option [value]="'whatsapp'">Whatsapp</mat-option>
+                    <mat-option [value]="'messenger'">FB Messenger</mat-option>
+                    <mat-option [value]="'youtube'">Youtube</mat-option>
+                    <mat-option [value]="'snapchat'">Snapchat</mat-option>
+                    <mat-option [value]="'telegram'">Telegram</mat-option>
+                    <mat-option [value]="'weibo'">Weibo</mat-option>
+                    <mat-option [value]="'wechat'">Wechat</mat-option>
+                </mat-select>
+            </div>
+            <div *ngIf="selectedMedia == ''" style="height: 47px">Select a social media</div>
+            <div class="mb-3" [ngSwitch]="selectedMedia">
+                <div style="width: fit-content" *ngSwitchCase="'facebook'">
+                    <ng-container *ngTemplateOutlet="mediaInputTemplate; context: {type: selectedMedia, placeholder: 'Username', prefixLink: 'https://www.facebook.com/'}"></ng-container>
+                </div>
+                <div style="width: fit-content" *ngSwitchCase="'messenger'">
+                    <ng-container *ngTemplateOutlet="mediaInputTemplate; context: {type: selectedMedia, placeholder: 'Username', prefixLink: 'https://m.me/'}"></ng-container>
+                </div>
+                <div style="width: fit-content" *ngSwitchCase="'twitter'">
+                    <ng-container *ngTemplateOutlet="mediaInputTemplate; context: {type: selectedMedia, placeholder: 'Account', prefixLink: 'https://www.twitter.com/'}"></ng-container>
+                </div>
+                <div style="width: fit-content" *ngSwitchCase="'whatsapp'">
+                    <ng-container *ngTemplateOutlet="mediaInputTemplate; context: {type: selectedMedia, placeholder: 'Phone Number'}"></ng-container>
+                </div>
+                <div style="width: fit-content" *ngSwitchCase="'instagram'">
+                    <ng-container *ngTemplateOutlet="mediaInputTemplate; context: {type: selectedMedia, placeholder: 'Username', prefixLink: 'https://www.instagram.com/'}"></ng-container>
+                </div>
+                <div style="width: fit-content" *ngSwitchCase="'wechat'">
+                    <ng-container *ngTemplateOutlet="mediaInputTemplate; context: {type: selectedMedia, placeholder: 'Wechat Username'}"></ng-container>
+                </div>
+                <div style="width: fit-content" *ngSwitchCase="'weibo'">
+                    <ng-container *ngTemplateOutlet="mediaInputTemplate; context: {type: selectedMedia, placeholder: 'Weibo Username'}"></ng-container>
+                </div>
+                <div style="width: fit-content" *ngSwitchCase="'youtube'">
+                    <ng-container *ngTemplateOutlet="mediaInputTemplate; context: {type: selectedMedia, placeholder: 'Youtube URL', prefixLink: 'https://www.youtube.com/channel/'}"></ng-container>
+                </div>
+                <div style="width: fit-content" *ngSwitchCase="'telegram'">
+                    <ng-container *ngTemplateOutlet="mediaInputTemplate; context: {type: selectedMedia, placeholder: 'Telegram Account'}"></ng-container>
+                </div>
+                <div style="width: fit-content" *ngSwitchCase="'snapchat'">
+                    <ng-container *ngTemplateOutlet="mediaInputTemplate; context: {type: selectedMedia, placeholder: 'Snapchat Account'}"></ng-container>
+                </div>
+                <p *ngIf="error != ''" class="text-danger mb-0 font-8">{{error}}</p>
+            </div>
+            <ng-template #mediaInputTemplate let-placeholder="placeholder" let-type="type" let-prefixLink="prefixLink">
+                <div class="input-group font-8">
+                    <span *ngIf="prefixLink" style="line-height:31px;">{{prefixLink}}</span>
+                    <input name="mediavalue" class="form-control form-control-sm p-1" maxlength="30" placeholder="{{placeholder}}" (input)="error = ''" ngModel/>
+                </div>
+            </ng-template>
+        </div>
+        <div>
+            <button class="btn btn-sm btn-controller float-right" (click)="isAddMediaOpened = false">Close</button>
+            <button [disabled]="isEdingLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmAddMediaClicked(selectedMedia, form.value.mediavalue)">
+                <ws-spinner *ngIf="isEdingLoading?.isRunning()" [width]="15" [height]="15" [spinnerColor]="'#fff'" [borderWidth]="3" class="mr-2"></ws-spinner>Confirm</button>
+        </div>
+    </form>
+</ws-modal>

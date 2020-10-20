@@ -1,0 +1,134 @@
+:host {
+    font-weight: 300;
+}
+
+.merchant-preview {
+    overflow: auto;
+    height: calc(100vh - 265px);
+    border-radius: .25rem;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.16);
+
+    .merchant-preview__save {
+        background-color: #7f0000;
+        color: #fff;
+        position: sticky;
+        top: 0;
+        z-index: 900;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+}
+
+.preview-image__container {
+    width: 300px;
+    height: 300px;
+    position: relative;
+    user-select: none;
+
+    .banner-preview-image__text-container,
+    .preview-image__text-container {
+        margin: 25px;
+        padding-top: 24%;
+        text-align: center;
+        background-color: #f7f7f7;
+        height: 250px;
+        transition: background-color ease .2s;
+
+        &:hover {
+            background-color: #ebecf0;
+            cursor: pointer;
+        }
+
+        .banner-preview-image__text,
+        .preview-image__text {
+            font-size: 1rem;
+            display: block;
+        }
+
+        .banner-preview-image__text-icon,
+        .preview-image__text-icon {
+            font-size: 5rem;
+        }
+    }
+
+    .banner-preview-image__remove-icon,
+    .preview-image__remove-icon {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        z-index: 10;
+        color: #fff;
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+}
+
+.corner-setting {
+    position: absolute;
+    right: 1px;
+    top: 1px;
+    z-index: 2;
+    cursor: pointer;
+
+    .corner-setting-item {
+        padding: .5rem;
+        width: 2rem;
+        line-height: .9rem;
+        text-align: center;
+        background-color: rgba(0, 0, 0, .3);
+        transition: background-color .3s ease;
+        color: #fff;
+
+        &:hover {
+            background-color: rgba(0, 0, 0, .5);
+        }
+    }
+}
+
+.all-item-container {
+    // overflow-x: auto;
+    white-space: nowrap;
+    max-width: inherit;
+
+    &::-webkit-scrollbar {
+        height: 5px;
+    }
+
+    /* Track */
+    &::-webkit-scrollbar-track {
+        border-radius: 10px;
+    }
+
+    /* Handle */
+    &::-webkit-scrollbar-thumb {
+        background: #7f0000;
+        border-radius: 10px;
+    }
+
+    /* Handle on hover */
+    &::-webkit-scrollbar-thumb:hover {
+        background: #660000;
+    }
+}
+
+// put outside because of drag and drop placeholder
+.image-item{
+    width: 100%;
+    height: 300px;
+    object-fit: contain;
+    transition: all ease .2s;
+    box-shadow: 0 0 3px #888;
+    background-color: #fff;
+    &:hover{
+        opacity: .7;
+    }
+}
+
+ws-modal{
+    font-weight: 400;
+}

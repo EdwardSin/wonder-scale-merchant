@@ -1,5 +1,5 @@
 <div class="input-group input-group-sm mb-1" *ngFor="let item of items; let i = index;trackBy:trackByFn">
-  <input #itemInput name="{{name}}-{{i}}" type="{{type}}" autocomplete="nope" class="pl-2 form-control form-control-sm"
+  <input #itemInput name="{{name}}-{{i}}" type="{{type}}" autocomplete="nope" class="pl-2 form-control form-control-sm" [maxlength]="maxlength"
     placeholder="{{placeholder}}" [(ngModel)]="items[i]" (ngModelChange)="itemChange($event, i)"/>
   <div class="input-group-append" *ngIf="items.length < maxItems && items.length-1 == i">
     <button class="input-group-text" (click)="addCol()">

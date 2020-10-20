@@ -200,9 +200,8 @@
               mapController.valueChanged(addressFormGroup.get('searchAddress').value)" (click)="$event.stopPropagation()"
               (input)="mapController.valueChanged(addressFormGroup.get('searchAddress').value)" required>
           </div>
-          <div class="position-relative w-100">
-            <ul class="list-group suggestions" (clickOutside)="mapController.displayed = false"
-              *ngIf="mapController?.displayed">
+          <div class="position-relative w-100" *ngIf="mapController?.displayed">
+            <ul class="list-group suggestions" (clickOutside)="mapController.displayed = false">
               <li [class.hover]="mapController.hovered == i"
                 *ngFor="let suggestion of mapController?.suggestions; let i = index;"
                 (click)="$event.stopPropagation(); 
@@ -242,7 +241,7 @@
             <span class="fas fa-times" [routerLink]="[]" [queryParams]="{modal: null}"></span>
           </div>
           <h3 class="h5 mb-0">Business Hour:</h3>
-          <business-timetable [(timetable)]="timetable"></business-timetable>
+          <business-timetable [(timetable)]="editingTimetable"></business-timetable>
           <div class="row no-gutters mt-2">
             <button class="btn btn-md btn-second" type="button" (click)="phase.previous()">Previous</button>
             <!-- [disabled]="!openingInfoFormGroup.valid" -->

@@ -17,9 +17,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ElementModule } from '../element/element.module';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
+import { BusinessLocationComponent } from '@elements/business-location/business-location.component';
 
 @NgModule({
   declarations: [
+    BusinessLocationComponent
   ],
   imports: [
     CommonModule,
@@ -41,6 +43,7 @@ import { MDBBootstrapModule } from 'angular-bootstrap-md';
     })
   ],
   exports: [
+    BusinessLocationComponent,
     AgmCoreModule,
     FormsModule,
     ReactiveFormsModule,

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, QueryList, SimpleChanges, ViewChildren } from '@angular/core';
 import _ from 'lodash';
 @Component({
   selector: 'ws-multiple-input',
@@ -10,6 +10,7 @@ export class WsMultipleInputComponent implements OnInit {
   @Input() maxItems: number;
   @Input() type: string = 'text';
   @Input() name: string;
+  @Input() maxlength: number;
   @Input() placeholder: string;
   @Input() removeColCallback: Function;
   @Output() itemsChange: EventEmitter<any> = new EventEmitter;
@@ -24,6 +25,11 @@ export class WsMultipleInputComponent implements OnInit {
   constructor(private ref: ChangeDetectorRef) { }
   
   ngOnInit() {
+  }
+  ngOnChanges(changes: SimpleChanges) {
+    if(changes['items'] && this.items) {
+      this.items = this.items.length ? this.items : [''];
+    }
   }
 
   itemChange(event, i){

@@ -53,10 +53,10 @@ const routes: Routes = [{
       loadChildren: () => import('./modules/store/catalogue/catalogue.module').then(m => m.CatalogueModule)
     },
     {
-      path: 'information',
+      path: 'store-page',
       canActivate: [StoreGuard],
-      data: { title: 'information', breadcrumb: 'Information' },
-      loadChildren: () => import('./modules/store/information/information.module').then(m => m.InformationModule)
+      data: { title: 'store-page', breadcrumb: 'Store page' },
+      loadChildren: () => import('./modules/store/store-page/store-page.module').then(m => m.StorePageModule)
     },
     // {
     //   path: 'advertising',
