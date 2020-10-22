@@ -2,6 +2,7 @@
     font-weight: 300;
 }
 
+.merchant-preview__website,
 .merchant-preview {
     overflow: auto;
     height: calc(100vh - 265px);
@@ -19,7 +20,15 @@
         align-items: center;
         justify-content: space-between;
     }
+}
 
+.merchant-preview__website{
+    width: 410px;
+    position: relative;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
 }
 
 .preview-image__container {

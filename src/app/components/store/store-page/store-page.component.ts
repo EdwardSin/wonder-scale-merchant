@@ -16,6 +16,9 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { environment } from '@environments/environment';
 import { AuthStoreContributorService } from '@services/http/auth-store/contributor/auth-store-contributor.service';
 import { WsToastService } from '@elements/ws-toast/ws-toast.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { EmailValidator } from '@validations/email.validator';
+import { URLValidator } from '@validations/url.validator';
 
 @Component({
   selector: 'app-store-page',
@@ -50,6 +53,7 @@ export class StorePageComponent implements OnInit {
   isWeiboOpened: boolean = false;
   isWechatOpened: boolean = false;
   isAddMediaOpened: boolean = false;
+  selectedNav: string = 'info';
   editingStore: Store;
   editingTimetable: Timetable;
   editingMapController: MapController;
@@ -75,15 +79,23 @@ export class StorePageComponent implements OnInit {
     private sharedStoreService: SharedStoreService,
     private authStoreContributorService: AuthStoreContributorService,
     private ref: ChangeDetectorRef,
+    private route: ActivatedRoute,
+    private router: Router,
     private sanitization: DomSanitizer) {
   }
 
   ngOnInit(): void {
+    this.selectedNav = this.route.snapshot.queryParams.nav || 'info';
     this.sharedStoreService.store.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       this.store = result;
       this.editingStore = _.cloneDeep(result);
       this.allBanners = this.store.informationImages.map(image => { return { url: image, type: 'url' } });
       this.editingAllBanners = _.cloneDeep(this.allBanners);
+    });
+    this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe(queryParams => {
+      if(queryParams['nav']) {
+        this.selectedNav = queryParams['nav'];
+      }
     });
   }
   onEditBannersClicked() {
@@ -200,6 +212,8 @@ export class StorePageComponent implements OnInit {
   onConfirmEditOpeningHoursClicked() {
     this.store.openingInfoType = this.editingTimetable.operatingHourRadio;
     this.store.openingInfo = this.editingTimetable.operatingHours;
+    this.editingStore.openingInfoType = this.editingTimetable.operatingHourRadio;
+    this.editingStore.openingInfo = this.editingTimetable.operatingHours;
     this.isChanged = true;
     this.isOpeningHoursOpened = false;
   }
@@ -238,14 +252,24 @@ export class StorePageComponent implements OnInit {
     this.isPhoneOpened = false;
   }
   onConfirmEditEmailClicked() {
-    this.store.email = _.compact(this.editingStore.email);
-    this.isChanged = true;
-    this.isEmailOpened = false;
+    let emails = _.compact(this.editingStore.email);
+    if (!emails.filter(email => !EmailValidator.validate(email)).length || !emails.length) {
+      this.store.email = _.compact(this.editingStore.email);
+      this.isChanged = true;
+      this.isEmailOpened = false;
+    } else {
+      WsToastService.toastSubject.next({ content: 'Please enter valid email!', type: 'danger'});
+    }
   }
   onConfirmEditWebsiteClicked() {
-    this.store.website = _.compact(this.editingStore.website);
-    this.isChanged = true;
-    this.isWebsiteOpened = false;
+    let websites = _.compact(this.editingStore.website);
+    if (!websites.filter(url => !URLValidator.validate(url)).length || !websites.length) {
+      this.store.website = _.compact(this.editingStore.website);
+      this.isChanged = true;
+      this.isWebsiteOpened = false;
+    } else {
+      WsToastService.toastSubject.next({ content: 'Please enter valid website!', type: 'danger'});
+    }
   }
   onConfirmEditFacebookClicked() {
     let remainingMedias = _.remove(this.store.media, media => media.type !== 'facebook');
@@ -377,6 +401,15 @@ export class StorePageComponent implements OnInit {
       WsToastService.toastSubject.next({ content:'Store is updated!', type: 'success' });
     });
   }
+  navigateToInfo() {
+    this.router.navigate([], {queryParams: {nav: 'info'}, queryParamsHandling: 'merge'});
+  }
+  navigateToMenu() {
+    this.router.navigate([], {queryParams: {nav: 'menu'}, queryParamsHandling: 'merge'});
+  }
+  navigateToShare() {
+    this.router.navigate([], {queryParams: {nav: 'share'}, queryParamsHandling: 'merge'});
+  }
   removeInformationImagesObservable() {
     return forkJoin(this.removingBanners.map(image => {
       console.log(image);
@@ -449,6 +482,14 @@ export class StorePageComponent implements OnInit {
       return this.store.media.length > MAX;
     }
     return false;
+  }
+  changePreview(platform) {
+    this.selectedPreview = platform;
+    if (this.selectedPreview == 'mobile') {
+      this.router.navigate([], { queryParams: {nav: 'info'}, queryParamsHandling: 'merge'});
+    } else {
+      this.router.navigate([], { queryParams: {nav: 'overview'}, queryParamsHandling: 'merge'});
+    }
   }
   removeBanner(item) {
     this.removingBanners = [...this.removingBanners, ..._.filter(this.editingAllBanners, x => x.type == 'url' && x.url == item.url)];

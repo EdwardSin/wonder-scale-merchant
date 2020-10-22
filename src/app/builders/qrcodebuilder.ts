@@ -1,7 +1,10 @@
+import { Injectable } from '@angular/core';
 import { environment } from '@environments/environment';
 
 declare var jQuery: any;
-
+@Injectable({
+    providedIn: 'root'
+})
 export class QRCodeBuilder {
     public static createQRcode(target, url, option = {}) {
         let code = url;

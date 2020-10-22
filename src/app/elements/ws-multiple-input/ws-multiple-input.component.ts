@@ -27,8 +27,10 @@ export class WsMultipleInputComponent implements OnInit {
   ngOnInit() {
   }
   ngOnChanges(changes: SimpleChanges) {
-    if(changes['items'] && this.items) {
-      this.items = this.items.length ? this.items : [''];
+    if (changes['items'] && this.items) {
+      setTimeout(() => {
+        this.items = this.items.length ? this.items : [''];
+      })
     }
   }
 

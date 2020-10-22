@@ -3,8 +3,8 @@
     <div class="mb-3 d-flex align-items-center justify-content-between">
         <h5>Preview:</h5>
         <div class="btn-group" role="group">
-            <button type="button" class="btn btn-controller" style="width: 50px; font-size: 1.2rem" (click)="selectedPreview = 'website'" [class.selected]="selectedPreview == 'website'"><span class="fas fa-desktop"></span></button>
-            <button type="button" class="btn btn-controller" style="width: 50px; font-size: 1.2rem" (click)="selectedPreview = 'mobile'" [class.selected]="selectedPreview == 'mobile'"><span class="fas fa-mobile-alt"></span></button>
+            <button type="button" class="btn btn-controller" style="width: 50px; font-size: 1.2rem" (click)="changePreview('website')" [class.selected]="selectedPreview == 'website'"><span class="fas fa-desktop"></span></button>
+            <button type="button" class="btn btn-controller" style="width: 50px; font-size: 1.2rem" (click)="changePreview('mobile')" [class.selected]="selectedPreview == 'mobile'"><span class="fas fa-mobile-alt"></span></button>
         </div>
     </div>
     <div class="clearfix"></div>
@@ -45,7 +45,51 @@
         (onAddMediaClicked)="onAddMediaClicked($event)"
         ></merchant-page>
     </div>
-    <div *ngIf="selectedPreview == 'mobile'"></div>
+    <div *ngIf="selectedPreview == 'mobile'" class="d-flex justify-content-center">
+        <div class="merchant-preview__website">
+            <div *ngIf="isChanged" class="merchant-preview__save p-2">
+                <p class="d-inline-block mb-0">Save to confirm changes</p>
+                <button class="btn btn-sm btn-controller" style="opacity: 1; width: 80px" [disabled]="isSaveStoreLoading.isRunning()" (click)="onConfirmStoreSaved($event)">
+                    <ws-spinner *ngIf="isSaveStoreLoading?.isRunning()" class="align-center" [width]="15" [height]="15" [borderWidth]="2" [spinnerColor]="'#888'"></ws-spinner>
+                    <span *ngIf="!isSaveStoreLoading.isRunning()"><span class="fas fa-save mr-2 d-inline-block"></span>Save</span>
+                </button>
+            </div>
+            <div class="clearfix"></div>
+            <merchant-info style="display: block; min-height: calc(100vh - 317px)" *ngIf="selectedNav == 'info'" [store]="store"
+                [isEditing]="true"
+                [isAuthenticated]="false"
+                [editingBanners]="editingBanners"
+                (onEditBannersClicked)="onEditBannersClicked($event)"
+                (onEditProfileImageClicked)="onEditProfileImageClicked($event)"
+                (onEditOpeningHoursClicked)="onEditOpeningHoursClicked($event)"
+                (onEditDescriptionClicked)="onEditDescriptionClicked($event)"
+                (onEditStoreTypeClicked)="onEditStoreTypeClicked($event)"
+                (onEditAddressClicked)="onEditAddressClicked($event)"
+                (onEditTagsClicked)="onEditTagsClicked($event)"
+                (onEditPhoneClicked)="onEditPhoneClicked($event)"
+                (onEditEmailClicked)="onEditEmailClicked($event)"
+                (onEditWebsiteClicked)="onEditWebsiteClicked($event)"
+                (onEditFacebookClicked)="onEditFacebookClicked($event)"
+                (onEditInstagramClicked)="onEditInstagramClicked($event)"
+                (onEditTwitterClicked)="onEditTwitterClicked($event)"
+                (onEditWhatsappClicked)="onEditWhatsappClicked($event)"
+                (onEditMessengerClicked)="onEditMessengerClicked($event)"
+                (onEditYoutubeClicked)="onEditYoutubeClicked($event)"
+                (onEditSnapchatClicked)="onEditSnapchatClicked($event)"
+                (onEditTelegramClicked)="onEditTelegramClicked($event)"
+                (onEditWeiboClicked)="onEditWeiboClicked($event)"
+                (onEditWechatClicked)="onEditWechatClicked($event)"
+                (onAddMediaClicked)="onAddMediaClicked($event)"
+            ></merchant-info>
+            <merchant-menu style="display: block; min-height: calc(100vh - 317px)" *ngIf="selectedNav == 'menu'" [store]="store" [isEditing]="true" [navigateToStore]="navigateToInfo.bind(this)"></merchant-menu>
+            <merchant-share style="display: block; min-height: calc(100vh - 317px)" *ngIf="selectedNav == 'share'" [store]="store" [isEditing]="true"></merchant-share>
+            <merchant-footer [selectedNav]="selectedNav" [isEditing]="true"
+            [navigateToInfo]="navigateToInfo.bind(this)"
+            [navigateToMenu]="navigateToMenu.bind(this)"
+            [navigateToShare]="navigateToShare.bind(this)"
+            ></merchant-footer>
+        </div>
+    </div>
 </div>
 
 <ws-modal *ngIf="isBannersOpened" [isCloseIconDisplayed]="false" [(isOpened)]="isBannersOpened" [maxWidth]="600">
@@ -134,7 +178,7 @@
 </ws-modal>
 <ws-modal *ngIf="isDescriptionOpened" [isCloseIconDisplayed]="false" [(isOpened)]="isDescriptionOpened" [maxWidth]="500">
     <div class="pt-3" modalBody>
-        <textarea name="description" class="form-control mb-3" rows="8" [(ngModel)]="editingStore.description"></textarea>
+        <textarea name="description" class="form-control mb-3" maxlength="500" rows="8" [(ngModel)]="editingStore.description"></textarea>
         <div>
             <button class="btn btn-sm btn-controller float-right" (click)="isDescriptionOpened = false">Close</button>
             <button [disabled]="isEdingLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditDescriptionClicked()">
@@ -154,8 +198,10 @@
 <ws-modal *ngIf="isAddressOpened" [isCloseIconDisplayed]="false" [(isOpened)]="isAddressOpened" [maxWidth]="600">
     <div class="pt-3" modalBody>
         <div>
-            <mat-checkbox [color]="'primary'" [checked]="store.showAddress" (change)="editingStore.showAddress = !editingStore.showAddress" class="mr-2 d-inline-block" style="vertical-align: text-top"></mat-checkbox>
-            <label class="mb-0 font-9" style="display: inline-flex">Show Store Location</label>
+            <div class="d-flex align-items-center">
+                <mat-checkbox [color]="'primary'" [checked]="store.showAddress" (change)="editingStore.showAddress = !editingStore.showAddress" class="mr-2 d-inline-block mb-0"></mat-checkbox>
+                <label class="font-9" style="display: inline-flex; margin-bottom: .35rem">Show Store Location</label>
+            </div>
             <business-location [disabled]="!editingStore.showAddress" [address]="address" [mapController]="editingMapController"></business-location>
         </div>
         <div>
