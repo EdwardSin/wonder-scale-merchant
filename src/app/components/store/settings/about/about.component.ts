@@ -25,7 +25,7 @@ import { finalize, takeUntil } from 'rxjs/operators';
 import _ from 'lodash';
 import { Store } from '@objects/store';
 import { EmailValidator } from '@validations/email.validator';
-import { URLValidator } from '@validations/urlvalidator';
+import { URLValidator } from '@validations/url.validator';
 import { CurrencyService } from '@services/http/general/currency.service';
 import * as moment from 'moment';
 import * as $ from 'jquery';

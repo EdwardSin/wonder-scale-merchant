@@ -1,4 +1,4 @@
-import { URLValidator } from './../urlvalidator';
+import { URLValidator } from './../url.validator';
 import { ValidatorInterface } from './../validator.interface';
 export class WebsitesValidator implements ValidatorInterface {
     errors: {websites: { index: number, message: string} };

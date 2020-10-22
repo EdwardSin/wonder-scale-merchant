@@ -24,7 +24,6 @@
     (keydown.enter)="mapController.onAddressSelected(); mapController.displayed = false" 
     (keydown)="mapController.selectAddress($event)" (focus)="mapController.displayed = true" 
     (input)="address.valueChanged(); mapController.valueChanged(searchAddress)"
-    (click)="$event.stopPropagation()"
     [disabled]="disabled" [(ngModel)]="searchAddress"/>
   <div class="position-relative w-100">
     <ul class="list-group suggestions" *ngIf="mapController?.displayed">

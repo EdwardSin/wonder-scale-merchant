@@ -15,7 +15,6 @@ import { WsDropdownComponent } from '@elements/ws-dropdown/ws-dropdown.component
 import { WsLoadingScreenComponent } from '@elements/ws-loading-screen/ws-loading-screen.component';
 import { WsToastComponent } from '@elements/ws-toast/ws-toast.component';
 import { WsMultipleInputComponent } from '@elements/ws-multiple-input/ws-multiple-input.component';
-import { BusinessLocationComponent } from '@elements/business-location/business-location.component';
 import { BusinessTimetableComponent } from '@elements/business-timetable/business-timetable.component';
 import { ConfirmModalComponent } from '@components/modals/confirm-modal/confirm-modal.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -46,7 +45,6 @@ import { MatNativeDateModule } from '@angular/material/core';
     WsMultipleInputComponent,
     WsDropdownComponent,
     SearchBarComponent,
-    BusinessLocationComponent,
     BusinessTimetableComponent,
     ConfirmModalComponent
   ],
@@ -77,7 +75,6 @@ import { MatNativeDateModule } from '@angular/material/core';
     WsMultipleInputComponent,
     WsDropdownComponent,
     SearchBarComponent,
-    BusinessLocationComponent,
     BusinessTimetableComponent,
     ConfirmModalComponent
   ]

@@ -12,6 +12,9 @@ export class AuthStoreContributorService {
   getContributors() {
     return this.http.get(AuthStoreContributorUrl.getContributorsUrl, this.accessTokenService.getAccessToken());
   }
+  editStore(obj) {
+    return this.http.put(AuthStoreContributorUrl.editStoreByIdUrl, obj, this.accessTokenService.getAccessToken());
+  }
   editProfileImage(obj) {
     return this.http.put(AuthStoreContributorUrl.editProfileUrl, obj, this.accessTokenService.getAccessToken());
   }
