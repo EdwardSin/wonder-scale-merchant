@@ -1,23 +1,23 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { AboutRoutingModule } from './about-routing.module';
+import { StaffSettingsRoutingModule } from './staff-settings-routing.module';
 import { SharedModule } from 'src/app/modules/public/shared/shared.module';
-import { AboutComponent } from '@components/store/settings/about/about.component';
+import { StaffSettingsComponent } from '@components/store/settings/staff-settings/staff-settings.component';
 import { PermissionListComponent } from '@elements/permission-list/permission-list.component';
 import { EditContributorModalComponent } from '@components/modals/edit-contributor-modal/edit-contributor-modal.component';
 
 
 @NgModule({
   declarations: [
-    AboutComponent,
+    StaffSettingsComponent,
     PermissionListComponent,
     EditContributorModalComponent
   ],
   imports: [
     CommonModule,
     SharedModule,
-    AboutRoutingModule
+    StaffSettingsRoutingModule
   ]
 })
-export class AboutModule { }
+export class StaffSettingsModule { }

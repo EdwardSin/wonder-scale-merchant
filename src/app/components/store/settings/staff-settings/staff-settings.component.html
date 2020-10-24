@@ -1,0 +1,87 @@
+<div class="settings-header" *ngIf="isAdminAuthorized; else loadingTemplate">
+    <h4 class="ws-subtitle mb-3">Contributor</h4>
+    <p>You can control and view contributor in {{ store?.name }}.</p>
+    <div class="col-sm-6 px-0 center" style="height: 100%">
+        <form class="border mb-3" *ngIf="isAdminAuthorized">
+            <div class="border-bottom p-2 text-center" style="background-color: #fafafa;">
+                Invite Contributor
+            </div>
+            <div class="p-3">
+                <label class="font-9 mb-0">Select members to invite</label>
+                <div class="form-control form-control-sm">
+                    <div class="row no-gutters w-100">
+                        <span class="badge ws-bg-secondary mr-1" style="height:20px;line-height:17px" *ngFor="let contributor of contributorController.newContributors">{{
+            contributor?.firstName}}
+                            <span class="fas fa-times ml-2 clickable" (click)="removeContributor(contributor)"></span>
+                        </span>
+                        <input autocomplete="off" (input)="valueChanged($event.target.value)" name="contributor" class="mb-0 settings-input border-0 col nooutline" [(ngModel)]="contributorController.searchText" />
+                    </div>
+                </div>
+                <div class="w-100 position-relative">
+                    <ul *ngIf="userSuggestions?.length" class="contributor-list list-unstyled mb-0">
+                        <li *ngFor="let user of userSuggestions" (click)="addContributor(user)">
+                            <img class="mr-2" style="width:24px; height:24px; object-fit: contain; border-radius: 50%;" [defaultImage]="environment.LAZY_LOAD_IMAGE" [lazyLoad]="user?.profileImage" alt="profile image" />
+                            <div class="d-inline-block">{{user?.firstName }} {{user?.lastName}}</div>
+                        </li>
+                    </ul>
+                </div>
+
+                <label class="font-9 mb-0">Choose a role permission</label>
+                <mat-select name="role" [(ngModel)]="contributorController.newRole" class="settings-input form-control form-control-sm">
+                    <mat-option value="admin">Admin</mat-option>
+                    <mat-option value="maintainer">Maintainer</mat-option>
+                </mat-select>
+                <permission-list [role]="contributorController.newRole"></permission-list>
+                <button class="btn btn-sm btn-controller m-0 mt-3 mb-3" wsDebounceClick (debounceClick)="inviteContributor()">
+                    <ws-spinner *ngIf="isInviteLoading?.isRunning()" [width]="15" [height]="15" [spinnerColor]="'#fff'" [borderWidth]="3" class="mr-2"></ws-spinner>Invite</button>
+            </div>
+        </form>
+        <p class="mb-2">Existing contributors</p>
+        <div class="border rounded">
+            <div class="border-bottom p-2" style="background-color: #fafafa; font-size: .9rem">
+                Contributors of
+                <span class="font-weight-bold">Vrest Hotel</span>
+                <button [disabled]="refreshLoading.isRunning()" style="background: none; border: 0" class="p-0 float-right mr-2" (click)="getContributors()">
+                    <span [class.loading]="refreshLoading.isRunning()" class="fas fa-sync-alt clickable"></span>
+                </button>
+            </div>
+            <div class="p-3" *ngFor="let contributor of contributorController.existsContributors">
+                <img class="mr-3" style="width: 40px; height: 40px; border-radius: 50%" [defaultImage]="environment.LAZY_LOAD_IMAGE" [lazyLoad]="contributor?.profileImage" alt="Profile" />
+                <div class="d-inline-block" style="vertical-align: middle">
+                    <span class="d-flex font-weight-normal" style="font-size:.9rem">{{contributor?.firstName}}
+                        {{contributor?.lastName}}
+                        <span *ngIf="contributor?.status == 'active'" class="fas fa-circle ml-2 text-success" style="filter: drop-shadow(0 0  2px #1e7b34);line-height: 20px;"></span>
+                        <span *ngIf="contributor?.status == 'rejected'" class="fas fa-circle ml-2 text-danger" style="filter: drop-shadow(0 0 2px #990000);line-height: 20px;"></span>
+                        <span *ngIf="contributor?.status == 'pending'" class="fas fa-circle ml-2 text-warning" style="filter: drop-shadow(0 0 2px #ffbb33);line-height: 20px;"></span>
+                    </span>
+                    <span *ngIf="contributor?.status == 'active'" class="d-flex" style="font-size:.9rem">Joined {{
+          contributor?.joinedDate | passDate }} - {{ contributor?.role}}</span>
+                    <span *ngIf="contributor?.status == 'pending'" class="d-flex" style="font-size:.9rem">Invited {{
+          contributor?.invitedDate | passDate }} - {{ contributor?.role}}</span>
+                    <span *ngIf="contributor?.status == 'rejected'" class="d-flex" style="font-size:.9rem">Rejected {{
+          contributor?.joinedDate | passDate }} - {{ contributor?.role}}</span>
+                </div>
+                <div *ngIf="isAdminAuthorized" class="d-inline-block float-right">
+                    <a href="javascript:void(0)" class="default" (click)="openEditContributorModal(contributor)">
+                        <span class="font-weight-normal" style="font-size:.9rem">Edit</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #loadingTemplate>
+  <ng-container *ngIf="loading.isRunning(); else noAuthorization">
+      <ws-spinner class="text-center d-block w-100" style="padding-top: 10vh; padding-bottom: 10vh"></ws-spinner>
+  </ng-container>
+</ng-template>
+
+
+<ng-template #noAuthorization>
+    <div class="h5 text-muted text-center font-weight-light" style="padding-top: 10vh; padding-bottom: 10vh">
+        No Authorization
+    </div>
+  </ng-template>
+
+<edit-contributor-modal *ngIf="isEditContributorModalOpened" [contributorController]="contributorController" [(isOpened)]="isEditContributorModalOpened" id="editModal"></edit-contributor-modal>

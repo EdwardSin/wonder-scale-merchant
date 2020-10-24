@@ -1,0 +1,25 @@
+ul.contributor-list {
+    z-index: 1;
+    background-color: #fff;
+    position: absolute;
+    width: 100%;
+    top: .25rem;
+    font-size: .8rem;
+    overflow: hidden;
+    border-radius: .25rem;
+    border-top: 1px solid #ced4da;
+
+    li {
+        list-style: none;
+        padding: .75rem 1rem;
+        border: 1px solid #ced4da;
+        border-top: none;
+
+        &:hover,
+        &.hover {
+            background-color: #4d5466;
+            color: #fff;
+            cursor: pointer;
+        }
+    }
+}

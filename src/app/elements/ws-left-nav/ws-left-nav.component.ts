@@ -37,11 +37,11 @@ export class WsLeftNavComponent implements OnInit {
     if (window) {
       let isMobileSize = window.innerWidth < 992;
       $('.main-nav-list').css({
-        height: (window.innerHeight - (isMobileSize ? 50 : 91)) + 'px'
+        height: (window.innerHeight - (isMobileSize ? 70 : 120)) + 'px'
       });
       $(window).on('resize', function () {
         $('.main-nav-list').css({
-          height: (window.innerHeight - (isMobileSize ? 50 : 91)) + 'px'
+          height: (window.innerHeight - (isMobileSize ? 70 : 120)) + 'px'
         });
       })
     }

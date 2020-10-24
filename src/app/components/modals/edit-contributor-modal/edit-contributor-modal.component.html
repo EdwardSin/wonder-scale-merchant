@@ -12,11 +12,11 @@
         [value]="contributorController.selectedContributor?.email" />
       <div>
         <label class="p-0 mb-0">Role</label>
-        <select class="form-control form-control-sm p-0 font-9" name="role"
+        <mat-select class="form-control form-control-sm font-9" name="role"
           (input)="contributorController.reset()" [(ngModel)]="contributorController.newRole">
-          <option [value]="'admin'">Admin</option>
-          <option [value]="'maintainer'">Maintainer</option>
-        </select>
+          <mat-option [value]="'admin'">Admin</mat-option>
+          <mat-option [value]="'maintainer'">Maintainer</mat-option>
+        </mat-select>
         <permission-list [role]="contributorController.newRole"></permission-list>
       </div>
       <div class="mt-3">

@@ -412,7 +412,6 @@ export class StorePageComponent implements OnInit {
   }
   removeInformationImagesObservable() {
     return forkJoin(this.removingBanners.map(image => {
-      console.log(image);
       return this.authStoreContributorService.removeInformationImage({ filename: image.url })
     }));
   }

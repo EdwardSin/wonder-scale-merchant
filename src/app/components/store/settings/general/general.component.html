@@ -1,0 +1,28 @@
+<h4 class="ws-subtitle mb-3">General</h4>
+<div>
+    <h5>Status</h5>
+    <div class="px-3 py-2">
+        <mat-radio-group [value]="status" class="d-block" (click)="clickStatus($event)" style="width: 160px">
+          <mat-radio-button [color]="'primary'" class="d-block" [value]="true">In Operation</mat-radio-button>
+          <mat-radio-button [color]="'primary'" class="d-block" [value]="false">Under Maintanence</mat-radio-button>
+        </mat-radio-group>
+    </div>
+    <hr />
+    <h5>Preference</h5>
+    <div class="px-3 py-2 mb-3">
+        <label class="h6 d-block">Currency</label>
+        <mat-select class="form-control form-control-sm" name="currency" [(ngModel)]="selectedCurrency" style="max-width: 300px" placeholder="Currency">
+            <ng-container  *ngFor="let currency of currencyService.currencyFullnameArray">
+                <mat-option [value]="currency" *ngIf="currency == 'MYR'">{{currency}}
+                    ({{currencyService.currencySymbols[currency]}})
+                </mat-option>
+            </ng-container>
+        </mat-select>
+    </div>
+    <div style="width: 316px;">
+        <button class="float-right btn btn-sm btn-controller" (click)="editGeneral()">
+            <ws-spinner *ngIf="isEditingLoading?.isRunning()" [width]="15" [height]="15" [spinnerColor]="'#fff'" [borderWidth]="3" class="mr-2"></ws-spinner>Save</button>
+    </div>
+</div>
+<confirm-modal *ngIf="isConfirmPublishedModalOpened" [(isOpened)]="isConfirmPublishedModalOpened" [loading]="isPublishLoading.isRunning()" id="confirmPublishStoreModal" [message]="'Are you sure to publish the store?'" [action]="publishStore.bind(this)"></confirm-modal>
+<confirm-modal *ngIf="isConfirmUnpublishedModalOpened" [(isOpened)]="isConfirmUnpublishedModalOpened" [loading]="isUnpublishLoading.isRunning()" id="confirmUnpublishStoreModal" [message]="'Are you sure to unpublish the store?'" [action]="unpublishStore.bind(this)"></confirm-modal>

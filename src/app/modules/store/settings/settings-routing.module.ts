@@ -2,28 +2,39 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { SettingsComponent } from '@components/store/settings/settings/settings.component';
 import { StoreResolver } from '@components/resolvers/store-resolver.service';
+import { StaffSettingsComponent } from '@components/store/settings/staff-settings/staff-settings.component';
+import { AdvancedComponent } from '@components/store/settings/advanced/advanced.component';
+import { SettingsListComponent } from '@components/store/settings/settings-list/settings-list.component';
 
 
 const routes: Routes = [
   {
     path: '',
     component: SettingsComponent,
-    children: [{
+    children: [
+    {
       path: '',
-      redirectTo: 'about',
-      pathMatch: 'full'
+      component: SettingsListComponent,
+      resolve: { store: StoreResolver },
+      data: { title: '', breadcrumb: '' }
     },
     {
-      path: 'about',
-      loadChildren: () => import('./about/about.module').then(m => m.AboutModule),
+      path: 'general',
+      loadChildren: () => import('./general/general.module').then(m => m.GeneralModule),
       resolve: { store: StoreResolver },
-      data: { title: 'about', breadcrumb: 'About' }
+      data: { title: 'general', breadcrumb: 'General' }
+    }, 
+    {
+      path: 'staff',
+      loadChildren: () => import('./staff-settings/staff-settings.module').then(m => m.StaffSettingsModule),
+      resolve: { store: StoreResolver },
+      data: { title: 'staff', breadcrumb: 'Staff' }
     },
     {
-      path: 'social-media',
-      loadChildren: () => import('./social-media/social-media.module').then(m => m.SocialMediaModule),
+      path: 'advanced',
+      loadChildren: () => import('./advanced/advanced.module').then(m => m.AdvancedModule),
       resolve: { store: StoreResolver },
-      data: { title: 'social-media', breadcrumb: 'Socia Media' }
+      data: { title: 'advanced', breadcrumb: 'Advanced' }
     }
   ]
   }
