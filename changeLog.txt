@@ -8,6 +8,7 @@
 ---------------------------------------------
 .: WSM: Task: Settings Page (WSM-210)
 .: WSM: Task: Reduce shop entry details (WSM-188)
+.: WSM: Task: Update home control (WSM-207)
 
 ---------------------------------------------
 - 2020-10-18                                -
