@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { SocialMediaComponent } from '@components/store/settings/social-media/social-media.component';
+import { StaffSettingsComponent } from '@components/store/settings/staff-settings/staff-settings.component';
 
 
 const routes: Routes = [{
   path: '',
-  component: SocialMediaComponent
+  component: StaffSettingsComponent
 }];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class SocialMediaRoutingModule { }
+export class StaffSettingsRoutingModule { }

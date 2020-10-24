@@ -1,0 +1,35 @@
+<div class="row no-gutters">
+    <div class="col-lg-2 pr-lg-3">
+        <div class="btn settings-container" [routerLink]="['/stores', store?.username, 'settings', 'general']">
+            <div>
+                <div class="mb-2">
+                    <span class="settings-icon fas fa-cog"></span>
+                    <label class="settings-label mb-0">General</label>
+                </div>
+                <p class="settings-text">View and update your store settings</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-2 pr-lg-3">
+        <div class="btn settings-container" [routerLink]="['/stores', store?.username, 'settings', 'staff']">
+            <div>
+                <div class="mb-2">
+                    <span class="settings-icon fas fa-user-tie"></span>
+                    <label class="settings-label mb-0">Staff</label>
+                </div>
+                <p class="settings-text">Manage or edit staff</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-2 pr-lg-3">
+        <div class="btn settings-container" [routerLink]="['/stores', store?.username, 'settings', 'advanced']">
+            <div>
+                <div class="mb-2">
+                    <span class="settings-icon fas fa-sign-out-alt"></span>
+                    <label class="settings-label mb-0">Advanced</label>
+                </div>
+                <p class="settings-text">Close or leave store</p>
+            </div>
+        </div>
+    </div>
+</div>

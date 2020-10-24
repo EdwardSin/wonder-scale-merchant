@@ -29,7 +29,7 @@
           <span class="ws-main-nav-icon fas fa-th"></span>
           <span class="ws-main-nav-text">{{store?.type == 'restaurant' ? 'Menu' : 'Catalogue'}}</span>
         </a>
-        <ul class="ws-main-nav-sub-list ws-main-nav-sub-list__padding">
+        <ul class="ws-main-nav-sub-list">
           <li class="ws-main-nav-sub-list__title">
             <a [routerLink]="['catalogue']">{{store?.type == 'restaurant' ? 'Menu' : 'Catalogue'}}</a>
           </li>
@@ -88,17 +88,17 @@
                   <span style="vertical-align: sub">Confirm</span>
                 </a>
               </div>
-              <span *ngIf="!isEditCategory(category?.name)" class="drag-handle" cdkDragHandle>
-                <span class="fas fa-bars" style="font-size: .9rem; margin-left: .25rem"></span>
-              </span>
-              <a href="javascript:void(0)" *ngIf="!isEditCategory(category?.name)" class="ws-secondary"
+              <a href="javascript:void(0)" *ngIf="!isEditCategory(category?.name)" class="ws-secondary collapsed"
                 [class.active]="isLinkActive('/stores/' + store?.username + '/catalogue/custom/' + category.name)" [routerLink]="['catalogue', 'custom', category.name]"
                 [queryParams]="{page: 1}">
+                <span *ngIf="!isEditCategory(category?.name)" class="drag-handle" cdkDragHandle>
+                  <span class="fas fa-bars"></span>
+                </span>
                 <span style="overflow: hidden; width: 160px; text-overflow: ellipsis; display: inline-block">
                   {{ category?.name }}</span>
                 <span class="badge ws-bg-secondary badge-pill float-right position-absolute"
                   style="margin-top: 3px; right: 10px; top: .5rem">{{category?.items?.length}}</span>
-                <div>
+                <div style="padding-left: 1.75rem">
                   <span class="edit-button d-inline-block ws-secondary" style="font-size: .8rem"
                     (click)="$event.preventDefault(); $event.stopPropagation(); setEditCategory(category?.name)">Edit</span>
                   <span class="edit-button d-inline-block ws-secondary ml-2" style="font-size: .8rem"
@@ -213,10 +213,13 @@
             <a [routerLink]="['settings', 'about']">Settings</a>
           </li>
           <li>
-            <a [routerLinkActive]="'active'" [routerLink]="['settings', 'about']">About</a>
+            <a [routerLinkActive]="'active'" [routerLink]="['settings', 'general']">General</a>
           </li>
           <li>
-            <a [routerLinkActive]="'active'" [routerLink]="['settings', 'social-media']">Social Media</a>
+            <a [routerLinkActive]="'active'" [routerLink]="['settings', 'staff']">Staff</a>
+          </li>
+          <li>
+            <a [routerLinkActive]="'active'" [routerLink]="['settings', 'advanced']">Advanced</a>
           </li>
         </ul>
       </li>
