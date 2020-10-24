@@ -2,8 +2,8 @@
   <div class="container-fluid">
     <div *ngIf="!store?.isPublished" class="pt-3">
       <div class="alert alert-info font-8 mb-0">
-        Store is not published currently.<br/>
-        You may click <a href="javascript:void(0)" (click)="publishStore()" class="font-weight-bold">here</a> to show to public once your store is ready.
+        Store is under maintenance currently.<br/>
+        You may click <a href="javascript:void(0)" (click)="publishStore()" class="font-weight-bold">here</a> to show to the public once your store is ready.
       </div>
     </div>
     <div *ngIf="isCatalogueRoute && !isClear && !store?.isPublished && !numberOfAllItems" class="pt-3">
