@@ -1,71 +1,70 @@
 <div modal class="modal">
   <div class="modal-wrap">
     <div class="modal-body">
-      <div [ngSwitch]="phase.step" class="modal-body-content" style="max-width: 100%;">
-        <!-- <form *ngSwitchCase="0" class="modal-content">
+      <div [ngSwitch]="phase.step" class="modal-body-content">
+        <form *ngSwitchCase="0" class="modal-content" style="max-width: 600px;">
           <div class="modal-close">
             <span class="fas fa-times" [routerLink]="[]" [queryParams]="{modal: null}"></span>
           </div>
           <p class="mb-4">Choose your store type.</p>
-          <div class="row no-gutters">
-            <div class="col-lg-6 p-3 text-center">
-              <button class="btn-type p-3" (click)="storeServiceType='physicalStore'"
-                [class.selected]="storeServiceType=='physicalStore'">
-                <img class="mb-4 mt-4" style="height: 75px" src="assets/images/svg/store.svg" alt="physical store" />
+          <div class="row no-gutters mb-4">
+            <div class="col-lg-6 pr-lg-3 text-center">
+              <button class="btn-type px-3 py-5" (click)="storeServiceType='physical'"
+                [class.selected]="storeServiceType=='physical'">
+                <span class="btn-type-icon fas fa-store mb-4"></span>
                 <p class="font-weight-bold mb-2">Physical Store</p>
-                <p style="font-size: .8rem">Physical store is existed.<br />
-                  (Store can sell online in future.)</p>
+                <p class="mb-0" style="font-size: .8rem">Physical store is existing.</p>
               </button>
             </div>
-            <div class="col-lg-6 p-3 text-center">
-              <button class="btn-type p-3" (click)="storeServiceType='onlineStore'"
-                [class.selected]="storeServiceType=='onlineStore'">
-                <img class="mb-4 mt-4" style="height: 75px" src="assets/images/svg/ecommerce.svg" alt="ecommerce" />
+            <div class="col-lg-6 pl-lg-3 text-center">
+              <button class="btn-type px-3 py-5" (click)="storeServiceType='online'"
+                [class.selected]="storeServiceType=='online'">
+                <span class="btn-type-icon fas fa-globe mb-4"></span>
                 <p class="font-weight-bold mb-2">Online Store</p>
-                <p style="font-size: .8rem">Sell products online only.<br />
-                  (Store can add details in future.)</p>
+                <p class="mb-0" style="font-size: .8rem">Sell products online only.</p>
               </button>
             </div>
           </div>
-          <button class="btn btn-md btn-second" type="button" style="margin-left: auto" (click)="next()">Next</button>
-        </form> -->
-        <form *ngSwitchCase="0" class="modal-content" style="max-width: 800px;">
+          <button class="btn btn-sm btn-controller" type="button" style="margin-left: auto" (click)="next()">Next</button>
+        </form>
+        <form *ngSwitchCase="1" class="modal-content" style="max-width: 800px;">
           <div class="modal-close">
             <span class="fas fa-times" [routerLink]="[]" [queryParams]="{modal: null}"></span>
           </div>
           <p class="mb-4">Choose your store type for us to provide you specified services.</p>
-          <div class="row no-gutters">
-            <div class="col-lg-4 p-2 text-center">
+          <div class="row no-gutters mb-4">
+            <div class="col-lg-4 pr-lg-3 text-center">
               <button class="btn-type p-4" (click)="storeType='restaurant'"
                 [class.selected]="storeType=='restaurant'">
-                <div class="fas fa-utensils mb-4" style="font-size: 4rem; color: #A52A2A"></div>
+                <div class="btn-type-icon fas fa-utensils mb-4"></div>
                 <p class="font-weight-bold mb-2">Restaurant</p>
                 <p style="font-size: .8rem">Examples: Foods, Beverages,<br /> Desserts, Cafe etc.</p>
               </button>
             </div>
-            <div class="col-lg-4 p-2 text-center">
+            <div class="col-lg-4 pr-lg-3 text-center">
               <button class="btn-type p-4" (click)="storeType='shopping'"
                 [class.selected]="storeType=='shopping'">
-                <div class="fas fa-shopping-bag mb-4" style="font-size: 4rem; color: #FF7F50"></div>
+                <div class="btn-type-icon fas fa-shopping-bag mb-4"></div>
                 <p class="font-weight-bold mb-2">Shopping</p>
                 <p style="font-size: .8rem">Examples: Shirts, <br />Electronic products, Furniture etc.</p>
               </button>
             </div>
-            <div class="col-lg-4 p-2 text-center">
+            <div class="col-lg-4 text-center">
               <button class="btn-type p-4" (click)="storeType='services'"
                 [class.selected]="storeType=='services'">
-                <div class="fas fa-cog mb-4" style="font-size: 4rem; color: #EFD31A"></div>
+                <div class="btn-type-icon fas fa-cog mb-4"></div>
                 <p class="font-weight-bold mb-2">Services</p>
                 <p style="font-size: .8rem">Examples: PC Repair, <br />Recycle Center, Cleaning Service etc.</p>
               </button>
             </div>
           </div>
           <div class="row no-gutters">
-            <button [disabled]="storeType == undefined" class="btn btn-md btn-second" type="button" style="margin-left: auto" (click)="next()">Next</button>
+            <button class="btn btn-sm btn-controller" type="button" (click)="phase.previous()">Previous</button>
+            <button [disabled]="storeType == undefined" class="btn btn-sm btn-controller" type="button" style="margin-left: auto" (click)="next()">Next</button>
           </div>
         </form>
 
-        <form *ngSwitchCase="1" class="modal-content" style="max-width: 500px" [formGroup]="basicFormGroup"
+        <form *ngSwitchCase="2" class="modal-content" style="max-width: 500px" [formGroup]="basicFormGroup"
           (keydown.enter)="$event.preventDefault()">
           <div class="modal-close">
             <span class="fas fa-times" [routerLink]="[]" [queryParams]="{modal: null}"></span>
@@ -143,13 +142,12 @@
             Max 128 characters.
           </mat-error>
           <div class="row no-gutters mt-4">
-            <button class="btn btn-md btn-second" type="button" (click)="phase.previous()">Previous</button>
-            <!-- [disabled]="!basicFormGroup.valid"  -->
-            <button class="btn btn-md btn-second" type="button" style="margin-left: auto" (click)="next()">Next</button>
+            <button class="btn btn-sm btn-controller" type="button" (click)="phase.previous()">Previous</button>
+            <button [disabled]="!basicFormGroup.valid" class="btn btn-sm btn-controller" type="button" style="margin-left: auto" (click)="next()">Next</button>
           </div>
         </form>
 
-        <form *ngSwitchCase="2" class="modal-content" style="max-width: 800px;"[formGroup]="addressFormGroup"
+        <form *ngSwitchCase="3" class="modal-content" style="max-width: 800px;"[formGroup]="addressFormGroup"
           (keydown.enter)="$event.preventDefault()">
           <div class="modal-close">
             <span class="fas fa-times" [routerLink]="[]" [queryParams]="{modal: null}"></span>
@@ -229,13 +227,13 @@
             </agm-map>
           </div>
           <div class="row no-gutters mt-4">
-            <button class="btn btn-md btn-second" type="button" (click)="phase.previous()">Previous</button>
+            <button class="btn btn-sm btn-controller" type="button" (click)="phase.previous()">Previous</button>
             <!-- [disabled]="addressFormGroup.value.isShowLocation && !addressFormGroup.valid"  -->
-            <button class="btn btn-md btn-second" type="button" style="margin-left: auto" (click)="next()">Next</button>
+            <button class="btn btn-sm btn-controller" type="button" style="margin-left: auto" (click)="next()">Next</button>
           </div>
         </form>
 
-        <form *ngSwitchCase="3" class="modal-content" style="width: fit-content" [formGroup]="openingInfoFormGroup"
+        <form *ngSwitchCase="4" class="modal-content" style="width: fit-content" [formGroup]="openingInfoFormGroup"
           (keydown.enter)="$event.preventDefault()">
           <div class="modal-close">
             <span class="fas fa-times" [routerLink]="[]" [queryParams]="{modal: null}"></span>
@@ -243,13 +241,13 @@
           <h3 class="h5 mb-0">Business Hour:</h3>
           <business-timetable [(timetable)]="timetable"></business-timetable>
           <div class="row no-gutters mt-2">
-            <button class="btn btn-md btn-second" type="button" (click)="phase.previous()">Previous</button>
+            <button class="btn btn-sm btn-controller" type="button" (click)="phase.previous()">Previous</button>
             <!-- [disabled]="!openingInfoFormGroup.valid" -->
-            <button class="btn btn-md btn-second" type="button" style="margin-left: auto" (click)="next()">Next</button>
+            <button class="btn btn-sm btn-controller" type="button" style="margin-left: auto" (click)="next()">Next</button>
           </div>
         </form>
 
-        <form *ngSwitchCase="4" class="modal-content" style="max-width: 800px;" [formGroup]="termAndConfitionsFormGroup"
+        <form *ngSwitchCase="5" class="modal-content" style="max-width: 800px;" [formGroup]="termAndConfitionsFormGroup"
           (keydown.enter)="$event.preventDefault()">
           <div class="modal-close">
             <span class="fas fa-times" [routerLink]="[]" [queryParams]="{modal: null}"></span>
@@ -266,13 +264,13 @@
               continue.</mat-error>
           </div>
           <div class="row no-gutters mt-4">
-            <button class="btn btn-md btn-second" type="button" (click)="phase.previous()">Previous</button>
+            <button class="btn btn-sm btn-controller" type="button" (click)="phase.previous()">Previous</button>
             <!-- [disabled]="!termAndConfitionsFormGroup.valid" -->
-            <ws-loading-button [loading]='loading.isRunning()' [class]="'btn btn-md btn-second'" style="margin-left: auto"
+            <ws-loading-button [loading]='loading.isRunning()' [class]="'btn btn-sm btn-controller'" style="margin-left: auto"
             (click)="next()">Next</ws-loading-button>
           </div>
         </form>
-        <div *ngSwitchCase="5" class="modal-content" style="max-width: 500px">
+        <div *ngSwitchCase="6" class="modal-content" style="max-width: 500px">
           <div class="modal-close" [routerLink]="[]" [queryParams]="{modal: null}">
             <span class="fas fa-times"></span>
           </div>

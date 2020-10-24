@@ -11,10 +11,15 @@
         outline: none;
     }
     &.selected{
-        border:1px solid #999999;
-        background-color: #F5F5F5;
+        background-color: #FFF5F5;
         border-radius: 5px;
         outline: none;   
+    }
+    .btn-type-icon {
+        font-size: 2rem;
+        -webkit-text-fill-color: white;
+        -webkit-text-stroke-width: 1px;
+        -webkit-text-stroke-color: #7f0000;
     }
 }
 

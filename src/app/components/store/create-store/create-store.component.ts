@@ -22,9 +22,9 @@ import { SharedStoreService } from '@services/shared/shared-store.service';
   styleUrls: ['./create-store.component.scss']
 })
 export class CreateStoreComponent implements OnInit {
-  storeServiceType: 'physicalStore' | 'onlineStore' = 'physicalStore';
+  storeServiceType: 'physical' | 'online' = 'physical';
   storeType: 'restaurant' | 'shopping' | 'services';
-  phase: Phase<number> = new Phase(0, 6);
+  phase: Phase<number> = new Phase(0, 7);
   mapController: MapController;
   loading: WsLoading = new WsLoading;
   store: Store;
@@ -65,29 +65,28 @@ export class CreateStoreComponent implements OnInit {
     this.getTermAndCondition();
   }
   next() {
-    // if (this.phase.isStep()) {
-    //   if (this.storeServiceType != undefined) {
-    //     this.phase.next();
-    //   }
-    //   else {
-    //     WsToastService.toastSubject.next({ content: 'Please choose a store type.', type: 'danger' })
-    //   }
-    // }
-    // else 
     if (this.phase.isStep(0)) {
+      if (this.storeServiceType != undefined) {
+        this.phase.next();
+      }
+      else {
+        WsToastService.toastSubject.next({ content: 'Please choose a service type.', type: 'danger' })
+      }
+    }
+    else if (this.phase.isStep(1)) {
       if (this.storeType != undefined) {
         this.phase.next();
       }
       else {
-        WsToastService.toastSubject.next({ content: 'Please choose a store service type.', type: 'danger' })
+        WsToastService.toastSubject.next({ content: 'Please choose a store type.', type: 'danger' })
       }
     }
-    else if (this.phase.isStep(1)) {
+    else if (this.phase.isStep(2)) {
       if (this.basicFormGroup.valid) {
         this.phase.next();
       }
     }
-    else if (this.phase.isStep(2)) {
+    else if (this.phase.isStep(3)) {
       if (!this.addressFormGroup.value.isShowLocation || this.addressFormGroup.valid) {
         this.phase.next();
       }
@@ -95,14 +94,14 @@ export class CreateStoreComponent implements OnInit {
         WsToastService.toastSubject.next({ content: 'Please complete the form.', type: 'danger' });
       }
     }
-    else if (this.phase.isStep(3)) {
+    else if (this.phase.isStep(4)) {
       if (this.openingInfoFormGroup.valid) {
         this.phase.next();
       }
       else {
         WsToastService.toastSubject.next({ content: 'Please complete the form.', type: 'danger' });
       }
-    } else if (this.phase.isStep(4)) {
+    } else if (this.phase.isStep(5)) {
       this.addStore(true);
     }
   }
@@ -157,12 +156,13 @@ export class CreateStoreComponent implements OnInit {
   }
   createNewStore() {
     let store = new Store;
+    store.serviceType = this.storeServiceType;
     store.type = this.storeType;
     store.serviceType = this.storeServiceType;
     store.name = this.basicFormGroup.value.name;
     store.phone = [this.basicFormGroup.value.tel];
-    store.email = [this.basicFormGroup.value.email];
-    store.website = [this.basicFormGroup.value.website];
+    store.email = _.compact([this.basicFormGroup.value.email]);
+    store.website = _.compact([this.basicFormGroup.value.website]);
     store['currency'] = this.basicFormGroup.value.currency;
     store.showAddress = this.addressFormGroup.value.isShowLocation;
     if (this.addressFormGroup.value.isShowLocation) {
