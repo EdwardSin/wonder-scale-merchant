@@ -20,9 +20,6 @@
         (click)="onNavbarOpen()">
         <span class="fas fa-bars d-inline-block pr-3 pl-3"></span>
       </span>
-      <a [href]="environment.URL + 'page/' + store?.username + '?id=' + store?._id + '&preview=true'" target="_blank" title="View your store" class="float-icon btn btn-controller">
-        <span class="fas fa-eye"></span>
-      </a>
       <breadcrumb class="col"></breadcrumb>
     </div>
     <div *ngIf="store?.status?.status == 'closed'" class="alert-danger p-3 mt-2">

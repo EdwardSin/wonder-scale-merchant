@@ -61,7 +61,7 @@ export class QrcodeComponent implements OnInit {
         if (result) {
           this.store = result;
           this.displayImage = this.store.profileImage ? 'api/images/' + encodeURIComponent(this.store.profileImage) : 'assets/images/svg/dot.svg';
-          this.url = environment.URL + 'page/' + this.store.username + '?id=' + this.store.id + '&type=qr_scan';
+          this.url = environment.URL + 'page/' + this.store.username + '?type=qr_scan';
           this.getTracks();
         }
         this.loading.stop();
