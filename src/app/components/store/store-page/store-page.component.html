@@ -21,7 +21,8 @@
         [store]="store"
         [isEditing]="true"
         [isAuthenticated]="false"
-        [editingBanners]="editingBanners"
+        [banners]="editingBanners"
+        [profileImage]="editingProfileImage"
         (onEditBannersClicked)="onEditBannersClicked($event)"
         (onEditProfileImageClicked)="onEditProfileImageClicked($event)"
         (onEditOpeningHoursClicked)="onEditOpeningHoursClicked($event)"
@@ -58,7 +59,8 @@
             <merchant-info style="display: block; min-height: calc(100vh - 317px)" *ngIf="selectedNav == 'info'" [store]="store"
                 [isEditing]="true"
                 [isAuthenticated]="false"
-                [editingBanners]="editingBanners"
+                [banners]="editingBanners"
+                [profileImage]="editingProfileImage"
                 (onEditBannersClicked)="onEditBannersClicked($event)"
                 (onEditProfileImageClicked)="onEditProfileImageClicked($event)"
                 (onEditOpeningHoursClicked)="onEditOpeningHoursClicked($event)"
@@ -82,7 +84,7 @@
                 (onAddMediaClicked)="onAddMediaClicked($event)"
             ></merchant-info>
             <merchant-menu style="display: block; min-height: calc(100vh - 317px)" *ngIf="selectedNav == 'menu'" [store]="store" [isEditing]="true" [navigateToStore]="navigateToInfo.bind(this)"></merchant-menu>
-            <merchant-share style="display: block; min-height: calc(100vh - 317px)" *ngIf="selectedNav == 'share'" [store]="store" [isEditing]="true"></merchant-share>
+            <merchant-share style="display: block; min-height: calc(100vh - 317px)" *ngIf="selectedNav == 'share'" [store]="store" [profileImage]="editingProfileImage" [isEditing]="true"></merchant-share>
             <merchant-footer [selectedNav]="selectedNav" [isEditing]="true"
             [navigateToInfo]="navigateToInfo.bind(this)"
             [navigateToMenu]="navigateToMenu.bind(this)"
@@ -157,6 +159,7 @@
             <input hidden id="id-profile-image-upload" type="file" accept="image/*" name="profile-image" (change)="fileChangeEvent($event)" />
         </div>
         <div class="mt-5">
+            <button class="btn btn-sm btn-danger mr-2" (click)="onDeleteProfileImageClicked()">Remove</button>
             <button class="btn btn-sm btn-controller" [disabled]="!isUploadProfileImage" (click)="onResetProfileImageClicked()">Reset</button>
             <button class="btn btn-sm btn-controller float-right" (click)="isProfileImageOpened = false">Close</button>
             <button [disabled]="isEdingLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditProfileImageClicked()">

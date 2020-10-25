@@ -58,6 +58,7 @@ export class StorePageComponent implements OnInit {
   editingTimetable: Timetable;
   editingMapController: MapController;
   editingBanners: Array<string> = [];
+  editingProfileImage: string;
   address: Address = new Address;
   tag = new Tag;
   previewImage;
@@ -65,6 +66,7 @@ export class StorePageComponent implements OnInit {
   editingAllBanners = [];
   croppieObj;
   isUploadProfileImage: boolean;
+  isDeleteProfileImage: boolean;
   removingBanners = [];
   isMediaMax: boolean;
   editingMedias = [];
@@ -91,6 +93,8 @@ export class StorePageComponent implements OnInit {
       this.editingStore = _.cloneDeep(result);
       this.allBanners = this.store.informationImages.map(image => { return { url: image, type: 'url' } });
       this.editingAllBanners = _.cloneDeep(this.allBanners);
+      this.editingBanners = this.store.informationImages.map(image => environment.IMAGE_URL + image);
+      this.editingProfileImage = this.store.profileImage ? environment.IMAGE_URL + this.store.profileImage: null;
     });
     this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe(queryParams => {
       if(queryParams['nav']) {
@@ -204,10 +208,11 @@ export class StorePageComponent implements OnInit {
   }
   async onConfirmEditProfileImageClicked() {
     this.editingStore.profileImage = await this.croppieObj.result({size: {width: 300, height: 300}})
-    $('.merchant__profile-image').attr('src', this.editingStore.profileImage);
+    this.editingProfileImage = this.editingStore.profileImage;
     this.isChanged = true;
     this.isProfileImageOpened = false;
     this.isUploadProfileImage = true;
+    this.isDeleteProfileImage = false;
   }
   onConfirmEditOpeningHoursClicked() {
     this.store.openingInfoType = this.editingTimetable.operatingHourRadio;
@@ -369,10 +374,20 @@ export class StorePageComponent implements OnInit {
     }
   }
   onResetProfileImageClicked() {
-    $('.merchant__profile-image').attr('src', environment.IMAGE_URL + this.store.profileImage);
+    this.editingProfileImage = this.store.profileImage ? environment.IMAGE_URL + this.store.profileImage: '';
     this.isChanged = true;
     this.isProfileImageOpened = false;
     this.isUploadProfileImage = false;
+    this.isDeleteProfileImage = false;
+  }
+  onDeleteProfileImageClicked() {
+    this.editingStore.profileImage = null;
+    this.store.profileImage = null;
+    this.editingProfileImage = '';
+    this.isChanged = true;
+    this.isProfileImageOpened = false;
+    this.isUploadProfileImage = false;
+    this.isDeleteProfileImage = true;
   }
   onConfirmStoreSaved() {
     let obj = {
@@ -380,13 +395,13 @@ export class StorePageComponent implements OnInit {
     }
     let isInformationImagesUploaded = this.allBanners.find(banner => banner.type === 'blob');
     let isInformationImagesRemove = this.removingBanners.length > 0;
-  
     let profileImageObservable = this.isUploadProfileImage ? this.authStoreContributorService.editProfileImage({ file: this.editingStore.profileImage }) : of(null);
+    let removeProfileImageObservable = this.isDeleteProfileImage ? this.authStoreContributorService.removeProfileImage() : of(null);
     let informationImagesObservable = isInformationImagesUploaded ? this.getInformationImagesObservable() : of([]);
     let removeInformationImagesObservable = isInformationImagesRemove ? this.removeInformationImagesObservable() : of([]);
     this.isSaveStoreLoading.start();
-    forkJoin([profileImageObservable, informationImagesObservable, removeInformationImagesObservable]).pipe(switchMap((result) => {
-      let informationImages = result[1];
+    forkJoin([profileImageObservable, removeProfileImageObservable, informationImagesObservable, removeInformationImagesObservable]).pipe(switchMap((result) => {
+      let informationImages = <Array<any>>result[2];
       let editingBanners = this.allBanners.map(banner => banner.url);
       informationImages.forEach(informationImage => {
         editingBanners[informationImage.index] = informationImage.image;
