@@ -159,7 +159,7 @@
             <input hidden id="id-profile-image-upload" type="file" accept="image/*" name="profile-image" (change)="fileChangeEvent($event)" />
         </div>
         <div class="mt-5">
-            <button class="btn btn-sm btn-controller mr-2" [disabled]="!isUploadProfileImage" (click)="onDeleteProfileImageClicked()">Remove</button>
+            <button class="btn btn-sm btn-danger mr-2" (click)="onDeleteProfileImageClicked()">Remove</button>
             <button class="btn btn-sm btn-controller" [disabled]="!isUploadProfileImage" (click)="onResetProfileImageClicked()">Reset</button>
             <button class="btn btn-sm btn-controller float-right" (click)="isProfileImageOpened = false">Close</button>
             <button [disabled]="isEdingLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditProfileImageClicked()">
