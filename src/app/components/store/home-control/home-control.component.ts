@@ -31,7 +31,7 @@ export class HomeControlComponent implements OnInit {
     this.sharedStoreService.store.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       this.store = result;
       this.displayImage = this.store.profileImage ? 'api/images/' + encodeURIComponent(this.store.profileImage) : 'assets/images/svg/dot.svg';
-      this.url = environment.URL + 'page/' + this.store.username + '?id=' + this.store.id + '&type=qr_scan';
+      this.url = environment.URL + 'page/' + this.store.username + '?type=qr_scan';
     })
   }
   isStoreDetailsCompleted() {
