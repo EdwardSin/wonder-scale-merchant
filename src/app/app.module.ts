@@ -6,8 +6,6 @@ import { JwtModule, JWT_OPTIONS } from '@auth0/angular-jwt';
 import { SocialLoginModule, GoogleLoginProvider, FacebookLoginProvider, SocialAuthServiceConfig } from 'angularx-social-login';
 import { NgProgressModule } from 'ngx-progressbar';
 import { NgProgressRouterModule } from 'ngx-progressbar/router';
-import { NgxDropzoneModule } from 'ngx-dropzone';
-import { SortablejsModule } from 'ngx-sortablejs';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -77,10 +75,6 @@ export function jwtOptionsFactory(platformId) {
     SocialLoginModule,
     NgProgressModule,
     NgProgressRouterModule,
-    NgxDropzoneModule,
-    SortablejsModule.forRoot({
-      animation: 150
-    }),
     JwtModule.forRoot({
       jwtOptionsProvider: {
         provide: JWT_OPTIONS,

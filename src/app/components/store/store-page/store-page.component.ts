@@ -478,6 +478,13 @@ export class StorePageComponent implements OnInit {
     }
     reader.readAsDataURL(file);
   }
+  removePreviewImage() {
+    this.previewImage = null;
+    $('.croppie-container').remove();
+  }
+  mediaChange() {
+    this.error = '';
+  }
   uploadImageModalChange() {
     $(() => {
       let Croppie = window['Croppie'];

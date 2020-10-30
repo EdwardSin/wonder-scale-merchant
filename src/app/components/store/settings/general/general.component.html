@@ -2,7 +2,7 @@
 <div>
     <h5>Status</h5>
     <div class="px-3 py-2">
-        <mat-radio-group [value]="status" class="d-block" (click)="clickStatus($event)" style="width: 160px">
+        <mat-radio-group [value]="status" class="d-block" (click)="clickStatus()" style="width: 160px">
           <mat-radio-button [color]="'primary'" class="d-block" [value]="true">In Operation</mat-radio-button>
           <mat-radio-button [color]="'primary'" class="d-block" [value]="false">Under Maintanence</mat-radio-button>
         </mat-radio-group>

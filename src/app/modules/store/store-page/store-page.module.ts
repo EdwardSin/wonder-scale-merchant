@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { StorePageRoutingModule } from './store-page-routing.module';
@@ -17,6 +17,7 @@ import { MerchantShareComponent } from '@elements/mobile/merchant-share/merchant
     MerchantFooterComponent,
     MerchantMenuComponent,
     MerchantShareComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   imports: [
     CommonModule,
     SharedModule,

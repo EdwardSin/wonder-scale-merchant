@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+import { NgxDropzoneModule } from 'ngx-dropzone';
+import { SortablejsModule } from 'ngx-sortablejs';
 import { SwiperModule } from 'ngx-swiper-wrapper';
 import { AgmCoreModule } from '@agm/core';
 import { MatNativeDateModule } from '@angular/material/core';
@@ -17,11 +19,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ElementModule } from '../element/element.module';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
-import { BusinessLocationComponent } from '@elements/business-location/business-location.component';
 
 @NgModule({
   declarations: [
-    BusinessLocationComponent
   ],
   imports: [
     CommonModule,
@@ -38,12 +38,15 @@ import { BusinessLocationComponent } from '@elements/business-location/business-
     MatNativeDateModule,
     LazyLoadImageModule,
     MDBBootstrapModule.forRoot(),
+    NgxDropzoneModule,
+    SortablejsModule.forRoot({
+      animation: 150
+    }),
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyBTVuemjzI8vqXoCPeJhtt0WgFQ9TNizLQ'
     })
   ],
   exports: [
-    BusinessLocationComponent,
     AgmCoreModule,
     FormsModule,
     ReactiveFormsModule,
@@ -59,7 +62,9 @@ import { BusinessLocationComponent } from '@elements/business-location/business-
     MatDatepickerModule,
     MatNativeDateModule,
     LazyLoadImageModule,
-    MDBBootstrapModule
+    MDBBootstrapModule,
+    NgxDropzoneModule,
+    SortablejsModule
   ]
 })
 export class SharedModule { }
