@@ -11,7 +11,7 @@
     <div *ngIf="selectedPreview == 'website'" class="merchant-preview">
         <div *ngIf="isChanged" class="merchant-preview__save p-2">
             <p class="d-inline-block mb-0">Save to confirm changes</p>
-            <button class="btn btn-sm btn-controller" style="opacity: 1; width: 80px" [disabled]="isSaveStoreLoading.isRunning()" (click)="onConfirmStoreSaved($event)">
+            <button class="btn btn-sm btn-controller" style="opacity: 1; width: 80px" [disabled]="isSaveStoreLoading.isRunning()" (click)="onConfirmStoreSaved()">
                 <ws-spinner *ngIf="isSaveStoreLoading?.isRunning()" class="align-center" [width]="15" [height]="15" [borderWidth]="2" [spinnerColor]="'#888'"></ws-spinner>
                 <span *ngIf="!isSaveStoreLoading.isRunning()"><span class="fas fa-save mr-2 d-inline-block"></span>Save</span>
             </button>
@@ -23,34 +23,34 @@
         [isAuthenticated]="false"
         [banners]="editingBanners"
         [profileImage]="editingProfileImage"
-        (onEditBannersClicked)="onEditBannersClicked($event)"
-        (onEditProfileImageClicked)="onEditProfileImageClicked($event)"
-        (onEditOpeningHoursClicked)="onEditOpeningHoursClicked($event)"
-        (onEditDescriptionClicked)="onEditDescriptionClicked($event)"
-        (onEditStoreTypeClicked)="onEditStoreTypeClicked($event)"
-        (onEditAddressClicked)="onEditAddressClicked($event)"
-        (onEditTagsClicked)="onEditTagsClicked($event)"
-        (onEditPhoneClicked)="onEditPhoneClicked($event)"
-        (onEditEmailClicked)="onEditEmailClicked($event)"
-        (onEditWebsiteClicked)="onEditWebsiteClicked($event)"
-        (onEditFacebookClicked)="onEditFacebookClicked($event)"
-        (onEditInstagramClicked)="onEditInstagramClicked($event)"
-        (onEditTwitterClicked)="onEditTwitterClicked($event)"
-        (onEditWhatsappClicked)="onEditWhatsappClicked($event)"
-        (onEditMessengerClicked)="onEditMessengerClicked($event)"
-        (onEditYoutubeClicked)="onEditYoutubeClicked($event)"
-        (onEditSnapchatClicked)="onEditSnapchatClicked($event)"
-        (onEditTelegramClicked)="onEditTelegramClicked($event)"
-        (onEditWeiboClicked)="onEditWeiboClicked($event)"
-        (onEditWechatClicked)="onEditWechatClicked($event)"
-        (onAddMediaClicked)="onAddMediaClicked($event)"
+        (onEditBannersClicked)="onEditBannersClicked()"
+        (onEditProfileImageClicked)="onEditProfileImageClicked()"
+        (onEditOpeningHoursClicked)="onEditOpeningHoursClicked()"
+        (onEditDescriptionClicked)="onEditDescriptionClicked()"
+        (onEditStoreTypeClicked)="onEditStoreTypeClicked()"
+        (onEditAddressClicked)="onEditAddressClicked()"
+        (onEditTagsClicked)="onEditTagsClicked()"
+        (onEditPhoneClicked)="onEditPhoneClicked()"
+        (onEditEmailClicked)="onEditEmailClicked()"
+        (onEditWebsiteClicked)="onEditWebsiteClicked()"
+        (onEditFacebookClicked)="onEditFacebookClicked()"
+        (onEditInstagramClicked)="onEditInstagramClicked()"
+        (onEditTwitterClicked)="onEditTwitterClicked()"
+        (onEditWhatsappClicked)="onEditWhatsappClicked()"
+        (onEditMessengerClicked)="onEditMessengerClicked()"
+        (onEditYoutubeClicked)="onEditYoutubeClicked()"
+        (onEditSnapchatClicked)="onEditSnapchatClicked()"
+        (onEditTelegramClicked)="onEditTelegramClicked()"
+        (onEditWeiboClicked)="onEditWeiboClicked()"
+        (onEditWechatClicked)="onEditWechatClicked()"
+        (onAddMediaClicked)="onAddMediaClicked()"
         ></merchant-page>
     </div>
     <div *ngIf="selectedPreview == 'mobile'" class="d-flex justify-content-center">
         <div class="merchant-preview__website">
             <div *ngIf="isChanged" class="merchant-preview__save p-2">
                 <p class="d-inline-block mb-0">Save to confirm changes</p>
-                <button class="btn btn-sm btn-controller" style="opacity: 1; width: 80px" [disabled]="isSaveStoreLoading.isRunning()" (click)="onConfirmStoreSaved($event)">
+                <button class="btn btn-sm btn-controller" style="opacity: 1; width: 80px" [disabled]="isSaveStoreLoading.isRunning()" (click)="onConfirmStoreSaved()">
                     <ws-spinner *ngIf="isSaveStoreLoading?.isRunning()" class="align-center" [width]="15" [height]="15" [borderWidth]="2" [spinnerColor]="'#888'"></ws-spinner>
                     <span *ngIf="!isSaveStoreLoading.isRunning()"><span class="fas fa-save mr-2 d-inline-block"></span>Save</span>
                 </button>
@@ -58,30 +58,29 @@
             <div class="clearfix"></div>
             <merchant-info style="display: block; min-height: calc(100vh - 317px)" *ngIf="selectedNav == 'info'" [store]="store"
                 [isEditing]="true"
-                [isAuthenticated]="false"
                 [banners]="editingBanners"
                 [profileImage]="editingProfileImage"
-                (onEditBannersClicked)="onEditBannersClicked($event)"
-                (onEditProfileImageClicked)="onEditProfileImageClicked($event)"
-                (onEditOpeningHoursClicked)="onEditOpeningHoursClicked($event)"
-                (onEditDescriptionClicked)="onEditDescriptionClicked($event)"
-                (onEditStoreTypeClicked)="onEditStoreTypeClicked($event)"
-                (onEditAddressClicked)="onEditAddressClicked($event)"
-                (onEditTagsClicked)="onEditTagsClicked($event)"
-                (onEditPhoneClicked)="onEditPhoneClicked($event)"
-                (onEditEmailClicked)="onEditEmailClicked($event)"
-                (onEditWebsiteClicked)="onEditWebsiteClicked($event)"
-                (onEditFacebookClicked)="onEditFacebookClicked($event)"
-                (onEditInstagramClicked)="onEditInstagramClicked($event)"
-                (onEditTwitterClicked)="onEditTwitterClicked($event)"
-                (onEditWhatsappClicked)="onEditWhatsappClicked($event)"
-                (onEditMessengerClicked)="onEditMessengerClicked($event)"
-                (onEditYoutubeClicked)="onEditYoutubeClicked($event)"
-                (onEditSnapchatClicked)="onEditSnapchatClicked($event)"
-                (onEditTelegramClicked)="onEditTelegramClicked($event)"
-                (onEditWeiboClicked)="onEditWeiboClicked($event)"
-                (onEditWechatClicked)="onEditWechatClicked($event)"
-                (onAddMediaClicked)="onAddMediaClicked($event)"
+                (onEditBannersClicked)="onEditBannersClicked()"
+                (onEditProfileImageClicked)="onEditProfileImageClicked()"
+                (onEditOpeningHoursClicked)="onEditOpeningHoursClicked()"
+                (onEditDescriptionClicked)="onEditDescriptionClicked()"
+                (onEditStoreTypeClicked)="onEditStoreTypeClicked()"
+                (onEditAddressClicked)="onEditAddressClicked()"
+                (onEditTagsClicked)="onEditTagsClicked()"
+                (onEditPhoneClicked)="onEditPhoneClicked()"
+                (onEditEmailClicked)="onEditEmailClicked()"
+                (onEditWebsiteClicked)="onEditWebsiteClicked()"
+                (onEditFacebookClicked)="onEditFacebookClicked()"
+                (onEditInstagramClicked)="onEditInstagramClicked()"
+                (onEditTwitterClicked)="onEditTwitterClicked()"
+                (onEditWhatsappClicked)="onEditWhatsappClicked()"
+                (onEditMessengerClicked)="onEditMessengerClicked()"
+                (onEditYoutubeClicked)="onEditYoutubeClicked()"
+                (onEditSnapchatClicked)="onEditSnapchatClicked()"
+                (onEditTelegramClicked)="onEditTelegramClicked()"
+                (onEditWeiboClicked)="onEditWeiboClicked()"
+                (onEditWechatClicked)="onEditWechatClicked()"
+                (onAddMediaClicked)="onAddMediaClicked()"
             ></merchant-info>
             <merchant-menu style="display: block; min-height: calc(100vh - 317px)" *ngIf="selectedNav == 'menu'" [store]="store" [isEditing]="true" [navigateToStore]="navigateToInfo.bind(this)"></merchant-menu>
             <merchant-share style="display: block; min-height: calc(100vh - 317px)" *ngIf="selectedNav == 'share'" [store]="store" [profileImage]="editingProfileImage" [isEditing]="true"></merchant-share>
@@ -116,11 +115,11 @@
                             <img class="image-item" [src]="environment.IMAGE_URL + image.url" data-upload='img_upload' alt="item.png" />
                         </ng-container>
                         <ng-container *ngSwitchCase="'blob'">
-                            <div *ngIf="isImagesUploading" class="w-100 h-100 position-absolute text-center"
+                            <!-- <div *ngIf="isImagesUploading" class="w-100 h-100 position-absolute text-center"
                                 style="z-index:2; top:0; background-color: rgba(0, 0, 0, .3)">
                                 <ws-spinner-dot class="position-absolute d-block" style="top: 50%; left: 50%;" 
                                 [color]="'rgba(0,0,0,.8)'"></ws-spinner-dot>
-                            </div>
+                            </div> -->
                             <div class="corner-setting">
                                 <span class="corner-setting-item fas fa-times"
                                 (click)="removeBanner(image)"></span>
@@ -436,8 +435,7 @@
     <form #form="ngForm" class="pt-3" modalBody>
         <div class="mb-3">
             <div class="ws-input mb-3" style="max-width: 300px">
-                <mat-select name="media" [disabled]="isMediaMax" class="form-control" [(ngModel)]="selectedMedia"
-                    (change)="mediaChange()" placeholder="Select Social Media">
+                <mat-select name="media" [disabled]="isMediaMax" class="form-control" [(ngModel)]="selectedMedia" placeholder="Select Social Media">
                     <mat-option [value]="'facebook'">Facebook</mat-option>
                     <mat-option [value]="'instagram'">Instagram</mat-option>
                     <mat-option [value]="'twitter'">Twitter</mat-option>

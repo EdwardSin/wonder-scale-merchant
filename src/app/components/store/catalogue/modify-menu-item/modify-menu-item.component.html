@@ -95,7 +95,7 @@
                             </button>
                             <ws-uploader [id]="'itemProfileUpload'" [max]="5" [input]="allProfileItems" (output)="onProfileImageUploaded($event)"></ws-uploader>
                             <div class="upload-profile-images__container" (dragenter)="onDragEnter($event)">
-                                <div ngx-dropzone [accept]="'image/*'" (drop)="onDrop($event)" (change)="onSelect($event)" [disableClick]="true" class="upload-profile-images__drop-area">
+                                <ngx-dropzone  [accept]="'image/*'" (drop)="onDrop($event)" (change)="onSelect($event)" [disableClick]="true" class="upload-profile-images__drop-area">
                                     <ngx-dropzone-label>
                                         <div *ngIf="!allProfileItems.length" style="pointer-events: none; height: 100%; display: flex; align-items: center; justify-content: center;">
                                             <div>
@@ -104,7 +104,7 @@
                                             </div>
                                         </div>
                                     </ngx-dropzone-label>
-                                </div>
+                                </ngx-dropzone>
 
                                 <div class="upload-profile-images"
                                 [sortablejs]="allProfileItems" [sortablejsOptions]="{ animation: 150, onChoose: onChoose, onUnchoose: onUnchoose }">

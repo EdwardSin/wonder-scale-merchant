@@ -13,7 +13,7 @@
           </li>
         </ul>
       </li>
-      <li wsNavItem *ngIf="store?.type == 'restaurant' && !isServiceExpired" class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
+      <li wsNavItem *ngIf="store?.type == 'restaurant'" class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
         <a [routerLink]="['quick-menu']">
           <span class="ws-main-nav-icon fas fa-book-open"></span>
           <span class="ws-main-nav-text">Quick Menu</span>
