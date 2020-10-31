@@ -103,6 +103,12 @@ export class StaffSettingsComponent implements OnInit {
   }
   inviteContributor() {
     if (this.contributorController.newContributors.length) {
+      this.contributorController.newContributors = this.contributorController.newContributors.map(contributor => {
+        return {
+          ...contributor,
+          role: this.contributorController.newRole
+        }
+      });
       this.isInviteLoading.start();
       forkJoin(this.contributorController.newContributors.map(contributor => {
         let obj = {

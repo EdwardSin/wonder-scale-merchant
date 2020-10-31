@@ -215,7 +215,7 @@
           <li>
             <a [routerLinkActive]="'active'" [routerLink]="['settings', 'general']">General</a>
           </li>
-          <li>
+          <li *ngIf="isAdminAuthorized">
             <a [routerLinkActive]="'active'" [routerLink]="['settings', 'staff']">Staff</a>
           </li>
           <li>

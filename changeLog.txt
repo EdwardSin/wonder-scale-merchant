@@ -9,6 +9,7 @@
 .: WSM: Task: Deployment (WSM-215)
 .: WSM: BugFix: Reading url from backend issue (WSM-218)
 .: WSM: BugFix: Fix store page issue (WSM-209)
+.: WSM: BugFix: Fix contributor invitation issue (WSM-210)
 
 ---------------------------------------------
 - 2020-10-25                                -
