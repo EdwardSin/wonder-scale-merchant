@@ -131,8 +131,8 @@
     height: 300px;
     object-fit: contain;
     transition: all ease .2s;
-    box-shadow: 0 0 3px #888;
-    background-color: #fff;
+    border-radius: 5px;
+    background-color: #f7f7f7;
     &:hover{
         opacity: .7;
     }

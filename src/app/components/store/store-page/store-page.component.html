@@ -106,7 +106,7 @@
         </div>
         <div class="row no-gutters w-100 center">
             <div *ngIf="editingAllBanners?.length; else noImage" class="all-item-container pb-2" cdkDropList (cdkDropListDropped)="dropBanner($event)">
-                <div class="ws-drag-box mx-1 " *ngFor="let image of editingAllBanners; let i = index" cdkDrag>
+                <div class="ws-drag-box " *ngFor="let image of editingAllBanners; let i = index" cdkDrag>
                     <div [ngSwitch]="image?.type" class="position-relative">
                         <ng-container *ngSwitchCase="'url'">
                             <div class="corner-setting">
@@ -180,7 +180,7 @@
 </ws-modal>
 <ws-modal *ngIf="isDescriptionOpened" [isCloseIconDisplayed]="false" [(isOpened)]="isDescriptionOpened" [maxWidth]="500">
     <div class="pt-3" modalBody>
-        <textarea name="description" class="form-control mb-3" maxlength="500" rows="8" [(ngModel)]="editingStore.description"></textarea>
+        <textarea name="description" class="form-control mb-3" maxlength="500" rows="8" placeholder="Enter description..." [(ngModel)]="editingStore.description"></textarea>
         <div>
             <button class="btn btn-sm btn-controller float-right" (click)="isDescriptionOpened = false">Close</button>
             <button [disabled]="isEdingLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditDescriptionClicked()">
