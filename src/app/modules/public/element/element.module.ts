@@ -26,6 +26,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatNativeDateModule } from '@angular/material/core';
+import { BusinessLocationComponent } from '@elements/business-location/business-location.component';
+import { DirectiveModule } from '../directive/directive.module';
 
 
 
@@ -46,7 +48,8 @@ import { MatNativeDateModule } from '@angular/material/core';
     WsDropdownComponent,
     SearchBarComponent,
     BusinessTimetableComponent,
-    ConfirmModalComponent
+    ConfirmModalComponent,
+    BusinessLocationComponent
   ],
   imports: [
     AgmCoreModule,
@@ -59,7 +62,8 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatCheckboxModule,
     MatDatepickerModule,
     MatTabsModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    DirectiveModule
   ],
   exports: [
     WsSpinnerComponent,
@@ -77,7 +81,8 @@ import { MatNativeDateModule } from '@angular/material/core';
     WsDropdownComponent,
     SearchBarComponent,
     BusinessTimetableComponent,
-    ConfirmModalComponent
+    ConfirmModalComponent,
+    BusinessLocationComponent
   ]
 })
 export class ElementModule { }

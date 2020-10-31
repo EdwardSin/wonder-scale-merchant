@@ -10,7 +10,7 @@
             </div>
         </div>
     </div>
-    <div class="col-lg-2 pr-lg-3">
+    <div class="col-lg-2 pr-lg-3" *ngIf="isAdminAuthorized">
         <div class="btn settings-container" [routerLink]="['/stores', store?.username, 'settings', 'staff']">
             <div>
                 <div class="mb-2">

@@ -22,9 +22,11 @@
         [isEditing]="true"
         [isAuthenticated]="false"
         [banners]="editingBanners"
+        [menuImages]="editingMenuImages"
         [profileImage]="editingProfileImage"
         (onEditBannersClicked)="onEditBannersClicked()"
         (onEditProfileImageClicked)="onEditProfileImageClicked()"
+        (onEditQuickMenuClicked)="onEditQuickMenuClicked()"
         (onEditOpeningHoursClicked)="onEditOpeningHoursClicked()"
         (onEditDescriptionClicked)="onEditDescriptionClicked()"
         (onEditStoreTypeClicked)="onEditStoreTypeClicked()"
@@ -82,9 +84,13 @@
                 (onEditWechatClicked)="onEditWechatClicked()"
                 (onAddMediaClicked)="onAddMediaClicked()"
             ></merchant-info>
-            <merchant-menu style="display: block; min-height: calc(100vh - 317px)" *ngIf="selectedNav == 'menu'" [store]="store" [isEditing]="true" [navigateToStore]="navigateToInfo.bind(this)"></merchant-menu>
+            <merchant-menu style="display: block; min-height: calc(100vh - 317px)" *ngIf="selectedNav == 'menu'" 
+            [store]="store"
+            [menuImages]="editingMenuImages"
+            (onEditQuickMenuClicked)="onEditQuickMenuClicked()"
+            [isEditing]="true" [navigateToStore]="navigateToInfo.bind(this)"></merchant-menu>
             <merchant-share style="display: block; min-height: calc(100vh - 317px)" *ngIf="selectedNav == 'share'" [store]="store" [profileImage]="editingProfileImage" [isEditing]="true"></merchant-share>
-            <merchant-footer [selectedNav]="selectedNav" [isEditing]="true"
+            <merchant-footer *ngIf="selectedNav != 'menu'" [selectedNav]="selectedNav" [isEditing]="true"
             [navigateToInfo]="navigateToInfo.bind(this)"
             [navigateToMenu]="navigateToMenu.bind(this)"
             [navigateToShare]="navigateToShare.bind(this)"
@@ -162,6 +168,57 @@
             <button class="btn btn-sm btn-controller" [disabled]="!isUploadProfileImage" (click)="onResetProfileImageClicked()">Reset</button>
             <button class="btn btn-sm btn-controller float-right" (click)="isProfileImageOpened = false">Close</button>
             <button [disabled]="isEdingLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditProfileImageClicked()">
+                <ws-spinner *ngIf="isEdingLoading?.isRunning()" [width]="15" [height]="15" [spinnerColor]="'#fff'" [borderWidth]="3" class="mr-2"></ws-spinner>Confirm</button>
+        </div>
+    </div>
+</ws-modal>
+<ws-modal *ngIf="isMenuImagesOpened" [isCloseIconDisplayed]="false" [(isOpened)]="isMenuImagesOpened" [maxWidth]="600">
+    <div class="pt-3" modalBody>
+        <div class="ws-circle-button">
+            <button class="btn btn-controller small" title="Upload"
+                onclick="document.getElementById('information_upload_input').click();">
+                <span class="fas fa-upload"></span>
+            </button>
+            <ws-uploader [id]="'information_upload_input'" [max]="10"
+                        [input]="editingAllMenuImages"
+                        (output)="fileMenuImageChangeEvent($event)"></ws-uploader>
+        </div>
+        <div class="row no-gutters w-100 center">
+            <div *ngIf="editingAllMenuImages?.length; else noImage" class="all-item-container pb-2" cdkDropList (cdkDropListDropped)="dropMenuImage($event)">
+                <div class="ws-drag-box " *ngFor="let image of editingAllMenuImages; let i = index" cdkDrag>
+                    <div [ngSwitch]="image?.type" class="position-relative">
+                        <ng-container *ngSwitchCase="'url'">
+                            <div class="corner-setting">
+                                <span class="corner-setting-item fas fa-times" (click)="removeMenuImage(image)"></span>
+                            </div>
+                            <img class="image-item" [src]="environment.IMAGE_URL + image.url" data-upload='img_upload' alt="item.png" />
+                        </ng-container>
+                        <ng-container *ngSwitchCase="'blob'">
+                            <!-- <div *ngIf="isImagesUploading" class="w-100 h-100 position-absolute text-center"
+                                style="z-index:2; top:0; background-color: rgba(0, 0, 0, .3)">
+                                <ws-spinner-dot class="position-absolute d-block" style="top: 50%; left: 50%;" 
+                                [color]="'rgba(0,0,0,.8)'"></ws-spinner-dot>
+                            </div> -->
+                            <div class="corner-setting">
+                                <span class="corner-setting-item fas fa-times"
+                                (click)="removeMenuImage(image)"></span>
+                            </div>
+                            <img class="image-item" [src]="image.url" data-upload='img_upload' alt="item.png" />
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+
+            <ng-template #noImage>
+                <div class="text-center col" style="width: 100%; height: 175px; padding-top: 3rem;">
+                    <p class="ws-no-title">Upload Image</p>
+                    <span class="text-muted mb-2 d-inline-block">Add your quick menu/catalogue here</span>
+                </div>
+            </ng-template>
+        </div>
+        <div>
+            <button class="btn btn-sm btn-controller float-right" (click)="isMenuImagesOpened = false">Close</button>
+            <button [disabled]="isEdingLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditMenuImagesClicked()">
                 <ws-spinner *ngIf="isEdingLoading?.isRunning()" [width]="15" [height]="15" [spinnerColor]="'#fff'" [borderWidth]="3" class="mr-2"></ws-spinner>Confirm</button>
         </div>
     </div>
