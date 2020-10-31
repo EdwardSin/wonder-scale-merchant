@@ -114,7 +114,7 @@ export class StorePageComponent implements OnInit {
     this.isOpeningHoursOpened = true;
     this.editingTimetable = new Timetable;
     this.editingTimetable.operatingHourRadio = this.editingStore.openingInfoType;
-    this.editingTimetable.operatingHours = this.editingStore.openingInfo;
+    this.editingTimetable.operatingHours = this.editingStore.openingInfo.length ? _.cloneDeep(this.editingStore.openingInfo): this.editingTimetable.operatingHours;
   }
   onEditDescriptionClicked() {
     this.isDescriptionOpened = true;
@@ -408,6 +408,7 @@ export class StorePageComponent implements OnInit {
         this.allBanners[informationImage.index] = { type: 'url', url: informationImage.image };
         this.editingAllBanners[informationImage.index] = { type: 'url', url: informationImage.image };
       });
+      this.removingBanners = [];
       this.editingBanners = editingBanners.map(image => environment.IMAGE_URL + image);
       obj.informationImages = editingBanners;
       return this.authStoreContributorService.editStore(obj);

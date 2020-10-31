@@ -26,7 +26,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatNativeDateModule } from '@angular/material/core';
-import { BusinessLocationComponent } from '@elements/business-location/business-location.component';
 
 
 
@@ -47,8 +46,7 @@ import { BusinessLocationComponent } from '@elements/business-location/business-
     WsDropdownComponent,
     SearchBarComponent,
     BusinessTimetableComponent,
-    ConfirmModalComponent,
-    BusinessLocationComponent
+    ConfirmModalComponent
   ],
   imports: [
     AgmCoreModule,
@@ -64,7 +62,6 @@ import { BusinessLocationComponent } from '@elements/business-location/business-
     MatNativeDateModule
   ],
   exports: [
-    BusinessLocationComponent,
     WsSpinnerComponent,
     WsLoadingComponent,
     WsLoadingButtonComponent,
