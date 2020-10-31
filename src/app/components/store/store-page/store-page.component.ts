@@ -34,6 +34,7 @@ export class StorePageComponent implements OnInit {
   isSaveStoreLoading: WsLoading = new WsLoading;
   isBannersOpened: boolean = false;
   isProfileImageOpened: boolean = false;
+  isMenuImagesOpened: boolean;
   isOpeningHoursOpened: boolean = false;
   isDescriptionOpened: boolean = false;
   isStoreTypeOpened: boolean = false;
@@ -58,16 +59,20 @@ export class StorePageComponent implements OnInit {
   editingTimetable: Timetable;
   editingMapController: MapController;
   editingBanners: Array<string> = [];
+  editingMenuImages: Array<string> = [];
   editingProfileImage: string;
   address: Address = new Address;
   tag = new Tag;
   previewImage;
   allBanners = [];
+  allMenuImages = [];
   editingAllBanners = [];
+  editingAllMenuImages = [];
   croppieObj;
   isUploadProfileImage: boolean;
   isDeleteProfileImage: boolean;
   removingBanners = [];
+  removingMenuImages = [];
   isMediaMax: boolean;
   editingMedias = [];
   selectedMedia: string = '';
@@ -95,6 +100,9 @@ export class StorePageComponent implements OnInit {
       this.editingAllBanners = _.cloneDeep(this.allBanners);
       this.editingBanners = this.store.informationImages.map(image => environment.IMAGE_URL + image);
       this.editingProfileImage = this.store.profileImage ? environment.IMAGE_URL + this.store.profileImage: null;
+      this.allMenuImages = this.store.menuImages.map(image => { return {url: image, type: 'url'}});
+      this.editingAllMenuImages = _.cloneDeep(this.allMenuImages);
+      this.editingMenuImages = this.store.menuImages.map(image => environment.IMAGE_URL + image);
     });
     this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe(queryParams => {
       if(queryParams['nav']) {
@@ -109,6 +117,10 @@ export class StorePageComponent implements OnInit {
   onEditProfileImageClicked() {
     this.isProfileImageOpened = true;
     this.previewImage = null;
+  }
+  onEditQuickMenuClicked() {
+    this.isMenuImagesOpened = true;
+    this.editingAllMenuImages = _.cloneDeep(this.allMenuImages);
   }
   onEditOpeningHoursClicked() {
     this.isOpeningHoursOpened = true;
@@ -205,6 +217,18 @@ export class StorePageComponent implements OnInit {
     this.allBanners = _.cloneDeep(this.editingAllBanners);
     this.isChanged = true;
     this.isBannersOpened = false;
+  }
+  onConfirmEditMenuImagesClicked() {
+    this.editingMenuImages = [...this.editingAllMenuImages.map(image => {
+      if (image.type == 'url') {
+        return environment.IMAGE_URL + image.url;
+      } else if (image.type == 'blob') {
+        return image.url
+      }
+    })];
+    this.allMenuImages = _.cloneDeep(this.editingAllMenuImages);
+    this.isChanged = true;
+    this.isMenuImagesOpened = false;
   }
   async onConfirmEditProfileImageClicked() {
     this.editingStore.profileImage = await this.croppieObj.result({size: {width: 300, height: 300}})
@@ -395,22 +419,36 @@ export class StorePageComponent implements OnInit {
     }
     let isInformationImagesUploaded = this.allBanners.find(banner => banner.type === 'blob');
     let isInformationImagesRemove = this.removingBanners.length > 0;
+    let isMenuImagesUploaded = this.allMenuImages.find(image => image.type === 'blob');
+    let isMenuImagesRemove = this.removingMenuImages.length > 0;
     let profileImageObservable = this.isUploadProfileImage ? this.authStoreContributorService.editProfileImage({ file: this.editingStore.profileImage }) : of(null);
     let removeProfileImageObservable = this.isDeleteProfileImage ? this.authStoreContributorService.removeProfileImage() : of(null);
     let informationImagesObservable = isInformationImagesUploaded ? this.getInformationImagesObservable() : of([]);
     let removeInformationImagesObservable = isInformationImagesRemove ? this.removeInformationImagesObservable() : of([]);
+    let menuImagesObservable = isMenuImagesUploaded ? this.getMenuImagesObservable() : of([]);
+    let removeMenuImagesObservable = isMenuImagesRemove ? this.removeMenuImagesObservable() : of([]);
     this.isSaveStoreLoading.start();
-    forkJoin([profileImageObservable, removeProfileImageObservable, informationImagesObservable, removeInformationImagesObservable]).pipe(switchMap((result) => {
+    forkJoin([profileImageObservable, removeProfileImageObservable, informationImagesObservable, removeInformationImagesObservable, menuImagesObservable, removeMenuImagesObservable]).pipe(switchMap((result) => {
       let informationImages = <Array<any>>result[2];
+      let menuImages = <Array<any>>result[4];
       let editingBanners = this.allBanners.map(banner => banner.url);
+      let editingMenuImages = this.allMenuImages.map(image => image.url);
       informationImages.forEach(informationImage => {
         editingBanners[informationImage.index] = informationImage.image;
         this.allBanners[informationImage.index] = { type: 'url', url: informationImage.image };
         this.editingAllBanners[informationImage.index] = { type: 'url', url: informationImage.image };
       });
+      menuImages.forEach(menuImage => {
+        editingMenuImages[menuImage.index] = menuImage.image;
+        this.allMenuImages[menuImage.index] = { type: 'url', url: menuImage.image };
+        this.editingAllMenuImages[menuImage.index] = { type: 'url', url: menuImage.image };
+      })
       this.removingBanners = [];
+      this.removingMenuImages = [];
       this.editingBanners = editingBanners.map(image => environment.IMAGE_URL + image);
+      this.editingMenuImages = editingMenuImages.map(image => environment.IMAGE_URL + image);
       obj.informationImages = editingBanners;
+      obj.menuImages = editingMenuImages;
       return this.authStoreContributorService.editStore(obj);
     }), takeUntil(this.ngUnsubscribe), finalize(() => this.isSaveStoreLoading.stop())).subscribe(result => {
       this.isChanged = false;
@@ -431,6 +469,11 @@ export class StorePageComponent implements OnInit {
       return this.authStoreContributorService.removeInformationImage({ filename: image.url })
     }));
   }
+  removeMenuImagesObservable() {
+    return forkJoin(this.removingBanners.map(image => {
+      return this.authStoreContributorService.removeMenuImage({ filename: image.url })
+    }));
+  }
   getInformationImagesObservable() {
     let images_blob = this.allBanners.filter(image => image.type === 'blob');
     return forkJoin(images_blob.map(image => {
@@ -439,6 +482,16 @@ export class StorePageComponent implements OnInit {
         index: this.allBanners.indexOf(image)
       };
       return this.authStoreContributorService.editInformationImages(obj);
+    }));
+  }
+  getMenuImagesObservable() {
+    let images_blob = this.allMenuImages.filter(image => image.type === 'blob');
+    return forkJoin(images_blob.map(image => {
+      let obj = {
+        file: image.base64,
+        index: this.allMenuImages.indexOf(image)
+      };
+      return this.authStoreContributorService.editMenuImages(obj);
     }));
   }
   fileChangeEvent(event) {
@@ -459,6 +512,16 @@ export class StorePageComponent implements OnInit {
       })
       if (!exist) {
         this.editingAllBanners.push(item);
+      }
+    });
+  }
+  fileMenuImageChangeEvent(event) {
+    event.forEach(item => {
+      let exist = this.editingAllMenuImages.find(image => {
+        return image.name == item.name && image.file.size == item.file.size;
+      })
+      if (!exist) {
+        this.editingAllMenuImages.push(item);
       }
     });
   }
@@ -519,6 +582,13 @@ export class StorePageComponent implements OnInit {
   }
   dropBanner(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.editingAllBanners, event.previousIndex, event.currentIndex);
+  }
+  removeMenuImage(item) {
+    this.removingMenuImages = [...this.removingMenuImages, ..._.filter(this.editingAllMenuImages, x => x.type == 'url' && x.url == item.url)];
+    this.editingAllMenuImages = _.filter(this.editingAllMenuImages, (x) => x.url !== item.url);
+  }
+  dropMenuImage(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.editingAllMenuImages, event.previousIndex, event.currentIndex);
   }
   ngOnDestroy() {
     this.ngUnsubscribe.next();

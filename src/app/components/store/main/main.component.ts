@@ -342,5 +342,6 @@ export class MainComponent implements OnInit {
   ngOnDestroy() {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
+    this.storeAuthorizationService.isAdminAuthorized.next(false);
   }
 }

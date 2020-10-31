@@ -13,14 +13,14 @@
           </li>
         </ul>
       </li>
-      <li wsNavItem *ngIf="store?.type == 'restaurant'" class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
+      <li wsNavItem class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
         <a [routerLink]="['quick-menu']">
           <span class="ws-main-nav-icon fas fa-book-open"></span>
-          <span class="ws-main-nav-text">Quick Menu</span>
+          <span class="ws-main-nav-text">Quick {{ store?.type == 'restaurant' ? 'Menu' : 'Catalogue'}}</span>
         </a>
         <ul class="ws-main-nav-sub-list">
           <li class="ws-main-nav-sub-list__title">
-            <a [routerLink]="['quick-menu']">Quick Menu</a>
+            <a [routerLink]="['quick-menu']">Quick {{ store?.type == 'restaurant' ? 'Menu' : 'Catalogue'}}</a>
           </li>
         </ul>
       </li>
