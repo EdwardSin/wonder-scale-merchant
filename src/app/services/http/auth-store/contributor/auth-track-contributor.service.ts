@@ -13,9 +13,8 @@ export class AuthTrackContributorService {
     return this.http.get('/api/auth-stores/track-contributors/', this.accessTokenService.getAccessToken());
   }
   getTracksBetweenDates(fromDate, toDate, fromHour, targets) {
-    let date = new Date;
-    let _fromDate = new Date(date.getFullYear(), date.getMonth(), fromDate.getDate(), fromHour, 0, 0);
-    let _toDate = new Date(date.getFullYear(), date.getMonth(), toDate.getDate() + 1, fromHour, 0, 0);
+    let _fromDate = new Date(fromDate.getFullYear(), fromDate.getMonth(), fromDate.getDate(), fromHour, 0, 0);
+    let _toDate = new Date(toDate.getFullYear(), toDate.getMonth(), toDate.getDate() + 1, fromHour, 0, 0);
     // if (fromHour <= this.getUTCTimeDifference()) {
     //   _fromDate = new Date(date.getFullYear(), date.getMonth(), fromDate.getDate(), fromHour, 0, 0);
     //   _toDate = new Date(date.getFullYear(), date.getMonth(), toDate.getDate() + 1, fromHour, 0, 0);
