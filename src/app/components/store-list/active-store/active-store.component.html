@@ -1,0 +1,19 @@
+<img *ngIf="!store?.profileImage" class="mr-3" style="width: 64px; height: 64px; border-radius: 50%; background-color: #f7f7f7"
+  [src]="'assets/images/png/shop.png'" alt="store profile" />
+<img *ngIf="store?.profileImage" class="mr-3" style="width: 64px; height: 64px; border-radius: 50%; background-color: #f7f7f7"
+  [src]="environment.IMAGE_URL + store?.profileImage" alt="store profile" />
+<div class="col">
+  <div class="d-flex mt-2">
+    <a class="default" href="javascript:void(0)" (click)="navigateToStore(store?.username)">
+      <span>{{store?.name}}</span>
+    </a>
+    <span title="Active" *ngIf="store?.status?.status == 'active'" class="fas fa-circle ml-2 text-success"
+      style="filter: drop-shadow(0 0  1px #1e7b34);line-height: 20px;"></span>
+    <span title="Closed" *ngIf="store?.status?.status == 'closed'" class="fas fa-circle ml-2 text-danger"
+      style="filter: drop-shadow(0 0  1px red);line-height: 20px;"></span>
+    
+    <span class="contributor-label mx-2">{{ store?.currentContributor?.role}}</span>
+    <span *ngIf="store?.package?.length" class="contributor-label px-2" [class.text-danger]="isExpired" style="border-radius: 10px; font-size: .8rem">Expired on {{ store?.package[0].expiryDate | date: 'yyyy-MMM-dd'}}</span>
+  </div>
+  <span class="mt-1 d-flex" style="font-size: .8rem">Updated {{ store?.updatedAt | passDate}}</span>
+</div>

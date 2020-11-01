@@ -1,0 +1,84 @@
+<h4 class="ws-title">Tracking Figure</h4>
+<div class="tracking-figure-container">
+    <div class="row no-gutters mb-4">
+        <div class="col-lg-3 col mb-2 mb-lg-0">
+            <div class="tracking-figure tracking-figure__today">
+                <h4 class="h6 mb-0 font-weight-normal" style="min-width: 200px">
+                    Number of customer today:
+                </h4>
+                <span class="tracking-figure__today__figure mb-3" #numberOfCustomer>{{ totalNumberOfCustomerToday }}</span>
+                <h4 class="h6 font-weight-normal" style="min-width: 200px">
+                    Last updated:
+                </h4>
+                <span class="font-9">{{ moment(updatedDate).format('llll') }}</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row no-gutters tracking-figure mb-4">
+        <button [disabled]="loading.isRunning()" (click)="getTodayTrack()" title="Refresh" class="btn btn-controller float-right">
+            <span [class.loading]="loading.isRunning()" class="fas fa-sync-alt"></span>
+        </button>
+        <div>
+            <h4 class="h5 font-weight-normal mb-3">Today Customer Visit</h4>
+            <div class="bg-white p-3">
+                <div class="mb-3 row no-gutters">
+                    <label class="tracking-figure__label">Start Hour:</label>
+                    <mat-select class="form-control form-control-sm d-inline-block" style="max-width: 100px" [(ngModel)]="startHour" (selectionChange)="getTodayTrack()">
+                        <mat-option *ngFor="let hour of allHours" [value]="hour.value">{{hour.text}}</mat-option>
+                    </mat-select>
+                </div>
+                <div style="position:relative; width: 100%; height: 300px">
+                    <div *ngIf="todayTrackLoading.isRunning()" class="tracking-figure__analyzer__overlay">
+                        <div class="tracking-figure__analyzer__overlay-spinner">
+                            <ws-spinner [width]="60" [height]="60" [spinnerColor]="'#282C35'"></ws-spinner>
+                        </div>
+                    </div>
+                    <canvas baseChart [data]="numberOfCustomersToday" [legend]="false" [options]="lineChartOptions" [labels]="hours" [chartType]="lineGraphType" [colors]="lineChartColors"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row no-gutters tracking-figure">
+        <button [disabled]="loading.isRunning()" (click)="getBetweenTracks()" title="Refresh" class="btn btn-controller float-right">
+            <span [class.loading]="loading.isRunning()" class="fas fa-sync-alt"></span>
+        </button>
+        <h4 class="h5 font-weight-normal mb-3">History</h4>
+        <div class="bg-white p-3">
+            <div class="row no-gutters">
+                <div class="mb-2 d-inline-block col">
+                    <label class="tracking-figure__label">From Date: </label>
+                    <input (click)="fromPicker.open()" class="form-control form-control-sm d-inline-block" style="max-width: 200px" [(ngModel)]="fromDate" [matDatepicker]="fromPicker" [max]="maxDate" />
+                    <mat-datepicker #fromPicker startView="month" [startAt]="fromDate" (opened)="openCalendar()"></mat-datepicker>
+                </div>
+                <div class="mb-2 d-inline-block col">
+                    <label class="tracking-figure__label">To Date: </label>
+                    <input (click)="toPicker.open()" class="form-control form-control-sm d-inline-block" style="max-width: 200px" [(ngModel)]="toDate" [matDatepicker]="toPicker" [min]="fromDate" [max]="maxDate" />
+                    <mat-datepicker #toPicker startView="month" [startAt]="toDate" (opened)="openCalendar()"></mat-datepicker>
+                </div>
+                <div class="mb-3 d-inline-block col">
+                    <label class="tracking-figure__label">Target: </label>
+                    <mat-select class="form-control form-control-sm d-inline-block" style="max-width: 200px" [(ngModel)]="targets" (openedChange)="selectionOpenedChange($event)" (selectionChange)="selectionChange()" multiple>
+                        <mat-option *ngFor="let track of tracks" [disabled]="'Number of Total Customers' == track.name" [value]="track?.name">{{track?.name}}</mat-option>
+                        <div *ngIf="tracksLoading.isRunning()" class="text-center py-3">
+                            <ws-spinner [width]="30" [height]="30" [spinnerColor]="'#282C35'"></ws-spinner>
+                        </div>
+                    </mat-select>
+                </div>
+                <div class="mb-3 col">
+                    <button class="btn btn-sm btn-controller" (click)="getBetweenTracks()">Search</button>
+                </div>
+            </div>
+            <div *ngIf="loading.isRunning()" class="d-flex justify-content-center align-items-center" style="height: 300px">
+                <ws-spinner [width]="60" [height]="60"></ws-spinner>
+            </div>
+            <div *ngIf="!loading.isRunning()" class="row no-gutters">
+                <div class="tracking-figure__analyzer">
+                    <canvas baseChart [datasets]="historyChart.data" [labels]="historyChart.labels" [legend]="historyChart.legend" [options]="lineChartOptions" [chartType]="historyChart.chartType" [colors]="historyChart.colors">
+                    </canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

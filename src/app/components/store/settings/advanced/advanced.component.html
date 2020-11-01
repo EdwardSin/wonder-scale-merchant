@@ -1,0 +1,31 @@
+<div>
+    <h4 class="ws-subtitle mb-3">Advanced</h4>
+    <form *ngIf="isAdminAuthorized">
+        <p *ngIf="store?.status?.status == 'closed' && timeDifference > 0" class="alert alert-secondary ws-bg-light-grey-4 mb-2" style="font-size: .9rem">
+            <button *ngIf="store.status.status == 'closed' && timeDifference > 0" class="btn btn-primary btn-sm m-0 mb-2" (click)="isConfirmReactivateModalOpened = true">Reactivate</button>
+            <br />
+            Store will be closed permanently <span class="text-danger">{{timeDifferenceString}}</span>.
+            <br />
+            You can reactivate anytime before store is closed permanently.
+        </p>
+        <p *ngIf="store?.status?.status != 'closed'" class="alert alert-secondary ws-bg-light-grey-4 mb-2" style="font-size: .9rem">
+            <button *ngIf="store.status.status != 'closed'" class="btn btn-sm btn-danger m-0 mb-2" (click)="isConfirmCloseStoreModalOpened = true">Close
+                Store Permanently</button>
+            <br />
+            You can reactivate store within 1 hour.<br>
+            Store will not be displayed to public.</p>
+    </form>
+
+    <form class="mb-3">
+        <p class="alert alert-secondary ws-bg-light-grey-4 mb-1" style="font-size: .9rem">
+            <button class="btn btn-warning btn-sm m-0 mb-2" (click)="isConfirmQuitStoreModalOpened = true">Leave Store</button>
+            <br />
+            All contributors can leave the store.<br />
+            At least 1 admin should be in the store.
+        </p>
+    </form>
+</div>
+
+<confirm-modal *ngIf="isConfirmCloseStoreModalOpened" [(isOpened)]="isConfirmCloseStoreModalOpened" id="confirmCloseStoreModal" [message]="'Are you sure to close the store permanently?'" [action]="closePermanently.bind(this)"></confirm-modal>
+<confirm-modal *ngIf="isConfirmReactivateModalOpened" [(isOpened)]="isConfirmReactivateModalOpened" id="confirmReactivateModal" [message]="'Are you sure to reactivate the store?'" [action]="reactivateFromInactive.bind(this)"></confirm-modal>
+<confirm-modal *ngIf="isConfirmQuitStoreModalOpened" [(isOpened)]="isConfirmQuitStoreModalOpened" id="confirmQuitStoreModal" [message]="'Are you sure to quit the store?'" [action]="quitStore.bind(this)">

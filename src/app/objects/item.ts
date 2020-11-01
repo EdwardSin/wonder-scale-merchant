@@ -8,7 +8,7 @@ export class Item {
     profileImageIndex: number;
     descriptionImages: Array<string>;
     types: Array<any>;
-    shop?: any;
+    store?: any;
     price: number;
     currency: string;
     discount: number;
@@ -20,4 +20,5 @@ export class Item {
     priceAfterDiscount?: number;
     categories: string[];
     isDiscountExisting: boolean;
+    kind?: string;
 }

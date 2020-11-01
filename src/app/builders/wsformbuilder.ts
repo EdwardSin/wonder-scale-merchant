@@ -57,6 +57,16 @@ export class WSFormBuilder {
             validator: DateValidation.Valid
         });
     }
+    public static createPaymentGatewayForm(): FormGroup {
+        let formBuilder = new FormBuilder();
+        return formBuilder.group({
+            firstName: ["", [Validators.required, Validators.maxLength(40)]],
+            lastName: ["", [Validators.required, Validators.maxLength(40)]],
+            email: ["", [Validators.required, Validators.email, Validators.maxLength(30)]],
+            phone: ["", [Validators.required, Validators.maxLength(20)]],
+            countryName: ["", [Validators.required]]
+        })
+    }
 
     public static createLoginForm(): FormGroup {
         let formBuilder = new FormBuilder();
@@ -96,7 +106,7 @@ export class WSFormBuilder {
         });
     }
 
-    public static createShopForm() {
+    public static createStoreForm() {
         let formBuilder = new FormBuilder();
         return formBuilder.group({
             type: ["", [Validators.required]],
@@ -119,12 +129,30 @@ export class WSFormBuilder {
             openingHour: ['']
         });
     }
+    public static createMenuItemForm() {
+        let formBuilder = new FormBuilder();
+        return formBuilder.group({
+            refId: ['', [Validators.required, Validators.maxLength(36)]],
+            name: ['', [Validators.required, Validators.maxLength(128)]],
+            currency: ['MYR', [Validators.required]],
+            price: ['', [Validators.required]],
+            discount: ['', []],
+            quantity: [''],
+            categories: [[]],
+            description: ['', [Validators.maxLength(256)]],
+            isEntityNew: [true, [Validators.required]],
+            isPriceDisplayed: [false, [Validators.required]],
+            isPublished: [false, Validators.required],
+            isOffer: [false, Validators.required],
+            isPickup: [false]
+        })
+    }
     public static createItemForm() {
         let formBuilder = new FormBuilder();
         return formBuilder.group({
             refId: ['', [Validators.required, Validators.maxLength(36)]],
             name: ['', [Validators.required, Validators.maxLength(128)]],
-            currency: ['', [Validators.required]],
+            currency: ['MYR', [Validators.required]],
             price: ['', [Validators.required]],
             discount: ['', []],
             quantity: [''],

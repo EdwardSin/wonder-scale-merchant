@@ -41,6 +41,15 @@
 .mat-error{
     font-size: .9rem;
 }
+.noselect {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently
+                    supported by Chrome, Edge, Opera and Firefox */
+}
 .btn.btn-controller {
     border-radius: 5px;
     background-color: #f7f7f7;
@@ -65,10 +74,43 @@
         }
     }
 }
+.btn-start{
+    border-radius: 2rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    font-size: 1rem;
+    color: #7F0000;
+    border: 1px solid #7F0000;
+    transition: all .5s ease;
+    
+    &:hover{
+        background-color: #7F0000;
+        color: #fff;
+    }
+    // &:active{
+    //     background-color: map-get($ws-color, secondary);
+    // }
+}
+.btn-start-revert{
+    border-radius: 2rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    font-size: 1rem;
+    color: #fff;
+    border: 1px solid #fff;
+    transition: all .5s ease;
+    
+    &:hover{
+        background-color: #fff;
+        color: #7F0000;
+    }
+    &:active{
+    }
+}
 
 .dropdown-menu{
     border: 0;
-    box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.31) 0px 0px 1px;
+    box-shadow: 0 3px 5px #888;
 }
 .dropdown.show .dropdown-menu {
     transition-duration: .2s !important;

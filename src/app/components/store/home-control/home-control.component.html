@@ -1,0 +1,68 @@
+<div class="d-flex justify-content-center align-items-center">
+    <div>
+        <h3 class="my-4 text-center">A quick setup guide for your business</h3>
+        <ul class="list-unstyled mb-0 setup-list">
+            <li class="row no-gutters setup-list-item">
+                <span class="setup-list-item-icon fas fa-tag"></span>
+                <div class="mr-auto">
+                    <div class="row no-gutters mb-1 d-flex align-items-center">
+                        <p class="setup-list-item-label">First Product</p>
+                        <span class="setup-list-item-checked fas fa-check-circle" [class.text-success]="store.number_of_all_items > 0"></span>
+                    </div>
+                    <p class="setup-list-item-text">Add your first product</p>
+                </div>
+                <button class="btn btn-setup ml-5" [routerLink]="['/stores', storeUsername, 'catalogue', 'all']" [queryParams]="{modal: 'modify-item'}">Add Product</button>
+            </li>
+            <li class="row no-gutters setup-list-item">
+                <span class="setup-list-item-icon fas fa-store"></span>
+                <div class="mr-auto">
+                    <div class="row no-gutters mb-1 d-flex align-items-center">
+                        <p class="setup-list-item-label">Store Information</p>
+                        <span class="setup-list-item-checked fas fa-check-circle" [class.text-success]="isStoreDetailsCompleted()"></span>
+                    </div>
+                    <p class="setup-list-item-text">Complete your store information</p>
+                    <ul class="setup-sublist font-9">
+                        <li class="setup-sublist-item" [class.text-success]="store.profileImage">Profile Image</li>
+                        <li class="setup-sublist-item" [class.text-success]="store.description">Store Description</li>
+                        <li class="setup-sublist-item" [class.text-success]="isContactDetailsCompleted()">Contact Details</li>
+                        <li class="setup-sublist-item" [class.text-success]="isLocationDetailsCompleted()">Location Details</li>
+                        <li class="setup-sublist-item" [class.text-success]="store.openingInfoType">Operation Hours</li>
+                    </ul>
+                </div>
+                <button class="btn btn-setup ml-5" [routerLink]="['/stores', storeUsername, 'store-page']">Change Details</button>
+            </li>
+            <li class="row no-gutters setup-list-item">
+                <span class="setup-list-item-icon fas fa-qrcode"></span>
+                <div class="mr-auto">
+                    <div class="row no-gutters mb-1 d-flex align-items-center">
+                        <p class="setup-list-item-label">QR code</p>
+                    </div>
+                    <p class="setup-list-item-text">Place your QR code in obvious place</p>
+                </div>
+                <button class="btn btn-setup ml-5" (click)="openQRcodeModal(url)">View QR code</button>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<ws-modal *ngIf="isQRcodeOpened" [isCloseIconDisplayed]="false" [(isOpened)]="isQRcodeOpened" [maxWidth]="400">
+    <div class="pt-3" modalBody>
+        <div class="row no-gutters mb-4">
+            <a id="id-qrcode" hidden href="#" download="ws-qr-code.png"></a>
+            <div style="width:120px" class="input-group input-group-sm pr-1">
+                <input name="qr-size" placeholder="75 - 300" class="form-control" (keydown.enter)="renderQrcode(downloadQRcode, downloadURL, $event.target.value)" [ngModel]="qrSize" />
+                <div class="input-group-append">
+                    <span class="input-group-text">px</span>
+                </div>
+            </div>
+            <button title="Download QR-code" class="btn btn-controller" style="margin-left: auto" (click)="download()">
+                <span class="fas fa-download"></span>
+            </button>
+        </div>
+        <p class="text-muted font-9">Change your profile image to make the QR code be more iconic.</p> 
+        <div [style.width.px]="qrSize" [style.height.px]="qrSize" class="center mb-4" #downloadQRcode>
+            <ws-spinner style='line-height: 200px; display: block' class="text-center" *ngIf="isQRcodeLoading.isRunning()"></ws-spinner>
+        </div>
+        <button class="btn btn-sm btn-controller float-right" (click)="isQRcodeOpened = false">Close</button>
+    </div>
+</ws-modal>

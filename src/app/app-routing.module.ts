@@ -1,18 +1,19 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
 import { HomeComponent } from './components/public/home/home.component';
-import { MainComponent } from '@components/shop/main/main.component';
+import { MainComponent } from '@components/store/main/main.component';
 import { AuthGuard } from './guards/auth.guard';
-import { ShopResolver } from '@components/resolvers/shopResolver.service';
-import { ShopGuard } from './shop.guard';
+import { StoreResolver } from '@components/resolvers/store-resolver.service';
+import { StoreGuard } from './guards/store.guard';
+import { HomeControlComponent } from '@components/store/home-control/home-control.component';
 
 
 const routes: Routes = [{
   path: '',
   component: HomeComponent
 }, {
-  path: 'shops',
-  loadChildren: () => import('./modules/shop-list/shop-list.module').then(m => m.ShopListModule)
+  path: 'stores',
+  loadChildren: () => import('./modules/store-list/store-list.module').then(m => m.StoreListModule)
 }, {
   path: 'contact-us',
   loadChildren: () => import('./modules/contact-us/contact-us.module').then(m => m.ContactUsModule)
@@ -20,36 +21,42 @@ const routes: Routes = [{
   path: 'policy',
   loadChildren: () => import('./modules/policy/policy.module').then(m => m.PolicyModule)
 }, {
-  path: 'shops/:username',
+  path: 'stores/:username',
   component: MainComponent,
   canActivate: [AuthGuard],
-  resolve: { shop: ShopResolver },
+  resolve: { store: StoreResolver },
   data: { title: 'username', breadcrumb: '{{username}}' },
   children: [
-    { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+    { path: '', redirectTo: 'home', pathMatch: 'full' },
     {
-      path: 'dashboard',
-      canActivate: [ShopGuard],
-      data: { title: 'dashboard', breadcrumb: 'Dashboard' },
-      loadChildren: () => import('./modules/shop/dashboard/dashboard.module').then(m => m.DashboardModule)
+      path: 'home',
+      canActivate: [StoreGuard],
+      data: { title: 'home', breadcrumb: 'Home' },
+      component: HomeControlComponent
+    },
+    {
+      path: 'tracking',
+      canActivate: [StoreGuard],
+      data: { title: 'tracking', breadcrumb: 'Tracking' },
+      loadChildren: () => import('./modules/store/tracking/tracking.module').then(m => m.TrackingModule)
     },
     {
       path: 'quick-menu',
-      canActivate: [ShopGuard],
+      canActivate: [StoreGuard],
       data: { title: 'quick-menu', breadcrumb: 'Quick Menu' },
-      loadChildren: () => import('./modules/shop/quick-menu/quick-menu.module').then(m => m.QuickMenuModule)
+      loadChildren: () => import('./modules/store/quick-menu/quick-menu.module').then(m => m.QuickMenuModule)
     },
     {
       path: 'catalogue',
-      canActivate: [ShopGuard],
+      canActivate: [StoreGuard],
       data: { title: 'cat', breadcrumb: 'Catalogue' },
-      loadChildren: () => import('./modules/shop/catalogue/catalogue.module').then(m => m.CatalogueModule)
+      loadChildren: () => import('./modules/store/catalogue/catalogue.module').then(m => m.CatalogueModule)
     },
     {
-      path: 'information',
-      canActivate: [ShopGuard],
-      data: { title: 'information', breadcrumb: 'Information' },
-      loadChildren: () => import('./modules/shop/information/information.module').then(m => m.InformationModule)
+      path: 'store-page',
+      canActivate: [StoreGuard],
+      data: { title: 'store-page', breadcrumb: 'Store page' },
+      loadChildren: () => import('./modules/store/store-page/store-page.module').then(m => m.StorePageModule)
     },
     // {
     //   path: 'advertising',
@@ -88,31 +95,11 @@ const routes: Routes = [{
     //   { path: 'billing-history', component: EBillingHistoryComponent, data: { title: 'billing-history', breadcrumb: 'Billing History' } }]
     // },
     {
-      path: 'packages',
-      data: { title: 'packages', breadcrumb: 'Packages' },
-      loadChildren: () => import('./modules/shop/packages/packages.module').then(m => m.PackagesModule)
-    },
-    // {
-    //   path: 'billing',
-    //   component: BillingComponent,
-    //   data: { title: 'billing', breadcrumb: 'Billing' },
-    //   children: [{ path: '', redirectTo: 'history', pathMatch: 'full' },
-    //   { path: 'history', component: HistoryComponent, data: { title: 'history', breadcrumb: 'History' } },
-    //   { path: 'payment-methods', component: PaymentMethodsComponent, data: { title: 'payment-methods', breadcrumb: 'Payment Methods' } },
-    //   { path: 'subscription', component: SubscriptionComponent, data: { title: 'subscription', breadcrumb: 'Subscription' } }]
-    // },
-    {
       path: 'settings',
-      canActivate: [ShopGuard],
+      canActivate: [StoreGuard],
       data: { title: 'settings', breadcrumb: 'Settings' },
-      loadChildren: () => import('./modules/shop/settings/settings.module').then(m => m.SettingsModule)
-    },
-    {
-      path: 'qrcode',
-      canActivate: [ShopGuard],
-      data: { title: 'qrcode', breadcrumb: 'Qr Code' },
-      loadChildren: () => import('./modules/shop/qrcode/qrcode.module').then(m => m.QrcodeModule)
-    },
+      loadChildren: () => import('./modules/store/settings/settings.module').then(m => m.SettingsModule)
+    }
   ]
 },
 { path: 'not-found', loadChildren: () => import('./modules/error/error.module').then(m => m.ErrorModule) },

@@ -9,9 +9,10 @@ export class OpeningInfo {
     constructor(day: DayType) {
         this.day = day;
         this.time = new Array<OpeningTime>({
-            openingHour: Constants.businessHour.openingHour,
-            closeHour: Constants.businessHour.closeHour
+            openingHour: "",
+            closeHour: ""
         });
+        this.selected = false;
     }
 }
 

@@ -50,7 +50,6 @@
             margin: 0;
             cursor: pointer;
             .ws-main-nav-list-item {
-                font-size: .9rem;
                 position: relative;
                 >a {
                     color: #222;
@@ -66,6 +65,7 @@
                 .ws-main-nav-icon {
                     margin-right: .5rem;
                     color: #222;
+                    -webkit-text-fill-color: #7f0000;
                 }
                 &.hovered .ws-main-nav-sub-list {
                     display: block;
@@ -74,6 +74,10 @@
                     border-left: 1px solid #e5e5e5;
                     background-color: #fff; 
                     box-shadow: 2px 1px 3px rgba(0, 0, 0, .3);
+
+                    &>li a {
+                        padding: 8px 16px;
+                    }
                 }
                 &.selected.hovered .ws-main-nav-sub-list {
                     position: static;
@@ -81,9 +85,17 @@
                     margin-top: 0;
                     border-left: inherit;
                     background-color: rgba(0, 0, 0, 0.01);
+                    
+                    &>li a {
+                        padding: 8px 16px 8px 40px;
+
+                        &.collapsed{
+                            padding: 8px 16px;
+                        }
+                    }
                 }
                 &.selected {
-                    box-shadow: inset 4px 0 0 map-get($ws-color, secondary);
+                    box-shadow: inset 4px 0 0 #7f0000;
                     background-color: rgba(0, 0, 0, 0.04);
                     .ws-main-nav-sub-list {
                         display: block;
@@ -107,22 +119,20 @@
                     height: 5px;
                 }
                 &::-webkit-scrollbar-thumb {
-                    background-color: map-get($ws-color, secondary);
+                    background-color: #7f0000;
                 }
                 &>li a {
                     display: inline-block;
-                    padding: 8px 16px;
+                    padding: 8px 16px 8px 40px;
                     width: 100%;
                     color: #222;
-                    font-size: .9rem;
                     &.active,
                     &:hover {
                         background-color: rgba(0, 0, 0, .04);
                     }
-                }
-                &.ws-main-nav-sub-list__padding{
-                    &>li a{
-                        padding: 8px 25px 8px 40px;
+                    
+                    &.collapsed{
+                        padding: 8px 16px;
                     }
                 }
             }
@@ -145,7 +155,6 @@
                             .ws-main-nav-sub-list__title{
                                 display: block;
                                 font-weight: bold;
-                                font-size: .9rem;
                             }
                             li:nth-child(2){
                                 border-top: 1px solid #ccc;
@@ -168,7 +177,6 @@
         z-index: 3;
         color: #111;
         cursor: pointer;
-        font-size: .9rem;
         text-align: center;
         padding: 0 16px;
         display: flex;

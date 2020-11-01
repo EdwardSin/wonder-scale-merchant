@@ -2,6 +2,97 @@
 - Wonder Scale Merchant                     -
 ---------------------------------------------
 
+- v1.0.1040                                 -
+---------------------------------------------
+- 2020-11-01                                -
+---------------------------------------------
+.: WSM: Task: Quick Menu Page (WSM-220)
+.: WSM: Task: Prevent caching issue (WSM-221)
+.: WSM: BugFix: Fix cross month tracking issue (WSM-211)
+
+---------------------------------------------
+- 2020-10-31                                -
+---------------------------------------------
+.: WSM: Task: Deployment (WSM-215)
+.: WSM: BugFix: Reading url from backend issue (WSM-218)
+.: WSM: BugFix: Fix store page issue (WSM-209)
+.: WSM: BugFix: Fix contributor invitation issue (WSM-210)
+
+---------------------------------------------
+- 2020-10-25                                -
+---------------------------------------------
+.: WSM: BugFix: Profile Image with qrcode updated (WSM-209)
+.: WSM: Task: Update Tracking URL (WSM-211)
+
+---------------------------------------------
+- 2020-10-24                                -
+---------------------------------------------
+.: WSM: Task: Settings Page (WSM-210)
+.: WSM: Task: Reduce shop entry details (WSM-188)
+.: WSM: Task: Update home control (WSM-207)
+
+---------------------------------------------
+- 2020-10-18                                -
+---------------------------------------------
+.: WSM: Task: Store Page (WSM-209)
+
+---------------------------------------------
+- 2020-10-17                                -
+---------------------------------------------
+.: WSM: Task: Home Control Page (WSM-207)
+.: WSM: Task: Tracking Page (WSM-208)
+
+---------------------------------------------
+- 2020-10-16                                -
+---------------------------------------------
+.: WSM: Task: Add social medias (WSM-203)
+.: WSM: Task: Change the flow from home to store page (WSM-200)
+
+---------------------------------------------
+- 2020-10-11                                -
+---------------------------------------------
+.: WSM: Task: Home page (Update) (WSM-183)
+.: WSM: Task: Revert Pricing page (WSM-186)
+
+---------------------------------------------
+- 2020-10-10                                -
+---------------------------------------------
+.: WSM: Task: Revert Ordering System (WSM-84)
+.: WSM: Task: Revert Subscription Module (WSM-190)
+
+---------------------------------------------
+- 2020-10-07                                -
+---------------------------------------------
+.: WSM: Task: Change 'page' and 'shop' to store' (WSM-184)
+
+---------------------------------------------
+- 2020-10-04                                -
+---------------------------------------------
+.: WSM: Task: Payment Methods (WSM-189)
+.: WSM: Task: Fix subscriptions flow (WSM-190)
+.: WSM: Task: Billing Subscription Details Module (WSM-191)
+
+---------------------------------------------
+- 2020-09-30                                -
+---------------------------------------------
+.: WSM: Task: Subscription Module (WSM-190)
+
+---------------------------------------------
+- 2020-09-19                                -
+---------------------------------------------
+.: WSM: Task: Create price page (WSM-186)
+
+---------------------------------------------
+- 2020-09-08                                -
+---------------------------------------------
+.: WSM: Task: Home Page (WSM-183)
+
+---------------------------------------------
+- 2020-08-28                                -
+---------------------------------------------
+.: WSM: Story: Ordering System (WSM-84)
+.: WSM: Task: Focus on MYR Currency (WSM-171)
+
 - v1.0.1031                                 -
 ---------------------------------------------
 - 2020-07-20                                -

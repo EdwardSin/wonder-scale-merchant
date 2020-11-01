@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { WsModalComponent } from '@elements/ws-modal/ws-modal.component';
 
 
@@ -8,7 +8,6 @@ import { WsModalComponent } from '@elements/ws-modal/ws-modal.component';
   styleUrls: ['./confirm-modal.component.scss']
 })
 export class ConfirmModalComponent extends WsModalComponent implements OnInit {
-  @Input() isOpened: boolean;
   @Input() header: string = "Confirmation";
   @Input() loading: boolean;
   @Input() message: string;

@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ArrayHelper } from '@helpers/arrayhelper/array.helper';
 import _ from 'lodash';
 import { WsModalComponent } from '@elements/ws-modal/ws-modal.component';

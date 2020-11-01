@@ -2,7 +2,8 @@
   <div class="breadcrumbs-container">
     <ul class="mb-0 list-unstyled d-flex" style="font-size: .8rem">
       <li style="padding-right: 20px" class="position-relative d-flex" *ngFor="let part of routeParts; let i = index">
-        <a href="javascript:void(0)" class="default mr-2" style="color: #888" routerLink="/{{part.url}}">{{part.breadcrumb}}</a>
+        <a href="javascript:void(0)" class="default mr-2" style="color: #888" routerLink="/{{part.url}}">{{ store?.type == 'restaurant' && part?.breadcrumb == 'Catalogue' 
+          ? 'Menu' : part.breadcrumb}}</a>
         <span *ngIf="i < routeParts?.length - 1" class="fas fa-chevron-right position-absolute" style="transform: translateY(-50%);right: 10px; top: 50%;color: #888; font-size:.5rem"></span>
       </li>
     </ul>

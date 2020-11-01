@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+import { NgxDropzoneModule } from 'ngx-dropzone';
+import { SortablejsModule } from 'ngx-sortablejs';
 import { SwiperModule } from 'ngx-swiper-wrapper';
 import { AgmCoreModule } from '@agm/core';
 import { MatNativeDateModule } from '@angular/material/core';
@@ -36,6 +38,10 @@ import { MDBBootstrapModule } from 'angular-bootstrap-md';
     MatNativeDateModule,
     LazyLoadImageModule,
     MDBBootstrapModule.forRoot(),
+    NgxDropzoneModule,
+    SortablejsModule.forRoot({
+      animation: 150
+    }),
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyBTVuemjzI8vqXoCPeJhtt0WgFQ9TNizLQ'
     })
@@ -56,7 +62,9 @@ import { MDBBootstrapModule } from 'angular-bootstrap-md';
     MatDatepickerModule,
     MatNativeDateModule,
     LazyLoadImageModule,
-    MDBBootstrapModule
+    MDBBootstrapModule,
+    NgxDropzoneModule,
+    SortablejsModule
   ]
 })
 export class SharedModule { }

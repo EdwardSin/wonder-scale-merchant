@@ -5,29 +5,29 @@ import { OrderType } from '@wstypes/order.type';
 export class OrderHelper {
     constructor() { }
     // Tested
-    public static orderByAndSetShopList(orderMethod: OrderType, shopList: Array<any>) {
+    public static orderByAndSetStoreList(orderMethod: OrderType, storeList: Array<any>) {
         let list;
         switch (orderMethod) {
             case "thebest":
-                list = _.sortBy(shopList, x => {
+                list = _.sortBy(storeList, x => {
                     if (x.review) { return [x["dist"], x.review.score] }
                     return x["dist"]
                 });
                 break;
             case "related":
-                list = shopList;
+                list = storeList;
                 break;
             case "alphabet":
-                list = _.sortBy(shopList, x => x["name"].toLowerCase());
+                list = _.sortBy(storeList, x => x["name"].toLowerCase());
                 break;
             case "distance":
-                list = _.sortBy(shopList, x => x["dist"]);
+                list = _.sortBy(storeList, x => x["dist"]);
                 break;
             case "popularity":
-                list = _.sortBy(shopList, x => { if (x['review']) { return x["review"].score } return 0; });
+                list = _.sortBy(storeList, x => { if (x['review']) { return x["review"].score } return 0; });
                 break;
             default:
-                list = shopList;
+                list = storeList;
         }
         return list;
     }

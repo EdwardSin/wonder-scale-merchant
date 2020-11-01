@@ -1,0 +1,37 @@
+<div class="main-container">
+  <div class="container-fluid">
+    <div *ngIf="!store?.isPublished" class="pt-3">
+      <div class="alert alert-info font-8 mb-0">
+        Store is under maintenance currently.<br/>
+        You may click <a href="javascript:void(0)" (click)="publishStore()" class="font-weight-bold">here</a> to show to the public once your store is ready.
+      </div>
+    </div>
+    <div *ngIf="isCatalogueRoute && !isClear && !store?.isPublished && !numberOfAllItems" class="pt-3">
+      <div class="alert alert-warning alert-dismissible fade show font-8 mb-0" role="alert">
+        Click on <span class="fas fa-upload px-2"></span> button to import items quickly.
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close" (click)="closeAlert()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    </div>
+    <div class="row no-gutters w-100 position-relative">
+      <span *ngIf="isMobileSize" class="text-center clickable"
+        style="line-height: 47px; vertical-align: middle; border-bottom: 1px solid #e5e5e5"
+        (click)="onNavbarOpen()">
+        <span class="fas fa-bars d-inline-block pr-3 pl-3"></span>
+      </span>
+      <breadcrumb class="col"></breadcrumb>
+    </div>
+    <div *ngIf="store?.status?.status == 'closed'" class="alert-danger p-3 mt-2">
+      <span class="font-9">The store is currently closed and will not be seen in public.</span><br />
+      <span class="font-8" *ngIf="isAdminAuthorized">Click <span class="font-weight-bold clickable" (click)="isConfirmReactivateStoreModalOpened = true">here</span> to reactivate store.</span>
+      <span class="font-8" *ngIf="!isAdminAuthorized">Contact your admin to reactivate the store.</span>
+    </div>
+    <div class="pt-3">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
+
+<confirm-modal *ngIf="isConfirmReactivateStoreModalOpened" [(isOpened)]="isConfirmReactivateStoreModalOpened" id="confirmReactivateStoreModal" [message]="'Are you sure to reactivate the store?'"
+  [action]="reactivateFromInactive.bind(this)"></confirm-modal>
