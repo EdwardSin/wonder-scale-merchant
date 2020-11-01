@@ -3,7 +3,7 @@ import _ from 'lodash';
 export class Tag {
   input = '';
   tags = [];
-  max = 5;
+  max = 10;
   error = '';
 
   addTag(customTag?) {

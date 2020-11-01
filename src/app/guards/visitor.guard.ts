@@ -13,7 +13,7 @@ export class VisitorGuard implements CanActivate {
     return new Promise((resolve) => {
       this.authenticationService.isAuthenticated().then(result => {
         if (result) {
-          this.router.navigate(['/shops/all']);
+          this.router.navigate(['/stores/all']);
           resolve(false);
         }
         else {

@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, PLATFORM_ID } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { SWIPER_CONFIG, SwiperConfigInterface } from 'ngx-swiper-wrapper';
 import { JwtModule, JWT_OPTIONS } from '@auth0/angular-jwt';
 import { SocialLoginModule, GoogleLoginProvider, FacebookLoginProvider, SocialAuthServiceConfig } from 'angularx-social-login';
@@ -16,15 +16,14 @@ import { HeaderComponent } from './partials/header/header.component';
 // import { AboutUsComponent } from '@components/public/about-us/about-us.component';
 
 import { isPlatformBrowser } from '@angular/common';
-import { MainComponent } from '@components/shop/main/main.component';
-import { MainContainerComponent } from '@components/shop/main/main-container/main-container.component';
+import { MainComponent } from '@components/store/main/main.component';
+import { MainContainerComponent } from '@components/store/main/main-container/main-container.component';
 import { WsLeftNavComponent } from '@elements/ws-left-nav/ws-left-nav.component';
 import { BreadcrumbComponent } from '@elements/breadcrumb/breadcrumb.component';
 import { SharedModule } from './modules/public/shared/shared.module';
-import { BillingComponent } from './components/shop/billing/billing/billing.component';
-import { HistoryComponent } from './components/shop/billing/history/history.component';
-import { PaymentMethodsComponent } from './components/shop/billing/payment-methods/payment-methods.component';
-import { SubscriptionComponent } from './components/shop/billing/subscription/subscription.component';
+import { TrackingComponent } from '@components/store/tracking/tracking.component';
+import { HomeControlComponent } from '@components/store/home-control/home-control.component';
+import { NoCacheHeadersInterceptor } from '@components/resolvers/no-cache-headers.interceptor.service';
 
 const DEFAULT_SWIPER_CONFIG: SwiperConfigInterface = {
   direction: 'horizontal',
@@ -65,10 +64,8 @@ export function jwtOptionsFactory(platformId) {
     // Elements
     WsLeftNavComponent,
     BreadcrumbComponent,
-    BillingComponent,
-    HistoryComponent,
-    PaymentMethodsComponent,
-    SubscriptionComponent
+    HomeControlComponent,
+    TrackingComponent
   ],
   imports: [
     BrowserModule,
@@ -107,6 +104,11 @@ export function jwtOptionsFactory(platformId) {
     {
       provide: SWIPER_CONFIG,
       useValue: DEFAULT_SWIPER_CONFIG
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: NoCacheHeadersInterceptor,
+      multi: true
     }
   ],
   bootstrap: [AppComponent]

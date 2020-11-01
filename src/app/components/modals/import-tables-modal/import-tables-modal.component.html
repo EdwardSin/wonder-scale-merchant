@@ -1,0 +1,57 @@
+<ws-modal [id]="id" [isCloseIconDisplayed]="false" [maxWidth]="maxWidth">
+    <div modalBody *ngIf="phase == 0">
+        <div *ngIf="isUploaded && !isPreviewLoading.isRunning()">
+            <ul *ngIf="!isUploadValid()" class="mb-3 list-unstyled alert alert-danger">
+                <li *ngIf="!isRowExistance" class="font-9">No item is uploaded. (Please fill in items)</li>
+                <li *ngIf="!isHeaderValid" class="font-9"><span class="fas fa-square mr-2" style="color: #ff9999"></span>Headers are invalid. (Please follow our template)</li>
+                <li *ngIf="!isEmptyField" class="font-9"><span class="fas fa-square mr-2" style="color: #ffbb33"></span>Empty field is not allowed.</li>
+                <li *ngIf="!isNumberField" class="font-9"><span class="fas fa-square mr-2" style="color: #33b5e5"></span>Field must be a number.</li>
+                <li *ngIf="!isTableNoMaxLengthValid" class="font-9"><span class="fas fa-square mr-2" style="color: #e58341"></span>Max 30 characters in table no fields.</li>
+                <li *ngIf="!isMaximumPersonsMaxValid" class="font-9"><span class="fas fa-square mr-2" style="color: #e9effc"></span>Max persons should between 1 to 30.</li>
+            </ul>
+            <h1 class="h6 font-weight-bold">Preview:</h1>
+        </div>
+        <ws-spinner *ngIf="isPreviewLoading.isRunning()" class="text-center d-block w-100" style="padding-top: 10vh; padding-bottom: 10vh"></ws-spinner>
+        <div class="table-responsive mb-3" style="max-height:65vh; overflow-y: auto;" id="tableView"></div>
+        <div *ngIf="!isUploaded">
+            <h6 class="font-weight-bold">Tips:</h6>
+            <ul class="mb-3 font-9">
+                <li>A quick way to import the tables details.</li>
+                <li>You can download the template and modify.</li>
+                <li>Only accept <span class="text-warning">Excel</span> file.</li>
+            </ul>
+            <h6 class="font-weight-bold">Example:</h6>
+            <table class="table font-9 mb-4">
+                <thead>
+                    <th>Table No</th>
+                    <th>Maximum Persons</th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>5</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <a *ngIf="!isUploaded" href="/assets/template/ws-table-template.xlsx" download>
+            <button class="btn btn-sm btn-controller"><i class="fas fa-download mr-1"></i>
+                Download Template</button>
+        </a>
+        <button class="btn btn-sm btn-controller float-right ml-2" (click)="close()">Cancel</button>
+        <button *ngIf="!isUploadValid()" class="btn btn-sm btn-controller float-right" onclick="document.getElementById('importFile').click()">{{ !isUploaded ? 'Upload': 'Upload Again'}}</button>
+        <button *ngIf="isUploadValid()" class="btn btn-sm btn-controller float-right" [disabled]="isUploadLoading.isRunning()" (click)="uploadItems()">
+            <ws-spinner *ngIf="isUploadLoading?.isRunning()" [width]="15" [height]="15" [spinnerColor]="'#fff'" [borderWidth]="3" class="mr-2"></ws-spinner>Confirm
+        </button>
+        <input id="importFile" type="file" hidden name="importFile" #importFile accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" (change)="importFileChangeEvent($event)" />
+    </div>
+    <div modalBody *ngIf="phase == 1">
+        <div class="text-center mt-5 mb-4">
+            <span class="far fa-check-circle" style="font-size: 7rem; color:#68DC64"></span>
+        </div>
+        <p class="text-center mb-4">Tables are uploaded successfully.</p>
+        <div class="text-center">
+            <button class="btn btn-sm btn-controller mb-2" (click)="close()">Done!</button>
+        </div>
+    </div>
+</ws-modal>

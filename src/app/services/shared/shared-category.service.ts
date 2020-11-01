@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Item } from '@objects/item';
-import { AuthCategoryContributorService } from '@services/http/auth-shop/contributor/auth-category-contributor.service';
+import { AuthCategoryContributorService } from '@services/http/auth-store/contributor/auth-category-contributor.service';
 import { BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { SharedItemService } from './shared-item.service';

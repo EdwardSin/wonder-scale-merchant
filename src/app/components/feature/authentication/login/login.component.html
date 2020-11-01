@@ -4,7 +4,7 @@
       <div class="modal-body-content">
         <form class="px-lg-5 p-4 pt-5 modal-content" style="max-width: 500px" [formGroup]="loginForm">
           <div class="modal-close">
-            <span class="fas fa-times" [routerLink]="[]" [queryParams]="{modal: null}" [queryParamsHandling]="'merge'"></span>
+            <span class="fas fa-times" [routerLink]="[]" [queryParams]="{modal: null, returnUrl: null}" [queryParamsHandling]="'merge'"></span>
           </div>
           <div class="ws-input">
             <input placeholder="Login Email" class="form-control" formControlName="email" required>
@@ -50,7 +50,7 @@
             Google</button>
           <p class="mb-0 font-weight-light">Don't have an account?
             <a href="javascript:void(0)" class="font-weight-bold default"
-              [routerLink]="[]" [queryParams]="{modal: 'register'}">Sign
+              [routerLink]="[]" [queryParams]="{modal: 'register'}" [queryParamsHandling]="'merge'">Sign
               up</a></p>
         </form>
       </div>

@@ -1,113 +1,144 @@
-<div class="background-container"></div>
-
-<div class="container position-relative">
-  <div class="background row no-gutters">
-    <div class="col-lg-9 background__texture order-12 order-lg-1 text-center text-lg-left">
-      <h1 class="background__title mb-4">Merchant | Wonder Scale</h1>
-      <p class="mb-4 font-weight-bold" style="font-size: 1.5rem">A platform for merchants to manage and advertise your shop.</p>
-      <p style="color: #888; font-size: 1rem; margin-bottom: 2rem">- We promise to provide the best services to our customers.</p>
-      <button class="btn btn-second" (click)="navigateToJoinUs()">Join us now!</button>
+<div class="background-container">
+  <div class="container position-relative">
+    <div class="background">
+      <div class="background__texture text-center">
+        <div>
+          <h1 class="background__title mb-4">Merchant | Wonder Scale</h1>
+          <p style="font-size: 1.4rem;">A platform for merchants to manage and advertise your store.</p>
+          <p style="color: #888; font-size: 1rem; margin-bottom: 2rem">We promise to provide the best services to our customers.</p>
+          <div>
+            <button class="btn btn-start" (click)="navigateToJoinUs()">Join us now!</button>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="col-lg-3 order-1 order-lg-12 mb-3">
-      <img class="background__image" src="/assets/images/svg/icon.svg" alt="home icon" />
+  </div>
+</div>
+<div class="container">
+  <div class="text-center py-5 px-3">
+    <h4>Here's Why You Should Start Listing</h4>
+    <div class="row no-gutters">
+      <div class="start-listing-container col-lg-4 offset-lg-2">
+        <div class="start-listing">
+          <div class="start-listing-icon-container">
+            <span class="fas fa-bullhorn start-listing-icon" style="transform: rotate(-20deg);"></span>
+          </div>
+          <p class="start-listing-label">Advertise Your Business</p>
+          <p class="start-listing-text">Make more people know your business with low cost.</p>
+        </div>
+      </div>
+      <div class="start-listing-container col-lg-4">
+        <div class="start-listing">
+          <div class="start-listing-icon-container">
+            <span class="fas fa-desktop start-listing-icon"></span>
+            <span class="fas fa-globe start-listing-sub-icon"></span>
+          </div>
+          <p class="start-listing-label">Digitalize Your Business</p>
+          <p class="start-listing-text">Combine technology with your business regardless E-Commerce or Physical store.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="subbackground">
+  <div class="background__texture text-center">
+    <div>
+      <h1 class="mb-4 text-white h3 font-weight-light">Advertise Your Business</h1>
+      <p class="text-white mb-0" style="font-size: 1rem;">Add your products and your store information, publish on the website.</p>
+      <p class="text-white" style="font-size: 1rem; margin-bottom: 2rem">Customers can view your products in digitalized way.</p>
+      <div>
+        <button class="btn btn-start-revert" (click)="navigateToJoinUs()">Start now!</button>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- <div class="container text-center pt-5 pb-5">
-  <h4>Promotion Now</h4>
-  <p>We offer our first 100 merchants for free advertising!</p>
-  <button class="btn btn-second" [routerLink]="[]" [queryParams]="{modal: 'login'}">Get offer now!</button>
-</div> -->
-<div class="pt-4 pb-4" style="background-color: #f5f5f5">
-  <div class="container">
-    <h4 class="font-weight-bold">Free Services</h4>    
-      <div class="row no-gutters text-center feature__container">
-        <div class="col-sm-6 text-center">
-          <div class="fas fa-chart-line icon icon-dashboard icon-right mb-2"></div>
+<div class="container">
+  <div style="padding: 3% 0">
+    <div class="text-center">
+      <h1 class="mb-4 h3 font-weight-light">Digitalize Your Business</h1>
+      <div class="row no-gutters">
+        <div class="col-lg-2 p-lg-4 p-2 offset-lg-1">
+          <div class="digitalize" [class.active]="selectedTab == 'qrcode'" (click)="selectedTab = 'qrcode'">
+            <span class="fas fa-qrcode digitalize-icon"></span>
+            <p class="digitalize-text" style="line-height: 2rem">QR Code</p>
+          </div>
         </div>
-        <div class="col-sm-6">
-          <p class="feature__title font-weight-bold mb-1">Customer Tracking</p>
-          <p class="mb-0" style="font-size: .9rem">- View the number of your daily customers who visited your page.</p>
-          <p class="mb-0" style="font-size: .9rem">- Customer sources can be analyzed through different QR code scanning.</p>
+        <div class="col-lg-2 p-lg-4 p-2">
+          <div class="digitalize" [class.active]="selectedTab == 'productManagement'" (click)="selectedTab = 'productManagement'">
+            <span class="fas fa-th-large digitalize-icon"></span>
+            <p class="digitalize-text">Product Management</p>
+          </div>
         </div>
-      </div>  
-      <div class="row no-gutters text-center feature__container">
-        <div class="col-sm-6 order-12 order-sm-1">
-          <p class="feature__title font-weight-bold mb-1">Get your QR-code</p>
-          <p style="font-size: .9rem">- Display QR code on different sources.<br/>
-            <span class="ml-2">- Make your customer easily scan and view your shop.</span></p>
+        <div class="col-lg-2 p-lg-4 p-2">
+          <div class="digitalize" [class.active]="selectedTab == 'displayingInformation'" (click)="selectedTab = 'displayingInformation'">
+            <span class="fas fa-info-circle digitalize-icon"></span>
+            <p class="digitalize-text">Displaying Information</p>
+          </div>
         </div>
-        <div class="col-sm-6 text-center order-1 order-sm-12">
-          <div class="fas fa-qrcode icon icon-qrcode icon-right mb-2"></div>
+        <div class="col-lg-2 p-lg-4 p-2">
+          <div class="digitalize" [class.active]="selectedTab == 'mainCatalogue'" (click)="selectedTab = 'mainCatalogue'">
+            <span class="fas fa-book-open digitalize-icon"></span>
+            <p class="digitalize-text">Menu / Catalogue</p>
+          </div>
         </div>
-      </div>
-      <div class="row no-gutters text-center feature__container">
-        <div class="col-sm-6 text-center">
-          <div class="icon icon-right icon-item fas fa-th-large mb-2"></div>
-        </div>
-        <div class="col-sm-6">
-          <p class="feature__title font-weight-bold mb-1">Catalogue management</p>
-          <p style="font-size: .9rem">- Manage your items by systems.
-            <br/>
-            <span class="ml-2">You can publish your items online instantly.</span></p>
+        <div class="col-lg-2 p-lg-4 p-2">
+          <div class="digitalize" [class.active]="selectedTab == 'customerTacking'" (click)="selectedTab = 'customerTacking'">
+            <span class="fas fa-chart-line digitalize-icon"></span>
+            <p class="digitalize-text">Customer Tracking</p>
+          </div>
         </div>
       </div>
-      <div class="row no-gutters text-center feature__container">
-        <div class="col-sm-6 order-12 order-sm-1">
-          <p class="feature__title font-weight-bold mb-1">Display latest information</p>
-          <p class="mb-0" style="font-size: .9rem">- Display your shop information in crease the exposure to public.</p>
-          <p class="mb-0" style="font-size: .9rem">- Display promotion banner, job vacancy banner to interact their customer.</p>
+    </div>
+    <div class="tab-container">
+      <ng-container [ngSwitch]="selectedTab" class="center">
+        <div *ngSwitchCase="'qrcode'" [@openClose]="'open'">
+          <div class="mb-3 tab">
+            <span class="fas fa-qrcode tab-icon mr-3"></span>
+            <span class="tab-label">QR Code</span>
+          </div>
+            <p class="tab-text">A QR code is provided for every store to make user easily access to the store.</p>
+            <button class="btn btn-start" (click)="navigateToJoinUs()">Start now!</button>
         </div>
-        <div class="col-sm-6 text-center order-1 order-sm-12">
-          <div class="fas fa-store icon icon-store icon-left mb-2"></div>
+        <div *ngSwitchCase="'productManagement'" [@openClose]="'open'">
+          <div class="mb-3 tab">
+            <span class="fas fa-th-large tab-icon mr-3"></span>
+            <span class="tab-label">Product Management</span>
+          </div>
+          <p class="tab-text">Users can easily upload the products and display to the public.</p>
+          <button class="btn btn-start" (click)="navigateToJoinUs()">Start now!</button>
         </div>
-      </div>
-      <!-- <div class="row no-gutters text-center feature__container">
-        <div class="col-sm-6 order-12 order-sm-1">
-          <p class="feature__title font-weight-bold mb-1">Notify your customers</p>
-          <p style="font-size: .9rem">- Now you can notify your customers any new arrival products & wish list products.</p>
+        <div *ngSwitchCase="'displayingInformation'" [@openClose]="'open'">
+          <div class="mb-3 tab">
+            <span class="fas fa-info-circle tab-icon mr-3"></span>
+            <span class="tab-label">Displaying Information</span>
+          </div>
+          <p class="tab-text">Display the basic information of your store.<br/>
+            It can make your customer easily find you and view your products.</p>
+            <button class="btn btn-start" (click)="navigateToJoinUs()">Start now!</button>
         </div>
-        <div class="col-sm-6 text-center order-1 order-sm-12">
-          <div class="fas fa-bell icon icon-bell icon-left mb-2"></div>
+        <div *ngSwitchCase="'mainCatalogue'" [@openClose]="'open'">
+          <div class="mb-3 tab">
+            <span class="fas fa-book-open tab-icon mr-3"></span>
+            <span class="tab-label">Main / Catalogue</span>
+          </div>
+          <p class="tab-text">Can view as food menu or product catalogue to display for customers.<br/>
+            Quickly update the menu without any hassle.</p>
+            <button class="btn btn-start" (click)="navigateToJoinUs()">Start now!</button>
         </div>
-      </div> -->
-  </div>
-</div>
-<div class="container pt-4 pb-4">
-  <h4 class="font-weight-bold">Coming Soon</h4>
-  <div class="row no-gutters pt-2 pb-2">
-    <div class="col-lg-4 text-center p-3">
-      <div class="fas fa-map-marked-alt mb-2" style="font-size: 4rem"></div>
-      <p class="font-weight-bold mb-1">Show shop on map</p>
-      <p style="font-size: .9rem">Customers can find your shop easily by item on map.</p>
-    </div>
-    <div class="col-lg-4 text-center p-3">
-      <img class="mb-2" style="height: 65.86px;" src="assets/images/svg/advsing.svg" alt="order" />
-      <p class="font-weight-bold mb-1">Shop Advertising</p>
-      <p style="font-size: .9rem">Shop will be promoted in multiple places in apps to attract more customers.</p>
-    </div>
-    <div class="col-lg-4 text-center p-3">
-      <span class="fas fa-clipboard-list mb-2" style="font-size: 4rem"></span>
-      <p class="font-weight-bold mb-1">Order System</p>
-      <p style="font-size: .9rem">Seller allows users to make order online.<br />Users pay online and pick up in store.
-      </p>
-    </div>
-    <div class="col-lg-4 text-center p-3">
-      <span class="fas fa-globe mb-2" style="font-size: 4rem"></span>
-      <p class="font-weight-bold mb-1">E-Commerce</p>
-      <p style="font-size: .9rem">Seller easily sell online.<br /> Users pay online and wait for the delivery.</p>
-    </div>
-    <div class="col-lg-4 text-center p-3">
-      <div class="fas fa-user-tie mb-2" style="font-size: 4rem"></div>
-      <p class="font-weight-bold mb-1">Recruitment Advertising</p>
-      <p style="font-size: .9rem">Post job vacancy advertisement to recruit new staffs.</p>
-    </div>
-    <div class="col-lg-4 text-center p-3">
-      <div class="fas fa-ellipsis-h mb-2 mt-3" style="font-size: 4rem"></div>
+        <div *ngSwitchCase="'customerTacking'" [@openClose]="'open'">
+          <div class="mb-3 tab">
+            <span class="fas fa-chart-line tab-icon mr-3"></span>
+            <span class="tab-label">Customer Tracking</span>
+          </div>
+          <p class="tab-text">View the number daily customers who viewing your page.</p>
+          <button class="btn btn-start" (click)="navigateToJoinUs()">Start now!</button>
+        </div>
+      </ng-container>
     </div>
   </div>
 </div>
+
 <footer class="pt-3">
   <div></div>
   <div class='container-fluid col-md-8 pt-20 pl-0 pr-0'>
@@ -126,30 +157,29 @@
           </a> -->
         </div>
       </div>
-      <div class="footer-box-center col-md-8 no-gutters row">
-        <div class="col">
-          <ul>
-            <li class="col">
-              <a class="font-weight-bold ws-white" style="pointer-events: none;">Wonder Scale</a>
-            </li>
-            <li class="col mb-0">
-              <a class="font-9" [routerLink]="['/contact-us']">Contact Us</a>
-            </li>
-            <li class="col mb-0">
-              <a class="font-9" [routerLink]="['/policy']">Policy</a>
-            </li>
+      <div class="col-md-8 no-gutters row text-center text-lg-left" style="display: flex; align-items: center">
+            <span class="col-lg-auto" style="display: flex; align-items: center; justify-content: center">
+              <img style="width: 25px" class="mr-2" src="/assets/images/svg/icon.svg" alt="icon"/>
+              <span class="logo">Wonder Scale</span>
+            </span>
+            <div class="col-lg mt-lg-0 mt-3">
+              <span class="col-lg">
+                <a class="font-9 ws-secondary" [routerLink]="['/contact-us']">Contact Us</a>
+              </span>|
+              <span class="col-lg">
+                <a class="font-9 ws-secondary" [routerLink]="['/policy']">Policy</a>
+              </span>
+            </div>
             <!-- <li class="col">
               <a class="font-9" routerLink="/about-us">About Us</a>
             </li>
             <li *ngIf="false">
               <a routerLink="/help">Help</a>
             </li> -->
-          </ul>
-        </div>
       </div>
-      <div class="col-md-4 footer-box-right" style="font-size: .9rem">
-        <p class="text-md-right text-center ws-white">Wonder Scale &#169;
-          <br>Copyright {{year}}. All Rights Reserved.</p>
+      <div class="col-md-4 pt-3 footer-box-right" style="font-size: .9rem">
+        <!-- <p class="text-md-right text-center ws-white">Wonder Scale &#169;
+          <br>Copyright {{year}}. All Rights Reserved.</p> -->
         <div class="fb-like mb-2" data-href="https://www.facebook.com/wonderscale/" data-layout="button"
           data-action="like" data-size="small" data-show-faces="false" data-share="true"></div>
       </div>

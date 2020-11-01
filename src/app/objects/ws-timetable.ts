@@ -1,11 +1,10 @@
 import _ from "lodash";
 import { Day } from '@enum/day.enum';
 import { DefaultEnum } from '@enum/default.enum';
-import { environment } from '@environments/environment';
 import { InputValidateHelper } from '@helpers/inputvalidatehelper/inputvalidate.helper';
 import { StatusHelper } from '@helpers/statushelper/status.helper';
 import { OpeningInfoType } from '@wstypes/opening-info.type';
-import { Shop } from '@objects/shop';
+import { Store } from '@objects/store';
 import { OpeningInfo } from './opening-info';
 import { TodayOpeningInfo } from './ws-today-opening-info';
 
@@ -25,13 +24,13 @@ export class Timetable {
     let formatted_days = this.days.map(day => new OpeningInfo(day));
     return formatted_days;
   };
-  public static getTodayDateTime(shop: Shop): TodayOpeningInfo {
+  public static getTodayDateTime(store: Store): TodayOpeningInfo {
     let days = Timetable.days;
     let todayOpeningInfo = new TodayOpeningInfo;
-    todayOpeningInfo.openingInfoType = shop.openingInfoType;
-    if (shop && shop.openingInfoType === "selected_hours") {
-      todayOpeningInfo.todayDate = shop.openingInfo.find(day => day.day === days[todayOpeningInfo.today]);
-      todayOpeningInfo.openingInfos = shop.openingInfo;
+    todayOpeningInfo.openingInfoType = store.openingInfoType;
+    if (store && store.openingInfoType === "selected_hours") {
+      todayOpeningInfo.todayDate = store.openingInfo.find(day => day.day === days[todayOpeningInfo.today]);
+      todayOpeningInfo.openingInfos = store.openingInfo;
       if (todayOpeningInfo.todayDate) {
         if (todayOpeningInfo.todayDate.selected) {
           for (let time of todayOpeningInfo.todayDate.time) {

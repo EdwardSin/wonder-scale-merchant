@@ -15,7 +15,6 @@ import { WsDropdownComponent } from '@elements/ws-dropdown/ws-dropdown.component
 import { WsLoadingScreenComponent } from '@elements/ws-loading-screen/ws-loading-screen.component';
 import { WsToastComponent } from '@elements/ws-toast/ws-toast.component';
 import { WsMultipleInputComponent } from '@elements/ws-multiple-input/ws-multiple-input.component';
-import { BusinessLocationComponent } from '@elements/business-location/business-location.component';
 import { BusinessTimetableComponent } from '@elements/business-timetable/business-timetable.component';
 import { ConfirmModalComponent } from '@components/modals/confirm-modal/confirm-modal.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -25,8 +24,10 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatTabsModule } from '@angular/material/tabs';
 import { MatNativeDateModule } from '@angular/material/core';
-import { PackageListComponent } from '@components/shop/packages/package-list/package-list.component';
+import { BusinessLocationComponent } from '@elements/business-location/business-location.component';
+import { DirectiveModule } from '../directive/directive.module';
 
 
 
@@ -46,10 +47,9 @@ import { PackageListComponent } from '@components/shop/packages/package-list/pac
     WsMultipleInputComponent,
     WsDropdownComponent,
     SearchBarComponent,
-    BusinessLocationComponent,
     BusinessTimetableComponent,
     ConfirmModalComponent,
-    PackageListComponent
+    BusinessLocationComponent
   ],
   imports: [
     AgmCoreModule,
@@ -61,9 +61,12 @@ import { PackageListComponent } from '@components/shop/packages/package-list/pac
     MatRadioModule,
     MatCheckboxModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatTabsModule,
+    MatNativeDateModule,
+    DirectiveModule
   ],
-  exports: [WsSpinnerComponent,
+  exports: [
+    WsSpinnerComponent,
     WsLoadingComponent,
     WsLoadingButtonComponent,
     WsLoadingScreenComponent,
@@ -77,10 +80,9 @@ import { PackageListComponent } from '@components/shop/packages/package-list/pac
     WsMultipleInputComponent,
     WsDropdownComponent,
     SearchBarComponent,
-    BusinessLocationComponent,
     BusinessTimetableComponent,
     ConfirmModalComponent,
-    PackageListComponent
+    BusinessLocationComponent
   ]
 })
 export class ElementModule { }

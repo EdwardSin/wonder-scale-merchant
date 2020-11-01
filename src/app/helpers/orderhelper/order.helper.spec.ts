@@ -8,33 +8,33 @@ describe('OrderHelper', () => {
      });
   });
 
-  it('should ordered shop by thebest', () => {
-    // var shopList = [{dist: {calculated: 1}}, {dist: {calculated: 3}},{dist: {calculated: 2}},{dist: {calculated: 4}}];
+  it('should ordered store by thebest', () => {
+    // var storeList = [{dist: {calculated: 1}}, {dist: {calculated: 3}},{dist: {calculated: 2}},{dist: {calculated: 4}}];
     // var result = [{dist: {calculated: 1}},{dist: {calculated: 2}},{dist: {calculated: 3}},{dist: {calculated: 4}}];
-    var shopList = [{dist: 1}, {dist: 3},{dist: 2},{dist: 4}];
+    var storeList = [{dist: 1}, {dist: 3},{dist: 2},{dist: 4}];
     var result = [{dist: 1},{dist: 2},{dist: 3},{dist: 4}];
-    var orderedShopList = OrderHelper.orderByAndSetShopList('thebest', shopList);
-    expect(orderedShopList).toEqual(result);
+    var orderedStoreList = OrderHelper.orderByAndSetStoreList('thebest', storeList);
+    expect(orderedStoreList).toEqual(result);
   });
 
-  it('should ordered shop by alphabet', () => {
-    var shopList = [{name: 'ab'}, {name: 'bc'}, {name: 'ca'}, {name: 'ac'}];
+  it('should ordered store by alphabet', () => {
+    var storeList = [{name: 'ab'}, {name: 'bc'}, {name: 'ca'}, {name: 'ac'}];
     var result = [{name: 'ab'}, {name: 'ac'}, {name: 'bc'}, {name: 'ca'}];
-    var orderedShopList = OrderHelper.orderByAndSetShopList('alphabet', shopList);
-    expect(orderedShopList).toEqual(result);
+    var orderedStoreList = OrderHelper.orderByAndSetStoreList('alphabet', storeList);
+    expect(orderedStoreList).toEqual(result);
   });
 
-  it('should ordered shop by distance', () => {
-    var shopList = [{dist: 1}, {dist: 3},{dist: 2},{dist: 4}];
+  it('should ordered store by distance', () => {
+    var storeList = [{dist: 1}, {dist: 3},{dist: 2},{dist: 4}];
     var result = [{dist: 1},{dist: 2},{dist: 3},{dist: 4}];
-    var orderedShopList = OrderHelper.orderByAndSetShopList('distance', shopList);
-    expect(orderedShopList).toEqual(result);
+    var orderedStoreList = OrderHelper.orderByAndSetStoreList('distance', storeList);
+    expect(orderedStoreList).toEqual(result);
   });
-  it('should ordered shop by popularity', () => {
-    var shopList = [{ review: { score: 1 } }, { review: { score: 3 } }, { review: { score: 2 } }, { review: { score: 4 } }];
+  it('should ordered store by popularity', () => {
+    var storeList = [{ review: { score: 1 } }, { review: { score: 3 } }, { review: { score: 2 } }, { review: { score: 4 } }];
     var result = [{ review: { score: 1 } }, { review: { score: 2 } }, { review: { score: 3 } }, { review: { score: 4 } }];
-    var orderedShopList = OrderHelper.orderByAndSetShopList('popularity', shopList);
-    expect(orderedShopList).toEqual(result);
+    var orderedStoreList = OrderHelper.orderByAndSetStoreList('popularity', storeList);
+    expect(orderedStoreList).toEqual(result);
   });
 
   it('should ordered item by thebest', () => {

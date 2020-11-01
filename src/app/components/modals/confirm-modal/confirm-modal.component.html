@@ -5,7 +5,7 @@
         <p *ngIf="submessage" class="mb-2 text-black-50 font-9">{{submessage}}</p>
         <ng-content select="[content]"></ng-content>
         <div class="center mt-4 float-right">
-            <ws-loading-button [class]="'btn btn-sm btn-controller mr-1'" [loading]="loading" (click)="action()">Confirm</ws-loading-button>
+            <ws-loading-button [class]="'btn btn-sm btn-controller mr-1'" [color]="'#282c35'" [loading]="loading" (click)="action()">Confirm</ws-loading-button>
             <button class="btn btn-sm btn-controller ml-1" (click)="close()">Cancel</button>
         </div>
     </div>
