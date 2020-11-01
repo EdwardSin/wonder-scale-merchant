@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, PLATFORM_ID } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { SWIPER_CONFIG, SwiperConfigInterface } from 'ngx-swiper-wrapper';
 import { JwtModule, JWT_OPTIONS } from '@auth0/angular-jwt';
 import { SocialLoginModule, GoogleLoginProvider, FacebookLoginProvider, SocialAuthServiceConfig } from 'angularx-social-login';
@@ -23,6 +23,7 @@ import { BreadcrumbComponent } from '@elements/breadcrumb/breadcrumb.component';
 import { SharedModule } from './modules/public/shared/shared.module';
 import { TrackingComponent } from '@components/store/tracking/tracking.component';
 import { HomeControlComponent } from '@components/store/home-control/home-control.component';
+import { NoCacheHeadersInterceptor } from '@components/resolvers/no-cache-headers.interceptor.service';
 
 const DEFAULT_SWIPER_CONFIG: SwiperConfigInterface = {
   direction: 'horizontal',
@@ -103,6 +104,11 @@ export function jwtOptionsFactory(platformId) {
     {
       provide: SWIPER_CONFIG,
       useValue: DEFAULT_SWIPER_CONFIG
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: NoCacheHeadersInterceptor,
+      multi: true
     }
   ],
   bootstrap: [AppComponent]
