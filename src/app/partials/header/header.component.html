@@ -12,12 +12,19 @@
             </ul>
         </div>
         <div class="user-container float-right">
-            <div *ngIf="!user" class="user__login-container" style="font-size: .9rem; line-height: 70px; vertical-align: middle">
-                <a class="user-container__link" href="javascript:void(0)" [routerLink]="[]" [queryParams]="{modal: 'login'}">Login</a>
-                <!-- <span style="color: #7F0000">|</span> -->
-                <a class="user-container__link" href="javascript:void(0)" [routerLink]="[]" [queryParams]="{modal: 'register'}">Sign-up</a>
+            <div *ngIf="!user && !isMobileSize">
+                <a class="user-container__link" href="javascript:void(0)"
+                [routerLink]="[]" [queryParams]="{modal: 'login'}" [queryParamsHandling]="'merge'">Login</a>
+                <span class="user-container__text">|</span>
+                <a class="user-container__link" href="javacript:void(0)"
+                [routerLink]="[]" [queryParams]="{modal: 'register'}" [queryParamsHandling]="'merge'">Sign-up</a>
             </div>
-    
+            <div *ngIf="!user && isMobileSize">
+                <a class="user-container__link" href="javascript:void(0)"
+                [routerLink]="[]" [queryParams]="{modal: 'login'}" [queryParamsHandling]="'merge'">
+                    <span class="fas fa-sign-in-alt"></span>
+                </a>
+            </div>
             <div *ngIf="user" class="btn-group" mdbDropdown>
                 <div mdbDropdownToggle class="user-container__profile-container dropdown-toggle">
                     <img class='user-container__profile mr-1' src="{{user?.profileImage}}" alt="profile" />
