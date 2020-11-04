@@ -470,7 +470,7 @@ export class StorePageComponent implements OnInit {
     }));
   }
   removeMenuImagesObservable() {
-    return forkJoin(this.removingBanners.map(image => {
+    return forkJoin(this.removingMenuImages.map(image => {
       return this.authStoreContributorService.removeMenuImage({ filename: image.url })
     }));
   }
