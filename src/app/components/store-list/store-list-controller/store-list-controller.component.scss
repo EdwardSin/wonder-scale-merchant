@@ -22,10 +22,10 @@ ul li {
         padding-right: 2rem;
         display: inline-block;
         &.selected {
-            border-bottom: 3px solid map-get($ws-color, secondary);
+            border-bottom: 3px solid #b71c1c;
         }
         &:hover {
-            border-bottom: 3px solid rgba(0, 0, 0, .5);
+            border-bottom: 3px solid #b71c1c;
             text-decoration: none;
         }
     }

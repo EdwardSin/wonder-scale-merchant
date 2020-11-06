@@ -28,6 +28,12 @@
     cursor: pointer;
 }
 
+.badge-pill {
+    color: #282c35;
+    background-color: #fff;
+    border-radius: 10px;
+}
+
 .edit-button {
     &:hover {
         font-weight: bold;
