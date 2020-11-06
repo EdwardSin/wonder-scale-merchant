@@ -30,7 +30,6 @@ export class StorePageComponent implements OnInit {
   store: Store;
   selectedPreview: string = 'website';
   isChanged: boolean = false;
-  isEdingLoading: WsLoading = new WsLoading;
   isSaveStoreLoading: WsLoading = new WsLoading;
   isBannersOpened: boolean = false;
   isProfileImageOpened: boolean = false;

@@ -12,7 +12,7 @@
         <div *ngIf="isChanged" class="merchant-preview__save p-2">
             <p class="d-inline-block mb-0">Save to confirm changes</p>
             <button class="btn btn-sm btn-controller" style="opacity: 1; width: 80px" [disabled]="isSaveStoreLoading.isRunning()" (click)="onConfirmStoreSaved()">
-                <ws-spinner *ngIf="isSaveStoreLoading?.isRunning()" class="align-center" [width]="15" [height]="15" [borderWidth]="2" [spinnerColor]="'#888'"></ws-spinner>
+                <ws-spinner *ngIf="isSaveStoreLoading?.isRunning()" class="align-center" [width]="15" [height]="15" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>
                 <span *ngIf="!isSaveStoreLoading.isRunning()"><span class="fas fa-save mr-2 d-inline-block"></span>Save</span>
             </button>
         </div>
@@ -53,7 +53,7 @@
             <div *ngIf="isChanged" class="merchant-preview__save p-2">
                 <p class="d-inline-block mb-0">Save to confirm changes</p>
                 <button class="btn btn-sm btn-controller" style="opacity: 1; width: 80px" [disabled]="isSaveStoreLoading.isRunning()" (click)="onConfirmStoreSaved()">
-                    <ws-spinner *ngIf="isSaveStoreLoading?.isRunning()" class="align-center" [width]="15" [height]="15" [borderWidth]="2" [spinnerColor]="'#888'"></ws-spinner>
+                    <ws-spinner *ngIf="isSaveStoreLoading?.isRunning()" class="align-center" [width]="15" [height]="15" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>
                     <span *ngIf="!isSaveStoreLoading.isRunning()"><span class="fas fa-save mr-2 d-inline-block"></span>Save</span>
                 </button>
             </div>
@@ -145,8 +145,7 @@
         </div>
         <div>
             <button class="btn btn-sm btn-controller float-right" (click)="isBannersOpened = false">Close</button>
-            <button [disabled]="isEdingLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditBannersClicked()">
-                <ws-spinner *ngIf="isEdingLoading?.isRunning()" [width]="15" [height]="15" [spinnerColor]="'#fff'" [borderWidth]="3" class="mr-2"></ws-spinner>Confirm</button>
+            <button class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditBannersClicked()">Confirm</button>
         </div>
     </div>
 </ws-modal>
@@ -167,8 +166,7 @@
             <button class="btn btn-sm btn-danger mr-2" (click)="onDeleteProfileImageClicked()">Remove</button>
             <button class="btn btn-sm btn-controller" [disabled]="!isUploadProfileImage" (click)="onResetProfileImageClicked()">Reset</button>
             <button class="btn btn-sm btn-controller float-right" (click)="isProfileImageOpened = false">Close</button>
-            <button [disabled]="isEdingLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditProfileImageClicked()">
-                <ws-spinner *ngIf="isEdingLoading?.isRunning()" [width]="15" [height]="15" [spinnerColor]="'#fff'" [borderWidth]="3" class="mr-2"></ws-spinner>Confirm</button>
+            <button class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditProfileImageClicked()">Confirm</button>
         </div>
     </div>
 </ws-modal>
@@ -218,8 +216,7 @@
         </div>
         <div>
             <button class="btn btn-sm btn-controller float-right" (click)="isMenuImagesOpened = false">Close</button>
-            <button [disabled]="isEdingLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditMenuImagesClicked()">
-                <ws-spinner *ngIf="isEdingLoading?.isRunning()" [width]="15" [height]="15" [spinnerColor]="'#fff'" [borderWidth]="3" class="mr-2"></ws-spinner>Confirm</button>
+            <button class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditMenuImagesClicked()">Confirm</button>
         </div>
     </div>
 </ws-modal>
@@ -230,8 +227,7 @@
         </div>
         <div>
             <button class="btn btn-sm btn-controller float-right" (click)="isOpeningHoursOpened = false">Close</button>
-            <button [disabled]="isEdingLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditOpeningHoursClicked()">
-                <ws-spinner *ngIf="isEdingLoading?.isRunning()" [width]="15" [height]="15" [spinnerColor]="'#fff'" [borderWidth]="3" class="mr-2"></ws-spinner>Confirm</button>
+            <button class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditOpeningHoursClicked()">Confirm</button>
         </div>
     </div>
 </ws-modal>
@@ -240,8 +236,7 @@
         <textarea name="description" class="form-control mb-3" maxlength="500" rows="8" placeholder="Enter description..." [(ngModel)]="editingStore.description"></textarea>
         <div>
             <button class="btn btn-sm btn-controller float-right" (click)="isDescriptionOpened = false">Close</button>
-            <button [disabled]="isEdingLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditDescriptionClicked()">
-                <ws-spinner *ngIf="isEdingLoading?.isRunning()" [width]="15" [height]="15" [spinnerColor]="'#fff'" [borderWidth]="3" class="mr-2"></ws-spinner>Confirm</button>
+            <button class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditDescriptionClicked()">Confirm</button>
         </div>
     </div>
 </ws-modal>
@@ -249,8 +244,7 @@
     <div class="pt-3" modalBody>
         <div>
             <button class="btn btn-sm btn-controller float-right" (click)="isStoreTypeOpened = false">Close</button>
-            <button [disabled]="isEdingLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditStoreTypeClicked()">
-                <ws-spinner *ngIf="isEdingLoading?.isRunning()" [width]="15" [height]="15" [spinnerColor]="'#fff'" [borderWidth]="3" class="mr-2"></ws-spinner>Confirm</button>
+            <button class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditStoreTypeClicked()">Confirm</button>
         </div>
     </div>
 </ws-modal>
@@ -265,8 +259,7 @@
         </div>
         <div>
             <button class="btn btn-sm btn-controller float-right" (click)="isAddressOpened = false">Close</button>
-            <button [disabled]="isEdingLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditAddressClicked()">
-                <ws-spinner *ngIf="isEdingLoading?.isRunning()" [width]="15" [height]="15" [spinnerColor]="'#fff'" [borderWidth]="3" class="mr-2"></ws-spinner>Confirm</button>
+            <button class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditAddressClicked()">Confirm</button>
         </div>
     </div>
 </ws-modal>
@@ -314,8 +307,7 @@
         </div>
         <div>
             <button class="btn btn-sm btn-controller float-right" (click)="isTagsOpened = false">Close</button>
-            <button [disabled]="isEdingLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditTagsClicked()">
-                <ws-spinner *ngIf="isEdingLoading?.isRunning()" [width]="15" [height]="15" [spinnerColor]="'#fff'" [borderWidth]="3" class="mr-2"></ws-spinner>Confirm</button>
+            <button class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditTagsClicked()">Confirm</button>
         </div>
     </div>
 </ws-modal>
@@ -327,8 +319,7 @@
         </div>
         <div>
             <button class="btn btn-sm btn-controller float-right" (click)="isPhoneOpened = false">Close</button>
-            <button [disabled]="isEdingLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditPhoneClicked()">
-                <ws-spinner *ngIf="isEdingLoading?.isRunning()" [width]="15" [height]="15" [spinnerColor]="'#fff'" [borderWidth]="3" class="mr-2"></ws-spinner>Confirm</button>
+            <button class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditPhoneClicked()">Confirm</button>
         </div>
     </div>
 </ws-modal>
@@ -340,8 +331,7 @@
         </div>
         <div>
             <button class="btn btn-sm btn-controller float-right" (click)="isEmailOpened = false">Close</button>
-            <button [disabled]="isEdingLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditEmailClicked()">
-                <ws-spinner *ngIf="isEdingLoading?.isRunning()" [width]="15" [height]="15" [spinnerColor]="'#fff'" [borderWidth]="3" class="mr-2"></ws-spinner>Confirm</button>
+            <button class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditEmailClicked()">Confirm</button>
         </div>
     </div>
 </ws-modal>
@@ -353,8 +343,7 @@
         </div>
         <div>
             <button class="btn btn-sm btn-controller float-right" (click)="isWebsiteOpened = false">Close</button>
-            <button [disabled]="isEdingLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditWebsiteClicked()">
-                <ws-spinner *ngIf="isEdingLoading?.isRunning()" [width]="15" [height]="15" [spinnerColor]="'#fff'" [borderWidth]="3" class="mr-2"></ws-spinner>Confirm</button>
+            <button class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditWebsiteClicked()">Confirm</button>
         </div>
     </div>
 </ws-modal>
@@ -366,8 +355,7 @@
         </div>
         <div>
             <button class="btn btn-sm btn-controller float-right" (click)="isFacebookOpened = false">Close</button>
-            <button [disabled]="isEdingLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditFacebookClicked()">
-                <ws-spinner *ngIf="isEdingLoading?.isRunning()" [width]="15" [height]="15" [spinnerColor]="'#fff'" [borderWidth]="3" class="mr-2"></ws-spinner>Confirm</button>
+            <button class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditFacebookClicked()">Confirm</button>
         </div>
     </div>
 </ws-modal>
@@ -379,8 +367,7 @@
         </div>
         <div>
             <button class="btn btn-sm btn-controller float-right" (click)="isInstagramOpened = false">Close</button>
-            <button [disabled]="isEdingLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditInstagramClicked()">
-                <ws-spinner *ngIf="isEdingLoading?.isRunning()" [width]="15" [height]="15" [spinnerColor]="'#fff'" [borderWidth]="3" class="mr-2"></ws-spinner>Confirm</button>
+            <button class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditInstagramClicked()">Confirm</button>
         </div>
     </div>
 </ws-modal>
@@ -392,8 +379,7 @@
         </div>
         <div>
             <button class="btn btn-sm btn-controller float-right" (click)="isTwitterOpened = false">Close</button>
-            <button [disabled]="isEdingLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditTwitterClicked()">
-                <ws-spinner *ngIf="isEdingLoading?.isRunning()" [width]="15" [height]="15" [spinnerColor]="'#fff'" [borderWidth]="3" class="mr-2"></ws-spinner>Confirm</button>
+            <button class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditTwitterClicked()">Confirm</button>
         </div>
     </div>
 </ws-modal>
@@ -405,8 +391,7 @@
         </div>
         <div>
             <button class="btn btn-sm btn-controller float-right" (click)="isWhatsappOpened = false">Close</button>
-            <button [disabled]="isEdingLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditWhatsappClicked()">
-                <ws-spinner *ngIf="isEdingLoading?.isRunning()" [width]="15" [height]="15" [spinnerColor]="'#fff'" [borderWidth]="3" class="mr-2"></ws-spinner>Confirm</button>
+            <button class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditWhatsappClicked()">Confirm</button>
         </div>
     </div>
 </ws-modal>
@@ -418,8 +403,7 @@
         </div>
         <div>
             <button class="btn btn-sm btn-controller float-right" (click)="isMessengerOpened = false">Close</button>
-            <button [disabled]="isEdingLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditMessengerClicked()">
-                <ws-spinner *ngIf="isEdingLoading?.isRunning()" [width]="15" [height]="15" [spinnerColor]="'#fff'" [borderWidth]="3" class="mr-2"></ws-spinner>Confirm</button>
+            <button class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditMessengerClicked()">Confirm</button>
         </div>
     </div>
 </ws-modal>
@@ -431,8 +415,7 @@
         </div>
         <div>
             <button class="btn btn-sm btn-controller float-right" (click)="isYoutubeOpened = false">Close</button>
-            <button [disabled]="isEdingLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditYoutubeClicked()">
-                <ws-spinner *ngIf="isEdingLoading?.isRunning()" [width]="15" [height]="15" [spinnerColor]="'#fff'" [borderWidth]="3" class="mr-2"></ws-spinner>Confirm</button>
+            <button class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditYoutubeClicked()">Confirm</button>
         </div>
     </div>
 </ws-modal>
@@ -444,8 +427,7 @@
         </div>
         <div>
             <button class="btn btn-sm btn-controller float-right" (click)="isSnapchatOpened = false">Close</button>
-            <button [disabled]="isEdingLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditSnapchatClicked()">
-                <ws-spinner *ngIf="isEdingLoading?.isRunning()" [width]="15" [height]="15" [spinnerColor]="'#fff'" [borderWidth]="3" class="mr-2"></ws-spinner>Confirm</button>
+            <button class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditSnapchatClicked()">Confirm</button>
         </div>
     </div>
 </ws-modal>
@@ -457,8 +439,7 @@
         </div>
         <div>
             <button class="btn btn-sm btn-controller float-right" (click)="isTelegramOpened = false">Close</button>
-            <button [disabled]="isEdingLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditTelegramClicked()">
-                <ws-spinner *ngIf="isEdingLoading?.isRunning()" [width]="15" [height]="15" [spinnerColor]="'#fff'" [borderWidth]="3" class="mr-2"></ws-spinner>Confirm</button>
+            <button class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditTelegramClicked()">Confirm</button>
         </div>
     </div>
 </ws-modal>
@@ -470,8 +451,7 @@
         </div>
         <div>
             <button class="btn btn-sm btn-controller float-right" (click)="isWeiboOpened = false">Close</button>
-            <button [disabled]="isEdingLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditWeiboClicked()">
-                <ws-spinner *ngIf="isEdingLoading?.isRunning()" [width]="15" [height]="15" [spinnerColor]="'#fff'" [borderWidth]="3" class="mr-2"></ws-spinner>Confirm</button>
+            <button class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditWeiboClicked()">Confirm</button>
         </div>
     </div>
 </ws-modal>
@@ -483,8 +463,7 @@
         </div>
         <div>
             <button class="btn btn-sm btn-controller float-right" (click)="isWechatOpened = false">Close</button>
-            <button [disabled]="isEdingLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditWechatClicked()">
-                <ws-spinner *ngIf="isEdingLoading?.isRunning()" [width]="15" [height]="15" [spinnerColor]="'#fff'" [borderWidth]="3" class="mr-2"></ws-spinner>Confirm</button>
+            <button class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditWechatClicked()">Confirm</button>
         </div>
     </div>
 </ws-modal>
@@ -548,8 +527,7 @@
         </div>
         <div>
             <button class="btn btn-sm btn-controller float-right" (click)="isAddMediaOpened = false">Close</button>
-            <button [disabled]="isEdingLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmAddMediaClicked(selectedMedia, form.value.mediavalue)">
-                <ws-spinner *ngIf="isEdingLoading?.isRunning()" [width]="15" [height]="15" [spinnerColor]="'#fff'" [borderWidth]="3" class="mr-2"></ws-spinner>Confirm</button>
+            <button class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmAddMediaClicked(selectedMedia, form.value.mediavalue)">Confirm</button>
         </div>
     </form>
 </ws-modal>

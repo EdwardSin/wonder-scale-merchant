@@ -21,12 +21,12 @@
 </ng-template>
 <ng-template #loadingTemplate>
     <ng-container *ngIf="loading.isRunning(); else noItem">
-        <ws-spinner class="text-center d-block w-100" style="padding-top: 30vh"></ws-spinner>
+        <ws-spinner class="text-center d-block w-100" style="padding-top: 30vh" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>
     </ng-container>
 </ng-template>
 
 <ng-template #searchLoadingTemplate>
     <ng-container *ngIf="loading.isRunning(); else noSearchItem">
-        <ws-spinner class="text-center d-block w-100" style="padding-top: 30vh"></ws-spinner>
+        <ws-spinner class="text-center d-block w-100" style="padding-top: 30vh" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>
     </ng-container>
 </ng-template>
