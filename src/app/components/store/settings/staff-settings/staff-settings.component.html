@@ -33,7 +33,7 @@
                 </mat-select>
                 <permission-list [role]="contributorController.newRole"></permission-list>
                 <button class="btn btn-sm btn-controller m-0 mt-3 mb-3" wsDebounceClick (debounceClick)="inviteContributor()">
-                    <ws-spinner *ngIf="isInviteLoading?.isRunning()" [width]="15" [height]="15" [spinnerColor]="'#fff'" [borderWidth]="3" class="mr-2"></ws-spinner>Invite</button>
+                    <ws-spinner *ngIf="isInviteLoading?.isRunning()" [width]="15" [height]="15" [borderWidth]="1" [spinnerColor]="'#b71c1c'" class="mr-2"></ws-spinner>Invite</button>
             </div>
         </form>
         <p class="mb-2">Existing contributors</p>
@@ -73,7 +73,7 @@
 
 <ng-template #loadingTemplate>
   <ng-container *ngIf="loading.isRunning(); else noAuthorization">
-      <ws-spinner class="text-center d-block w-100" style="padding-top: 10vh; padding-bottom: 10vh"></ws-spinner>
+      <ws-spinner class="text-center d-block w-100" style="padding-top: 10vh; padding-bottom: 10vh" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>
   </ng-container>
 </ng-template>
 

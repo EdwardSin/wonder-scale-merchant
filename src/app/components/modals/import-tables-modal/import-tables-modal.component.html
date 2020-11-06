@@ -11,7 +11,7 @@
             </ul>
             <h1 class="h6 font-weight-bold">Preview:</h1>
         </div>
-        <ws-spinner *ngIf="isPreviewLoading.isRunning()" class="text-center d-block w-100" style="padding-top: 10vh; padding-bottom: 10vh"></ws-spinner>
+        <ws-spinner *ngIf="isPreviewLoading.isRunning()" [borderWidth]="1" [spinnerColor]="'#b71c1c'" class="text-center d-block w-100" style="padding-top: 10vh; padding-bottom: 10vh"></ws-spinner>
         <div class="table-responsive mb-3" style="max-height:65vh; overflow-y: auto;" id="tableView"></div>
         <div *ngIf="!isUploaded">
             <h6 class="font-weight-bold">Tips:</h6>
@@ -41,7 +41,7 @@
         <button class="btn btn-sm btn-controller float-right ml-2" (click)="close()">Cancel</button>
         <button *ngIf="!isUploadValid()" class="btn btn-sm btn-controller float-right" onclick="document.getElementById('importFile').click()">{{ !isUploaded ? 'Upload': 'Upload Again'}}</button>
         <button *ngIf="isUploadValid()" class="btn btn-sm btn-controller float-right" [disabled]="isUploadLoading.isRunning()" (click)="uploadItems()">
-            <ws-spinner *ngIf="isUploadLoading?.isRunning()" [width]="15" [height]="15" [spinnerColor]="'#fff'" [borderWidth]="3" class="mr-2"></ws-spinner>Confirm
+            <ws-spinner *ngIf="isUploadLoading?.isRunning()" [width]="15" [height]="15" [borderWidth]="1" [spinnerColor]="'#b71c1c'" class="mr-2"></ws-spinner>Confirm
         </button>
         <input id="importFile" type="file" hidden name="importFile" #importFile accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" (change)="importFileChangeEvent($event)" />
     </div>

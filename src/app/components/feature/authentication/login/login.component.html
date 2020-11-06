@@ -25,13 +25,13 @@
             [routerLink]="[]" [queryParams]="{modal: 'forgot-password'}">Forgot Password?</a>
           <div class="text-center center w-100">
             <button class="btn btn-block btn-login mb-2" [disabled]="loading.isRunning()" (click)="login()">
-              <ws-spinner class="mr-2" *ngIf="loading.isRunning()" [width]="15" [height]="15" [borderWidth]="3" [spinnerColor]="'#282c35'"></ws-spinner>
+              <ws-spinner class="mr-2" *ngIf="loading.isRunning()" [width]="15" [height]="15" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>
               Login
             </button>
           </div>
           <div *ngIf="resend" class="text-center center w-100">
             <button [class]="'btn btn-block btn-login mb-2'" [disabled]="resendLoading.isRunning()" (click)="resendActiveLink()">
-              <ws-spinner class="mr-2" *ngIf="resendLoading.isRunning()" [width]="15" [height]="15" [borderWidth]="3" [spinnerColor]="'#282c35'"></ws-spinner>Resend Activation
+              <ws-spinner class="mr-2" *ngIf="resendLoading.isRunning()" [width]="15" [height]="15" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>Resend Activation
             </button>
           </div>
           <div class="text-center my-1" style="overflow: hidden">

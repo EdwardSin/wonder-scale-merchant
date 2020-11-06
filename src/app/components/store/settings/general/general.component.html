@@ -21,7 +21,7 @@
     </div>
     <div style="width: 316px;">
         <button class="float-right btn btn-sm btn-controller" (click)="editGeneral()">
-            <ws-spinner *ngIf="isEditingLoading?.isRunning()" [width]="15" [height]="15" [spinnerColor]="'#fff'" [borderWidth]="3" class="mr-2"></ws-spinner>Save</button>
+            <ws-spinner *ngIf="isEditingLoading?.isRunning()" [width]="15" [height]="15" [borderWidth]="1" [spinnerColor]="'#b71c1c'" class="mr-2"></ws-spinner>Save</button>
     </div>
 </div>
 <confirm-modal *ngIf="isConfirmPublishedModalOpened" [(isOpened)]="isConfirmPublishedModalOpened" [loading]="isPublishLoading.isRunning()" id="confirmPublishStoreModal" [message]="'Are you sure to publish the store?'" [action]="publishStore.bind(this)"></confirm-modal>

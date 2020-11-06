@@ -61,7 +61,7 @@
         </div>
         <p class="text-muted font-9">Change your profile image to make the QR code be more iconic.</p> 
         <div [style.width.px]="qrSize" [style.height.px]="qrSize" class="center mb-4" #downloadQRcode>
-            <ws-spinner style='line-height: 200px; display: block' class="text-center" *ngIf="isQRcodeLoading.isRunning()"></ws-spinner>
+            <ws-spinner style='line-height: 200px; display: block' class="text-center" [borderWidth]="1" [spinnerColor]="'#b71c1c'" *ngIf="isQRcodeLoading.isRunning()"></ws-spinner>
         </div>
         <button class="btn btn-sm btn-controller float-right" (click)="isQRcodeOpened = false">Close</button>
     </div>
