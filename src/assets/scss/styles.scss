@@ -163,7 +163,7 @@ select.nooutline:focus,
         }
         &:active{
             color: #fff;
-            background-color: #282C35;
+            background-color: #b71c1c;
         }
         span {
             display: block;
@@ -330,6 +330,7 @@ a.primary{
 }
 .badge.ws-bg-secondary{
     color: white;
+    background-color: #b71c1c;
 }
 
 

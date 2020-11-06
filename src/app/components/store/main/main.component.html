@@ -35,43 +35,43 @@
           </li>
           <li class="position-relative">
             <a [class.active]="isLinkActive('/stores/' + store?.username + '/catalogue/all')" [routerLink]="['catalogue', 'all']" [queryParams]="{page: 1}">All
-              <span class="badge ws-bg-secondary badge-pill float-right position-absolute"
+              <span class="badge badge-pill float-right position-absolute"
                 style="margin-top: 3px; right: 10px; top: .5rem">{{ numberOfAllItems }}</span>
             </a>
           </li>
           <li class="position-relative">
             <a [class.active]="isLinkActive('/stores/' + store?.username + '/catalogue/new')" [routerLink]="['catalogue', 'new']" [queryParams]="{page: 1}">New
-              <span class="badge ws-bg-secondary badge-pill float-right position-absolute"
+              <span class="badge badge-pill float-right position-absolute"
                 style="margin-top: 3px; right: 10px; top: .5rem">{{ numberOfNewItems }}</span>
             </a>
           </li>
           <li *ngIf="store?.type == 'restaurant'" class="position-relative">
             <a [class.active]="isLinkActive('/stores/' + store?.username + '/catalogue/todayspecial')" [routerLink]="['catalogue', 'todayspecial']" [queryParams]="{page: 1}">Today Special
-              <span class="badge ws-bg-secondary badge-pill float-right position-absolute"
+              <span class="badge badge-pill float-right position-absolute"
                 style="margin-top: 3px; right: 10px; top: .5rem">{{ numberOfTodaySpecialItems }}</span>
             </a>
           </li>
           <li class="position-relative">
             <a [class.active]="isLinkActive('/stores/' + store?.username + '/catalogue/discount')" [routerLink]="['catalogue', 'discount']" [queryParams]="{page: 1}">Discount
-              <span class="badge ws-bg-secondary badge-pill float-right position-absolute"
+              <span class="badge badge-pill float-right position-absolute"
                 style="margin-top: 3px; right: 10px; top: .5rem">{{ numberOfDiscountItems }}</span>
             </a>
           </li>
           <li class="position-relative">
             <a [class.active]="isLinkActive('/stores/' + store?.username + '/catalogue/published')" [routerLink]="['catalogue', 'published']" [queryParams]="{page: 1}">Published
-              <span class="badge ws-bg-secondary badge-pill float-right position-absolute"
+              <span class="badge badge-pill float-right position-absolute"
                 style="margin-top: 3px; right: 10px; top: .5rem">{{ numberOfPublishedItems }}</span>
             </a>
           </li>
           <li class="position-relative">
             <a [class.active]="isLinkActive('/stores/' + store?.username + '/catalogue/unpublished')" [routerLink]="['catalogue', 'unpublished']" [queryParams]="{page: 1}">Unpublished
-              <span class="badge ws-bg-secondary badge-pill float-right position-absolute"
+              <span class="badge badge-pill float-right position-absolute"
                 style="margin-top: 3px; right: 10px; top: .5rem">{{ numberOfUnpublishedItems }}</span>
             </a>
           </li>
           <li class="position-relative">
             <a [class.active]="isLinkActive('/stores/' + store?.username + '/catalogue/uncategorized')" [routerLink]="['catalogue', 'uncategorized']" [queryParams]="{page: 1}">Uncategorized
-              <span class="badge ws-bg-secondary badge-pill float-right position-absolute"
+              <span class="badge badge-pill float-right position-absolute"
                 style="margin-top: 3px; right: 10px; top: .5rem">{{ numberOfUncategorizedItems }}</span>
             </a>
           </li>
@@ -96,7 +96,7 @@
                 </span>
                 <span style="overflow: hidden; width: 160px; text-overflow: ellipsis; display: inline-block">
                   {{ category?.name }}</span>
-                <span class="badge ws-bg-secondary badge-pill float-right position-absolute"
+                <span class="badge badge-pill float-right position-absolute"
                   style="margin-top: 3px; right: 10px; top: .5rem">{{category?.items?.length}}</span>
                 <div style="padding-left: 1.75rem">
                   <span class="edit-button d-inline-block ws-secondary" style="font-size: .8rem"

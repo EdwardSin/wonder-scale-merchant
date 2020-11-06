@@ -278,19 +278,19 @@
                 <label class="font-9 font-weight-normal">Restaurants:</label>
                 <div class="mb-2" style="line-height: 1rem">
                   <span (click)="tag.addTag(rtag)" *ngFor="let rtag of restaurantTags"
-                    class="badge noselect pt-1 pb-1 mr-2 mb-1 clickable" style="color: #7f0000; background-color: #f7f7f7">{{
+                    class="badge noselect pt-1 pb-1 mr-2 mb-1 clickable" style="color: #b71c1c; background-color: #f7f7f7">{{
                     rtag }}</span>
                 </div>
                 <label class="font-9 font-weight-normal">Shopping:</label>
                 <div class="mb-2" style="line-height: 1rem">
                   <span (click)="tag.addTag(stag)" *ngFor="let stag of shoppingTags"
-                    class="badge noselect pt-1 pb-1 mr-2 mb-1 clickable" style="color: #7f0000; background-color: #f7f7f7">{{
+                    class="badge noselect pt-1 pb-1 mr-2 mb-1 clickable" style="color: #b71c1c; background-color: #f7f7f7">{{
                     stag }}</span>
                 </div>
                 <label class="font-9 font-weight-normal">Services:</label>
                 <div style="line-height: 1rem">
                   <span (click)="tag.addTag(stag)" *ngFor="let stag of serviceTags"
-                    class="badge noselect pt-1 pb-1 mr-2 mb-1 clickable" style="color: #7f0000; background-color: #f7f7f7">{{
+                    class="badge noselect pt-1 pb-1 mr-2 mb-1 clickable" style="color: #b71c1c; background-color: #f7f7f7">{{
                     stag }}</span>
                 </div>
               </div>
@@ -306,7 +306,7 @@
                   </button>
                 </div>
               </div>
-              <span class="badge mr-2 mb-2" style="color: #7f0000; background-color: #f7f7f7" *ngFor="let rtag of tag.tags">
+              <span class="badge mr-2 mb-2" style="color: #b71c1c; background-color: #f7f7f7" *ngFor="let rtag of tag.tags">
                 {{rtag}}
                 <span class="fas fa-times clickable"
                   (click)="$event.stopPropagation(); tag.removeTag(rtag); tag.reset();"></span>

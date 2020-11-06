@@ -70,7 +70,7 @@ export class QRCodeBuilder {
         img.src = src;
         img.addEventListener('load', function () {
             let context = targetCanvas.getContext('2d');
-            context.imageSmoothingEnabled = true
+            context.imageSmoothingEnabled = true;
             context.drawImage(img, (size-size/3)/2, (size-size/3)/2, size/3, size/3)
         });
     }

@@ -17,7 +17,7 @@ export class TrackingFigureComponent implements OnInit {
   public lineGraphType: string = 'line';
   lineChartColors: Color[] = [
     {
-      borderColor: '#7f0000',
+      borderColor: '#b71c1c',
       backgroundColor: 'rgba(127, 0, 0, .5)',
     },
   ];
@@ -56,7 +56,7 @@ export class TrackingFigureComponent implements OnInit {
   totalNumberOfCustomerToday: number = 0;
   tracks = [{ name: 'Number of Total Customers' }];
   colorSchema = [{
-    borderColor: '#7f0000',
+    borderColor: '#b71c1c',
     backgroundColor: 'rgba(127, 0, 0, .5)',
   }, {
     borderColor: '#b380ff',

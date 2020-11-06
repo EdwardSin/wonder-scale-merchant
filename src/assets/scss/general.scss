@@ -60,7 +60,7 @@
     }
     &:active{
         color: #fff;
-        background-color: #282C35;
+        background-color: #b71c1c;
     }
     span {
         display: block;
@@ -68,9 +68,9 @@
     }
     &.selected{
         color: #fff;
-        background-color: #282C35;
+        background-color: #b71c1c;
         &:hover{
-            background-color: #4d5466;
+            background-color: #b71c1c;
         }
     }
 }
@@ -79,12 +79,12 @@
     padding-left: 1.5rem;
     padding-right: 1.5rem;
     font-size: 1rem;
-    color: #7F0000;
-    border: 1px solid #7F0000;
+    color: #b71c1c;
+    border: 1px solid #b71c1c;
     transition: all .5s ease;
     
     &:hover{
-        background-color: #7F0000;
+        background-color: #b71c1c;
         color: #fff;
     }
     // &:active{
@@ -102,7 +102,7 @@
     
     &:hover{
         background-color: #fff;
-        color: #7F0000;
+        color: #b71c1c;
     }
     &:active{
     }
