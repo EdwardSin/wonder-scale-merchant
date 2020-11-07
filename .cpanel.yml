@@ -2,4 +2,4 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home2/wondersc/testing/
-    - /bin/cp -R src/assets/images $DEPLOYPATH
+    - /bin/cp angular.json $DEPLOYPATH
