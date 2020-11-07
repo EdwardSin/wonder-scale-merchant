@@ -1,5 +1,5 @@
 ---
 deployment:
   tasks:
-  - export DEPLOYPATH=/home2/wondersc/testing/
-  - /bin/cp -R src/assets/images $DEPLOYPATH
+    - export DEPLOYPATH=/home2/wondersc/testing/
+    - /bin/cp -R src/assets/images $DEPLOYPATH
