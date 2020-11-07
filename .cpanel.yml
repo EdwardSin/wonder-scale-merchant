@@ -1,6 +1,7 @@
 ---
 deployment:
   tasks:
+    - npm install
     - npm run build
     - export DEPLOYPATH=/home2/wondersc/testing/
     - /bin/cp -R dist $DEPLOYPATH
