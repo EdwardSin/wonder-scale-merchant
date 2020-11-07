@@ -1,0 +1,4 @@
+deployment:
+  tasks:
+  - export DEPLOYPATH=/home2/wondersc/testing.wonderscale.com/
+  - /bin/cp -R images $DEPLOYPATH
