@@ -43,7 +43,6 @@
         (onEditYoutubeClicked)="onEditYoutubeClicked()"
         (onEditSnapchatClicked)="onEditSnapchatClicked()"
         (onEditTelegramClicked)="onEditTelegramClicked()"
-        (onEditWeiboClicked)="onEditWeiboClicked()"
         (onEditWechatClicked)="onEditWechatClicked()"
         (onAddMediaClicked)="onAddMediaClicked()"
         ></merchant-page>
@@ -80,7 +79,6 @@
                 (onEditYoutubeClicked)="onEditYoutubeClicked()"
                 (onEditSnapchatClicked)="onEditSnapchatClicked()"
                 (onEditTelegramClicked)="onEditTelegramClicked()"
-                (onEditWeiboClicked)="onEditWeiboClicked()"
                 (onEditWechatClicked)="onEditWechatClicked()"
                 (onAddMediaClicked)="onAddMediaClicked()"
             ></merchant-info>
@@ -443,18 +441,6 @@
         </div>
     </div>
 </ws-modal>
-<ws-modal *ngIf="isWeiboOpened" [isCloseIconDisplayed]="false" [(isOpened)]="isWeiboOpened" [maxWidth]="400">
-    <div class="pt-3" modalBody>
-        <div class="mb-3">
-            <h6>Weibo</h6>
-            <ws-multiple-input [maxlength]="30" [(items)]="editingMedias" [type]="'weibo'" [placeholder]="'Weibo Username'" [name]="'weibo'"></ws-multiple-input>
-        </div>
-        <div>
-            <button class="btn btn-sm btn-controller float-right" (click)="isWeiboOpened = false">Close</button>
-            <button class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditWeiboClicked()">Confirm</button>
-        </div>
-    </div>
-</ws-modal>
 <ws-modal *ngIf="isWechatOpened" [isCloseIconDisplayed]="false" [(isOpened)]="isWechatOpened" [maxWidth]="400">
     <div class="pt-3" modalBody>
         <div class="mb-3">
@@ -480,7 +466,6 @@
                     <mat-option [value]="'youtube'">Youtube</mat-option>
                     <mat-option [value]="'snapchat'">Snapchat</mat-option>
                     <mat-option [value]="'telegram'">Telegram</mat-option>
-                    <mat-option [value]="'weibo'">Weibo</mat-option>
                     <mat-option [value]="'wechat'">Wechat</mat-option>
                 </mat-select>
             </div>
@@ -493,7 +478,7 @@
                     <ng-container *ngTemplateOutlet="mediaInputTemplate; context: {type: selectedMedia, placeholder: 'Username', prefixLink: 'https://m.me/'}"></ng-container>
                 </div>
                 <div style="width: fit-content" *ngSwitchCase="'twitter'">
-                    <ng-container *ngTemplateOutlet="mediaInputTemplate; context: {type: selectedMedia, placeholder: 'Account', prefixLink: 'https://www.twitter.com/'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="mediaInputTemplate; context: {type: selectedMedia, placeholder: 'Account', prefixLink: 'https://twitter.com/'}"></ng-container>
                 </div>
                 <div style="width: fit-content" *ngSwitchCase="'whatsapp'">
                     <ng-container *ngTemplateOutlet="mediaInputTemplate; context: {type: selectedMedia, placeholder: 'Phone Number'}"></ng-container>
@@ -504,14 +489,11 @@
                 <div style="width: fit-content" *ngSwitchCase="'wechat'">
                     <ng-container *ngTemplateOutlet="mediaInputTemplate; context: {type: selectedMedia, placeholder: 'Wechat Username'}"></ng-container>
                 </div>
-                <div style="width: fit-content" *ngSwitchCase="'weibo'">
-                    <ng-container *ngTemplateOutlet="mediaInputTemplate; context: {type: selectedMedia, placeholder: 'Weibo Username'}"></ng-container>
-                </div>
                 <div style="width: fit-content" *ngSwitchCase="'youtube'">
                     <ng-container *ngTemplateOutlet="mediaInputTemplate; context: {type: selectedMedia, placeholder: 'Youtube URL', prefixLink: 'https://www.youtube.com/channel/'}"></ng-container>
                 </div>
                 <div style="width: fit-content" *ngSwitchCase="'telegram'">
-                    <ng-container *ngTemplateOutlet="mediaInputTemplate; context: {type: selectedMedia, placeholder: 'Telegram Account'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="mediaInputTemplate; context: {type: selectedMedia, placeholder: 'Telegram Account', prefixLink: 'https://telegram.me/'}"></ng-container>
                 </div>
                 <div style="width: fit-content" *ngSwitchCase="'snapchat'">
                     <ng-container *ngTemplateOutlet="mediaInputTemplate; context: {type: selectedMedia, placeholder: 'Snapchat Account'}"></ng-container>

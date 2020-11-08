@@ -50,7 +50,6 @@ export class StorePageComponent implements OnInit {
   isYoutubeOpened: boolean = false;
   isSnapchatOpened: boolean = false;
   isTelegramOpened: boolean = false;
-  isWeiboOpened: boolean = false;
   isWechatOpened: boolean = false;
   isAddMediaOpened: boolean = false;
   selectedNav: string = 'info';
@@ -192,10 +191,6 @@ export class StorePageComponent implements OnInit {
   onEditTelegramClicked() {
     this.isTelegramOpened = true;
     this.editingMedias = this.store.media.filter(media => media.type == 'telegram').map(media => media.value);
-  }
-  onEditWeiboClicked() {
-    this.isWeiboOpened = true;
-    this.editingMedias = this.store.media.filter(media => media.type == 'weibo').map(media => media.value);
   }
   onEditWechatClicked() {
     this.isWechatOpened = true;
@@ -354,13 +349,6 @@ export class StorePageComponent implements OnInit {
     this.store = {...this.store};
     this.isChanged = true;
     this.isTelegramOpened = false;
-  }
-  onConfirmEditWeiboClicked() {
-    let remainingMedias = _.remove(this.store.media, media => media.type !== 'weibo');
-    this.store.media = _.compact([...remainingMedias, ...this.editingMedias.map(value => {return value ? {type: 'weibo', value} : null })]);
-    this.store = {...this.store};
-    this.isChanged = true;
-    this.isWeiboOpened = false;
   }
   onConfirmEditWechatClicked() {
     let remainingMedias = _.remove(this.store.media, media => media.type !== 'wechat');
