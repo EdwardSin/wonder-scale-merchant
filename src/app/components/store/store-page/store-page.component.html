@@ -32,6 +32,7 @@
         (onEditStoreTypeClicked)="onEditStoreTypeClicked()"
         (onEditAddressClicked)="onEditAddressClicked()"
         (onEditTagsClicked)="onEditTagsClicked()"
+        (onEditContactButtonClicked)="onEditContactButtonClicked()"
         (onEditPhoneClicked)="onEditPhoneClicked()"
         (onEditEmailClicked)="onEditEmailClicked()"
         (onEditWebsiteClicked)="onEditWebsiteClicked()"
@@ -45,6 +46,7 @@
         (onEditTelegramClicked)="onEditTelegramClicked()"
         (onEditWechatClicked)="onEditWechatClicked()"
         (onAddMediaClicked)="onAddMediaClicked()"
+        (onDeleteContactButtonClicked)="onDeleteContactButtonClicked()"
         ></merchant-page>
     </div>
     <div class="text-center py-5" *ngIf="selectedPreview == 'website' && isMobileSize">
@@ -71,6 +73,7 @@
                 (onEditStoreTypeClicked)="onEditStoreTypeClicked()"
                 (onEditAddressClicked)="onEditAddressClicked()"
                 (onEditTagsClicked)="onEditTagsClicked()"
+                (onEditContactButtonClicked)="onEditContactButtonClicked()"
                 (onEditPhoneClicked)="onEditPhoneClicked()"
                 (onEditEmailClicked)="onEditEmailClicked()"
                 (onEditWebsiteClicked)="onEditWebsiteClicked()"
@@ -84,6 +87,7 @@
                 (onEditTelegramClicked)="onEditTelegramClicked()"
                 (onEditWechatClicked)="onEditWechatClicked()"
                 (onAddMediaClicked)="onAddMediaClicked()"
+                (onDeleteContactButtonClicked)="onDeleteContactButtonClicked()"
             ></merchant-info>
             <merchant-menu style="display: block; min-height: calc(100vh - 317px)" *ngIf="selectedNav == 'menu'" 
             [store]="store"
@@ -309,6 +313,54 @@
         <div>
             <button class="btn btn-sm btn-controller float-right" (click)="isTagsOpened = false">Close</button>
             <button class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditTagsClicked()">Confirm</button>
+        </div>
+    </div>
+</ws-modal>
+<ws-modal *ngIf="isContactButtonOpened" [isCloseIconDisplayed]="false" [(isOpened)]="isContactButtonOpened" [maxWidth]="400">
+    <div class="pt-3" modalBody>
+        <div class="mb-3" style="max-width: 300px">
+            <mat-label class="font-weight-bold mb-2 font-9">Contact Button Label:</mat-label>
+            <mat-select name="contactLabel" class="form-control mb-3" style="border-radius: 25px" [(ngModel)]="selectedContactButtonLabel" placeholder="Contact Button Label">
+                <mat-option [value]="'contactUs'">Contact Us</mat-option>
+                <mat-option [value]="'orderNow'">Order Now</mat-option>
+                <mat-option [value]="'bookNow'">Book Now</mat-option>
+                <mat-option [value]="'purchaseNow'">Purchase Now</mat-option>
+                <mat-option [value]="'learnMore'">Learn More</mat-option>
+            </mat-select>
+            <mat-label class="font-weight-bold mb-2 font-9">Contact Method:</mat-label>
+            <mat-select name="contactType" class="form-control mb-3" style="border-radius: 25px" [(ngModel)]="selectedContactButtonType" (selectionChange)="selectedContactButtonValue = ''" placeholder="Contact Button Type">
+                <mat-option [value]="'url'">Website URL</mat-option>
+                <mat-option [value]="'phoneCall'">Phone Call</mat-option>
+                <mat-option [value]="'whatsapp'">Whatsapp</mat-option>
+                <mat-option [value]="'instagram'">Instagram</mat-option>
+                <mat-option [value]="'messenger'">FB Messenger</mat-option>
+            </mat-select>
+            <ng-container [ngSwitch]="selectedContactButtonType">
+                <div *ngSwitchCase="'url'">
+                    <mat-label class="font-weight-bold mb-2 font-9">URL:</mat-label>
+                    <input *ngIf="selectedContactButtonType == 'url'" class="form-control" [(ngModel)]="selectedContactButtonValue" name="value" placeholder="https://www.example.com" />
+                </div>
+                <div *ngSwitchCase="'phoneCall'">
+                    <mat-label class="font-weight-bold mb-2 font-9">Contact Number:</mat-label>
+                    <input class="form-control" [(ngModel)]="selectedContactButtonValue" name="value" placeholder="+60 123 456 789" />
+                </div>
+                <div *ngSwitchCase="'whatsapp'">
+                    <mat-label class="font-weight-bold mb-2 font-9">Whatsapp Number:</mat-label>
+                    <input class="form-control" [(ngModel)]="selectedContactButtonValue" name="value" placeholder="+60 123 456 789" />
+                </div>
+                <div *ngSwitchCase="'instagram'">
+                    <mat-label class="font-weight-bold mb-2 font-9">Account:</mat-label>
+                    <input class="form-control" [(ngModel)]="selectedContactButtonValue" name="value" placeholder="Account" />
+                </div>
+                <div *ngSwitchCase="'messenger'">
+                    <mat-label class="font-weight-bold mb-2 font-9">Whatsapp Number:</mat-label>
+                    <input class="form-control" [(ngModel)]="selectedContactButtonValue" name="value" placeholder="Account" />
+                </div>
+            </ng-container>
+        </div>
+        <div>
+            <button class="btn btn-sm btn-controller float-right" (click)="isContactButtonOpened = false">Close</button>
+            <button class="btn btn-sm btn-controller float-right mr-2" [disabled]="selectedContactButtonValue == ''" (click)="onConfirmEditContactButtonClicked()">Confirm</button>
         </div>
     </div>
 </ws-modal>

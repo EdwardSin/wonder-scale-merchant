@@ -8,7 +8,8 @@
 ---------------------------------------------
 .: WSM: Task: Create build bot (WSM-216)
 .: WSM: Task: Add Social Media (WSM-52)
-.: WSM: Update Mobile Version in Merchant (WSM-225)
+.: WSM: Task: Update Mobile Version in Merchant (WSM-225)
+.: WSM: Task: Add an preferable order method (WSM-205)
 
 ---------------------------------------------
 - 2020-11-06                                -

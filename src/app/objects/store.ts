@@ -48,6 +48,11 @@ export class Store {
     categoryList?: Array<string>;
     trackExpiration: string;
     number_of_all_items: number;
+    contactButton?: {
+        label: string,
+        type: string,
+        value: string
+    };
      constructor(){
          this.location = {
              type: 'Point',

@@ -41,6 +41,7 @@ export class StorePageComponent implements OnInit {
   isStoreTypeOpened: boolean = false;
   isAddressOpened: boolean = false;
   isTagsOpened: boolean = false;
+  isContactButtonOpened: boolean = false;
   isPhoneOpened: boolean = false;
   isEmailOpened: boolean = false;
   isWebsiteOpened: boolean = false;
@@ -76,6 +77,9 @@ export class StorePageComponent implements OnInit {
   isMediaMax: boolean;
   editingMedias = [];
   selectedMedia: string = '';
+  selectedContactButtonLabel: string = '';
+  selectedContactButtonType: string = '';
+  selectedContactButtonValue: string = '';
   error: string = '';
 
   restaurantTags = TagController.headerTags.restaurantTags;
@@ -156,6 +160,14 @@ export class StorePageComponent implements OnInit {
   onEditTagsClicked() {
     this.isTagsOpened = true;
     this.tag.tags = this.editingStore.tags;
+  }
+  onEditContactButtonClicked() {
+    this.isContactButtonOpened = true;
+    if(this.store.contactButton) {
+      this.selectedContactButtonLabel = this.store.contactButton.label;
+      this.selectedContactButtonType = this.store.contactButton.type;
+      this.selectedContactButtonValue = this.store.contactButton.value;
+    }
   }
   onEditPhoneClicked() {
     this.isPhoneOpened = true;
@@ -274,6 +286,19 @@ export class StorePageComponent implements OnInit {
     this.store.tags = [...this.tag.tags];
     this.isChanged = true;
     this.isTagsOpened = false;
+  }
+  onConfirmEditContactButtonClicked() {
+    this.editingStore.contactButton = {
+      label: this.selectedContactButtonLabel,
+      type: this.selectedContactButtonType,
+      value: this.selectedContactButtonValue
+    };
+    this.store.contactButton = _.cloneDeep(this.editingStore.contactButton);
+    this.selectedContactButtonLabel = '';
+    this.selectedContactButtonType = '';
+    this.selectedContactButtonValue = '';
+    this.isChanged = true;
+    this.isContactButtonOpened = false;
   }
   onConfirmEditPhoneClicked() {
     this.store.phone = _.compact(this.editingStore.phone);
@@ -405,6 +430,14 @@ export class StorePageComponent implements OnInit {
     this.isProfileImageOpened = false;
     this.isUploadProfileImage = false;
     this.isDeleteProfileImage = true;
+  }
+  onDeleteContactButtonClicked() {
+    this.store.contactButton = null;
+    this.editingStore.contactButton = null;
+    this.selectedContactButtonLabel = '';
+    this.selectedContactButtonType = '';
+    this.selectedContactButtonValue = '';
+    this.isChanged = true;
   }
   onConfirmStoreSaved() {
     let obj = {
