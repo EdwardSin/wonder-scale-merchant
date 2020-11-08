@@ -1,5 +1,5 @@
 <h4 class="ws-title">Store Page</h4>
-<div class="p-4">
+<div class="p-lg-4">
     <div class="mb-3 d-flex align-items-center justify-content-between">
         <h5>Preview:</h5>
         <div class="btn-group" role="group">
@@ -8,7 +8,7 @@
         </div>
     </div>
     <div class="clearfix"></div>
-    <div *ngIf="selectedPreview == 'website'" class="merchant-preview">
+    <div *ngIf="selectedPreview == 'website' && !isMobileSize" class="merchant-preview">
         <div *ngIf="isChanged" class="merchant-preview__save p-2">
             <p class="d-inline-block mb-0">Save to confirm changes</p>
             <button class="btn btn-sm btn-controller" style="opacity: 1; width: 80px" [disabled]="isSaveStoreLoading.isRunning()" (click)="onConfirmStoreSaved()">
@@ -46,6 +46,9 @@
         (onEditWechatClicked)="onEditWechatClicked()"
         (onAddMediaClicked)="onAddMediaClicked()"
         ></merchant-page>
+    </div>
+    <div class="text-center py-5" *ngIf="selectedPreview == 'website' && isMobileSize">
+        <p>Website preview is not available in mobile.</p>
     </div>
     <div *ngIf="selectedPreview == 'mobile'" class="d-flex justify-content-center">
         <div class="merchant-preview__website">

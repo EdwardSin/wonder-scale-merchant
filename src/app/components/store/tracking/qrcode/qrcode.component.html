@@ -18,7 +18,7 @@
 <div *ngIf="store; else loadingTemplate">
     <ws-uploader [id]="'qrcode-profile'" [max]="1" [input]="[]" (output)="imageChangeEvent($event)"></ws-uploader>
     <div class="row no-gutters">
-        <div class="col-md-4 p-2 mb-3">
+        <div class="col-md-4 p-lg-2 mb-3">
             <div class="qrcode-info">
                 <a id="id-qrcode" hidden href="#" download="ws-qr-code.png"></a>
                 <label class="font-weight-bold">Default</label>
@@ -60,7 +60,7 @@
             </div>
         </div>
         <ng-container *ngFor="let track of tracks">
-            <div *ngIf="track.status == 'active'" class="col-md-4 p-2 mb-3">
+            <div *ngIf="track.status == 'active'" class="col-md-4 p-lg-2 mb-3">
                 <ng-container *ngTemplateOutlet="qrcodeTemplate; context: {track: track}"></ng-container>
             </div>
         </ng-container>
@@ -69,7 +69,7 @@
     <h5 *ngIf="isInactiveExisted">Inactive</h5>
     <div class="row no-gutters">
         <ng-container *ngFor="let track of tracks">
-            <div class="col-md-4 p-2 mb-3" *ngIf="track.status == 'inactive'">
+            <div class="col-md-4 p-lg-2 mb-3" *ngIf="track.status == 'inactive'">
                 <ng-container *ngTemplateOutlet="qrcodeTemplate; context: {track: track}"></ng-container>
             </div>
         </ng-container>
