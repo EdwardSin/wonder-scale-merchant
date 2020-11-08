@@ -16,6 +16,7 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { environment } from '@environments/environment';
 import { AuthStoreContributorService } from '@services/http/auth-store/contributor/auth-store-contributor.service';
 import { WsToastService } from '@elements/ws-toast/ws-toast.service';
+import { ScreenService } from '@services/general/screen.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EmailValidator } from '@validations/email.validator';
 import { URLValidator } from '@validations/url.validator';
@@ -30,6 +31,7 @@ export class StorePageComponent implements OnInit {
   store: Store;
   selectedPreview: string = 'website';
   isChanged: boolean = false;
+  isMobileSize: boolean = false;
   isSaveStoreLoading: WsLoading = new WsLoading;
   isBannersOpened: boolean = false;
   isProfileImageOpened: boolean = false;
@@ -81,6 +83,7 @@ export class StorePageComponent implements OnInit {
   shoppingTags = TagController.headerTags.shoppingTags;
   private ngUnsubscribe: Subject<any> = new Subject();
   constructor(private gpsService: WsGpsService,
+    private screenService: ScreenService,
     private sharedStoreService: SharedStoreService,
     private authStoreContributorService: AuthStoreContributorService,
     private ref: ChangeDetectorRef,
@@ -107,6 +110,9 @@ export class StorePageComponent implements OnInit {
         this.selectedNav = queryParams['nav'];
       }
     });
+    this.screenService.isMobileSize.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+      this.isMobileSize = result;
+    })
   }
   onEditBannersClicked() {
     this.isBannersOpened = true;

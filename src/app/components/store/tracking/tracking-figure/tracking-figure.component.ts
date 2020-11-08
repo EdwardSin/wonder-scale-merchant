@@ -6,6 +6,7 @@ import { Color } from 'ng2-charts';
 import { AuthTrackContributorService } from '@services/http/auth-store/contributor/auth-track-contributor.service';
 import { Subject, timer } from 'rxjs';
 import { takeUntil, delay, switchMap } from 'rxjs/operators';
+import { ScreenService } from '@services/general/screen.service';
 
 @Component({
   selector: 'app-tracking-figure',
@@ -15,6 +16,7 @@ import { takeUntil, delay, switchMap } from 'rxjs/operators';
 export class TrackingFigureComponent implements OnInit {
   @ViewChild('numberOfCustomer', { static: true }) numberOfCustomer: ElementRef;
   public lineGraphType: string = 'line';
+  isMobileSize: boolean = false;
   lineChartColors: Color[] = [
     {
       borderColor: '#b71c1c',
@@ -27,6 +29,7 @@ export class TrackingFigureComponent implements OnInit {
     scales: {
       yAxes: [{
         ticks: {
+          suggestedMax: 100,
           beginAtZero: true,
           callback: function (value) { if (Number.isInteger(value)) { return value; } }
         }
@@ -91,8 +94,11 @@ export class TrackingFigureComponent implements OnInit {
     colors: this.colorSchema
   }
   private ngUnsubscribe: Subject<any> = new Subject;
-  constructor(private authTrackContributorService: AuthTrackContributorService) {
+  constructor(private screenService: ScreenService, private authTrackContributorService: AuthTrackContributorService) {
     this.getTargetsInSession();
+    this.screenService.isMobileSize.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+      this.isMobileSize = result;
+    })
   }
   ngOnInit(): void {
     this.setupData();
