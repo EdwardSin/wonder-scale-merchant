@@ -305,6 +305,13 @@ a.primary{
         text-decoration: underline;
     }
 }
+a.secondary{
+    color: map-get($ws-color, secondary) !important;
+    &:hover{
+        color: map-get($ws-color, secondary-hover);
+        text-decoration: underline;
+    }
+}
 .center{
     margin-left: auto;
     margin-right: auto;
