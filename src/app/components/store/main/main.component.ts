@@ -1,27 +1,21 @@
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { UnitAnimation } from '@animations/unit.animation';
 import { Constants } from '@constants/constants';
 import { Role } from '@enum/Role.enum';
-import { environment } from '@environments/environment';
 import { ContributorController } from '@objects/contributor.controller';
-import { AuthCategoryContributorService } from '@services/http/auth-store/contributor/auth-category-contributor.service';
 import { AuthStoreContributorService } from '@services/http/auth-store/contributor/auth-store-contributor.service';
 import { CurrencyService } from '@services/http/general/currency.service';
-import { RoutePartsService } from '@services/general/route-parts.service';
 import { StoreAuthorizationService } from '@services/http/general/store-authorization.service';
-import { SharedCategoryService } from '@services/shared/shared-category.service';
 import { SharedStoreService } from '@services/shared/shared-store.service';
 import { SharedUserService } from '@services/shared/shared-user.service';
 import { DocumentHelper } from '@helpers/documenthelper/document.helper';
 import { PriceHelper } from '@helpers/pricehelper/price.helper';
 import { ScreenHelper } from '@helpers/screenhelper/screen.helper';
 import { WsLoading } from '@elements/ws-loading/ws-loading';
-import { WsToastService } from '@elements/ws-toast/ws-toast.service';
 import _ from 'lodash';
 import { Subject } from 'rxjs';
-import { takeUntil, finalize } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { SharedNavbarService } from '@services/shared/shared-nav-bar.service';
 import { ScreenService } from '@services/general/screen.service';
 

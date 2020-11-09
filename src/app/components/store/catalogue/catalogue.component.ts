@@ -1,5 +1,5 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { WsToastService } from '@elements/ws-toast/ws-toast.service';
 import { DocumentHelper } from '@helpers/documenthelper/document.helper';
 import { AuthCategoryContributorService } from '@services/http/auth-store/contributor/auth-category-contributor.service';
