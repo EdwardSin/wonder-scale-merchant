@@ -5,8 +5,8 @@ import { CatalogueComponent } from '@components/store/catalogue/catalogue.compon
 
 const routes: Routes = [{
   path: '',
-  component: CatalogueComponent,
-  children: [{ path: '', redirectTo: 'all', pathMatch: 'full' },
+  children: [
+  { path: '', pathMatch: 'full', component: CatalogueComponent},
   { path: 'all', loadChildren: () => import('./all-items/all-items.module').then(m => m.AllItemsModule), data: { title: 'all', breadcrumb: 'All' } },
   { path: 'new', loadChildren: () => import('./new-items/new-items.module').then(m => m.NewItemsModule), data: { title: 'new', breadcrumb: 'New' } },
   { path: 'todayspecial', loadChildren: () => import('./today-special-items/today-special-items.module').then(m => m.TodaySpecialItemsModule), data: { title: 'todayspecial', breadcrumb: 'Today Special' } },
