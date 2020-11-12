@@ -4,6 +4,11 @@
 
 - v1.0.1050                                 -
 ---------------------------------------------
+- 2020-11-12                                -
+---------------------------------------------
+.: WSM: BugFix: Remove today special category when the shop type other than restaurant (WSM-235)
+
+---------------------------------------------
 - 2020-11-09                                -
 ---------------------------------------------
 .: WSM: Task: Move categories to a page instead of in sidebar (WSM-233)
