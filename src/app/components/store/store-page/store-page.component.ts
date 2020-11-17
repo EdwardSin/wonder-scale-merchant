@@ -20,6 +20,7 @@ import { ScreenService } from '@services/general/screen.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EmailValidator } from '@validations/email.validator';
 import { URLValidator } from '@validations/url.validator';
+import { DocumentHelper } from '@helpers/documenthelper/document.helper';
 
 @Component({
   selector: 'app-store-page',
@@ -100,6 +101,7 @@ export class StorePageComponent implements OnInit {
     this.selectedNav = this.route.snapshot.queryParams.nav || 'info';
     this.sharedStoreService.store.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       this.store = result;
+      DocumentHelper.setWindowTitleWithWonderScale('Store Page - ' + this.store.name);
       this.editingStore = _.cloneDeep(result);
       this.allBanners = this.store.informationImages.map(image => { return { url: image, type: 'url' } });
       this.editingAllBanners = _.cloneDeep(this.allBanners);

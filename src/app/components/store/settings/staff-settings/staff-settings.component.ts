@@ -14,6 +14,7 @@ import { finalize, takeUntil } from 'rxjs/operators';
 import _ from 'lodash';
 import { AuthStoreAdminService } from '@services/http/auth-store/admin/auth-store-admin.service';
 import { Contributor } from '@objects/contributor';
+import { DocumentHelper } from '@helpers/documenthelper/document.helper';
 
 @Component({
   selector: 'app-staff-settings',
@@ -40,6 +41,7 @@ export class StaffSettingsComponent implements OnInit {
     private sharedStoreService: SharedStoreService) { 
     this.sharedStoreService.store.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       this.store = result;
+      DocumentHelper.setWindowTitleWithWonderScale('Staff - ' + this.store.name);
       this.updateContributorAuthorization();
     });
     this.sharedStoreService.contributorRefresh.pipe(takeUntil(this.ngUnsubscribe))
