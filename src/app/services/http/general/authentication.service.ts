@@ -5,7 +5,7 @@ import { FacebookLoginProvider, GoogleLoginProvider, SocialAuthService } from 'a
 import decode from 'jwt-decode';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { CookieService } from 'ngx-cookie-service';
+// import { CookieService } from 'ngx-cookie-service';
 import { SharedUserService } from '@services/shared/shared-user.service';
 
 @Injectable({
@@ -21,15 +21,15 @@ export class AuthenticationService {
         private sharedUserService: SharedUserService,
         private jwtHelper: JwtHelperService,
         private authService: SocialAuthService,
-        private cookieService: CookieService
+        // private cookieService: CookieService
     ) {
     }
     isAuthenticated(): Promise<boolean> {
-        if (!this.cookieService.get('accessJwt')) {
-            return new Promise<boolean>(resolve => {
-                resolve(false);
-            })
-        }
+        // if (!this.cookieService.get('accessJwt')) {
+        //     return new Promise<boolean>(resolve => {
+        //         resolve(false);
+        //     })
+        // }
         if(!AuthenticationService.token){
             return new Promise<boolean>((resolve, reject) => {
                 this.http.get('/api/users/is-authenticated').subscribe(result => {
@@ -46,7 +46,7 @@ export class AuthenticationService {
     }
     login(email: string, password: string): Observable<any> {
         let credential = { email: email, password: password };
-        return this.http.post('/api/users/login', credential).pipe(
+        return this.http.post('/api/users/login', credential, { withCredentials: true}).pipe(
             map(result => {
                 this.setupAuthentication(result);
                 return result;
@@ -63,7 +63,7 @@ export class AuthenticationService {
         return new Promise((resolve) => {
             AuthenticationService.token = null;
             AuthenticationService.user_id = null;
-            if (this.cookieService.get('accessJwt')) {
+            // if (this.cookieService.get('accessJwt')) {
                 this.http.post('/api/auth-users/users/logout', {}).subscribe(result => {
                     this.sharedUserService.user.next(null);
                     this.sharedUserService.followStores.next([]);
@@ -73,12 +73,12 @@ export class AuthenticationService {
                 if (this.authService['_user']) {
                     this.authService.signOut();
                 }
-            } else {
-                this.sharedUserService.user.next(null);
-                this.sharedUserService.followStores.next([]);
-                this.sharedUserService.followItems.next([]);
-                resolve(true);
-            }
+            // } else {
+            //     this.sharedUserService.user.next(null);
+            //     this.sharedUserService.followStores.next([]);
+            //     this.sharedUserService.followItems.next([]);
+            //     resolve(true);
+            // }
         })
     }
     setupAuthentication(result){
