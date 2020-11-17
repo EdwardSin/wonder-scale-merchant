@@ -5,6 +5,6 @@ export class ScreenHelper {
 
   // Tested
   public static isMobileSize(){
-      return window.innerWidth < maxMobileSize;
+    return window.innerWidth < maxMobileSize;
   }
 }
