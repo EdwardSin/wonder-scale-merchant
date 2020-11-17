@@ -7,6 +7,8 @@ import { AuthTrackContributorService } from '@services/http/auth-store/contribut
 import { Subject, timer } from 'rxjs';
 import { takeUntil, delay, switchMap } from 'rxjs/operators';
 import { ScreenService } from '@services/general/screen.service';
+import { DocumentHelper } from '@helpers/documenthelper/document.helper';
+import { SharedStoreService } from '@services/shared/shared-store.service';
 
 @Component({
   selector: 'app-tracking-figure',
@@ -94,7 +96,7 @@ export class TrackingFigureComponent implements OnInit {
     colors: this.colorSchema
   }
   private ngUnsubscribe: Subject<any> = new Subject;
-  constructor(private screenService: ScreenService, private authTrackContributorService: AuthTrackContributorService) {
+  constructor(private sharedStoreService: SharedStoreService, private screenService: ScreenService, private authTrackContributorService: AuthTrackContributorService) {
     this.getTargetsInSession();
     this.screenService.isMobileSize.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       this.isMobileSize = result;
@@ -104,6 +106,12 @@ export class TrackingFigureComponent implements OnInit {
     this.setupData();
     this.getBetweenTracks();
     this.getTodayTrack();
+    this.sharedStoreService.store.pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(result => {
+        if (result) {
+          DocumentHelper.setWindowTitleWithWonderScale('Figure - ' + result.name);
+      }
+    });
   }
   setupData() {
     this.allHours = this.getHoursInSelection();

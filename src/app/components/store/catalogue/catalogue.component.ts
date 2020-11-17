@@ -81,7 +81,7 @@ export class CatalogueComponent implements OnInit {
     this.sharedStoreService.store.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
         if (result) {
-          DocumentHelper.setWindowTitleWithWonderScale(result.name);
+          DocumentHelper.setWindowTitleWithWonderScale('Catalogue - ' + result.name);
           this.store = result;
           this.sharedStoreService.store_id = this.store._id;
           this.sharedStoreService.store_name = this.store.name;

@@ -55,10 +55,10 @@ export class QrcodeComponent implements OnInit {
     this.loading.start();
     let store_name = this.sharedStoreService.store_name;
     let storeUsername = this.sharedStoreService.storeUsername;
-    DocumentHelper.setWindowTitleWithWonderScale('QR Code - ' + store_name);
     this.authStoreUserService.getAuthenticatedStoreByStoreUsername(storeUsername).pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
         if (result) {
+          DocumentHelper.setWindowTitleWithWonderScale('QR Code - ' + store_name);
           this.store = result;
           this.displayImage = this.store.profileImage ? 'api/images/' + this.store.profileImage.replace(/\//g, ',') : 'assets/images/svg/dot.svg';
           this.url = environment.URL + 'page/' + this.store.username + '?type=qr_scan';
