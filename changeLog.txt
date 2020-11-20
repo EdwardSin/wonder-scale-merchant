@@ -9,6 +9,7 @@
 .: WSM: Task: Adding loading spinner in policy page (WSM-243)
 .: WSM: BugFix: Not able to have duplicate category is added/edited (WSM-240)
 .: WSM: BugFix: Not able to invite user twice (WSM-241)
+.: WSM: BugFix: Get "name" of null issue when logging out (WSM-242)
 
 ---------------------------------------------
 - 2020-11-17                                -

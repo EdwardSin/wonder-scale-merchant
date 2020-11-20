@@ -18,8 +18,10 @@ export class SettingsListComponent implements OnInit {
   constructor(private sharedStoreService: SharedStoreService,
     private storeAuthorizationService: StoreAuthorizationService) { 
     this.sharedStoreService.store.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
-      this.store = result;
-      DocumentHelper.setWindowTitleWithWonderScale('Settings - ' + this.store.name);
+      if (result) {
+        this.store = result;
+        DocumentHelper.setWindowTitleWithWonderScale('Settings - ' + this.store.name);
+      }
     });
     this.storeAuthorizationService.isAdminAuthorized.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {

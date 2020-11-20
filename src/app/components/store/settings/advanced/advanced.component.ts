@@ -31,8 +31,10 @@ export class AdvancedComponent implements OnInit {
     private storeAuthorizationService: StoreAuthorizationService,
     private router: Router) {
     this.sharedStoreService.store.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
-      this.store = result;
-      DocumentHelper.setWindowTitleWithWonderScale('Advanced - ' + this.store.name);
+      if (result) {
+        this.store = result;
+        DocumentHelper.setWindowTitleWithWonderScale('Advanced - ' + this.store.name);
+      }
     })
     this.storeAuthorizationService.isAdminAuthorized.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
