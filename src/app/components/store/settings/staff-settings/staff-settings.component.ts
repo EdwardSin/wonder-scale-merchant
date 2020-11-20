@@ -40,9 +40,11 @@ export class StaffSettingsComponent implements OnInit {
     private authStoreAdminService: AuthStoreAdminService,
     private sharedStoreService: SharedStoreService) { 
     this.sharedStoreService.store.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
-      this.store = result;
-      DocumentHelper.setWindowTitleWithWonderScale('Staff - ' + this.store.name);
-      this.updateContributorAuthorization();
+      if (result) {
+        this.store = result;
+        DocumentHelper.setWindowTitleWithWonderScale('Staff - ' + this.store.name);
+        this.updateContributorAuthorization();
+      }
     });
     this.sharedStoreService.contributorRefresh.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
@@ -52,7 +54,6 @@ export class StaffSettingsComponent implements OnInit {
         }
       })
   }
-
   ngOnInit(): void {
     this.loading.start();
     this.storeAuthorizationService.isAdminAuthorized.pipe(takeUntil(this.ngUnsubscribe))
@@ -144,5 +145,9 @@ export class StaffSettingsComponent implements OnInit {
     this.isEditContributorModalOpened = true;
     this.contributorController.selectedContributor = contributor;
     this.contributorController.newRole = contributor.role;
+  }
+  ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 }

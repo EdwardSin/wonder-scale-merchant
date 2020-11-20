@@ -100,16 +100,18 @@ export class StorePageComponent implements OnInit {
   ngOnInit(): void {
     this.selectedNav = this.route.snapshot.queryParams.nav || 'info';
     this.sharedStoreService.store.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
-      this.store = result;
-      DocumentHelper.setWindowTitleWithWonderScale('Store Page - ' + this.store.name);
-      this.editingStore = _.cloneDeep(result);
-      this.allBanners = this.store.informationImages.map(image => { return { url: image, type: 'url' } });
-      this.editingAllBanners = _.cloneDeep(this.allBanners);
-      this.editingBanners = this.store.informationImages.map(image => environment.IMAGE_URL + image);
-      this.editingProfileImage = this.store.profileImage ? environment.IMAGE_URL + this.store.profileImage: null;
-      this.allMenuImages = this.store.menuImages.map(image => { return {url: image, type: 'url'}});
-      this.editingAllMenuImages = _.cloneDeep(this.allMenuImages);
-      this.editingMenuImages = this.store.menuImages.map(image => environment.IMAGE_URL + image);
+      if (result) {
+        this.store = result;
+        DocumentHelper.setWindowTitleWithWonderScale('Store Page - ' + this.store.name);
+        this.editingStore = _.cloneDeep(result);
+        this.allBanners = this.store.informationImages.map(image => { return { url: image, type: 'url' } });
+        this.editingAllBanners = _.cloneDeep(this.allBanners);
+        this.editingBanners = this.store.informationImages.map(image => environment.IMAGE_URL + image);
+        this.editingProfileImage = this.store.profileImage ? environment.IMAGE_URL + this.store.profileImage: null;
+        this.allMenuImages = this.store.menuImages.map(image => { return {url: image, type: 'url'}});
+        this.editingAllMenuImages = _.cloneDeep(this.allMenuImages);
+        this.editingMenuImages = this.store.menuImages.map(image => environment.IMAGE_URL + image);
+      }
     });
     this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe(queryParams => {
       if(queryParams['nav']) {

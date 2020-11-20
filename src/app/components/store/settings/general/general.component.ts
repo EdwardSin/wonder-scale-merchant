@@ -35,8 +35,8 @@ export class GeneralComponent implements OnInit {
   ngOnInit(): void {
     this.username = this.sharedStoreService.storeUsername;
     this.sharedStoreService.store.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
-      this.store = result;
       if (result) {
+        this.store = result;
         DocumentHelper.setWindowTitleWithWonderScale('General - ' + this.store.name);
         this.status = result.isPublished;
         this.selectedCurrency = result.currency;

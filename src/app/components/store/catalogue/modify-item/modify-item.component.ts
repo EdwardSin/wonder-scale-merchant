@@ -404,4 +404,8 @@ export class ModifyItemComponent implements OnInit {
   dropDescription(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.allDescriptionItems, event.previousIndex, event.currentIndex);
   }
+  ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
+  }
 }
