@@ -4,9 +4,10 @@
 
 - v1.0.1050                                 -
 ---------------------------------------------
-- 2020-11-17                                -
+- 2020-11-20                                -
 ---------------------------------------------
 .: WSM: Task: Adding loading spinner in policy page (WSM-243)
+.: WSM: BugFix: Not able to have duplicate category is added/edited (WSM-240)
 
 ---------------------------------------------
 - 2020-11-17                                -

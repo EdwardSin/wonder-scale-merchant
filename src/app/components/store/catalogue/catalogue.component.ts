@@ -8,7 +8,6 @@ import { SharedStoreService } from '@services/shared/shared-store.service';
 import { Subject } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
 import * as _ from 'lodash';
-import { ActivatedRoute, Router } from '@angular/router';
 import { WsLoading } from '@elements/ws-loading/ws-loading';
 
 @Component({
@@ -24,6 +23,7 @@ export class CatalogueComponent implements OnInit {
   isEditCategoryOpened: boolean;
   isRemoveCategoryConfirmationModalOpened: boolean;
   loading: WsLoading = new WsLoading;
+  addLoading: WsLoading = new WsLoading;
   removeLoading: WsLoading = new WsLoading;
   categories: Array<any> = [];
   numberOfAllItems: number = 0;
@@ -36,8 +36,6 @@ export class CatalogueComponent implements OnInit {
   private ngUnsubscribe: Subject<any> = new Subject;
   constructor(private sharedCategoryService: SharedCategoryService,
     private sharedStoreService: SharedStoreService,
-    private router: Router,
-    private route: ActivatedRoute,
     private authCategoryContributorService: AuthCategoryContributorService) { 
     }
   ngOnInit() {
@@ -121,9 +119,10 @@ export class CatalogueComponent implements OnInit {
       let obj = {
         name: this.editingName
       };
+      this.addLoading.start();
       this.authCategoryContributorService
         .addCategory(obj)
-        .pipe(takeUntil(this.ngUnsubscribe))
+        .pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.addLoading.stop()))
         .subscribe(result => {
           WsToastService.toastSubject.next({ content: 'Category is added!', type: 'success' });
           result['result'].items = [];
