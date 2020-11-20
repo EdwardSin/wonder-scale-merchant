@@ -127,7 +127,7 @@ export class StaffSettingsComponent implements OnInit {
         });
     }
     else {
-      WsToastService.toastSubject.next({ content: "Please add member to invite!", type: 'danger' });
+      WsToastService.toastSubject.next({ content: "Please add a user to invite!", type: 'danger' });
     }
   }
   searchContributors(value) {
