@@ -23,7 +23,7 @@ export class CatalogueComponent implements OnInit {
   isEditCategoryOpened: boolean;
   isRemoveCategoryConfirmationModalOpened: boolean;
   loading: WsLoading = new WsLoading;
-  addLoading: WsLoading = new WsLoading;
+  editLoading: WsLoading = new WsLoading;
   removeLoading: WsLoading = new WsLoading;
   categories: Array<any> = [];
   numberOfAllItems: number = 0;
@@ -119,10 +119,10 @@ export class CatalogueComponent implements OnInit {
       let obj = {
         name: this.editingName
       };
-      this.addLoading.start();
+      this.editLoading.start();
       this.authCategoryContributorService
         .addCategory(obj)
-        .pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.addLoading.stop()))
+        .pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.editLoading.stop()))
         .subscribe(result => {
           WsToastService.toastSubject.next({ content: 'Category is added!', type: 'success' });
           result['result'].items = [];
@@ -140,9 +140,10 @@ export class CatalogueComponent implements OnInit {
         category_id,
         name: this.editingName || this.selectedCategory['name']
       };
+      this.editLoading.start();
       this.authCategoryContributorService
         .editCategory(obj)
-        .pipe(takeUntil(this.ngUnsubscribe))
+        .pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.editLoading.stop()))
         .subscribe(result => {
           WsToastService.toastSubject.next({ content: 'Category is edited!', type: 'success' });
           this.selectedCategory['name'] = this.editingName;

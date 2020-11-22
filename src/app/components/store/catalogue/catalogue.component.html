@@ -143,8 +143,8 @@
         </div>
         <div>
             <button class="btn btn-sm btn-controller float-right" (click)="onEditCategoryClosed()">Close</button>
-            <button [disabled]="addLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="selectedCategory? editCategory(): addCategory()">
-                <ws-spinner class="mr-2" *ngIf="addLoading.isRunning()" [width]="15" [height]="15" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>Confirm</button>
+            <button [disabled]="editLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="selectedCategory? editCategory(): addCategory()">
+                <ws-spinner class="mr-2" *ngIf="editLoading.isRunning()" [width]="15" [height]="15" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>Confirm</button>
         </div>
     </div>
 </ws-modal>
