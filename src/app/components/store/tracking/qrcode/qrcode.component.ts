@@ -60,7 +60,7 @@ export class QrcodeComponent implements OnInit {
         if (result) {
           DocumentHelper.setWindowTitleWithWonderScale('QR Code - ' + store_name);
           this.store = result;
-          this.displayImage = this.store.profileImage ? 'api/images/' + this.store.profileImage.replace(/\//g, ',') : 'assets/images/svg/dot.svg';
+          this.displayImage = this.store.profileImage ? 'api/images/' + this.store.profileImage.replace(/\//g, ',') : 'assets/images/png/shop.png';
           this.url = environment.URL + 'page/' + this.store.username + '?type=qr_scan';
           this.getTracks();
         }
