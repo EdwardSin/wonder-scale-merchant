@@ -116,9 +116,6 @@ export class HeaderComponent implements OnInit {
     this.router.navigate(['/stores/all']);
     this.sharedStoreService.store.next(null);
   }
-  displayPreview() {
-
-  }
   logout() {
     this.sharedLoadingService.screenLoading.next({loading: true, label: 'Logging out...'});
     this.authenticationService.logout().then(result => {

@@ -7,14 +7,14 @@
         "dev": "ng serve --port 4201 --ssl true --host 0.0.0.0 --disableHostCheck",
         "build": "ng build --prod --aot --output-hashing=all",
         "upload": "aws s3 cp dist/wonder-scale-merchant s3://merchant.wonderscale.com --recursive",
-        "deploy": "npm run build && npm run upload",
         "upload-testing": "aws s3 cp dist/wonder-scale-merchant s3://merchant-testing.wonderscale.com --recursive",
         "build-testing": "ng build --configuration qa --aot --output-hashing=all",
-        "deploy-testing": "ng build --configuration qa --aot && npm run upload-testing",
         "test": "ng test",
         "lint": "ng lint",
         "postinstall": "ngcc",
-        "e2e": "ng e2e"
+        "e2e": "ng e2e",
+        "deploy": "npm run build && npm run upload",
+        "deploy-testing": "ng build --configuration qa --aot && npm run upload-testing"
     },
     "private": true,
     "dependencies": {
@@ -69,6 +69,7 @@
         "@types/node": "^12.11.1",
         "@types/sortablejs": "^1.10.5",
         "codelyzer": "^5.1.2",
+        "ftp-deploy": "^2.3.8",
         "jasmine-core": "~3.5.0",
         "jasmine-spec-reporter": "~4.2.1",
         "karma": "~4.3.0",

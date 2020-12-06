@@ -32,7 +32,7 @@
                     <mat-option value="maintainer">Maintainer</mat-option>
                 </mat-select>
                 <permission-list [role]="contributorController.newRole"></permission-list>
-                <button class="btn btn-sm btn-controller m-0 mt-3 mb-3" wsDebounceClick (debounceClick)="inviteContributor()">
+                <button [disabled]="isInviteLoading.isRunning()" class="btn btn-sm btn-controller m-0 mt-3 mb-3" (click)="inviteContributor()">
                     <ws-spinner *ngIf="isInviteLoading?.isRunning()" [width]="15" [height]="15" [borderWidth]="1" [spinnerColor]="'#b71c1c'" class="mr-2"></ws-spinner>Invite</button>
             </div>
         </form>

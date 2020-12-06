@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DocumentHelper } from '@helpers/documenthelper/document.helper';
 import { Store } from '@objects/store';
 import { StoreAuthorizationService } from '@services/http/general/store-authorization.service';
 import { SharedStoreService } from '@services/shared/shared-store.service';
@@ -17,7 +18,10 @@ export class SettingsListComponent implements OnInit {
   constructor(private sharedStoreService: SharedStoreService,
     private storeAuthorizationService: StoreAuthorizationService) { 
     this.sharedStoreService.store.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
-      this.store = result;
+      if (result) {
+        this.store = result;
+        DocumentHelper.setWindowTitleWithWonderScale('Settings - ' + this.store.name);
+      }
     });
     this.storeAuthorizationService.isAdminAuthorized.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {

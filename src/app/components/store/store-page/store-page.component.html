@@ -1,5 +1,5 @@
 <h4 class="ws-title">Store Page</h4>
-<div class="p-4">
+<div class="p-lg-4">
     <div class="mb-3 d-flex align-items-center justify-content-between">
         <h5>Preview:</h5>
         <div class="btn-group" role="group">
@@ -8,7 +8,7 @@
         </div>
     </div>
     <div class="clearfix"></div>
-    <div *ngIf="selectedPreview == 'website'" class="merchant-preview">
+    <div *ngIf="selectedPreview == 'website' && !isMobileSize" class="merchant-preview">
         <div *ngIf="isChanged" class="merchant-preview__save p-2">
             <p class="d-inline-block mb-0">Save to confirm changes</p>
             <button class="btn btn-sm btn-controller" style="opacity: 1; width: 80px" [disabled]="isSaveStoreLoading.isRunning()" (click)="onConfirmStoreSaved()">
@@ -32,6 +32,7 @@
         (onEditStoreTypeClicked)="onEditStoreTypeClicked()"
         (onEditAddressClicked)="onEditAddressClicked()"
         (onEditTagsClicked)="onEditTagsClicked()"
+        (onEditContactButtonClicked)="onEditContactButtonClicked()"
         (onEditPhoneClicked)="onEditPhoneClicked()"
         (onEditEmailClicked)="onEditEmailClicked()"
         (onEditWebsiteClicked)="onEditWebsiteClicked()"
@@ -43,10 +44,13 @@
         (onEditYoutubeClicked)="onEditYoutubeClicked()"
         (onEditSnapchatClicked)="onEditSnapchatClicked()"
         (onEditTelegramClicked)="onEditTelegramClicked()"
-        (onEditWeiboClicked)="onEditWeiboClicked()"
         (onEditWechatClicked)="onEditWechatClicked()"
         (onAddMediaClicked)="onAddMediaClicked()"
+        (onDeleteContactButtonClicked)="onDeleteContactButtonClicked()"
         ></merchant-page>
+    </div>
+    <div class="text-center py-5" *ngIf="selectedPreview == 'website' && isMobileSize">
+        <p>Website preview is not available in mobile.</p>
     </div>
     <div *ngIf="selectedPreview == 'mobile'" class="d-flex justify-content-center">
         <div class="merchant-preview__website">
@@ -69,6 +73,7 @@
                 (onEditStoreTypeClicked)="onEditStoreTypeClicked()"
                 (onEditAddressClicked)="onEditAddressClicked()"
                 (onEditTagsClicked)="onEditTagsClicked()"
+                (onEditContactButtonClicked)="onEditContactButtonClicked()"
                 (onEditPhoneClicked)="onEditPhoneClicked()"
                 (onEditEmailClicked)="onEditEmailClicked()"
                 (onEditWebsiteClicked)="onEditWebsiteClicked()"
@@ -80,9 +85,9 @@
                 (onEditYoutubeClicked)="onEditYoutubeClicked()"
                 (onEditSnapchatClicked)="onEditSnapchatClicked()"
                 (onEditTelegramClicked)="onEditTelegramClicked()"
-                (onEditWeiboClicked)="onEditWeiboClicked()"
                 (onEditWechatClicked)="onEditWechatClicked()"
                 (onAddMediaClicked)="onAddMediaClicked()"
+                (onDeleteContactButtonClicked)="onDeleteContactButtonClicked()"
             ></merchant-info>
             <merchant-menu style="display: block; min-height: calc(100vh - 317px)" *ngIf="selectedNav == 'menu'" 
             [store]="store"
@@ -311,6 +316,54 @@
         </div>
     </div>
 </ws-modal>
+<ws-modal *ngIf="isContactButtonOpened" [isCloseIconDisplayed]="false" [(isOpened)]="isContactButtonOpened" [maxWidth]="400">
+    <div class="pt-3" modalBody>
+        <div class="mb-3" style="max-width: 300px">
+            <mat-label class="font-weight-bold mb-2 font-9">Contact Button Label:</mat-label>
+            <mat-select name="contactLabel" class="form-control mb-3" style="border-radius: 25px" [(ngModel)]="selectedContactButtonLabel" placeholder="Contact Button Label">
+                <mat-option [value]="'contactUs'">Contact Us</mat-option>
+                <mat-option [value]="'orderNow'">Order Now</mat-option>
+                <mat-option [value]="'bookNow'">Book Now</mat-option>
+                <mat-option [value]="'purchaseNow'">Purchase Now</mat-option>
+                <mat-option [value]="'learnMore'">Learn More</mat-option>
+            </mat-select>
+            <mat-label class="font-weight-bold mb-2 font-9">Contact Method:</mat-label>
+            <mat-select name="contactType" class="form-control mb-3" style="border-radius: 25px" [(ngModel)]="selectedContactButtonType" (selectionChange)="selectedContactButtonValue = ''" placeholder="Contact Button Type">
+                <mat-option [value]="'url'">Website URL</mat-option>
+                <mat-option [value]="'phoneCall'">Phone Call</mat-option>
+                <mat-option [value]="'whatsapp'">Whatsapp</mat-option>
+                <mat-option [value]="'instagram'">Instagram</mat-option>
+                <mat-option [value]="'messenger'">FB Messenger</mat-option>
+            </mat-select>
+            <ng-container [ngSwitch]="selectedContactButtonType">
+                <div *ngSwitchCase="'url'">
+                    <mat-label class="font-weight-bold mb-2 font-9">URL:</mat-label>
+                    <input *ngIf="selectedContactButtonType == 'url'" class="form-control" [(ngModel)]="selectedContactButtonValue" name="value" placeholder="https://www.example.com" />
+                </div>
+                <div *ngSwitchCase="'phoneCall'">
+                    <mat-label class="font-weight-bold mb-2 font-9">Contact Number:</mat-label>
+                    <input class="form-control" [(ngModel)]="selectedContactButtonValue" name="value" placeholder="+60 123 456 789" />
+                </div>
+                <div *ngSwitchCase="'whatsapp'">
+                    <mat-label class="font-weight-bold mb-2 font-9">Whatsapp Number:</mat-label>
+                    <input class="form-control" [(ngModel)]="selectedContactButtonValue" name="value" placeholder="+60 123 456 789" />
+                </div>
+                <div *ngSwitchCase="'instagram'">
+                    <mat-label class="font-weight-bold mb-2 font-9">Account:</mat-label>
+                    <input class="form-control" [(ngModel)]="selectedContactButtonValue" name="value" placeholder="Account" />
+                </div>
+                <div *ngSwitchCase="'messenger'">
+                    <mat-label class="font-weight-bold mb-2 font-9">Whatsapp Number:</mat-label>
+                    <input class="form-control" [(ngModel)]="selectedContactButtonValue" name="value" placeholder="Account" />
+                </div>
+            </ng-container>
+        </div>
+        <div>
+            <button class="btn btn-sm btn-controller float-right" (click)="isContactButtonOpened = false">Close</button>
+            <button class="btn btn-sm btn-controller float-right mr-2" [disabled]="selectedContactButtonValue == ''" (click)="onConfirmEditContactButtonClicked()">Confirm</button>
+        </div>
+    </div>
+</ws-modal>
 <ws-modal *ngIf="isPhoneOpened" [isCloseIconDisplayed]="false" [(isOpened)]="isPhoneOpened" [maxWidth]="400">
     <div class="pt-3" modalBody>
         <div class="mb-3">
@@ -443,18 +496,6 @@
         </div>
     </div>
 </ws-modal>
-<ws-modal *ngIf="isWeiboOpened" [isCloseIconDisplayed]="false" [(isOpened)]="isWeiboOpened" [maxWidth]="400">
-    <div class="pt-3" modalBody>
-        <div class="mb-3">
-            <h6>Weibo</h6>
-            <ws-multiple-input [maxlength]="30" [(items)]="editingMedias" [type]="'weibo'" [placeholder]="'Weibo Username'" [name]="'weibo'"></ws-multiple-input>
-        </div>
-        <div>
-            <button class="btn btn-sm btn-controller float-right" (click)="isWeiboOpened = false">Close</button>
-            <button class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditWeiboClicked()">Confirm</button>
-        </div>
-    </div>
-</ws-modal>
 <ws-modal *ngIf="isWechatOpened" [isCloseIconDisplayed]="false" [(isOpened)]="isWechatOpened" [maxWidth]="400">
     <div class="pt-3" modalBody>
         <div class="mb-3">
@@ -480,7 +521,6 @@
                     <mat-option [value]="'youtube'">Youtube</mat-option>
                     <mat-option [value]="'snapchat'">Snapchat</mat-option>
                     <mat-option [value]="'telegram'">Telegram</mat-option>
-                    <mat-option [value]="'weibo'">Weibo</mat-option>
                     <mat-option [value]="'wechat'">Wechat</mat-option>
                 </mat-select>
             </div>
@@ -493,7 +533,7 @@
                     <ng-container *ngTemplateOutlet="mediaInputTemplate; context: {type: selectedMedia, placeholder: 'Username', prefixLink: 'https://m.me/'}"></ng-container>
                 </div>
                 <div style="width: fit-content" *ngSwitchCase="'twitter'">
-                    <ng-container *ngTemplateOutlet="mediaInputTemplate; context: {type: selectedMedia, placeholder: 'Account', prefixLink: 'https://www.twitter.com/'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="mediaInputTemplate; context: {type: selectedMedia, placeholder: 'Account', prefixLink: 'https://twitter.com/'}"></ng-container>
                 </div>
                 <div style="width: fit-content" *ngSwitchCase="'whatsapp'">
                     <ng-container *ngTemplateOutlet="mediaInputTemplate; context: {type: selectedMedia, placeholder: 'Phone Number'}"></ng-container>
@@ -504,14 +544,11 @@
                 <div style="width: fit-content" *ngSwitchCase="'wechat'">
                     <ng-container *ngTemplateOutlet="mediaInputTemplate; context: {type: selectedMedia, placeholder: 'Wechat Username'}"></ng-container>
                 </div>
-                <div style="width: fit-content" *ngSwitchCase="'weibo'">
-                    <ng-container *ngTemplateOutlet="mediaInputTemplate; context: {type: selectedMedia, placeholder: 'Weibo Username'}"></ng-container>
-                </div>
                 <div style="width: fit-content" *ngSwitchCase="'youtube'">
                     <ng-container *ngTemplateOutlet="mediaInputTemplate; context: {type: selectedMedia, placeholder: 'Youtube URL', prefixLink: 'https://www.youtube.com/channel/'}"></ng-container>
                 </div>
                 <div style="width: fit-content" *ngSwitchCase="'telegram'">
-                    <ng-container *ngTemplateOutlet="mediaInputTemplate; context: {type: selectedMedia, placeholder: 'Telegram Account'}"></ng-container>
+                    <ng-container *ngTemplateOutlet="mediaInputTemplate; context: {type: selectedMedia, placeholder: 'Telegram Account', prefixLink: 'https://telegram.me/'}"></ng-container>
                 </div>
                 <div style="width: fit-content" *ngSwitchCase="'snapchat'">
                     <ng-container *ngTemplateOutlet="mediaInputTemplate; context: {type: selectedMedia, placeholder: 'Snapchat Account'}"></ng-container>

@@ -1,1 +1,156 @@
-<router-outlet></router-outlet>
+<h5 class="h5">{{ store?.type == 'restaurant' ? 'Menu' : 'Catalogue'}}</h5>
+<button class="btn btn-sm btn-controller float-right" (click)="isEditCategoryOpened = true; editingName = ''; selectedCategory = null">
+    <span class="fas fa-plus mr-2 d-inline-block"></span>Add New
+</button>
+<div class="clearfix mb-3"></div>
+<div class="d-flex justify-content-center align-items-center mb-4" *ngIf="!loading.isRunning(); else loadingTemplate">
+    <table class="table list-table">
+        <thead style="background-color: #f7f7f7">
+            <th class="border-top-0" style="width: 50px"></th>
+            <th class="border-top-0">Title</th>
+            <th class="border-top-0" style="width: 100px">Products</th>
+            <th class="border-top-0 text-right" style="width: 100px">Actions</th>
+        </thead>
+        <tbody class="ws-drag-container" cdkDropList (cdkDropListDropped)="dropOrder($event)">
+            <tr>
+                <td>
+                    <span class="fas fa-bars text-light"></span>
+                </td>
+                <td>
+                    <a class="secondary" [routerLink]="['all']" [queryParams]="{page: 1}">All (default)</a>
+                </td>
+                <td class="text-center">
+                    <span class="badge badge-pill badge-secondary">
+                        {{ numberOfAllItems }}
+                    </span>
+                </td>
+                <td class="text-center">-</td>
+            </tr>
+            <tr>
+                <td>
+                    <span class="fas fa-bars text-light"></span>
+                </td>
+                <td>
+                    <a class="secondary" [routerLink]="['new']" [queryParams]="{page: 1}">New (default)</a>
+                </td>
+                <td class="text-center">
+                    <span class="badge badge-pill badge-secondary">
+                        {{ numberOfNewItems }}
+                    </span>
+                </td>
+                <td class="text-center">-</td>
+            </tr>
+            <tr *ngIf="store?.type == 'restaurant'">
+                <td>
+                    <span class="fas fa-bars text-light"></span>
+                </td>
+                <td>
+                    <a class="secondary" [routerLink]="['todayspecial']" [queryParams]="{page: 1}">Today Special (default)</a>
+                </td>
+                <td class="text-center">
+                    <span class="badge badge-pill badge-secondary">
+                        {{ numberOfTodaySpecialItems }}
+                    </span>
+                </td>        
+                <td class="text-center">-</td>
+            </tr>
+            <tr>
+                <td>
+                    <span class="fas fa-bars text-light"></span>
+                </td>
+                <td>
+                    <a class="secondary" [routerLink]="['discount']" [queryParams]="{page: 1}">Discount (default)</a>
+                </td>
+                <td class="text-center">
+                    <span class="badge badge-pill badge-secondary">
+                        {{ numberOfDiscountItems }}
+                    </span>
+                </td>
+                <td class="text-center">-</td>
+            </tr>
+            <tr>
+                <td>
+                    <span class="fas fa-bars text-light"></span>
+                </td>
+                <td>
+                    <a class="secondary" [routerLink]="['published']" [queryParams]="{page: 1}">Published (default)</a>
+                </td>
+                <td class="text-center">
+                    <span class="badge badge-pill badge-secondary">
+                        {{ numberOfPublishedItems }}
+                    </span>
+                </td>
+                <td class="text-center">-</td>
+            </tr>
+            <tr>
+                <td>
+                    <span class="fas fa-bars text-light"></span>
+                </td>
+                <td>
+                    <a class="secondary" [routerLink]="['unpublished']" [queryParams]="{page: 1}">Unpublished (default)</a>
+                </td>
+                <td class="text-center">
+                    <span class="badge badge-pill badge-secondary">
+                        {{ numberOfUnpublishedItems }}
+                    </span>
+                </td>        
+                <td class="text-center">-</td>
+            </tr>
+            <tr>
+                <td>
+                    <span class="fas fa-bars text-light"></span>
+                </td>
+                <td>
+                    <a class="secondary" [routerLink]="['uncategorized']" [queryParams]="{page: 1}">Uncategorized (default)</a>
+                </td>
+                <td class="text-center">
+                    <span class="badge badge-pill badge-secondary">
+                        {{ numberOfUncategorizedItems }}
+                    </span>
+                </td>
+                <td class="text-center">-</td>
+            </tr>
+            <tr *ngFor="let category of categories" cdkDrag class="ws-drag">
+                <td class="align-middle drag-handle" style="width: 50px" cdkDragHandle>
+                    <span class="fas fa-bars moveable"></span>
+                </td>
+                <td class="align-middle" style="width: inherit">
+                    <a class="secondary" [routerLink]="['custom', category.name]" [queryParams]="{page: 1}">{{category.name}}</a>
+                </td>
+                <td class="align-middle text-center" style="width: 100px">
+                    <span class="badge badge-pill badge-secondary">{{category?.items?.length}}</span>
+                </td>
+                <td style="width: 100px">
+                    <a class="secondary" title="Edit" href="javascript:void(0)" class="d-inline-block d-sm-inline-flex btn btn-sm btn-controller p-2 mb-1 mb-sm-0 mr-sm-2" (click)="onEditCategoryClicked(category)">
+                        <span class="fas fa-edit"></span>
+                    </a>
+                    <a class="secondary" title="Remove" href="javascript:void(0)" class="d-inline-block d-sm-inline-flex btn btn-sm btn-controller p-2" (click)="openRemoveModal(category)">
+                        <span class="fas fa-trash"></span>
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<confirm-modal *ngIf="isRemoveCategoryConfirmationModalOpened" [(isOpened)]="isRemoveCategoryConfirmationModalOpened" id="confirmModal" [loading]="removeLoading.isRunning()" 
+[message]="'Are you sure to remove category?'" [action]="removeCategory.bind(this)">
+</confirm-modal>
+
+<ws-modal *ngIf="isEditCategoryOpened" [isCloseIconDisplayed]="false" [(isOpened)]="isEditCategoryOpened" [maxWidth]="400">
+    <div class="pt-3" modalBody>
+        <div class="mb-3">
+            <input class="form-control" placeholder="Catalogue Name" [(ngModel)]="editingName" />
+        </div>
+        <div>
+            <button class="btn btn-sm btn-controller float-right" (click)="onEditCategoryClosed()">Close</button>
+            <button [disabled]="editLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="selectedCategory? editCategory(): addCategory()">
+                <ws-spinner class="mr-2" *ngIf="editLoading.isRunning()" [width]="15" [height]="15" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>Confirm</button>
+        </div>
+    </div>
+</ws-modal>
+
+<ng-template #loadingTemplate>
+    <ng-container *ngIf="loading.isRunning()">
+        <ws-spinner class="text-center d-block w-100" style="padding-top: 10vh; padding-bottom: 10vh" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>
+    </ng-container>
+</ng-template>

@@ -1,22 +1,24 @@
 <div class="d-flex justify-content-center align-items-center">
     <div>
         <h3 class="my-4 text-center">A quick setup guide for your business</h3>
-        <ul class="list-unstyled mb-0 setup-list">
+        <ul class="list-unstyled mb-5 setup-list">
             <li class="row no-gutters setup-list-item">
-                <span class="setup-list-item-icon fas fa-tag"></span>
-                <div class="mr-auto">
+                <span class="setup-list-item-icon d-none d-lg-block fas fa-tag"></span>
+                <div class="mr-lg-auto col-lg-auto">
                     <div class="row no-gutters mb-1 d-flex align-items-center">
+                        <span class="setup-list-item-sm-icon d-inline-block d-lg-none fas fa-tag"></span>
                         <p class="setup-list-item-label">First Product</p>
                         <span class="setup-list-item-checked fas fa-check-circle" [class.text-success]="store.number_of_all_items > 0"></span>
                     </div>
                     <p class="setup-list-item-text">Add your first product</p>
                 </div>
-                <button class="btn btn-setup ml-5" [routerLink]="['/stores', storeUsername, 'catalogue', 'all']" [queryParams]="{modal: 'modify-item'}">Add Product</button>
+                <button class="btn btn-sm btn-setup ml-lg-5 mt-3 mt-lg-0 ml-auto" [routerLink]="['/stores', storeUsername, 'catalogue', 'all']" [queryParams]="{modal: 'modify-item'}">Add Product</button>
             </li>
             <li class="row no-gutters setup-list-item">
-                <span class="setup-list-item-icon fas fa-store"></span>
-                <div class="mr-auto">
+                <span class="setup-list-item-icon d-none d-lg-block fas fa-store"></span>
+                <div class="mr-lg-auto col-lg-auto">
                     <div class="row no-gutters mb-1 d-flex align-items-center">
+                        <span class="setup-list-item-sm-icon d-inline-block d-lg-none fas fa-store"></span>
                         <p class="setup-list-item-label">Store Information</p>
                         <span class="setup-list-item-checked fas fa-check-circle" [class.text-success]="isStoreDetailsCompleted()"></span>
                     </div>
@@ -29,17 +31,18 @@
                         <li class="setup-sublist-item" [class.text-success]="store.openingInfoType">Operation Hours</li>
                     </ul>
                 </div>
-                <button class="btn btn-setup ml-5" [routerLink]="['/stores', storeUsername, 'store-page']">Change Details</button>
+                <button class="btn btn-sm btn-setup ml-lg-5 mt-3 mt-lg-0 ml-auto" [routerLink]="['/stores', storeUsername, 'store-page']">Change Details</button>
             </li>
             <li class="row no-gutters setup-list-item">
-                <span class="setup-list-item-icon fas fa-qrcode"></span>
-                <div class="mr-auto">
+                <span class="setup-list-item-icon d-none d-lg-block fas fa-qrcode"></span>
+                <div class="mr-lg-auto col-lg-auto">
                     <div class="row no-gutters mb-1 d-flex align-items-center">
+                        <span class="setup-list-item-sm-icon d-inline-block d-lg-none fas fa-qrcode"></span>
                         <p class="setup-list-item-label">QR code</p>
                     </div>
                     <p class="setup-list-item-text">Place your QR code in obvious place</p>
                 </div>
-                <button class="btn btn-setup ml-5" (click)="openQRcodeModal(url)">View QR code</button>
+                <button class="btn btn-sm btn-setup ml-lg-5 mt-3 mt-lg-0 ml-auto" (click)="openQRcodeModal(url)">View QR code</button>
             </li>
         </ul>
     </div>

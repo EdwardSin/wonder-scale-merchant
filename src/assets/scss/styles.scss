@@ -1,7 +1,7 @@
 @import './variables.scss';
 
 @font-face {
-    font-family: 'Bauhaus 93';
+    font-family: 'Bauhaus93';
     src: url('../fonts/Bauhaus 93 Regular.ttf');
 }
 
@@ -302,6 +302,13 @@ a.primary{
     color: map-get($ws-color, primary) !important;
     &:hover{
         color: map-get($ws-color, primary-hover);
+        text-decoration: underline;
+    }
+}
+a.secondary{
+    color: map-get($ws-color, secondary) !important;
+    &:hover{
+        color: map-get($ws-color, secondary-hover);
         text-decoration: underline;
     }
 }

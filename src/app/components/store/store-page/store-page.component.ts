@@ -16,9 +16,11 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { environment } from '@environments/environment';
 import { AuthStoreContributorService } from '@services/http/auth-store/contributor/auth-store-contributor.service';
 import { WsToastService } from '@elements/ws-toast/ws-toast.service';
+import { ScreenService } from '@services/general/screen.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EmailValidator } from '@validations/email.validator';
 import { URLValidator } from '@validations/url.validator';
+import { DocumentHelper } from '@helpers/documenthelper/document.helper';
 
 @Component({
   selector: 'app-store-page',
@@ -30,6 +32,7 @@ export class StorePageComponent implements OnInit {
   store: Store;
   selectedPreview: string = 'website';
   isChanged: boolean = false;
+  isMobileSize: boolean = false;
   isSaveStoreLoading: WsLoading = new WsLoading;
   isBannersOpened: boolean = false;
   isProfileImageOpened: boolean = false;
@@ -39,6 +42,7 @@ export class StorePageComponent implements OnInit {
   isStoreTypeOpened: boolean = false;
   isAddressOpened: boolean = false;
   isTagsOpened: boolean = false;
+  isContactButtonOpened: boolean = false;
   isPhoneOpened: boolean = false;
   isEmailOpened: boolean = false;
   isWebsiteOpened: boolean = false;
@@ -50,7 +54,6 @@ export class StorePageComponent implements OnInit {
   isYoutubeOpened: boolean = false;
   isSnapchatOpened: boolean = false;
   isTelegramOpened: boolean = false;
-  isWeiboOpened: boolean = false;
   isWechatOpened: boolean = false;
   isAddMediaOpened: boolean = false;
   selectedNav: string = 'info';
@@ -75,6 +78,9 @@ export class StorePageComponent implements OnInit {
   isMediaMax: boolean;
   editingMedias = [];
   selectedMedia: string = '';
+  selectedContactButtonLabel: string = '';
+  selectedContactButtonType: string = '';
+  selectedContactButtonValue: string = '';
   error: string = '';
 
   restaurantTags = TagController.headerTags.restaurantTags;
@@ -82,6 +88,7 @@ export class StorePageComponent implements OnInit {
   shoppingTags = TagController.headerTags.shoppingTags;
   private ngUnsubscribe: Subject<any> = new Subject();
   constructor(private gpsService: WsGpsService,
+    private screenService: ScreenService,
     private sharedStoreService: SharedStoreService,
     private authStoreContributorService: AuthStoreContributorService,
     private ref: ChangeDetectorRef,
@@ -93,21 +100,27 @@ export class StorePageComponent implements OnInit {
   ngOnInit(): void {
     this.selectedNav = this.route.snapshot.queryParams.nav || 'info';
     this.sharedStoreService.store.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
-      this.store = result;
-      this.editingStore = _.cloneDeep(result);
-      this.allBanners = this.store.informationImages.map(image => { return { url: image, type: 'url' } });
-      this.editingAllBanners = _.cloneDeep(this.allBanners);
-      this.editingBanners = this.store.informationImages.map(image => environment.IMAGE_URL + image);
-      this.editingProfileImage = this.store.profileImage ? environment.IMAGE_URL + this.store.profileImage: null;
-      this.allMenuImages = this.store.menuImages.map(image => { return {url: image, type: 'url'}});
-      this.editingAllMenuImages = _.cloneDeep(this.allMenuImages);
-      this.editingMenuImages = this.store.menuImages.map(image => environment.IMAGE_URL + image);
+      if (result) {
+        this.store = result;
+        DocumentHelper.setWindowTitleWithWonderScale('Store Page - ' + this.store.name);
+        this.editingStore = _.cloneDeep(result);
+        this.allBanners = this.store.informationImages.map(image => { return { url: image, type: 'url' } });
+        this.editingAllBanners = _.cloneDeep(this.allBanners);
+        this.editingBanners = this.store.informationImages.map(image => environment.IMAGE_URL + image);
+        this.editingProfileImage = this.store.profileImage ? environment.IMAGE_URL + this.store.profileImage: null;
+        this.allMenuImages = this.store.menuImages.map(image => { return {url: image, type: 'url'}});
+        this.editingAllMenuImages = _.cloneDeep(this.allMenuImages);
+        this.editingMenuImages = this.store.menuImages.map(image => environment.IMAGE_URL + image);
+      }
     });
     this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe(queryParams => {
       if(queryParams['nav']) {
         this.selectedNav = queryParams['nav'];
       }
     });
+    this.screenService.isMobileSize.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+      this.isMobileSize = result;
+    })
   }
   onEditBannersClicked() {
     this.isBannersOpened = true;
@@ -152,6 +165,14 @@ export class StorePageComponent implements OnInit {
     this.isTagsOpened = true;
     this.tag.tags = this.editingStore.tags;
   }
+  onEditContactButtonClicked() {
+    this.isContactButtonOpened = true;
+    if(this.store.contactButton) {
+      this.selectedContactButtonLabel = this.store.contactButton.label;
+      this.selectedContactButtonType = this.store.contactButton.type;
+      this.selectedContactButtonValue = this.store.contactButton.value;
+    }
+  }
   onEditPhoneClicked() {
     this.isPhoneOpened = true;
   }
@@ -192,10 +213,6 @@ export class StorePageComponent implements OnInit {
   onEditTelegramClicked() {
     this.isTelegramOpened = true;
     this.editingMedias = this.store.media.filter(media => media.type == 'telegram').map(media => media.value);
-  }
-  onEditWeiboClicked() {
-    this.isWeiboOpened = true;
-    this.editingMedias = this.store.media.filter(media => media.type == 'weibo').map(media => media.value);
   }
   onEditWechatClicked() {
     this.isWechatOpened = true;
@@ -273,6 +290,19 @@ export class StorePageComponent implements OnInit {
     this.store.tags = [...this.tag.tags];
     this.isChanged = true;
     this.isTagsOpened = false;
+  }
+  onConfirmEditContactButtonClicked() {
+    this.editingStore.contactButton = {
+      label: this.selectedContactButtonLabel,
+      type: this.selectedContactButtonType,
+      value: this.selectedContactButtonValue
+    };
+    this.store.contactButton = _.cloneDeep(this.editingStore.contactButton);
+    this.selectedContactButtonLabel = '';
+    this.selectedContactButtonType = '';
+    this.selectedContactButtonValue = '';
+    this.isChanged = true;
+    this.isContactButtonOpened = false;
   }
   onConfirmEditPhoneClicked() {
     this.store.phone = _.compact(this.editingStore.phone);
@@ -355,13 +385,6 @@ export class StorePageComponent implements OnInit {
     this.isChanged = true;
     this.isTelegramOpened = false;
   }
-  onConfirmEditWeiboClicked() {
-    let remainingMedias = _.remove(this.store.media, media => media.type !== 'weibo');
-    this.store.media = _.compact([...remainingMedias, ...this.editingMedias.map(value => {return value ? {type: 'weibo', value} : null })]);
-    this.store = {...this.store};
-    this.isChanged = true;
-    this.isWeiboOpened = false;
-  }
   onConfirmEditWechatClicked() {
     let remainingMedias = _.remove(this.store.media, media => media.type !== 'wechat');
     this.store.media = _.compact([...remainingMedias, ...this.editingMedias.map(value => {return value ? {type: 'wechat', value} : null })]);
@@ -411,6 +434,14 @@ export class StorePageComponent implements OnInit {
     this.isProfileImageOpened = false;
     this.isUploadProfileImage = false;
     this.isDeleteProfileImage = true;
+  }
+  onDeleteContactButtonClicked() {
+    this.store.contactButton = null;
+    this.editingStore.contactButton = null;
+    this.selectedContactButtonLabel = '';
+    this.selectedContactButtonType = '';
+    this.selectedContactButtonValue = '';
+    this.isChanged = true;
   }
   onConfirmStoreSaved() {
     let obj = {

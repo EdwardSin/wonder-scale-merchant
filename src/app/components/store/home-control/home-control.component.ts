@@ -6,6 +6,7 @@ import * as $ from 'jquery';
 import { QRCodeBuilder } from '@builders/qrcodebuilder';
 import { environment } from '@environments/environment';
 import { WsLoading } from '@elements/ws-loading/ws-loading';
+import { DocumentHelper } from '@helpers/documenthelper/document.helper';
 
 @Component({
   selector: 'app-home-control',
@@ -29,9 +30,12 @@ export class HomeControlComponent implements OnInit {
   ngOnInit(): void {
     this.storeUsername = this.sharedStoreService.storeUsername;
     this.sharedStoreService.store.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
-      this.store = result;
-      this.displayImage = this.store.profileImage ? 'api/images/' + this.store.profileImage.replace(/\//g, ',') : 'assets/images/svg/dot.svg';
-      this.url = environment.URL + 'page/' + this.store.username + '?type=qr_scan';
+      if (result) {
+        this.store = result;
+        DocumentHelper.setWindowTitleWithWonderScale('Home - ' + this.store.name);
+        this.displayImage = this.store.profileImage ? 'api/images/' + this.store.profileImage.replace(/\//g, ',') : 'assets/images/svg/dot.svg';
+        this.url = environment.URL + 'page/' + this.store.username + '?type=qr_scan';
+      }
     })
   }
   isStoreDetailsCompleted() {
