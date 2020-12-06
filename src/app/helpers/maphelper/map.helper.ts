@@ -29,13 +29,15 @@ export class MapHelper {
     }
 
     public static getFormattedAddress(x) {
+        const name = x.address.name ? x.address.name + ', ' : '';
         const houseNumber = x.address.houseNumber ? x.address.houseNumber + ', ' : '';
         const street = x.address.street ? x.address.street + ', ' : '';
         const district = x.address.district ? x.address.district + ', ' : '';
         const city = x.address.city ? x.address.city + ', ' : '';
+        const postcode = x.address.postcode ? x.address.postcode + ', ' : '';
         const state = x.address.state ? x.address.state + ', ' : '';
         const country = x.address.country ? x.address.country : '';
-        const address = houseNumber + street + district + city + state + country;
+        const address = name + houseNumber + street + district + postcode + city + state + country;
         return address;
     }
 
