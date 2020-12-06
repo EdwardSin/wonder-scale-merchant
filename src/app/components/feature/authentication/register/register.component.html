@@ -72,23 +72,21 @@
               </mat-select>
             </div>
           </div>
-          <div class="center">
-            <mat-checkbox [color]="'primary'" class="mr-2 d-inline-block" style="vertical-align: sub"
+          <div class="center my-3 row no-gutters px-3">
+            <mat-checkbox [color]="'primary'" class="pt-1 mr-2 d-inline-block" style="vertical-align: sub"
               formControlName="receiveInfo">
             </mat-checkbox>
-            <label for="receiveInfo" class="mt-2" style="display: inline-flex">
-              <span class="font-8">I'd like to receive marketing<br /> and policy communications<br /> from Wonder Scale
-                and its
-                partners.</span>
+            <label for="receiveInfo" class="col mb-0">
+              <span class="font-8">I'd like to receive marketing and policy communications from Wonder Scale and its partners.</span>
               <span class="checkmark"></span>
             </label>
           </div>
           <div class="text-center mb-2 center w-100">
-            <ws-loading-button [class]="'btn btn-md btn-block btn-second mb-2'" [loading]="loading.isRunning()">Sign
-              up
-            </ws-loading-button>
+            <button [class]="'btn btn-md btn-block btn-register mb-2'" [disabled]="loading.isRunning()">
+              <ws-spinner class="mr-2" *ngIf="loading.isRunning()" [width]="15" [height]="15" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>Sign up
+            </button>
           </div>
-          <p class="font-weight-light">Already have a Wonder Scale account? <a class="font-weight-bold default"
+          <p class="font-weight-light">Already have a Wonder Scale account? <a class="default"
               href="javascript:void(0)" [routerLink]="[]" [queryParams]="{modal: 'login'}" [queryParamsHandling]="'merge'">Log in</a></p>
         </form>
       </div>

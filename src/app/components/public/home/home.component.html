@@ -58,34 +58,34 @@
     <div class="text-center">
       <h1 class="mb-4 h3 font-weight-light">Digitalize Your Business</h1>
       <div class="row no-gutters">
-        <div class="col-lg-2 p-lg-4 p-2 offset-lg-1">
+        <div class="col-lg-2 col-4 p-lg-4 p-2 offset-lg-1">
           <div class="digitalize" [class.active]="selectedTab == 'qrcode'" (click)="selectedTab = 'qrcode'">
             <span class="fas fa-qrcode digitalize-icon"></span>
-            <p class="digitalize-text" style="line-height: 2rem">QR Code</p>
+            <p class="digitalize-text d-none d-lg-block" style="line-height: 2rem">QR Code</p>
           </div>
         </div>
-        <div class="col-lg-2 p-lg-4 p-2">
+        <div class="col-lg-2 col-4 p-lg-4 p-2">
           <div class="digitalize" [class.active]="selectedTab == 'productManagement'" (click)="selectedTab = 'productManagement'">
             <span class="fas fa-th-large digitalize-icon"></span>
-            <p class="digitalize-text">Product Management</p>
+            <p class="digitalize-text d-none d-lg-block">Product Management</p>
           </div>
         </div>
-        <div class="col-lg-2 p-lg-4 p-2">
+        <div class="col-lg-2 col-4 p-lg-4 p-2">
           <div class="digitalize" [class.active]="selectedTab == 'displayingInformation'" (click)="selectedTab = 'displayingInformation'">
             <span class="fas fa-info-circle digitalize-icon"></span>
-            <p class="digitalize-text">Displaying Information</p>
+            <p class="digitalize-text d-none d-lg-block">Displaying Information</p>
           </div>
         </div>
-        <div class="col-lg-2 p-lg-4 p-2">
+        <div class="col-lg-2 col-4 p-lg-4 p-2">
           <div class="digitalize" [class.active]="selectedTab == 'mainCatalogue'" (click)="selectedTab = 'mainCatalogue'">
             <span class="fas fa-book-open digitalize-icon"></span>
-            <p class="digitalize-text">Menu / Catalogue</p>
+            <p class="digitalize-text d-none d-lg-block">Menu / Catalogue</p>
           </div>
         </div>
-        <div class="col-lg-2 p-lg-4 p-2">
+        <div class="col-lg-2 col-4 p-lg-4 p-2">
           <div class="digitalize" [class.active]="selectedTab == 'customerTacking'" (click)="selectedTab = 'customerTacking'">
             <span class="fas fa-chart-line digitalize-icon"></span>
-            <p class="digitalize-text">Customer Tracking</p>
+            <p class="digitalize-text d-none d-lg-block">Customer Tracking</p>
           </div>
         </div>
       </div>
@@ -159,8 +159,7 @@
       </div>
       <div class="col-md-8 no-gutters row text-center text-lg-left" style="display: flex; align-items: center">
             <span class="col-lg-auto" style="display: flex; align-items: center; justify-content: center">
-              <img style="width: 25px" class="mr-2" src="/assets/images/svg/icon.svg" alt="icon"/>
-              <span class="logo">Wonder Scale</span>
+              <object style="pointer-events: none" type="image/svg+xml" data="assets/images/svg/icon-title.svg" width="120"></object>
             </span>
             <div class="col-lg mt-lg-0 mt-3">
               <span class="col-lg">

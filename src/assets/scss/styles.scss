@@ -1,5 +1,11 @@
 @import './variables.scss';
 
+@font-face {
+    font-family: 'Bauhaus93';
+    src: url('../fonts/Bauhaus 93 Regular.ttf');
+}
+
+
 .ws-bg-secondary{
     background-color: map-get($ws-color, secondary);
 }
@@ -157,7 +163,7 @@ select.nooutline:focus,
         }
         &:active{
             color: #fff;
-            background-color: #282C35;
+            background-color: #b71c1c;
         }
         span {
             display: block;
@@ -299,6 +305,13 @@ a.primary{
         text-decoration: underline;
     }
 }
+a.secondary{
+    color: map-get($ws-color, secondary) !important;
+    &:hover{
+        color: map-get($ws-color, secondary-hover);
+        text-decoration: underline;
+    }
+}
 .center{
     margin-left: auto;
     margin-right: auto;
@@ -324,6 +337,7 @@ a.primary{
 }
 .badge.ws-bg-secondary{
     color: white;
+    background-color: #b71c1c;
 }
 
 

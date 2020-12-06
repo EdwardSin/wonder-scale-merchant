@@ -9,6 +9,7 @@ import { SharedStoreService } from '@services/shared/shared-store.service';
 import { interval, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import * as moment from 'moment';
+import { DocumentHelper } from '@helpers/documenthelper/document.helper';
 
 @Component({
   selector: 'app-advanced',
@@ -30,7 +31,10 @@ export class AdvancedComponent implements OnInit {
     private storeAuthorizationService: StoreAuthorizationService,
     private router: Router) {
     this.sharedStoreService.store.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
-      this.store = result;
+      if (result) {
+        this.store = result;
+        DocumentHelper.setWindowTitleWithWonderScale('Advanced - ' + this.store.name);
+      }
     })
     this.storeAuthorizationService.isAdminAuthorized.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {

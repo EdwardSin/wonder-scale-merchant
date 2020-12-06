@@ -466,4 +466,8 @@ export class ModifyMenuItemComponent implements OnInit {
     $('.upload-profile-images__container').css({'z-index': 0});
     $('.upload-profile-images__drop-area').css({'z-index': 0});
   }
+  ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
+  }
 }

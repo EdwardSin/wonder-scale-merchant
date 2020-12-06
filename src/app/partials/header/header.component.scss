@@ -7,8 +7,8 @@ header {
     font-family: 'Segoe UI';
 
     .logo {
-        font-family: 'Bauhaus 93';
-        color: #7F0000;
+        font-family: 'Bauhaus93';
+        color: #b71c1c;
         border-radius: .5rem;
         font-size: 1.5rem;
         display: flex;
@@ -59,7 +59,7 @@ header {
             padding: .5rem 1rem;
             border-radius: 20px;
             transition: all ease .15s;
-            color: #7f0000;
+            color: #b71c1c;
     
             &:hover {
               background-color: #f7f7f7;
@@ -112,7 +112,7 @@ header {
             transition: all .5s ease, color .1s ease;
 
             &:hover {
-                background-color: #7F0000;
+                background-color: #b71c1c;
                 color: #fff;
             }
         }
@@ -157,10 +157,11 @@ header {
                 padding-top: .5rem;
                 padding-bottom: .5rem;
                 &:hover{
-                    background-color: #f7f7f7;
+                    color: #fff;
+                    background-color: #990000;
                 }
-                &:focus{
-                    color: #000;
+                &:active{
+                    background-color: #b71c1c;
                 }
             }
 

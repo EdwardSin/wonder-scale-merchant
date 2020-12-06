@@ -6,6 +6,9 @@ import { Color } from 'ng2-charts';
 import { AuthTrackContributorService } from '@services/http/auth-store/contributor/auth-track-contributor.service';
 import { Subject, timer } from 'rxjs';
 import { takeUntil, delay, switchMap } from 'rxjs/operators';
+import { ScreenService } from '@services/general/screen.service';
+import { DocumentHelper } from '@helpers/documenthelper/document.helper';
+import { SharedStoreService } from '@services/shared/shared-store.service';
 
 @Component({
   selector: 'app-tracking-figure',
@@ -15,9 +18,10 @@ import { takeUntil, delay, switchMap } from 'rxjs/operators';
 export class TrackingFigureComponent implements OnInit {
   @ViewChild('numberOfCustomer', { static: true }) numberOfCustomer: ElementRef;
   public lineGraphType: string = 'line';
+  isMobileSize: boolean = false;
   lineChartColors: Color[] = [
     {
-      borderColor: '#7f0000',
+      borderColor: '#b71c1c',
       backgroundColor: 'rgba(127, 0, 0, .5)',
     },
   ];
@@ -27,6 +31,7 @@ export class TrackingFigureComponent implements OnInit {
     scales: {
       yAxes: [{
         ticks: {
+          suggestedMax: 100,
           beginAtZero: true,
           callback: function (value) { if (Number.isInteger(value)) { return value; } }
         }
@@ -56,7 +61,7 @@ export class TrackingFigureComponent implements OnInit {
   totalNumberOfCustomerToday: number = 0;
   tracks = [{ name: 'Number of Total Customers' }];
   colorSchema = [{
-    borderColor: '#7f0000',
+    borderColor: '#b71c1c',
     backgroundColor: 'rgba(127, 0, 0, .5)',
   }, {
     borderColor: '#b380ff',
@@ -91,13 +96,22 @@ export class TrackingFigureComponent implements OnInit {
     colors: this.colorSchema
   }
   private ngUnsubscribe: Subject<any> = new Subject;
-  constructor(private authTrackContributorService: AuthTrackContributorService) {
+  constructor(private sharedStoreService: SharedStoreService, private screenService: ScreenService, private authTrackContributorService: AuthTrackContributorService) {
     this.getTargetsInSession();
+    this.screenService.isMobileSize.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+      this.isMobileSize = result;
+    })
   }
   ngOnInit(): void {
     this.setupData();
     this.getBetweenTracks();
     this.getTodayTrack();
+    this.sharedStoreService.store.pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(result => {
+        if (result) {
+          DocumentHelper.setWindowTitleWithWonderScale('Figure - ' + result.name);
+      }
+    });
   }
   setupData() {
     this.allHours = this.getHoursInSelection();

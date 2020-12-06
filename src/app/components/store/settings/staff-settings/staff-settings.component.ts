@@ -14,6 +14,7 @@ import { finalize, takeUntil } from 'rxjs/operators';
 import _ from 'lodash';
 import { AuthStoreAdminService } from '@services/http/auth-store/admin/auth-store-admin.service';
 import { Contributor } from '@objects/contributor';
+import { DocumentHelper } from '@helpers/documenthelper/document.helper';
 
 @Component({
   selector: 'app-staff-settings',
@@ -39,8 +40,11 @@ export class StaffSettingsComponent implements OnInit {
     private authStoreAdminService: AuthStoreAdminService,
     private sharedStoreService: SharedStoreService) { 
     this.sharedStoreService.store.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
-      this.store = result;
-      this.updateContributorAuthorization();
+      if (result) {
+        this.store = result;
+        DocumentHelper.setWindowTitleWithWonderScale('Staff - ' + this.store.name);
+        this.updateContributorAuthorization();
+      }
     });
     this.sharedStoreService.contributorRefresh.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
@@ -50,7 +54,6 @@ export class StaffSettingsComponent implements OnInit {
         }
       })
   }
-
   ngOnInit(): void {
     this.loading.start();
     this.storeAuthorizationService.isAdminAuthorized.pipe(takeUntil(this.ngUnsubscribe))
@@ -125,7 +128,7 @@ export class StaffSettingsComponent implements OnInit {
         });
     }
     else {
-      WsToastService.toastSubject.next({ content: "Please add member to invite!", type: 'danger' });
+      WsToastService.toastSubject.next({ content: "Please add a user to invite!", type: 'danger' });
     }
   }
   searchContributors(value) {
@@ -142,5 +145,9 @@ export class StaffSettingsComponent implements OnInit {
     this.isEditContributorModalOpened = true;
     this.contributorController.selectedContributor = contributor;
     this.contributorController.newRole = contributor.role;
+  }
+  ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 }

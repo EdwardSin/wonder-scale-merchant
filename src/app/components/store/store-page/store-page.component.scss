@@ -10,7 +10,7 @@
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.16);
 
     .merchant-preview__save {
-        background-color: #7f0000;
+        background-color: #b71c1c;
         color: #fff;
         position: sticky;
         top: 0;
@@ -115,13 +115,13 @@
 
     /* Handle */
     &::-webkit-scrollbar-thumb {
-        background: #7f0000;
+        background: #b71c1c;
         border-radius: 10px;
     }
 
     /* Handle on hover */
     &::-webkit-scrollbar-thumb:hover {
-        background: #660000;
+        background: #b71c1c;
     }
 }
 

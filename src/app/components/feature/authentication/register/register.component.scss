@@ -8,3 +8,17 @@
 .mat-select-placeholder{
     color: #80888e;
 }
+
+.btn-register {
+    border-radius: 2rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    font-size: 1rem;
+    transition: all .2s ease;
+    background-color: #f7f7f7;
+    color: #7f0000;
+    &:hover{
+        background-color: #7F0000;
+        color: #fff;
+    }
+}

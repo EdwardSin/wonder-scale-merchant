@@ -24,32 +24,33 @@
           <a href="javascript: void(0)" class="font-weight-light text-center pt-2 pb-2 mb-0"
             [routerLink]="[]" [queryParams]="{modal: 'forgot-password'}">Forgot Password?</a>
           <div class="text-center center w-100">
-            <ws-loading-button [class]="'btn btn-block btn-second mb-2'" [loading]="loading.isRunning()"
-              (click)="login()">Login
-            </ws-loading-button>
+            <button class="btn btn-block btn-login mb-2" [disabled]="loading.isRunning()" (click)="login()">
+              <ws-spinner class="mr-2" *ngIf="loading.isRunning()" [width]="15" [height]="15" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>
+              Login
+            </button>
           </div>
           <div *ngIf="resend" class="text-center center w-100">
-            <ws-loading-button [class]="'btn btn-block btn-second mb-2'" [loading]="resendLoading.isRunning()"
-              (click)="resendActiveLink()">Resend Activation
-            </ws-loading-button>
+            <button [class]="'btn btn-block btn-login mb-2'" [disabled]="resendLoading.isRunning()" (click)="resendActiveLink()">
+              <ws-spinner class="mr-2" *ngIf="resendLoading.isRunning()" [width]="15" [height]="15" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>Resend Activation
+            </button>
           </div>
-          <div class="text-center mt-1 mb-1" style="overflow: hidden">
+          <div class="text-center my-1" style="overflow: hidden">
             <span id="continueSpan" class="p-2 position-relative">
               <span class="innerSpan">
                 <span>Continue log in with</span>
               </span>
             </span>
           </div>
-          <button class="btn btn-second mb-2 center w-100" style="background-color: #4568B2"
+          <button class="btn btn-facebook mb-2 center w-100"
             (click)="loginWithFb()">
             <span class="fab fa-facebook-f mr-2"></span>Log in with
             Facebook</button>
-          <button class="btn btn-second mb-3 center w-100" style="background-color:#DC4E41"
+          <button class="btn btn-google mb-3 center w-100"
             (click)="loginWithGoogle()">
             <span class="fab fa-google-plus-g mr-2"></span>Log in with
             Google</button>
           <p class="mb-0 font-weight-light">Don't have an account?
-            <a href="javascript:void(0)" class="font-weight-bold default"
+            <a href="javascript:void(0)" class="default"
               [routerLink]="[]" [queryParams]="{modal: 'register'}" [queryParamsHandling]="'merge'">Sign
               up</a></p>
         </form>

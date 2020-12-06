@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
@@ -16,6 +16,7 @@ import { ScreenService } from '@services/general/screen.service';
 import { Subject } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
 import { environment } from '@environments/environment';
+import { isPlatformBrowser } from '@angular/common';
 
 
 @Component({
@@ -35,7 +36,9 @@ export class LoginComponent implements OnInit {
   storeEmail: string;
   storePassword: string;
   private ngUnsubscribe: Subject<any> = new Subject;
-  constructor(private authenticationService: AuthenticationService,
+  constructor(
+    @Inject(PLATFORM_ID) private platformId,
+    private authenticationService: AuthenticationService,
     private route: ActivatedRoute,
     private router: Router,
     private userService: UserService,
@@ -45,7 +48,9 @@ export class LoginComponent implements OnInit {
     private sharedUserService: SharedUserService) { }
 
   ngOnInit() {
-    DocumentHelper.setWindowTitleWithWonderScale(Title.HOME);
+    if (isPlatformBrowser(this.platformId)) {
+      DocumentHelper.setWindowTitleWithWonderScale(Title.HOME);
+    }
     this.createLoginForm();
     this.createPasswordForm();
     this.screenService.isMobileSize.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
@@ -62,6 +67,7 @@ export class LoginComponent implements OnInit {
         this.getUser();
         this.navigateToReturnUrl();
       }, err => {
+        console.log(err);
         if (err.error.message == 'Please activate your account!') {
           this.resend = true;
           this.storeEmail = this.loginForm.value.email;

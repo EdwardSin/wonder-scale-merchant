@@ -2,6 +2,70 @@
 - Wonder Scale Merchant                     -
 ---------------------------------------------
 
+- v1.0.1050                                 -
+---------------------------------------------
+- 2020-12-06                                -
+---------------------------------------------
+.: WSM: Task: Update autocomplete api (WSM-248)
+.: WSM: Task: Update command (WSM-216)
+
+---------------------------------------------
+- 2020-12-05                                -
+---------------------------------------------
+.: WSM: Task: Update upload url (WSM-216)
+
+---------------------------------------------
+- 2020-12-03                                -
+---------------------------------------------
+.: WSM: Task: Change icon (WSM-247)
+
+---------------------------------------------
+- 2020-11-20                                -
+---------------------------------------------
+.: WSM: Task: Adding loading spinner in policy page (WSM-243)
+.: WSM: BugFix: Not able to have duplicate category is added/edited (WSM-240)
+.: WSM: BugFix: Not able to invite user twice (WSM-241)
+.: WSM: BugFix: Get "name" of null issue when logging out (WSM-242)
+
+---------------------------------------------
+- 2020-11-17                                -
+---------------------------------------------
+.: WSM: Task: Update Titles
+
+---------------------------------------------
+- 2020-11-12                                -
+---------------------------------------------
+.: WSM: BugFix: Remove today special category when the shop type other than restaurant (WSM-235)
+
+---------------------------------------------
+- 2020-11-09                                -
+---------------------------------------------
+.: WSM: Task: Move categories to a page instead of in sidebar (WSM-233)
+
+---------------------------------------------
+- 2020-11-08                                -
+---------------------------------------------
+.: WSM: Task: Create build bot (WSM-216)
+.: WSM: Task: Add Social Media (WSM-52)
+.: WSM: Task: Update Mobile Version in Merchant (WSM-225)
+.: WSM: Task: Add an preferable order method (WSM-205)
+
+---------------------------------------------
+- 2020-11-06                                -
+---------------------------------------------
+.: WSM: Task: Standardize button colors (WSM-217)
+.: WSM: Task: Standardize loading (WSM-226)
+
+---------------------------------------------
+- 2020-11-04                                -
+---------------------------------------------
+.: WSM: Task: Icon in QRcode is too blur (WSM-219)
+
+---------------------------------------------
+- 2020-11-03                                -
+---------------------------------------------
+.：WSM: BugFix: Doesn't implement the correct font for logo (WSM-224)
+
 - v1.0.1040                                 -
 ---------------------------------------------
 - 2020-11-01                                -

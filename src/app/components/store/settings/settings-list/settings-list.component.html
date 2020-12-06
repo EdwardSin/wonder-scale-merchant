@@ -1,5 +1,5 @@
 <div class="row no-gutters">
-    <div class="col-lg-2 pr-lg-3">
+    <div class="col-lg-2 pr-lg-3 mb-3">
         <div class="btn settings-container" [routerLink]="['/stores', store?.username, 'settings', 'general']">
             <div>
                 <div class="mb-2">
@@ -10,7 +10,7 @@
             </div>
         </div>
     </div>
-    <div class="col-lg-2 pr-lg-3" *ngIf="isAdminAuthorized">
+    <div class="col-lg-2 pr-lg-3 mb-3" *ngIf="isAdminAuthorized">
         <div class="btn settings-container" [routerLink]="['/stores', store?.username, 'settings', 'staff']">
             <div>
                 <div class="mb-2">
@@ -21,7 +21,7 @@
             </div>
         </div>
     </div>
-    <div class="col-lg-2 pr-lg-3">
+    <div class="col-lg-2 pr-lg-3 mb-3">
         <div class="btn settings-container" [routerLink]="['/stores', store?.username, 'settings', 'advanced']">
             <div>
                 <div class="mb-2">

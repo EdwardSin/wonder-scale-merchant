@@ -26,7 +26,7 @@ export class AllStoresComponent implements OnInit {
     }
 
   ngOnInit() {
-    DocumentHelper.setWindowTitleWithWonderScale('Joined Stores');
+    DocumentHelper.setWindowTitleWithWonderScale('All Stores');
     this.loading.start();
     this.sharedUserService.user.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {

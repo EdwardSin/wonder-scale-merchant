@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { WsLoading } from '@elements/ws-loading/ws-loading';
 import { WsToastService } from '@elements/ws-toast/ws-toast.service';
+import { DocumentHelper } from '@helpers/documenthelper/document.helper';
 import { Store } from '@objects/store';
 import { AuthStoreAdminService } from '@services/http/auth-store/admin/auth-store-admin.service';
 import { AuthStoreContributorService } from '@services/http/auth-store/contributor/auth-store-contributor.service';
@@ -34,8 +35,9 @@ export class GeneralComponent implements OnInit {
   ngOnInit(): void {
     this.username = this.sharedStoreService.storeUsername;
     this.sharedStoreService.store.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
-      this.store = result;
       if (result) {
+        this.store = result;
+        DocumentHelper.setWindowTitleWithWonderScale('General - ' + this.store.name);
         this.status = result.isPublished;
         this.selectedCurrency = result.currency;
       }
