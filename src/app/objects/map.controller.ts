@@ -42,8 +42,21 @@ export class MapController{
             this.gpsService.getSuggestions(query)
                 .pipe(debounceTime(500), takeUntil(this.ngUnsubscribe), finalize(() => this.loading.stop()))
                 .subscribe(result => {
-                    if (result && result['suggestions']) {
-                        this.suggestionsObj = result['suggestions'];
+                    if (result && result['features'] && result['features'].length) {
+                        let suggestions = result['features'].map(function (location) {
+                            return {
+                                address: {
+                                    name: location.properties.name,
+                                    postcode: location.properties.postcode,
+                                    street: location.properties.street,
+                                    city: location.properties.city,
+                                    state: location.properties.state,
+                                    country: location.properties.country,
+                                },
+                                geometry: location.geometry
+                            }
+                        });
+                        this.suggestionsObj = suggestions;
                         this.suggestions = this.suggestionsObj.map(x => MapHelper.getFormattedAddress(x));
                         this.displayed = true;
                     }
@@ -67,11 +80,7 @@ export class MapController{
         var address = this.suggestionsObj[this.hovered];
         if (this.suggestionsObj.length > 0 && address) {
             this.locationLoading.start();
-            let coords = await new Promise((resolve, reject) => {
-                this.gpsService.geocode({ address: MapHelper.getSelectedFormattedAddress(address) }, (coords) => {
-                    resolve(coords);
-                })
-            });
+            let coords = {lng: address.geometry.coordinates[0], lat: address.geometry.coordinates[1]};
             this.mapPoint = {latitude: coords['lat'], longitude: coords['lng']};
             this.mapCircle.latitude = coords['lat'];
             this.mapCircle.longitude = coords['lng'];

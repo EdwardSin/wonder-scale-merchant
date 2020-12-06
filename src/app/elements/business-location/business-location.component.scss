@@ -17,7 +17,7 @@ ul.suggestions {
         border-top: none;
         &:hover,
         &.hover {
-            background-color: map-get($ws-color, secondary-hover);
+            background-color: map-get($ws-color, secondary);
             color: map-get($ws-color, white);
             cursor: pointer;
         }
