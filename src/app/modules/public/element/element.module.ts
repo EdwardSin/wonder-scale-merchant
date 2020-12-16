@@ -28,6 +28,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatNativeDateModule } from '@angular/material/core';
 import { BusinessLocationComponent } from '@elements/business-location/business-location.component';
 import { DirectiveModule } from '../directive/directive.module';
+// import { WsOrderCardComponent } from '@elements/ws-order-card/ws-order-card.component';
 
 
 
@@ -42,6 +43,7 @@ import { DirectiveModule } from '../directive/directive.module';
     WsSpinnerHDotComponent,
     WsModalComponent,
     WsToastComponent,
+    // WsOrderCardComponent,
     WsPaginationComponent,
     WsUploaderComponent,
     WsMultipleInputComponent,
@@ -75,6 +77,7 @@ import { DirectiveModule } from '../directive/directive.module';
     WsSpinnerHDotComponent,
     WsModalComponent,
     WsToastComponent,
+    // WsOrderCardComponent,
     WsPaginationComponent,
     WsUploaderComponent,
     WsMultipleInputComponent,

@@ -24,6 +24,7 @@ import { SharedModule } from './modules/public/shared/shared.module';
 import { TrackingComponent } from '@components/store/tracking/tracking.component';
 import { HomeControlComponent } from '@components/store/home-control/home-control.component';
 import { NoCacheHeadersInterceptor } from '@components/resolvers/no-cache-headers.interceptor.service';
+import { OrdersComponent } from './components/store/orders/orders.component';
 
 const DEFAULT_SWIPER_CONFIG: SwiperConfigInterface = {
   direction: 'horizontal',
@@ -65,7 +66,8 @@ export function jwtOptionsFactory(platformId) {
     WsLeftNavComponent,
     BreadcrumbComponent,
     HomeControlComponent,
-    TrackingComponent
+    TrackingComponent,
+    OrdersComponent
   ],
   imports: [
     BrowserModule,

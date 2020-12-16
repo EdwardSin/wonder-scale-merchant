@@ -58,6 +58,12 @@ const routes: Routes = [{
       data: { title: 'store-page', breadcrumb: 'Store page' },
       loadChildren: () => import('./modules/store/store-page/store-page.module').then(m => m.StorePageModule)
     },
+    {
+      path: 'orders',
+      canActivate: [StoreGuard],
+      data: { title: 'orders', breadcrumb: 'Orders' },
+      loadChildren: () => import('./modules/store/orders/orders.module').then(m => m.OrdersModule)
+    },
     // {
     //   path: 'advertising',
     //   component: AdvertisingComponent,

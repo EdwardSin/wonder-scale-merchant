@@ -1,0 +1,110 @@
+<h4 class="ws-title">Customers</h4>
+<search-bar class="d-inline-block mr-2 mb-3" [placeholder]="'Search ID, Name...'" [searchAttributes]="['name', 'id']" [items]="allCustomers" [searchKeyword]="searchController.searchKeyword"></search-bar>
+<button class="btn btn-sm btn-controller float-right" (click)="openModifyCustomerModal()">
+    <span class="fas fa-plus mr-2 d-inline-block"></span>Add New
+</button>
+
+<table class="table table-hover w-100 font-9">
+    <thead>
+        <th>Name</th>
+        <th width="150">Phone Number</th>
+        <th width="100">Actions</th>
+    </thead>
+    <tbody>
+        <tr *ngFor="let customer of customers">
+            <td>{{ customer.firstName }} {{ customer.lastName}}</td>
+            <td>{{ customer.phoneNumber }}</td>
+            <td>
+                <button [disabled]="itemLoading.isRunning()" title="Edit Item" href="javascript:void(0)" class="ws-dark-color btn btn-sm btn-controller text-decoration-none" (click)="$event.stopPropagation(); openModifyCustomerModal(customer)">
+                    <span class="fas fa-edit"></span>
+                </button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+<ws-pagination *ngIf="numberOfCurrentTotalItems" [expanded]="isNavOpen" [currentPage]="currentPage"
+            [pageSize]="environment.ITEMS_PER_PAGE" [dbTotal]="numberOfAllItems" [total]="numberOfCurrentTotalItems" (getPageNumber)="navigate($event)"></ws-pagination>
+
+<div *ngIf="!customers.length && !loading.isRunning(); else loadingTemplate">
+    <div class="text-center w-100">
+        <h6 class="py-5">No Customer</h6>
+    </div>
+</div>
+
+<ng-template #loadingTemplate>
+    <ng-container *ngIf="loading.isRunning();">
+        <ws-spinner class="text-center d-block w-100" style="padding-top: 10vh; padding-bottom: 10vh" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>
+    </ng-container>
+</ng-template>
+
+<ws-modal *ngIf="isModifyCustomerModalOpened" [(isOpened)]="isModifyCustomerModalOpened" [maxWidth]="600">
+    <form modalBody class="py-3" [formGroup]="form">
+        <h6 class="h6">Customer Details</h6>
+        <div class="row no-gutters mb-3">
+            <div class="col-lg-6 pr-lg-3 mb-3">
+                <input class="form-control form-control-sm" maxlength="36" formControlName="firstName" (input)="updateDeliveryFirstName($event)" placeholder="First Name*" />
+            </div>
+            <div class="col-lg-6 mb-3">
+                <input class="form-control form-control-sm" maxlength="36" formControlName="lastName" (input)="updateDeliveryLastName($event)" placeholder="Last Name*" />
+            </div>
+            <div class="col-lg-6 pr-lg-3 mb-3">
+                <input class="form-control form-control-sm" maxlength="128" formControlName="email" placeholder="Email Addres" />
+            </div>
+            <div class="col-lg-6 mb-3">
+                <input class="form-control form-control-sm" maxlength="36" formControlName="phoneNumber" placeholder="Phone Number" />
+            </div>
+            <div class="col-lg-6 pr-lg-3 mb-3">
+                <input (click)="fromPicker.open()" class="form-control form-control-sm" formControlName="dateOfBirth" [matDatepicker]="fromPicker" [max]="today" placeholder="Date of Birth" />
+                <mat-datepicker #fromPicker startView="month"></mat-datepicker>
+            </div>
+            <div class="col-lg-6 mb-3">
+                <mat-select class="form-control form-control-sm" formControlName="gender" placeholder="Gender">
+                    <mat-option [value]="''">Select a gender</mat-option>
+                    <mat-option [value]="'male'">male</mat-option>
+                    <mat-option [value]="'female'">female</mat-option>
+                </mat-select>
+            </div>
+        </div>
+        <h6 class="h6">Delivery Address</h6>
+        <div class="mb-3">
+            <mat-checkbox [color]="'primary'" [checked]="isDefaultCustomerDetailsChecked" (change)="onDefaultCustomerDetailsCheck($event)" class="font-9">Use customer details by default</mat-checkbox>
+            <div class="row no-gutters">
+                <div class="col-lg-6 mb-3 pr-lg-3">
+                    <input class="form-control form-control-sm" maxlength="36" formControlName="deliveryFirstName" placeholder="Delivery First Name" />
+                </div>
+                <div class="col-lg-6 mb-3">
+                    <input class="form-control form-control-sm" maxlength="36" formControlName="deliveryLastName" placeholder="Delivery Last Name" />
+                </div>
+            </div>
+            <div class="mb-3">
+                <input class="form-control form-control-sm" maxlength="128" formControlName="address" placeholder="Address" />
+            </div>
+            <div class="row no-gutters">
+                <div class="col-lg-4 mb-3 pr-lg-3">
+                    <input class="form-control form-control-sm" maxlength="36" formControlName="postCode" placeholder="Post Code" />
+                </div>
+                <div class="col-lg-4 mb-3 pr-lg-3">
+                    <mat-select class="form-control form-control-sm" formControlName="state" placeholder="State">
+                        <mat-option [value]="''">Select a state</mat-option>
+                        <mat-option [value]="_state" *ngFor="let _state of states">{{ _state }}</mat-option>
+                    </mat-select>
+                </div>
+                <div class="col-lg-4 mb-3">
+                    <mat-select class="form-control form-control-sm" formControlName="country" placeholder="Country">
+                        <mat-option [value]="''">Select a country</mat-option>
+                        <mat-option [value]="'MYS'">Malaysia</mat-option>
+                    </mat-select>
+                </div>
+            </div>
+        </div>
+        <div>
+            <button *ngIf="selectedCustomer" [disabled]="modifyLoading.isRunning()" class="btn btn-sm btn-danger" (click)="removeCustomer()">
+                <ws-spinner *ngIf="modifyLoading.isRunning()" [width]="15" [height]="15" [borderWidth]="1" [spinnerColor]="'#b71c1c'" class="mr-2"></ws-spinner>Delete
+            </button>
+            <button class="btn btn-sm btn-controller float-right" (click)="isModifyCustomerModalOpened = false">Cancel</button>
+            <button [disabled]="modifyLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="modifyCustomer()">
+                <ws-spinner *ngIf="modifyLoading.isRunning()" [width]="15" [height]="15" [borderWidth]="1" [spinnerColor]="'#b71c1c'" class="mr-2"></ws-spinner>{{ selectedCustomer ? 'Save': 'Create'}}
+            </button>
+        </div>
+    </form>
+</ws-modal>
