@@ -1,4 +1,5 @@
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from "@angular/forms";
+import { AddressValidation } from '@validations/validators/addressvalidation';
 import { DateValidation } from "../validations/validators/datevalidation";
 import { GenderValidation } from "../validations/validators/gendervalidation";
 import { PasswordValidation } from './../validations/validators/passwordvalidation';
@@ -208,5 +209,24 @@ export class WSFormBuilder {
         return formBuilder.group({
 
         });
+    }
+    public static createAddCustomerForm() {
+        let formBuilder = new FormBuilder;
+        return formBuilder.group({
+            firstName: ['', [Validators.required, Validators.maxLength(36)]],
+            lastName: ['', [Validators.required, Validators.maxLength(36)]],
+            email: ['', [Validators.email, Validators.maxLength(128)]],
+            phoneNumber: ['', [Validators.maxLength(36)]],
+            dateOfBirth: [''],
+            gender: [''],
+            deliveryFirstName: ['', [Validators.maxLength(36)]],
+            deliveryLastName: ['', [Validators.maxLength(36)]],
+            address: ['', [Validators.maxLength(128)]],
+            postCode: ['', [Validators.maxLength(36)]],
+            state: ['', [Validators.maxLength(36)]],
+            country: ['', [Validators.maxLength(3)]],
+        }, {
+            validator: [AddressValidation.validAddress]
+        })
     }
 }

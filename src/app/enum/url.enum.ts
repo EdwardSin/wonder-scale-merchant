@@ -7,6 +7,8 @@ export class URL {
     static AUTH_CATEGORY_CONTRIBUTOR_URL = '/api/auth-stores/category-contributors';
     static AUTH_CARD_CONTRIBUTOR_URL = '/api/auth-stores/card-contributors';
     static AUTH_DEFAULT_SETTING_CONTRIBUTOR_URL = '/api/auth-stores/default-setting-contributors';
+    static AUTH_ORDER_RECEIPT_CONTRIBUTOR_URL = '/api/auth-stores/order-receipt-contributors';
+    static AUTH_CUSTOMER_CONTRIBUTOR_URL = '/api/auth-stores/customer-contributors';
     static AUTH_ITEM_CONTRIBUTOR_URL = '/api/auth-stores/item-contributors';
     static AUTH_STORE_CONTRIBUTOR_URL = '/api/auth-stores/store-contributors';
     static AUTH_TABLE_CONTRIBUTOR_URL = '/api/auth-stores/ordering-contributors/table-contributors';
@@ -187,6 +189,18 @@ export class AuthOrderingConfigurationContributorUrl {
     static addAnonymousPageRoleUrl = URL.AUTH_ORDERING_CONFIGURATION_CONTRIBUTOR_URL + '/add-anonymous-page-role';
     static updatePageRoleUrl = URL.AUTH_ORDERING_CONFIGURATION_CONTRIBUTOR_URL + '/update-page-role';
     static removePageRoleUrl = URL.AUTH_ORDERING_CONFIGURATION_CONTRIBUTOR_URL + '/remove-page-role/';
+}
+// export class AuthOrderReceiptContributorUrl {
+//     static getOrderReceiptsUrl = URL.AUTH_ORDER_RECEIPT_CONTRIBUTOR_URL + '/';
+//     static addOrderReceipteUrl = URL.AUTH_ORDER_RECEIPT_CONTRIBUTOR_URL + '/';
+//     static editOrderReceipteUrl = URL.AUTH_ORDER_RECEIPT_CONTRIBUTOR_URL + '/';
+//     static updateOrderReceiptStatusUrl = URL.AUTH_ORDER_RECEIPT_CONTRIBUTOR_URL + '/change-status';
+// }
+export class AuthCustomerContributorUrl {
+    static getCustomersUrl = URL.AUTH_CUSTOMER_CONTRIBUTOR_URL + '/';
+    static addCustomerUrl = URL.AUTH_CUSTOMER_CONTRIBUTOR_URL + '/';
+    static updateCustomerUrl = URL.AUTH_CUSTOMER_CONTRIBUTOR_URL + '/';
+    static removeCustomerUrl = URL.AUTH_CUSTOMER_CONTRIBUTOR_URL + '/';
 }
 
 // export class AuthVoucherContributorUrl {
