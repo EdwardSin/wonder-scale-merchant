@@ -9,6 +9,7 @@ export class URL {
     static AUTH_DEFAULT_SETTING_CONTRIBUTOR_URL = '/api/auth-stores/default-setting-contributors';
     static AUTH_ORDER_RECEIPT_CONTRIBUTOR_URL = '/api/auth-stores/order-receipt-contributors';
     static AUTH_CUSTOMER_CONTRIBUTOR_URL = '/api/auth-stores/customer-contributors';
+    static AUTH_PROMOTION_CONTRIBUTOR_URL = '/api/auth-stores/promotion-contributors';
     static AUTH_ITEM_CONTRIBUTOR_URL = '/api/auth-stores/item-contributors';
     static AUTH_STORE_CONTRIBUTOR_URL = '/api/auth-stores/store-contributors';
     static AUTH_TABLE_CONTRIBUTOR_URL = '/api/auth-stores/ordering-contributors/table-contributors';
@@ -201,6 +202,12 @@ export class AuthCustomerContributorUrl {
     static addCustomerUrl = URL.AUTH_CUSTOMER_CONTRIBUTOR_URL + '/';
     static updateCustomerUrl = URL.AUTH_CUSTOMER_CONTRIBUTOR_URL + '/';
     static removeCustomerUrl = URL.AUTH_CUSTOMER_CONTRIBUTOR_URL + '/';
+}
+export class AuthPromotionContributorUrl {
+    static getPromotionsUrl = URL.AUTH_PROMOTION_CONTRIBUTOR_URL + '/';
+    static addPromotionUrl = URL.AUTH_PROMOTION_CONTRIBUTOR_URL + '/';
+    static updatePromotionUrl = URL.AUTH_PROMOTION_CONTRIBUTOR_URL + '/';
+    static removePromotionUrl = URL.AUTH_PROMOTION_CONTRIBUTOR_URL + '/';
 }
 
 // export class AuthVoucherContributorUrl {
