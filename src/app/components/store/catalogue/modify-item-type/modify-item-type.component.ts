@@ -176,17 +176,26 @@ export class ModifyItemTypeComponent implements OnInit {
     }
   }
   validateBasicForm() {
-    this.itemTypesForm.get('itemTypes')['controls'].forEach(formGroup => {
+    let results = this.itemTypesForm.get('itemTypes')['controls'].map((formGroup, index) => {
+      let name = formGroup.get('name');
       let price = formGroup.get('price');
       let discount = formGroup.get('discount');
       let weight = formGroup.get('weight');
       let quantity = formGroup.get('quantity');
       let priceRegex = /^\d*(?:\.\d{1,2})?$/;
       let intergerRegex = /^\d+$/;
+      
+      if ((!name.value || !name.value.trim()) && index !== 0) {
+        WsToastService.toastSubject.next({ content: 'Type name is required!', type: 'danger' });
+        return false;
+      }
+      if ((!name.value || !name.value.trim()) && index == 0) {
+        name.setValue('Default');
+      }
       if (price.value && !priceRegex.test(price.value)){
         WsToastService.toastSubject.next({ content: 'Price is invalid!', type: 'danger' });
         return false;
-      } 
+      }
       else if (discount.value && (!priceRegex.test(discount.value) || +discount.value > 100)){
         WsToastService.toastSubject.next({ content: 'Discount is invalid!', type: 'danger' });
         return false;
@@ -202,8 +211,16 @@ export class ModifyItemTypeComponent implements OnInit {
         WsToastService.toastSubject.next({ content: 'Quantity should less than 999999!', type: 'danger' });
         return false;
       }
-    })
-    return true;
+    });
+    let listOfName = this.itemTypesForm.get('itemTypes')['controls'].map(formGroup => {
+      return formGroup.value.name.trim();
+    });
+    // Check has duplicate type name
+    if (!listOfName.every((e, i, a) => a.indexOf(e) === i)) {
+      WsToastService.toastSubject.next({ content: 'No duplicated type is allowed!', type: 'danger'});
+      return false;
+    }
+    return !results.includes(false);
   }
   onColorValueChanged($event, formGroup) {
     if (this.colors.includes($event) || /^#([0-9A-F]{3}){1,2}$/i.test($event.value)) {

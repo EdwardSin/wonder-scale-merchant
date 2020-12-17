@@ -181,6 +181,7 @@ export class WSFormBuilder {
         let formBuilder = new FormBuilder();
         return formBuilder.group({
             _id: new FormControl(''),
+            name: new FormControl('', [Validators.required, Validators.maxLength(36)]),
             images: new FormControl([]),
             hexColor: new FormControl(''),
             sizes: new FormControl(['S', 'M', 'L']),
