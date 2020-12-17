@@ -229,4 +229,17 @@ export class WSFormBuilder {
             validator: [AddressValidation.validAddress]
         })
     }
+    public static createAddPromotionForm() {
+        let formBuilder = new FormBuilder;
+        return formBuilder.group({
+            isEnabled: [false],
+            title: ['', [Validators.required, Validators.maxLength(128)]],
+            discountOption: ['percentage'],
+            discountValue: [0, [Validators.required]],
+            isActiveToday: [false],
+            activeDate: [''],
+            expiryDate: [''],
+            isExpiryDate: [false]
+        });
+    }
 }

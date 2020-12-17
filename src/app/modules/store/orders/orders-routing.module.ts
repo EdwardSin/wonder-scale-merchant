@@ -22,11 +22,11 @@ const routes: Routes = [{
       data: { title: 'customers', breadcrumb: 'Customers' },
       loadChildren: () => import('./customers/customers.module').then(m => m.CustomersModule)
     },
-    // {
-    //   path: 'promotions',
-    //   data: { title: 'promotions', breadcrumb: 'Promotions' },
-    //   loadChildren: () => import('./promotions/promotions.module').then(m => m.PromotionsModule)
-    // },
+    {
+      path: 'promotions',
+      data: { title: 'promotions', breadcrumb: 'Promotions' },
+      loadChildren: () => import('./promotions/promotions.module').then(m => m.PromotionsModule)
+    }
   ]
 }];
 

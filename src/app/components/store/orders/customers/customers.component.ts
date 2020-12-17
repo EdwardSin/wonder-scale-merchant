@@ -84,7 +84,6 @@ export class CustomersComponent implements OnInit {
       });
   }
   setupCustomer() {
-    this.form.reset();
     if (this.selectedCustomer) {
       this.form.patchValue({
         firstName: this.selectedCustomer.firstName,
@@ -244,8 +243,15 @@ export class CustomersComponent implements OnInit {
   navigate(event) {
     this.router.navigate([], { queryParams: {page: event}, queryParamsHandling: 'merge' });
   }
-  openModifyCustomerModal(obj?) {
+  resetForm() {
+    this.form.reset();
+    this.selectedCustomer = null;
     this.isDefaultCustomerDetailsChecked = false;
+    this.form.get('deliveryFirstName').enable();
+    this.form.get('deliveryLastName').enable();
+  }
+  openModifyCustomerModal(obj?) {
+    this.resetForm();
     if (obj) {
       this.selectedCustomer = obj
       this.setupCustomer();
