@@ -125,7 +125,7 @@ export class WsOrderCardComponent implements OnInit {
     event.stopPropagation();
     var tempInput = document.createElement("input");
     tempInput.style.cssText = "position: absolute; left: -1000px; top: -1000px";
-    tempInput.value = environment.URL + 'order/?receiptId=' + this.item._id;
+    tempInput.value = environment.URL + 'order/?s_id=' + this.item._id + '&r_id=' + this.item.receiptId;
     document.body.appendChild(tempInput);
     tempInput.select();
     document.execCommand("copy");
