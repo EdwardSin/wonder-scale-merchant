@@ -16,7 +16,7 @@
     <button class="btn btn-sm btn-controller mr-3" (click)="selectTabAndRefreshReceipts('cancelled')" [class.selected]="selectedTab == 'cancelled'">Cancelled</button>
 </div>
 <div class="row no-gutters" *ngIf="allOrders.length && !loading.isRunning(); else loadingTemplate">
-    <div class="col-lg-2 col-md-3 col-sm-4 p-2" *ngFor="let order of allOrders">
+    <div class="col-lg-2 col-md-3 col-sm-4 p-2" *ngFor="let order of allOrders; trackBy: trackOrderId">
         <ws-order-card [item]="order" [onOrderInfoModalClick]="openEditOrderModal.bind(this, order)"></ws-order-card>
     </div>
 </div>
