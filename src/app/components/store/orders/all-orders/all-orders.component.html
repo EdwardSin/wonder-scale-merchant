@@ -1,0 +1,43 @@
+<h4 class="ws-title">All Orders</h4>
+<search-bar class="d-inline-block mr-2 mb-3" [placeholder]="'Search ID, Name...'" [searchAttributes]="['name', 'id']" [items]="allOrders" [searchKeyword]="searchController.searchKeyword"></search-bar>
+<button class="btn btn-sm btn-controller float-right ml-2" title="View flow chart" (click)="isHelpModalOpened = true">
+    <span class="fas fa-question-circle d-inline-block"></span>
+</button>
+<button class="btn btn-sm btn-controller float-right" (click)="openCreateOrderModal()">
+    <span class="fas fa-plus mr-2 d-inline-block"></span>Add New
+</button>
+<div class="row no-gutters mb-2">
+    <button class="btn btn-sm btn-controller mr-3" (click)="selectTabAndRefreshReceipts('all')" [class.selected]="selectedTab == 'all'">All</button>
+    <button class="btn btn-sm btn-controller mr-3" (click)="selectTabAndRefreshReceipts('new')" [class.selected]="selectedTab == 'new'">New ({{numberOfNewOrders}})</button>
+    <button class="btn btn-sm btn-controller mr-3" (click)="selectTabAndRefreshReceipts('paid')" [class.selected]="selectedTab == 'paid'">Paid ({{numberOfPaidOrders}})</button>
+    <button class="btn btn-sm btn-controller mr-3" (click)="selectTabAndRefreshReceipts('in_progress')" [class.selected]="selectedTab == 'in_progress'">In Progress ({{numberOfInProgressOrders}})</button>
+    <button class="btn btn-sm btn-controller mr-3" (click)="selectTabAndRefreshReceipts('delivered')" [class.selected]="selectedTab == 'delivered'">Delivered ({{numberOfDeliveryOrders}})</button>
+    <button class="btn btn-sm btn-controller mr-3" (click)="selectTabAndRefreshReceipts('completed')" [class.selected]="selectedTab == 'completed'">Completed</button>
+    <button class="btn btn-sm btn-controller mr-3" (click)="selectTabAndRefreshReceipts('cancelled')" [class.selected]="selectedTab == 'cancelled'">Cancelled</button>
+</div>
+<div class="row no-gutters" *ngIf="allOrders.length && !loading.isRunning(); else loadingTemplate">
+    <div class="col-lg-2 col-md-3 col-sm-4 p-2" *ngFor="let order of allOrders">
+        <ws-order-card [item]="order" [onOrderInfoModalClick]="openEditOrderModal.bind(this, order)"></ws-order-card>
+    </div>
+</div>
+
+<ng-template #loadingTemplate>
+    <ng-container *ngIf="loading.isRunning(); else noOrder">
+        <ws-spinner class="text-center d-block w-100" style="padding-top: 10vh; padding-bottom: 10vh" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>
+    </ng-container>
+</ng-template>
+
+<ng-template #noOrder>
+    <div class="text-center w-100">
+        <h6 class="py-5">No Order</h6>
+    </div>
+</ng-template>
+
+<ws-modal *ngIf="isHelpModalOpened" [(isOpened)]="isHelpModalOpened" [maxWidth]="700">
+    <div class="pt-3" modalBody>
+        <img style="max-width: 100%" class="center d-block" src="assets/images/jpg/flowchart.jpg" alt="flow chart" />
+    </div>
+</ws-modal>
+
+<modify-order-modal [(isOpened)]="isModifyOrderModalOpened" [item]="selectedItem"></modify-order-modal>
+<order-info-modal [(isOpened)]="isOrderInfoModalOpened" [item]="selectedItem"></order-info-modal>

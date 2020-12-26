@@ -1,0 +1,98 @@
+<div class="ws-order-card-container row no-gutters justify-content-between h-100" style="flex-direction: column;" (click)="onOrderInfoModalClick()">
+    <p class="mb-0 ws-order-title text-break">
+        <span *ngIf="item?.customer?.firstName && item?.customer?.lastName">{{item?.customer?.firstName + ' ' + item?.customer?.lastName}}</span>
+        <span *ngIf="!item?.customer?.firstName || !item?.customer?.lastName">{{item?.receiptId}}</span>
+    </p>
+    <div class="row no-gutters justify-content-between">
+        <div class="col">
+            <ng-container [ngSwitch]="item.status">
+                <span *ngSwitchCase="'new'" class="badge rounded-pill badge-light">New</span>
+                <span *ngSwitchCase="'paid'" class="badge rounded-pill badge-warning">Paid</span>
+                <span *ngSwitchCase="'in_progress'" class="badge rounded-pill badge-warning">In Progress</span>
+                <span *ngSwitchCase="'delivered'" class="badge rounded-pill badge-warning">Delivered</span>
+                <span *ngSwitchCase="'cancelled'" class="badge rounded-pill badge-danger">Cancelled</span>
+                <span *ngSwitchCase="'refunded'" class="badge rounded-pill badge-danger">Refunded</span>
+                <span *ngSwitchCase="'completed'" class="badge rounded-pill badge-success">Completed</span>
+            </ng-container>
+            <span class="ws-order-id">{{ item.receiptId }}</span>
+        </div>
+        <div>
+            <ng-container [ngSwitch]="item.status">
+                <div *ngSwitchCase="'new'" class="btn-group">
+                    <button class="btn btn-sm mt-2 btn-controller" [disabled]="statusLoading.isRunning()" (click)="$event.stopPropagation(); isPayModalOpened = true">Pay</button>
+                    <button class="btn btn-sm mt-2 btn-controller btn-controller-icon" [disabled]="statusLoading.isRunning()" (click)="copy($event)">
+                        <span class="fas fa-copy"></span>
+                    </button>
+                </div>
+                <div *ngSwitchCase="'paid'" class="btn-group">
+                    <button class="btn btn-sm mt-2 btn-controller" [disabled]="statusLoading.isRunning()" (click)="confirmOrder($event)">Confirm</button>
+                    <button class="btn btn-sm mt-2 btn-controller btn-controller-icon" [disabled]="statusLoading.isRunning()" (click)="$event.stopPropagation(); isPayslipModalOpened = true">
+                        <span class="fas fa-receipt" [class.text-success]="item.payslip"></span>
+                    </button>
+                </div>
+                <div *ngSwitchCase="'in_progress'" class="btn-group">
+                    <button class="btn btn-sm mt-2 btn-controller" [disabled]="statusLoading.isRunning()" (click)="deliveryOrder($event)">Delivered</button>
+                    <button class="btn btn-sm mt-2 btn-controller btn-controller-icon" [disabled]="statusLoading.isRunning()" (click)="openEtaDeliveryDateModal($event)">
+                        <span class="fas" [ngClass]="item?.delivery?.etaDate ? 'fa-calendar-check text-success' : 'fa-calendar-alt'"></span>
+                    </button>
+                </div>
+                <button *ngSwitchCase="'delivered'" class="btn btn-sm mt-2 btn-controller" [disabled]="statusLoading.isRunning()" (click)="completeOrder($event)">Complete</button>
+            </ng-container>
+        </div>
+    </div>
+</div>
+
+<ws-modal *ngIf="isPayslipModalOpened" [(isOpened)]="isPayslipModalOpened" [maxWidth]="700">
+    <div class="pt-3" modalBody>
+        <img *ngIf="!receiptLoading.isRunning() && item.payslip; else receiptLoadingTemplate" class="w-100" [src]="environment.IMAGE_URL + item.payslip" alt="flow chart" />
+    </div>
+</ws-modal>
+<ws-modal *ngIf="isPayModalOpened" [isCloseIconDisplayed]="false" [(isOpened)]="isPayModalOpened" [maxWidth]="400">
+    <div class="pt-3" modalBody>
+        <mat-select class="form-control form-control-sm" placeholder="Payment Method" [(ngModel)]="paymentMethod">
+            <mat-option [value]="'cash'">Cash</mat-option>
+            <mat-option [value]="'bank_in'">Bank In</mat-option>
+            <mat-option [value]="'cod'">Cash on delivery</mat-option>
+        </mat-select>
+        <p class="mb-3 font-9">Order will be updated to <span class="text-warning">in progress</span> status without further confirmation.</p>
+        <div>
+            <button class="btn btn-sm btn-controller float-right" (click)="isPayModalOpened = false">Cancel</button>
+            <button [disabled]="statusLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="payOrder()">
+                <ws-spinner class="mr-2" *ngIf="statusLoading.isRunning()" [width]="15" [height]="15" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>Confirm</button>
+        </div>
+    </div>
+</ws-modal>
+
+<ws-modal *ngIf="isEtaDeliveryDateModalOpened" [isCloseIconDisplayed]="false" [(isOpened)]="isEtaDeliveryDateModalOpened" [maxWidth]="350">
+    <form class="pt-3" [formGroup]="form" modalBody>
+        <h6 class="h6">ETA Delivery Date</h6>
+        <input (click)="fromPicker.open()" placeholder="Date" [min]="todayDate" class="form-control form-control-sm mb-2" [matDatepicker]="fromPicker" formControlName="etaDate"/>
+        <mat-datepicker #fromPicker [startAt]="todayDate" startView="month"></mat-datepicker>
+        <div class="input-group mb-3" style="width: 150px">
+            <mat-select class="form-control form-control-sm" placeholder="HH" formControlName="etaDateTimeHour">
+                <mat-option [value]="n" *ngFor="let n of hours">{{n}}
+                </mat-option>
+            </mat-select>
+            <mat-select class="form-control form-control-sm" placeholder="MM" formControlName="etaDateTimeMin">
+                <mat-option [value]="n" *ngFor="let n of mins">{{n}}
+                </mat-option>
+            </mat-select>
+        </div>
+        <div>
+            <button class="btn btn-sm btn-controller float-right" (click)="isEtaDeliveryDateModalOpened = false">Close</button>
+            <button [disabled]="editEtaLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="editEtaDateTime()">
+                <ws-spinner class="mr-2" *ngIf="editEtaLoading.isRunning()" [width]="15" [height]="15" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>Confirm</button>
+        </div>
+    </form>
+</ws-modal>
+
+<ng-template #receiptLoadingTemplate>
+    <ws-loading *ngIf="receiptLoading.isRunning(); else noReceiptTemplate"></ws-loading>
+</ng-template>
+<ng-template #noReceiptTemplate>
+    <div class="w-100">
+        <div class="h5 text-muted text-center font-weight-light" style="padding-top: 10vh; padding-bottom: 10vh">
+          No Receipt found
+        </div>
+    </div>
+</ng-template>

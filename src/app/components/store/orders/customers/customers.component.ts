@@ -107,7 +107,7 @@ export class CustomersComponent implements OnInit {
       if (this.selectedCustomer.address) {
         this.form.patchValue({
           address: this.selectedCustomer.address.address,
-          postCode: this.selectedCustomer.address.postCode,
+          postcode: this.selectedCustomer.address.postcode,
           state: this.selectedCustomer.address.state,
           country: this.selectedCustomer.address.country
         })
@@ -127,7 +127,7 @@ export class CustomersComponent implements OnInit {
   }
   modifyCustomer() {
     let address = this.form.controls['address'].value;
-    let postCode = this.form.controls['postCode'].value;
+    let postcode = this.form.controls['postcode'].value;
     let state = this.form.controls['state'].value;
     let country = this.form.controls['country'].value;
     if (this.form.status == 'VALID') {
@@ -148,7 +148,7 @@ export class CustomersComponent implements OnInit {
       if (address) {
         obj['address'] = {
           address,
-          postCode,
+          postcode,
           state,
           country
         }
@@ -192,7 +192,7 @@ export class CustomersComponent implements OnInit {
         WsToastService.toastSubject.next({ content: 'Please enter a valid email!', type: 'danger'});
       }
       else if (this.form.controls['address'].errors || 
-          this.form.controls['postCode'].errors || 
+          this.form.controls['postcode'].errors || 
           this.form.controls['state'].errors || 
           this.form.controls['country'].errors) {
           WsToastService.toastSubject.next({ content: 'All related address fields must be filled!', type: 'danger'});

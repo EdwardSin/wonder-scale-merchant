@@ -107,7 +107,6 @@
     &:active{
     }
 }
-
 .dropdown-menu{
     border: 0;
     box-shadow: 0 3px 5px #888;
@@ -115,6 +114,10 @@
 .dropdown.show .dropdown-menu {
     transition-duration: .2s !important;
     transition-property: opacity !important;
+}
+.form-control.disabled{
+    pointer-events: none;
+    background-color: #e9ecef;
 }
 
 @media (max-width: 992px) {

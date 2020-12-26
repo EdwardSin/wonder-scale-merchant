@@ -9,14 +9,14 @@ const routes: Routes = [{
   children: [
     {
       path: '',
-      redirectTo: 'customers',
+      redirectTo: 'all-orders',
       pathMatch: 'full'
     },
-    // {
-    //   path: 'all-orders',
-    //   data: { title: 'all-orders', breadcrumb: 'All Orders' },
-    //   loadChildren: () => import('./all-orders/all-orders.module').then(m => m.AllOrdersModule)
-    // },
+    {
+      path: 'all-orders',
+      data: { title: 'all-orders', breadcrumb: 'All Orders' },
+      loadChildren: () => import('./all-orders/all-orders.module').then(m => m.AllOrdersModule)
+    },
     { 
       path: 'customers',
       data: { title: 'customers', breadcrumb: 'Customers' },
