@@ -7,6 +7,7 @@
 - 2020-12-26                                -
 ---------------------------------------------
 .: WSM: Feature: Invoice Module (WSM-250)
+.: WSM: Task: CLONE - Prevent receiptId got brute force and customer information being exposed (WSM-259)
 
 ---------------------------------------------
 - 2020-12-17                                -
