@@ -69,6 +69,14 @@ export class WsOrderCardComponent implements OnInit {
       this.authOrderContributorService.refreshOrderReceipts.next(true);
     });
   }
+  rejectPayslip(event) {
+    event.stopPropagation();
+    this.statusLoading.start();
+    this.authOrderContributorService.updateOrderReceiptStatus(this.item._id, {status: 'new'}).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.statusLoading.stop())).subscribe(result => {
+      this.item.status = 'new';
+      this.authOrderContributorService.refreshOrderReceipts.next(true);
+    })
+  }
   openEtaDeliveryDateModal(event) {
     event.stopPropagation();
     this.isEtaDeliveryDateModalOpened = true;
