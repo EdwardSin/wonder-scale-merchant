@@ -1,3 +1,4 @@
+
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from "@angular/forms";
 import { AddressValidation } from '@validations/validators/addressvalidation';
 import { DateValidation } from "../validations/validators/datevalidation";
@@ -223,9 +224,9 @@ export class WSFormBuilder {
             deliveryFirstName: ['', [Validators.maxLength(36)]],
             deliveryLastName: ['', [Validators.maxLength(36)]],
             address: ['', [Validators.maxLength(128)]],
-            postCode: ['', [Validators.maxLength(36)]],
+            postcode: ['', [Validators.maxLength(36)]],
             state: ['', [Validators.maxLength(36)]],
-            country: ['', [Validators.maxLength(3)]],
+            country: ['MYS', [Validators.maxLength(3)]],
         }, {
             validator: [AddressValidation.validAddress]
         })
@@ -241,6 +242,32 @@ export class WSFormBuilder {
             activeDate: [''],
             expiryDate: [''],
             isExpiryDate: [false]
+        });
+    }
+    public static createOrderForm() {
+        let formBuilder = new FormBuilder;
+        return formBuilder.group({
+            deliveryFee: ['', [Validators.pattern("^[0-9.,]+$")]],
+            firstName: ['', [Validators.maxLength(36)]],
+            lastName: ['', [Validators.maxLength(36)]],
+            address: ['', [Validators.maxLength(128)]],
+            postcode: ['', [Validators.maxLength(36)]],
+            state: ['', [Validators.maxLength(36)]],
+            country: ['MYS', [Validators.maxLength(3)]],
+            phoneNumber: ['', [Validators.maxLength(36)]],
+            isCustomerSaved: [false],
+            etaDate: [''],
+            etaDateTimeHour: [''],
+            etaDateTimeMin: [''],
+            promotion: [''],
+            itemName: [''],
+            itemType: [''],
+            itemPrice: ['', [Validators.pattern("^[0-9.,]+$")]],
+            itemQuantity: ['', [Validators.pattern("^[0-9]+$")]],
+            status: ['new', Validators.required],
+            remark: ['', Validators.maxLength(300)],
+        }, {
+            validator: [AddressValidation.validAddressWithoutCountry]
         });
     }
 }

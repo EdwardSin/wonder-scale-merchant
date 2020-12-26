@@ -28,8 +28,11 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatNativeDateModule } from '@angular/material/core';
 import { BusinessLocationComponent } from '@elements/business-location/business-location.component';
 import { DirectiveModule } from '../directive/directive.module';
-// import { WsOrderCardComponent } from '@elements/ws-order-card/ws-order-card.component';
-
+import { WsOrderCardComponent } from '@elements/ws-order-card/ws-order-card.component';
+import { WsSearchSelectComponent } from '@elements/ws-search-select/ws-search-select.component';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { MatSelectInfiniteScrollModule } from 'ng-mat-select-infinite-scroll';
+import { OrderReceiptComponent } from '@elements/order-receipt/order-receipt.component';
 
 
 @NgModule({
@@ -43,15 +46,17 @@ import { DirectiveModule } from '../directive/directive.module';
     WsSpinnerHDotComponent,
     WsModalComponent,
     WsToastComponent,
-    // WsOrderCardComponent,
+    WsOrderCardComponent,
     WsPaginationComponent,
     WsUploaderComponent,
     WsMultipleInputComponent,
+    WsSearchSelectComponent,
     WsDropdownComponent,
     SearchBarComponent,
     BusinessTimetableComponent,
     ConfirmModalComponent,
-    BusinessLocationComponent
+    BusinessLocationComponent,
+    OrderReceiptComponent
   ],
   imports: [
     AgmCoreModule,
@@ -65,6 +70,8 @@ import { DirectiveModule } from '../directive/directive.module';
     MatDatepickerModule,
     MatTabsModule,
     MatNativeDateModule,
+    NgxMatSelectSearchModule,
+    MatSelectInfiniteScrollModule,
     DirectiveModule
   ],
   exports: [
@@ -77,15 +84,17 @@ import { DirectiveModule } from '../directive/directive.module';
     WsSpinnerHDotComponent,
     WsModalComponent,
     WsToastComponent,
-    // WsOrderCardComponent,
+    WsOrderCardComponent,
     WsPaginationComponent,
     WsUploaderComponent,
     WsMultipleInputComponent,
+    WsSearchSelectComponent,
     WsDropdownComponent,
     SearchBarComponent,
     BusinessTimetableComponent,
     ConfirmModalComponent,
-    BusinessLocationComponent
+    BusinessLocationComponent,
+    OrderReceiptComponent
   ]
 })
 export class ElementModule { }
