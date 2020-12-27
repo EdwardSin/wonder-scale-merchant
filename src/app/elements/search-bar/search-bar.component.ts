@@ -75,10 +75,11 @@ export class SearchBarComponent implements OnInit {
   navigate() {
     let queryParams = {};
     if(this.searchKeyword) {
-      queryParams = {...queryParams, s_keyword: this.searchKeyword};
+      queryParams = {...queryParams, s_keyword: this.searchKeyword, page: 1};
+    } else {
+      queryParams = {...queryParams, s_keyword: '', page: 1};
     }
-    queryParams = {...queryParams, page: 1};
-    this.router.navigate([], { queryParams });
+    this.router.navigate([], { queryParams, queryParamsHandling: 'merge' });
   }
   ngOnDestroy() {
     this.ngUnsubscribe.next();

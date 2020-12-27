@@ -17,12 +17,13 @@ export class AllOrdersComponent implements OnInit {
   allOrders = [];
   keyword: string = '';
   selectedTab: string = 'new';
-  searchController: Searchbar = new Searchbar;
   isHelpModalOpened: boolean;
   isModifyOrderModalOpened: boolean;
   isOrderInfoModalOpened: boolean;
   selectedItem: any;
   loading: WsLoading = new WsLoading;
+  _statusColumns = sessionStorage.getItem('shownStatusColumns') || '["new", "paid", "in_progress", "delivered"]';
+  statusColumns = JSON.parse(this._statusColumns);
   numberOfNewOrders: number = 0;
   numberOfPaidOrders: number = 0;
   numberOfInProgressOrders: number = 0;
@@ -30,11 +31,9 @@ export class AllOrdersComponent implements OnInit {
   private ngUnsubscribe: Subject<any> = new Subject;
   refreshOrderReceiptsInterval: Subscription;
   constructor(private authOrderControbutorService: AuthOrderContributorService, private ref: ChangeDetectorRef,
-    private router: Router, private route: ActivatedRoute,
-    private authItemContributorService: AuthItemContributorService
+    private router: Router, private route: ActivatedRoute
     ) { 
     this.allOrders = this.authOrderControbutorService.allOrders;
-    
   }
   ngOnInit(): void {
     this.selectedTab = this.route.snapshot.queryParams['tab'] || 'new';
@@ -56,9 +55,13 @@ export class AllOrdersComponent implements OnInit {
     }
     this.refreshOrderReceipts();
   }
-  getOrderReceipts() {
-    this.authOrderControbutorService.getOrderReceipts({status: this.selectedTab, keyword: this.keyword}).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.loading.stop())).subscribe(result => {
-      if (result ) {
+  getOrderReceipts(loading=false) {
+    let statuses = this.selectedTab == 'all' ? this.statusColumns: [this.selectedTab];
+    if (loading) {
+      this.loading.start();
+    }
+    this.authOrderControbutorService.getOrderReceipts({statuses, keyword: this.keyword}).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.loading.stop())).subscribe(result => {
+      if (result) {
         this.allOrders = result['result'];
         if (result['meta']) {
           this.numberOfNewOrders = result['meta']['numberOfNewOrders'];
@@ -70,7 +73,9 @@ export class AllOrdersComponent implements OnInit {
     });
   }
   refreshOrderReceipts() {
-    this.refreshOrderReceiptsInterval = interval(60 * 1000).pipe(switchMap(() => {return this.authOrderControbutorService.getOrderReceipts({status: this.selectedTab, keyword: this.keyword})}),
+    this.refreshOrderReceiptsInterval = interval(60 * 1000).pipe(switchMap(() => {
+      let statuses = this.selectedTab == 'all' ? this.statusColumns: [this.selectedTab];
+      return this.authOrderControbutorService.getOrderReceipts({statuses: statuses, keyword: this.keyword})}),
     takeUntil(this.ngUnsubscribe)).subscribe(result => {
       if (result ) {
         this.allOrders = result['result'];
@@ -95,6 +100,15 @@ export class AllOrdersComponent implements OnInit {
     this.isOrderInfoModalOpened = true;
     this.selectedItem = order;
     this.ref.detectChanges();
+  }
+  triggerStatusColumns(value) {
+    if (this.statusColumns.includes(value)) {
+      this.statusColumns = this.statusColumns.filter(x => x != value);
+    } else {
+      this.statusColumns.push(value);
+    }
+    this.getOrderReceipts(true);
+    sessionStorage.setItem('shownStatusColumns', JSON.stringify(this.statusColumns));
   }
   trackOrderId(index: number, orderReceipt: OrderReceipt) {
     return orderReceipt._id;

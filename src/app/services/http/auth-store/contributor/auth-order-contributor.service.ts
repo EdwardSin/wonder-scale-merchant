@@ -14,12 +14,7 @@ export class AuthOrderContributorService {
   constructor(private http: HttpClient, private accessTokenService: AccessTokenService) { }
 
   getOrderReceipts(obj) {
-    return this.http.get(AuthOrderReceiptContributorUrl.getOrderReceiptsUrl, {
-      ...this.accessTokenService.getAccessToken(),
-      params: {
-        ...obj
-      }
-    });
+    return this.http.post(AuthOrderReceiptContributorUrl.getOrderReceiptsUrl, obj, this.accessTokenService.getAccessToken());
   }
   addOrderReceipt(order) {
     return this.http.post(AuthOrderReceiptContributorUrl.addOrderReceipteUrl, order, this.accessTokenService.getAccessToken());
