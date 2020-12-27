@@ -7,7 +7,8 @@ export class URL {
     static AUTH_CATEGORY_CONTRIBUTOR_URL = '/api/auth-stores/category-contributors';
     static AUTH_CARD_CONTRIBUTOR_URL = '/api/auth-stores/card-contributors';
     static AUTH_DEFAULT_SETTING_CONTRIBUTOR_URL = '/api/auth-stores/default-setting-contributors';
-    static AUTH_Invoice_CONTRIBUTOR_URL = '/api/auth-stores/invoice-contributors';
+    static AUTH_INVOICE_CONTRIBUTOR_URL = '/api/auth-stores/invoice-contributors';
+    static AUTH_INVOICE_CONFIGURATION_CONTRIBUTOR_URL = '/api/auth-stores/invoice-configuration-contributors';
     static AUTH_CUSTOMER_CONTRIBUTOR_URL = '/api/auth-stores/customer-contributors';
     static AUTH_PROMOTION_CONTRIBUTOR_URL = '/api/auth-stores/promotion-contributors';
     static AUTH_ITEM_CONTRIBUTOR_URL = '/api/auth-stores/item-contributors';
@@ -204,10 +205,14 @@ export class AuthPromotionContributorUrl {
     static removePromotionUrl = URL.AUTH_PROMOTION_CONTRIBUTOR_URL + '/';
 }
 export class AuthInvoiceContributorUrl {
-    static getInvoicesUrl = URL.AUTH_Invoice_CONTRIBUTOR_URL + '/list';
-    static addInvoiceUrl = URL.AUTH_Invoice_CONTRIBUTOR_URL + '/';
-    static editInvoiceUrl = URL.AUTH_Invoice_CONTRIBUTOR_URL + '/';
-    static updateInvoiceStatusUrl = URL.AUTH_Invoice_CONTRIBUTOR_URL + '/change-status';
+    static getInvoicesUrl = URL.AUTH_INVOICE_CONTRIBUTOR_URL + '/list';
+    static addInvoiceUrl = URL.AUTH_INVOICE_CONTRIBUTOR_URL + '/';
+    static editInvoiceUrl = URL.AUTH_INVOICE_CONTRIBUTOR_URL + '/';
+    static updateInvoiceStatusUrl = URL.AUTH_INVOICE_CONTRIBUTOR_URL + '/change-status';
+}
+export class AuthInvoiceConfigurationContributorUrl {
+    static getInvoiceConfigurationUrl = URL.AUTH_INVOICE_CONFIGURATION_CONTRIBUTOR_URL + '/';
+    static addInvoiceConfigurationUrl = URL.AUTH_INVOICE_CONFIGURATION_CONTRIBUTOR_URL + '/';
 }
 
 // export class AuthVoucherContributorUrl {

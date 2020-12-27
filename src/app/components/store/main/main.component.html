@@ -72,14 +72,17 @@
           <li class="ws-main-nav-sub-list__title">
             <a [routerLink]="['invoices']">Invoices</a>
           </li>
-          <li>
+          <li *ngIf="isInvoiceEnabled">
             <a [routerLinkActive]="'active'" [routerLink]="['invoices', 'all-invoices']">All Invoices</a>
           </li>
-          <li>
+          <li *ngIf="isInvoiceEnabled">
             <a [routerLinkActive]="'active'" [routerLink]="['invoices', 'promotions']">Promotions</a>
           </li>
-          <li>
+          <li *ngIf="isInvoiceEnabled">
             <a [routerLinkActive]="'active'" [routerLink]="['invoices', 'customers']">Customers</a>
+          </li>
+          <li *ngIf="isInvoiceEnabled">
+            <a [routerLinkActive]="'active'" [routerLink]="['invoices', 'accounting']">Accounting</a>
           </li>
         </ul>
       </li>

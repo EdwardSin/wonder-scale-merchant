@@ -26,6 +26,11 @@ const routes: Routes = [{
       path: 'promotions',
       data: { title: 'promotions', breadcrumb: 'Promotions' },
       loadChildren: () => import('./promotions/promotions.module').then(m => m.PromotionsModule)
+    },
+    {
+      path: 'accounting',
+      data: { title: 'accounting', breadcrumb: 'Accounting' },
+      loadChildren: () => import('./accounting/accounting.module').then(m => m.AccountingModule)
     }
   ]
 }];

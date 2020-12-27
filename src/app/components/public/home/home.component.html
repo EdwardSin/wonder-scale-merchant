@@ -58,7 +58,7 @@
     <div class="text-center">
       <h1 class="mb-4 h3 font-weight-light">Digitalize Your Business</h1>
       <div class="row no-gutters">
-        <div class="col-lg-2 col-4 p-lg-4 p-2 offset-lg-1">
+        <div class="col-lg-2 col-4 p-lg-4 p-2">
           <div class="digitalize" [class.active]="selectedTab == 'qrcode'" (click)="selectedTab = 'qrcode'">
             <span class="fas fa-qrcode digitalize-icon"></span>
             <p class="digitalize-text d-none d-lg-block" style="line-height: 2rem">QR Code</p>
@@ -86,6 +86,12 @@
           <div class="digitalize" [class.active]="selectedTab == 'customerTacking'" (click)="selectedTab = 'customerTacking'">
             <span class="fas fa-chart-line digitalize-icon"></span>
             <p class="digitalize-text d-none d-lg-block">Customer Tracking</p>
+          </div>
+        </div>
+        <div class="col-lg-2 col-4 p-lg-4 p-2">
+          <div class="digitalize" [class.active]="selectedTab == 'invoice'" (click)="selectedTab = 'invoice'">
+            <span class="fas fa-clipboard-list digitalize-icon"></span>
+            <p class="digitalize-text d-none d-lg-block" style="line-height: 2rem">E-invoice</p>
           </div>
         </div>
       </div>
@@ -132,6 +138,14 @@
             <span class="tab-label">Customer Tracking</span>
           </div>
           <p class="tab-text">View the number daily customers who viewing your page.</p>
+          <button class="btn btn-start" (click)="navigateToJoinUs()">Start now!</button>
+        </div>
+        <div *ngSwitchCase="'invoice'" [@openClose]="'open'">
+          <div class="mb-3 tab">
+            <span class="fas fa-clipboard-list tab-icon mr-3"></span>
+            <span class="tab-label">E-invoice</span>
+          </div>
+          <p class="tab-text">Easily to create E-invoice to track orders.</p>
           <button class="btn btn-start" (click)="navigateToJoinUs()">Start now!</button>
         </div>
       </ng-container>
