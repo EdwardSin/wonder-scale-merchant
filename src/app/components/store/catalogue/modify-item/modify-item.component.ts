@@ -122,7 +122,7 @@ export class ModifyItemComponent implements OnInit {
     if (routeParts[1]['title'] == 'cat') {
       let categoryName = RoutePartsService.parseText(routeParts[0]);
       let category = categories.find(category => category.name == categoryName);
-      if (category){
+      if (category && !this.currentItem) {
         this.itemGroup.controls['categories'].setValue([category._id]);
       }
     }
