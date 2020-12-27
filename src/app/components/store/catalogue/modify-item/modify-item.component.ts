@@ -148,11 +148,7 @@ export class ModifyItemComponent implements OnInit {
     let brand = this.itemGroup.get('brand');
     let priceRegex = /^\d*(?:\.\d{1,2})?$/;
     let intergerRegex = /^\d+$/;
-    if (refId.errors && refId.errors.required) {
-      WsToastService.toastSubject.next({ content: 'SKU is required!', type: 'danger' });
-      return false;
-    }
-    else if (refId.errors && refId.errors.maxlength) {
+    if (refId.errors && refId.errors.maxlength) {
       WsToastService.toastSubject.next({ content: 'SKU is too long. Max 36 characters!', type: 'danger' });
       return false;
     }

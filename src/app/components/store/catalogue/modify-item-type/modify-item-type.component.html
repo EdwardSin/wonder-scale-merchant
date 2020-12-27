@@ -44,7 +44,7 @@
                   <div class="all-item-container ws-drag-list" cdkDropList
                     (cdkDropListDropped)="dropItemTypeImages($event, itemTypesForm.controls.itemTypes.value[i].images)"
                     cdkDropListOrientation="horizontal">
-                    <div class="ws-drag-box mr-1 ml-1 border"
+                    <div class="ws-drag-box border my-0 mx-1"
                       *ngFor="let image of itemTypesForm.controls.itemTypes.value[i].images" cdkDrag>
                       <div [ngSwitch]="image?.type" class="center">
                         <div *ngSwitchCase="'url'" class="h-100 position-relative">
