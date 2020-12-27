@@ -1,1 +1,37 @@
-<router-outlet></router-outlet>
+<div class="d-flex justify-content-center align-items-center" *ngIf="!isInvoiceEnabled && !loading.isRunning(); else loadingTemplate">
+    <div *ngIf="phase.isStep(0)">
+        <div class="text-center pt-5 mt-5">
+            <span class="fas fa-clipboard-list"></span>
+        </div>
+        <h4 class="my-4 text-center">E-Invoicing</h4>
+        <ol class="font-9">
+            <li>Create invoice and place your customer order.</li>
+            <li>Merchant and customer can easily track the orders.</li>
+            <li>Easily to view and export monthly account.</li>
+            <!-- <li>Order analysis to check the hot items.</li> -->
+        </ol>
+        <div class="text-center py-2">
+            <button class="btn btn-start" (click)="phase.next()">Get started now</button>
+        </div>
+    </div>
+    <form *ngIf="phase.isStep(1)" class="pt-5 py-5">
+        <p class="font-8 mb-2">Start invoice ID with the prefix below:</p>
+        <div class="mb-3 input-group">
+            <input name="prefix" class="form-control d-inline-block" style="width: 70px" placeholder="Prefix" maxlength="3" [(ngModel)]="prefix" />
+            <input name="prefix" class="form-control d-inline-block input-group-append" style="flex-basis: 60%" disabled value="000001" />
+        </div>
+        <button class="btn btn-sm btn-controller" (click)="phase.previous()">Back</button>
+        <button class="btn btn-sm btn-controller float-right" (click)="addInvoiceConfiguration()">
+            <ws-spinner class="mr-2" *ngIf="addLoading.isRunning()" [width]="15" [height]="15" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>Start</button>
+    </form>
+</div>
+
+<ng-template #loadingTemplate>
+    <ng-container *ngIf="loading.isRunning()">
+        <ws-spinner class="text-center d-block w-100" style="padding-top: 10vh; padding-bottom: 10vh" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>
+    </ng-container>
+  </ng-template>
+
+<ng-container *ngIf="isInvoiceEnabled">
+    <router-outlet></router-outlet>
+</ng-container>

@@ -15,9 +15,10 @@ import { ScreenHelper } from '@helpers/screenhelper/screen.helper';
 import { WsLoading } from '@elements/ws-loading/ws-loading';
 import _ from 'lodash';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { finalize, takeUntil } from 'rxjs/operators';
 import { SharedNavbarService } from '@services/shared/shared-nav-bar.service';
 import { ScreenService } from '@services/general/screen.service';
+import { AuthInvoiceConfigurationContributorService } from '@services/http/auth-store/contributor/auth-invoice-configuration-contributor.service';
 
 @Component({
   selector: 'app-main',
@@ -34,6 +35,7 @@ export class MainComponent implements OnInit {
   loading: WsLoading = new WsLoading;
   isAdminAuthorized: boolean;
   isMobileSize: boolean;
+  isInvoiceEnabled: boolean;
   contributorController: ContributorController = new ContributorController;
   unreplied_quotations = [];
 
@@ -46,6 +48,7 @@ export class MainComponent implements OnInit {
     private storeAuthorizationService: StoreAuthorizationService,
     private screenService: ScreenService,
     private sharedNavbarService: SharedNavbarService,
+    private authInvoiceConfigurationContributorService: AuthInvoiceConfigurationContributorService,
     private ref: ChangeDetectorRef) {
 
   }
@@ -86,6 +89,7 @@ export class MainComponent implements OnInit {
           this.sharedStoreService.storeUsername = this.store.username;
           this.storeUsername = this.store.username;
           this.refreshContributors();
+          this.getInvoiceConfiguration();
         }
         this.loading.stop();
       })
@@ -115,6 +119,9 @@ export class MainComponent implements OnInit {
         this.unreplied_quotations = res;
       }
     })
+    this.authInvoiceConfigurationContributorService.isInvoiceEnabled.pipe(takeUntil(this.ngUnsubscribe)).subscribe(res => {
+      this.isInvoiceEnabled = res;
+    });
     this.currencyService.currencyRate
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
@@ -145,6 +152,13 @@ export class MainComponent implements OnInit {
   isAdminAuthorizedRefresh(userId: string) {
     let isAdminAuthorized = this.contributorController.existsContributors.some(x => x.user == userId && x.role == Role.Admin);
     this.storeAuthorizationService.isAdminAuthorized.next(isAdminAuthorized);
+  }
+  getInvoiceConfiguration() {
+    this.authInvoiceConfigurationContributorService.getInvoiceConfiguration().pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.loading.stop())).subscribe(result => {
+      if (result) {
+        this.authInvoiceConfigurationContributorService.isInvoiceEnabled.next(result['result'] != null);
+      }
+    });
   }
   // getUnrepliedRequests() {
   //   this.authRequestContributorService.getUnrepliedRequests().pipe(takeUntil(this.ngUnsubscribe))

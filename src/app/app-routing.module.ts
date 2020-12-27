@@ -62,7 +62,7 @@ const routes: Routes = [{
       path: 'invoices',
       canActivate: [StoreGuard],
       data: { title: 'invoices', breadcrumb: 'Invoices' },
-      loadChildren: () => import('./modules/store/invoice/invoices.module').then(m => m.InvoicesModule)
+      loadChildren: () => import('./modules/store/invoices/invoices.module').then(m => m.InvoicesModule)
     },
     // {
     //   path: 'advertising',
