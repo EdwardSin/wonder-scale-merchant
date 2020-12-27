@@ -87,6 +87,12 @@ export class WsOrderCardComponent implements OnInit {
         etaDateTimeHour: ('0' + etaDate.getHours()).slice(-2),
         etaDateTimeMin: ('0' + etaDate.getMinutes()).slice(-2)
       });
+    } else {
+      this.form.patchValue({
+        etaDate: '',
+        etaDateTimeHour: '',
+        etaDateTimeMin: ''
+      });
     }
   }
   editEtaDateTime() {
@@ -101,9 +107,19 @@ export class WsOrderCardComponent implements OnInit {
       this.authOrderContributorService.editOrderReceipt({_id: this.item._id, delivery: {etaDate}}).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.editEtaLoading.stop())).subscribe(result => {
         if (result && result['result']) {
           this.authOrderContributorService.refreshOrderReceipts.next(true);
+          this.isEtaDeliveryDateModalOpened = false;
         }
       })
     }
+  }
+  removeEtaDateTime() {
+    this.editEtaLoading.start();
+    this.authOrderContributorService.editOrderReceipt({_id: this.item._id, delivery: {etaDate: null}}).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.editEtaLoading.stop())).subscribe(result => {
+      if (result && result['result']) {
+        this.authOrderContributorService.refreshOrderReceipts.next(true);
+        this.isEtaDeliveryDateModalOpened = false;
+      }
+    })
   }
   isValidatedEtaDate(): boolean {
     let etaDate = this.form.controls['etaDate'].value;

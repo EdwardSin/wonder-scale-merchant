@@ -66,7 +66,6 @@ export class ModifyOrderModalComponent extends WsModalComponent implements OnIni
     private authOrderContributorService: AuthOrderContributorService,
     private authPromotionContributorService: AuthPromotionContributorService) {
     super();
-    this.form = WSFormBuilder.createOrderForm();
   }
   ngOnInit() {
     super.ngOnInit();
@@ -74,8 +73,12 @@ export class ModifyOrderModalComponent extends WsModalComponent implements OnIni
     this.getPromotions();
   }
   ngOnChanges(changes: SimpleChanges) {
-    if (changes && changes['isOpened'] && this.item) {
-      this.setupItem();
+    if (changes && changes['isOpened']) {
+      if (this.item) {
+        this.setupItem();
+      } else if (!this.tempOrder) {
+        this.form = WSFormBuilder.createOrderForm();
+      }
     }
   }
   setupItem() {
@@ -85,10 +88,11 @@ export class ModifyOrderModalComponent extends WsModalComponent implements OnIni
       this.form.patchValue({
         status: this.item.status,
         remark: this.item.remark,
+        deliveryOption: this.item.deliveryOption
       });
       if (!this.isEditable()) {
         this.form.get('deliveryFee').disable();
-        this.form.get('deliveryFee').disable();
+        this.form.get('deliveryOption').disable();
         this.form.get('firstName').disable();
         this.form.get('lastName').disable();
         this.form.get('address').disable();
@@ -152,7 +156,8 @@ export class ModifyOrderModalComponent extends WsModalComponent implements OnIni
       deliveryFee: '',
       status: 'new',
       itemType: 'default',
-      country: 'MYS'
+      country: 'MYS',
+      deliveryOption: 'delivery'
     });
     this.inListItems = [];
     this.notifyCalculation();
@@ -346,6 +351,18 @@ export class ModifyOrderModalComponent extends WsModalComponent implements OnIni
       }
     })
   }
+  _validatePickup() {
+    let form = this.form;
+    return form.controls['isCustomerSaved'].value && form.controls['firstName'].value && form.controls['lastName'].value && form.controls['phoneNumber'].value ||
+          (!form.controls['isCustomerSaved'].value && form.controls['firstName'].value && form.controls['lastName'].value && form.controls['phoneNumber'].value) ||
+          (!form.controls['isCustomerSaved'].value && !form.controls['phoneNumber'].value);
+  }
+  _validateDelivery() {
+    let form = this.form;
+    return form.controls['isCustomerSaved'].value && form.controls['firstName'].value && form.controls['lastName'].value && form.controls['phoneNumber'].value ||
+           (!form.controls['isCustomerSaved'].value && (form.controls['phoneNumber'].value || form.controls['address'].value || form.controls['postcode'].value ||form.controls['state'].value) && form.controls['lastName'].value && form.controls['firstName'].value) ||
+           (!form.controls['isCustomerSaved'].value && !(form.controls['phoneNumber'].value || form.controls['address'].value || form.controls['postcode'].value ||form.controls['state'].value));
+  }
   modifyItem() {
     let form = this.form;
     let etaDate = this.form.controls['etaDate'].value;
@@ -360,8 +377,8 @@ export class ModifyOrderModalComponent extends WsModalComponent implements OnIni
       WsToastService.toastSubject.next({ content: 'Please enter first name!', type: 'danger'});
       return;
     }
-    if (form.controls['isCustomerSaved'].value == true || (form.controls['phoneNumber'].value || form.controls['address'].value || form.controls['postcode'].value ||form.controls['state'].value) && !form.controls['firstName'].value && !form.controls['lastName'].value) {
-      WsToastService.toastSubject.next({ content: 'Customer name is required!', type: 'danger'});
+    if (!this._validatePickup() || !this._validateDelivery()) {
+      WsToastService.toastSubject.next({ content: 'Customer name and contact is required!', type: 'danger'});
       return;
     }
     if (this.form.controls['address'].errors || 
@@ -405,6 +422,7 @@ export class ModifyOrderModalComponent extends WsModalComponent implements OnIni
       items: this.inListItems,
       remark: form.controls['remark'].value,
       status: form.controls['status'].value,
+      deliveryOption: form.controls['deliveryOption'].value,
       isCustomerSaved: form.controls['isCustomerSaved'].value
     }
     if (this.item) {
@@ -508,11 +526,17 @@ export class ModifyOrderModalComponent extends WsModalComponent implements OnIni
     });
     return obj;
   }
+  returnToModifyOrder(tempOrder) {
+    this.isOpened = true;
+    this.isCloseIconDisplayed = false;
+
+  }
   ngOnDestroy() {
     super.ngOnDestroy();
   }
   close() {
     super.close();
+    this.tempOrder = null;
     if (this.closeCallback) {
       this.closeCallback();
     }

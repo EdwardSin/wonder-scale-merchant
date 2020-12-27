@@ -9,7 +9,7 @@
                 <span *ngSwitchCase="'new'" class="badge rounded-pill badge-light">New</span>
                 <span *ngSwitchCase="'paid'" class="badge rounded-pill badge-warning">Paid</span>
                 <span *ngSwitchCase="'in_progress'" class="badge rounded-pill badge-warning">In Progress</span>
-                <span *ngSwitchCase="'delivered'" class="badge rounded-pill badge-warning">Delivered</span>
+                <span *ngSwitchCase="'delivered'" class="badge rounded-pill badge-warning">{{ item?.deliveryOption == 'delivery' ? 'Delivered' : 'Ready to pickup'}}</span>
                 <span *ngSwitchCase="'cancelled'" class="badge rounded-pill badge-danger">Cancelled</span>
                 <span *ngSwitchCase="'refunded'" class="badge rounded-pill badge-danger">Refunded</span>
                 <span *ngSwitchCase="'completed'" class="badge rounded-pill badge-success">Completed</span>
@@ -31,7 +31,7 @@
                     </button>
                 </div>
                 <div *ngSwitchCase="'in_progress'" class="btn-group">
-                    <button class="btn btn-sm mt-2 btn-controller" [disabled]="statusLoading.isRunning()" (click)="deliveryOrder($event)">Delivered</button>
+                    <button class="btn btn-sm mt-2 btn-controller" [disabled]="statusLoading.isRunning()" (click)="deliveryOrder($event)">{{ item?.deliveryOption == 'delivery' ? 'Delivered' : 'Pickup'}}</button>
                     <button class="btn btn-sm mt-2 btn-controller btn-controller-icon" [disabled]="statusLoading.isRunning()" (click)="openEtaDeliveryDateModal($event)"
                     [title]="item?.delivery?.etaDate ? 'Scheduled: ' + (item.delivery.etaDate | date: 'MMM d y, h:mm a') : ''">
                         <span class="fas" [ngClass]="item?.delivery?.etaDate ? 'fa-calendar-check text-success' : 'fa-calendar-alt'"></span>
@@ -85,6 +85,8 @@
             </mat-select>
         </div>
         <div>
+            <button *ngIf="item?.delivery?.etaDate" [disabled]="editEtaLoading.isRunning()" class="btn btn-sm btn-danger" (click)="removeEtaDateTime()">
+                <ws-spinner class="mr-2" *ngIf="editEtaLoading.isRunning()" [width]="15" [height]="15" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>Remove</button>
             <button class="btn btn-sm btn-controller float-right" (click)="isEtaDeliveryDateModalOpened = false">Close</button>
             <button [disabled]="editEtaLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="editEtaDateTime()">
                 <ws-spinner class="mr-2" *ngIf="editEtaLoading.isRunning()" [width]="15" [height]="15" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>Confirm</button>

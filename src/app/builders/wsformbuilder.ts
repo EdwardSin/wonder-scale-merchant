@@ -248,6 +248,7 @@ export class WSFormBuilder {
         let formBuilder = new FormBuilder;
         return formBuilder.group({
             deliveryFee: ['', [Validators.pattern("^[0-9.,]+$")]],
+            deliveryOption: ['delivery', [Validators.required]],
             firstName: ['', [Validators.maxLength(36)]],
             lastName: ['', [Validators.maxLength(36)]],
             address: ['', [Validators.maxLength(128)]],
