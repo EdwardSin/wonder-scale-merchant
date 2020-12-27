@@ -66,6 +66,7 @@ export class ModifyOrderModalComponent extends WsModalComponent implements OnIni
     private authOrderContributorService: AuthOrderContributorService,
     private authPromotionContributorService: AuthPromotionContributorService) {
     super();
+    this.form = WSFormBuilder.createOrderForm();
   }
   ngOnInit() {
     super.ngOnInit();
@@ -188,7 +189,8 @@ export class ModifyOrderModalComponent extends WsModalComponent implements OnIni
     }
   }
   isEditable() {
-    return this.item.status !== 'completed' &&
+    return (!this.item) ||
+          this.item.status !== 'completed' &&
           this.item.status !== 'refunded' &&
           this.item.status !== 'cancelled'
   }
