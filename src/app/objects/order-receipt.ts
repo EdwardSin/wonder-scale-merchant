@@ -11,6 +11,7 @@ export class OrderReceipt{
         },
         phoneNumber?: String
     };
+    deliveryOption: 'self_pickup' | 'delivery';
     delivery?: {
         fee?:  number,
         etaDate?: Date
