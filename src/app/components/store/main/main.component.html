@@ -64,22 +64,22 @@
         </ul>
       </li>
       <li wsNavItem class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
-        <a [routerLink]="['orders']">
+        <a [routerLink]="['invoices']">
           <span class="ws-main-nav-icon fas fa-clipboard-list"></span>
-          <span class="ws-main-nav-text">Orders</span>
+          <span class="ws-main-nav-text">Invoices</span>
         </a>
         <ul class="ws-main-nav-sub-list">
           <li class="ws-main-nav-sub-list__title">
-            <a [routerLink]="['orders']">Orders</a>
+            <a [routerLink]="['invoices']">Invoices</a>
           </li>
           <li>
-            <a [routerLinkActive]="'active'" [routerLink]="['orders', 'all-orders']">All Orders</a>
+            <a [routerLinkActive]="'active'" [routerLink]="['invoices', 'all-invoices']">All Invoices</a>
           </li>
           <li>
-            <a [routerLinkActive]="'active'" [routerLink]="['orders', 'promotions']">Promotions</a>
+            <a [routerLinkActive]="'active'" [routerLink]="['invoices', 'promotions']">Promotions</a>
           </li>
           <li>
-            <a [routerLinkActive]="'active'" [routerLink]="['orders', 'customers']">Customers</a>
+            <a [routerLinkActive]="'active'" [routerLink]="['invoices', 'customers']">Customers</a>
           </li>
         </ul>
       </li>

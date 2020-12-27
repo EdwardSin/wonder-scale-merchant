@@ -9,6 +9,7 @@
 .: WSM: Task: Create a status selection column (WSM-258)
 .: WSM: Task: Mark order as self-pickup (WSM-257)
 .: WSM: Task: Make SKU as optional field (WSM-255)
+.: WSM: Task: Rename order to invoice (WSM-250)
 
 ---------------------------------------------
 - 2020-12-26                                -
