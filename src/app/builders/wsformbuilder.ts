@@ -244,7 +244,7 @@ export class WSFormBuilder {
             isExpiryDate: [false]
         });
     }
-    public static createOrderForm() {
+    public static createInvoiceForm() {
         let formBuilder = new FormBuilder;
         return formBuilder.group({
             deliveryFee: ['', [Validators.pattern("^[0-9.,]+$")]],

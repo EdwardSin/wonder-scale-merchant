@@ -59,10 +59,10 @@ const routes: Routes = [{
       loadChildren: () => import('./modules/store/store-page/store-page.module').then(m => m.StorePageModule)
     },
     {
-      path: 'orders',
+      path: 'invoices',
       canActivate: [StoreGuard],
-      data: { title: 'orders', breadcrumb: 'Orders' },
-      loadChildren: () => import('./modules/store/orders/orders.module').then(m => m.OrdersModule)
+      data: { title: 'invoices', breadcrumb: 'Invoices' },
+      loadChildren: () => import('./modules/store/invoice/invoices.module').then(m => m.InvoicesModule)
     },
     // {
     //   path: 'advertising',

@@ -1,0 +1,11 @@
+@import '../../../../../assets/scss/variables.scss';
+
+.dropdown-item{
+    &.selected{
+        background-color: map-get($ws-color, light-grey-3);
+    }
+    &:hover{
+        color: #000;
+        background-color: #ebecf0;
+    }
+}
