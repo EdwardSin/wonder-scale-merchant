@@ -204,7 +204,7 @@ export class AuthPromotionContributorUrl {
     static removePromotionUrl = URL.AUTH_PROMOTION_CONTRIBUTOR_URL + '/';
 }
 export class AuthOrderReceiptContributorUrl {
-    static getOrderReceiptsUrl = URL.AUTH_ORDER_RECEIPT_CONTRIBUTOR_URL + '/';
+    static getOrderReceiptsUrl = URL.AUTH_ORDER_RECEIPT_CONTRIBUTOR_URL + '/list';
     static addOrderReceipteUrl = URL.AUTH_ORDER_RECEIPT_CONTRIBUTOR_URL + '/';
     static editOrderReceipteUrl = URL.AUTH_ORDER_RECEIPT_CONTRIBUTOR_URL + '/';
     static updateOrderReceiptStatusUrl = URL.AUTH_ORDER_RECEIPT_CONTRIBUTOR_URL + '/change-status';

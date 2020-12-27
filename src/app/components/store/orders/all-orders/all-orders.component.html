@@ -1,5 +1,5 @@
 <h4 class="ws-title">All Orders</h4>
-<search-bar class="d-inline-block mr-2 mb-3" [placeholder]="'Search ID, Name...'" [searchAttributes]="['name', 'id']" [items]="allOrders" [searchKeyword]="searchController.searchKeyword"></search-bar>
+<search-bar class="d-inline-block mr-2 mb-3" [placeholder]="'Search ID, Name...'" [searchKeyword]="keyword"></search-bar>
 <button class="btn btn-sm btn-controller float-right ml-2" title="View flow chart" (click)="isHelpModalOpened = true">
     <span class="fas fa-question-circle d-inline-block"></span>
 </button>
@@ -7,13 +7,38 @@
     <span class="fas fa-plus mr-2 d-inline-block"></span>Add New
 </button>
 <div class="row no-gutters mb-2">
-    <button class="btn btn-sm btn-controller mr-3" (click)="selectTabAndRefreshReceipts('all')" [class.selected]="selectedTab == 'all'">All</button>
+    <button class="btn btn-sm btn-controller mr-3" style="width: 40px" (click)="selectTabAndRefreshReceipts('all')" [class.selected]="selectedTab == 'all'">All</button>
     <button class="btn btn-sm btn-controller mr-3" (click)="selectTabAndRefreshReceipts('new')" [class.selected]="selectedTab == 'new'">New ({{numberOfNewOrders}})</button>
     <button class="btn btn-sm btn-controller mr-3" (click)="selectTabAndRefreshReceipts('paid')" [class.selected]="selectedTab == 'paid'">Paid ({{numberOfPaidOrders}})</button>
     <button class="btn btn-sm btn-controller mr-3" (click)="selectTabAndRefreshReceipts('in_progress')" [class.selected]="selectedTab == 'in_progress'">In Progress ({{numberOfInProgressOrders}})</button>
     <button class="btn btn-sm btn-controller mr-3" (click)="selectTabAndRefreshReceipts('delivered')" [class.selected]="selectedTab == 'delivered'">Delivered ({{numberOfDeliveryOrders}})</button>
     <button class="btn btn-sm btn-controller mr-3" (click)="selectTabAndRefreshReceipts('completed')" [class.selected]="selectedTab == 'completed'">Completed</button>
     <button class="btn btn-sm btn-controller mr-3" (click)="selectTabAndRefreshReceipts('cancelled')" [class.selected]="selectedTab == 'cancelled'">Cancelled</button>
+    <div class="ml-auto ws-circle-button p-0" *ngIf="selectedTab == 'all'" mdbDropdown>
+        <button mdbDropdownToggle class="btn btn-controller clickable d-inline">
+            <span class="fa fa-ellipsis-v"></span>
+        </button>
+        <div class="dropdown-menu dropdown-menu-right mt-0 pb-0 pt-0 font-9"  style="left: inherit; top: -15px">
+            <button class="dropdown-item" (click)="$event.stopPropagation()">
+                <mat-checkbox (change)="triggerStatusColumns('new')" [checked]="statusColumns.includes('new')" [color]="'primary'" class="mr-2 d-inline-block">New</mat-checkbox>
+            </button>
+            <button class="dropdown-item" (click)="$event.stopPropagation()">
+                <mat-checkbox (change)="triggerStatusColumns('paid')" [checked]="statusColumns.includes('paid')" [color]="'primary'" class="mr-2 d-inline-block">Paid</mat-checkbox>
+            </button>
+            <button class="dropdown-item" (click)="$event.stopPropagation()">
+                <mat-checkbox (change)="triggerStatusColumns('in_progress')" [checked]="statusColumns.includes('in_progress')" [color]="'primary'" class="mr-2 d-inline-block">In Progress</mat-checkbox>
+            </button>
+            <button class="dropdown-item" (click)="$event.stopPropagation()">
+                <mat-checkbox (change)="triggerStatusColumns('delivered')" [checked]="statusColumns.includes('delivered')" [color]="'primary'" class="mr-2 d-inline-block">Delivered</mat-checkbox>
+            </button>
+            <button class="dropdown-item" (click)="$event.stopPropagation()">
+                <mat-checkbox (change)="triggerStatusColumns('completed')" [checked]="statusColumns.includes('completed')" [color]="'primary'" class="mr-2 d-inline-block">Completed</mat-checkbox>
+            </button>
+            <button class="dropdown-item" (click)="$event.stopPropagation()">
+                <mat-checkbox (change)="triggerStatusColumns('cancelled')" [checked]="statusColumns.includes('cancelled')" [color]="'primary'" class="mr-2 d-inline-block">Cancelled</mat-checkbox>
+            </button>
+        </div>
+    </div>
 </div>
 <div class="row no-gutters" *ngIf="allOrders.length && !loading.isRunning(); else loadingTemplate">
     <div class="col-lg-2 col-md-3 col-sm-4 p-2" *ngFor="let order of allOrders; trackBy: trackOrderId">
