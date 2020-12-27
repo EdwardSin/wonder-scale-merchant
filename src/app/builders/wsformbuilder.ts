@@ -134,7 +134,7 @@ export class WSFormBuilder {
     public static createMenuItemForm() {
         let formBuilder = new FormBuilder();
         return formBuilder.group({
-            refId: ['', [Validators.required, Validators.maxLength(36)]],
+            refId: ['', [Validators.maxLength(36)]],
             name: ['', [Validators.required, Validators.maxLength(128)]],
             currency: ['MYR', [Validators.required]],
             price: ['', [Validators.required]],

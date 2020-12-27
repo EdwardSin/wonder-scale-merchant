@@ -40,7 +40,7 @@ export class ImportItemsModalComponent extends WsModalComponent implements OnIni
   isUploadLoading: WsLoading = new WsLoading;
   isPreviewLoading: WsLoading = new WsLoading;
   phase: number = 0;
-  isEntityNew: boolean;
+  isEntityNew: boolean = true;
   isPublished: boolean;
   categories = [];
   selectedCategories = [];
@@ -157,7 +157,7 @@ export class ImportItemsModalComponent extends WsModalComponent implements OnIni
     for (let i = 0; i < rows.length; i++) {
       let row = rows[i];
       let keys = Object.keys(row);
-      keys = keys.filter(x => x != 'D');
+      keys = keys.filter(x => (x != 'D' && x != 'A'));
       for (let key of keys) {
         if (row[key] === undefined || row[key] === null || row[key].toString().trim() === '') {
           errors.push('#sjs-' + key + (i + 2));
