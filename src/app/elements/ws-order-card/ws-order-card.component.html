@@ -20,7 +20,7 @@
             <ng-container [ngSwitch]="item.status">
                 <div *ngSwitchCase="'new'" class="btn-group">
                     <button class="btn btn-sm mt-2 btn-controller" [disabled]="statusLoading.isRunning()" (click)="$event.stopPropagation(); isPayModalOpened = true">Pay</button>
-                    <button class="btn btn-sm mt-2 btn-controller btn-controller-icon" [disabled]="statusLoading.isRunning()" (click)="copy($event)">
+                    <button class="btn btn-sm mt-2 btn-controller btn-controller-icon" title="Copy order link" [disabled]="statusLoading.isRunning()" (click)="copy($event)">
                         <span class="fas fa-copy"></span>
                     </button>
                 </div>
@@ -32,7 +32,8 @@
                 </div>
                 <div *ngSwitchCase="'in_progress'" class="btn-group">
                     <button class="btn btn-sm mt-2 btn-controller" [disabled]="statusLoading.isRunning()" (click)="deliveryOrder($event)">Delivered</button>
-                    <button class="btn btn-sm mt-2 btn-controller btn-controller-icon" [disabled]="statusLoading.isRunning()" (click)="openEtaDeliveryDateModal($event)">
+                    <button class="btn btn-sm mt-2 btn-controller btn-controller-icon" [disabled]="statusLoading.isRunning()" (click)="openEtaDeliveryDateModal($event)"
+                    [title]="item?.delivery?.etaDate ? 'Scheduled: ' + (item.delivery.etaDate | date: 'MMM d y, h:mm a') : ''">
                         <span class="fas" [ngClass]="item?.delivery?.etaDate ? 'fa-calendar-check text-success' : 'fa-calendar-alt'"></span>
                     </button>
                 </div>
