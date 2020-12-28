@@ -6,6 +6,11 @@
 ---------------------------------------------
 - 2020-12-27                                -
 ---------------------------------------------
+.: WSM: Task: Style the font weight and adjust invoice size (WSM-250)
+
+---------------------------------------------
+- 2020-12-27                                -
+---------------------------------------------
 .: WSM: Task: Create a status selection column (WSM-258)
 .: WSM: Task: Mark order as self-pickup (WSM-257)
 .: WSM: Task: Make SKU as optional field (WSM-255)
