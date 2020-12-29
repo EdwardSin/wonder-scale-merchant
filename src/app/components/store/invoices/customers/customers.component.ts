@@ -67,10 +67,12 @@ export class CustomersComponent implements OnInit {
         });
       }
     });
+    this.searchController.searchKeyword = this.route.snapshot['queryParams']['s_keyword'];
     this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe(queryParam => {
       if (this.queryParams.keyword != queryParam.s_keyword || this.queryParams.page != queryParam.page || this.queryParams.order != queryParam.order || this.queryParams.orderBy != queryParam.by) {
         this.currentPage = queryParam['page'] || 1;
         this.queryParams = { keyword: queryParam['s_keyword'], page: queryParam['page'], order: queryParam['order'], orderBy: queryParam['by'] };
+        this.loading.start();
         this.getCustomers({
           keyword: this.queryParams.keyword || '',
           page: this.queryParams.page
@@ -122,6 +124,7 @@ export class CustomersComponent implements OnInit {
         this.customers = result['result'];
         this.numberOfAllItems = result['total'];
         this.numberOfCurrentTotalItems = result['total'];
+        window.scrollTo({top: 0});
       }
     });
   }

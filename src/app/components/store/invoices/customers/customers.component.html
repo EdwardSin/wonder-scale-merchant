@@ -1,16 +1,16 @@
 <h4 class="ws-title">Customers</h4>
-<search-bar class="d-inline-block mr-2 mb-3" [placeholder]="'Search ID, Name...'" [searchKeyword]="searchController.searchKeyword"></search-bar>
+<search-bar class="d-inline-block mr-2 mb-3" [placeholder]="'Search name...'" [searchKeyword]="searchController.searchKeyword"></search-bar>
 <button class="btn btn-sm btn-controller float-right" (click)="openModifyCustomerModal()">
     <span class="fas fa-plus mr-2 d-inline-block"></span>Add New
 </button>
 
-<table class="table table-hover w-100 font-9">
+<table class="table table-hover w-100 font-9 mb-5">
     <thead>
         <th>Name</th>
         <th width="150">Phone Number</th>
         <th width="100">Actions</th>
     </thead>
-    <tbody>
+    <tbody *ngIf="!loading.isRunning()">
         <tr *ngFor="let customer of customers">
             <td>{{ customer.firstName }} {{ customer.lastName}}</td>
             <td>{{ customer.phoneNumber }}</td>
@@ -41,23 +41,23 @@
     <form modalBody class="py-3" [formGroup]="form">
         <h6 class="h6">Customer Details</h6>
         <div class="row no-gutters mb-3">
-            <div class="col-lg-6 pr-lg-3 mb-3">
+            <div class="col-lg-6 pr-lg-3 mb-2">
                 <input class="form-control form-control-sm" maxlength="36" formControlName="firstName" (input)="updateDeliveryFirstName($event)" placeholder="First Name*" />
             </div>
-            <div class="col-lg-6 mb-3">
+            <div class="col-lg-6 mb-2">
                 <input class="form-control form-control-sm" maxlength="36" formControlName="lastName" (input)="updateDeliveryLastName($event)" placeholder="Last Name*" />
             </div>
-            <div class="col-lg-6 pr-lg-3 mb-3">
+            <div class="col-lg-6 pr-lg-3 mb-2">
                 <input class="form-control form-control-sm" maxlength="128" formControlName="email" placeholder="Email Addres" />
             </div>
-            <div class="col-lg-6 mb-3">
+            <div class="col-lg-6 mb-2">
                 <input class="form-control form-control-sm" maxlength="36" formControlName="phoneNumber" placeholder="Phone Number" />
             </div>
-            <div class="col-lg-6 pr-lg-3 mb-3">
+            <div class="col-lg-6 pr-lg-3 mb-2">
                 <input (click)="fromPicker.open()" class="form-control form-control-sm" formControlName="dateOfBirth" [matDatepicker]="fromPicker" [max]="today" placeholder="Date of Birth" />
                 <mat-datepicker #fromPicker startView="month"></mat-datepicker>
             </div>
-            <div class="col-lg-6 mb-3">
+            <div class="col-lg-6 mb-2">
                 <mat-select class="form-control form-control-sm" formControlName="gender" placeholder="Gender">
                     <mat-option [value]="''">Select a gender</mat-option>
                     <mat-option [value]="'male'">male</mat-option>
@@ -67,29 +67,29 @@
         </div>
         <h6 class="h6">Delivery Address</h6>
         <div class="mb-3">
-            <mat-checkbox [color]="'primary'" [checked]="isDefaultCustomerDetailsChecked" (change)="onDefaultCustomerDetailsCheck($event)" class="font-9">Use customer details by default</mat-checkbox>
+            <mat-checkbox [color]="'primary'" [checked]="isDefaultCustomerDetailsChecked" (change)="onDefaultCustomerDetailsCheck($event)" class="font-9 mb-2 d-block">Use customer details by default</mat-checkbox>
             <div class="row no-gutters">
-                <div class="col-lg-6 mb-3 pr-lg-3">
+                <div class="col-lg-6 mb-2 pr-lg-3">
                     <input class="form-control form-control-sm" maxlength="36" formControlName="deliveryFirstName" placeholder="Delivery First Name" />
                 </div>
-                <div class="col-lg-6 mb-3">
+                <div class="col-lg-6 mb-2">
                     <input class="form-control form-control-sm" maxlength="36" formControlName="deliveryLastName" placeholder="Delivery Last Name" />
                 </div>
             </div>
-            <div class="mb-3">
+            <div class="mb-2">
                 <input class="form-control form-control-sm" maxlength="128" formControlName="address" placeholder="Address" />
             </div>
             <div class="row no-gutters">
-                <div class="col-lg-4 mb-3 pr-lg-3">
+                <div class="col-lg-4 mb-2 pr-lg-3">
                     <input class="form-control form-control-sm" maxlength="36" formControlName="postcode" placeholder="Post Code" />
                 </div>
-                <div class="col-lg-4 mb-3 pr-lg-3">
+                <div class="col-lg-4 mb-2 pr-lg-3">
                     <mat-select class="form-control form-control-sm" formControlName="state" placeholder="State">
                         <mat-option [value]="''">Select a state</mat-option>
                         <mat-option [value]="_state" *ngFor="let _state of states">{{ _state }}</mat-option>
                     </mat-select>
                 </div>
-                <div class="col-lg-4 mb-3">
+                <div class="col-lg-4 mb-2">
                     <mat-select class="form-control form-control-sm" formControlName="country" placeholder="Country">
                         <mat-option [value]="''">Select a country</mat-option>
                         <mat-option [value]="'MYS'">Malaysia</mat-option>
