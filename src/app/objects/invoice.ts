@@ -23,4 +23,6 @@ export class Invoice{
     _id?: String;
     receiptId?: String;
     isCustomerSaved?: boolean;
+    createdAt?: Date;
+    updatedAt?: Date;
 }

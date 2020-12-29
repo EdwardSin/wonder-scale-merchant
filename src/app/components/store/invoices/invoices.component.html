@@ -21,7 +21,7 @@
             <input name="prefix" class="form-control d-inline-block input-group-append" style="flex-basis: 60%" disabled value="000001" />
         </div>
         <button class="btn btn-sm btn-controller" (click)="phase.previous()">Back</button>
-        <button class="btn btn-sm btn-controller float-right" (click)="addInvoiceConfiguration()">
+        <button [disabled]="addLoading.isRunning()" class="btn btn-sm btn-controller float-right" (click)="addInvoiceConfiguration()">
             <ws-spinner class="mr-2" *ngIf="addLoading.isRunning()" [width]="15" [height]="15" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>Start</button>
     </form>
 </div>
