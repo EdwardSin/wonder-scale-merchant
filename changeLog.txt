@@ -8,6 +8,7 @@
 ---------------------------------------------
 .: WSM: Task: Disable button when start invoice module (WSM-256)
 .: WSM: Task: Fixed minor bugs in customer module (WSM-253)
+.: WSM: Task: Fixed minor bugs in promotion module (WSM-252)
 
 ---------------------------------------------
 - 2020-12-27                                -

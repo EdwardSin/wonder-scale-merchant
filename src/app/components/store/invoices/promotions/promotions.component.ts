@@ -51,10 +51,12 @@ export class PromotionsComponent implements OnInit {
         });
       }
     });
+    this.searchController.searchKeyword = this.route.snapshot['queryParams']['s_keyword'];
     this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe(queryParam => {
       if (this.queryParams.keyword != queryParam.s_keyword || this.queryParams.page != queryParam.page || this.queryParams.order != queryParam.order || this.queryParams.orderBy != queryParam.by) {
         this.currentPage = queryParam['page'] || 1;
         this.queryParams = { keyword: queryParam['s_keyword'], page: queryParam['page'], order: queryParam['order'], orderBy: queryParam['by'] };
+        this.loading.start();
         this.getPromotions({
           keyword: this.queryParams.keyword || '',
           page: this.queryParams.page
@@ -162,6 +164,9 @@ export class PromotionsComponent implements OnInit {
       this.form.patchValue({
         activeDate: this.today
       })
+      this.form.controls['activeDate'].disable();
+    } else {
+      this.form.controls['activeDate'].enable();
     }
   }
   updateActiveDate(event) {

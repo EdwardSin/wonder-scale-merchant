@@ -11,17 +11,17 @@
         <th width="180">Value</th>
         <th width="180">Active Date</th>
         <th width="180">Expiry Date</th>
-        <th width="150">Enable</th>
+        <th class="text-center" width="150">Enable</th>
         <th width="100">Actions</th>
     </thead>
-    <tbody>
+    <tbody *ngIf="!loading.isRunning()">
         <tr *ngFor="let promotion of promotions">
             <td>{{ promotion.title }}</td>
             <td>{{ promotion.option == 'fixed_amount' ? 'Fixed Amount' : 'Percentage' }}</td>
             <td>{{ promotion.value | number:'1.2-2' | wsEmptyDash }} {{ promotion.option == 'percentage' ? '%' : ''}}</td>
             <td>{{ promotion.activeDate | date: 'MMM d, y' | wsEmptyDash }}</td>
             <td>{{ promotion.expiryDate | date: 'MMM d, y' | wsEmptyDash }}</td>
-            <td>
+            <td class="text-center">
                 <span *ngIf="isExpired(promotion)" class="fas fa-times-circle text-danger"></span>
                 <span *ngIf="!isExpired(promotion)" class="fas fa-check-circle" [ngClass]="promotion.isEnabled ? 'text-success': 'text-muted'"></span>
             </td>
@@ -51,13 +51,13 @@
 <ws-modal *ngIf="isModifyPromotionModalOpened" [(isOpened)]="isModifyPromotionModalOpened" [maxWidth]="600">
     <form modalBody class="py-3" [formGroup]="form">
         <div class="mb-3">
-            <mat-checkbox [color]="'primary'" class="font-9" formControlName="isEnabled">Enable</mat-checkbox>
+            <mat-checkbox [color]="'primary'" class="font-9 d-block mb-2" formControlName="isEnabled">Enable</mat-checkbox>
             <input class="form-control form-control-sm" maxlength="128" formControlName="title" placeholder="Promotion Title*" />
         </div>
         <h6 class="h6 mb-3">Promotion settings</h6>
         <div>
-            <p class="mb-0 font-9 mb-3">Discount option</p>
-            <mat-radio-group class="d-block font-9" formControlName="discountOption" (change)="clickDiscountOption($event)">
+            <p class="mb-0 font-9 mb-2">Discount option</p>
+            <mat-radio-group class="d-block font-9 mb-2" formControlName="discountOption" (change)="clickDiscountOption($event)">
                 <mat-radio-button [color]="'primary'" class="d-block" [value]="'percentage'">Discount by percentage</mat-radio-button>
                 <mat-radio-button [color]="'primary'" class="d-block" [value]="'fixed_amount'">Discount by fixed amount</mat-radio-button>
             </mat-radio-group>
@@ -72,14 +72,14 @@
             </div>
         </div>
         <div class="mb-3">
-            <mat-checkbox [color]="'primary'" class="font-9" formControlName="isActiveToday" (change)="updateActiveDateToToday($event)">Active from today</mat-checkbox>
+            <mat-checkbox [color]="'primary'" class="font-9 mb-2 d-block" formControlName="isActiveToday" (change)="updateActiveDateToToday($event)">Active from today</mat-checkbox>
             <div>
                 <input (click)="activeDatePicker.open()" class="form-control form-control-sm" formControlName="activeDate" (dateChange)="updateActiveDate($event)" [matDatepicker]="activeDatePicker" [min]="today" placeholder="Active date" />
                 <mat-datepicker #activeDatePicker startView="month"></mat-datepicker>
             </div>
         </div>
         <div class="mb-3">
-            <mat-checkbox [color]="'primary'" formControlName="isExpiryDate" class="font-9">No expiry date</mat-checkbox>
+            <mat-checkbox [color]="'primary'" formControlName="isExpiryDate" class="font-9 mb-2 d-block">No expiry date</mat-checkbox>
             <div *ngIf="!form.controls['isExpiryDate'].value">
                 <input (click)="expiryDatePicker.open()" class="form-control form-control-sm" formControlName="expiryDate" [matDatepicker]="expiryDatePicker" [min]="form.controls['activeDate'].value || today" placeholder="Expiry date" />
                 <mat-datepicker #expiryDatePicker startView="month"></mat-datepicker>
@@ -88,7 +88,7 @@
         </div>
         <div>
             <button *ngIf="selectedPromotion" [disabled]="modifyLoading.isRunning()" class="btn btn-sm btn-danger" (click)="removePromotion()">
-                <ws-spinner *ngIf="modifyLoading.isRunning()" [width]="15" [height]="15" [borderWidth]="1" [spinnerColor]="'#b71c1c'" class="mr-2"></ws-spinner>Remove
+                <ws-spinner *ngIf="modifyLoading.isRunning()" [width]="15" [height]="15" [borderWidth]="1" [spinnerColor]="'#b71c1c'" class="mr-2"></ws-spinner>Delete
             </button>
             <button class="btn btn-sm btn-controller float-right" (click)="isModifyPromotionModalOpened = false">Cancel</button>
             <button [disabled]="modifyLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="modifyPromotion()">
