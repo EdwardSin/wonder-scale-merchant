@@ -33,6 +33,8 @@ import { WsSearchSelectComponent } from '@elements/ws-search-select/ws-search-se
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { MatSelectInfiniteScrollModule } from 'ng-mat-select-infinite-scroll';
 import { WsInvoiceComponent } from '@elements/ws-invoice/ws-invoice.component';
+import { AppRoutingModule } from 'src/app/app-routing.module';
+import { RouterModule } from '@angular/router';
 
 
 @NgModule({
@@ -72,7 +74,8 @@ import { WsInvoiceComponent } from '@elements/ws-invoice/ws-invoice.component';
     MatNativeDateModule,
     NgxMatSelectSearchModule,
     MatSelectInfiniteScrollModule,
-    DirectiveModule
+    DirectiveModule,
+    RouterModule
   ],
   exports: [
     WsSpinnerComponent,
