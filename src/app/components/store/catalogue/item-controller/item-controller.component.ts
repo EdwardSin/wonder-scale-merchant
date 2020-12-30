@@ -57,6 +57,8 @@ export class ItemControllerComponent implements OnInit {
   isEditMultipleItemsModalOpened: boolean;
   isImportItemsModalOpened: boolean;
   moment = moment;
+  removeMessage = '';
+  removeSubmessage = '';
   columns = [];
   previousEditedItems: Array<any> = [];
   isAdvertiseDropdownOpened: boolean;
@@ -231,8 +233,16 @@ export class ItemControllerComponent implements OnInit {
     this.isMoveToCategoriesModalOpened = true;
     this.action = this.onMoveCategory.bind(this, this.editItems);
   }
-  openRemoveModal() {
-    this.action = this.param == 'uncategorized' ? this.removeItemsPermanantly.bind(this) : this.removeItemsFromCategory.bind(this);
+  openRemoveCategoryModal(){
+    this.action = this.removeItemsFromCategory.bind(this);
+    this.removeMessage = 'Are you sure to remove all selected items from the category?';
+    this.removeSubmessage = '';
+    this.isRemoveAllSelectedItemModalConfirmationOpened = true;
+  }
+  openRemovePermanentlyModal() {
+    this.action = this.removeItemsPermanantly.bind(this);
+    this.removeMessage = 'Are you sure to remove all selected items permanently?';
+    this.removeSubmessage = 'Caution: Item will be removed from all categories!';
     this.isRemoveAllSelectedItemModalConfirmationOpened = true;
   }
   checkSelectedItems() {

@@ -41,8 +41,8 @@
                     <button *ngIf="store.type == 'restaurant'" class="dropdown-item" (click)="unmarkTodaySpecial()">Unmark from Today Special</button>
                     <button class="dropdown-item" (click)="openAddToModal()">Add to</button>
                     <button *ngIf="param == 'custom'" class="dropdown-item" (click)="openMoveModal()">Move to</button>
-                    <button *ngIf="param != 'uncategorized'" class="dropdown-item" (click)="openRemoveModal()">Remove from categories</button>
-                    <button *ngIf="param == 'uncategorized' " class="dropdown-item" (click)="openRemoveModal()">Remove Permanently</button>
+                    <button class="dropdown-item" (click)="openRemoveCategoryModal()">Remove from category</button>
+                    <button class="dropdown-item" (click)="openRemovePermanentlyModal()">Remove permanently</button>
                 </div>
             </div>
             <div *ngIf="param == 'new'" class="d-inline-block">
@@ -177,7 +177,10 @@
         (debounceClick)="advertiseItems()">{{ isPublished ? 'Done' : 'Advertise'}}</button>
     <div class="clearfix"></div>
 </div> -->
-<confirm-modal *ngIf="isRemoveAllSelectedItemModalConfirmationOpened" [(isOpened)]="isRemoveAllSelectedItemModalConfirmationOpened" id="removeItemsModal" [loading]="loading.isRunning()" [message]="'Are you sure to remove all selected items?'" [action]="action">
+<confirm-modal *ngIf="isRemoveAllSelectedItemModalConfirmationOpened" [(isOpened)]="isRemoveAllSelectedItemModalConfirmationOpened" id="removeItemsModal" [loading]="loading.isRunning()" [message]="removeMessage" [action]="action">
+    <p *ngIf="removeSubmessage" class="text-danger font-8" content>
+        {{removeSubmessage}}
+    </p>
 </confirm-modal>
 <add-to-categories-modal *ngIf="isAddToCategoriesModalOpened" [(isOpened)]="isAddToCategoriesModalOpened" id="addToCategoriesModal" [action]="action" 
     [loading]="categoriesLoading.isRunning()"

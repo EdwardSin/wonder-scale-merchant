@@ -7,6 +7,7 @@
 - 2020-12-30                                -
 ---------------------------------------------
 .: WSM: BugFix: Fixed multiselect dropdown jumping issue (WSM-251)
+.: WSM: BugFix: Remove Item without moving to uncategoried (WSM-261)
 
 ---------------------------------------------
 - 2020-12-29                                -
