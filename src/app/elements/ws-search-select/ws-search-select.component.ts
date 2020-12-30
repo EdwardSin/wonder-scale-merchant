@@ -22,15 +22,12 @@ export class WsSearchSelectComponent implements OnInit {
   
   @ViewChild('matSelectInfiniteScroll', { static: true } )
   infiniteScrollSelect: MatSelect;
-  isOpened: boolean;
   searchCtrl: FormControl = new FormControl();
   private ngUnsubscribe: Subject<void> = new Subject<void>();
 
   constructor() { 
     this.searchCtrl.valueChanges.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
-      if (this.isOpened) {
-        this.searchValueChange.emit(result);
-      }
+      this.searchValueChange.emit(result);
     });
   }
 
@@ -38,7 +35,6 @@ export class WsSearchSelectComponent implements OnInit {
     this.infiniteScrollSelect.openedChange.pipe(takeUntil(this.ngUnsubscribe)).subscribe(opened => {
       // after opening, reset the batch offset
       this.openChange.emit(opened);
-      this.isOpened = opened;
     });
   }
   selectItem(event) {

@@ -55,6 +55,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
   categoryId: string = '';
   itemKeyword: string = '';
   page: number = 1;
+  open: boolean;
   tempInvoice: Invoice = null;
   isCreateEmptyInvoiceModalOpened: boolean;
   modifyLoading: WsLoading = new WsLoading;
@@ -285,7 +286,8 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
     }
   }
   openItemChange(event) {
-    if(event) {
+    this.open = event;
+    if(event && !this.items.length) {
       this.page = 1;
       this.itemKeyword = '';
       this.items = [];
@@ -293,9 +295,11 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
     }
   }
   searchItemValueChange = _.debounce((event) => {
-    this.page = 1;
-    this.itemKeyword = event;
-    this.getItems(this.categoryId);
+    if (this.open) {
+      this.page = 1;
+      this.itemKeyword = event;
+      this.getItems(this.categoryId);
+    }
   }, 500);
   selectionChange(event) {
     this.selectedItem = event;
