@@ -14,6 +14,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Item } from '@objects/item';
 import * as _ from 'lodash';
 import { SharedCategoryService } from '@services/shared/shared-category.service';
+import { CurrencyService } from '@services/http/general/currency.service';
+import { SharedStoreService } from '@services/shared/shared-store.service';
 
 @Component({
   selector: 'app-modify-item-type',
@@ -25,6 +27,8 @@ export class ModifyItemTypeComponent implements OnInit {
   itemTypesForm: FormGroup;
   environment = environment;
   colors = [];
+  currencySymbol = '';
+  selectedCurrencyCode = '';
   currentItem: Item;
   itemTypeLoading: WsLoading = new WsLoading;
   loading: WsLoading = new WsLoading;
@@ -34,6 +38,8 @@ export class ModifyItemTypeComponent implements OnInit {
     private route: ActivatedRoute,
     private sharedCategoryService: SharedCategoryService,
     private authItemContributorService: AuthItemContributorService,
+    public currencyService: CurrencyService,
+    private sharedStoreService: SharedStoreService,
     private colorService: ColorService) {  
       this.loading.start();
       this.itemTypesForm = WSFormBuilder.createItemTypesGroup();
@@ -41,6 +47,16 @@ export class ModifyItemTypeComponent implements OnInit {
   }
   ngOnInit(): void {
     this.getItem();
+    this.sharedStoreService.store.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+      if (result) {
+        this.currencySymbol = this.currencyService.currencySymbols[result.currency];
+      }
+    });
+    this.currencyService.selectedCurrency
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe(result => {
+      this.selectedCurrencyCode = result;
+    });
   }
   onItemTypeClicked(id){
     document.getElementById(id).click();
