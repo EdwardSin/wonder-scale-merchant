@@ -348,7 +348,10 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
     }
   }
   getPromotions() {
-    let obj = {};
+    let obj = {
+      isShownExpiry: true,
+      isShownEnabled: true
+    };
     this.authPromotionContributorService.getPromotions(obj).pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       if (result && result['result']) {
         this.promotions = result['result'];

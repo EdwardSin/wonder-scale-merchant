@@ -66,11 +66,13 @@
         </div>
     </div>
 </div>
-<div class="row no-gutters" *ngIf="allInvoices?.length && !loading.isRunning(); else loadingTemplate">
-    <div class="col-lg-2 col-md-3 col-sm-4 p-lg-2 py-2" *ngFor="let invoice of allInvoices; trackBy: trackInvoiceId">
+<div class="row no-gutters mb-5 pb-3" *ngIf="allInvoices?.length && !loading.isRunning(); else loadingTemplate">
+    <div class="col-lg-5ths col-md-4 col-sm-6 p-sm-2 py-2" *ngFor="let invoice of allInvoices; trackBy: trackInvoiceId">
         <ws-invoice-card [item]="invoice" [onInvoiceInfoModalClick]="openEditInvoiceModal.bind(this, invoice)"></ws-invoice-card>
     </div>
 </div>
+<ws-pagination *ngIf="numberOfCurrentTotalItems" [expanded]="isNavOpen" [currentPage]="currentPage"
+            [pageSize]="50" [dbTotal]="numberOfAllItems" [total]="numberOfCurrentTotalItems" (getPageNumber)="navigate($event)"></ws-pagination>
 
 <ng-template #loadingTemplate>
     <ng-container *ngIf="loading.isRunning(); else noInvoice">
