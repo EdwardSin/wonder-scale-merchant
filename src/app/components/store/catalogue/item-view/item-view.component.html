@@ -48,7 +48,7 @@
             </div>
           </span>
       </th>
-      <th *ngIf="columns.includes('id')" width="200px">ID</th>
+      <th *ngIf="columns.includes('sku')" width="200px">SKU</th>
       <th *ngIf="columns.includes('name')">Name</th>
       <th *ngIf="columns.includes('price')" width="200px">Price({{ currencySymbol }})</th>
       <th *ngIf="columns.includes('discount')" width="200px">Discount Price({{ currencySymbol }})</th>
@@ -66,7 +66,7 @@
             <span *ngIf="statusItems.includes('discount')" [class.badge-default]="!isOffer(item)" class="badge default ws-clear-color ws-bg-offer mr-1" style="padding-top: 5px" title="Discount">D</span>
             <span *ngIf="statusItems.includes('categorized')" [class.badge-default]="!item?.categories.length" class="badge badge-info default mr-1" style="padding-top: 5px" title="Categorized/Uncategorized">C</span>
           </td>
-          <td *ngIf="columns.includes('id')">{{ item?.refId}}</td>
+          <td *ngIf="columns.includes('sku')">{{ item?.refId}}</td>
           <td *ngIf="columns.includes('name')">
             <a class="default" href="javascript:void(0)" (click)="$event.stopPropagation();" 
             [routerLink]="[]" [queryParams]="{id: item?._id, modal: store?.type == 'restaurant' ? 'modify-menu-item' : 'modify-item'}" [queryParamsHandling]="'merge'">{{ item?.name | titlecase | limitTo: 128 }}</a>
