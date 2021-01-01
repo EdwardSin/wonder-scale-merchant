@@ -116,7 +116,7 @@
                 </button>
                 <div class="dropdown-menu dropdown-menu-right mt-0 pb-0 pt-0" aria-labelledby="sortButton">
                     <button class="dropdown-item" (click)="$event.stopPropagation()">
-                        <mat-checkbox (change)="triggerColumns('id')" [checked]="columns.includes('id')" [color]="'primary'" class="mr-2 d-inline-block">ID</mat-checkbox>
+                        <mat-checkbox (change)="triggerColumns('sku')" [checked]="columns.includes('sku')" [color]="'primary'" class="mr-2 d-inline-block">SKU</mat-checkbox>
                     </button>
                     <button class="dropdown-item" (click)="$event.stopPropagation()">
                         <mat-checkbox [disabled]="true" (change)="triggerColumns('name')" [checked]="columns.includes('name')" [color]="'primary'" class="mr-2 d-inline-block">Name</mat-checkbox>

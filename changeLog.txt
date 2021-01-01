@@ -10,6 +10,7 @@
 .: WSM: BugFix: Fixed promotion active date  validation and lazyload (WSM-250)
 .: WSM: Task: Show default price in item type (WSM-254)
 .: WSM: BugFix: Update current page in invoice module (WSM-250)
+.: WSM: BugFix: Show existing SKU message (WSM-255)
 
 ---------------------------------------------
 - 2020-12-30                                -

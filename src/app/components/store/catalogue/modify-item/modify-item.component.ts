@@ -248,7 +248,8 @@ export class ModifyItemComponent implements OnInit {
         this.router.navigate([], {queryParams: { id: this.itemId, modal: 'modify-item-type' }, queryParamsHandling: 'merge'});
         this.sharedCategoryService.refreshCategories();
       }, err => {
-        WsToastService.toastSubject.next({ content: err.error.message || 'Error when creating item!', type: 'danger' });
+        let message = err.error && err.error.message ? err.error.message : 'Error when creating items!';
+        WsToastService.toastSubject.next({ content: message, type: 'danger' });
       });
     }
   }
@@ -270,7 +271,8 @@ export class ModifyItemComponent implements OnInit {
         this.sharedCategoryService.refreshCategories();
         this.router.navigate([], {queryParams: {id: null, modal: null}, queryParamsHandling: 'merge'});
       }, err => {
-        WsToastService.toastSubject.next({ content: 'Error when editing item!', type: 'danger' });
+        let message = err.error && err.error.message ? err.error.message : 'Error when editing items!';
+        WsToastService.toastSubject.next({ content: message, type: 'danger' });
       });
     }
   }
