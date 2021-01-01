@@ -130,7 +130,7 @@
                         formControlName="price" />
                     </div>
                   </div>
-                  <span *ngIf="currentItem?.price" class="font-8 text-muted">Default price: {{currencySymbol}}{{ currentItem?.price | currency: currencyService.getCurrencyWithCode(currentItem?.currency).rate: currencyService.getCurrencyWithCode(selectedCurrencyCode).rate | number: '1.2-2' }}</span>
+                  <span *ngIf="currencies.length" class="font-8 text-muted">Default price: {{currencySymbol}}{{ currentItem?.price | currency: currencyService.getCurrencyWithCode(currentItem?.currency).rate: currencyService.getCurrencyWithCode(selectedCurrencyCode).rate | number: '1.2-2' }}</span>
                 </div>
                 <div class="px-1">
                   <div class="ws-input">
@@ -142,7 +142,7 @@
                         formControlName="discount" />
                     </div>
                   </div>
-                  <span class="font-8 text-muted">Default discount: {{currentItem.discount}}%</span>
+                  <span class="font-8 text-muted">Default discount: {{currentItem.discount || '0'}}%</span>
                 </div>
                 <div *ngIf="false" class="col-sm-6 px-1">
                   <div class="ws-input">

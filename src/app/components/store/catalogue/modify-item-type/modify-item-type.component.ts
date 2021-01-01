@@ -28,6 +28,7 @@ export class ModifyItemTypeComponent implements OnInit {
   environment = environment;
   colors = [];
   currencySymbol = '';
+  currencies = [];
   selectedCurrencyCode = '';
   currentItem: Item;
   itemTypeLoading: WsLoading = new WsLoading;
@@ -56,6 +57,9 @@ export class ModifyItemTypeComponent implements OnInit {
     .pipe(takeUntil(this.ngUnsubscribe))
     .subscribe(result => {
       this.selectedCurrencyCode = result;
+    });
+    this.currencyService.currenciesBehaviourSubject.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+      this.currencies = result;
     });
   }
   onItemTypeClicked(id){
