@@ -8,6 +8,7 @@
 ---------------------------------------------
 .: WSM: BugFix: Fixed existing promotion active date and expiry date issue (WSM-252)
 .: WSM: BugFix: Fixed promotion active date  validation and lazyload (WSM-250)
+.: WSM: Task: Show default price in item type (WSM-254)
 
 ---------------------------------------------
 - 2020-12-30                                -

@@ -120,49 +120,49 @@
                     </div>
                   </div>
                 </div>
-                <div class="row no-gutters">
-                  <div class="col-sm-6 px-1">
-                    <div class="ws-input">
-                      <div class="input-group">
-                        <div class="input-group-prepend" style="width: 100px">
-                          <span>Price</span>
-                        </div>
-                        <input class="form-control form-control-sm" tabIndex="1" placeholder="Blank to use default price"
-                          formControlName="price" />
+                <div class="px-1">
+                  <div class="ws-input">
+                    <div class="input-group">
+                      <div class="input-group-prepend" style="width: 100px">
+                        <span>Price</span>
                       </div>
+                      <input class="form-control form-control-sm" tabIndex="1" placeholder="Blank to use default price"
+                        formControlName="price" />
                     </div>
                   </div>
-                  <div class="col-sm-6 px-1">
-                    <div class="ws-input">
-                      <div class="input-group">
-                        <div class="input-group-prepend" style="width: 100px">
-                          <span>Discount (%)</span>
-                        </div>
-                        <input class="form-control form-control-sm" tabIndex="1" placeholder="Blank to use default discount"
-                          formControlName="discount" />
+                  <span *ngIf="currentItem?.price" class="font-8 text-muted">Default price: {{currencySymbol}}{{ currentItem?.price | currency: currencyService.getCurrencyWithCode(currentItem?.currency).rate: currencyService.getCurrencyWithCode(selectedCurrencyCode).rate | number: '1.2-2' }}</span>
+                </div>
+                <div class="px-1">
+                  <div class="ws-input">
+                    <div class="input-group">
+                      <div class="input-group-prepend" style="width: 100px">
+                        <span>Discount (%)</span>
                       </div>
+                      <input class="form-control form-control-sm" tabIndex="1" placeholder="Blank to use default discount"
+                        formControlName="discount" />
                     </div>
                   </div>
-                  <div *ngIf="false" class="col-sm-6 px-1">
-                    <div class="ws-input">
-                      <div class="input-group">
-                        <div class="input-group-prepend" style="width: 100px">
-                          <span>Quantity</span>
-                        </div>
-                        <input class="form-control form-control-sm" tabIndex="1" placeholder="Blank to use default quantity"
-                          formControlName="quantity" />
+                  <span class="font-8 text-muted">Default discount: {{currentItem.discount}}%</span>
+                </div>
+                <div *ngIf="false" class="col-sm-6 px-1">
+                  <div class="ws-input">
+                    <div class="input-group">
+                      <div class="input-group-prepend" style="width: 100px">
+                        <span>Quantity</span>
                       </div>
+                      <input class="form-control form-control-sm" tabIndex="1" placeholder="Blank to use default quantity"
+                        formControlName="quantity" />
                     </div>
                   </div>
-                  <div *ngIf="false" class="col-sm-6 px-1">
-                    <div class="ws-input">
-                      <div class="input-group">
-                        <div class="input-group-prepend" style="width: 100px">
-                          <span>Weight (kg)</span>
-                        </div>
-                        <input class="form-control form-control-sm" tabIndex="1" placeholder="Blank to use default weight"
-                          formControlName="weight" />
+                </div>
+                <div *ngIf="false" class="col-sm-6 px-1">
+                  <div class="ws-input">
+                    <div class="input-group">
+                      <div class="input-group-prepend" style="width: 100px">
+                        <span>Weight (kg)</span>
                       </div>
+                      <input class="form-control form-control-sm" tabIndex="1" placeholder="Blank to use default weight"
+                        formControlName="weight" />
                     </div>
                   </div>
                 </div>
