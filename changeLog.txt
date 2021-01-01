@@ -4,6 +4,11 @@
 
 - v1.0.1060                                 -
 ---------------------------------------------
+- 2021-01-01                                -
+---------------------------------------------
+.: WSM: BugFix: Fixed existing promotion active date and expiry date issue (WSM-252)
+
+---------------------------------------------
 - 2020-12-30                                -
 ---------------------------------------------
 .: WSM: BugFix: Fixed multiselect dropdown jumping issue (WSM-251)
