@@ -81,6 +81,7 @@ export class PromotionsComponent implements OnInit {
         isActiveToday: this.selectedPromotion.activeDate == this.today.toISOString(),
         isExpiryDate: this.selectedPromotion.isExpiryDate
       });
+      this.today = new Date(this.selectedPromotion.activeDate);
     }
   }
   getPromotions({keyword, page}) {
@@ -105,7 +106,8 @@ export class PromotionsComponent implements OnInit {
         isExpiryDate: this.form.controls['isExpiryDate'].value
       }
       if (this.form.controls['isActiveToday'].value) {
-        obj['activeDate'] = new Date(this.today.getFullYear(), this.today.getMonth(), this.today.getDate())
+        let today = new Date();
+        obj['activeDate'] = new Date(today.getFullYear(), today.getMonth(), today.getDate())
       }
       if (this.form.controls['isExpiryDate'].value) {
         obj['expiryDate'] = null;
@@ -147,6 +149,12 @@ export class PromotionsComponent implements OnInit {
       else if (this.form.controls['discountValue'].errors && this.form.controls['discountValue'].errors.required) {
         WsToastService.toastSubject.next({ content: 'Please enter discount value!', type: 'danger'});
       }
+      else if (this.form.controls['activeDate'].errors &&this.form.controls['activeDate'].errors.matDatepickerMin) {
+        WsToastService.toastSubject.next({ content: 'Active date is invalid!', type: 'danger'});
+      }
+      else if (this.form.controls['expiryDate'].errors &&this.form.controls['expiryDate'].errors.matDatepickerMin) {
+        WsToastService.toastSubject.next({ content: 'Expiry date is invalid!', type: 'danger'});
+      }
     }
   }
   removePromotion() {
@@ -162,10 +170,17 @@ export class PromotionsComponent implements OnInit {
   updateActiveDateToToday(event) {
     if (event.checked) {
       this.form.patchValue({
-        activeDate: this.today
+        activeDate: new Date(),
+        isActiveToday: true
       })
       this.form.controls['activeDate'].disable();
+      if (new Date(this.form.controls['expiryDate'].value) < new Date()) {
+        this.form.controls['expiryDate'].setValue('');
+      }
     } else {
+      this.form.patchValue({
+        isActiveToday: false
+      })
       this.form.controls['activeDate'].enable();
     }
   }
@@ -174,6 +189,9 @@ export class PromotionsComponent implements OnInit {
       this.form.patchValue({
         isActiveToday: event.value.toISOString() == this.today.toISOString()
       });
+      if (new Date(this.form.controls['expiryDate'].value) < event.value) {
+        this.form.controls['expiryDate'].setValue('');
+      }
     }
   }
   clickDiscountOption(event) {
@@ -194,6 +212,7 @@ export class PromotionsComponent implements OnInit {
     this.today.setHours(0,0,0,0);
     this.selectedPromotion = null;
     this.isDefaultPromotionDetailsChecked = false;
+    this.form.controls['activeDate'].enable();
   }
   openModifyPromotionModal(obj?) {
     this.resetForm();
