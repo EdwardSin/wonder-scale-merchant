@@ -28,7 +28,6 @@ export class PromotionsComponent implements OnInit {
   today = new Date;
   loading: WsLoading = new WsLoading;
   itemLoading: WsLoading = new WsLoading;
-  isDefaultPromotionDetailsChecked: boolean;
   isModifyPromotionModalOpened: boolean;
   searchController: Searchbar = new Searchbar;
   modifyLoading: WsLoading = new WsLoading;
@@ -38,7 +37,7 @@ export class PromotionsComponent implements OnInit {
     private sharedNavbarService: SharedNavbarService,
     private route: ActivatedRoute,
     private router: Router,
-    private ref: ChangeDetectorRef) { 
+    private ref: ChangeDetectorRef) {
     this.form = WSFormBuilder.createAddPromotionForm();
   }
   ngOnInit(): void {
@@ -75,18 +74,23 @@ export class PromotionsComponent implements OnInit {
         isEnabled: this.selectedPromotion.isEnabled,
         title: this.selectedPromotion.title,
         discountOption: this.selectedPromotion.option,
-        discountValue: (this.selectedPromotion.value||0).toFixed(2),
+        discountValue: (this.selectedPromotion.value || 0).toFixed(2),
         activeDate: this.selectedPromotion.activeDate,
         expiryDate: this.selectedPromotion.expiryDate,
         isActiveToday: this.selectedPromotion.activeDate == this.today.toISOString(),
         isExpiryDate: this.selectedPromotion.isExpiryDate
       });
-      this.today = new Date(this.selectedPromotion.activeDate);
+      if (this.selectedPromotion.activeDate) {
+        if (this.selectedPromotion.activeDate == this.today.toISOString()) {
+          this.form.controls['activeDate'].disable();
+        }
+        this.today = new Date(this.selectedPromotion.activeDate);
+      }
     }
   }
-  getPromotions({keyword, page}) {
+  getPromotions({ keyword, page }) {
     this.itemLoading.start();
-    this.authPromotionContributorService.getPromotions({ keyword, page}).pipe(takeUntil(this.ngUnsubscribe), finalize(() => { this.loading.stop(); this.itemLoading.stop() })).subscribe(result => {
+    this.authPromotionContributorService.getPromotions({ keyword, page }).pipe(takeUntil(this.ngUnsubscribe), finalize(() => { this.loading.stop(); this.itemLoading.stop() })).subscribe(result => {
       if (result) {
         this.promotions = result['result'];
         this.numberOfAllItems = result['total'];
@@ -113,11 +117,11 @@ export class PromotionsComponent implements OnInit {
         obj['expiryDate'] = null;
       }
       if (this.form.controls['isEnabled'].value && !this.form.controls['activeDate'].value) {
-        WsToastService.toastSubject.next({ content: 'Please enter active date!', type: 'danger'});
+        WsToastService.toastSubject.next({ content: 'Please enter active date!', type: 'danger' });
         return;
       }
       if (this.form.controls['isEnabled'].value && !this.form.controls['isExpiryDate'].value && !this.form.controls['expiryDate'].value) {
-        WsToastService.toastSubject.next({ content: 'Please enter expiry date!', type: 'danger'});
+        WsToastService.toastSubject.next({ content: 'Please enter expiry date!', type: 'danger' });
         return;
       }
       this.modifyLoading.start();
@@ -125,35 +129,33 @@ export class PromotionsComponent implements OnInit {
         obj['_id'] = this.selectedPromotion._id;
         this.authPromotionContributorService.updatePromotion(obj).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.modifyLoading.stop())).subscribe(result => {
           if (result && result['result']) {
-            WsToastService.toastSubject.next({ content:'Promotion is updated!', type: 'success'});
+            WsToastService.toastSubject.next({ content: 'Promotion is updated!', type: 'success' });
             this.isModifyPromotionModalOpened = false;
             this.selectedPromotion = null;
             this.authPromotionContributorService.refreshPromotions.next(true);
-            this.resetForm();
           }
         });
       } else {
         this.authPromotionContributorService.addPromotion(obj).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.modifyLoading.stop())).subscribe(result => {
           if (result && result['result']) {
-            WsToastService.toastSubject.next({ content:'Promotion is added!', type: 'success'});
+            WsToastService.toastSubject.next({ content: 'Promotion is added!', type: 'success' });
             this.isModifyPromotionModalOpened = false;
             this.authPromotionContributorService.refreshPromotions.next(true);
-            this.resetForm();
           }
         });
       }
     } else {
       if (this.form.controls['title'].errors && this.form.controls['title'].errors.required) {
-        WsToastService.toastSubject.next({ content: 'Please enter title!', type: 'danger'});
+        WsToastService.toastSubject.next({ content: 'Please enter title!', type: 'danger' });
       }
       else if (this.form.controls['discountValue'].errors && this.form.controls['discountValue'].errors.required) {
-        WsToastService.toastSubject.next({ content: 'Please enter discount value!', type: 'danger'});
+        WsToastService.toastSubject.next({ content: 'Please enter discount value!', type: 'danger' });
       }
-      else if (this.form.controls['activeDate'].errors &&this.form.controls['activeDate'].errors.matDatepickerMin) {
-        WsToastService.toastSubject.next({ content: 'Active date is invalid!', type: 'danger'});
+      else if (this.form.controls['activeDate'].errors && this.form.controls['activeDate'].errors.matDatepickerMin) {
+        WsToastService.toastSubject.next({ content: 'Active date is invalid!', type: 'danger' });
       }
-      else if (this.form.controls['expiryDate'].errors &&this.form.controls['expiryDate'].errors.matDatepickerMin) {
-        WsToastService.toastSubject.next({ content: 'Expiry date is invalid!', type: 'danger'});
+      else if (this.form.controls['expiryDate'].errors && this.form.controls['expiryDate'].errors.matDatepickerMin) {
+        WsToastService.toastSubject.next({ content: 'Expiry date is invalid!', type: 'danger' });
       }
     }
   }
@@ -202,22 +204,18 @@ export class PromotionsComponent implements OnInit {
     }
   }
   navigate(event) {
-    this.router.navigate([], { queryParams: {page: event}, queryParamsHandling: 'merge' });
+    this.router.navigate([], { queryParams: { page: event }, queryParamsHandling: 'merge' });
   }
   resetForm() {
-    this.form.reset({
-      discountOption: 'percentage'
-    });
+    this.form = WSFormBuilder.createAddPromotionForm();
     this.today = new Date;
-    this.today.setHours(0,0,0,0);
+    this.today.setHours(0, 0, 0, 0);
     this.selectedPromotion = null;
-    this.isDefaultPromotionDetailsChecked = false;
-    this.form.controls['activeDate'].enable();
   }
   openModifyPromotionModal(obj?) {
     this.resetForm();
     if (obj) {
-      this.selectedPromotion = obj
+      this.selectedPromotion = obj;
       this.setupPromotion();
     }
     this.isModifyPromotionModalOpened = true;
@@ -252,7 +250,7 @@ export class PromotionsComponent implements OnInit {
     }
     return null;
   }
-  isExpired(promotion){
+  isExpired(promotion) {
     if (promotion.isExpiryDate || !promotion.expiryDate || new Date() < new Date(promotion.expiryDate)) {
       return false;
     }
