@@ -9,7 +9,8 @@ import { Currency } from '@objects/currency';
   providedIn: 'root'
 })
 export class CurrencyService {
-  currencies: Array<Currency> = [];
+  currenciesBehaviourSubject: BehaviorSubject<any[]> = new BehaviorSubject([]);
+  _currencies: Array<Currency> = [];
   currencyFullnameArray = Object.keys(Constants.currencyFullnames);
   currencyFullnames = Constants.currencyFullnames;
   currencySymbols = Constants.currencySymbols;
@@ -24,7 +25,8 @@ export class CurrencyService {
     }
   }
   getCurrencyWithCode(code='MYR') {
-    return this.currencies.find(currency => currency.code == code);
+    let currencies = this.currenciesBehaviourSubject.getValue();
+    return currencies.find(currency => currency.code == code);
   }
 
   getCurrency() {

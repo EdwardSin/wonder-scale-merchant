@@ -218,7 +218,8 @@ export class ImportItemsModalComponent extends WsModalComponent implements OnIni
           this.isUploadLoading.stop();
         });
       }, err => {
-        WsToastService.toastSubject.next({ content: err.error.message || 'Error when uploading items!', type: 'danger' });
+        let message = err.error && err.error.message ? err.error.message : 'Error when uploading items!';
+        WsToastService.toastSubject.next({ content: message, type: 'danger' });
         this.isUploadLoading.stop();
       })
   }
