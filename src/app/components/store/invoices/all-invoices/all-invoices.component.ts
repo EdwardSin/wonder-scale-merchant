@@ -29,7 +29,6 @@ export class AllInvoicesComponent implements OnInit {
   numberOfAllItems = 0;
   numberOfCurrentTotalItems = 0;
   isNavOpen: Boolean = false;
-  currentPage: number = 1;
   numberOfNewInvoices: number = 0;
   numberOfPaidInvoices: number = 0;
   numberOfInProgressInvoices: number = 0;

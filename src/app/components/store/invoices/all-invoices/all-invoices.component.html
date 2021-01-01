@@ -71,7 +71,7 @@
         <ws-invoice-card [item]="invoice" [onInvoiceInfoModalClick]="openEditInvoiceModal.bind(this, invoice)"></ws-invoice-card>
     </div>
 </div>
-<ws-pagination *ngIf="numberOfCurrentTotalItems" [expanded]="isNavOpen" [currentPage]="currentPage"
+<ws-pagination *ngIf="numberOfCurrentTotalItems" [expanded]="isNavOpen" [currentPage]="page"
             [pageSize]="50" [dbTotal]="numberOfAllItems" [total]="numberOfCurrentTotalItems" (getPageNumber)="navigate($event)"></ws-pagination>
 
 <ng-template #loadingTemplate>
