@@ -32,8 +32,7 @@ export class ModifyMenuItemComponent implements OnInit {
   isTypeFields: boolean;
   currencies = [];
   allProfileItems = [];
-  allTypes = [];
-  defaultType = { name: 'Normal (default)', incrementType: true, amount: 0 };
+  allTypes = [{ name: 'Normal (default)', incrementType: true, amount: 0 }];
   allDescriptionItems = [];
   categories = [];
   environment = environment;
