@@ -11,6 +11,7 @@
 .: WSM: Task: Add input label in promotions (WSM-252)
 .: WSM: BugFix: Set malaysia as default country (WSM-253)
 .: WSM: Task: Category select all by default when open modify invoice modal (WSM-250)
+.: WSM: Task: Remove default item type (WSM-263)
 
 ---------------------------------------------
 - 2021-01-01                                -

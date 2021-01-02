@@ -48,6 +48,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
   items = [];
   inListItems = [];
   promotions = [];
+  itemTypes = [];
   selectedItem = null;
   delivery: number = 0;
   subtotal: number = 0;
@@ -82,6 +83,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
         this.setupItem();
       } else if (!this.tempInvoice) {
         this.form = WSFormBuilder.createInvoiceForm();
+        this.inListItems = [];
       }
     }
   }
@@ -189,7 +191,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
     if (this.form.status == 'VALID') {
       this.inListItems.push({
         name: this.form.controls['itemName'].value,
-        type: this.form.controls['itemType'].value || 'Default',
+        type: this.form.controls['itemType'].value ? this.form.controls['itemType'].value.name : 'Default',
         quantity: this.form.controls['itemQuantity'].value || 1,
         price: +this.form.controls['itemPrice'].value,
       });
@@ -305,23 +307,20 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
   }, 500);
   selectionChange(event) {
     this.selectedItem = event;
+    this.itemTypes = [
+      {
+        name: 'Default',
+        price: this.getPriceAfterDiscount(this.selectedItem.price, this.selectedItem.discount)
+      },
+      ...this.selectedItem.types];
     this.getItemType(this.selectedItem);
   }
   getItemType(item) {
-    let discount = 0;
-    let price = 0;
-    let priceAfterDiscount = 0;
-    if (item.discount) {
-      discount = item.discount;
-    }
-    if (item.price) {
-      price = item.price;
-    }
-    priceAfterDiscount = price * (100 - discount)/ 100;
+    let priceAfterDiscount = this.getPriceAfterDiscount(item.price, item.discount);
     this.selectedItem = item;
     this.defaultPrice = priceAfterDiscount;
     this.form.patchValue({
-      itemType: this.selectedItem.types.length ? this.selectedItem.types[0].name : '',
+      itemType: this.itemTypes[0],
       itemName: item.name,
       itemPrice: priceAfterDiscount,
       itemQuantity: 1
@@ -329,20 +328,14 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
   }
   selectItemType(itemType) {
     if (itemType) {
-      let discount = 0;
-      let price = 0;
-      let priceAfterDiscount = 0;
-
-      if (itemType.name) {
-        this.form.patchValue({
-          itemName: itemType.name
-        });
-      }
-      if (itemType.discount) {
-        discount = itemType.discount;
-      }
       if (itemType.price) {
-        priceAfterDiscount = price * (100 - discount) / 100;
+        let priceAfterDiscount = this.getPriceAfterDiscount(itemType.price, itemType.discount);
+        this.form.patchValue({
+          itemPrice: priceAfterDiscount
+        });
+      } else if (itemType.amount !== undefined && itemType.incrementType !== undefined) {
+        let price = itemType.incrementType ? this.selectedItem.price + itemType.amount: this.selectedItem.price - itemType.amount;
+        let priceAfterDiscount = this.getPriceAfterDiscount(price, this.selectedItem.discount);
         this.form.patchValue({
           itemPrice: priceAfterDiscount
         });
@@ -360,17 +353,28 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
       }
     })
   }
-  _validatePickup() {
+  private validatePickup() {
     let form = this.form;
     return form.controls['isCustomerSaved'].value && form.controls['firstName'].value && form.controls['lastName'].value && form.controls['phoneNumber'].value ||
           (!form.controls['isCustomerSaved'].value && form.controls['firstName'].value && form.controls['lastName'].value && form.controls['phoneNumber'].value) ||
           (!form.controls['isCustomerSaved'].value && !form.controls['phoneNumber'].value);
   }
-  _validateDelivery() {
+  private validateDelivery() {
     let form = this.form;
     return form.controls['isCustomerSaved'].value && form.controls['firstName'].value && form.controls['lastName'].value && form.controls['phoneNumber'].value ||
            (!form.controls['isCustomerSaved'].value && (form.controls['phoneNumber'].value || form.controls['address'].value || form.controls['postcode'].value ||form.controls['state'].value) && form.controls['lastName'].value && form.controls['firstName'].value) ||
            (!form.controls['isCustomerSaved'].value && !(form.controls['phoneNumber'].value || form.controls['address'].value || form.controls['postcode'].value ||form.controls['state'].value));
+  }
+  private getPriceAfterDiscount(price, discount) {
+    let _discount = 0;
+    let _price = 0;
+    if (discount) {
+      _discount = discount;
+    }
+    if (price) {
+      _price = price;
+    }
+    return _price * (100 - _discount)/ 100;
   }
   modifyItem() {
     let form = this.form;
@@ -386,7 +390,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
       WsToastService.toastSubject.next({ content: 'Please enter first name!', type: 'danger'});
       return;
     }
-    if (!this._validatePickup() || !this._validateDelivery()) {
+    if (!this.validatePickup() || !this.validateDelivery()) {
       WsToastService.toastSubject.next({ content: 'Customer name and contact is required!', type: 'danger'});
       return;
     }
