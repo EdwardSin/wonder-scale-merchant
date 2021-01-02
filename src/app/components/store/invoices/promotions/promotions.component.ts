@@ -6,6 +6,7 @@ import { WsLoading } from '@elements/ws-loading/ws-loading';
 import { WsToastService } from '@elements/ws-toast/ws-toast.service';
 import { environment } from '@environments/environment';
 import { Searchbar } from '@objects/searchbar';
+import { ScreenService } from '@services/general/screen.service';
 import { AuthPromotionContributorService } from '@services/http/auth-store/contributor/auth-promotion-contributor.service';
 import { SharedNavbarService } from '@services/shared/shared-nav-bar.service';
 import { Subject } from 'rxjs';
@@ -29,6 +30,7 @@ export class PromotionsComponent implements OnInit {
   loading: WsLoading = new WsLoading;
   itemLoading: WsLoading = new WsLoading;
   isModifyPromotionModalOpened: boolean;
+  isMobileSize: boolean;
   searchController: Searchbar = new Searchbar;
   modifyLoading: WsLoading = new WsLoading;
   environment = environment;
@@ -37,6 +39,7 @@ export class PromotionsComponent implements OnInit {
     private sharedNavbarService: SharedNavbarService,
     private route: ActivatedRoute,
     private router: Router,
+    private screenService: ScreenService,
     private ref: ChangeDetectorRef) {
     this.form = WSFormBuilder.createAddPromotionForm();
   }
@@ -62,6 +65,9 @@ export class PromotionsComponent implements OnInit {
         });
       }
     });
+    this.screenService.isMobileSize.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+      this.isMobileSize = result;
+    })
     this.sharedNavbarService.isNavSubject.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(res => {
         this.isNavOpen = res;
