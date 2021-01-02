@@ -7,6 +7,7 @@
 - 2021-01-02                                -
 ---------------------------------------------
 .: WSM: BugFix: Fixed minor issues in Invoice Module (WSM-250)
+.: WSM: Task: Add input label (WSM-253)
 
 ---------------------------------------------
 - 2021-01-01                                -
