@@ -72,11 +72,12 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
   }
   ngOnInit() {
     super.ngOnInit();
-    this.getCatalogue();
-    this.getPromotions();
   }
   ngOnChanges(changes: SimpleChanges) {
     if (changes && changes['isOpened']) {
+      this.getCatalogue();
+      this.getPromotions();
+      this.getItems(this.categoryId);
       if (this.item) {
         this.setupItem();
       } else if (!this.tempInvoice) {
@@ -158,7 +159,6 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
     this.form.reset({
       deliveryFee: '',
       status: 'new',
-      itemType: 'default',
       country: 'MYS',
       deliveryOption: 'delivery'
     });
@@ -507,16 +507,6 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
     let etaDate = this.form.controls['etaDate'].value;
     let etaDateTimeHour = this.form.controls['etaDateTimeHour'].value;
     let etaDateTimeMin = this.form.controls['etaDateTimeMin'].value;
-    if (etaDate === '') {
-      WsToastService.toastSubject.next({ content: 'Please set estimated date!', type: 'danger'});
-      return false;
-    } else if (etaDateTimeHour === '') {
-      WsToastService.toastSubject.next({ content: 'Please set estimated hour!', type: 'danger'});
-      return false;
-    } else if (etaDateTimeMin === '') {
-      WsToastService.toastSubject.next({ content: 'Please set estimated time!', type: 'danger'});
-      return false;
-    }
     if ((etaDate && (!etaDateTimeHour || !etaDateTimeMin)) ||
         (etaDateTimeHour && (!etaDate || !etaDateTimeMin)) ||
         etaDateTimeMin && (!etaDate || !etaDateTimeHour)) {
@@ -563,6 +553,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
   close() {
     super.close();
     this.tempInvoice = null;
+    this.categoryId = '';
     if (this.closeCallback) {
       this.closeCallback();
     }

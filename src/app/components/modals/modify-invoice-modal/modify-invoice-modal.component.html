@@ -14,7 +14,8 @@
             <p class="mb-0" style="color: #6b778c" *ngIf="item.createdAt">Created {{ item?.createdAt | date: 'MMM d, y, h:mm a'}}</p>
             <p class="mb-0" style="color: #6b778c" *ngIf="item.updatedAt">Updated {{ item?.updatedAt | date: 'MMM d, y, h:mm a'}}</p>
         </div>
-        <mat-select class="form-control form-control-sm mb-3" placeholder="Catalogue" [disabled]="!isEditable()" (selectionChange)="getItems($event.value)">
+        <mat-select class="form-control form-control-sm mb-3" placeholder="Catalogue" value="" [disabled]="!isEditable()" (selectionChange)="getItems($event.value)">
+            <mat-option [value]="''">All</mat-option>
             <mat-option [value]="'uncategorized'">Uncategorized</mat-option>
             <mat-option [value]="category.id" *ngFor="let category of categories">{{ category?.name }}</mat-option>
         </mat-select>
