@@ -1,27 +1,30 @@
 <h4 class="ws-title">Customers</h4>
 <search-bar class="d-inline-block mr-2 mb-3" [placeholder]="'Search name...'" [searchKeyword]="searchController.searchKeyword"></search-bar>
-<button class="btn btn-sm btn-controller float-right" (click)="openModifyCustomerModal()">
-    <span class="fas fa-plus mr-2 d-inline-block"></span>Add New
+<button class="btn btn-sm btn-controller float-right mb-3" title="Add New" (click)="openModifyCustomerModal()">
+    <span class="d-lg-flex align-items-center">
+        <span class="fas fa-plus mr-lg-2 d-inline-block"></span><span *ngIf="!isMobileSize">Add New</span>
+    </span>
 </button>
-
-<table class="table table-hover w-100 font-9 mb-5">
-    <thead>
-        <th>Name</th>
-        <th width="150">Phone Number</th>
-        <th width="100">Actions</th>
-    </thead>
-    <tbody *ngIf="!loading.isRunning()">
-        <tr *ngFor="let customer of customers">
-            <td>{{ customer.firstName }} {{ customer.lastName}}</td>
-            <td>{{ customer.phoneNumber }}</td>
-            <td>
-                <button [disabled]="itemLoading.isRunning()" title="Edit Item" href="javascript:void(0)" class="ws-dark-color btn btn-sm btn-controller text-decoration-none" (click)="$event.stopPropagation(); openModifyCustomerModal(customer)">
-                    <span class="fas fa-edit"></span>
-                </button>
-            </td>
-        </tr>
-    </tbody>
-</table>
+<div class="w-100" style="z-index: 1; overflow-x: auto;">
+    <table class="table table-hover w-100 font-9 mb-5">
+        <thead>
+            <th style="white-space: nowrap">Name</th>
+            <th style="white-space: nowrap" width="150">Phone Number</th>
+            <th style="white-space: nowrap" width="100">Actions</th>
+        </thead>
+        <tbody *ngIf="!loading.isRunning()">
+            <tr *ngFor="let customer of customers">
+                <td style="white-space: nowrap">{{ customer.firstName }} {{ customer.lastName}}</td>
+                <td style="white-space: nowrap">{{ customer.phoneNumber }}</td>
+                <td style="white-space: nowrap">
+                    <button [disabled]="itemLoading.isRunning()" title="Edit Item" href="javascript:void(0)" class="ws-dark-color btn btn-sm btn-controller text-decoration-none" (click)="$event.stopPropagation(); openModifyCustomerModal(customer)">
+                        <span class="fas fa-edit"></span>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 <ws-pagination *ngIf="numberOfCurrentTotalItems" [expanded]="isNavOpen" [currentPage]="currentPage"
             [pageSize]="environment.ITEMS_PER_PAGE" [dbTotal]="numberOfAllItems" [total]="numberOfCurrentTotalItems" (getPageNumber)="navigate($event)"></ws-pagination>
 
@@ -42,23 +45,29 @@
         <h6 class="h6">Customer Details</h6>
         <div class="row no-gutters mb-3">
             <div class="col-lg-6 pr-lg-3 mb-2">
-                <input class="form-control form-control-sm" maxlength="36" formControlName="firstName" (input)="updateDeliveryFirstName($event)" placeholder="First Name*" />
+                <label id="firstName" class="mb-0 font-9">First Name*:</label>
+                <input for="firstName" class="form-control form-control-sm" maxlength="36" formControlName="firstName" (input)="updateDeliveryFirstName($event)"/>
             </div>
             <div class="col-lg-6 mb-2">
-                <input class="form-control form-control-sm" maxlength="36" formControlName="lastName" (input)="updateDeliveryLastName($event)" placeholder="Last Name*" />
+                <label id="lastName" class="mb-0 font-9">Last Name*:</label>
+                <input for="lastName" class="form-control form-control-sm" maxlength="36" formControlName="lastName" (input)="updateDeliveryLastName($event)"/>
             </div>
             <div class="col-lg-6 pr-lg-3 mb-2">
-                <input class="form-control form-control-sm" maxlength="128" formControlName="email" placeholder="Email Addres" />
+                <label id="email" class="mb-0 font-9">Email:</label>
+                <input  for="email" class="form-control form-control-sm" maxlength="128" formControlName="email"/>
             </div>
             <div class="col-lg-6 mb-2">
-                <input class="form-control form-control-sm" maxlength="36" formControlName="phoneNumber" placeholder="Phone Number" />
+                <label id="phoneNumber" class="mb-0 font-9">Phone Number:</label>
+                <input for="phoneNumber" class="form-control form-control-sm" maxlength="36" formControlName="phoneNumber"/>
             </div>
             <div class="col-lg-6 pr-lg-3 mb-2">
-                <input (click)="fromPicker.open()" class="form-control form-control-sm" formControlName="dateOfBirth" [matDatepicker]="fromPicker" [max]="today" placeholder="Date of Birth" />
+                <label id="dateOfBirth" class="mb-0 font-9">Date of Birth:</label>
+                <input for="dateOfBirth" (click)="fromPicker.open()" class="form-control form-control-sm" formControlName="dateOfBirth" [matDatepicker]="fromPicker" [max]="today" />
                 <mat-datepicker #fromPicker startView="month"></mat-datepicker>
             </div>
             <div class="col-lg-6 mb-2">
-                <mat-select class="form-control form-control-sm" formControlName="gender" placeholder="Gender">
+                <label id="gender" class="mb-0 font-9">Gender:</label>
+                <mat-select for="gender" class="form-control form-control-sm" formControlName="gender">
                     <mat-option [value]="''">Select a gender</mat-option>
                     <mat-option [value]="'male'">male</mat-option>
                     <mat-option [value]="'female'">female</mat-option>
@@ -70,27 +79,33 @@
             <mat-checkbox [color]="'primary'" [checked]="isDefaultCustomerDetailsChecked" (change)="onDefaultCustomerDetailsCheck($event)" class="font-9 mb-2 d-block">Use customer details by default</mat-checkbox>
             <div class="row no-gutters">
                 <div class="col-lg-6 mb-2 pr-lg-3">
-                    <input class="form-control form-control-sm" maxlength="36" formControlName="deliveryFirstName" placeholder="Delivery First Name" />
+                    <label id="deliveryFirstName" class="mb-0 font-9">Delivery First Name:</label>
+                    <input for="deliveryFirstName" class="form-control form-control-sm" maxlength="36" formControlName="deliveryFirstName" />
                 </div>
                 <div class="col-lg-6 mb-2">
-                    <input class="form-control form-control-sm" maxlength="36" formControlName="deliveryLastName" placeholder="Delivery Last Name" />
+                    <label id="deliveryLastName" class="mb-0 font-9">Delivery Last Name:</label>
+                    <input for="deliveryLastName" class="form-control form-control-sm" maxlength="36" formControlName="deliveryLastName" />
                 </div>
             </div>
             <div class="mb-2">
-                <input class="form-control form-control-sm" maxlength="128" formControlName="address" placeholder="Address" />
+                <label id="address" class="mb-0 font-9">Address:</label>
+                <input for="address" class="form-control form-control-sm" maxlength="128" formControlName="address" />
             </div>
             <div class="row no-gutters">
                 <div class="col-lg-4 mb-2 pr-lg-3">
-                    <input class="form-control form-control-sm" maxlength="36" formControlName="postcode" placeholder="Post Code" />
+                    <label id="postcode" class="mb-0 font-9">Postcode:</label>
+                    <input for="postcode" class="form-control form-control-sm" maxlength="36" formControlName="postcode" />
                 </div>
                 <div class="col-lg-4 mb-2 pr-lg-3">
-                    <mat-select class="form-control form-control-sm" formControlName="state" placeholder="State">
+                    <label id="state" class="mb-0 font-9">State:</label>
+                    <mat-select for="state" class="form-control form-control-sm" formControlName="state">
                         <mat-option [value]="''">Select a state</mat-option>
                         <mat-option [value]="_state" *ngFor="let _state of states">{{ _state }}</mat-option>
                     </mat-select>
                 </div>
                 <div class="col-lg-4 mb-2">
-                    <mat-select class="form-control form-control-sm" formControlName="country" placeholder="Country">
+                    <label id="country" class="mb-0 font-9">Country:</label>
+                    <mat-select for="country" class="form-control form-control-sm" formControlName="country">
                         <mat-option [value]="''">Select a country</mat-option>
                         <mat-option [value]="'MYS'">Malaysia</mat-option>
                     </mat-select>

@@ -6,6 +6,7 @@ import { WsLoading } from '@elements/ws-loading/ws-loading';
 import { WsToastService } from '@elements/ws-toast/ws-toast.service';
 import { environment } from '@environments/environment';
 import { Searchbar } from '@objects/searchbar';
+import { ScreenService } from '@services/general/screen.service';
 import { AuthCustomerContributorService } from '@services/http/auth-store/contributor/auth-customer-contributor.service';
 import { SharedNavbarService } from '@services/shared/shared-nav-bar.service';
 import { Subject } from 'rxjs';
@@ -46,6 +47,7 @@ export class CustomersComponent implements OnInit {
   itemLoading: WsLoading = new WsLoading;
   isDefaultCustomerDetailsChecked: boolean;
   isModifyCustomerModalOpened: boolean;
+  isMobileSize: boolean;
   searchController: Searchbar = new Searchbar;
   modifyLoading: WsLoading = new WsLoading;
   environment = environment;
@@ -53,6 +55,7 @@ export class CustomersComponent implements OnInit {
   constructor(private authCustomerContributorService: AuthCustomerContributorService,
     private sharedNavbarService: SharedNavbarService,
     private route: ActivatedRoute,
+    private screenService: ScreenService,
     private router: Router,
     private ref: ChangeDetectorRef) { 
     this.form = WSFormBuilder.createAddCustomerForm();
@@ -79,6 +82,9 @@ export class CustomersComponent implements OnInit {
         });
       }
     });
+    this.screenService.isMobileSize.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+      this.isMobileSize = result;
+    })
     this.sharedNavbarService.isNavSubject.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(res => {
         this.isNavOpen = res;
