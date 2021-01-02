@@ -202,8 +202,7 @@ export class CustomersComponent implements OnInit {
       }
       else if (this.form.controls['address'].errors || 
           this.form.controls['postcode'].errors || 
-          this.form.controls['state'].errors || 
-          this.form.controls['country'].errors) {
+          this.form.controls['state'].errors) {
           WsToastService.toastSubject.next({ content: 'All related address fields must be filled!', type: 'danger'});
       }
       else if (this.form.controls['address'].errors && this.form.controls['address'].errors.maxlength) {
@@ -253,7 +252,9 @@ export class CustomersComponent implements OnInit {
     this.router.navigate([], { queryParams: {page: event}, queryParamsHandling: 'merge' });
   }
   resetForm() {
-    this.form.reset();
+    this.form.reset({
+      country: 'MYS'
+    });
     this.selectedCustomer = null;
     this.isDefaultCustomerDetailsChecked = false;
     this.form.get('deliveryFirstName').enable();

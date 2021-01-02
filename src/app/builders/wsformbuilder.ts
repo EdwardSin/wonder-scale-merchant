@@ -228,7 +228,7 @@ export class WSFormBuilder {
             state: ['', [Validators.maxLength(36)]],
             country: ['MYS', [Validators.maxLength(3)]],
         }, {
-            validator: [AddressValidation.validAddress]
+            validator: [AddressValidation.validAddressWithoutCountry]
         })
     }
     public static createAddPromotionForm() {
