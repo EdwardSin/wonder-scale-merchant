@@ -1,6 +1,6 @@
 <ws-modal *ngIf="isOpened" [(isOpened)]="isOpened" [isCloseIconDisplayed]="false" [maxWidth]="700">
     <form modalBody [formGroup]="form">
-        <mat-select class="form-control form-control-sm mb-2 border-0 float-right status-container" style="width: 150px; padding-top: .35rem" placeholder="Status" formControlName="status" [ngClass]="'status-container-' + form.controls['status'].value" (selectionChange)="updateInvoiceStatus($event.value)">
+        <mat-select class="form-control form-control-sm mb-3 border-0 float-right status-container" style="width: 150px; padding-top: .35rem" placeholder="Status" formControlName="status" [ngClass]="'status-container-' + form.controls['status'].value" (selectionChange)="updateInvoiceStatus($event.value)">
             <mat-option [value]="'new'" *ngIf="!item || item.status == 'new' || item.status == 'paid' || item.status == 'completed' || item.status == 'refunded' || item.status == 'cancelled'">New</mat-option>
             <mat-option [value]="'paid'" *ngIf="item && (item.status == 'paid' || item.status == 'in_progress')">Paid</mat-option>
             <mat-option [value]="'in_progress'" *ngIf="item && (item.status == 'paid' || item.status == 'in_progress' || item.status == 'delivered')">In Progress</mat-option>
@@ -10,25 +10,32 @@
             <mat-option [value]="'completed'" *ngIf="item && (item.status == 'delivered' || item.status == 'completed')">Completed</mat-option>
         </mat-select>
         <p class="mb-0 font-8" *ngIf="item?.receiptId">ID: {{ item?.receiptId }}</p>
-        <div class="font-8 mb-2" *ngIf="item">
+        <div class="font-8 mb-3" *ngIf="item">
             <p class="mb-0" style="color: #6b778c" *ngIf="item.createdAt">Created {{ item?.createdAt | date: 'MMM d, y, h:mm a'}}</p>
             <p class="mb-0" style="color: #6b778c" *ngIf="item.updatedAt">Updated {{ item?.updatedAt | date: 'MMM d, y, h:mm a'}}</p>
         </div>
-        <mat-select class="form-control form-control-sm mb-2" placeholder="Catalogue" [disabled]="!isEditable()" (selectionChange)="getItems($event.value)">
+        <mat-select class="form-control form-control-sm mb-3" placeholder="Catalogue" [disabled]="!isEditable()" (selectionChange)="getItems($event.value)">
             <mat-option [value]="'uncategorized'">Uncategorized</mat-option>
             <mat-option [value]="category.id" *ngFor="let category of categories">{{ category?.name }}</mat-option>
         </mat-select>
         <div class="border rounded mb-3 p-3">
-            <ws-search-select [items]="items" [placeholder]="'Item'" [loading]="itemLoading.isRunning()" (selectionChange)="selectionChange($event)" (searchValueChange)="searchItemValueChange($event)" (scroll)="getItems(categoryId, true)" (open)="openItemChange($event)" [class.disabled]="!isEditable()" class="d-block form-control form-control-sm mb-2"></ws-search-select>
-            <mat-select class="form-control form-control-sm mb-2" placeholder="Item Type" formControlName="itemType">
+            <label id="itemtype" class="mb-0 font-9">Item: </label>
+            <ws-search-select for="itemtype" [items]="items" [loading]="itemLoading.isRunning()" (selectionChange)="selectionChange($event)" (searchValueChange)="searchItemValueChange($event)" (scroll)="getItems(categoryId, true)" (open)="openItemChange($event)" [class.disabled]="!isEditable()" class="d-block form-control form-control-sm mb-2"></ws-search-select>
+            <label id="itemtype" class="mb-0 font-9">Item Type: </label>
+            <mat-select for="itemtype" class="form-control form-control-sm mb-2" formControlName="itemType">
                 <mat-option [value]="itemType.name" *ngFor="let itemType of selectedItem?.types">{{itemType.name}}</mat-option>
             </mat-select>
             <div class="row no-gutters mb-2">
-                <div class="col-lg-6 pr-2">
-                    <input class="form-control form-control-sm" placeholder="Price" formControlName="itemPrice" />
+                <div class="col-lg-6 pr-lg-2">
+                    <label id="price" class="mb-0 font-9">Price: </label>
+                    <div class="position-relative">
+                        <a *ngIf="form.controls['itemType'].value" (click)="setDefaultPrice()" href="javascript:void(0)" class="position-absolute font-9" style="right: 8px; top: 5px; z-index: 99;">Set default</a>
+                        <input for="price" class="form-control form-control-sm" style="padding-right: 5.25rem" formControlName="itemPrice" />
+                    </div>
                 </div>
-                <div class="col-lg-6">
-                    <input class="form-control form-control-sm" placeholder="Quantity" formControlName="itemQuantity" />
+                <div class="col-lg-6 mt-2 mt-lg-0">
+                    <label id="quantity" class="mb-0 font-9">Quantity: </label>
+                    <input for="quantity" class="form-control form-control-sm" formControlName="itemQuantity" />
                 </div>
             </div>
             <div>
@@ -41,8 +48,8 @@
         </div>
         <div class="mb-3">
             <h5 class="h6">Items ({{inListItems.length}})</h5>
-            <ul class="list-group font-9" *ngIf="inListItems.length">
-                <li class="list-group-item d-flex align-items-center" *ngFor="let targetItem of inListItems">
+            <ul class="list-group font-9" cdkDropList (cdkDropListDropped)="drop($event)" *ngIf="inListItems.length">
+                <li cdkDrag class="list-group-item d-flex align-items-center" *ngFor="let targetItem of inListItems">
                     <span class="col p-0">{{ targetItem.name }} {{ targetItem.type !== 'default' ? '- ' + targetItem.type : '' }} - RM {{ targetItem.price  | number: '1.2-2' }} x {{ targetItem.quantity}} </span>
                     <span class="px-1">RM {{ targetItem.price * targetItem.quantity | number: '1.2-2' }}</span>
                     <span *ngIf="isEditable()" class="fas fa-times pl-2 clickable" (click)="removeItem(targetItem)"></span>
@@ -95,13 +102,16 @@
             <h5 class="h6">Customer Details</h5>
             <div class="row no-gutters">
                 <div class="col-lg-6 pr-lg-1">
-                    <input class="form-control form-control-sm mb-2" maxlength="36" placeholder="First Name" formControlName="firstName" />
+                    <label id="firstName" class="mb-0 font-9">First Name: </label>
+                    <input for="firstName" class="form-control form-control-sm mb-2" maxlength="36" formControlName="firstName" />
                 </div>
                 <div class="col-lg-6 pl-lg-1">
-                    <input class="form-control form-control-sm mb-2" maxlength="36" placeholder="Last Name" formControlName="lastName" />
+                    <label id="lastName" class="mb-0 font-9">Last Name: </label>
+                    <input for="lastName" class="form-control form-control-sm mb-2" maxlength="36" formControlName="lastName" />
                 </div>
             </div>
-            <input class="form-control form-control-sm mb-2" placeholder="Contact Tel" maxlength="36" formControlName="phoneNumber" />
+            <label id="contactTel" class="mb-0 font-9">Contact Tel: </label>
+            <input for="contactTel" class="form-control form-control-sm mb-2" maxlength="36" formControlName="phoneNumber" />
             <mat-checkbox [color]="'primary'" class="pt-1 mr-2 d-inline-block" formControlName="isCustomerSaved">
                 <span class="font-8 align-middle">Check to save customer</span>
             </mat-checkbox>
@@ -110,29 +120,36 @@
             <h5 class="h6">Delivery Details</h5>
             <div class="row no-gutters">
                 <div class="col-lg-6 pr-lg-1">
-                    <input class="form-control form-control-sm mb-2" maxlength="36" placeholder="First Name" formControlName="firstName" />
+                    <label id="firstName" class="mb-0 font-9">First Name: </label>
+                    <input for="firstName" class="form-control form-control-sm mb-2" maxlength="36" formControlName="firstName" />
                 </div>
                 <div class="col-lg-6 pl-lg-1">
-                    <input class="form-control form-control-sm mb-2" maxlength="36" placeholder="Last Name" formControlName="lastName" />
+                    <label id="lastName" class="mb-0 font-9">Last Name: </label>
+                    <input for="lastName" class="form-control form-control-sm mb-2" maxlength="36" formControlName="lastName" />
                 </div>
             </div>
-            <input class="form-control form-control-sm mb-2" placeholder="Contact Tel" maxlength="36" formControlName="phoneNumber" />
+            <label id="contactTel" class="mb-0 font-9">Contact Tel: </label>
+            <input for="contactTel" class="form-control form-control-sm mb-2" maxlength="36" formControlName="phoneNumber" />
             <div class="mb-2">
                 <div class="mb-2">
-                    <input class="form-control form-control-sm" maxlength="128" placeholder="Delivery Address" formControlName="address" />
+                    <label id="deliveryAddress" class="mb-0 font-9">Delivery Address:</label>
+                    <input for="deliveryAddress" class="form-control form-control-sm" maxlength="128" formControlName="address" />
                 </div>
                 <div class="row no-gutters">
                     <div class="col-lg-4 pr-lg-2">
-                        <input class="form-control form-control-sm" maxlength="36" formControlName="postcode" placeholder="Post Code" />
+                        <label id="postcode" class="mb-0 font-9">Postcode:</label>
+                        <input class="form-control form-control-sm" maxlength="36" formControlName="postcode" />
                     </div>
-                    <div class="col-lg-4 pr-lg-2">
-                        <mat-select class="form-control form-control-sm" formControlName="state" placeholder="State">
+                    <div class="col-lg-4 pr-lg-2 mt-2 mt-lg-0">
+                        <label id="state" class="mb-0 font-9">State:</label>
+                        <mat-select class="form-control form-control-sm" formControlName="state">
                             <mat-option [value]="''">Select a state</mat-option>
                             <mat-option [value]="_state" *ngFor="let _state of states">{{ _state }}</mat-option>
                         </mat-select>
                     </div>
-                    <div class="col-lg-4">
-                        <mat-select class="form-control form-control-sm" formControlName="country" placeholder="Country">
+                    <div class="col-lg-4 mt-2 mt-lg-0">
+                        <label id="country" class="mb-0 font-9">Country:</label>
+                        <mat-select class="form-control form-control-sm" formControlName="country">
                             <mat-option [value]="''">Select a country</mat-option>
                             <mat-option [value]="'MYS'">Malaysia</mat-option>
                         </mat-select>
@@ -146,7 +163,7 @@
         <div class="mb-3">
             <h5 class="h6">ETA {{ form.controls.deliveryOption.value == 'delivery' ? 'Delivery' : 'Pick-up'}} Date</h5>
             <div class="row no-gutters">
-                <input (click)="fromPicker.open()" placeholder="Date" [min]="todayDate" formControlName="etaDate" class="form-control form-control-sm mb-2 mr-3" style="max-width: 200px" [matDatepicker]="fromPicker" />
+                <input (click)="fromPicker.open()" placeholder="Date" [min]="todayDate" formControlName="etaDate" class="form-control form-control-sm mb-2 mr-2" style="max-width: 200px" [matDatepicker]="fromPicker" />
                 <mat-datepicker #fromPicker startView="month" [startAt]="todayDate"></mat-datepicker>
                 <div class="input-group" style="width: 150px">
                     <mat-select class="form-control form-control-sm" placeholder="HH" formControlName="etaDateTimeHour">
@@ -176,5 +193,5 @@
     </form>
 </ws-modal>
 
-<confirm-modal *ngIf="isCreateEmptyInvoiceModalOpened" [(isOpened)]="isCreateEmptyInvoiceModalOpened" id="removeItemsModal" [loading]="modifyLoading.isRunning()" [message]="'Are you sure the invoice is empty?'" [action]="modifyCallback.bind(this, tempInvoice)" [closeCallback]="returnToModifyInvoice.bind(this, tempInvoice)">
+<confirm-modal *ngIf="isCreateEmptyInvoiceModalOpened" [(isOpened)]="isCreateEmptyInvoiceModalOpened" id="removeItemsModal" [loading]="modifyLoading.isRunning()" [message]="'Are you sure the invoice is empty?'" [action]="modifyCallback.bind(this, tempInvoice)" [closeCallback]="returnToModifyInvoice.bind(this)">
 </confirm-modal>

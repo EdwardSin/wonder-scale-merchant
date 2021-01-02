@@ -137,6 +137,21 @@ export class WsInvoiceCardComponent implements OnInit {
       WsToastService.toastSubject.next({ content: 'Please set estimated time!', type: 'danger'});
       return false;
     }
+    if ((etaDate && (!etaDateTimeHour || !etaDateTimeMin)) ||
+        (etaDateTimeHour && (!etaDate || !etaDateTimeMin)) ||
+        etaDateTimeMin && (!etaDate || !etaDateTimeHour)) {
+      WsToastService.toastSubject.next({ content: 'Please set a valid estimated date time!', type: 'danger'});
+      return false;
+    } else if (etaDate) {
+      if (typeof etaDate !== typeof Date) {
+        etaDate = new Date(etaDate);
+      }
+      let estimatedDateTime = new Date(etaDate.getFullYear(), etaDate.getMonth(), etaDate.getDate(), etaDateTimeHour, etaDateTimeMin);
+      if (estimatedDateTime < new Date) {
+        WsToastService.toastSubject.next({ content: 'Estimated date time must be later than now!', type: 'danger'});
+        return false;
+      }
+    }
     return true;
   }
   copy(event) {

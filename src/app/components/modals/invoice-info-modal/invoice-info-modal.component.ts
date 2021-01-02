@@ -32,15 +32,19 @@ export class InvoiceInfoModalComponent extends WsModalComponent implements OnIni
     super.ngOnInit();
   }
   refund() {
-    let status = 'cancelled';
+    let obj = {
+      status: 'cancelled',
+      reason: this.reason
+    };
     if (this.isRefundChecked) {
-      status = 'refunded';
+      obj.status = 'refunded';
     }
     this.refundLoading.start();
-    this.authInvoiceContributorService.updateInvoiceStatus(this.item._id, {status}).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.refundLoading.stop())).subscribe(result => {
+    this.authInvoiceContributorService.updateInvoiceStatus(this.item._id, obj).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.refundLoading.stop())).subscribe(result => {
       if (result && result['result']) {
         this.authInvoiceContributorService.refreshInvoices.next(true);
         this.isCancelledOpened = false;
+        this.reason = '';
       }
     }, err => {
       WsToastService.toastSubject.next({content: 'Status cannot be updated!', type: 'danger'});
