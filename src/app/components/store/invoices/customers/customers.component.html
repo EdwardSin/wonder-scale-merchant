@@ -1,9 +1,7 @@
 <h4 class="ws-title">Customers</h4>
 <search-bar class="d-inline-block mr-2 mb-3" [placeholder]="'Search name...'" [searchKeyword]="searchController.searchKeyword"></search-bar>
 <button class="btn btn-sm btn-controller float-right mb-3" title="Add New" (click)="openModifyCustomerModal()">
-    <span class="d-lg-flex align-items-center">
-        <span class="fas fa-plus mr-lg-2 d-inline-block"></span><span *ngIf="!isMobileSize">Add New</span>
-    </span>
+    <span class="fas fa-plus mr-lg-2 d-inline-block"></span><ng-container *ngIf="!isMobileSize">Add New</ng-container>
 </button>
 <div class="w-100" style="z-index: 1; overflow-x: auto;">
     <table class="table table-hover w-100 font-9 mb-5">
