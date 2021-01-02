@@ -86,10 +86,6 @@ export class ModifyItemTypeComponent implements OnInit {
   }
   setupItemTypeForm(item) {
     let itemTypes = this.itemTypesForm.get('itemTypes') as FormArray;
-    if (!item.types || item.types.length == 0) {
-      let form = WSFormBuilder.createItemTypeForm();
-      itemTypes.push(form);
-    }
     item.types.forEach(type => {
       let form = WSFormBuilder.createItemTypeForm();
       if (type.images) {
@@ -198,7 +194,9 @@ export class ModifyItemTypeComponent implements OnInit {
     }
   }
   validateBasicForm() {
-    let results = this.itemTypesForm.get('itemTypes')['controls'].map((formGroup, index) => {
+    let controls = this.itemTypesForm.get('itemTypes')['controls'];
+    for (let i = 0; i < controls.length; i++) {
+      let formGroup = controls[i];
       let name = formGroup.get('name');
       let price = formGroup.get('price');
       let discount = formGroup.get('discount');
@@ -206,31 +204,32 @@ export class ModifyItemTypeComponent implements OnInit {
       let quantity = formGroup.get('quantity');
       let priceRegex = /^\d*(?:\.\d{1,2})?$/;
       let intergerRegex = /^\d+$/;
+      let currentIndex = i + 1;
       
-      if (!name.value || !name.value.trim()) {
-        WsToastService.toastSubject.next({ content: 'Type name is required!', type: 'danger' });
+      if ((!name.value || !name.value.trim()) && i !== 0) {
+        WsToastService.toastSubject.next({ content: 'Item ' + currentIndex + ' - name is required!', type: 'danger' });
         return false;
       }
       if (price.value && !priceRegex.test(price.value)){
-        WsToastService.toastSubject.next({ content: 'Price is invalid!', type: 'danger' });
+        WsToastService.toastSubject.next({ content: 'Item ' + currentIndex + ' - price is invalid!', type: 'danger' });
         return false;
       }
       else if (discount.value && (!priceRegex.test(discount.value) || +discount.value > 100)){
-        WsToastService.toastSubject.next({ content: 'Discount is invalid!', type: 'danger' });
+        WsToastService.toastSubject.next({ content: 'Item ' + currentIndex + ' - discount is invalid!', type: 'danger' });
         return false;
       }
       else if (weight.value && !priceRegex.test(weight.value)){
-        WsToastService.toastSubject.next({ content: 'Weight is invalid!', type: 'danger' });
+        WsToastService.toastSubject.next({ content: 'Item ' + currentIndex + ' - weight is invalid!', type: 'danger' });
         return false;
       }
       else if (quantity.value && !intergerRegex.test(quantity.value)){
-        WsToastService.toastSubject.next({ content: 'Quantity is invalid!', type: 'danger' });
+        WsToastService.toastSubject.next({ content: 'Item ' + currentIndex + ' - quantity is invalid!', type: 'danger' });
         return false;
       } else if(quantity.value && +quantity.value > 999999) {
-        WsToastService.toastSubject.next({ content: 'Quantity should less than 999999!', type: 'danger' });
+        WsToastService.toastSubject.next({ content: 'Item ' + currentIndex + ' - quantity should less than 999999!', type: 'danger' });
         return false;
       }
-    });
+    }
     let listOfName = this.itemTypesForm.get('itemTypes')['controls'].map(formGroup => {
       return formGroup.value.name.trim();
     });
@@ -239,7 +238,7 @@ export class ModifyItemTypeComponent implements OnInit {
       WsToastService.toastSubject.next({ content: 'No duplicated type is allowed!', type: 'danger'});
       return false;
     }
-    return !results.includes(false);
+    return true;
   }
   onColorValueChanged($event, formGroup) {
     if (this.colors.includes($event) || /^#([0-9A-F]{3}){1,2}$/i.test($event.value)) {

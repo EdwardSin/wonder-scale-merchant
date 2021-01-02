@@ -20,7 +20,7 @@
             </div>
             <div *ngFor="let itemType of itemTypesForm.get('itemTypes')['controls']; index as i"
               class="my-2 border position-relative" style="padding: .5rem">
-              <span *ngIf="i != 0" (click)="removeItemType(itemType)" class="position-absolute fas fa-times clickable"
+              <span (click)="removeItemType(itemType)" class="position-absolute fas fa-times clickable"
                 style="right: -28px;
             top: 10px;
             background-color: #f7f7f7;
@@ -168,8 +168,11 @@
                 </div>
               </ng-container>
             </div>
+            <div *ngIf="!itemTypesForm.get('itemTypes')['controls'].length">
+              <p class="mb-0 py-5 my-5 text-muted text-center">Add types to your item</p>
+            </div>
             <div>
-                <ws-loading-button class="d-block" [loading]="itemTypeLoading.isRunning()"
+            <ws-loading-button *ngIf="itemTypesForm.get('itemTypes')['controls'].length" class="d-block" [loading]="itemTypeLoading.isRunning()"
                 [class]="'btn btn-sm btn-controller float-right mr-0'" (click)="editItemTypes()">Save</ws-loading-button>
             </div>
           </ng-container>
