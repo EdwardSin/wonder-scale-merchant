@@ -23,8 +23,8 @@
             <label id="itemtype" class="mb-0 font-9">Item: </label>
             <ws-search-select for="itemtype" [items]="items" [loading]="itemLoading.isRunning()" (selectionChange)="selectionChange($event)" (searchValueChange)="searchItemValueChange($event)" (scroll)="getItems(categoryId, true)" (open)="openItemChange($event)" [class.disabled]="!isEditable()" class="d-block form-control form-control-sm mb-2"></ws-search-select>
             <label id="itemtype" class="mb-0 font-9">Item Type: </label>
-            <mat-select for="itemtype" class="form-control form-control-sm mb-2" formControlName="itemType">
-                <mat-option [value]="itemType.name" *ngFor="let itemType of selectedItem?.types">{{itemType.name}}</mat-option>
+            <mat-select for="itemtype" class="form-control form-control-sm mb-2" formControlName="itemType" (selectionChange)="selectItemType($event.value)">
+                <mat-option [value]="itemType" *ngFor="let itemType of itemTypes">{{itemType.name}}</mat-option>
             </mat-select>
             <div class="row no-gutters mb-2">
                 <div class="col-lg-6 pr-lg-2">
@@ -139,18 +139,18 @@
                 <div class="row no-gutters">
                     <div class="col-lg-4 pr-lg-2">
                         <label id="postcode" class="mb-0 font-9">Postcode:</label>
-                        <input class="form-control form-control-sm" maxlength="36" formControlName="postcode" />
+                        <input for="postcode" class="form-control form-control-sm" maxlength="36" formControlName="postcode" />
                     </div>
                     <div class="col-lg-4 pr-lg-2 mt-2 mt-lg-0">
                         <label id="state" class="mb-0 font-9">State:</label>
-                        <mat-select class="form-control form-control-sm" formControlName="state">
+                        <mat-select for="state" class="form-control form-control-sm" formControlName="state">
                             <mat-option [value]="''">Select a state</mat-option>
                             <mat-option [value]="_state" *ngFor="let _state of states">{{ _state }}</mat-option>
                         </mat-select>
                     </div>
                     <div class="col-lg-4 mt-2 mt-lg-0">
                         <label id="country" class="mb-0 font-9">Country:</label>
-                        <mat-select class="form-control form-control-sm" formControlName="country">
+                        <mat-select for="country" class="form-control form-control-sm" formControlName="country">
                             <mat-option [value]="''">Select a country</mat-option>
                             <mat-option [value]="'MYS'">Malaysia</mat-option>
                         </mat-select>

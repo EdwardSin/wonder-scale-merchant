@@ -215,6 +215,7 @@ export class ModifyItemComponent implements OnInit {
     let currentItem = {
       ...this.currentItem,
       ...this.itemGroup.value,
+      refId: this.itemGroup.value.refId || null,
       profileImageIndex: this.profileImageIndex
     },
     allProfileItems = [],
@@ -245,7 +246,7 @@ export class ModifyItemComponent implements OnInit {
       finalize(() => { this.addItemLoading.stop() }))
       .subscribe(result => {
         this.currentItem = this.tempItem;
-        this.router.navigate([], {queryParams: { id: this.itemId, modal: 'modify-item-type' }, queryParamsHandling: 'merge'});
+        this.router.navigate([], {queryParams: { id: null, modal: null }, queryParamsHandling: 'merge'});
         this.sharedCategoryService.refreshCategories();
       }, err => {
         let message = err.error && err.error.message ? err.error.message : 'Error when creating items!';

@@ -86,6 +86,10 @@ export class ModifyItemTypeComponent implements OnInit {
   }
   setupItemTypeForm(item) {
     let itemTypes = this.itemTypesForm.get('itemTypes') as FormArray;
+    if (!item.types || item.types.length == 0) {
+      let form = WSFormBuilder.createItemTypeForm();
+      itemTypes.push(form);
+    }
     item.types.forEach(type => {
       let form = WSFormBuilder.createItemTypeForm();
       if (type.images) {
@@ -93,8 +97,6 @@ export class ModifyItemTypeComponent implements OnInit {
       }
       form.patchValue(type);
       itemTypes.push(form);
-      itemTypes.controls[0]['controls']['price'].disable();
-      itemTypes.controls[0]['controls']['discount'].disable();
     });
   }
   uploadItemImages(allImages, images, itemTypeId) {
@@ -205,12 +207,9 @@ export class ModifyItemTypeComponent implements OnInit {
       let priceRegex = /^\d*(?:\.\d{1,2})?$/;
       let intergerRegex = /^\d+$/;
       
-      if ((!name.value || !name.value.trim()) && index !== 0) {
+      if (!name.value || !name.value.trim()) {
         WsToastService.toastSubject.next({ content: 'Type name is required!', type: 'danger' });
         return false;
-      }
-      if ((!name.value || !name.value.trim()) && index == 0) {
-        name.setValue('Default');
       }
       if (price.value && !priceRegex.test(price.value)){
         WsToastService.toastSubject.next({ content: 'Price is invalid!', type: 'danger' });

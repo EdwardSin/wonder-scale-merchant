@@ -253,6 +253,7 @@ export class CustomersComponent implements OnInit {
   }
   resetForm() {
     this.form.reset({
+      state: '',
       country: 'MYS'
     });
     this.selectedCustomer = null;

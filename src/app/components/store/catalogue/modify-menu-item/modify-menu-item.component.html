@@ -60,6 +60,9 @@
                             <h6>Types<span class="d-inline-block fas fa-plus float-right clickable" style="color:#505f79;" (click)="openTypeField()"></span></h6>
                             <div class="type-container">
                                 <div class="py-1" cdkDropList (cdkDropListDropped)="dropType($event)">
+                                    <div class="type-item row no-gutters default">
+                                        <ng-container *ngTemplateOutlet="itemTypeTemplate; context: {type: defaultType}"></ng-container>
+                                    </div>
                                     <div *ngFor="let type of allTypes">
                                         <div class="type-item row no-gutters" cdkDrag>
                                             <ng-container *ngTemplateOutlet="itemTypeTemplate; context: {type: type}"></ng-container>
