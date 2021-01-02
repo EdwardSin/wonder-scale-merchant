@@ -86,7 +86,7 @@
         </div>
         <div>
             <button *ngIf="item?.delivery?.etaDate" [disabled]="editEtaLoading.isRunning()" class="btn btn-sm btn-danger" (click)="removeEtaDateTime()">
-                <ws-spinner class="mr-2" *ngIf="editEtaLoading.isRunning()" [width]="15" [height]="15" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>Remove</button>
+                <ws-spinner class="mr-2" *ngIf="editEtaLoading.isRunning()" [width]="15" [height]="15" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>Cancel</button>
             <button class="btn btn-sm btn-controller float-right" (click)="isEtaDeliveryDateModalOpened = false">Close</button>
             <button [disabled]="editEtaLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="editEtaDateTime()">
                 <ws-spinner class="mr-2" *ngIf="editEtaLoading.isRunning()" [width]="15" [height]="15" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>Confirm</button>

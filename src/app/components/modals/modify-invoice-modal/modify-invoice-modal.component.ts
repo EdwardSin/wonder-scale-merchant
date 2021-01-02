@@ -1,4 +1,5 @@
-import { ChangeDetectorRef, Component, Input, OnInit, SimpleChanges, ViewEncapsulation } from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges, ViewEncapsulation } from '@angular/core';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { FormGroup } from '@angular/forms';
 import { WSFormBuilder } from '@builders/wsformbuilder';
 import { WsModalComponent } from '@elements/ws-modal/ws-modal.component';
@@ -23,7 +24,7 @@ import { WsLoading } from '@elements/ws-loading/ws-loading';
 export class ModifyInvoiceModalComponent extends WsModalComponent implements OnInit {
   @Input() item: Invoice;
   @Input() closeCallback: Function;
-  hours = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23'];
+  hours = ['06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '00', '01', '02', '03', '04', '05'];
   mins = ['00', '15', '30', '45'];
   states = [
     'Johor',
@@ -56,6 +57,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
   itemKeyword: string = '';
   page: number = 1;
   open: boolean;
+  defaultPrice: number = 0;
   tempInvoice: Invoice = null;
   isCreateEmptyInvoiceModalOpened: boolean;
   modifyLoading: WsLoading = new WsLoading;
@@ -317,7 +319,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
     }
     priceAfterDiscount = price * (100 - discount)/ 100;
     this.selectedItem = item;
-    
+    this.defaultPrice = priceAfterDiscount;
     this.form.patchValue({
       itemType: this.selectedItem.types.length ? this.selectedItem.types[0].name : '',
       itemName: item.name,
@@ -505,6 +507,16 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
     let etaDate = this.form.controls['etaDate'].value;
     let etaDateTimeHour = this.form.controls['etaDateTimeHour'].value;
     let etaDateTimeMin = this.form.controls['etaDateTimeMin'].value;
+    if (etaDate === '') {
+      WsToastService.toastSubject.next({ content: 'Please set estimated date!', type: 'danger'});
+      return false;
+    } else if (etaDateTimeHour === '') {
+      WsToastService.toastSubject.next({ content: 'Please set estimated hour!', type: 'danger'});
+      return false;
+    } else if (etaDateTimeMin === '') {
+      WsToastService.toastSubject.next({ content: 'Please set estimated time!', type: 'danger'});
+      return false;
+    }
     if ((etaDate && (!etaDateTimeHour || !etaDateTimeMin)) ||
         (etaDateTimeHour && (!etaDate || !etaDateTimeMin)) ||
         etaDateTimeMin && (!etaDate || !etaDateTimeHour)) {
@@ -516,7 +528,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
       }
       let estimatedDateTime = new Date(etaDate.getFullYear(), etaDate.getMonth(), etaDate.getDate(), etaDateTimeHour, etaDateTimeMin);
       if (estimatedDateTime < new Date) {
-        WsToastService.toastSubject.next({ content: 'Estimated date time must later than now!', type: 'danger'});
+        WsToastService.toastSubject.next({ content: 'Estimated date time must be later than now!', type: 'danger'});
         return false;
       }
     }
@@ -533,10 +545,17 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
     });
     return obj;
   }
-  returnToModifyInvoice(tempInvoice) {
+  returnToModifyInvoice() {
     this.isOpened = true;
     this.isCloseIconDisplayed = false;
-
+  }
+  setDefaultPrice() {
+    this.form.patchValue({
+      itemPrice: this.defaultPrice
+    });
+  }
+  drop(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.inListItems, event.previousIndex, event.currentIndex);
   }
   ngOnDestroy() {
     super.ngOnDestroy();

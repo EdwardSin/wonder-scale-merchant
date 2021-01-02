@@ -11,15 +11,18 @@
 <div class="row no-gutters mb-2">
     <div *ngIf="isMobileSize" mdbDropdown>
         <button placement="right" mdbDropdownToggle class="btn btn-controller font-9">
-            <ng-container [ngSwitch]="selectedTab">
-                <span *ngSwitchCase="'all'">All</span>
-                <span *ngSwitchCase="'new'">New</span>
-                <span *ngSwitchCase="'paid'">Paid</span>
-                <span *ngSwitchCase="'in_progress'">In Progress</span>
-                <span *ngSwitchCase="'delivered'">Delivered</span>
-                <span *ngSwitchCase="'completed'">Completed</span>
-                <span *ngSwitchCase="'cancelled'">Cancelled</span>
-            </ng-container>
+            <span class="d-flex align-items-center">
+                <ng-container [ngSwitch]="selectedTab">
+                    <span *ngSwitchCase="'all'">All</span>
+                    <span *ngSwitchCase="'new'">New</span>
+                    <span *ngSwitchCase="'paid'">Paid</span>
+                    <span *ngSwitchCase="'in_progress'">In Progress</span>
+                    <span *ngSwitchCase="'delivered'">Delivered</span>
+                    <span *ngSwitchCase="'completed'">Completed</span>
+                    <span *ngSwitchCase="'cancelled'">Cancelled</span>
+                </ng-container>
+                <span class="fas fa-chevron-down font-8 ml-1"></span>
+            </span>
         </button>
         <div class="dropdown-menu mt-0 pb-0 pt-0" aria-labelledby="sortButton">
             <button class="dropdown-item" (click)="selectTabAndRefreshReceipts('all')" [class.selected]="selectedTab == 'all'">All</button>
