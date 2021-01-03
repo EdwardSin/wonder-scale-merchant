@@ -8,14 +8,10 @@
                 </mat-select>
             </div>
             <div class="input-group d-inline-block mb-1 pl-2" style="flex-wrap: nowrap">
-                <mat-checkbox [color]="'primary'" class="mr-1 align-middle" style="line-height: 1;" [(ngModel)]="isEntityNew">
-                </mat-checkbox>
-                Mark as new
+                <mat-checkbox [color]="'primary'" class="mr-1 align-middle" style="line-height: 1;" [(ngModel)]="isEntityNew">Mark as new</mat-checkbox>
             </div>
             <div class="input-group d-inline-block mb-4 pl-2" style="flex-wrap: nowrap">
-                <mat-checkbox [color]="'primary'" class="mr-1 align-middle" style="line-height: 1;" [(ngModel)]="isPublished">
-                </mat-checkbox>
-                Mark as published
+                <mat-checkbox [color]="'primary'" class="mr-1 align-middle" style="line-height: 1;" [(ngModel)]="isPublished">Mark as published</mat-checkbox>
             </div>
 
             <ul *ngIf="!isUploadValid()" class="mb-3 list-unstyled alert alert-danger">

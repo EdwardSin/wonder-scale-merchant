@@ -28,7 +28,13 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatNativeDateModule } from '@angular/material/core';
 import { BusinessLocationComponent } from '@elements/business-location/business-location.component';
 import { DirectiveModule } from '../directive/directive.module';
-
+import { WsInvoiceCardComponent } from '@elements/ws-invoice-card/ws-invoice-card.component';
+import { WsSearchSelectComponent } from '@elements/ws-search-select/ws-search-select.component';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { MatSelectInfiniteScrollModule } from 'ng-mat-select-infinite-scroll';
+import { WsInvoiceComponent } from '@elements/ws-invoice/ws-invoice.component';
+import { AppRoutingModule } from 'src/app/app-routing.module';
+import { RouterModule } from '@angular/router';
 
 
 @NgModule({
@@ -42,14 +48,17 @@ import { DirectiveModule } from '../directive/directive.module';
     WsSpinnerHDotComponent,
     WsModalComponent,
     WsToastComponent,
+    WsInvoiceCardComponent,
     WsPaginationComponent,
     WsUploaderComponent,
     WsMultipleInputComponent,
+    WsSearchSelectComponent,
     WsDropdownComponent,
     SearchBarComponent,
     BusinessTimetableComponent,
     ConfirmModalComponent,
-    BusinessLocationComponent
+    BusinessLocationComponent,
+    WsInvoiceComponent
   ],
   imports: [
     AgmCoreModule,
@@ -63,7 +72,10 @@ import { DirectiveModule } from '../directive/directive.module';
     MatDatepickerModule,
     MatTabsModule,
     MatNativeDateModule,
-    DirectiveModule
+    NgxMatSelectSearchModule,
+    MatSelectInfiniteScrollModule,
+    DirectiveModule,
+    RouterModule
   ],
   exports: [
     WsSpinnerComponent,
@@ -75,14 +87,17 @@ import { DirectiveModule } from '../directive/directive.module';
     WsSpinnerHDotComponent,
     WsModalComponent,
     WsToastComponent,
+    WsInvoiceCardComponent,
     WsPaginationComponent,
     WsUploaderComponent,
     WsMultipleInputComponent,
+    WsSearchSelectComponent,
     WsDropdownComponent,
     SearchBarComponent,
     BusinessTimetableComponent,
     ConfirmModalComponent,
-    BusinessLocationComponent
+    BusinessLocationComponent,
+    WsInvoiceComponent
   ]
 })
 export class ElementModule { }

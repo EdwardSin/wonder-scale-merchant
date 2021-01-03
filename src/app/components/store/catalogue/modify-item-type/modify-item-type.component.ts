@@ -14,6 +14,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Item } from '@objects/item';
 import * as _ from 'lodash';
 import { SharedCategoryService } from '@services/shared/shared-category.service';
+import { CurrencyService } from '@services/http/general/currency.service';
+import { SharedStoreService } from '@services/shared/shared-store.service';
 
 @Component({
   selector: 'app-modify-item-type',
@@ -25,6 +27,9 @@ export class ModifyItemTypeComponent implements OnInit {
   itemTypesForm: FormGroup;
   environment = environment;
   colors = [];
+  currencySymbol = '';
+  currencies = [];
+  selectedCurrencyCode = '';
   currentItem: Item;
   itemTypeLoading: WsLoading = new WsLoading;
   loading: WsLoading = new WsLoading;
@@ -34,6 +39,8 @@ export class ModifyItemTypeComponent implements OnInit {
     private route: ActivatedRoute,
     private sharedCategoryService: SharedCategoryService,
     private authItemContributorService: AuthItemContributorService,
+    public currencyService: CurrencyService,
+    private sharedStoreService: SharedStoreService,
     private colorService: ColorService) {  
       this.loading.start();
       this.itemTypesForm = WSFormBuilder.createItemTypesGroup();
@@ -41,6 +48,19 @@ export class ModifyItemTypeComponent implements OnInit {
   }
   ngOnInit(): void {
     this.getItem();
+    this.sharedStoreService.store.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+      if (result) {
+        this.currencySymbol = this.currencyService.currencySymbols[result.currency];
+      }
+    });
+    this.currencyService.selectedCurrency
+    .pipe(takeUntil(this.ngUnsubscribe))
+    .subscribe(result => {
+      this.selectedCurrencyCode = result;
+    });
+    this.currencyService.currenciesBehaviourSubject.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+      this.currencies = result;
+    });
   }
   onItemTypeClicked(id){
     document.getElementById(id).click();
@@ -73,8 +93,6 @@ export class ModifyItemTypeComponent implements OnInit {
       }
       form.patchValue(type);
       itemTypes.push(form);
-      itemTypes.controls[0]['controls']['price'].disable();
-      itemTypes.controls[0]['controls']['discount'].disable();
     });
   }
   uploadItemImages(allImages, images, itemTypeId) {
@@ -176,33 +194,50 @@ export class ModifyItemTypeComponent implements OnInit {
     }
   }
   validateBasicForm() {
-    this.itemTypesForm.get('itemTypes')['controls'].forEach(formGroup => {
+    let controls = this.itemTypesForm.get('itemTypes')['controls'];
+    for (let i = 0; i < controls.length; i++) {
+      let formGroup = controls[i];
+      let name = formGroup.get('name');
       let price = formGroup.get('price');
       let discount = formGroup.get('discount');
       let weight = formGroup.get('weight');
       let quantity = formGroup.get('quantity');
       let priceRegex = /^\d*(?:\.\d{1,2})?$/;
       let intergerRegex = /^\d+$/;
-      if (price.value && !priceRegex.test(price.value)){
-        WsToastService.toastSubject.next({ content: 'Price is invalid!', type: 'danger' });
+      let currentIndex = i + 1;
+      
+      if ((!name.value || !name.value.trim()) && i !== 0) {
+        WsToastService.toastSubject.next({ content: 'Item ' + currentIndex + ' - name is required!', type: 'danger' });
         return false;
-      } 
+      }
+      if (price.value && !priceRegex.test(price.value)){
+        WsToastService.toastSubject.next({ content: 'Item ' + currentIndex + ' - price is invalid!', type: 'danger' });
+        return false;
+      }
       else if (discount.value && (!priceRegex.test(discount.value) || +discount.value > 100)){
-        WsToastService.toastSubject.next({ content: 'Discount is invalid!', type: 'danger' });
+        WsToastService.toastSubject.next({ content: 'Item ' + currentIndex + ' - discount is invalid!', type: 'danger' });
         return false;
       }
       else if (weight.value && !priceRegex.test(weight.value)){
-        WsToastService.toastSubject.next({ content: 'Weight is invalid!', type: 'danger' });
+        WsToastService.toastSubject.next({ content: 'Item ' + currentIndex + ' - weight is invalid!', type: 'danger' });
         return false;
       }
       else if (quantity.value && !intergerRegex.test(quantity.value)){
-        WsToastService.toastSubject.next({ content: 'Quantity is invalid!', type: 'danger' });
+        WsToastService.toastSubject.next({ content: 'Item ' + currentIndex + ' - quantity is invalid!', type: 'danger' });
         return false;
       } else if(quantity.value && +quantity.value > 999999) {
-        WsToastService.toastSubject.next({ content: 'Quantity should less than 999999!', type: 'danger' });
+        WsToastService.toastSubject.next({ content: 'Item ' + currentIndex + ' - quantity should less than 999999!', type: 'danger' });
         return false;
       }
-    })
+    }
+    let listOfName = this.itemTypesForm.get('itemTypes')['controls'].map(formGroup => {
+      return formGroup.value.name.trim();
+    });
+    // Check has duplicate type name
+    if (!listOfName.every((e, i, a) => a.indexOf(e) === i)) {
+      WsToastService.toastSubject.next({ content: 'No duplicated type is allowed!', type: 'danger'});
+      return false;
+    }
     return true;
   }
   onColorValueChanged($event, formGroup) {

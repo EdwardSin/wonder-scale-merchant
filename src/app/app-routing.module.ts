@@ -58,6 +58,12 @@ const routes: Routes = [{
       data: { title: 'store-page', breadcrumb: 'Store page' },
       loadChildren: () => import('./modules/store/store-page/store-page.module').then(m => m.StorePageModule)
     },
+    {
+      path: 'invoices',
+      canActivate: [StoreGuard],
+      data: { title: 'invoices', breadcrumb: 'Invoices' },
+      loadChildren: () => import('./modules/store/invoices/invoices.module').then(m => m.InvoicesModule)
+    },
     // {
     //   path: 'advertising',
     //   component: AdvertisingComponent,

@@ -17,18 +17,10 @@
                     <ng-container *ngIf="!loading.isRunning() else loadingTemplate">
                         <div class="ws-input">
                             <div class="input-group">
-                                <div class="input-group-prepend" style="width: 120px" title="Stock keeping unit">
-                                    <span>SKU*</span>
-                                </div>
-                                <input class="form-control form-control-sm" placeholder="A unique ID for you to easily find the item" autocomplete="off" name="refId" formControlName="refId" tabIndex="1" />
-                            </div>
-                        </div>
-                        <div class="ws-input">
-                            <div class="input-group">
                                 <div class="input-group-prepend" style="width: 120px">
                                     <span>Product name*</span>
                                 </div>
-                                <input name="name" class="form-control form-control-sm" autocomplete="off" formControlName="name" tabIndex="2" />
+                                <input name="name" class="form-control form-control-sm" autocomplete="off" formControlName="name" />
                             </div>
                         </div>
                         <div class="ws-input">
@@ -45,7 +37,7 @@
                                         </ng-container>
                                     </mat-select>
                                 </div>
-                                <input name="price" autocomplete="off" tabIndex="2" class="form-control form-control-sm p-1" lang="en-150" placeholder="0.00" formControlName="price" />
+                                <input name="price" autocomplete="off" class="form-control form-control-sm p-1" lang="en-150" placeholder="0.00" formControlName="price" />
                             </div>
                         </div>
                         <div class="ws-input">
@@ -60,12 +52,20 @@
                                 </span>
                             </span>
                         </div>
-                        <div class="ws-input" style="margin-top: 0">
+                        <div class="ws-input">
+                            <div class="input-group">
+                                <div class="input-group-prepend" style="width: 120px" title="Stock keeping unit">
+                                    <span>SKU</span>
+                                </div>
+                                <input class="form-control form-control-sm" placeholder="A unique ID for you to easily find the item" autocomplete="off" name="refId" formControlName="refId" />
+                            </div>
+                        </div>
+                        <div class="ws-input">
                             <div class="input-group">
                                 <div class="input-group-prepend" style="width: 120px">
                                     <span>Discount (%)</span>
                                 </div>
-                                <input name="discount" autocomplete="off" tabIndex="2" class="form-control form-control-sm p-1" lang="en-150" placeholder="0.00%" formControlName="discount" />
+                                <input name="discount" autocomplete="off" class="form-control form-control-sm p-1" lang="en-150" placeholder="0.00%" formControlName="discount" />
                             </div>
                         </div>
                         <div *ngIf="false" class="ws-input">
@@ -73,7 +73,7 @@
                                 <div class="input-group-prepend" style="width: 120px">
                                     <span>Weight (kg)</span>
                                 </div>
-                                <input name="weight" autocomplete="off" tabIndex="2" class="form-control form-control-sm p-1" lang="en-150" placeholder="0.0" formControlName="weight" />
+                                <input name="weight" autocomplete="off" class="form-control form-control-sm p-1" lang="en-150" placeholder="0.0" formControlName="weight" />
                             </div>
                         </div>
                         <div *ngIf="false" class="ws-input">
@@ -81,7 +81,7 @@
                                 <div class="input-group-prepend" style="width: 120px">
                                     <span>Quantity</span>
                                 </div>
-                                <input name="quantity" autocomplete="off" tabIndex="2" class="form-control form-control-sm p-1" lang="en-150" formControlName="quantity" />
+                                <input name="quantity" autocomplete="off" class="form-control form-control-sm p-1" lang="en-150" formControlName="quantity" />
                             </div>
                         </div>
                         <div *ngIf="false" class="ws-input">
@@ -89,7 +89,7 @@
                                 <div class="input-group-prepend" style="width: 120px">
                                     <span>Brand</span>
                                 </div>
-                                <input class="form-control form-control-sm" tabIndex="2" placeholder="Default: No Brand" formControlName="brand" />
+                                <input class="form-control form-control-sm" placeholder="Default: No Brand" formControlName="brand" />
                             </div>
                         </div>
                         <div *ngIf="false" class="ws-input">
@@ -97,11 +97,11 @@
                                 <div class="input-group-prepend" style="width: 120px">
                                     <span>Warranty</span>
                                 </div>
-                                <input class="form-control form-control-sm" tabIndex="2" placeholder="Default: No Warranty" formControlName="warranty" />
+                                <input class="form-control form-control-sm" placeholder="Default: No Warranty" formControlName="warranty" />
                             </div>
                         </div>
                         <div class="ws-input mb-3">
-                          <textarea class="form-control form-control-sm" maxlength="256" autocomplete="off" name="description" tabIndex="2" placeholder="Description" style="resize:none" formControlName="description" rows='4'></textarea>
+                          <textarea class="form-control form-control-sm" maxlength="256" autocomplete="off" name="description" placeholder="Description" style="resize:none" formControlName="description" rows='4'></textarea>
                         </div>
                         <div *ngIf="false" class="row no-gutters mb-2" style="flex-wrap: nowrap;">
                             <button type="button" class="btn-item-upload mr-1" onclick="document.getElementById('itemDescriptionUpload').click();">
@@ -110,7 +110,7 @@
                             </button>
                             <ws-uploader [id]="'itemDescriptionUpload'" [input]="allDescriptionItems" (output)="onDescriptionImageUploaded($event)"></ws-uploader>
                             <div class="all-item-container ws-drag-list" cdkDropList (cdkDropListDropped)="dropDescription($event)" cdkDropListOrientation="horizontal">
-                                <div class="ws-drag-box mr-1 ml-1 border" *ngFor="let image of allDescriptionItems" cdkDrag>
+                                <div class="ws-drag-box border my-0 mx-1" *ngFor="let image of allDescriptionItems" cdkDrag>
                                     <div [ngSwitch]="image?.type" class="center">
                                         <div *ngSwitchCase="'url'" class="h-100 position-relative">
                                             <div class="item_div position-relative">
@@ -144,7 +144,7 @@
                           </button>
                           <ws-uploader [id]="'itemProfileUpload'" [max]="5" [input]="allProfileItems" (output)="onProfileImageUploaded($event)"></ws-uploader>
                           <div id="scrollContainer" class="all-item-container ws-drag-list" cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="dropProfile($event)">
-                              <div class="ws-drag-box ml-1 mr-1 border" *ngFor="let image of allProfileItems" (click)="selectProfileImage(image?.name)" cdkDrag>
+                              <div class="ws-drag-box border my-0 mx-1" *ngFor="let image of allProfileItems" (click)="selectProfileImage(image?.name)" cdkDrag>
                                   <div [ngSwitch]="image?.type">
                                       <div *ngSwitchCase="'url'" class="h-100 position-relative">
                                           <div class="item_div position-relative">

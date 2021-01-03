@@ -1,0 +1,99 @@
+<h4 class="ws-title">All Invoices</h4>
+<search-bar class="d-inline-block mr-2 mb-3" [placeholder]="'Search ID, Name...'" [searchKeyword]="keyword"></search-bar>
+<button class="btn btn-sm btn-controller float-right ml-2" title="View flow chart" (click)="isHelpModalOpened = true">
+    <span class="fas fa-question-circle d-inline-block"></span>
+</button>
+<button class="btn btn-sm btn-controller float-right" (click)="openCreateInvoiceModal()">
+    <span class="fas fa-plus mr-lg-2 d-inline-block"></span>
+    <span class="d-inline-block" *ngIf="!isMobileSize">Add New</span>
+</button>
+
+<div class="row no-gutters mb-2">
+    <div *ngIf="isMobileSize" mdbDropdown>
+        <button placement="right" mdbDropdownToggle class="btn btn-controller font-9">
+            <span class="d-flex align-items-center">
+                <ng-container [ngSwitch]="selectedTab">
+                    <span *ngSwitchCase="'all'">All</span>
+                    <span *ngSwitchCase="'new'">New</span>
+                    <span *ngSwitchCase="'paid'">Paid</span>
+                    <span *ngSwitchCase="'in_progress'">In Progress</span>
+                    <span *ngSwitchCase="'delivered'">Delivered</span>
+                    <span *ngSwitchCase="'completed'">Completed</span>
+                    <span *ngSwitchCase="'cancelled'">Cancelled</span>
+                </ng-container>
+                <span class="fas fa-chevron-down font-8 ml-1"></span>
+            </span>
+        </button>
+        <div class="dropdown-menu mt-0 pb-0 pt-0" aria-labelledby="sortButton">
+            <button class="dropdown-item" (click)="selectTabAndRefreshReceipts('all')" [class.selected]="selectedTab == 'all'">All</button>
+            <button class="dropdown-item" (click)="selectTabAndRefreshReceipts('new')" [class.selected]="selectedTab == 'new'">New ({{numberOfNewInvoices}})</button>
+            <button class="dropdown-item" (click)="selectTabAndRefreshReceipts('paid')" [class.selected]="selectedTab == 'paid'">Paid ({{numberOfPaidInvoices}})</button>
+            <button class="dropdown-item" (click)="selectTabAndRefreshReceipts('in_progress')" [class.selected]="selectedTab == 'in_progress'">In Progress ({{numberOfInProgressInvoices}})</button>
+            <button class="dropdown-item" (click)="selectTabAndRefreshReceipts('delivered')" [class.selected]="selectedTab == 'delivered'">Delivered / Pickup ({{numberOfDeliveryInvoices}})</button>
+            <button class="dropdown-item" (click)="selectTabAndRefreshReceipts('completed')" [class.selected]="selectedTab == 'completed'">Completed</button>
+            <button class="dropdown-item" (click)="selectTabAndRefreshReceipts('cancelled')" [class.selected]="selectedTab == 'cancelled'">Cancelled</button>
+        </div>
+    </div>
+    <ng-container *ngIf="!isMobileSize">
+        <button class="btn btn-sm btn-controller mr-3" style="width: 40px" (click)="selectTabAndRefreshReceipts('all')" [class.selected]="selectedTab == 'all'">All</button>
+        <button class="btn btn-sm btn-controller mr-3" (click)="selectTabAndRefreshReceipts('new')" [class.selected]="selectedTab == 'new'">New ({{numberOfNewInvoices}})</button>
+        <button class="btn btn-sm btn-controller mr-3" (click)="selectTabAndRefreshReceipts('paid')" [class.selected]="selectedTab == 'paid'">Paid ({{numberOfPaidInvoices}})</button>
+        <button class="btn btn-sm btn-controller mr-3" (click)="selectTabAndRefreshReceipts('in_progress')" [class.selected]="selectedTab == 'in_progress'">In Progress ({{numberOfInProgressInvoices}})</button>
+        <button class="btn btn-sm btn-controller mr-3" (click)="selectTabAndRefreshReceipts('delivered')" [class.selected]="selectedTab == 'delivered'">Delivered / Pickup ({{numberOfDeliveryInvoices}})</button>
+        <button class="btn btn-sm btn-controller mr-3" (click)="selectTabAndRefreshReceipts('completed')" [class.selected]="selectedTab == 'completed'">Completed</button>
+        <button class="btn btn-sm btn-controller mr-3" (click)="selectTabAndRefreshReceipts('cancelled')" [class.selected]="selectedTab == 'cancelled'">Cancelled</button>
+    </ng-container>
+    <div class="ml-auto ws-circle-button p-0" *ngIf="selectedTab == 'all'" mdbDropdown>
+        <button mdbDropdownToggle class="btn btn-controller clickable d-inline">
+            <span class="fa fa-ellipsis-v"></span>
+        </button>
+        <div class="dropdown-menu dropdown-menu-right mt-0 pb-0 pt-0 font-9"  style="left: inherit; top: -15px">
+            <button class="dropdown-item" (click)="$event.stopPropagation()">
+                <mat-checkbox (change)="triggerStatusColumns('new')" [checked]="statusColumns.includes('new')" [color]="'primary'" class="mr-2 d-inline-block">New</mat-checkbox>
+            </button>
+            <button class="dropdown-item" (click)="$event.stopPropagation()">
+                <mat-checkbox (change)="triggerStatusColumns('paid')" [checked]="statusColumns.includes('paid')" [color]="'primary'" class="mr-2 d-inline-block">Paid</mat-checkbox>
+            </button>
+            <button class="dropdown-item" (click)="$event.stopPropagation()">
+                <mat-checkbox (change)="triggerStatusColumns('in_progress')" [checked]="statusColumns.includes('in_progress')" [color]="'primary'" class="mr-2 d-inline-block">In Progress</mat-checkbox>
+            </button>
+            <button class="dropdown-item" (click)="$event.stopPropagation()">
+                <mat-checkbox (change)="triggerStatusColumns('delivered')" [checked]="statusColumns.includes('delivered')" [color]="'primary'" class="mr-2 d-inline-block">Delivered / Pickup</mat-checkbox>
+            </button>
+            <button class="dropdown-item" (click)="$event.stopPropagation()">
+                <mat-checkbox (change)="triggerStatusColumns('completed')" [checked]="statusColumns.includes('completed')" [color]="'primary'" class="mr-2 d-inline-block">Completed</mat-checkbox>
+            </button>
+            <button class="dropdown-item" (click)="$event.stopPropagation()">
+                <mat-checkbox (change)="triggerStatusColumns('cancelled')" [checked]="statusColumns.includes('cancelled')" [color]="'primary'" class="mr-2 d-inline-block">Cancelled</mat-checkbox>
+            </button>
+        </div>
+    </div>
+</div>
+<div class="row no-gutters mb-5 pb-3" *ngIf="allInvoices?.length && !loading.isRunning(); else loadingTemplate">
+    <div class="col-lg-5ths col-md-4 col-sm-6 p-sm-2 py-2" *ngFor="let invoice of allInvoices; trackBy: trackInvoiceId">
+        <ws-invoice-card [item]="invoice" [onInvoiceInfoModalClick]="openEditInvoiceModal.bind(this, invoice)"></ws-invoice-card>
+    </div>
+</div>
+<ws-pagination *ngIf="numberOfCurrentTotalItems" [expanded]="isNavOpen" [currentPage]="page"
+            [pageSize]="50" [dbTotal]="numberOfAllItems" [total]="numberOfCurrentTotalItems" (getPageNumber)="navigate($event)"></ws-pagination>
+
+<ng-template #loadingTemplate>
+    <ng-container *ngIf="loading.isRunning(); else noInvoice">
+        <ws-spinner class="text-center d-block w-100" style="padding-top: 10vh; padding-bottom: 10vh" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>
+    </ng-container>
+</ng-template>
+
+<ng-template #noInvoice>
+    <div class="text-center w-100">
+        <h6 class="py-5">No Invoice</h6>
+    </div>
+</ng-template>
+
+<ws-modal *ngIf="isHelpModalOpened" [(isOpened)]="isHelpModalOpened" [maxWidth]="700">
+    <div class="pt-3" modalBody>
+        <img style="max-width: 100%" class="center d-block" src="assets/images/jpg/flowchart.jpg" alt="flow chart" />
+    </div>
+</ws-modal>
+
+<modify-invoice-modal [(isOpened)]="isModifyInvoiceModalOpened" [item]="selectedItem"></modify-invoice-modal>
+<invoice-info-modal [(isOpened)]="isInvoiceInfoModalOpened" [item]="selectedItem"></invoice-info-modal>

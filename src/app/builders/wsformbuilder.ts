@@ -1,4 +1,6 @@
+
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from "@angular/forms";
+import { AddressValidation } from '@validations/validators/addressvalidation';
 import { DateValidation } from "../validations/validators/datevalidation";
 import { GenderValidation } from "../validations/validators/gendervalidation";
 import { PasswordValidation } from './../validations/validators/passwordvalidation';
@@ -132,7 +134,7 @@ export class WSFormBuilder {
     public static createMenuItemForm() {
         let formBuilder = new FormBuilder();
         return formBuilder.group({
-            refId: ['', [Validators.required, Validators.maxLength(36)]],
+            refId: ['', [Validators.maxLength(36)]],
             name: ['', [Validators.required, Validators.maxLength(128)]],
             currency: ['MYR', [Validators.required]],
             price: ['', [Validators.required]],
@@ -180,6 +182,7 @@ export class WSFormBuilder {
         let formBuilder = new FormBuilder();
         return formBuilder.group({
             _id: new FormControl(''),
+            name: new FormControl('', [Validators.required, Validators.maxLength(36)]),
             images: new FormControl([]),
             hexColor: new FormControl(''),
             sizes: new FormControl(['S', 'M', 'L']),
@@ -207,6 +210,65 @@ export class WSFormBuilder {
         let formBuilder = new FormBuilder;
         return formBuilder.group({
 
+        });
+    }
+    public static createAddCustomerForm() {
+        let formBuilder = new FormBuilder;
+        return formBuilder.group({
+            firstName: ['', [Validators.required, Validators.maxLength(36)]],
+            lastName: ['', [Validators.required, Validators.maxLength(36)]],
+            email: ['', [Validators.email, Validators.maxLength(128)]],
+            phoneNumber: ['', [Validators.maxLength(36)]],
+            dateOfBirth: [''],
+            gender: [''],
+            deliveryFirstName: ['', [Validators.maxLength(36)]],
+            deliveryLastName: ['', [Validators.maxLength(36)]],
+            address: ['', [Validators.maxLength(128)]],
+            postcode: ['', [Validators.maxLength(36)]],
+            state: ['', [Validators.maxLength(36)]],
+            country: ['MYS', [Validators.maxLength(3)]],
+        }, {
+            validator: [AddressValidation.validAddressWithoutCountry]
+        })
+    }
+    public static createAddPromotionForm() {
+        let formBuilder = new FormBuilder;
+        return formBuilder.group({
+            isEnabled: [false],
+            title: ['', [Validators.required, Validators.maxLength(128)]],
+            discountOption: ['percentage'],
+            discountValue: [0, [Validators.required]],
+            isActiveToday: [false],
+            activeDate: [''],
+            expiryDate: [''],
+            isExpiryDate: [false]
+        });
+    }
+    public static createInvoiceForm() {
+        let formBuilder = new FormBuilder;
+        return formBuilder.group({
+            deliveryFee: ['', [Validators.pattern("^[0-9.,]+$")]],
+            deliveryOption: ['delivery', [Validators.required]],
+            firstName: ['', [Validators.maxLength(36)]],
+            lastName: ['', [Validators.maxLength(36)]],
+            address: ['', [Validators.maxLength(128)]],
+            postcode: ['', [Validators.maxLength(36)]],
+            state: ['', [Validators.maxLength(36)]],
+            country: ['MYS', [Validators.maxLength(3)]],
+            phoneNumber: ['', [Validators.maxLength(36)]],
+            isCustomerSaved: [false],
+            etaDate: [''],
+            etaDateTimeHour: [''],
+            etaDateTimeMin: [''],
+            promotion: [''],
+            itemName: [''],
+            itemType: [''],
+            itemPrice: ['', [Validators.pattern("^[0-9.,]+$")]],
+            itemQuantity: ['', [Validators.pattern("^[0-9]+$")]],
+            status: ['new', Validators.required],
+            remark: ['', Validators.maxLength(300)],
+        }, {
+            validator: [AddressValidation.validAddressWithoutCountry]
         });
     }
 }

@@ -1,0 +1,41 @@
+.status-container{
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.3);
+
+    &.status-container-,
+    &.status-container-new {
+        background-color: #E5E5E5;
+        &:focus{
+            background-color: #E5E5E5;
+        }
+    }
+    
+    &.status-container-paid,
+    &.status-container-in_progress,
+    &.status-container-delivered {
+        background-color: #ffc107;
+        &:focus{
+            background-color: #ffc107;
+        }
+    }
+    
+    &.status-container-cancelled,
+    &.status-container-refunded{
+        background-color: #dc3545;
+        &:focus{
+            background-color: #dc3545;
+        }
+        .mat-select-value{
+            color: #fff !important;
+        }
+    }
+    
+    &.status-container-completed{
+        background-color: #28a745;
+        &:focus{
+            background-color: #28a745;
+        }
+        .mat-select-value{
+            color: #fff !important;
+        }
+    }
+}

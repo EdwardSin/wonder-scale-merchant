@@ -12,7 +12,6 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SharedNavbarService } from '@services/shared/shared-nav-bar.service';
 import { SharedCategoryService } from '@services/shared/shared-category.service';
-import { Currency } from '@objects/currency';
 import { ScreenService } from '@services/general/screen.service';
 import * as _ from 'lodash';
 
@@ -91,21 +90,6 @@ export class ItemViewComponent implements OnInit {
     this.screenService.isMobileSize.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       this.isMobileSize = result;
     });
-    this.currencyService.currencyRate
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(rates => {
-        if (rates) {
-          this.currencyService.currencyFullnameArray.forEach(key => {
-            let currency = new Currency();
-            currency.code = key;
-            currency.rate = rates[key];
-            currency.symbol = this.currencyService.currencySymbols[key];
-            currency.fullname = this.currencyService.currencyFullnames[key];
-            this.currencyService.currencies.push(currency);
-          })
-          this.ref.detectChanges();
-        }
-      });
     this.currencyService.selectedCurrency
     .pipe(takeUntil(this.ngUnsubscribe))
     .subscribe(result => {

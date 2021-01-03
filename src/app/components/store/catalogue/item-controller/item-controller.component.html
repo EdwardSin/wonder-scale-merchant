@@ -41,8 +41,8 @@
                     <button *ngIf="store.type == 'restaurant'" class="dropdown-item" (click)="unmarkTodaySpecial()">Unmark from Today Special</button>
                     <button class="dropdown-item" (click)="openAddToModal()">Add to</button>
                     <button *ngIf="param == 'custom'" class="dropdown-item" (click)="openMoveModal()">Move to</button>
-                    <button *ngIf="param != 'uncategorized'" class="dropdown-item" (click)="openRemoveModal()">Remove from categories</button>
-                    <button *ngIf="param == 'uncategorized' " class="dropdown-item" (click)="openRemoveModal()">Remove Permanently</button>
+                    <button class="dropdown-item" (click)="openRemoveCategoryModal()">Remove from category</button>
+                    <button class="dropdown-item" (click)="openRemovePermanentlyModal()">Remove permanently</button>
                 </div>
             </div>
             <div *ngIf="param == 'new'" class="d-inline-block">
@@ -116,22 +116,22 @@
                 </button>
                 <div class="dropdown-menu dropdown-menu-right mt-0 pb-0 pt-0" aria-labelledby="sortButton">
                     <button class="dropdown-item" (click)="$event.stopPropagation()">
-                        <mat-checkbox (change)="triggerColumns('id')" [checked]="columns.includes('id')" [color]="'primary'" class="mr-2 d-inline-block" style="vertical-align: text-bottom"></mat-checkbox>ID
+                        <mat-checkbox (change)="triggerColumns('sku')" [checked]="columns.includes('sku')" [color]="'primary'" class="mr-2 d-inline-block">SKU</mat-checkbox>
                     </button>
                     <button class="dropdown-item" (click)="$event.stopPropagation()">
-                        <mat-checkbox [disabled]="true" (change)="triggerColumns('name')" [checked]="columns.includes('name')" [color]="'primary'" class="mr-2 d-inline-block" style="vertical-align: text-bottom"></mat-checkbox>Name
+                        <mat-checkbox [disabled]="true" (change)="triggerColumns('name')" [checked]="columns.includes('name')" [color]="'primary'" class="mr-2 d-inline-block">Name</mat-checkbox>
                     </button>
                     <button class="dropdown-item" (click)="$event.stopPropagation()">
-                        <mat-checkbox (change)="triggerColumns('price')" [checked]="columns.includes('price')" [color]="'primary'" class="mr-2 d-inline-block" style="vertical-align: text-bottom"></mat-checkbox>Price
+                        <mat-checkbox (change)="triggerColumns('price')" [checked]="columns.includes('price')" [color]="'primary'" class="mr-2 d-inline-block">Price</mat-checkbox>
                     </button>
                     <button class="dropdown-item" (click)="$event.stopPropagation()">
-                        <mat-checkbox (change)="triggerColumns('discount')" [checked]="columns.includes('discount')" [color]="'primary'" class="mr-2 d-inline-block" style="vertical-align: text-bottom"></mat-checkbox>Discount
+                        <mat-checkbox (change)="triggerColumns('discount')" [checked]="columns.includes('discount')" [color]="'primary'" class="mr-2 d-inline-block">Discount</mat-checkbox>
                     </button>
                     <button class="dropdown-item" (click)="$event.stopPropagation()">
-                        <mat-checkbox (change)="triggerColumns('uploaded_images')" [checked]="columns.includes('uploaded_images')" [color]="'primary'" class="mr-2 d-inline-block" style="vertical-align: text-bottom"></mat-checkbox>Uploaded Images
+                        <mat-checkbox (change)="triggerColumns('uploaded_images')" [checked]="columns.includes('uploaded_images')" [color]="'primary'" class="mr-2 d-inline-block">Uploaded Images</mat-checkbox>
                     </button>
                     <button class="dropdown-item" (click)="$event.stopPropagation()">
-                        <mat-checkbox (change)="triggerColumns('status')" [checked]="columns.includes('status')" [color]="'primary'" class="mr-2 d-inline-block" style="vertical-align: text-bottom"></mat-checkbox>Status
+                        <mat-checkbox (change)="triggerColumns('status')" [checked]="columns.includes('status')" [color]="'primary'" class="mr-2 d-inline-block">Status</mat-checkbox>
                     </button>
                 </div>
             </div>
@@ -177,7 +177,10 @@
         (debounceClick)="advertiseItems()">{{ isPublished ? 'Done' : 'Advertise'}}</button>
     <div class="clearfix"></div>
 </div> -->
-<confirm-modal *ngIf="isRemoveAllSelectedItemModalConfirmationOpened" [(isOpened)]="isRemoveAllSelectedItemModalConfirmationOpened" id="removeItemsModal" [loading]="loading.isRunning()" [message]="'Are you sure to remove all selected items?'" [action]="action">
+<confirm-modal *ngIf="isRemoveAllSelectedItemModalConfirmationOpened" [(isOpened)]="isRemoveAllSelectedItemModalConfirmationOpened" id="removeItemsModal" [loading]="loading.isRunning()" [message]="removeMessage" [action]="action">
+    <p *ngIf="removeSubmessage" class="text-danger font-8" content>
+        {{removeSubmessage}}
+    </p>
 </confirm-modal>
 <add-to-categories-modal *ngIf="isAddToCategoriesModalOpened" [(isOpened)]="isAddToCategoriesModalOpened" id="addToCategoriesModal" [action]="action" 
     [loading]="categoriesLoading.isRunning()"

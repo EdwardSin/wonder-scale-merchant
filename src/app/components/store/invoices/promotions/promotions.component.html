@@ -1,0 +1,104 @@
+<h4 class="ws-title">Promotions</h4>
+<search-bar class="d-inline-block mr-2 mb-3" [placeholder]="'Search title...'" [searchKeyword]="searchController.searchKeyword"></search-bar>
+<button class="btn btn-sm btn-controller float-right" (click)="openModifyPromotionModal()">
+    <span class="fas fa-plus mr-lg-2 d-inline-block"></span><ng-container *ngIf="!isMobileSize">Add New</ng-container>
+</button>
+
+<div class="w-100" style="z-index: 1; overflow-x: auto;">
+    <table class="table table-hover w-100 font-9">
+        <thead>
+            <th style="white-space: nowrap">Title</th>
+            <th style="white-space: nowrap" width="180">Type</th>
+            <th style="white-space: nowrap" width="180">Value</th>
+            <th style="white-space: nowrap" width="180">Active Date</th>
+            <th style="white-space: nowrap" width="180">Expiry Date</th>
+            <th style="white-space: nowrap" class="text-center" width="150">Enable</th>
+            <th style="white-space: nowrap" width="100">Actions</th>
+        </thead>
+        <tbody *ngIf="!loading.isRunning()">
+            <tr *ngFor="let promotion of promotions">
+                <td style="white-space: nowrap">{{ promotion.title }}</td>
+                <td style="white-space: nowrap">{{ promotion.option == 'fixed_amount' ? 'Fixed Amount' : 'Percentage' }}</td>
+                <td style="white-space: nowrap">{{ promotion.value | number:'1.2-2' | wsEmptyDash }} {{ promotion.option == 'percentage' ? '%' : ''}}</td>
+                <td style="white-space: nowrap">{{ promotion.activeDate | date: 'MMM d, y' | wsEmptyDash }}</td>
+                <td style="white-space: nowrap">{{ promotion.expiryDate | date: 'MMM d, y' | wsEmptyDash }}</td>
+                <td style="white-space: nowrap" class="text-center">
+                    <span *ngIf="isExpired(promotion)" class="fas fa-times-circle text-danger"></span>
+                    <span *ngIf="!isExpired(promotion)" class="fas fa-check-circle" [ngClass]="promotion.isEnabled ? 'text-success': 'text-muted'"></span>
+                </td>
+                <td style="white-space: nowrap">
+                    <button [disabled]="itemLoading.isRunning()" title="Edit Item" href="javascript:void(0)" class="ws-dark-color btn btn-sm btn-controller text-decoration-none" (click)="$event.stopPropagation(); openModifyPromotionModal(promotion)">
+                        <span class="fas fa-edit"></span>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<ws-pagination *ngIf="numberOfCurrentTotalItems" [expanded]="isNavOpen" [currentPage]="currentPage"
+            [pageSize]="environment.ITEMS_PER_PAGE" [dbTotal]="numberOfAllItems" [total]="numberOfCurrentTotalItems" (getPageNumber)="navigate($event)"></ws-pagination>
+
+<div *ngIf="!promotions.length && !loading.isRunning(); else loadingTemplate">
+    <div class="text-center w-100">
+        <h6 class="py-5">No Promotion</h6>
+    </div>
+</div>
+
+<ng-template #loadingTemplate>
+    <ng-container *ngIf="loading.isRunning();">
+        <ws-spinner class="text-center d-block w-100" style="padding-top: 10vh; padding-bottom: 10vh" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>
+    </ng-container>
+</ng-template>
+
+<ws-modal *ngIf="isModifyPromotionModalOpened" [(isOpened)]="isModifyPromotionModalOpened" [maxWidth]="600">
+    <form modalBody class="py-3" [formGroup]="form">
+        <div class="mb-3">
+            <mat-checkbox [color]="'primary'" class="font-9 d-block mb-2" formControlName="isEnabled">Enable</mat-checkbox>
+            <label id="title" class="mb-0 font-9">Promotion Title*:</label>
+            <input for="title" class="form-control form-control-sm" maxlength="128" formControlName="title"/>
+        </div>
+        <h6 class="h6 mb-3">Promotion settings</h6>
+        <div>
+            <p class="mb-0 font-9 mb-2">Discount option</p>
+            <mat-radio-group class="d-block font-9 mb-2" formControlName="discountOption" (change)="clickDiscountOption($event)">
+                <mat-radio-button [color]="'primary'" class="d-block" [value]="'percentage'">Discount by percentage</mat-radio-button>
+                <mat-radio-button [color]="'primary'" class="d-block" [value]="'fixed_amount'">Discount by fixed amount</mat-radio-button>
+            </mat-radio-group>
+            <div class="input-group mb-3">
+                <span class="input-group-prepend" *ngIf="form.controls['discountOption'].value == 'fixed_amount'">
+                    <span class="input-group-text fas">RM</span>
+                </span>
+                <input class="form-control form-control-sm" type="number" formControlName="discountValue" (change)="valueToDecimal($event)" placeholder="{{ form.controls['discountOption'].value == 'fixed_amount' ? '0.00' : '0' }}" />
+                <span class="input-group-append" *ngIf="form.controls['discountOption'].value == 'percentage'">
+                    <span class="input-group-text fas fa-percentage"></span>
+                </span>
+            </div>
+        </div>
+        <div class="mb-3">
+            <mat-checkbox [color]="'primary'" class="font-9 mb-2 d-block" formControlName="isActiveToday" (change)="updateActiveDateToToday($event)">Active from today</mat-checkbox>
+            <div>
+                <label id="activeDate" class="mb-0 font-9">Active Date:</label>
+                <input for="activeDate" (click)="activeDatePicker.open()" class="form-control form-control-sm" formControlName="activeDate" (dateChange)="updateActiveDate($event)" [matDatepicker]="activeDatePicker" [min]="today"/>
+                <mat-datepicker #activeDatePicker startView="month"></mat-datepicker>
+            </div>
+        </div>
+        <div class="mb-3">
+            <mat-checkbox [color]="'primary'" formControlName="isExpiryDate" class="font-9 mb-2 d-block">No expiry date</mat-checkbox>
+            <div *ngIf="!form.controls['isExpiryDate'].value">
+                <label id="expiryDate" class="mb-0 font-9">Expiry Date:</label>
+                <input for="expiryDate" (click)="expiryDatePicker.open()" class="form-control form-control-sm" formControlName="expiryDate" [matDatepicker]="expiryDatePicker" [min]="form.controls['activeDate'].value || today"/>
+                <mat-datepicker #expiryDatePicker startView="month"></mat-datepicker>
+                <span class="font-8 text-muted">Until 11:59:59 p.m of the expiry date</span>
+            </div>
+        </div>
+        <div>
+            <button *ngIf="selectedPromotion" [disabled]="modifyLoading.isRunning()" class="btn btn-sm btn-danger" (click)="removePromotion()">
+                <ws-spinner *ngIf="modifyLoading.isRunning()" [width]="15" [height]="15" [borderWidth]="1" [spinnerColor]="'#b71c1c'" class="mr-2"></ws-spinner>Delete
+            </button>
+            <button class="btn btn-sm btn-controller float-right" (click)="isModifyPromotionModalOpened = false">Cancel</button>
+            <button [disabled]="modifyLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="modifyPromotion()">
+                <ws-spinner *ngIf="modifyLoading.isRunning()" [width]="15" [height]="15" [borderWidth]="1" [spinnerColor]="'#b71c1c'" class="mr-2"></ws-spinner>{{ selectedPromotion ? 'Save': 'Create'}}
+            </button>
+        </div>
+    </form>
+</ws-modal>

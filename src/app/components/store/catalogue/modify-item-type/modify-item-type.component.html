@@ -20,7 +20,7 @@
             </div>
             <div *ngFor="let itemType of itemTypesForm.get('itemTypes')['controls']; index as i"
               class="my-2 border position-relative" style="padding: .5rem">
-              <span *ngIf="i != 0" (click)="removeItemType(itemType)" class="position-absolute fas fa-times clickable"
+              <span (click)="removeItemType(itemType)" class="position-absolute fas fa-times clickable"
                 style="right: -28px;
             top: 10px;
             background-color: #f7f7f7;
@@ -44,7 +44,7 @@
                   <div class="all-item-container ws-drag-list" cdkDropList
                     (cdkDropListDropped)="dropItemTypeImages($event, itemTypesForm.controls.itemTypes.value[i].images)"
                     cdkDropListOrientation="horizontal">
-                    <div class="ws-drag-box mr-1 ml-1 border"
+                    <div class="ws-drag-box border my-0 mx-1"
                       *ngFor="let image of itemTypesForm.controls.itemTypes.value[i].images" cdkDrag>
                       <div [ngSwitch]="image?.type" class="center">
                         <div *ngSwitchCase="'url'" class="h-100 position-relative">
@@ -109,56 +109,70 @@
                     </div>
                   </div>
                 </div>
-                <div class="row no-gutters">
-                  <div class="col-sm-6 px-1">
-                    <div class="ws-input">
-                      <div class="input-group">
-                        <div class="input-group-prepend" style="width: 100px">
-                          <span>Price</span>
-                        </div>
-                        <input class="form-control form-control-sm" tabIndex="1" placeholder="Blank to use default price"
-                          formControlName="price" />
+                <div class="px-1">
+                  <div class="ws-input">
+                    <div class="input-group">
+                      <div class="input-group-prepend" style="width: 100px">
+                        <span>Name</span>
                       </div>
+                      <input class="form-control form-control-sm" tabIndex="1" maxlength="36" placeholder="Colors, Size, Type (e.g. blue, small...)"
+                        formControlName="name" />
                     </div>
                   </div>
-                  <div class="col-sm-6 px-1">
-                    <div class="ws-input">
-                      <div class="input-group">
-                        <div class="input-group-prepend" style="width: 100px">
-                          <span>Discount (%)</span>
-                        </div>
-                        <input class="form-control form-control-sm" tabIndex="1" placeholder="Blank to use default discount"
-                          formControlName="discount" />
+                </div>
+                <div class="px-1">
+                  <div class="ws-input">
+                    <div class="input-group">
+                      <div class="input-group-prepend" style="width: 100px">
+                        <span>Price</span>
                       </div>
+                      <input class="form-control form-control-sm" tabIndex="1" placeholder="Blank to use default price"
+                        formControlName="price" />
                     </div>
                   </div>
-                  <div *ngIf="false" class="col-sm-6 px-1">
-                    <div class="ws-input">
-                      <div class="input-group">
-                        <div class="input-group-prepend" style="width: 100px">
-                          <span>Quantity</span>
-                        </div>
-                        <input class="form-control form-control-sm" tabIndex="1" placeholder="Blank to use default quantity"
-                          formControlName="quantity" />
+                  <span *ngIf="currencies.length" class="font-8 text-muted">Default price: {{currencySymbol}}{{ currentItem?.price | currency: currencyService.getCurrencyWithCode(currentItem?.currency).rate: currencyService.getCurrencyWithCode(selectedCurrencyCode).rate | number: '1.2-2' }}</span>
+                </div>
+                <div class="px-1">
+                  <div class="ws-input">
+                    <div class="input-group">
+                      <div class="input-group-prepend" style="width: 100px">
+                        <span>Discount (%)</span>
                       </div>
+                      <input class="form-control form-control-sm" tabIndex="1" placeholder="Blank to use default discount"
+                        formControlName="discount" />
                     </div>
                   </div>
-                  <div *ngIf="false" class="col-sm-6 px-1">
-                    <div class="ws-input">
-                      <div class="input-group">
-                        <div class="input-group-prepend" style="width: 100px">
-                          <span>Weight (kg)</span>
-                        </div>
-                        <input class="form-control form-control-sm" tabIndex="1" placeholder="Blank to use default weight"
-                          formControlName="weight" />
+                  <span class="font-8 text-muted">Default discount: {{currentItem.discount || '0'}}%</span>
+                </div>
+                <div *ngIf="false" class="col-sm-6 px-1">
+                  <div class="ws-input">
+                    <div class="input-group">
+                      <div class="input-group-prepend" style="width: 100px">
+                        <span>Quantity</span>
                       </div>
+                      <input class="form-control form-control-sm" tabIndex="1" placeholder="Blank to use default quantity"
+                        formControlName="quantity" />
+                    </div>
+                  </div>
+                </div>
+                <div *ngIf="false" class="col-sm-6 px-1">
+                  <div class="ws-input">
+                    <div class="input-group">
+                      <div class="input-group-prepend" style="width: 100px">
+                        <span>Weight (kg)</span>
+                      </div>
+                      <input class="form-control form-control-sm" tabIndex="1" placeholder="Blank to use default weight"
+                        formControlName="weight" />
                     </div>
                   </div>
                 </div>
               </ng-container>
             </div>
+            <div *ngIf="!itemTypesForm.get('itemTypes')['controls'].length">
+              <p class="mb-0 py-5 my-5 text-muted text-center">Add types to your item</p>
+            </div>
             <div>
-                <ws-loading-button class="d-block" [loading]="itemTypeLoading.isRunning()"
+            <ws-loading-button *ngIf="itemTypesForm.get('itemTypes')['controls'].length" class="d-block" [loading]="itemTypeLoading.isRunning()"
                 [class]="'btn btn-sm btn-controller float-right mr-0'" (click)="editItemTypes()">Save</ws-loading-button>
             </div>
           </ng-container>
