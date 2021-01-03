@@ -59,8 +59,8 @@
         background-color: #ebecf0;
     }
     &:active{
-        color: #fff;
-        background-color: #b71c1c;
+        color: #b71c1c;
+        background-color: #FFF5F5;
     }
     span {
         display: block;
@@ -107,7 +107,6 @@
     &:active{
     }
 }
-
 .dropdown-menu{
     border: 0;
     box-shadow: 0 3px 5px #888;
@@ -115,6 +114,61 @@
 .dropdown.show .dropdown-menu {
     transition-duration: .2s !important;
     transition-property: opacity !important;
+}
+.form-control.disabled{
+    pointer-events: none;
+    background-color: #e9ecef;
+}
+.ws-circle-button {
+    padding: .25rem;
+    position: relative;
+    display: inline-block;
+    &:first-child{
+        padding-left: 0;
+    }
+    .dropdown-menu{
+        position: absolute;
+        top: -10px;
+        left: inherit;
+        .dropdown-item {
+            font-size: .8rem;
+            padding: .25rem 1rem;
+            outline: none;
+            &:hover{
+                color: #000;
+                background-color: #ebecf0;
+            }
+        }
+    }
+    .btn.btn-controller {
+        border-radius: 5px;
+        width: 38px;
+        height: 31px;
+        padding: 0;
+        margin: 0;
+        background-color: map-get($ws-color, light-grey-4);
+        color: #505f79;
+        transition: background-color .2s ease-out, color .2s ease-out;
+        &:hover {
+            background-color: #ebecf0;
+        }
+        &:active{
+            color: #fff;
+            background-color: #b71c1c;
+        }
+        span {
+            display: block;
+            justify-content: center;
+        }
+        &.btn-selected-item {
+            color: map-get($ws-color, clear);
+            background-color: map-get($ws-color, primary);
+        }
+    }
+}
+
+mat-checkbox label{
+    margin-bottom: 0;
 }
 
 @media (max-width: 992px) {

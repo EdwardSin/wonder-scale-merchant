@@ -1,0 +1,10 @@
+<mat-select #matSelectInfiniteScroll msInfiniteScroll (infiniteScroll)="getNextBatch()" (selectionChange)="selectItem($event)" [placeholder]="placeholder">
+    <mat-option>
+        <ngx-mat-select-search [formControl]="searchCtrl" placeholderLabel="search" [preventHomeEndKeyPropagation]="true" [disableScrollToActiveOnOptionsChanged]="true" [searching]="loading" noEntriesFoundLabel="No entry matches">
+        </ngx-mat-select-search>
+    </mat-option>
+    <mat-option [value]="''" disabled *ngIf="!loading && !items.length">No Item</mat-option>
+    <mat-option *ngFor="let item of items" [value]="item.id">
+        {{item.name}}
+    </mat-option>
+</mat-select>

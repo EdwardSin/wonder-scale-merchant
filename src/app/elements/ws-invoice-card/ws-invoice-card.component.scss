@@ -1,0 +1,41 @@
+:host {
+    .ws-invoice-card-container {
+        display: block;
+        height: 110px;
+        padding: .5rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, .3);
+        position: relative;
+        background-color: #fff;
+        transition: transform ease .1s;
+        cursor: pointer;
+    }
+
+    .ws-invoice-title {
+        font-size: .9rem;
+        overflow: hidden;
+        height: 46px;
+        text-overflow: ellipsis;
+    }
+
+    .ws-invoice-id {
+        color: #6b778c;
+        display: block;
+        font-size: .8rem;
+    }
+
+    .badge-light {
+        background-color: #E5E5E5;
+    }
+
+    .btn-controller-icon {
+        background-color: #E5E5E5;
+
+        &:active {
+            background-color: #FFF5F5;
+        }
+    }
+
+    .ws-invoice-card-container:hover {
+        transform: scale(1.02);
+    }
+}

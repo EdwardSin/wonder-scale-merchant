@@ -5,6 +5,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ScreenService } from '@services/general/screen.service';
 import { ScreenHelper } from '@helpers/screenhelper/screen.helper';
+import { Currency } from '@objects/currency';
 
 @Component({
   selector: 'app-root',
@@ -28,6 +29,16 @@ export class AppComponent {
         if (result) {
           let rates = result['rates'];
           this.currencyService.currencyRate.next(rates);
+          let currencies = [];
+          this.currencyService.currencyFullnameArray.forEach(key => {
+            let currency = new Currency();
+            currency.code = key;
+            currency.rate = rates[key];
+            currency.symbol = this.currencyService.currencySymbols[key];
+            currency.fullname = this.currencyService.currencyFullnames[key];
+            currencies.push(currency);
+          })
+          this.currencyService.currenciesBehaviourSubject.next(currencies);
         }
       });
     this.screenService.isMobileSize.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {

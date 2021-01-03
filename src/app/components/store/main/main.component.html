@@ -63,6 +63,29 @@
           </li>
         </ul>
       </li>
+      <li wsNavItem class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
+        <a [routerLink]="['invoices']">
+          <span class="ws-main-nav-icon fas fa-clipboard-list"></span>
+          <span class="ws-main-nav-text">Invoices</span>
+        </a>
+        <ul class="ws-main-nav-sub-list">
+          <li class="ws-main-nav-sub-list__title">
+            <a [routerLink]="['invoices']">Invoices</a>
+          </li>
+          <li *ngIf="isInvoiceEnabled">
+            <a [routerLinkActive]="'active'" [routerLink]="['invoices', 'all-invoices']">All Invoices</a>
+          </li>
+          <li *ngIf="isInvoiceEnabled">
+            <a [routerLinkActive]="'active'" [routerLink]="['invoices', 'promotions']">Promotions</a>
+          </li>
+          <li *ngIf="isInvoiceEnabled">
+            <a [routerLinkActive]="'active'" [routerLink]="['invoices', 'customers']">Customers</a>
+          </li>
+          <li *ngIf="isInvoiceEnabled">
+            <a [routerLinkActive]="'active'" [routerLink]="['invoices', 'accounting']">Accounting</a>
+          </li>
+        </ul>
+      </li>
       <li wsNavItem *ngIf="false" class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
         <a [routerLink]="['reviews']">
           <span class="ws-main-nav-icon far fa-comment"></span>
