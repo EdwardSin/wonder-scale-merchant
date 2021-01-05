@@ -7,6 +7,7 @@
 - 2021-01-05                                -
 ---------------------------------------------
 .: WSM: Task: Use scroll-x in categories to view a proper table (WSM-267)
+.: WSM: Task: Clarify the pay button and letting merchant know they can wait user to upload payslip to update the invoice status (WSM-281)
 
 - v1.0.1060                                 -
 ---------------------------------------------
