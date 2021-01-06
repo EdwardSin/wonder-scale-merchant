@@ -14,7 +14,10 @@ export class Invoice{
     deliveryOption: 'self_pickup' | 'delivery';
     delivery?: {
         fee?:  number,
-        etaDate?: Date
+        etaDate?: String,
+        etaHour?: number,
+        etaMin?: number,
+        date?: Date
     };
     items: Array<any>;
     remark: String;

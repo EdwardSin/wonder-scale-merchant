@@ -126,11 +126,12 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
           });
         }
         if (this.item.delivery.etaDate) {
-          let etaDate = new Date(this.item.delivery.etaDate);
+          let etaDateTimeHour = this.item.delivery.etaHour;
+          let etaDateTimeMin = this.item.delivery.etaMin;
           this.form.patchValue({
             etaDate: this.item.delivery.etaDate,
-            etaDateTimeHour: ("0" + etaDate.getHours()).slice(-2),
-            etaDateTimeMin: ("0" + etaDate.getMinutes()).slice(-2),
+            etaDateTimeHour: etaDateTimeHour !== null ? ("0" + etaDateTimeHour).slice(-2): null,
+            etaDateTimeMin: etaDateTimeMin !== null ? ("0" + etaDateTimeMin).slice(-2): null
           })
         }
       }
@@ -409,12 +410,10 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
       return;
     }
     if (this.isValidatedEtaDate()) {
-      if (etaDate !== null) {
-        etaDate = new Date(etaDate);
-        etaDate.setHours(etaDateTimeHour);
-        etaDate.setMinutes(etaDateTimeMin);
-      } else {
+      if (etaDate == null) {
         etaDate = null;
+        etaDateTimeHour = null;
+        etaDateTimeMin = null
       }
     } else {
       return;
@@ -434,7 +433,9 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
       },
       delivery: {
         fee: form.controls['deliveryFee'].value,
-        etaDate: etaDate
+        etaDate: etaDate,
+        etaHour: etaDateTimeHour,
+        etaMin: etaDateTimeMin
       },
       items: this.inListItems,
       remark: form.controls['remark'].value,
@@ -515,12 +516,15 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
     let etaDate = this.form.controls['etaDate'].value;
     let etaDateTimeHour = this.form.controls['etaDateTimeHour'].value;
     let etaDateTimeMin = this.form.controls['etaDateTimeMin'].value;
-    if ((etaDate && (!etaDateTimeHour || !etaDateTimeMin)) ||
-        (etaDateTimeHour && (!etaDate || !etaDateTimeMin)) ||
-        etaDateTimeMin && (!etaDate || !etaDateTimeHour)) {
-      WsToastService.toastSubject.next({ content: 'Please set a valid estimated date time!', type: 'danger'});
+    if (!etaDate && (etaDateTimeHour || etaDateTimeMin)) {
+      WsToastService.toastSubject.next({ content: 'Please set estimated date!', type: 'danger'});
       return false;
-    } else if (etaDate) {
+    }
+    if ((etaDateTimeHour && !etaDateTimeMin) || (etaDateTimeMin && !etaDateTimeHour)) {
+      WsToastService.toastSubject.next({ content: 'Please set a valid estimated time!', type: 'danger'});
+      return false;
+    }
+    if (etaDate && etaDateTimeHour && etaDateTimeMin) {
       if (typeof etaDate !== typeof Date) {
         etaDate = new Date(etaDate);
       }
