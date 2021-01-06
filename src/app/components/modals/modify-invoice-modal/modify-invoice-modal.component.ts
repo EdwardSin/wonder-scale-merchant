@@ -172,7 +172,9 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
       WsToastService.toastSubject.next({ content: 'Please select an item!', type: 'danger'});
       return;
     }
-    if (!this.form.controls['itemPrice'].value || !('' + this.form.controls['itemPrice'].value).trim()) {
+    if (this.form.controls['itemPrice'].value == undefined || 
+        this.form.controls['itemPrice'].value == null || 
+        ('' + this.form.controls['itemPrice'].value).trim() == '') {
       WsToastService.toastSubject.next({ content: 'Please enter the price!', type: 'danger'});
       return;
     }
@@ -180,7 +182,9 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
       WsToastService.toastSubject.next({ content: 'Please enter a valid price!', type: 'danger'});
       return;
     }
-    if (!this.form.controls['itemQuantity'].value || !('' + this.form.controls['itemQuantity'].value).trim()) {
+    if (this.form.controls['itemQuantity'].value == undefined || 
+        this.form.controls['itemQuantity'].value == null || 
+        ('' + this.form.controls['itemQuantity'].value).trim() == '') {
       WsToastService.toastSubject.next({ content: 'Please enter the quantity!', type: 'danger'});
       return;
     }
@@ -322,7 +326,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
     this.form.patchValue({
       itemType: this.itemTypes[0],
       itemName: item.name,
-      itemPrice: priceAfterDiscount,
+      itemPrice: priceAfterDiscount.toFixed(2),
       itemQuantity: 1
     });
   }
@@ -545,7 +549,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
   }
   setDefaultPrice() {
     this.form.patchValue({
-      itemPrice: this.defaultPrice
+      itemPrice: this.defaultPrice.toFixed(2)
     });
   }
   drop(event: CdkDragDrop<string[]>) {
