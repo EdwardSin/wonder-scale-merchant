@@ -98,7 +98,16 @@ export class ModifyItemTypeComponent implements OnInit {
   uploadItemImages(allImages, images, itemTypeId) {
     images.forEach(image => image.loading = true);
     return from(images)
-    .pipe(mergeMap(image => {
+    .pipe(
+      mergeMap((image: any) => {
+        return of(ImageHelper.resizeImage(image['base64'], null, null , .5)).pipe(map(result => {
+          return {
+            base64: result,
+            ...image
+          }
+        }))
+      }),
+      mergeMap(image => {
       let index = allImages.indexOf(image);
       let obj = {
         id: image['id'],

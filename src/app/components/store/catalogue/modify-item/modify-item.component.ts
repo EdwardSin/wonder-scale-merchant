@@ -282,16 +282,22 @@ export class ModifyItemComponent implements OnInit {
       this.profileImageName = event[0].name;
     }
     event.forEach(item => {
-      if (!this.allProfileItems.includes(item)) {
-        this.allProfileItems.push(item);
-      }
+      ImageHelper.resizeImage(item.base64, null, null, .5).then(result => {
+        if (!this.allProfileItems.includes(item)) {
+          item.base64 = result;
+          this.allProfileItems.push(item);
+        }
+      });
     });
   }
   onDescriptionImageUploaded(event) {
     event.forEach(item => {
-      if (!this.allDescriptionItems.includes(item)) {
-        this.allDescriptionItems.push(item);
-      }
+      ImageHelper.resizeImage(item.base64, null, null, .5).then(result => {
+        if (!this.allDescriptionItems.includes(item)) {
+          item.base64 = result;
+          this.allDescriptionItems.push(item);
+        }
+      });
     });
   }
   uploadProfileImages(uploadProfileItems) {
