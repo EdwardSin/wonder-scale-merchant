@@ -538,15 +538,15 @@ export class StorePageComponent implements OnInit {
   }
   fileBannerChangeEvent(event) {
     event.forEach(item => {
-      let exist = this.editingAllBanners.find(image => {
-        return image.name == item.name && image.file.size == item.file.size;
-      })
-      if (!exist) {
-        ImageHelper.resizeImage(item.base64, null, null, .5).then(result => {
+      ImageHelper.resizeImage(item.base64, null, null, .5).then(result => {
+        let exist = this.editingAllBanners.find(image => {
+          return image.name == item.name && image.file.size == item.file.size;
+        })
+        if (!exist) {
           item.base64 = result;
           this.editingAllBanners.push(item);
-        });
-      }
+        }
+      });
     });
   }
   fileMenuImageChangeEvent(event) {
