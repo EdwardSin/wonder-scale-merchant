@@ -28,4 +28,5 @@ export class Invoice{
     isCustomerSaved?: boolean;
     createdAt?: Date;
     updatedAt?: Date;
+    completedAt?: Date;
 }

@@ -1,18 +1,23 @@
 <ws-modal *ngIf="isOpened" [(isOpened)]="isOpened" [isCloseIconDisplayed]="false" [maxWidth]="700">
     <form modalBody [formGroup]="form">
         <mat-select class="form-control form-control-sm mb-3 border-0 float-right status-container" style="width: 150px; padding-top: .35rem" placeholder="Status" formControlName="status" [ngClass]="'status-container-' + form.controls['status'].value" (selectionChange)="updateInvoiceStatus($event.value)">
-            <mat-option [value]="'new'" *ngIf="!item || item.status == 'new' || item.status == 'paid' || item.status == 'completed' || item.status == 'refunded' || item.status == 'cancelled'">New</mat-option>
-            <mat-option [value]="'paid'" *ngIf="item && (item.status == 'paid' || item.status == 'in_progress')">Paid</mat-option>
-            <mat-option [value]="'in_progress'" *ngIf="item && (item.status == 'paid' || item.status == 'in_progress' || item.status == 'delivered')">In Progress</mat-option>
-            <mat-option [value]="'delivered'" *ngIf="item && (item.status == 'in_progress' || item.status == 'delivered')">Delivered</mat-option>
+            <mat-option [value]="'new'" *ngIf="(!item || item.status == 'new' || item.status == 'paid' || item.status == 'completed' || item.status == 'refunded' || item.status == 'cancelled') || (!item && !form.controls['isCompletedChecked'].value)">New</mat-option>
+            <mat-option [value]="'paid'" *ngIf="item && (item.status == 'paid' || item.status == 'in_progress') && !form.controls['isCompletedChecked'].value">Paid</mat-option>
+            <mat-option [value]="'in_progress'" *ngIf="item && (item.status == 'paid' || item.status == 'in_progress' || item.status == 'delivered') && !form.controls['isCompletedChecked'].value">In Progress</mat-option>
+            <mat-option [value]="'delivered'" *ngIf="item && (item.status == 'in_progress' || item.status == 'delivered') && !form.controls['isCompletedChecked'].value">Delivered</mat-option>
             <mat-option [value]="'cancelled'" *ngIf="item && (item.status == 'cancelled' || item.status == 'refunded')">Cancelled</mat-option>
             <mat-option [value]="'refunded'" *ngIf="item && (item.status == 'cancelled' || item.status == 'refunded')">Refunded</mat-option>
-            <mat-option [value]="'completed'" *ngIf="item && (item.status == 'delivered' || item.status == 'completed')">Completed</mat-option>
+            <mat-option [value]="'completed'" *ngIf="(item && (item.status == 'delivered' || item.status == 'completed')) || ((!item || item && item.status !== 'cancelled' && item.status !== 'refunded') && form.controls['isCompletedChecked'].value)">Completed</mat-option>
         </mat-select>
         <p class="mb-0 font-8" *ngIf="item?.receiptId">ID: {{ item?.receiptId }}</p>
         <div class="font-8 mb-3" *ngIf="item">
             <p class="mb-0" style="color: #6b778c" *ngIf="item.createdAt">Created {{ item?.createdAt | date: 'MMM d, y, h:mm a'}}</p>
             <p class="mb-0" style="color: #6b778c" *ngIf="item.updatedAt">Updated {{ item?.updatedAt | date: 'MMM d, y, h:mm a'}}</p>
+        </div>
+        <div class="mb-3">
+            <mat-checkbox [color]="'primary'" class="mb-2 font-9 d-inline-block" formControlName="isCompletedChecked" (change)="changeToCompletedStatus($event)">Mark as completed invoice</mat-checkbox>
+            <input [hidden]="!form.controls['isCompletedChecked'].value" (click)="completedPicker.open()" placeholder="Completion Date" formControlName="completedAt" class="form-control form-control-sm mb-2 mr-2" style="max-width: 200px" [matDatepicker]="completedPicker" />
+            <mat-datepicker #completedPicker startView="month" [startAt]="immutedTodayDate"></mat-datepicker>
         </div>
         <mat-select class="form-control form-control-sm mb-3" placeholder="Catalogue" value="" [disabled]="!isEditable()" (selectionChange)="getItems($event.value)">
             <mat-option [value]="''">All</mat-option>
