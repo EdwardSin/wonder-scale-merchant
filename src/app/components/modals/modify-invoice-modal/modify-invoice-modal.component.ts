@@ -43,6 +43,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
     'Terengganu'
   ]
   todayDate: Date = new Date;
+  immutedTodayDate: Date = new Date;
   form: FormGroup;
   categories = [];
   items = [];
@@ -60,6 +61,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
   open: boolean;
   defaultPrice: number = 0;
   tempInvoice: Invoice = null;
+  _previousStatus: boolean;
   isCreateEmptyInvoiceModalOpened: boolean;
   modifyLoading: WsLoading = new WsLoading;
   itemLoading: WsLoading = new WsLoading;
@@ -97,26 +99,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
         deliveryOption: this.item.deliveryOption
       });
       if (!this.isEditable()) {
-        this.form.get('deliveryFee').disable();
-        this.form.get('deliveryOption').disable();
-        this.form.get('firstName').disable();
-        this.form.get('lastName').disable();
-        this.form.get('address').disable();
-        this.form.get('postcode').disable();
-        this.form.get('state').disable();
-        this.form.get('country').disable();
-        this.form.get('phoneNumber').disable();
-        this.form.get('isCustomerSaved').disable();
-        this.form.get('etaDate').disable();
-        this.form.get('etaDateTimeHour').disable();
-        this.form.get('etaDateTimeMin').disable();
-        this.form.get('promotion').disable();
-        this.form.get('itemName').disable();
-        this.form.get('itemType').disable();
-        this.form.get('itemPrice').disable();
-        this.form.get('itemQuantity').disable();
-        this.form.get('status').disable();
-        this.form.get('remark').disable();
+        this.disableAllFields()
       }
       this.inListItems = this.item.items;
       if (this.item.delivery) {
@@ -154,6 +137,12 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
         this.form.patchValue({
           isCustomerSaved: true
         });
+      }
+      if (this.item.completedAt) {
+        this.form.patchValue({
+          completedAt: this.item.completedAt,
+          isCompletedChecked: true
+        })
       }
       this.notifyCalculation();
     }
@@ -399,13 +388,13 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
       WsToastService.toastSubject.next({ content: 'Customer name and contact is required!', type: 'danger'});
       return;
     }
-    if (this.form.controls['address'].errors || 
-      this.form.controls['postcode'].errors || 
-      this.form.controls['state'].errors) {
+    if (form.controls['address'].errors || 
+      form.controls['postcode'].errors || 
+      form.controls['state'].errors) {
       WsToastService.toastSubject.next({ content: 'All related address fields must be filled!', type: 'danger'});
       return;
     }
-    else if (this.form.controls['address'].errors && this.form.controls['address'].errors.maxlength) {
+    else if (form.controls['address'].errors && form.controls['address'].errors.maxlength) {
       WsToastService.toastSubject.next({ content: 'Address must be less than 128 characters!', type: 'danger'});
       return;
     }
@@ -416,6 +405,10 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
         etaDateTimeMin = null
       }
     } else {
+      return;
+    }
+    if (form.controls['isCompletedChecked'].value && !form.controls['completedAt'].value) {
+      WsToastService.toastSubject.next({ content: 'Please enter completion date!', type: 'danger'});
       return;
     }
     
@@ -449,6 +442,9 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
     if (form.controls['promotion'].value) {
       invoice['promotions'] = form.controls['promotion'].value;
     }
+    if (form.controls['isCompletedChecked'].value) {
+      invoice['completedAt'] = form.controls['completedAt'].value;
+    }
     if (form.valid) {
       invoice = this.removeEmpty(invoice);
       if (!invoice.items.length) {
@@ -476,7 +472,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
       this.authInvoiceContributorService.addInvoice(invoice).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.modifyLoading.stop())).subscribe(result => {
         if (result && result['result']) {
           this.authInvoiceContributorService.refreshInvoices.next(true);
-          if (result['data']) {
+          if (result['data'] && invoice.status !== 'completed') {
             this.copy(result['data']);
           }
           this.close();
@@ -492,6 +488,19 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
         WsToastService.toastSubject.next({content: 'Status is updated!', type: 'success'});
         this.authInvoiceContributorService.refreshInvoices.next(true);
         this.item.status = status;
+        this._previousStatus = status;
+        if (this.isEditable()) {
+          this.enableAllFields();
+          if (status == 'new') {
+            this.form.controls['isCompletedChecked'].setValue(false);
+          }
+        } else if (!this.isEditable()) {
+          this.disableAllFields();
+          if (status == 'completed') {
+            this.form.controls['isCompletedChecked'].setValue(true);
+            this.form.controls['completedAt'].setValue(new Date());
+          }
+        }
         return true;
       }
     }, err => {
@@ -547,6 +556,52 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
     });
     return obj;
   }
+  disableAllFields() {
+    this.form.get('deliveryFee').disable();
+    this.form.get('deliveryOption').disable();
+    this.form.get('firstName').disable();
+    this.form.get('lastName').disable();
+    this.form.get('address').disable();
+    this.form.get('postcode').disable();
+    this.form.get('state').disable();
+    this.form.get('country').disable();
+    this.form.get('phoneNumber').disable();
+    this.form.get('isCustomerSaved').disable();
+    this.form.get('etaDate').disable();
+    this.form.get('etaDateTimeHour').disable();
+    this.form.get('etaDateTimeMin').disable();
+    this.form.get('promotion').disable();
+    this.form.get('itemName').disable();
+    this.form.get('itemType').disable();
+    this.form.get('itemPrice').disable();
+    this.form.get('itemQuantity').disable();
+    this.form.get('remark').disable();
+    this.form.get('isCompletedChecked').disable();
+    this.form.get('completedAt').disable();
+  }
+  enableAllFields() {
+    this.form.get('deliveryFee').enable();
+    this.form.get('deliveryOption').enable();
+    this.form.get('firstName').enable();
+    this.form.get('lastName').enable();
+    this.form.get('address').enable();
+    this.form.get('postcode').enable();
+    this.form.get('state').enable();
+    this.form.get('country').enable();
+    this.form.get('phoneNumber').enable();
+    this.form.get('isCustomerSaved').enable();
+    this.form.get('etaDate').enable();
+    this.form.get('etaDateTimeHour').enable();
+    this.form.get('etaDateTimeMin').enable();
+    this.form.get('promotion').enable();
+    this.form.get('itemName').enable();
+    this.form.get('itemType').enable();
+    this.form.get('itemPrice').enable();
+    this.form.get('itemQuantity').enable();
+    this.form.get('remark').enable();
+    this.form.get('isCompletedChecked').enable();
+    this.form.get('completedAt').enable();
+  }
   returnToModifyInvoice() {
     this.isOpened = true;
     this.isCloseIconDisplayed = false;
@@ -555,6 +610,19 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
     this.form.patchValue({
       itemPrice: this.defaultPrice.toFixed(2)
     });
+  }
+  changeToCompletedStatus(event) {
+    if (event.checked) {
+      this._previousStatus = this.form.controls['status'].value;
+      if (this.isEditable()) {
+        this.form.controls['status'].setValue('completed');
+        if (!this.form.controls['completedAt'].value) {
+          this.form.controls['completedAt'].setValue(this.immutedTodayDate);
+        }
+      }
+    } else {
+      this.form.controls['status'].setValue(this._previousStatus);
+    }
   }
   drop(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.inListItems, event.previousIndex, event.currentIndex);
