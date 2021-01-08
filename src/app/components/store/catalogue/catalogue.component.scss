@@ -1,10 +1,10 @@
 .list-table{
-    width: 100%;
     min-height: 30vh;
     width: 100%;
     background-color: #fefefe;
     box-shadow: 0 3px 6px rgba(0, 0, 0, .16);
     border-radius: 10px;
+    display: inline-table;
 }
 
 .drag-handle {
