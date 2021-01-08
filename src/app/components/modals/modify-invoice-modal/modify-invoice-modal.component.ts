@@ -505,6 +505,12 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
       }
     }, err => {
       WsToastService.toastSubject.next({content: 'Status cannot be updated!', type: 'danger'});
+      if (this.form.controls['isCompletedChecked'].value) {
+        this.form.patchValue({
+          status: 'completed'
+        });
+        return false;
+      }
       this.form.patchValue({
         status: this.item.status
       });
