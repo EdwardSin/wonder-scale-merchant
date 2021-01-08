@@ -51,14 +51,6 @@ export class QuickMenuComponent implements OnInit {
     from(images_blob)
       .pipe(
         mergeMap(image => {
-          return of(ImageHelper.resizeImage(image.base64, null, null , .5)).pipe(map(result => {
-            return {
-              base64: result,
-              ...image
-            }
-          }))
-        }),
-        mergeMap(image => {
           return this.authStoreContributorService
             .editMenuImages({
               file: image.base64,
@@ -134,13 +126,15 @@ export class QuickMenuComponent implements OnInit {
   }
   fileChangeEvent(event) {
     event.forEach(item => {
-      let exist = this.allImages.find(image => {
-        return image.name == item.name && image.file.size == item.file.size;
-      })
-      if (!exist) {
-        this.allImages.push(item);
-        this.editedFlag = true;
-      }
+      ImageHelper.resizeImage(item.base64, null, null , .5).then(() => {
+        let exist = this.allImages.find(image => {
+          return image.name == item.name && image.file.size == item.file.size;
+        })
+        if (!exist) {
+          this.allImages.push(item);
+          this.editedFlag = true;
+        }
+      });
     });
   }
   openMenuModal(selectedMenu) {

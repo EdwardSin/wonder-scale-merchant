@@ -1,10 +1,10 @@
-<h4 class="ws-title d-inline-block mr-2">Quick Menu</h4>
+<h4 class="ws-title d-inline-block mr-2">Quick {{ store?.type == 'restaurant' ? 'Menu' : 'Catalogue'}}</h4>
 <span title="Display menu images to public. (Max 10)" wsTippy class="fa fa-question-circle"></span>
 <div *ngIf="!loading.isRunning() && !allImages?.length" class="alert alert-info font-9">
     Upload your restaurant menu instantly to start promoting your store.
 </div>
 <div *ngIf="!loading.isRunning() && store?.number_of_all_items < 11" class="alert alert-danger font-9">
-    You are advised to add items into catalogue instead of just adding menu picture to the quick menu.
+    You are advised to add items into catalogue instead of just adding product picture to the quick {{ store?.type == 'restaurant' ? 'menu' : 'catalogue'}}.
     <p class="mb-0 font-weight-bold">Added items can be easily searched by search engine.</p>
 </div>
 <button [disabled]="!editedFlag || isImagesUploading" class="btn btn-controller float-right ml-2" title="Save"
