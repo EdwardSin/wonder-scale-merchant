@@ -1,11 +1,13 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { WsLoading } from '@elements/ws-loading/ws-loading';
+import { DocumentHelper } from '@helpers/documenthelper/document.helper';
 import { ScreenHelper } from '@helpers/screenhelper/screen.helper';
 import { Invoice } from '@objects/invoice';
 import { ScreenService } from '@services/general/screen.service';
 import { AuthInvoiceContributorService } from '@services/http/auth-store/contributor/auth-invoice-contributor.service';
 import { SharedNavbarService } from '@services/shared/shared-nav-bar.service';
+import { SharedStoreService } from '@services/shared/shared-store.service';
 import { interval, Subject, Subscription } from 'rxjs';
 import { finalize, switchMap, takeUntil } from 'rxjs/operators';
 
@@ -39,7 +41,8 @@ export class AllInvoicesComponent implements OnInit {
   constructor(private authInvoiceControbutorService: AuthInvoiceContributorService, private ref: ChangeDetectorRef,
     private router: Router, private route: ActivatedRoute,
     private screenService: ScreenService,
-    private sharedNavbarService: SharedNavbarService
+    private sharedNavbarService: SharedNavbarService,
+    private sharedStoreService: SharedStoreService
     ) { 
     this.allInvoices = this.authInvoiceControbutorService.allInvoices;
   }
@@ -69,6 +72,11 @@ export class AllInvoicesComponent implements OnInit {
         this.isNavOpen = res;
         this.ref.detectChanges();
       });
+    this.sharedStoreService.store.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+      if (result) {
+        DocumentHelper.setWindowTitleWithWonderScale('All Invoices - ' + result.name);
+      }
+    });
     this.refreshInvoices();
   }
   getInvoices(loading=false) {
