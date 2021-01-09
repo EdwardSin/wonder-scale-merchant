@@ -265,6 +265,7 @@ export class WSFormBuilder {
             itemType: [''],
             isCompletedChecked: [false],
             completedAt: [''],
+            paymentMethod: [''],
             itemPrice: ['', [Validators.pattern("^[0-9.,]+$")]],
             itemQuantity: ['', [Validators.pattern("^[0-9]+$")]],
             status: ['new', Validators.required],
