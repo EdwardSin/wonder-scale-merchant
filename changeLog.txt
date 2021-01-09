@@ -7,6 +7,7 @@
 - 2021-01-09                                -
 ---------------------------------------------
 .: WSM: BugFix: Add payment method when invoice mark as completed (WSM-287)
+.: WSM: BugFix: Set Title - invoice (WSM-288)
 
 - v1.0.1061                                 -
 ---------------------------------------------
