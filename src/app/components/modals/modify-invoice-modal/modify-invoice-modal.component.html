@@ -14,17 +14,31 @@
             <p class="mb-0" style="color: #6b778c" *ngIf="item.createdAt">Created {{ item?.createdAt | date: 'MMM d, y, h:mm a'}}</p>
             <p class="mb-0" style="color: #6b778c" *ngIf="item.updatedAt">Updated {{ item?.updatedAt | date: 'MMM d, y, h:mm a'}}</p>
         </div>
-        <div class="mb-3">
-            <mat-checkbox [color]="'primary'" class="mb-2 font-9 d-inline-block" formControlName="isCompletedChecked" (change)="changeToCompletedStatus($event)">Mark as completed invoice</mat-checkbox>
-            <input [hidden]="!form.controls['isCompletedChecked'].value" (click)="completedPicker.open()" placeholder="Completion Date" formControlName="completedAt" class="form-control form-control-sm mb-2 mr-2" style="max-width: 200px" [matDatepicker]="completedPicker" />
-            <mat-datepicker #completedPicker startView="month" [startAt]="immutedTodayDate"></mat-datepicker>
-        </div>
-        <mat-select class="form-control form-control-sm mb-3" placeholder="Catalogue" value="" [disabled]="!isEditable()" (selectionChange)="getItems($event.value)">
-            <mat-option [value]="''">All</mat-option>
-            <mat-option [value]="'uncategorized'">Uncategorized</mat-option>
-            <mat-option [value]="category.id" *ngFor="let category of categories">{{ category?.name }}</mat-option>
-        </mat-select>
+        <div class="clearfix"></div>
         <div class="border rounded mb-3 p-3">
+            <mat-checkbox [color]="'primary'" class="font-9 d-inline-block" formControlName="isCompletedChecked" (change)="changeToCompletedStatus($event)">Mark as completed invoice</mat-checkbox>
+            <div class="mt-2" [hidden]="!form.controls['isCompletedChecked'].value">
+                <label id="completionDate" class="mb-0 font-9">Completion Date:</label>
+                <input for="completionDate" (click)="completedPicker.open()" formControlName="completedAt" class="form-control form-control-sm mb-2" style="max-width: 200px" [matDatepicker]="completedPicker" />
+                <mat-datepicker #completedPicker startView="month" [startAt]="immutedTodayDate"></mat-datepicker>
+            </div>
+            <div class="my-2" *ngIf="item || form.controls['isCompletedChecked'].value">
+                <label id="paymentMethod" class="mb-0 font-9">Payment Method:</label>
+                <mat-select for="paymentMethod" style="max-width: 200px" class="form-control form-control-sm mb-2 d-block" formControlName="paymentMethod">
+                    <mat-option [value]="''"></mat-option>
+                    <mat-option [value]="'cash'">Cash</mat-option>
+                    <mat-option [value]="'bank_in'">Bank In</mat-option>
+                    <mat-option [value]="'cod'">Cash on delivery</mat-option>
+                </mat-select>
+            </div>
+        </div>
+        <div class="border rounded mb-3 p-3">
+            <label id="paymentMethod" class="mb-0 font-9">Catalogue:</label>
+            <mat-select class="form-control form-control-sm mb-3" value="" [disabled]="!isEditable()" (selectionChange)="getItems($event.value)">
+                <mat-option [value]="''">All</mat-option>
+                <mat-option [value]="'uncategorized'">Uncategorized</mat-option>
+                <mat-option [value]="category.id" *ngFor="let category of categories">{{ category?.name }}</mat-option>
+            </mat-select>
             <label id="itemtype" class="mb-0 font-9">Item: </label>
             <ws-search-select for="itemtype" [items]="items" [loading]="itemLoading.isRunning()" (selectionChange)="selectionChange($event)" (searchValueChange)="searchItemValueChange($event)" (scroll)="getItems(categoryId, true)" (open)="openItemChange($event)" [class.disabled]="!isEditable()" class="d-block form-control form-control-sm mb-2"></ws-search-select>
             <label id="itemtype" class="mb-0 font-9">Item Type: </label>
