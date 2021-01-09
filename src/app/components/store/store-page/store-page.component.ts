@@ -21,6 +21,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EmailValidator } from '@validations/email.validator';
 import { URLValidator } from '@validations/url.validator';
 import { DocumentHelper } from '@helpers/documenthelper/document.helper';
+import { ImageHelper } from '@helpers/imagehelper/image.helper';
 
 @Component({
   selector: 'app-store-page',
@@ -537,12 +538,15 @@ export class StorePageComponent implements OnInit {
   }
   fileBannerChangeEvent(event) {
     event.forEach(item => {
-      let exist = this.editingAllBanners.find(image => {
-        return image.name == item.name && image.file.size == item.file.size;
-      })
-      if (!exist) {
-        this.editingAllBanners.push(item);
-      }
+      ImageHelper.resizeImage(item.base64, null, null, .5).then(result => {
+        let exist = this.editingAllBanners.find(image => {
+          return image.name == item.name && image.file.size == item.file.size;
+        })
+        if (!exist) {
+          item.base64 = result;
+          this.editingAllBanners.push(item);
+        }
+      });
     });
   }
   fileMenuImageChangeEvent(event) {
