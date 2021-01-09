@@ -96,7 +96,8 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
       this.form.patchValue({
         status: this.item.status,
         remark: this.item.remark,
-        deliveryOption: this.item.deliveryOption
+        deliveryOption: this.item.deliveryOption,
+        paymentMethod: this.item.paymentMethod
       });
       if (!this.isEditable()) {
         this.disableAllFields()
@@ -142,7 +143,6 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
         this.form.patchValue({
           completedAt: this.item.completedAt,
           isCompletedChecked: true,
-          paymentMethod: this.item.paymentMethod
         })
       }
       this.notifyCalculation();
