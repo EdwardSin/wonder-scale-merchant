@@ -83,11 +83,12 @@ export class WsInvoiceCardComponent implements OnInit {
     event.stopPropagation();
     this.isEtaDeliveryDateModalOpened = true;
     if (this.item.delivery && this.item.delivery.etaDate) {
-      let etaDate = new Date(this.item.delivery.etaDate);
+      let etaDateTimeHour = this.item.delivery.etaHour;
+      let etaDateTimeMin = this.item.delivery.etaMin;
       this.form.patchValue({
-        etaDate: new Date(etaDate.getFullYear(), etaDate.getMonth(), etaDate.getDate()),
-        etaDateTimeHour: ('0' + etaDate.getHours()).slice(-2),
-        etaDateTimeMin: ('0' + etaDate.getMinutes()).slice(-2)
+        etaDate: this.item.delivery.etaDate,
+        etaDateTimeHour: etaDateTimeHour !== null ? ("0" + etaDateTimeHour).slice(-2): null,
+        etaDateTimeMin: etaDateTimeMin !== null ? ("0" + etaDateTimeMin).slice(-2): null
       });
     } else {
       this.form.patchValue({
@@ -99,14 +100,11 @@ export class WsInvoiceCardComponent implements OnInit {
   }
   editEtaDateTime() {
     let etaDate = this.form.controls['etaDate'].value;
-    let etaDateTimeHour = this.form.controls['etaDateTimeHour'].value;
-    let etaDateTimeMin = this.form.controls['etaDateTimeMin'].value;
+    let etaHour = this.form.controls['etaDateTimeHour'].value;
+    let etaMin = this.form.controls['etaDateTimeMin'].value;
     if (this.isValidatedEtaDate()) {
-      etaDate = new Date(etaDate);
-      etaDate.setHours(etaDateTimeHour);
-      etaDate.setMinutes(etaDateTimeMin);
       this.editEtaLoading.start();
-      this.authInvoiceContributorService.editInvoice({_id: this.item._id, delivery: {etaDate}}).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.editEtaLoading.stop())).subscribe(result => {
+      this.authInvoiceContributorService.editInvoice({_id: this.item._id, delivery: {etaDate, etaHour, etaMin}}).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.editEtaLoading.stop())).subscribe(result => {
         if (result && result['result']) {
           this.authInvoiceContributorService.refreshInvoices.next(true);
           this.isEtaDeliveryDateModalOpened = false;
@@ -127,22 +125,15 @@ export class WsInvoiceCardComponent implements OnInit {
     let etaDate = this.form.controls['etaDate'].value;
     let etaDateTimeHour = this.form.controls['etaDateTimeHour'].value;
     let etaDateTimeMin = this.form.controls['etaDateTimeMin'].value;
-    if (etaDate === '') {
+    if (!etaDate && (etaDateTimeHour || etaDateTimeMin)) {
       WsToastService.toastSubject.next({ content: 'Please set estimated date!', type: 'danger'});
       return false;
-    } else if (etaDateTimeHour === '') {
-      WsToastService.toastSubject.next({ content: 'Please set estimated hour!', type: 'danger'});
-      return false;
-    } else if (etaDateTimeMin === '') {
-      WsToastService.toastSubject.next({ content: 'Please set estimated time!', type: 'danger'});
+    }
+    if ((etaDateTimeHour && !etaDateTimeMin) || (etaDateTimeMin && !etaDateTimeHour)) {
+      WsToastService.toastSubject.next({ content: 'Please set a valid estimated time!', type: 'danger'});
       return false;
     }
-    if ((etaDate && (!etaDateTimeHour || !etaDateTimeMin)) ||
-        (etaDateTimeHour && (!etaDate || !etaDateTimeMin)) ||
-        etaDateTimeMin && (!etaDate || !etaDateTimeHour)) {
-      WsToastService.toastSubject.next({ content: 'Please set a valid estimated date time!', type: 'danger'});
-      return false;
-    } else if (etaDate) {
+    if (etaDate && etaDateTimeHour && etaDateTimeMin) {
       if (typeof etaDate !== typeof Date) {
         etaDate = new Date(etaDate);
       }

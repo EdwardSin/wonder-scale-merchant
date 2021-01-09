@@ -56,4 +56,31 @@ export class ImageHelper {
       }
     });
   }
+  public static async resizeImage(src, width, height, quality=1) {
+    return new Promise((resolve, reject) => {
+      let img = new Image;
+      img.onload = () => resolve(this._resizeImage(img, width || img.width, height || img.height, quality));
+      img.onerror = reject;
+      img.src = src;
+    });
+  }
+  private static _resizeImage(img, targetWidth, targetHeight, quality) {
+    return this.imageToDataUri(img, targetWidth, targetHeight, quality);
+  }
+  private static imageToDataUri(img, width, height, quality) {
+
+    // create an off-screen canvas
+    var canvas = document.createElement('canvas'),
+        ctx = canvas.getContext('2d');
+
+    // set its dimension to target size
+    canvas.width = width;
+    canvas.height = height;
+
+    // draw source image into the off-screen canvas:
+    ctx.drawImage(img, 0, 0, width, height);
+
+    // encode image to data-uri with base64 version of compressed image
+    return canvas.toDataURL('image/jpeg', quality);
+}
 }

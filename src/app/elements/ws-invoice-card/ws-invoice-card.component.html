@@ -55,12 +55,20 @@
 </ws-modal>
 <ws-modal *ngIf="isPayModalOpened" [isCloseIconDisplayed]="false" [(isOpened)]="isPayModalOpened" [maxWidth]="400">
     <div class="pt-3" modalBody>
-        <mat-select class="form-control form-control-sm" placeholder="Payment Method" [(ngModel)]="paymentMethod">
+        <mat-select class="form-control form-control-sm my-2" placeholder="Payment Method" [(ngModel)]="paymentMethod">
             <mat-option [value]="'cash'">Cash</mat-option>
             <mat-option [value]="'bank_in'">Bank In</mat-option>
             <mat-option [value]="'cod'">Cash on delivery</mat-option>
         </mat-select>
         <p class="mb-3 font-9">Invoice will be updated to <span class="text-warning">in progress</span> status without further confirmation.</p>
+        <div class="text-center my-1" style="overflow: hidden">
+            <span id="continueSpan" class="p-2 position-relative">
+              <span class="innerSpan">
+                <span>OR</span>
+              </span>
+            </span>
+        </div>
+        <p class="mb-0 text-center font-9 py-3 mb-3 text-muted">Wait the customer to upload the payslip.</p>
         <div>
             <button class="btn btn-sm btn-controller float-right" (click)="isPayModalOpened = false">Cancel</button>
             <button [disabled]="statusLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="payInvoice()">
@@ -76,12 +84,12 @@
         <mat-datepicker #fromPicker [startAt]="todayDate" startView="month"></mat-datepicker>
         <div class="input-group mb-3" style="width: 150px">
             <mat-select class="form-control form-control-sm" placeholder="HH" formControlName="etaDateTimeHour">
-                <mat-option [value]="n" *ngFor="let n of hours">{{n}}
-                </mat-option>
+                <mat-option [value]="''">HH</mat-option>
+                <mat-option [value]="n" *ngFor="let n of hours">{{n}}</mat-option>
             </mat-select>
             <mat-select class="form-control form-control-sm" placeholder="MM" formControlName="etaDateTimeMin">
-                <mat-option [value]="n" *ngFor="let n of mins">{{n}}
-                </mat-option>
+                <mat-option [value]="''">MM</mat-option>
+                <mat-option [value]="n" *ngFor="let n of mins">{{n}}</mat-option>
             </mat-select>
         </div>
         <div>

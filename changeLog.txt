@@ -2,6 +2,30 @@
 - Wonder Scale Merchant                     -
 ---------------------------------------------
 
+- v1.0.1061                                 -
+---------------------------------------------
+- 2021-01-08                                -
+---------------------------------------------
+.: WSM: Task: Add completed date for invoice (WSM-283)
+
+---------------------------------------------
+- 2021-01-07                                -
+---------------------------------------------
+.: WSM: BugFix: Upload multiple banners slow issue (WSM-275)
+
+---------------------------------------------
+- 2021-01-06                                -
+---------------------------------------------
+.: WSM: BugFix: When item type price is 0, should set the price to 0 (WSM-276)
+.: WSM: Task: Able to not enter ETA time if not confirmed yet (WSM-277)
+
+---------------------------------------------
+- 2021-01-05                                -
+---------------------------------------------
+.: WSM: Task: Use scroll-x in categories to view a proper table (WSM-267)
+.: WSM: Task: Clarify the pay button and letting merchant know they can wait user to upload payslip to update the invoice status (WSM-281)
+.: WSM: Task: Improvement: Mobile size store page (WSM-268)
+
 - v1.0.1060                                 -
 ---------------------------------------------
 - 2021-01-02                                -

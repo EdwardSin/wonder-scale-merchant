@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { WsLoading } from '@elements/ws-loading/ws-loading';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Subject, from } from 'rxjs';
+import { Subject, from, of } from 'rxjs';
 import { SharedStoreService } from '@services/shared/shared-store.service';
 import { takeUntil, mergeMap, map } from 'rxjs/operators';
 import { Store } from '@objects/store';
@@ -48,7 +48,6 @@ export class QuickMenuComponent implements OnInit {
   uploadImagesAndEdit() {
     let images_blob = this.allImages.filter(image => image.type === 'blob');
     this.isImagesUploading = true;
-
     from(images_blob)
       .pipe(
         mergeMap(image => {
@@ -72,7 +71,9 @@ export class QuickMenuComponent implements OnInit {
           this.store.menuImages.splice(result['index'], 0, result['image']);
           this.allImages[result['index']] = { url: result['image'], type: 'url' };
         },
-        err => { },
+        err => { 
+          this.isImagesUploading = false;
+         },
         () => {
           this.isImagesUploading = false;
           this.editedFlag = this.allImages.filter(image => image.type === 'blob').length > 0;
@@ -94,9 +95,6 @@ export class QuickMenuComponent implements OnInit {
           this.sharedStoreService.store.next(this.store);
           WsToastService.toastSubject.next({ content: 'Menu is updated!', type: 'success' });
         });
-    }
-    else {
-      this.uploadImagesAndEdit();
     }
   }
   
@@ -128,13 +126,15 @@ export class QuickMenuComponent implements OnInit {
   }
   fileChangeEvent(event) {
     event.forEach(item => {
-      let exist = this.allImages.find(image => {
-        return image.name == item.name && image.file.size == item.file.size;
-      })
-      if (!exist) {
-        this.allImages.push(item);
-        this.editedFlag = true;
-      }
+      ImageHelper.resizeImage(item.base64, null, null , .5).then(() => {
+        let exist = this.allImages.find(image => {
+          return image.name == item.name && image.file.size == item.file.size;
+        })
+        if (!exist) {
+          this.allImages.push(item);
+          this.editedFlag = true;
+        }
+      });
     });
   }
   openMenuModal(selectedMenu) {

@@ -3,7 +3,7 @@
     <span class="fas fa-plus mr-2 d-inline-block"></span>Add New
 </button>
 <div class="clearfix mb-3"></div>
-<div class="d-flex justify-content-center align-items-center mb-4" *ngIf="!loading.isRunning(); else loadingTemplate">
+<div class="mb-5 pt-2 px-2" style="overflow-x: auto;" *ngIf="!loading.isRunning(); else loadingTemplate">
     <table class="table list-table">
         <thead style="background-color: #f7f7f7">
             <th class="border-top-0" style="width: 50px"></th>
@@ -17,7 +17,7 @@
                     <span class="fas fa-bars text-light"></span>
                 </td>
                 <td>
-                    <a class="secondary" [routerLink]="['all']" [queryParams]="{page: 1}">All (default)</a>
+                    <a class="secondary text-nowrap" [routerLink]="['all']" [queryParams]="{page: 1}">All (default)</a>
                 </td>
                 <td class="text-center">
                     <span class="badge badge-pill badge-secondary">
@@ -31,7 +31,7 @@
                     <span class="fas fa-bars text-light"></span>
                 </td>
                 <td>
-                    <a class="secondary" [routerLink]="['new']" [queryParams]="{page: 1}">New (default)</a>
+                    <a class="secondary text-nowrap" [routerLink]="['new']" [queryParams]="{page: 1}">New (default)</a>
                 </td>
                 <td class="text-center">
                     <span class="badge badge-pill badge-secondary">
@@ -45,7 +45,7 @@
                     <span class="fas fa-bars text-light"></span>
                 </td>
                 <td>
-                    <a class="secondary" [routerLink]="['todayspecial']" [queryParams]="{page: 1}">Today Special (default)</a>
+                    <a class="secondary text-nowrap" [routerLink]="['todayspecial']" [queryParams]="{page: 1}">Today Special (default)</a>
                 </td>
                 <td class="text-center">
                     <span class="badge badge-pill badge-secondary">
@@ -59,7 +59,7 @@
                     <span class="fas fa-bars text-light"></span>
                 </td>
                 <td>
-                    <a class="secondary" [routerLink]="['discount']" [queryParams]="{page: 1}">Discount (default)</a>
+                    <a class="secondary text-nowrap" [routerLink]="['discount']" [queryParams]="{page: 1}">Discount (default)</a>
                 </td>
                 <td class="text-center">
                     <span class="badge badge-pill badge-secondary">
@@ -73,7 +73,7 @@
                     <span class="fas fa-bars text-light"></span>
                 </td>
                 <td>
-                    <a class="secondary" [routerLink]="['published']" [queryParams]="{page: 1}">Published (default)</a>
+                    <a class="secondary text-nowrap" [routerLink]="['published']" [queryParams]="{page: 1}">Published (default)</a>
                 </td>
                 <td class="text-center">
                     <span class="badge badge-pill badge-secondary">
@@ -87,7 +87,7 @@
                     <span class="fas fa-bars text-light"></span>
                 </td>
                 <td>
-                    <a class="secondary" [routerLink]="['unpublished']" [queryParams]="{page: 1}">Unpublished (default)</a>
+                    <a class="secondary text-nowrap" [routerLink]="['unpublished']" [queryParams]="{page: 1}">Unpublished (default)</a>
                 </td>
                 <td class="text-center">
                     <span class="badge badge-pill badge-secondary">
@@ -101,7 +101,7 @@
                     <span class="fas fa-bars text-light"></span>
                 </td>
                 <td>
-                    <a class="secondary" [routerLink]="['uncategorized']" [queryParams]="{page: 1}">Uncategorized (default)</a>
+                    <a class="secondary text-nowrap" [routerLink]="['uncategorized']" [queryParams]="{page: 1}">Uncategorized (default)</a>
                 </td>
                 <td class="text-center">
                     <span class="badge badge-pill badge-secondary">
@@ -115,13 +115,13 @@
                     <span class="fas fa-bars moveable"></span>
                 </td>
                 <td class="align-middle" style="width: inherit">
-                    <a class="secondary" [routerLink]="['custom', category.name]" [queryParams]="{page: 1}">{{category.name}}</a>
+                    <a class="secondary text-nowrap" [routerLink]="['custom', category.name]" [queryParams]="{page: 1}">{{category.name}}</a>
                 </td>
                 <td class="align-middle text-center" style="width: 100px">
                     <span class="badge badge-pill badge-secondary">{{category?.items?.length}}</span>
                 </td>
-                <td style="width: 100px">
-                    <a class="secondary" title="Edit" href="javascript:void(0)" class="d-inline-block d-sm-inline-flex btn btn-sm btn-controller p-2 mb-1 mb-sm-0 mr-sm-2" (click)="onEditCategoryClicked(category)">
+                <td style="width: 100px" class="text-nowrap">
+                    <a class="secondary" title="Edit" href="javascript:void(0)" class="d-inline-block d-sm-inline-flex btn btn-sm btn-controller p-2 mr-2" (click)="onEditCategoryClicked(category)">
                         <span class="fas fa-edit"></span>
                     </a>
                     <a class="secondary" title="Remove" href="javascript:void(0)" class="d-inline-block d-sm-inline-flex btn btn-sm btn-controller p-2" (click)="openRemoveModal(category)">
@@ -139,7 +139,7 @@
 <ws-modal *ngIf="isEditCategoryOpened" [isCloseIconDisplayed]="false" [(isOpened)]="isEditCategoryOpened" [maxWidth]="400">
     <div class="pt-3" modalBody>
         <div class="mb-3">
-            <input class="form-control" placeholder="Catalogue Name" [(ngModel)]="editingName" />
+            <input class="form-control" maxlength="30" placeholder="Catalogue Name" [(ngModel)]="editingName" />
         </div>
         <div>
             <button class="btn btn-sm btn-controller float-right" (click)="onEditCategoryClosed()">Close</button>

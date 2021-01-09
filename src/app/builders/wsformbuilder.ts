@@ -263,10 +263,12 @@ export class WSFormBuilder {
             promotion: [''],
             itemName: [''],
             itemType: [''],
+            isCompletedChecked: [false],
+            completedAt: [''],
             itemPrice: ['', [Validators.pattern("^[0-9.,]+$")]],
             itemQuantity: ['', [Validators.pattern("^[0-9]+$")]],
             status: ['new', Validators.required],
-            remark: ['', Validators.maxLength(300)],
+            remark: ['', Validators.maxLength(300)]
         }, {
             validator: [AddressValidation.validAddressWithoutCountry]
         });

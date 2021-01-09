@@ -137,3 +137,18 @@
 ws-modal{
     font-weight: 400;
 }
+
+merchant-info {
+    min-height: calc(100vh - 317px);
+}
+
+@media (max-width: 768px) {
+    .merchant-preview__website,
+    .merchant-preview{
+        height: 620px;
+        margin-bottom: 3rem;
+    }
+    merchant-info {
+        min-height: 620px;
+    }
+}
