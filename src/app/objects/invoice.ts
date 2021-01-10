@@ -22,6 +22,7 @@ export class Invoice{
     items: Array<any>;
     remark: String;
     status: String;
+    paymentMethod?: String;
     promotions?: Array<String> | Array<{}>;
     _id?: String;
     receiptId?: String;

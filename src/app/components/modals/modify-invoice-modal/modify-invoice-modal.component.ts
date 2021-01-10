@@ -96,7 +96,8 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
       this.form.patchValue({
         status: this.item.status,
         remark: this.item.remark,
-        deliveryOption: this.item.deliveryOption
+        deliveryOption: this.item.deliveryOption,
+        paymentMethod: this.item.paymentMethod
       });
       if (!this.isEditable()) {
         this.disableAllFields()
@@ -141,7 +142,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
       if (this.item.completedAt) {
         this.form.patchValue({
           completedAt: this.item.completedAt,
-          isCompletedChecked: true
+          isCompletedChecked: true,
         })
       }
       this.notifyCalculation();
@@ -433,6 +434,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
       items: this.inListItems,
       remark: form.controls['remark'].value,
       status: form.controls['status'].value,
+      paymentMethod: form.controls['paymentMethod'].value,
       deliveryOption: form.controls['deliveryOption'].value,
       isCustomerSaved: form.controls['isCustomerSaved'].value
     }
@@ -584,6 +586,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
     this.form.get('remark').disable();
     this.form.get('isCompletedChecked').disable();
     this.form.get('completedAt').disable();
+    this.form.get('paymentMethod').disable();
   }
   enableAllFields() {
     this.form.get('deliveryFee').enable();
@@ -607,6 +610,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
     this.form.get('remark').enable();
     this.form.get('isCompletedChecked').enable();
     this.form.get('completedAt').enable();
+    this.form.get('paymentMethod').enable();
   }
   returnToModifyInvoice() {
     this.isOpened = true;
