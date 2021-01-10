@@ -154,7 +154,7 @@ export class WsInvoiceCardComponent implements OnInit {
     tempInput.select();
     document.execCommand("copy");
     document.body.removeChild(tempInput);
-    WsToastService.toastSubject.next({ content: 'URL is copied!\n Send the link to your customer!', type: 'success'}); 
+    WsToastService.toastSubject.next({ content: 'Link is copied!\n Send the link to your customer!', type: 'success'}); 
   }
   ngOnDestroy() {
     this.ngUnsubscribe.next();
