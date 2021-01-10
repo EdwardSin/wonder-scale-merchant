@@ -5,10 +5,12 @@ import { WSFormBuilder } from '@builders/wsformbuilder';
 import { WsLoading } from '@elements/ws-loading/ws-loading';
 import { WsToastService } from '@elements/ws-toast/ws-toast.service';
 import { environment } from '@environments/environment';
+import { DocumentHelper } from '@helpers/documenthelper/document.helper';
 import { Searchbar } from '@objects/searchbar';
 import { ScreenService } from '@services/general/screen.service';
 import { AuthPromotionContributorService } from '@services/http/auth-store/contributor/auth-promotion-contributor.service';
 import { SharedNavbarService } from '@services/shared/shared-nav-bar.service';
+import { SharedStoreService } from '@services/shared/shared-store.service';
 import { Subject } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
 
@@ -40,6 +42,7 @@ export class PromotionsComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private screenService: ScreenService,
+    private sharedStoreService: SharedStoreService,
     private ref: ChangeDetectorRef) {
     this.form = WSFormBuilder.createAddPromotionForm();
   }
@@ -73,6 +76,11 @@ export class PromotionsComponent implements OnInit {
         this.isNavOpen = res;
         this.ref.detectChanges();
       });
+    this.sharedStoreService.store.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+      if (result) {
+        DocumentHelper.setWindowTitleWithWonderScale('Promotions - ' + result.name);
+      }
+    });
   }
   setupPromotion() {
     if (this.selectedPromotion) {
