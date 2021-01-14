@@ -290,6 +290,9 @@ export class ModifyMenuItemComponent implements OnInit {
       }
     });
   }
+  onProfileImageOverflow() {
+    WsToastService.toastSubject.next({ content: 'Max 5 images are uploaded!', type: 'danger'});
+  }
   onDescriptionImageUploaded(event) {
     event.forEach(item => {
       if (!this.allDescriptionItems.includes(item)) {
@@ -441,6 +444,7 @@ export class ModifyMenuItemComponent implements OnInit {
     let items = await this.uploadHelper.fileChangeEvent(event.addedFiles);
     if (!this.profileImageName) {
       this.profileImageName = items[0].name;
+      this.profileImageIndex = this.allProfileItems.findIndex(x => x.name == this.profileImageName);
     }
     for(let item of items) {
       if (!this.allProfileItems.includes(item) && this.allProfileItems.length < 5) {
@@ -465,6 +469,9 @@ export class ModifyMenuItemComponent implements OnInit {
     // using anonymous function to access the current prototype variable
     $('.upload-profile-images__container').css({'z-index': 0});
     $('.upload-profile-images__drop-area').css({'z-index': 0});
+  }
+  onSort = () => {
+    this.profileImageIndex = this.allProfileItems.findIndex(x => x.name == this.profileImageName);
   }
   ngOnDestroy() {
     this.ngUnsubscribe.next();

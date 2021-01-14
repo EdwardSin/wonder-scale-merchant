@@ -12,6 +12,7 @@ export class WsUploaderComponent implements OnInit {
   @Input() max = 5;
   @Input() accept = 'image/*';
   @Output() output: EventEmitter<any> = new EventEmitter;
+  @Output() overflow: EventEmitter<any> = new EventEmitter;
 
   array = [];
   results = [];
@@ -35,6 +36,8 @@ export class WsUploaderComponent implements OnInit {
         });
       } else {
         console.log('Maximum files are uploaded!');
+        this.overflow.emit(true);
+        return;
       }
     }
     event.target.value = "";
@@ -43,7 +46,7 @@ export class WsUploaderComponent implements OnInit {
     let reader = new FileReader;
     reader.onload = function (e) {
         let img = {
-          name: file['name'],
+          name: Math.round(Math.random() * 10000) + file['name'],
           file: file,
           url: URL.createObjectURL(file),
           // done: isPreLoad,

@@ -1,27 +1,25 @@
 <div modal class="modal">
-  <div class="modal-wrap">
-    <div class="modal-body">
-      <div class="modal-body-content">
-        <form class="modal-content" [formGroup]="itemTypesForm">
-          <div class="modal-close">
-            <span class="fas fa-times" [routerLink]="[]" [queryParams]="{id: null, modal: null}" [queryParamsHandling]="'merge'"></span>
-          </div>
-          <ng-container formArrayName="itemTypes" *ngIf="!loading.isRunning() && currentItem; let i = index" >
-            <div>
-              <h4 class="d-inline-block mt-1">{{ currentItem.name}}</h4>
-              <div class="ws-circle-button float-right">
-                <button type="button" title="Edit Item" class="btn btn-controller small mr-2" (click)="navigateToEditItem()">
-                  <span class="fas fa-edit"></span>
-                </button>
-                  <button type="button" title="Add Item Type" class="btn btn-controller small" (click)="addNewItemType()">
-                    <span class="fas fa-plus"></span>
-                  </button>
-              </div>
-            </div>
-            <div *ngFor="let itemType of itemTypesForm.get('itemTypes')['controls']; index as i"
-              class="my-2 border position-relative" style="padding: .5rem">
-              <span (click)="removeItemType(itemType)" class="position-absolute fas fa-times clickable"
-                style="right: -28px;
+    <div class="modal-wrap">
+        <div class="modal-body">
+            <div class="modal-body-content">
+                <form class="modal-content" [formGroup]="itemTypesForm">
+                    <div class="modal-close">
+                        <span class="fas fa-times" [routerLink]="[]" [queryParams]="{id: null, modal: null}" [queryParamsHandling]="'merge'"></span>
+                    </div>
+                    <ng-container formArrayName="itemTypes" *ngIf="!loading.isRunning() && currentItem; let i = index">
+                        <div>
+                            <h4 class="d-inline-block mt-1">{{ currentItem.name}}</h4>
+                            <div class="ws-circle-button float-right">
+                                <button type="button" title="Edit Item" class="btn btn-controller small mr-2" (click)="navigateToEditItem()">
+                                    <span class="fas fa-edit"></span>
+                                </button>
+                                <button type="button" title="Add Item Type" class="btn btn-controller small" (click)="addNewItemType()">
+                                    <span class="fas fa-plus"></span>
+                                </button>
+                            </div>
+                        </div>
+                        <div *ngFor="let itemType of itemTypesForm.get('itemTypes')['controls']; index as i" class="my-2 border position-relative" style="padding: .5rem">
+                            <span (click)="removeItemType(itemType)" class="position-absolute fas fa-times clickable" style="right: -28px;
             top: 10px;
             background-color: #f7f7f7;
             width: 27px;
@@ -30,160 +28,123 @@
             line-height: 30px;
             border-radius: 0 5px 5px 0;
             font-size: .8rem;">
-              </span>
-              <ng-container *ngIf="!itemTypesForm.controls.itemTypes.value[i].isCollapsed" [formGroupName]="i">
-                <div class="row no-gutters" style="flex-wrap: nowrap;">
-                  <ws-uploader [id]="'item-uploader' + i" [max]="3"
-                    [input]="itemTypesForm.controls.itemTypes.value[i].images"
-                    (output)="onItemTypeImageUploaded($event, i)"></ws-uploader>
-
-                  <button type="button" class="btn-item-upload mx-1" (click)="onItemTypeClicked('item-uploader' + i)">
-                    <span class="fas fa-camera font-12"></span>
-                    <p class="mb-0 font-weight-light font-8">Image<br />(300 x 300)<br />Maximum 3</p>
-                  </button>
-                  <div class="all-item-container ws-drag-list" cdkDropList
-                    (cdkDropListDropped)="dropItemTypeImages($event, itemTypesForm.controls.itemTypes.value[i].images)"
-                    cdkDropListOrientation="horizontal">
-                    <div class="ws-drag-box border my-0 mx-1"
-                      *ngFor="let image of itemTypesForm.controls.itemTypes.value[i].images" cdkDrag>
-                      <div [ngSwitch]="image?.type" class="center">
-                        <div *ngSwitchCase="'url'" class="h-100 position-relative">
-                          <div class="item_div position-relative">
-                            <img src="{{environment.IMAGE_URL + image?.name}}" class="image-upload" alt="item.png" />
-                            <div class="corner-setting">
-                              <span class="corner-setting-item fas fa-times" (click)="$event.stopPropagation();removeItemTypeImage(image?.name, 
-                              itemTypesForm.controls.itemTypes['controls'][i],
-                        itemTypesForm.controls.itemTypes.value[i])"></span>
-                            </div>
-                          </div>
+                            </span>
+                            <ng-container *ngIf="!itemTypesForm.controls.itemTypes.value[i].isCollapsed" [formGroupName]="i">
+                                <div class="mb-3">
+                                    <button type="button" class="btn btn-controller font-9 mb-2" (click)="onItemTypeClicked('item-uploader' + i)">
+                                        <span class="fas fa-images mr-2 d-inline-block"></span>
+                                        <span class="d-inline-block">Upload Images</span>
+                                    </button>
+                                    <ws-uploader [id]="'item-uploader' + i" [max]="3" [input]="itemTypesForm.controls.itemTypes.value[i].images" (output)="onItemTypeImageUploaded($event, i)" (overflow)="onItemTypeImageOverflow()"></ws-uploader>
+                                    <div class="upload-profile-images__container" (dragenter)="onDragEnter($event)">
+                                        <ngx-dropzone [accept]="'image/*'" (drop)="onDrop($event)" (change)="onSelect($event, itemTypesForm.controls.itemTypes.value[i].images)" [disableClick]="true" class="upload-profile-images__drop-area">
+                                            <ngx-dropzone-label>
+                                                <div *ngIf="!itemTypesForm.controls.itemTypes.value[i].images.length" style="pointer-events: none; height: 100%; display: flex; align-items: center; justify-content: center;">
+                                                    <div class="font-8">
+                                                        <span>Drag and drop images here</span>
+                                                        <p class="mb-0">Max 3 images (300 x 300)</p>
+                                                    </div>
+                                                </div>
+                                            </ngx-dropzone-label>
+                                        </ngx-dropzone>
+                                        <div class="upload-profile-images" [sortablejs]="itemTypesForm.controls.itemTypes.value[i].images" [sortablejsOptions]="{ animation: 150, onChoose: onChoose, onUnchoose: onUnchoose }">
+                                            <div class="upload-drag-item m-1" *ngFor="let image of itemTypesForm.controls.itemTypes.value[i].images">
+                                                <div [ngSwitch]="image?.type">
+                                                    <div *ngSwitchCase="'url'">
+                                                        <img src="{{environment.IMAGE_URL + image?.name}}" class="profile-image" alt="item.png" />
+                                                        <div class="corner-setting">
+                                                            <span class="corner-setting-item fas fa-times" (click)="$event.stopPropagation();removeItemTypeImage(image?.name, itemTypesForm.controls.itemTypes['controls'][i], itemTypesForm.controls.itemTypes.value[i])"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div *ngSwitchCase="'blob'">
+                                                        <div *ngIf="!image?.done && image?.loading" class="profile-image-loading">
+                                                            <ws-spinner-dot class="position-absolute d-block" style="top: 50%; left: 50%;" [color]="'rgba(255,255,255,.8)'"></ws-spinner-dot>
+                                                        </div>
+                                                        <img [src]="image?.url" data-upload='img_upload' class="profile-image" alt="item.png" />
+                                                        <div class="corner-setting">
+                                                            <span class="corner-setting-item fas fa-times" (click)="$event.stopPropagation();removeItemTypeImage(image?.name, itemTypesForm.controls.itemTypes['controls'][i], itemTypesForm.controls.itemTypes.value[i])"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row no-gutters">
+                                    <div class="px-1 col">
+                                        <div *ngIf="false" class="ws-input clickable position-relative" (click)="itemTypesForm.controls.itemTypes.value[i].isOpen = true">
+                                            <span class="color-span mr-1 ml-2" [style.background-color]="itemTypesForm.controls.itemTypes.value[i].hexColor"></span>
+                                            <input class="form-control form-control-sm d-inline-block" placeholder="Color" disabled style="background-color: transparent; width: inherit" value="{{itemTypesForm.controls.itemTypes.value[i].hexColor}}" />
+                                            <ws-dropdown [items]="colors" [(isOpen)]="itemTypesForm.controls.itemTypes.value[i].isOpen" [styles]="{width: '300px'}" [isAllowedCustomInput]="true" [placeholder]="'Enter hex color code (E.g. #000000)'" (onItemClicked)="onColorValueChanged($event, itemTypesForm.get('itemTypes')['controls'][i])">
+                                            </ws-dropdown>
+                                        </div>
+                                        <div *ngIf="false" class="ws-input">
+                                            <mat-select class="form-control form-control-sm" placeholder="Sizes" formControlName="sizes" multiple>
+                                                <mat-option [value]="'3XS'">3XS</mat-option>
+                                                <mat-option [value]="'2XS'">2XS</mat-option>
+                                                <mat-option [value]="'XS'">XS</mat-option>
+                                                <mat-option [value]="'S'">S</mat-option>
+                                                <mat-option [value]="'M'">M</mat-option>
+                                                <mat-option [value]="'L'">L</mat-option>
+                                                <mat-option [value]="'XL'">XL</mat-option>
+                                                <mat-option [value]="'2XL'">2XL</mat-option>
+                                                <mat-option [value]="'3XL'">3XL</mat-option>
+                                                <mat-option [value]="'4XL'">4XL</mat-option>
+                                            </mat-select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="px-1 mb-3">
+                                    <label class="mb-0 font-9">Type:</label>
+                                    <input class="form-control form-control-sm" tabIndex="1" maxlength="36" placeholder="Colors, Size, Type (e.g. blue, small...)" formControlName="name" />
+                                </div>
+                                <div class="px-1 mb-3">
+                                    <label class="mb-0 font-9">Price:</label>
+                                    <input class="form-control form-control-sm" tabIndex="1" placeholder="Blank to use default price" formControlName="price" />
+                                    <span *ngIf="currencies.length" class="font-8 text-muted">Default price: {{currencySymbol}}{{ currentItem?.price | currency: currencyService.getCurrencyWithCode(currentItem?.currency).rate: currencyService.getCurrencyWithCode(selectedCurrencyCode).rate | number: '1.2-2' }}</span>
+                                </div>
+                                <div class="px-1">
+                                    <label class="mb-0 font-9">Discount (%):</label>
+                                    <input class="form-control form-control-sm" tabIndex="1" placeholder="Blank to use default discount" formControlName="discount" />
+                                    <span class="font-8 text-muted">Default discount: {{currentItem.discount || '0'}}%</span>
+                                </div>
+                                <div *ngIf="false" class="col-sm-6 px-1">
+                                    <div class="ws-input">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend" style="width: 100px">
+                                                <span>Quantity</span>
+                                            </div>
+                                            <input class="form-control form-control-sm" tabIndex="1" placeholder="Blank to use default quantity" formControlName="quantity" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div *ngIf="false" class="col-sm-6 px-1">
+                                    <div class="ws-input">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend" style="width: 100px">
+                                                <span>Weight (kg)</span>
+                                            </div>
+                                            <input class="form-control form-control-sm" tabIndex="1" placeholder="Blank to use default weight" formControlName="weight" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-container>
                         </div>
-                        <div *ngSwitchCase="'blob'" class="h-100 position-relative">
-                          <div class="item_div position-relative">
-                            <div *ngIf="!image?.done && image?.loading"
-                              class="w-100 h-100 position-absolute text-center"
-                              style="background-color: rgba(204,204,204,0.7)">
-                              <ws-spinner-dot class="position-absolute d-block" style="top: 50%; left: 50%;"
-                                [color]="'rgba(255,255,255,.8)'"></ws-spinner-dot>
-                            </div>
-                            <img [src]="image?.url" data-upload='img_upload' class="image-upload" alt="item.png" />
-                            <div class="corner-setting">
-                              <span class="corner-setting-item fas fa-times" (click)="$event.stopPropagation();removeItemTypeImage(image?.name, 
-                              itemTypesForm.controls.itemTypes['controls'][i],
-                        itemTypesForm.controls.itemTypes.value[i])"></span>
-                            </div>
-                          </div>
+                        <div *ngIf="!itemTypesForm.get('itemTypes')['controls'].length">
+                            <p class="mb-0 py-5 my-5 text-muted text-center">Add types to your item</p>
                         </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="row no-gutters">
-                  <div class="px-1 col">
-                    <div *ngIf="false" class="ws-input clickable position-relative"
-                      (click)="itemTypesForm.controls.itemTypes.value[i].isOpen = true">
-                      <span class="color-span mr-1 ml-2"
-                        [style.background-color]="itemTypesForm.controls.itemTypes.value[i].hexColor"></span>
-                      <input class="form-control form-control-sm d-inline-block" placeholder="Color" disabled
-                        style="background-color: transparent; width: inherit"
-                        value="{{itemTypesForm.controls.itemTypes.value[i].hexColor}}" />
-                      <ws-dropdown [items]="colors" [(isOpen)]="itemTypesForm.controls.itemTypes.value[i].isOpen"
-                        [styles]="{width: '300px'}" [isAllowedCustomInput]="true"
-                        [placeholder]="'Enter hex color code (E.g. #000000)'"
-                        (onItemClicked)="onColorValueChanged($event, itemTypesForm.get('itemTypes')['controls'][i])">
-                      </ws-dropdown>
-                    </div>
-                    <div *ngIf="false" class="ws-input">
-                      <mat-select class="form-control form-control-sm" placeholder="Sizes" formControlName="sizes"
-                        multiple>
-                        <mat-option [value]="'3XS'">3XS</mat-option>
-                        <mat-option [value]="'2XS'">2XS</mat-option>
-                        <mat-option [value]="'XS'">XS</mat-option>
-                        <mat-option [value]="'S'">S</mat-option>
-                        <mat-option [value]="'M'">M</mat-option>
-                        <mat-option [value]="'L'">L</mat-option>
-                        <mat-option [value]="'XL'">XL</mat-option>
-                        <mat-option [value]="'2XL'">2XL</mat-option>
-                        <mat-option [value]="'3XL'">3XL</mat-option>
-                        <mat-option [value]="'4XL'">4XL</mat-option>
-                      </mat-select>
-                    </div>
-                  </div>
-                </div>
-                <div class="px-1">
-                  <div class="ws-input">
-                    <div class="input-group">
-                      <div class="input-group-prepend" style="width: 100px">
-                        <span>Name</span>
-                      </div>
-                      <input class="form-control form-control-sm" tabIndex="1" maxlength="36" placeholder="Colors, Size, Type (e.g. blue, small...)"
-                        formControlName="name" />
-                    </div>
-                  </div>
-                </div>
-                <div class="px-1">
-                  <div class="ws-input">
-                    <div class="input-group">
-                      <div class="input-group-prepend" style="width: 100px">
-                        <span>Price</span>
-                      </div>
-                      <input class="form-control form-control-sm" tabIndex="1" placeholder="Blank to use default price"
-                        formControlName="price" />
-                    </div>
-                  </div>
-                  <span *ngIf="currencies.length" class="font-8 text-muted">Default price: {{currencySymbol}}{{ currentItem?.price | currency: currencyService.getCurrencyWithCode(currentItem?.currency).rate: currencyService.getCurrencyWithCode(selectedCurrencyCode).rate | number: '1.2-2' }}</span>
-                </div>
-                <div class="px-1">
-                  <div class="ws-input">
-                    <div class="input-group">
-                      <div class="input-group-prepend" style="width: 100px">
-                        <span>Discount (%)</span>
-                      </div>
-                      <input class="form-control form-control-sm" tabIndex="1" placeholder="Blank to use default discount"
-                        formControlName="discount" />
-                    </div>
-                  </div>
-                  <span class="font-8 text-muted">Default discount: {{currentItem.discount || '0'}}%</span>
-                </div>
-                <div *ngIf="false" class="col-sm-6 px-1">
-                  <div class="ws-input">
-                    <div class="input-group">
-                      <div class="input-group-prepend" style="width: 100px">
-                        <span>Quantity</span>
-                      </div>
-                      <input class="form-control form-control-sm" tabIndex="1" placeholder="Blank to use default quantity"
-                        formControlName="quantity" />
-                    </div>
-                  </div>
-                </div>
-                <div *ngIf="false" class="col-sm-6 px-1">
-                  <div class="ws-input">
-                    <div class="input-group">
-                      <div class="input-group-prepend" style="width: 100px">
-                        <span>Weight (kg)</span>
-                      </div>
-                      <input class="form-control form-control-sm" tabIndex="1" placeholder="Blank to use default weight"
-                        formControlName="weight" />
-                    </div>
-                  </div>
-                </div>
-              </ng-container>
+                        <div>
+                            <ws-loading-button *ngIf="itemTypesForm.get('itemTypes')['controls'].length" class="d-block" [loading]="itemTypeLoading.isRunning()" [class]="'btn btn-sm btn-controller float-right mr-0'" (click)="editItemTypes()">Save</ws-loading-button>
+                        </div>
+                    </ng-container>
+                    <ng-container *ngIf="loading.isRunning(); else noItem">
+                        <ws-spinner class="text-center d-block w-100" [borderWidth]="1" [spinnerColor]="'#b71c1c'" style="padding-top: 15vh; padding-bottom: 15vh"></ws-spinner>
+                    </ng-container>
+                </form>
+                <ng-template #noItem>
+                    <p *ngIf="!currentItem" class="pt-5 pb-5 mb-0 text-center">Item cannot be retrieved!</p>
+                </ng-template>
             </div>
-            <div *ngIf="!itemTypesForm.get('itemTypes')['controls'].length">
-              <p class="mb-0 py-5 my-5 text-muted text-center">Add types to your item</p>
-            </div>
-            <div>
-            <ws-loading-button *ngIf="itemTypesForm.get('itemTypes')['controls'].length" class="d-block" [loading]="itemTypeLoading.isRunning()"
-                [class]="'btn btn-sm btn-controller float-right mr-0'" (click)="editItemTypes()">Save</ws-loading-button>
-            </div>
-          </ng-container>
-          <ng-container *ngIf="loading.isRunning(); else noItem">
-                <ws-spinner class="text-center d-block w-100" [borderWidth]="1" [spinnerColor]="'#b71c1c'" style="padding-top: 15vh; padding-bottom: 15vh"></ws-spinner>
-            </ng-container>
-        </form>
-        <ng-template #noItem>
-            <p *ngIf="!currentItem" class="pt-5 pb-5 mb-0 text-center">Item cannot be retrieved!</p>
-        </ng-template>
-      </div>
+        </div>
     </div>
-  </div>
 </div>

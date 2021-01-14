@@ -17,6 +17,7 @@ import { from, of, Subject, forkJoin } from 'rxjs';
 import { finalize, map, mergeMap, takeUntil } from 'rxjs/operators';
 import { WSFormBuilder } from '@builders/wsformbuilder';
 import { RoutePartsService } from '@services/general/route-parts.service';
+import { UploadHelper } from '@helpers/uploadhelper/upload.helper';
 
 
 @Component({
@@ -58,6 +59,7 @@ export class ModifyItemComponent implements OnInit {
   constructor(private sharedStoreService: SharedStoreService,
     private router: Router,
     private route: ActivatedRoute,
+    private uploadHelper: UploadHelper,
     private sharedCategoryService: SharedCategoryService,
     private routePartsService: RoutePartsService,
     private authCategoryContributorService: AuthCategoryContributorService,
@@ -290,6 +292,9 @@ export class ModifyItemComponent implements OnInit {
       });
     });
   }
+  onProfileImageOverflow() {
+    WsToastService.toastSubject.next({ content: 'Max 5 images are uploaded!', type: 'danger'});
+  }
   onDescriptionImageUploaded(event) {
     event.forEach(item => {
       ImageHelper.resizeImage(item.base64, null, null, .5).then(result => {
@@ -402,12 +407,40 @@ export class ModifyItemComponent implements OnInit {
     this.profileImageName = name;
     this.profileImageIndex = this.allProfileItems.findIndex(x => x.name == this.profileImageName);
   }
-  dropProfile(event: CdkDragDrop<string[]>) {
-    moveItemInArray(this.allProfileItems, event.previousIndex, event.currentIndex);
-    this.profileImageIndex = this.allProfileItems.findIndex(x => x.name == this.profileImageName);
-  }
   dropDescription(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.allDescriptionItems, event.previousIndex, event.currentIndex);
+  }
+  async onSelect(event) {
+    let items = await this.uploadHelper.fileChangeEvent(event.addedFiles);
+    if (!this.profileImageName) {
+      this.profileImageName = items[0].name;
+    }
+    for(let item of items) {
+      if (!this.allProfileItems.includes(item) && this.allProfileItems.length < 5) {
+        this.allProfileItems.push(item);
+      } else {
+        WsToastService.toastSubject.next({ content: 'Max 5 images are uploaded!', type: 'danger'});
+        break;
+      }
+    }
+  }
+  onDragEnter(event) {
+    $('.upload-profile-images__drop-area').css({'z-index': 2});
+  }
+  onDrop(event) {
+    $('.upload-profile-images__drop-area').css({'z-index': 0});
+  }
+  onChoose = () => {
+    // using anonymous function to access the current prototype variable
+    $('.upload-profile-images__container').css({'z-index': 3});
+  }
+  onUnchoose = (event) => {
+    // using anonymous function to access the current prototype variable
+    $('.upload-profile-images__container').css({'z-index': 0});
+    $('.upload-profile-images__drop-area').css({'z-index': 0});
+  }
+  onSort = () => {
+    this.profileImageIndex = this.allProfileItems.findIndex(x => x.name == this.profileImageName);
   }
   ngOnDestroy() {
     this.ngUnsubscribe.next();
