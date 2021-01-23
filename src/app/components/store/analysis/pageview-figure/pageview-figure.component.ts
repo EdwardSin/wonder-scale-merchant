@@ -11,11 +11,11 @@ import { DocumentHelper } from '@helpers/documenthelper/document.helper';
 import { SharedStoreService } from '@services/shared/shared-store.service';
 
 @Component({
-  selector: 'app-tracking-figure',
-  templateUrl: './tracking-figure.component.html',
-  styleUrls: ['./tracking-figure.component.scss']
+  selector: 'app-pageview-figure',
+  templateUrl: './pageview-figure.component.html',
+  styleUrls: ['./pageview-figure.component.scss']
 })
-export class TrackingFigureComponent implements OnInit {
+export class PageviewFigureComponent implements OnInit {
   @ViewChild('numberOfCustomer', { static: true }) numberOfCustomer: ElementRef;
   public lineGraphType: string = 'line';
   isMobileSize: boolean = false;
@@ -226,7 +226,7 @@ export class TrackingFigureComponent implements OnInit {
       }
     });
   }
-  increment(target, duration, value) {
+  increment(target, duration, value, isDecimal=false) {
     $(target).each(function () {
       $(target).animate({
         value
@@ -237,7 +237,10 @@ export class TrackingFigureComponent implements OnInit {
           $(target).text(Math.floor(this.value));
         },
         complete: function () {
-          if (parseInt(this.value + 1) !== value) {
+          if (parseFloat(this.value + 1) !== value) {
+            if (isDecimal) {
+              value = value.toFixed(2);
+            }
             $(target).text(value);
           }
         }

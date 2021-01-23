@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TrackingComponent } from './tracking.component';
+import { PageviewFigureComponent } from './pageview-figure.component';
 
-describe('TrackingComponent', () => {
-  let component: TrackingComponent;
-  let fixture: ComponentFixture<TrackingComponent>;
+describe('PageviewFigureComponent', () => {
+  let component: PageviewFigureComponent;
+  let fixture: ComponentFixture<PageviewFigureComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TrackingComponent ]
+      declarations: [ PageviewFigureComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TrackingComponent);
+    fixture = TestBed.createComponent(PageviewFigureComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
