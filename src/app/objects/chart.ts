@@ -1,4 +1,5 @@
 import { Color } from "ng2-charts";
+import * as _ from 'lodash';
 
 export class Chart{
     static  lineGraphType: string = 'line';
@@ -66,13 +67,13 @@ export class Chart{
       }
     }
     public static createChart() {
-      return {
+      return _.cloneDeep({
         data: [{data: [], label: 1}],
         labels: [],
         legend: false,
         options: this.lineChartOptions,
         chartType: this.lineGraphType,
         colors: this.colorSchema
-      }
+      });
     }
   }

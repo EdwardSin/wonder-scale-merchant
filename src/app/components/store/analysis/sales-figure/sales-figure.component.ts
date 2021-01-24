@@ -42,7 +42,9 @@ export class SalesFigureComponent implements OnInit {
 
   ngOnInit(): void {
     this.setupData();
+    this.salesChart.options.scales.yAxes[0].ticks.suggestedMax = 1000;
     this.yearlySalesChart.options.scales.yAxes[0].ticks.suggestedMax = 1000;
+    this.cumulativeChart.options.scales.yAxes[0].ticks.suggestedMax = 1000;
     this.getMonthlySales();
     this.getYearlySales();
     this.getSalesBetweenDates();
@@ -88,7 +90,7 @@ export class SalesFigureComponent implements OnInit {
           let sale = result['result'].find(sale => sale.name == date);
           this.salesChart.data[0].data.push(sale ? sale.value : 0);
         });
-        this.salesChart.labels = this.getDateRange(this.fromDate, this.toDate).map(date => moment(date).format('YYYY-MM-DD (ddd)'));
+        this.salesChart.labels = this.getDateRange(this.fromDate, this.toDate).map(date => moment(date).format('MM-DD (ddd)'));
       }
     });
   }
