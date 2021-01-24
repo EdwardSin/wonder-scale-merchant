@@ -23,6 +23,17 @@ export class AuthAnalysisContributorService {
   getYearlySalesAnalysis() {
     return this.http.get(AuthAnalysisContributorUrl.getYearlySalesAnalysisUrl, this.accessTokenService.getAccessToken());
   }
+  getMonthDeliveryAnalysis() {
+    return this.http.get(AuthAnalysisContributorUrl.getMonthDeliveryAnalysisUrl, this.accessTokenService.getAccessToken());
+  }
+  getDeliveryBetweenDates(fromDate, toDate) {
+    let _fromDate = new Date(fromDate.getFullYear(), fromDate.getMonth(), fromDate.getDate());
+    let _toDate = new Date(toDate.getFullYear(), toDate.getMonth(), toDate.getDate() + 1);
+    return this.http.post(AuthAnalysisContributorUrl.getDeliveryBetweenDatesUrl, {fromDate: _fromDate, toDate: _toDate}, this.accessTokenService.getAccessToken());
+  }
+  getYearlyDeliveryAnalysis() {
+    return this.http.get(AuthAnalysisContributorUrl.getYearlyDeliveryAnalysisUrl, this.accessTokenService.getAccessToken());
+  }
   increment(target, duration, value, isDecimal=false) {
     $(target).each(function () {
       $(target).animate({

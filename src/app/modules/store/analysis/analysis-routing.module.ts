@@ -22,6 +22,11 @@ const routes: Routes = [{
       path: 'pageview',
       data: { title: 'pageview', breadcrumb: 'Page View' },
       loadChildren: () => import('./pageview-figure/pageview-figure.module').then(m => m.PageviewFigureModule)
+    },
+    {
+      path: 'delivery',
+      data: { title: 'delivery', breadcrumb: 'Delivery' },
+      loadChildren: () => import('./delivery-figure/delivery-figure.module').then(m => m.DeliveryFigureModule)
     }
   ]
 }];

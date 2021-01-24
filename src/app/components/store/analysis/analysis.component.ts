@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { WsLoading } from '@elements/ws-loading/ws-loading';
 import { SharedStoreService } from '@services/shared/shared-store.service';
 import { Subject } from 'rxjs';
@@ -24,6 +24,13 @@ export class AnalysisComponent implements OnInit {
     this.sharedStoreService.store.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       this.store = result;
     })
+    this.router.events.pipe(takeUntil(this.ngUnsubscribe)).subscribe(event => {
+        if (event instanceof NavigationEnd) {
+          if (this.route.snapshot['_urlSegment'].segments.length == 4) {
+            this.analysisType = this.route.snapshot['_urlSegment'].segments[3].path;
+          }
+        }
+    });
   }
 
   ngOnInit(): void {
