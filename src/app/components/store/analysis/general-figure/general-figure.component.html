@@ -55,16 +55,16 @@
             </div>
         </div>
     </div>
-    <div *ngIf="false" class="col-sm-6 p-2">
+    <div class="col-sm-6 p-2">
         <div class="analysis-card">
             <h5 class="analysis-header">Invoice</h5>
             <div>
                 <h6 class="analysis-title">Total monthly invoices:</h6>
-                <p class="analysis-main-value">{{ analysis.totalMonthlyInvoices }}</p>
+                <p class="analysis-main-value" #invoiceFigureRef>{{ analysis.totalMonthlyInvoice }}</p>
             </div>
             <div>
                 <h6 class="analysis-subtitle">Last month total invoices:</h6>
-                <p class="analysis-value">{{ analysis.lastMonthInvoices }}</p>
+                <p class="analysis-value">{{ analysis.lastMonthInvoice }}</p>
             </div>
             <div *ngIf="loading.isRunning()" class="anlysis-overlay">
                 <ws-spinner [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>

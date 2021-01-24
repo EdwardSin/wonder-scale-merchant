@@ -34,6 +34,17 @@ export class AuthAnalysisContributorService {
   getYearlyDeliveryAnalysis() {
     return this.http.get(AuthAnalysisContributorUrl.getYearlyDeliveryAnalysisUrl, this.accessTokenService.getAccessToken());
   }
+  getMonthInvoiceAnalysis() {
+    return this.http.get(AuthAnalysisContributorUrl.getMonthInvoiceAnalysisUrl, this.accessTokenService.getAccessToken());
+  }
+  getInvoiceBetweenDates(fromDate, toDate) {
+    let _fromDate = new Date(fromDate.getFullYear(), fromDate.getMonth(), fromDate.getDate());
+    let _toDate = new Date(toDate.getFullYear(), toDate.getMonth(), toDate.getDate() + 1);
+    return this.http.post(AuthAnalysisContributorUrl.getInvoiceBetweenDatesUrl, {fromDate: _fromDate, toDate: _toDate}, this.accessTokenService.getAccessToken());
+  }
+  getYearlyInvoiceAnalysis() {
+    return this.http.get(AuthAnalysisContributorUrl.getYearlyInvoiceAnalysisUrl, this.accessTokenService.getAccessToken());
+  }
   increment(target, duration, value, isDecimal=false) {
     $(target).each(function () {
       $(target).animate({
@@ -48,7 +59,7 @@ export class AuthAnalysisContributorService {
           $(target).text(Math.floor(this.value));
         },
         complete: function () {
-          if (parseFloat(this.value + 1) !== value) {
+          if (parseFloat(this.value + 1) != value) {
             if (isDecimal) {
               value = value.toFixed(2);
             }

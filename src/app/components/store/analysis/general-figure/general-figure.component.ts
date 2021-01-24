@@ -16,6 +16,7 @@ export class GeneralFigureComponent implements OnInit {
   @ViewChild('salesFigureRef', { static: true }) salesFigureRef: ElementRef;
   @ViewChild('pageViewFigureRef', { static: true }) pageViewFigureRef: ElementRef;
   @ViewChild('deliveryFigureRef', { static: true }) deliveryFigureRef: ElementRef;
+  @ViewChild('invoiceFigureRef', { static: true }) invoiceFigureRef: ElementRef;
   REFRESH_INTERVAL = 10 * 1000;
   analysis = {
     totalMonthlySales: 0,
@@ -26,8 +27,8 @@ export class GeneralFigureComponent implements OnInit {
     lastMonthPageview: 0,
     totalMonthlyDelivery: 0,
     lastMonthDelivery: 0,
-    totalMonthlyInvoices: 0,
-    lastMonthInvoices: 0
+    totalMonthlyInvoice: 0,
+    lastMonthInvoice: 0
   }
   generalAnalysisSubscription;
   loading: WsLoading = new WsLoading;
@@ -54,7 +55,8 @@ export class GeneralFigureComponent implements OnInit {
       this.analysis = result['result'];
       this.authAnalysisContributorService.increment(this.salesFigureRef.nativeElement, 500, this.analysis.totalMonthlySales, true);
       this.authAnalysisContributorService.increment(this.pageViewFigureRef.nativeElement, 500, this.analysis.totalPageview);
-      this.authAnalysisContributorService.increment(this.deliveryFigureRef.nativeElement, 500, this.analysis.totalMonthlyDelivery);
+      this.authAnalysisContributorService.increment(this.deliveryFigureRef.nativeElement, 500, this.analysis.totalMonthlyDelivery, true);
+      this.authAnalysisContributorService.increment(this.invoiceFigureRef.nativeElement, 500, this.analysis.totalMonthlyInvoice);
       this.loading.stop();
     });
   }

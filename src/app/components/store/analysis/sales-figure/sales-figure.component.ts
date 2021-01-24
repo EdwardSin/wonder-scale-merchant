@@ -69,6 +69,7 @@ export class SalesFigureComponent implements OnInit {
     this.cumulativeLoading.start();
     this.authAnalysisContributorService.getYearlySalesAnalysis().pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.yearlySalesLoading.stop())).subscribe(result => {
       if (result['result']) {
+        this.yearlySalesChart.data[0].data = [];
         result['result'].forEach(monthSale => {
           this.yearlySalesChart.data[0].data.push(monthSale.total)
         });
@@ -82,6 +83,7 @@ export class SalesFigureComponent implements OnInit {
     this.authAnalysisContributorService.getSalesBetweenDates(this.fromDate, this.toDate).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.salesLoading.stop())).subscribe(result => {
       if (result['result']) {
         let dateRange = this.getDateRange(this.fromDate, this.toDate);
+        this.salesChart.data[0].data = [];
         dateRange.forEach(date => {
           let sale = result['result'].find(sale => sale.name == date);
           this.salesChart.data[0].data.push(sale ? sale.value : 0);
@@ -102,6 +104,7 @@ export class SalesFigureComponent implements OnInit {
   }
   getCumulativeSales(sales) {
     let totals = sales.map(sale => sale.total);
+    this.cumulativeChart.data[0].data = [];
     totals.reduce((accumulator, total) => {
       this.cumulativeChart.data[0].data.push(accumulator + total);
       return accumulator + total;

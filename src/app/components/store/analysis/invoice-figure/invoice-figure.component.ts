@@ -7,32 +7,32 @@ import { finalize, switchMap, takeUntil } from 'rxjs/operators';
 import { Subject, timer } from 'rxjs';
 
 @Component({
-  selector: 'app-delivery-figure',
-  templateUrl: './delivery-figure.component.html',
-  styleUrls: ['./delivery-figure.component.scss']
+  selector: 'app-invoice-figure',
+  templateUrl: './invoice-figure.component.html',
+  styleUrls: ['./invoice-figure.component.scss']
 })
-export class DeliveryFigureComponent implements OnInit {
-  @ViewChild('monthlyDelivery', { static: true }) monthlyDelivery: ElementRef;
+export class InvoiceFigureComponent implements OnInit {
+  @ViewChild('monthlyInvoice', { static: true }) monthlyInvoice: ElementRef;
   updatedDate: Date = new Date;
   moment = moment;
   loading: WsLoading = new WsLoading;
-  deliveryLoading: WsLoading = new WsLoading;
+  invoiceLoading: WsLoading = new WsLoading;
   cumulativeLoading: WsLoading = new WsLoading;
   startHour: Date = new Date;
   endHour: Date = new Date;
-  totalMonthlyDelivery = 0;
-  delivery = {
-    totalMonthlyDelivery: 0,
-    lastMonthDelivery: 0,
-    averageMonthlyDelivery: 0
+  totalMonthlyInvoice = 0;
+  invoice = {
+    totalMonthlyInvoice: 0,
+    lastMonthInvoice: 0,
+    averageMonthlyInvoice: 0
   };
   last60dayDate = new Date;
   minDate = new Date;
   maxDate = new Date;
   fromDate = new Date;
   toDate = new Date;
-  monthlyDeliveryAnalysisSubscription;
-  deliveryChart = Chart.createChart();
+  monthlyInvoiceAnalysisSubscription;
+  invoiceChart = Chart.createChart();
   cumulativeChart = Chart.createChart();
   REFRESH_INTERVAL = 30 * 60 * 1000;
   private ngUnsubscribe: Subject<any> = new Subject();
@@ -40,9 +40,9 @@ export class DeliveryFigureComponent implements OnInit {
 
   ngOnInit(): void {
     this.setupData();
-    this.getMonthlyDelivery();
-    this.getYearlyDelivery();
-    this.getDeliveryBetweenDates();
+    this.getMonthlyInvoice();
+    this.getYearlyInvoice();
+    this.getInvoiceBetweenDates();
   }
   setupData() {
     this.minDate = new Date;
@@ -51,35 +51,35 @@ export class DeliveryFigureComponent implements OnInit {
     this.fromDate = this.minDate;
     this.toDate = new Date;
   }
-  getMonthlyDelivery() {
-    if (this.monthlyDeliveryAnalysisSubscription) {
-      this.monthlyDeliveryAnalysisSubscription.unsubscribe();
+  getMonthlyInvoice() {
+    if (this.monthlyInvoiceAnalysisSubscription) {
+      this.monthlyInvoiceAnalysisSubscription.unsubscribe();
     }
-    this.monthlyDeliveryAnalysisSubscription = timer(0, this.REFRESH_INTERVAL).pipe(switchMap(() => this.authAnalysisContributorService.getMonthDeliveryAnalysis()),
+    this.monthlyInvoiceAnalysisSubscription = timer(0, this.REFRESH_INTERVAL).pipe(switchMap(() => this.authAnalysisContributorService.getMonthInvoiceAnalysis()),
       takeUntil(this.ngUnsubscribe)).subscribe(result => {
-        this.delivery = result['result'];
-        this.authAnalysisContributorService.increment(this.monthlyDelivery.nativeElement, 1000, this.delivery.totalMonthlyDelivery, true);
+        this.invoice = result['result'];
+        this.authAnalysisContributorService.increment(this.monthlyInvoice.nativeElement, 1000, this.invoice.totalMonthlyInvoice);
       });
   }
-  getYearlyDelivery() {
+  getYearlyInvoice() {
     this.cumulativeLoading.start();
-    this.authAnalysisContributorService.getYearlyDeliveryAnalysis().pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+    this.authAnalysisContributorService.getYearlyInvoiceAnalysis().pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       if (result['result']) {
-        this.getCumulativeDelivery(result['result']);
+        this.getCumulativeInvoice(result['result']);
       }
     });
   }
-  getDeliveryBetweenDates() {
-    this.deliveryLoading.start();
-    this.authAnalysisContributorService.getDeliveryBetweenDates(this.fromDate, this.toDate).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.deliveryLoading.stop())).subscribe(result => {
+  getInvoiceBetweenDates() {
+    this.invoiceLoading.start();
+    this.authAnalysisContributorService.getInvoiceBetweenDates(this.fromDate, this.toDate).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.invoiceLoading.stop())).subscribe(result => {
       if (result['result']) {
         let dateRange = this.getDateRange(this.fromDate, this.toDate);
-        this.deliveryChart.data[0].data = [];
+        this.invoiceChart.data[0].data = [];
         dateRange.forEach(date => {
-          let delivery = result['result'].find(delivery => delivery.name == date);
-          this.deliveryChart.data[0].data.push(delivery ? delivery.value : 0);
+          let invoice = result['result'].find(invoice => invoice.name == date);
+          this.invoiceChart.data[0].data.push(invoice ? invoice.value : 0);
         });
-        this.deliveryChart.labels = this.getDateRange(this.fromDate, this.toDate).map(date => moment(date).format('MM-DD (ddd)'));
+        this.invoiceChart.labels = this.getDateRange(this.fromDate, this.toDate).map(date => moment(date).format('MM-DD (ddd)'));
       }
     });
   }
@@ -93,19 +93,18 @@ export class DeliveryFigureComponent implements OnInit {
     }
     return dateArray;
   }
-  getCumulativeDelivery(delivery) {
+  getCumulativeInvoice(invoice) {
     let total = 0;
     this.cumulativeChart.data[0].data = [];
     for(let index of Array(12).keys()) {
-      let foundDelivery = delivery.find(_delivery => {
-        return moment().subtract(12 - index, 'months').startOf('month').diff(moment(new Date(_delivery.date)), 'months', true) == 0;
+      let foundInvoice = invoice.find(_invoice => {
+        return moment().subtract(12 - index, 'months').startOf('month').diff(moment(new Date(_invoice.date)), 'months', true) == 0;
       })
-      if (foundDelivery) {
-        total += foundDelivery.total;
+      if (foundInvoice) {
+        total += foundInvoice.total;
       }
       this.cumulativeChart.data[0].data.push(total);
     }
-
     this.cumulativeChart.labels = [...Array(12).keys()].map(index => {
       return moment().subtract(12 - index, 'months').format('MMM / YYYY');
     });

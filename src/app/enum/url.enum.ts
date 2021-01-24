@@ -223,6 +223,9 @@ export class AuthAnalysisContributorUrl {
     static getMonthDeliveryAnalysisUrl = URL.AUTH_ANALYSIS_CONTRIBUTOR_URL + '/delivery';
     static getDeliveryBetweenDatesUrl = URL.AUTH_ANALYSIS_CONTRIBUTOR_URL + '/delivery-between-dates';
     static getYearlyDeliveryAnalysisUrl = URL.AUTH_ANALYSIS_CONTRIBUTOR_URL + '/delivery-yearly';
+    static getMonthInvoiceAnalysisUrl = URL.AUTH_ANALYSIS_CONTRIBUTOR_URL + '/invoice';
+    static getInvoiceBetweenDatesUrl = URL.AUTH_ANALYSIS_CONTRIBUTOR_URL + '/invoice-between-dates';
+    static getYearlyInvoiceAnalysisUrl = URL.AUTH_ANALYSIS_CONTRIBUTOR_URL + '/invoice-yearly';
 }
 
 // export class AuthVoucherContributorUrl {
