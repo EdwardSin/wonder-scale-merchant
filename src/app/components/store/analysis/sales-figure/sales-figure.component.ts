@@ -113,6 +113,7 @@ export class SalesFigureComponent implements OnInit {
     this.maxDate = new Date();
   }
   ngOnDestroy() {
-
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 }

@@ -1,0 +1,65 @@
+<div class="delivery-figure-container">
+    <div class="row no-gutters mb-lg-4 mb-3">
+        <div class="col-lg-3 col">
+            <div class="delivery-figure delivery-figure__today">
+                <h4 class="h6 mb-0 font-weight-normal" style="min-width: 200px">
+                    Total monthly delivery fee:
+                </h4>
+                <p class="delivery-figure__today__figure">RM <span #monthlyDelivery>{{ delivery.totalMonthlyDelivery | number: '1.2-2' }}</span></p>
+                <h4 class="h6 mb-0 font-weight-normal" style="min-width: 200px">
+                    Last month delivery fee:
+                </h4>
+                <p class="font-9 p-2 mb-0 text-right"><span>RM</span>{{delivery.lastMonthDelivery | number: '1.2-2' }}</p>
+                <h4 class="h6 mb-0 font-weight-normal" style="min-width: 200px">
+                    Last updated:
+                </h4>
+                <p class="font-9 p-2 mb-0 text-right">{{ moment(updatedDate).format('llll') }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="row no-gutters delivery-figure mb-3">
+        <h4 class="h5 font-weight-normal mb-3">Delivery Fee</h4>
+        <div class="bg-white p-3">
+            <div class="row no-gutters mb-3">
+                <div class="mb-2 d-inline-block col-lg-auto">
+                    <label class="delivery-figure__label d-block d-lg-inline-block">From Date: </label>
+                    <input (click)="fromPicker.open()" class="form-control form-control-sm d-inline-block" [ngStyle]="{'max-width': isMobileSize? '100%' : '200px'}" [(ngModel)]="fromDate" [matDatepicker]="fromPicker" [min]="last60dayDate" [max]="maxDate" />
+                    <mat-datepicker #fromPicker startView="month" [startAt]="fromDate" (opened)="openCalendar()"></mat-datepicker>
+                </div>
+                <div class="mb-2 d-inline-block col-lg-auto">
+                    <label class="delivery-figure__label d-block d-lg-inline-block">To Date: </label>
+                    <input (click)="toPicker.open()" class="form-control form-control-sm d-inline-block" [ngStyle]="{'max-width': isMobileSize? '100%' : '200px'}" [(ngModel)]="toDate" [matDatepicker]="toPicker" [min]="fromDate" [max]="maxDate" />
+                    <mat-datepicker #toPicker startView="month" [startAt]="toDate" (opened)="openCalendar()"></mat-datepicker>
+                </div>
+                <div class="d-flex align-items-center col-lg-auto">
+                    <button class="btn btn-sm btn-controller" [disabled]="deliveryLoading.isRunning()" (click)="getDeliveryBetweenDates()">Search</button>
+                </div>
+                <!-- <div class="float-right col text-right">
+                    <span class='fas fa-file-export mr-2'></span>
+                    <span>Export as</span>
+                </div> -->
+            </div>
+            <div *ngIf="deliveryLoading.isRunning()" class="d-flex justify-content-center align-items-center" style="height: 300px">
+                <ws-spinner [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>
+            </div>
+            <div *ngIf="!deliveryLoading.isRunning()" class="row no-gutters">
+                <div class="delivery-figure__analyzer">
+                    <canvas baseChart [datasets]="deliveryChart.data" [labels]="deliveryChart.labels" [legend]="deliveryChart.legend" [options]="deliveryChart.options" [chartType]="deliveryChart.chartType" [colors]="deliveryChart.colors"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row no-gutters delivery-figure">
+        <h4 class="h5 font-weight-normal mb-3">Cumulative delivery</h4>
+        <div class="bg-white p-3">
+            <div *ngIf="cumulativeLoading.isRunning()" class="d-flex justify-content-center align-items-center" style="height: 300px">
+                <ws-spinner [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>
+            </div>
+            <div *ngIf="!cumulativeLoading.isRunning()" class="row no-gutters">
+                <div class="delivery-figure__analyzer">
+                    <canvas baseChart [datasets]="cumulativeChart.data" [labels]="cumulativeChart.labels" [legend]="cumulativeChart.legend" [options]="cumulativeChart.options" [chartType]="cumulativeChart.chartType" [colors]="deliveryChart.colors"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
