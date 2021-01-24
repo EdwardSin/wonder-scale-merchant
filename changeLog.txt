@@ -7,6 +7,7 @@
 - 2021-01-24                                -
 ---------------------------------------------
 .: WSM: Task: Diagram of total delivery fee (monthly + daily) (WSM-270)
+.: WSM: Task: Diagram of total invoice (WSM-264)
 
 ---------------------------------------------
 - 2021-01-23                                -

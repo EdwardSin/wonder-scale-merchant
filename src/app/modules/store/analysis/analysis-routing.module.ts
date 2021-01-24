@@ -27,6 +27,11 @@ const routes: Routes = [{
       path: 'delivery',
       data: { title: 'delivery', breadcrumb: 'Delivery' },
       loadChildren: () => import('./delivery-figure/delivery-figure.module').then(m => m.DeliveryFigureModule)
+    },
+    {
+      path: 'invoice',
+      data: { title: 'invoice', breadcrumb: 'Invoice' },
+      loadChildren: () => import('./invoice-figure/invoice-figure.module').then(m => m.InvoiceFigureModule)
     }
   ]
 }];
