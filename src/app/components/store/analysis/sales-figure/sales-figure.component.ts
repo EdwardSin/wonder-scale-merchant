@@ -5,6 +5,7 @@ import * as moment from 'moment';
 import { Chart } from '@objects/chart';
 import { finalize, switchMap, takeUntil } from 'rxjs/operators';
 import { Subject, timer } from 'rxjs';
+import { ScreenService } from '@services/general/screen.service';
 
 @Component({
   selector: 'app-sales-figure',
@@ -37,8 +38,10 @@ export class SalesFigureComponent implements OnInit {
   yearlySalesChart = Chart.createChart();
   cumulativeChart = Chart.createChart();
   REFRESH_INTERVAL = 30 * 60 * 1000;
+  isMobileSize: boolean;
   private ngUnsubscribe: Subject<any> = new Subject();
-  constructor(private authAnalysisContributorService: AuthAnalysisContributorService) { }
+  constructor(private authAnalysisContributorService: AuthAnalysisContributorService,
+    private screenService: ScreenService) { }
 
   ngOnInit(): void {
     this.setupData();
@@ -48,6 +51,9 @@ export class SalesFigureComponent implements OnInit {
     this.getMonthlySales();
     this.getYearlySales();
     this.getSalesBetweenDates();
+    this.screenService.isMobileSize.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+      this.isMobileSize = result;
+    })
   }
   setupData() {
     this.minDate = new Date;
