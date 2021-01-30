@@ -207,9 +207,11 @@ export class AuthPromotionContributorUrl {
 }
 export class AuthInvoiceContributorUrl {
     static getInvoicesUrl = URL.AUTH_INVOICE_CONTRIBUTOR_URL + '/list';
+    static getInvoiceUrl = URL.AUTH_INVOICE_CONTRIBUTOR_URL + '/';
     static addInvoiceUrl = URL.AUTH_INVOICE_CONTRIBUTOR_URL + '/';
     static editInvoiceUrl = URL.AUTH_INVOICE_CONTRIBUTOR_URL + '/';
     static updateInvoiceStatusUrl = URL.AUTH_INVOICE_CONTRIBUTOR_URL + '/change-status';
+    static getUnseenInvoicesUrl = URL.AUTH_INVOICE_CONTRIBUTOR_URL + '/unseen'
 }
 export class AuthInvoiceConfigurationContributorUrl {
     static getInvoiceConfigurationUrl = URL.AUTH_INVOICE_CONFIGURATION_CONTRIBUTOR_URL + '/';

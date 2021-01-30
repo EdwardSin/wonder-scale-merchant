@@ -1,0 +1,17 @@
+<div [@slideDown]="'down'" *ngIf="isShown" class="ws-message-container">
+    <div class="ws-message-icon-container">
+        <span class="ws-message-icon fas fa-exclamation-circle ws-message-icon__information"></span>
+    </div>
+    <div class="ws-message">
+        <p *ngIf="header" class="ws-message-header">
+            {{ header }}
+        </p>
+        <p *ngIf="message" class="ws-message-body">
+            {{ message }}
+            <a *ngIf="linkLabel" href="javascript:void(0)" (click)="onLinkClick(); remove();">{{ linkLabel }}</a>
+        </p>
+    </div>
+    <div class="ws-message-times-icon-container" (click)="remove()">
+        <span class="ws-message-icon fas fa-times"></span>
+    </div>
+</div>

@@ -1,0 +1,77 @@
+.ws-message-container {
+    position: fixed;
+    display: flex;
+    top: 100px;
+    right: 10px;
+    z-index: 9999;
+    width: 500px;
+    border-radius: .25rem;
+    background-color: #fff;
+    align-items: center;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+    
+
+    .ws-message-icon-container{
+        width: 5rem;
+        text-align: center;
+
+        .ws-message-icon__information{
+            color: #4285f4;
+        }
+    }
+    .ws-message{
+        padding: 1rem .5rem;
+        width: 100%;
+
+        .ws-message-header {
+            color: #333;
+            font-weight: 600;
+            font-size: .9rem;
+            margin-bottom: .5rem;
+        }
+    
+        .ws-message-body {
+            color: #333;
+            font-size: .9rem;
+            margin-bottom: 0;
+        }
+    }
+
+    .ws-message-times-icon-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 5rem;
+        cursor: pointer;
+
+        &:hover .ws-message-icon{
+            color: #333;
+        }
+        
+        .ws-message-icon {
+            font-size: 1rem;
+            color: #707070;
+            transition: color ease .3s;
+        }
+    }
+
+    .default {
+        background-color: rgba(0, 0, 0, .8);
+    }
+
+    .success {
+        background-color: #00c851;
+    }
+
+    .danger {
+        background-color: #ff3547;
+    }
+
+    .info {
+        background-color: #33b5e5;
+    }
+
+    .warning {
+        background-color: #fb3;
+    }
+}

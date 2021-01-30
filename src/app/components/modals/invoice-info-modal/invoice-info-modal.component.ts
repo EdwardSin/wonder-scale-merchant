@@ -15,7 +15,6 @@ import { finalize, takeUntil } from 'rxjs/operators';
 })
 export class InvoiceInfoModalComponent extends WsModalComponent implements OnInit {
   @Input() item: Invoice;
-  @Input() closeCallback: Function;
   environment = environment;
   delivery: number = 0;
   subtotal: number = 0;
@@ -35,6 +34,7 @@ export class InvoiceInfoModalComponent extends WsModalComponent implements OnIni
   }
   refund() {
     let obj = {
+      fromStatus: this.item.status,
       status: 'cancelled',
       reason: this.reason
     };

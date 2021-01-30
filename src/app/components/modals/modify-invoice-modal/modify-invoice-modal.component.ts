@@ -485,7 +485,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
     }   
   }
   updateInvoiceStatus(status) {
-    this.authInvoiceContributorService.updateInvoiceStatus(this.item._id, {status}).pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+    this.authInvoiceContributorService.updateInvoiceStatus(this.item._id, {fromStatus: this.item.status, status}).pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       if (result && result['result']) {
         WsToastService.toastSubject.next({content: 'Status is updated!', type: 'success'});
         this.authInvoiceContributorService.refreshInvoices.next(true);
