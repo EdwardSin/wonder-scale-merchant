@@ -111,7 +111,7 @@
                                 <span class="fas fa-images mr-2 d-inline-block"></span>
                                 <span class="d-inline-block">Upload Images</span>
                             </button>
-                            <ws-uploader [id]="'itemProfileUpload'" [max]="5" [input]="allProfileItems" (output)="onProfileImageUploaded($event)" (overflow)="onProfileImageOverflow($event)"></ws-uploader>
+                            <ws-uploader [id]="'itemProfileUpload'" [max]="5" [input]="allProfileItems" (output)="onProfileImageUploaded($event)" (overflow)="onProfileImageOverflow()"></ws-uploader>
                             <div class="upload-profile-images__container mb-3" (dragenter)="onDragEnter($event)">
                                 <ngx-dropzone [accept]="'image/*'" (drop)="onDrop($event)" (change)="onSelect($event)" [disableClick]="true" class="upload-profile-images__drop-area">
                                     <ngx-dropzone-label>

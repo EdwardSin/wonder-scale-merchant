@@ -5,6 +5,7 @@ import * as moment from 'moment';
 import { Chart } from '@objects/chart';
 import { finalize, switchMap, takeUntil } from 'rxjs/operators';
 import { Subject, timer } from 'rxjs';
+import { ScreenService } from '@services/general/screen.service';
 
 @Component({
   selector: 'app-delivery-figure',
@@ -35,14 +36,19 @@ export class DeliveryFigureComponent implements OnInit {
   deliveryChart = Chart.createChart();
   cumulativeChart = Chart.createChart();
   REFRESH_INTERVAL = 30 * 60 * 1000;
+  isMobileSize: boolean;
   private ngUnsubscribe: Subject<any> = new Subject();
-  constructor(private authAnalysisContributorService: AuthAnalysisContributorService) { }
+  constructor(private authAnalysisContributorService: AuthAnalysisContributorService,
+    private screenService: ScreenService) { }
 
   ngOnInit(): void {
     this.setupData();
     this.getMonthlyDelivery();
     this.getYearlyDelivery();
     this.getDeliveryBetweenDates();
+    this.screenService.isMobileSize.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+      this.isMobileSize = result;
+    })
   }
   setupData() {
     this.minDate = new Date;
