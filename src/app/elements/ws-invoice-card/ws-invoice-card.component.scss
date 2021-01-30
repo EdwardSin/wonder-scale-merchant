@@ -1,6 +1,6 @@
 :host {
     .ws-invoice-card-container {
-        display: block;
+        display: flex;
         height: 110px;
         padding: .5rem;
         box-shadow: 0 2px 4px rgba(0, 0, 0, .3);
@@ -37,5 +37,8 @@
 
     .ws-invoice-card-container:hover {
         transform: scale(1.02);
+    }
+    .badge-warning-deep {
+        background-color: #e68a00;
     }
 }
