@@ -87,8 +87,7 @@ export class AllInvoicesComponent implements OnInit {
       }
     });
     this.authInvoiceControbutorService.allInvoices.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
-      this.allInvoices = result.filter(invoice => this.selectedTab == invoice.status)
-      this.allInvoices = this.groupInvoices(this.allInvoices);
+      this.allInvoices = this.groupInvoices(result);
     });
     this.authInvoiceControbutorService.numberOfAllItems.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       this.numberOfAllItems = result;

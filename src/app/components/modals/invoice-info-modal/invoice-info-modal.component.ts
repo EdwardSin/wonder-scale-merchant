@@ -46,6 +46,7 @@ export class InvoiceInfoModalComponent extends WsModalComponent implements OnIni
       if (result && result['result']) {
         this.authInvoiceContributorService.refreshInvoices.next(true);
         this.isCancelledOpened = false;
+        this.isRefundChecked = false;
         this.reason = '';
       }
     }, err => {
