@@ -3,11 +3,7 @@
         <div class="modal-body">
             <div class="modal-body-content">
                 <form [formGroup]="itemGroup" class="center modal-content">
-                    <div class="modal-close">
-                        <span class="fas fa-times" [routerLink]="[]" [queryParams]="{id: null, modal: null}" [queryParamsHandling]="'merge'"></span>
-                    </div>
                     <div *ngIf="currentItem">
-                        <h4 class="d-inline-block mt-1">{{ currentItem.name}}</h4>
                         <div class="ws-circle-button float-right">
                             <button type="button" title="Edit Item Type" class="btn btn-controller small" [routerLink]="[]" [queryParams]="{id: currentItem._id, modal: 'modify-item-type'}" [queryParamsHandling]="'merge'">
                                 <span class="fas fa-sitemap"></span>
@@ -123,14 +119,14 @@
                                         </div>
                                     </ngx-dropzone-label>
                                 </ngx-dropzone>
-                                <div class="upload-profile-images" [sortablejs]="allProfileItems" [sortablejsOptions]="{ animation: 150, onChoose: onChoose, onUnchoose: onUnchoose, onSort: onSort }">
-                                    <div class="upload-drag-item m-1" *ngFor="let image of allProfileItems" (click)="selectProfileImage(image?.name)">
+                                <div class="upload-profile-images" [sortablejs]="allProfileItems" [sortablejsOptions]="{ animation: 150, delay: 150, onChoose: onChoose, onUnchoose: onUnchoose, onSort: onSort }" (contextmenu)="$event.preventDefault(); $event.stopPropagation();">
+                                    <div class="upload-drag-item m-1" *ngFor="let image of allProfileItems" (click)="selectProfileImage(image?.name)"  (contextmenu)="$event.preventDefault(); $event.stopPropagation();">
                                         <ng-container [ngSwitch]="image?.type">
                                             <div *ngSwitchCase="'url'">
                                                 <div *ngIf="profileImageName == image?.name" class="profile-image-index-overlay">
                                                     <p class="profile-image-index-overlay__label">Set As Profile Image</p>
                                                 </div>
-                                                <img class="profile-image" src="{{environment.IMAGE_URL + image?.name}}" alt="item.png" />
+                                                <img class="profile-image" src="{{environment.IMAGE_URL + image?.name}}" alt="item.png"/>
                                                 <div class="corner-setting">
                                                     <span class="corner-setting-item fas fa-times" (click)="$event.stopPropagation();removeProfileImage(image?.name)"></span>
                                                 </div>
@@ -142,7 +138,7 @@
                                                 <div *ngIf="!image?.done && image?.loading" class="profile-image-loading">
                                                     <ws-spinner-dot class="position-absolute d-block" style="top: 50%; left: 50%;" [color]="'rgba(255,255,255,.8)'"></ws-spinner-dot>
                                                 </div>
-                                                <img class="profile-image" [src]="image?.url" data-upload='img_upload' alt="item.png" />
+                                                <img class="profile-image" [src]="image?.url" data-upload='img_upload' alt="item.png"/>
                                                 <div class="corner-setting">
                                                     <span class="corner-setting-item fas fa-times" (click)="$event.stopPropagation();removeProfileImage(image?.name)"></span>
                                                 </div>

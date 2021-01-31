@@ -120,15 +120,16 @@
         cursor: move;
 
         .type-label {
-            padding-right: 2rem;
             white-space: nowrap;
-            overflow: hidden;
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
 
             .type-label-text {
                 white-space: nowrap;
                 text-overflow: ellipsis;
                 overflow: hidden;
-                width: 200px;
+                width: 100%;
                 display: inline-block;
                 vertical-align: middle;
             }
