@@ -14,11 +14,11 @@
                 <span *ngSwitchCase="'refunded'" class="badge rounded-pill badge-danger">Refunded</span>
                 <span *ngSwitchCase="'completed'" class="badge rounded-pill badge-success">Completed</span>
             </ng-container>
-            <span class="font-7 d-block mt-1 text-muted" *ngIf="etaDate && !item?.delivery?.etaHour && (item?.status == 'delivered' || item?.status == 'in_progress') ">
+            <span class="font-7 d-block mt-1 text-muted" *ngIf="etaDate && (item?.delivery?.etaHour == null || item?.delivery?.etaHour == undefined) && (item?.status == 'delivered' || item?.status == 'in_progress') ">
                 ETA: {{ etaDate | date: 'MMM d,y' }}
             </span>
-            <span class="font-7 d-block mt-1 text-muted" *ngIf="etaDate && item?.delivery?.etaHour && (item?.status == 'delivered' || item?.status == 'in_progress')">
-                ETA: {{ etaDate | date: 'MMM d,y hh:mm' }}
+            <span class="font-7 d-block mt-1 text-muted" *ngIf="etaDate && item?.delivery?.etaHour > -1 && (item?.status == 'delivered' || item?.status == 'in_progress')">
+                ETA: {{ etaDate | date: 'MMM d,y h:mm a' }}
             </span>
             <span class="ws-invoice-id">{{ item.receiptId }}</span>
         </div>

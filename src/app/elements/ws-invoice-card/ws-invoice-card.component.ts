@@ -214,7 +214,7 @@ export class WsInvoiceCardComponent implements OnInit {
     let etaDate: Date = null;
     if (item && item.delivery && item.delivery.etaDate) {
       etaDate = new Date(item.delivery.etaDate)
-      if (item.delivery.etaHour && item.delivery.etaMin) {
+      if (item.delivery.etaHour > -1 && item.delivery.etaMin > -1) {
         etaDate.setHours(item.delivery.etaHour);
         etaDate.setMinutes(item.delivery.etaMin);
       }

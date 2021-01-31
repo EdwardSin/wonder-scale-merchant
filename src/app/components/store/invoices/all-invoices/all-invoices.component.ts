@@ -182,7 +182,7 @@ export class AllInvoicesComponent implements OnInit {
         .sortBy((invoice) => {
           if (invoice && invoice.delivery && invoice.delivery.etaDate) {
             let deliveryDate = new Date(invoice.delivery.etaDate);
-            if (invoice.delivery.etaHour) {
+            if (invoice.delivery.etaHour > -1) {
               deliveryDate.setHours(invoice.delivery.etaHour);
               deliveryDate.setMinutes(invoice.delivery.etaMin);
             }
