@@ -8,6 +8,7 @@
 ---------------------------------------------
 .: WSM: BugFix: Update UI in item list (WSM-286)
 .: WSM: Task: Able to add history invoice (WSM-297)
+.: WSM: BugFix: Fixed upload container size and button in item type (WSM-286)
 
 ---------------------------------------------
 - 2021-01-30                                -
