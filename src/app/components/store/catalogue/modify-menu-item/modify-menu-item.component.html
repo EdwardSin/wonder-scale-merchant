@@ -54,7 +54,7 @@
                                 </div>
                                 <ng-template #itemTypeTemplate let-type="type">
                                     <span class="type-label">
-                                        <span class="type-label-text">{{ type.name }}</span><span class="ml-2 align-middle">{{ type.incrementType ? '(+)' : '(-)' }} {{ type.amount | number: '1.2-2' }}</span>
+                                        <span class="type-label-text">{{ type.name }}</span><span class="ml-2 mr-4 align-middle">{{ type.incrementType ? '(+)' : '(-)' }} {{ type.amount | number: '1.2-2' }}</span>
                                     </span>
                                     <span *ngIf="type?.name != 'Normal (default)'" class="type-remove-icon fas fa-times" (click)="removeType(type)"></span>
                                 </ng-template>
