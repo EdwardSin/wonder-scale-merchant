@@ -97,7 +97,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
         status: this.item.status,
         remark: this.item.remark,
         deliveryOption: this.item.deliveryOption,
-        paymentMethod: this.item.paymentMethod
+        paymentMethod: this.item.paymentMethod || ''
       });
       if (!this.isEditable()) {
         this.disableAllFields()
