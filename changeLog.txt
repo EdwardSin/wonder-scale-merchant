@@ -11,6 +11,7 @@
 .: WSM: BugFix: Fixed upload container size and button in item type (WSM-286)
 .: WSM: BugFix: Menu item type overlapped issue (WSM-299)
 .: WSM: BugFix: Refresh invoices when invoice is paid (WSM-299)
+.: WSM: BugFix: Fixed eta hour issue (WSM-269)
 
 ---------------------------------------------
 - 2021-01-30                                -
