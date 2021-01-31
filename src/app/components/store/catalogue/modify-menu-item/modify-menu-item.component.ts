@@ -213,6 +213,7 @@ export class ModifyMenuItemComponent implements OnInit {
     let currentItem = {
       ...this.currentItem,
       ...this.itemGroup.value,
+      refId: this.itemGroup.value.refId || null,
       types: this.allTypes,
       profileImageIndex: this.profileImageIndex
     },

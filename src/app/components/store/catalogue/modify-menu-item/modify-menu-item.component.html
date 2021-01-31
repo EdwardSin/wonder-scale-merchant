@@ -3,9 +3,6 @@
         <div class="modal-body">
             <div class="modal-body-content">
                 <form [formGroup]="itemGroup" class="center modal-content">
-                    <div class="modal-close">
-                        <span class="fas fa-times" [routerLink]="[]" [queryParams]="{id: null, modal: null}" [queryParamsHandling]="'merge'"></span>
-                    </div>
                     <ng-container *ngIf="!loading.isRunning() else loadingTemplate">
                         <div class="mb-3">
                             <label class="mb-0 font-9">Product Name*:</label>
@@ -57,7 +54,7 @@
                                 </div>
                                 <ng-template #itemTypeTemplate let-type="type">
                                     <span class="type-label">
-                                        <span class="type-label-text">{{ type.name }}</span><span class="ml-3 align-middle">{{ type.incrementType ? '(+)' : '(-)' }} {{ type.amount | number: '1.2-2' }}</span>
+                                        <span class="type-label-text">{{ type.name }}</span><span class="ml-2 align-middle">{{ type.incrementType ? '(+)' : '(-)' }} {{ type.amount | number: '1.2-2' }}</span>
                                     </span>
                                     <span *ngIf="type?.name != 'Normal (default)'" class="type-remove-icon fas fa-times" (click)="removeType(type)"></span>
                                 </ng-template>
@@ -96,7 +93,7 @@
                                         </div>
                                     </ngx-dropzone-label>
                                 </ngx-dropzone>
-                                <div class="upload-profile-images" [sortablejs]="allProfileItems" [sortablejsOptions]="{ animation: 150, onChoose: onChoose, onUnchoose: onUnchoose, onSort: onSort }">
+                                <div class="upload-profile-images" [sortablejs]="allProfileItems" [sortablejsOptions]="{ animation: 150, delay: 150, onChoose: onChoose, onUnchoose: onUnchoose, onSort: onSort }">
                                     <div class="upload-drag-item m-1" *ngFor="let image of allProfileItems" (click)="selectProfileImage(image?.name)">
                                         <ng-container [ngSwitch]="image?.type">
                                             <div *ngSwitchCase="'url'">
