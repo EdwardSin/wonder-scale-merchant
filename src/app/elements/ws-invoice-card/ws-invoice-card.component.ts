@@ -47,6 +47,7 @@ export class WsInvoiceCardComponent implements OnInit {
       this.statusLoading.start();
       this.authInvoiceContributorService.updateInvoiceStatus(this.item._id, {fromStatus: 'new', status: 'in_progress', paymentMethod: this.paymentMethod}).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.statusLoading.stop())).subscribe(result => {
         this.item.status = 'in_progress';
+        this.isPayModalOpened = false;
         this.authInvoiceContributorService.refreshStatusNewToInProgress();
         this.authInvoiceContributorService.refreshDashboardInvoices(this.item);
       }, err => {

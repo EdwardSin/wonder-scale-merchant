@@ -87,7 +87,14 @@ export class AllInvoicesComponent implements OnInit {
       }
     });
     this.authInvoiceControbutorService.allInvoices.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
-      this.allInvoices = this.groupInvoices(result);
+      this.allInvoices = result.filter(invoice => {
+        if (this.selectedTab === 'cancelled') {
+          return invoice.status === 'cancelled' || invoice.status === 'refunded';
+        } else {
+          return this.selectedTab === invoice.status;
+        }
+      })
+      this.allInvoices = this.groupInvoices(this.allInvoices);
     });
     this.authInvoiceControbutorService.numberOfAllItems.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       this.numberOfAllItems = result;
