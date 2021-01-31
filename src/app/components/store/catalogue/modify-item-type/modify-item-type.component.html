@@ -39,7 +39,7 @@
                                                 <div *ngIf="!itemTypesForm.controls.itemTypes.value[i].images.length" style="pointer-events: none; height: 100%; display: flex; align-items: center; justify-content: center;">
                                                     <div class="font-8">
                                                         <span>Drag and drop images here</span>
-                                                        <p class="mb-0">Max 3 images (300 x 300)</p>
+                                                        <p class="mb-0">Max 3 images (300px x 300px)</p>
                                                     </div>
                                                 </div>
                                             </ngx-dropzone-label>
@@ -131,6 +131,7 @@
                             <p class="mb-0 py-5 my-5 text-muted text-center">Add types to your item</p>
                         </div>
                         <div>
+                            <button [routerLink]="[]" [queryParams]="{id: null, modal: null}" [queryParamsHandling]="'merge'" class="btn btn-sm btn-controller float-right ml-2">Cancel</button>
                             <ws-loading-button *ngIf="itemTypesForm.get('itemTypes')['controls'].length" class="d-block" [loading]="itemTypeLoading.isRunning()" [class]="'btn btn-sm btn-controller float-right mr-0'" (click)="editItemTypes()">Save</ws-loading-button>
                         </div>
                     </ng-container>
