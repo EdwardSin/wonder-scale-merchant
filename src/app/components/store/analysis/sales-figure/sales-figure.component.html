@@ -20,7 +20,7 @@
                 <p class="font-9 p-2 mb-0 text-right">{{ moment(updatedDate).format('llll') }}</p>
             </div>
         </div>
-        <div class="col ml-lg-3">
+        <div class="col-lg-9 pl-lg-3">
             <div class="row no-gutters sales-figure">
                 <button [disabled]="loading.isRunning()" (click)="getYearlySales()" title="Refresh" class="btn btn-controller float-right">
                     <span [class.loading]="loading.isRunning()" class="fas fa-sync-alt"></span>

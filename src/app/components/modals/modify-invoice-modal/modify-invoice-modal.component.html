@@ -1,7 +1,9 @@
 <ws-modal *ngIf="isOpened" [(isOpened)]="isOpened" [isCloseIconDisplayed]="false" [maxWidth]="700">
     <form modalBody [formGroup]="form">
         <mat-select class="form-control form-control-sm mb-3 border-0 float-right status-container" style="width: 150px; padding-top: .35rem" placeholder="Status" formControlName="status" [ngClass]="'status-container-' + form.controls['status'].value" (selectionChange)="updateInvoiceStatus($event.value)">
-            <mat-option [value]="'new'" *ngIf="(item && (item.status == 'new' || item.status == 'paid' || item.status == 'completed' || item.status == 'refunded' || item.status == 'cancelled') && !form.controls['isCompletedChecked'].value) || (!item && !form.controls['isCompletedChecked'].value)">New</mat-option>
+            <mat-option [value]="'new'" *ngIf="(item && (item.status == 'new' || item.status == 'paid') && !form.controls['isCompletedChecked'].value) || 
+                                               (!item && !form.controls['isCompletedChecked'].value) || 
+                                               (item && (item.status == 'completed' || item.status == 'refunded' || item.status == 'cancelled'))">New</mat-option>
             <mat-option [value]="'paid'" *ngIf="item && (item.status == 'paid' || item.status == 'in_progress') && !form.controls['isCompletedChecked'].value">Paid</mat-option>
             <mat-option [value]="'in_progress'" *ngIf="item && (item.status == 'paid' || item.status == 'in_progress' || item.status == 'delivered') && !form.controls['isCompletedChecked'].value">In Progress</mat-option>
             <mat-option [value]="'delivered'" *ngIf="item && (item.status == 'in_progress' || item.status == 'delivered') && !form.controls['isCompletedChecked'].value">Delivered</mat-option>
