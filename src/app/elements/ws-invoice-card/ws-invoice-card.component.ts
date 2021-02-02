@@ -129,8 +129,8 @@ export class WsInvoiceCardComponent implements OnInit {
       let etaDateTimeMin = this.item.delivery.etaMin;
       this.form.patchValue({
         etaDate: this.item.delivery.etaDate,
-        etaDateTimeHour: etaDateTimeHour !== null ? ("0" + etaDateTimeHour).slice(-2): null,
-        etaDateTimeMin: etaDateTimeMin !== null ? ("0" + etaDateTimeMin).slice(-2): null
+        etaDateTimeHour: etaDateTimeHour !== null && etaDateTimeHour !== undefined? ("0" + etaDateTimeHour).slice(-2): null,
+        etaDateTimeMin: etaDateTimeMin !== null && etaDateTimeMin !== undefined ? ("0" + etaDateTimeMin).slice(-2): null
       });
     } else {
       this.form.patchValue({
