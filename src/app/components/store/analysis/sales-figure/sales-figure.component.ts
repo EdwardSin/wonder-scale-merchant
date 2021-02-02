@@ -28,7 +28,7 @@ export class SalesFigureComponent implements OnInit {
     lastMonthSales: 0,
     averageMonthlySales: 0
   };
-  last60dayDate = new Date;
+  last60MonthsDate = new Date;
   minDate = new Date;
   maxDate = new Date;
   fromDate = new Date;
@@ -56,9 +56,8 @@ export class SalesFigureComponent implements OnInit {
     })
   }
   setupData() {
-    this.minDate = new Date;
-    this.minDate.setDate(this.minDate.getDate() - 6);
-    this.last60dayDate.setDate(this.minDate.getDate() - 60);
+    this.minDate = moment().add(-6, 'days').toDate();
+    this.last60MonthsDate = moment().add(-6, 'months').toDate();
     this.fromDate = this.minDate;
     this.toDate = new Date;
   }

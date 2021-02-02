@@ -114,8 +114,8 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
           let etaDateTimeMin = this.item.delivery.etaMin;
           this.form.patchValue({
             etaDate: this.item.delivery.etaDate,
-            etaDateTimeHour: etaDateTimeHour !== null ? ("0" + etaDateTimeHour).slice(-2): null,
-            etaDateTimeMin: etaDateTimeMin !== null ? ("0" + etaDateTimeMin).slice(-2): null
+            etaDateTimeHour: etaDateTimeHour !== null && etaDateTimeHour !== undefined ? ("0" + etaDateTimeHour).slice(-2): null,
+            etaDateTimeMin: etaDateTimeMin !== null && etaDateTimeMin !== undefined ? ("0" + etaDateTimeMin).slice(-2): null
           })
         }
       }
@@ -546,7 +546,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
         etaDate = new Date(etaDate);
       }
       let estimatedDateTime = new Date(etaDate.getFullYear(), etaDate.getMonth(), etaDate.getDate(), etaDateTimeHour, etaDateTimeMin);
-      if (estimatedDateTime < new Date) {
+      if (estimatedDateTime < new Date && !this.form.controls['isCompletedChecked'].value) {
         WsToastService.toastSubject.next({ content: 'Estimated date time must be later than now!', type: 'danger'});
         return false;
       }

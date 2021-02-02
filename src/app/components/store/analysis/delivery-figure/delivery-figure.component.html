@@ -23,7 +23,7 @@
             <div class="row no-gutters mb-3">
                 <div class="mb-2 d-inline-block col-lg-auto">
                     <label class="delivery-figure__label d-block d-lg-inline-block">From Date: </label>
-                    <input (click)="fromPicker.open()" class="form-control form-control-sm d-inline-block" [ngStyle]="{'max-width': isMobileSize? '100%' : '200px'}" [(ngModel)]="fromDate" [matDatepicker]="fromPicker" [min]="last60dayDate" [max]="maxDate" />
+                    <input (click)="fromPicker.open()" class="form-control form-control-sm d-inline-block" [ngStyle]="{'max-width': isMobileSize? '100%' : '200px'}" [(ngModel)]="fromDate" [matDatepicker]="fromPicker" [min]="last60MonthsDate" [max]="maxDate" />
                     <mat-datepicker #fromPicker startView="month" [startAt]="fromDate" (opened)="openCalendar()"></mat-datepicker>
                 </div>
                 <div class="mb-2 d-inline-block col-lg-auto">
