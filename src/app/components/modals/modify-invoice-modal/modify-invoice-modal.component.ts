@@ -15,6 +15,7 @@ import { environment } from '@environments/environment';
 import { AuthPromotionContributorService } from '@services/http/auth-store/contributor/auth-promotion-contributor.service';
 import { WsLoading } from '@elements/ws-loading/ws-loading';
 import * as moment from 'moment';
+import { DateTimeHelper } from '@helpers/datetimehelper/datetime.helper';
 
 @Component({
   selector: 'modify-invoice-modal',
@@ -446,7 +447,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
       invoice['promotions'] = form.controls['promotion'].value;
     }
     if (form.controls['isCompletedChecked'].value) {
-      invoice['completedAt'] = moment(new Date(form.controls['completedAt'].value)).add(-(new Date()).getTimezoneOffset(), 'minutes').toDate();
+      invoice['completedAt'] = DateTimeHelper.getDateWithCurrentTimezone(new Date(form.controls['completedAt'].value));
     }
     if (form.valid) {
       invoice = this.removeEmpty(invoice);

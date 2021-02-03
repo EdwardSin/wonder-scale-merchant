@@ -2,6 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthAnalysisContributorUrl } from '@enum/url.enum';
 import { AccessTokenService } from '../access-token.service';
+import * as moment from 'moment';
+import { DateTimeHelper } from '@helpers/datetimehelper/datetime.helper';
 
 @Injectable({
   providedIn: 'root'
@@ -10,40 +12,50 @@ export class AuthAnalysisContributorService {
 
   constructor(private http: HttpClient, private accessTokenService: AccessTokenService) { }
   getGeneralAnalysis() {
-    return this.http.get(AuthAnalysisContributorUrl.getGeneralAnalysisUrl, this.accessTokenService.getAccessToken());
+    let dateAsString = DateTimeHelper.getTodayWithCurrentTimezone().toISOString();
+    return this.http.get(AuthAnalysisContributorUrl.getGeneralAnalysisUrl + '?date=' + dateAsString, this.accessTokenService.getAccessToken());
   }
   getMonthSalesAnalysis() {
-    return this.http.get(AuthAnalysisContributorUrl.getMonthSalesAnalysisUrl, this.accessTokenService.getAccessToken());
+    let dateAsString = DateTimeHelper.getTodayWithCurrentTimezone().toISOString();
+    return this.http.get(AuthAnalysisContributorUrl.getMonthSalesAnalysisUrl + '?date=' + dateAsString, this.accessTokenService.getAccessToken());
   }
   getSalesBetweenDates(fromDate, toDate) {
-    let _fromDate = new Date(fromDate.getFullYear(), fromDate.getMonth(), fromDate.getDate());
-    let _toDate = new Date(toDate.getFullYear(), toDate.getMonth(), toDate.getDate() + 1);
+    toDate.setDate(toDate.getDate() + 1);
+    let _fromDate = DateTimeHelper.getDateWithCurrentTimezone(fromDate);
+    let _toDate = DateTimeHelper.getDateWithCurrentTimezone(toDate);
     return this.http.post(AuthAnalysisContributorUrl.getSalesBetweenDatesUrl, {fromDate: _fromDate, toDate: _toDate}, this.accessTokenService.getAccessToken());
   }
   getYearlySalesAnalysis() {
-    return this.http.get(AuthAnalysisContributorUrl.getYearlySalesAnalysisUrl, this.accessTokenService.getAccessToken());
+    let dateAsString = DateTimeHelper.getTodayWithCurrentTimezone().toISOString();
+    return this.http.get(AuthAnalysisContributorUrl.getYearlySalesAnalysisUrl + '?date=' + dateAsString, this.accessTokenService.getAccessToken());
   }
   getMonthDeliveryAnalysis() {
-    return this.http.get(AuthAnalysisContributorUrl.getMonthDeliveryAnalysisUrl, this.accessTokenService.getAccessToken());
+    let dateAsString = DateTimeHelper.getTodayWithCurrentTimezone().toISOString();
+    return this.http.get(AuthAnalysisContributorUrl.getMonthDeliveryAnalysisUrl + '?date=' + dateAsString, this.accessTokenService.getAccessToken());
   }
   getDeliveryBetweenDates(fromDate, toDate) {
-    let _fromDate = new Date(fromDate.getFullYear(), fromDate.getMonth(), fromDate.getDate());
-    let _toDate = new Date(toDate.getFullYear(), toDate.getMonth(), toDate.getDate() + 1);
+    toDate.setDate(toDate.getDate() + 1);
+    let _fromDate = DateTimeHelper.getDateWithCurrentTimezone(fromDate);
+    let _toDate = DateTimeHelper.getDateWithCurrentTimezone(toDate);
     return this.http.post(AuthAnalysisContributorUrl.getDeliveryBetweenDatesUrl, {fromDate: _fromDate, toDate: _toDate}, this.accessTokenService.getAccessToken());
   }
   getYearlyDeliveryAnalysis() {
-    return this.http.get(AuthAnalysisContributorUrl.getYearlyDeliveryAnalysisUrl, this.accessTokenService.getAccessToken());
+    let dateAsString = DateTimeHelper.getTodayWithCurrentTimezone().toISOString();
+    return this.http.get(AuthAnalysisContributorUrl.getYearlyDeliveryAnalysisUrl + '?date=' + dateAsString, this.accessTokenService.getAccessToken());
   }
   getMonthInvoiceAnalysis() {
-    return this.http.get(AuthAnalysisContributorUrl.getMonthInvoiceAnalysisUrl, this.accessTokenService.getAccessToken());
+    let dateAsString = DateTimeHelper.getTodayWithCurrentTimezone().toISOString();
+    return this.http.get(AuthAnalysisContributorUrl.getMonthInvoiceAnalysisUrl + '?date=' + dateAsString, this.accessTokenService.getAccessToken());
   }
   getInvoiceBetweenDates(fromDate, toDate) {
-    let _fromDate = new Date(fromDate.getFullYear(), fromDate.getMonth(), fromDate.getDate());
-    let _toDate = new Date(toDate.getFullYear(), toDate.getMonth(), toDate.getDate() + 1);
+    toDate.setDate(toDate.getDate() + 1);
+    let _fromDate = DateTimeHelper.getDateWithCurrentTimezone(fromDate);
+    let _toDate = DateTimeHelper.getDateWithCurrentTimezone(toDate);
     return this.http.post(AuthAnalysisContributorUrl.getInvoiceBetweenDatesUrl, {fromDate: _fromDate, toDate: _toDate}, this.accessTokenService.getAccessToken());
   }
   getYearlyInvoiceAnalysis() {
-    return this.http.get(AuthAnalysisContributorUrl.getYearlyInvoiceAnalysisUrl, this.accessTokenService.getAccessToken());
+    let dateAsString = DateTimeHelper.getTodayWithCurrentTimezone().toISOString();
+    return this.http.get(AuthAnalysisContributorUrl.getYearlyInvoiceAnalysisUrl + '?date=' + dateAsString, this.accessTokenService.getAccessToken());
   }
   increment(target, duration, value, isDecimal=false) {
     $(target).each(function () {
