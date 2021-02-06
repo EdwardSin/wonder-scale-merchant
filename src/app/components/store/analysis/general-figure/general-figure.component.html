@@ -1,0 +1,74 @@
+<div class="row no-gutters py-lg-4 px-0 col-lg-9 center mb-5">
+    <div class="col-sm-6 p-2">
+        <div class="analysis-card">
+            <h5 class="analysis-header">Sales</h5>
+            <div>
+                <h6 class="analysis-title">Total monthly sales:</h6>
+                <p class="analysis-main-value"><span class="analysis-currency">RM</span><span #salesFigureRef>{{analysis.totalMonthlySales | number: '1.2-2' }}</span></p>
+            </div>
+            <div>
+                <h6 class="analysis-subtitle">Last month sales:</h6>
+                <p class="analysis-value"><span class="analysis-currency">RM</span><span>{{analysis.lastMonthSales | number: '1.2-2' }}</span></p>
+            </div>
+            <div>
+                <h6 class="analysis-subtitle">Average monthly sales <span class="font-8">(Last 12 months)</span>:</h6>
+                <p class="analysis-value"><span class="analysis-currency">RM</span><span>{{analysis.averageMonthlySales | number: '1.2-2' }}</span></p>
+            </div>
+            <div *ngIf="loading.isRunning()" class="anlysis-overlay">
+                <ws-spinner [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 p-2">
+        <div class="analysis-card">
+            <h5 class="analysis-header">Pageview</h5>
+            <div>
+                <h6 class="analysis-title">Total pageview today:</h6>
+                <p class="analysis-main-value" #pageViewFigureRef>{{ analysis.totalPageview }}</p>
+            </div>
+            <div>
+                <h6 class="analysis-subtitle">Current month pageview:</h6>
+                <p class="analysis-value">{{ analysis.currentMonthPageview }}</p>
+            </div>
+            <div>
+                <h6 class="analysis-subtitle">Last month total pageview:</h6>
+                <p class="analysis-value">{{ analysis.lastMonthPageview }}</p>
+            </div>
+            <div *ngIf="loading.isRunning()" class="anlysis-overlay">
+                <ws-spinner [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 p-2">
+        <div class="analysis-card">
+            <h5 class="analysis-header">Delivery</h5>
+            <div>
+                <h6 class="analysis-title">Total monthly delivery fee:</h6>
+                <p class="analysis-main-value"><span class="analysis-currency">RM</span><span #deliveryFigureRef>{{ analysis.totalMonthlyDelivery | number: '1.2-2' }}</span></p>
+            </div>
+            <div>
+                <h6 class="analysis-subtitle">Last month delivery fee:</h6>
+                <p class="analysis-value"><span class="analysis-currency">RM</span><span>{{ analysis.lastMonthDelivery | number: '1.2-2' }}</span></p>
+            </div>
+            <div *ngIf="loading.isRunning()" class="anlysis-overlay">
+                <ws-spinner [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 p-2">
+        <div class="analysis-card">
+            <h5 class="analysis-header">Invoice</h5>
+            <div>
+                <h6 class="analysis-title">Total monthly invoices:</h6>
+                <p class="analysis-main-value" #invoiceFigureRef>{{ analysis.totalMonthlyInvoice }}</p>
+            </div>
+            <div>
+                <h6 class="analysis-subtitle">Last month total invoices:</h6>
+                <p class="analysis-value">{{ analysis.lastMonthInvoice }}</p>
+            </div>
+            <div *ngIf="loading.isRunning()" class="anlysis-overlay">
+                <ws-spinner [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>
+            </div>
+        </div>
+    </div>
+</div>

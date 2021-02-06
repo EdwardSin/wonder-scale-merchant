@@ -16,6 +16,7 @@ import * as _ from 'lodash';
 import { SharedCategoryService } from '@services/shared/shared-category.service';
 import { CurrencyService } from '@services/http/general/currency.service';
 import { SharedStoreService } from '@services/shared/shared-store.service';
+import { UploadHelper } from '@helpers/uploadhelper/upload.helper';
 
 @Component({
   selector: 'app-modify-item-type',
@@ -37,6 +38,7 @@ export class ModifyItemTypeComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
+    private uploadHelper: UploadHelper,
     private sharedCategoryService: SharedCategoryService,
     private authItemContributorService: AuthItemContributorService,
     public currencyService: CurrencyService,
@@ -69,6 +71,9 @@ export class ModifyItemTypeComponent implements OnInit {
     let formArray = this.itemTypesForm.get('itemTypes') as FormArray;
     let formGroup = formArray.controls[i] as FormGroup;
     formGroup.controls['images'].setValue(_.uniq([...formGroup.controls['images'].value, ...event]));
+  }
+  onItemTypeImageOverflow() {
+    WsToastService.toastSubject.next({ content: 'Max 3 images are uploaded!', type: 'danger'});
   }
   getItem() {
     this.itemId = this.route.snapshot.queryParams['id'];
@@ -215,27 +220,27 @@ export class ModifyItemTypeComponent implements OnInit {
       let intergerRegex = /^\d+$/;
       let currentIndex = i + 1;
       
-      if ((!name.value || !name.value.trim()) && i !== 0) {
-        WsToastService.toastSubject.next({ content: 'Item ' + currentIndex + ' - name is required!', type: 'danger' });
+      if (!name.value || !name.value.trim()) {
+        WsToastService.toastSubject.next({ content: 'Type ' + currentIndex + ' - name is required!', type: 'danger' });
         return false;
       }
       if (price.value && !priceRegex.test(price.value)){
-        WsToastService.toastSubject.next({ content: 'Item ' + currentIndex + ' - price is invalid!', type: 'danger' });
+        WsToastService.toastSubject.next({ content: 'Type ' + currentIndex + ' - price is invalid!', type: 'danger' });
         return false;
       }
       else if (discount.value && (!priceRegex.test(discount.value) || +discount.value > 100)){
-        WsToastService.toastSubject.next({ content: 'Item ' + currentIndex + ' - discount is invalid!', type: 'danger' });
+        WsToastService.toastSubject.next({ content: 'Type ' + currentIndex + ' - discount is invalid!', type: 'danger' });
         return false;
       }
       else if (weight.value && !priceRegex.test(weight.value)){
-        WsToastService.toastSubject.next({ content: 'Item ' + currentIndex + ' - weight is invalid!', type: 'danger' });
+        WsToastService.toastSubject.next({ content: 'Type ' + currentIndex + ' - weight is invalid!', type: 'danger' });
         return false;
       }
       else if (quantity.value && !intergerRegex.test(quantity.value)){
-        WsToastService.toastSubject.next({ content: 'Item ' + currentIndex + ' - quantity is invalid!', type: 'danger' });
+        WsToastService.toastSubject.next({ content: 'Type ' + currentIndex + ' - quantity is invalid!', type: 'danger' });
         return false;
       } else if(quantity.value && +quantity.value > 999999) {
-        WsToastService.toastSubject.next({ content: 'Item ' + currentIndex + ' - quantity should less than 999999!', type: 'danger' });
+        WsToastService.toastSubject.next({ content: 'Type ' + currentIndex + ' - quantity should less than 999999!', type: 'danger' });
         return false;
       }
     }
@@ -271,5 +276,31 @@ export class ModifyItemTypeComponent implements OnInit {
   }
   itemType(i) {
     return this.itemTypesForm.controls.itemTypes.value[i];
+  }
+  async onSelect(event, itemTypeImages) {
+    let items = await this.uploadHelper.fileChangeEvent(event.addedFiles);
+    for(let item of items) {
+      if (!itemTypeImages.includes(item) && itemTypeImages.length < 3) {
+        itemTypeImages.push(item);
+      } else {
+        WsToastService.toastSubject.next({ content: 'Maximum images are uploaded!', type: 'danger'});
+        break;
+      }
+    }
+  }
+  onDragEnter(event) {
+    $('.upload-profile-images__drop-area').css({'z-index': 2});
+  }
+  onDrop(event) {
+    $('.upload-profile-images__drop-area').css({'z-index': 0});
+  }
+  onChoose = () => {
+    // using anonymous function to access the current prototype variable
+    $('.upload-profile-images__container').css({'z-index': 3});
+  }
+  onUnchoose = (event) => {
+    // using anonymous function to access the current prototype variable
+    $('.upload-profile-images__container').css({'z-index': 0});
+    $('.upload-profile-images__drop-area').css({'z-index': 0});
   }
 }

@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { WsLoading } from '@elements/ws-loading/ws-loading';
 import { WsModalComponent } from '@elements/ws-modal/ws-modal.component';
 import { WsToastService } from '@elements/ws-toast/ws-toast.service';
+import { environment } from '@environments/environment';
 import { Invoice } from '@objects/invoice';
 import { AuthInvoiceContributorService } from '@services/http/auth-store/contributor/auth-invoice-contributor.service';
 import { Subject } from 'rxjs';
@@ -14,7 +15,7 @@ import { finalize, takeUntil } from 'rxjs/operators';
 })
 export class InvoiceInfoModalComponent extends WsModalComponent implements OnInit {
   @Input() item: Invoice;
-  @Input() closeCallback: Function;
+  environment = environment;
   delivery: number = 0;
   subtotal: number = 0;
   discount: number = 0;
@@ -33,6 +34,7 @@ export class InvoiceInfoModalComponent extends WsModalComponent implements OnIni
   }
   refund() {
     let obj = {
+      fromStatus: this.item.status,
       status: 'cancelled',
       reason: this.reason
     };
@@ -44,11 +46,23 @@ export class InvoiceInfoModalComponent extends WsModalComponent implements OnIni
       if (result && result['result']) {
         this.authInvoiceContributorService.refreshInvoices.next(true);
         this.isCancelledOpened = false;
+        this.isRefundChecked = false;
         this.reason = '';
       }
     }, err => {
       WsToastService.toastSubject.next({content: 'Status cannot be updated!', type: 'danger'});
     });
+  }
+  copy(event) {
+    event.stopPropagation();
+    var tempInput = document.createElement("input");
+    tempInput.style.cssText = "position: absolute; left: -1000px; top: -1000px";
+    tempInput.value = environment.URL + 'invoice/?s_id=' + this.item._id + '&r_id=' + this.item.receiptId;
+    document.body.appendChild(tempInput);
+    tempInput.select();
+    document.execCommand("copy");
+    document.body.removeChild(tempInput);
+    WsToastService.toastSubject.next({ content: 'Link is copied!\n Send the link to your customer!', type: 'success'}); 
   }
   ngOnDestroy() {
     super.ngOnDestroy();

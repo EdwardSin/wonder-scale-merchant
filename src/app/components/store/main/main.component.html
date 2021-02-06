@@ -36,19 +36,13 @@
         </ul>
       </li>
       <li wsNavItem class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
-        <a [routerLink]="['tracking']">
-          <span class="ws-main-nav-icon fas fa-chart-line"></span>
-          <span class="ws-main-nav-text">Tracking</span>
+        <a [routerLink]="['qrcode']">
+          <span class="ws-main-nav-icon fas fa-qrcode"></span>
+          <span class="ws-main-nav-text">QR code</span>
         </a>
         <ul class="ws-main-nav-sub-list">
           <li class="ws-main-nav-sub-list__title">
-            <a [routerLink]="['tracking']">Tracking</a>
-          </li>
-          <li>
-            <a [routerLinkActive]="'active'" [routerLink]="['tracking', 'figure']">Figure</a>
-          </li>
-          <li>
-            <a [routerLinkActive]="'active'" [routerLink]="['tracking', 'qrcode']">QR code</a>
+            <a [routerLink]="['qrcode']">QR code</a>
           </li>
         </ul>
       </li>
@@ -81,8 +75,16 @@
           <li *ngIf="isInvoiceEnabled">
             <a [routerLinkActive]="'active'" [routerLink]="['invoices', 'customers']">Customers</a>
           </li>
-          <li *ngIf="isInvoiceEnabled">
-            <a [routerLinkActive]="'active'" [routerLink]="['invoices', 'accounting']">Accounting</a>
+        </ul>
+      </li>
+      <li wsNavItem class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
+        <a [routerLink]="['analysis']">
+          <span class="ws-main-nav-icon fas fa-chart-line"></span>
+          <span class="ws-main-nav-text">Analysis</span>
+        </a>
+        <ul class="ws-main-nav-sub-list">
+          <li class="ws-main-nav-sub-list__title">
+            <a [routerLink]="['analysis']">Analysis</a>
           </li>
         </ul>
       </li>

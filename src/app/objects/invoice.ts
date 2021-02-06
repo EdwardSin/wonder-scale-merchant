@@ -1,31 +1,31 @@
 export class Invoice{
-    customerId?: String;
-    customer?: String | {
-        firstName?: String,
-        lastName?: String,
+    customerId?: string;
+    customer?: string | {
+        firstName?: string,
+        lastName?: string,
         address?: {
-            address: String,
-            state: String,
-            postcode: String,
-            country: String,
+            address: string,
+            state: string,
+            postcode: string,
+            country: string,
         },
-        phoneNumber?: String
+        phoneNumber?: string
     };
     deliveryOption: 'self_pickup' | 'delivery';
     delivery?: {
         fee?:  number,
-        etaDate?: String,
+        etaDate?: string,
         etaHour?: number,
         etaMin?: number,
         date?: Date
     };
     items: Array<any>;
-    remark: String;
-    status: String;
-    paymentMethod?: String;
-    promotions?: Array<String> | Array<{}>;
-    _id?: String;
-    receiptId?: String;
+    remark: string;
+    status: string;
+    paymentMethod?: string;
+    promotions?: Array<string> | Array<{}>;
+    _id?: string;
+    receiptId?: string;
     isCustomerSaved?: boolean;
     createdAt?: Date;
     updatedAt?: Date;

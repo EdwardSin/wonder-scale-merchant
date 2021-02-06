@@ -11,6 +11,7 @@ export class URL {
     static AUTH_INVOICE_CONFIGURATION_CONTRIBUTOR_URL = '/api/auth-stores/invoice-configuration-contributors';
     static AUTH_CUSTOMER_CONTRIBUTOR_URL = '/api/auth-stores/customer-contributors';
     static AUTH_PROMOTION_CONTRIBUTOR_URL = '/api/auth-stores/promotion-contributors';
+    static AUTH_ANALYSIS_CONTRIBUTOR_URL = '/api/auth-stores/analysis-contributors';
     static AUTH_ITEM_CONTRIBUTOR_URL = '/api/auth-stores/item-contributors';
     static AUTH_STORE_CONTRIBUTOR_URL = '/api/auth-stores/store-contributors';
     static AUTH_TABLE_CONTRIBUTOR_URL = '/api/auth-stores/ordering-contributors/table-contributors';
@@ -206,13 +207,27 @@ export class AuthPromotionContributorUrl {
 }
 export class AuthInvoiceContributorUrl {
     static getInvoicesUrl = URL.AUTH_INVOICE_CONTRIBUTOR_URL + '/list';
+    static getInvoiceUrl = URL.AUTH_INVOICE_CONTRIBUTOR_URL + '/';
     static addInvoiceUrl = URL.AUTH_INVOICE_CONTRIBUTOR_URL + '/';
     static editInvoiceUrl = URL.AUTH_INVOICE_CONTRIBUTOR_URL + '/';
     static updateInvoiceStatusUrl = URL.AUTH_INVOICE_CONTRIBUTOR_URL + '/change-status';
+    static getUnseenInvoicesUrl = URL.AUTH_INVOICE_CONTRIBUTOR_URL + '/unseen'
 }
 export class AuthInvoiceConfigurationContributorUrl {
     static getInvoiceConfigurationUrl = URL.AUTH_INVOICE_CONFIGURATION_CONTRIBUTOR_URL + '/';
     static addInvoiceConfigurationUrl = URL.AUTH_INVOICE_CONFIGURATION_CONTRIBUTOR_URL + '/';
+}
+export class AuthAnalysisContributorUrl {
+    static getGeneralAnalysisUrl = URL.AUTH_ANALYSIS_CONTRIBUTOR_URL + '/general';
+    static getMonthSalesAnalysisUrl = URL.AUTH_ANALYSIS_CONTRIBUTOR_URL + '/sales';
+    static getSalesBetweenDatesUrl = URL.AUTH_ANALYSIS_CONTRIBUTOR_URL + '/sales-between-dates';
+    static getYearlySalesAnalysisUrl = URL.AUTH_ANALYSIS_CONTRIBUTOR_URL + '/sales-yearly';
+    static getMonthDeliveryAnalysisUrl = URL.AUTH_ANALYSIS_CONTRIBUTOR_URL + '/delivery';
+    static getDeliveryBetweenDatesUrl = URL.AUTH_ANALYSIS_CONTRIBUTOR_URL + '/delivery-between-dates';
+    static getYearlyDeliveryAnalysisUrl = URL.AUTH_ANALYSIS_CONTRIBUTOR_URL + '/delivery-yearly';
+    static getMonthInvoiceAnalysisUrl = URL.AUTH_ANALYSIS_CONTRIBUTOR_URL + '/invoice';
+    static getInvoiceBetweenDatesUrl = URL.AUTH_ANALYSIS_CONTRIBUTOR_URL + '/invoice-between-dates';
+    static getYearlyInvoiceAnalysisUrl = URL.AUTH_ANALYSIS_CONTRIBUTOR_URL + '/invoice-yearly';
 }
 
 // export class AuthVoucherContributorUrl {

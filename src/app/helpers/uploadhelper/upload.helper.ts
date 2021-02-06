@@ -121,7 +121,7 @@ export class UploadHelper {
             let reader = new FileReader;
             reader.onload = function (e) {
                 let img = {
-                    name: file['name'],
+                    name: Math.round(Math.random() * 10000) + file['name'],
                     file: file,
                     url: URL.createObjectURL(file),
                     // done: isPreLoad,

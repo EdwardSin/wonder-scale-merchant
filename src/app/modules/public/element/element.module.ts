@@ -35,6 +35,7 @@ import { MatSelectInfiniteScrollModule } from 'ng-mat-select-infinite-scroll';
 import { WsInvoiceComponent } from '@elements/ws-invoice/ws-invoice.component';
 import { AppRoutingModule } from 'src/app/app-routing.module';
 import { RouterModule } from '@angular/router';
+import { WsMessageBarComponent } from '@elements/ws-message-bar/ws-message-bar.component';
 
 
 @NgModule({
@@ -58,7 +59,8 @@ import { RouterModule } from '@angular/router';
     BusinessTimetableComponent,
     ConfirmModalComponent,
     BusinessLocationComponent,
-    WsInvoiceComponent
+    WsInvoiceComponent,
+    WsMessageBarComponent
   ],
   imports: [
     AgmCoreModule,
@@ -97,7 +99,8 @@ import { RouterModule } from '@angular/router';
     BusinessTimetableComponent,
     ConfirmModalComponent,
     BusinessLocationComponent,
-    WsInvoiceComponent
+    WsInvoiceComponent,
+    WsMessageBarComponent
   ]
 })
 export class ElementModule { }

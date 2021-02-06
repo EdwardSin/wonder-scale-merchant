@@ -21,10 +21,10 @@ import { MainContainerComponent } from '@components/store/main/main-container/ma
 import { WsLeftNavComponent } from '@elements/ws-left-nav/ws-left-nav.component';
 import { BreadcrumbComponent } from '@elements/breadcrumb/breadcrumb.component';
 import { SharedModule } from './modules/public/shared/shared.module';
-import { TrackingComponent } from '@components/store/tracking/tracking.component';
 import { HomeControlComponent } from '@components/store/home-control/home-control.component';
 import { NoCacheHeadersInterceptor } from '@components/resolvers/no-cache-headers.interceptor.service';
 import { InvoicesComponent } from './components/store/invoices/invoices.component';
+import { AnalysisComponent } from './components/store/analysis/analysis.component';
 
 const DEFAULT_SWIPER_CONFIG: SwiperConfigInterface = {
   direction: 'horizontal',
@@ -66,8 +66,8 @@ export function jwtOptionsFactory(platformId) {
     WsLeftNavComponent,
     BreadcrumbComponent,
     HomeControlComponent,
-    TrackingComponent,
-    InvoicesComponent
+    InvoicesComponent,
+    AnalysisComponent
   ],
   imports: [
     BrowserModule,
