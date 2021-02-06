@@ -14,6 +14,8 @@ import { Invoice } from '@objects/invoice';
 import { environment } from '@environments/environment';
 import { AuthPromotionContributorService } from '@services/http/auth-store/contributor/auth-promotion-contributor.service';
 import { WsLoading } from '@elements/ws-loading/ws-loading';
+import * as moment from 'moment';
+import { DateTimeHelper } from '@helpers/datetimehelper/datetime.helper';
 
 @Component({
   selector: 'modify-invoice-modal',
@@ -97,7 +99,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
         status: this.item.status,
         remark: this.item.remark,
         deliveryOption: this.item.deliveryOption,
-        paymentMethod: this.item.paymentMethod
+        paymentMethod: this.item.paymentMethod || ''
       });
       if (!this.isEditable()) {
         this.disableAllFields()
@@ -114,8 +116,8 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
           let etaDateTimeMin = this.item.delivery.etaMin;
           this.form.patchValue({
             etaDate: this.item.delivery.etaDate,
-            etaDateTimeHour: etaDateTimeHour !== null ? ("0" + etaDateTimeHour).slice(-2): null,
-            etaDateTimeMin: etaDateTimeMin !== null ? ("0" + etaDateTimeMin).slice(-2): null
+            etaDateTimeHour: etaDateTimeHour !== null && etaDateTimeHour !== undefined ? ("0" + etaDateTimeHour).slice(-2): null,
+            etaDateTimeMin: etaDateTimeMin !== null && etaDateTimeMin !== undefined ? ("0" + etaDateTimeMin).slice(-2): null
           })
         }
       }
@@ -445,7 +447,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
       invoice['promotions'] = form.controls['promotion'].value;
     }
     if (form.controls['isCompletedChecked'].value) {
-      invoice['completedAt'] = form.controls['completedAt'].value;
+      invoice['completedAt'] = DateTimeHelper.getDateWithCurrentTimezone(new Date(form.controls['completedAt'].value));
     }
     if (form.valid) {
       invoice = this.removeEmpty(invoice);
@@ -485,7 +487,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
     }   
   }
   updateInvoiceStatus(status) {
-    this.authInvoiceContributorService.updateInvoiceStatus(this.item._id, {status}).pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+    this.authInvoiceContributorService.updateInvoiceStatus(this.item._id, {fromStatus: this.item.status, status}).pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       if (result && result['result']) {
         WsToastService.toastSubject.next({content: 'Status is updated!', type: 'success'});
         this.authInvoiceContributorService.refreshInvoices.next(true);
@@ -546,7 +548,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
         etaDate = new Date(etaDate);
       }
       let estimatedDateTime = new Date(etaDate.getFullYear(), etaDate.getMonth(), etaDate.getDate(), etaDateTimeHour, etaDateTimeMin);
-      if (estimatedDateTime < new Date) {
+      if (estimatedDateTime < new Date && !this.form.controls['isCompletedChecked'].value) {
         WsToastService.toastSubject.next({ content: 'Estimated date time must be later than now!', type: 'danger'});
         return false;
       }

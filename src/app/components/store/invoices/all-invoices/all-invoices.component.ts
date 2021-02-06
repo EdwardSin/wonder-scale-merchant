@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, HostListener, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { WsLoading } from '@elements/ws-loading/ws-loading';
 import { DocumentHelper } from '@helpers/documenthelper/document.helper';
@@ -9,7 +9,9 @@ import { AuthInvoiceContributorService } from '@services/http/auth-store/contrib
 import { SharedNavbarService } from '@services/shared/shared-nav-bar.service';
 import { SharedStoreService } from '@services/shared/shared-store.service';
 import { interval, Subject, Subscription } from 'rxjs';
-import { finalize, switchMap, takeUntil } from 'rxjs/operators';
+import { delay, finalize, map, switchMap, takeUntil } from 'rxjs/operators';
+import * as _ from 'lodash';
+import { WsMessageBarService } from '@elements/ws-message-bar/ws-message-bar.service';
 
 @Component({
   selector: 'app-all-invoices',
@@ -21,6 +23,7 @@ export class AllInvoicesComponent implements OnInit {
   keyword: string = '';
   page: number = 1;
   selectedTab: string = 'new';
+  selectedDate;
   isHelpModalOpened: boolean;
   isModifyInvoiceModalOpened: boolean;
   isInvoiceInfoModalOpened: boolean;
@@ -38,23 +41,29 @@ export class AllInvoicesComponent implements OnInit {
   private ngUnsubscribe: Subject<any> = new Subject;
   refreshInvoicesInterval: Subscription;
   isMobileSize: boolean;
+  updatedAt;
   constructor(private authInvoiceControbutorService: AuthInvoiceContributorService, private ref: ChangeDetectorRef,
     private router: Router, private route: ActivatedRoute,
     private screenService: ScreenService,
     private sharedNavbarService: SharedNavbarService,
     private sharedStoreService: SharedStoreService
-    ) { 
-    this.allInvoices = this.authInvoiceControbutorService.allInvoices;
+    ) {
   }
   ngOnInit(): void {
     this.isMobileSize = ScreenHelper.isMobileSize();
     this.selectedTab = this.route.snapshot.queryParams['tab'] || 'new';
     this.keyword = this.route.snapshot.queryParams['s_keyword'] || '';
+    this.getInvoices(true);
     this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe(queryParams => {
-      this.selectedTab = queryParams['tab'] || 'new';
-      this.keyword = queryParams['s_keyword'] || '';
-      this.page = queryParams['page'] || 1;
-      this.getInvoices(true);
+      if (this.selectedTab !== queryParams['tab'] ||
+          this.keyword !== queryParams['s_keyword'] ||
+          this.page !== queryParams['page']) {
+        this.selectedDate = null;
+        this.selectedTab = queryParams['tab'] || 'new';
+        this.keyword = queryParams['s_keyword'] || '';
+        this.page = queryParams['page'] || 1;
+        this.getInvoices(true);
+      }
     });
     this.authInvoiceControbutorService.refreshInvoices.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       if (result) {
@@ -77,47 +86,137 @@ export class AllInvoicesComponent implements OnInit {
         DocumentHelper.setWindowTitleWithWonderScale('All Invoices - ' + result.name);
       }
     });
+    this.authInvoiceControbutorService.allInvoices.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+      this.allInvoices = result.filter(invoice => {
+        if (this.selectedTab === 'cancelled') {
+          return invoice.status === 'cancelled' || invoice.status === 'refunded';
+        } else {
+          return this.selectedTab === invoice.status;
+        }
+      })
+      this.allInvoices = this.groupInvoices(this.allInvoices);
+    });
+    this.authInvoiceControbutorService.numberOfAllItems.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+      this.numberOfAllItems = result;
+    })
+    this.authInvoiceControbutorService.numberOfCurrentTotalItems.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+      this.numberOfCurrentTotalItems = result;
+    })
+    this.authInvoiceControbutorService.numberOfNewInvoices.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+      this.numberOfNewInvoices = result;
+    })
+    this.authInvoiceControbutorService.numberOfPaidInvoices.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+      this.numberOfPaidInvoices = result;
+    })
+    this.authInvoiceControbutorService.numberOfInProgressInvoices.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+      this.numberOfInProgressInvoices = result;
+    })
+    this.authInvoiceControbutorService.numberOfDeliveryInvoices.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+      this.numberOfDeliveryInvoices = result;
+    })
+    this.authInvoiceControbutorService.updatedAt.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+      this.updatedAt = result;
+    });
     this.refreshInvoices();
   }
+  @HostListener('window:focus', ['$event'])
+  onFocus(event) {
+    this.getUnseenInvoicesSubscription().subscribe(result => {
+      if (result['result']) {
+        this.getRefreshNotification();
+      }
+    });
+  }
   getInvoices(loading=false) {
-    let statuses = this.selectedTab == 'all' ? this.statusColumns: [this.selectedTab];
     if (loading) {
       this.loading.start();
     }
-    this.authInvoiceControbutorService.getInvoices({statuses, keyword: this.keyword, page: this.page}).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.loading.stop())).subscribe(result => {
+    let subscription = this.getInvoicesSubscription();
+    subscription.pipe(finalize(() => {
+      this.loading.stop();
+      WsMessageBarService.close.next();
+    })).subscribe(result => {
       if (result) {
-        this.allInvoices = result['result'];
+        this.authInvoiceControbutorService.allInvoices.next(result['result']);
+        this.authInvoiceControbutorService.updatedAt.next(new Date);
         if (result['meta']) {
-          this.numberOfAllItems = result['meta']['numberOfTotal'];
-          this.numberOfCurrentTotalItems = result['meta']['numberOfTotal'];
-          this.numberOfNewInvoices = result['meta']['numberOfNewInvoices'];
-          this.numberOfPaidInvoices = result['meta']['numberOfPaidInvoices'];
-          this.numberOfInProgressInvoices = result['meta']['numberOfInProgressInvoices'];
-          this.numberOfDeliveryInvoices = result['meta']['numberOfDeliveryInvoices'];
+          this.authInvoiceControbutorService.numberOfAllItems.next(result['meta']['numberOfTotal']);
+          this.authInvoiceControbutorService.numberOfCurrentTotalItems.next(result['meta']['numberOfTotal']);
+          this.authInvoiceControbutorService.numberOfNewInvoices.next(result['meta']['numberOfNewInvoices']);
+          this.authInvoiceControbutorService.numberOfPaidInvoices.next(result['meta']['numberOfPaidInvoices']);
+          this.authInvoiceControbutorService.numberOfInProgressInvoices.next(result['meta']['numberOfInProgressInvoices']);
+          this.authInvoiceControbutorService.numberOfDeliveryInvoices.next(result['meta']['numberOfDeliveryInvoices']);
         }
       }
+    });
+  }
+  triggerNotification () {
+    WsMessageBarService.toastSubject.next({
+      type: 'info',
+      message: 'This board has been updated: ',
+      linkLabel: 'Refresh',
+      onLinkClick: this.getInvoices.bind(this)
     });
   }
   refreshInvoices() {
-    this.refreshInvoicesInterval = interval(60 * 1000).pipe(switchMap(() => {
-      let statuses = this.selectedTab == 'all' ? this.statusColumns: [this.selectedTab];
-      return this.authInvoiceControbutorService.getInvoices({statuses: statuses, keyword: this.keyword})}),
-    takeUntil(this.ngUnsubscribe)).subscribe(result => {
-      if (result) {
-        this.allInvoices = result['result'];
-        if (result['meta']) {
-          this.numberOfAllItems = result['meta']['numberOfTotal'];
-          this.numberOfCurrentTotalItems = result['meta']['numberOfTotal'];
-          this.numberOfNewInvoices = result['meta']['numberOfNewInvoices'];
-          this.numberOfPaidInvoices = result['meta']['numberOfPaidInvoices'];
-          this.numberOfInProgressInvoices = result['meta']['numberOfInProgressInvoices'];
-          this.numberOfDeliveryInvoices = result['meta']['numberOfDeliveryInvoices'];
-        }
+    this.refreshInvoicesInterval = interval(120*1000).pipe(switchMap(() => {
+      return this.getUnseenInvoicesSubscription();
+    }), takeUntil(this.ngUnsubscribe)).subscribe(result => {
+      if (result['result']) {
+        this.getRefreshNotification();
       }
     });
   }
+  getInvoicesSubscription() {
+    let statuses = this.selectedTab == 'all' ? this.statusColumns : [this.selectedTab];
+    let numberPerPage = -1;
+    return this.authInvoiceControbutorService.getInvoices({ statuses, keyword: this.keyword, page: this.page, numberPerPage, updatedAt: this.updatedAt }).pipe(
+      takeUntil(this.ngUnsubscribe));
+  }
+  groupInvoices(invoices) {
+    let tempInvoices = [];
+    if (this.selectedTab == 'delivered' || this.selectedTab == 'in_progress') {
+      invoices = _.chain(invoices).sortBy(invoice => {
+        return invoice.deliveryOption
+      })
+        .sortBy((invoice) => {
+          if (invoice && invoice.delivery && invoice.delivery.etaDate) {
+            let deliveryDate = new Date(invoice.delivery.etaDate);
+            if (invoice.delivery.etaHour > -1) {
+              deliveryDate.setHours(invoice.delivery.etaHour);
+              deliveryDate.setMinutes(invoice.delivery.etaMin);
+            }
+            return deliveryDate;
+          }
+        }).value();
+      invoices = _.groupBy(invoices, (invoice) => {
+        if (invoice && invoice.delivery && invoice.delivery.etaDate) {
+          return new Date(invoice.delivery.etaDate)
+        }
+      });
+      for (let date of Object.keys(invoices)) {
+        tempInvoices.push({
+          date: date !== 'undefined' ? date : 'others',
+          data: invoices[date]
+        })
+      }
+      invoices = tempInvoices;
+    }
+    return invoices;
+  }
+  getUnseenInvoicesSubscription() {
+    let obj = {updatedAt: this.updatedAt};
+    return this.authInvoiceControbutorService.getUnseenInvoices(obj).pipe(takeUntil(this.ngUnsubscribe));
+  }
+  getRefreshNotification () {
+    WsMessageBarService.toastSubject.next({
+      type: 'info',
+      message: 'This board has been updated: ',
+      linkLabel: 'Refresh',
+      onLinkClick: this.getInvoices.bind(this)
+    });
+  }
   selectTabAndRefreshReceipts(tab) {
-    this.selectedTab = tab;
     this.router.navigate([], {queryParams: {tab}});
   }
   openCreateInvoiceModal() {
@@ -125,9 +224,14 @@ export class AllInvoicesComponent implements OnInit {
     this.selectedItem = null;
   }
   openEditInvoiceModal(invoice) {
+    this.selectedItem = null;
     this.isInvoiceInfoModalOpened = true;
-    this.selectedItem = invoice;
-    this.ref.detectChanges();
+    this.authInvoiceControbutorService.getInvoice(invoice).pipe(delay(500), takeUntil(this.ngUnsubscribe)).subscribe(result => {
+      if (result['result']) {
+        this.selectedItem = result['result'];
+        this.ref.detectChanges();
+      }
+    });
   }
   triggerStatusColumns(value) {
     if (this.statusColumns.includes(value)) {
@@ -140,6 +244,13 @@ export class AllInvoicesComponent implements OnInit {
   }
   trackInvoiceId(index: number, invoiceReceipt: Invoice) {
     return invoiceReceipt._id;
+  }
+  onDateGroupClicked(date) {
+    if (this.selectedDate == date) {
+      this.selectedDate = null;
+    } else {
+      this.selectedDate = date;
+    }
   }
   navigate(event) {
     this.router.navigate([], { queryParams: {page: event}, queryParamsHandling: 'merge' });

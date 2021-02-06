@@ -35,10 +35,16 @@ const routes: Routes = [{
       component: HomeControlComponent
     },
     {
-      path: 'tracking',
+      path: 'analysis',
       canActivate: [StoreGuard],
-      data: { title: 'tracking', breadcrumb: 'Tracking' },
-      loadChildren: () => import('./modules/store/tracking/tracking.module').then(m => m.TrackingModule)
+      data: { title: 'analysis', breadcrumb: 'Analysis' },
+      loadChildren: () => import('./modules/store/analysis/analysis.module').then(m => m.AnalysisModule)
+    },
+    {
+      path: 'qrcode',
+      canActivate: [StoreGuard],
+      data: { title: 'qrcode', breadcrumb: 'QR code' },
+      loadChildren: () => import('./modules/store/qrcode/qrcode.module').then(m => m.QrcodeModule)
     },
     {
       path: 'quick-menu',

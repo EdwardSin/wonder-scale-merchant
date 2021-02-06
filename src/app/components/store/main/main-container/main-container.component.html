@@ -20,7 +20,7 @@
         (click)="onNavbarOpen()">
         <span class="fas fa-bars d-inline-block px-2"></span>
       </span>
-      <breadcrumb class="col"></breadcrumb>
+      <breadcrumb class="col" style="overflow: hidden; white-space: nowrap"></breadcrumb>
     </div>
     <div *ngIf="store?.status?.status == 'closed'" class="alert-danger p-3 mt-2">
       <span class="font-9">The store is currently closed and will not be seen in public.</span><br />

@@ -9,3 +9,15 @@
         background-color: #ebecf0;
     }
 }
+
+.invoice-group-container {
+    background-color: #F4F5F7;
+    border-radius: .25rem;
+    width: 100%;
+    transition: background-color ease .2s;
+
+    &:hover {
+        cursor: pointer;
+        background-color: #ebecf0;
+    }
+}

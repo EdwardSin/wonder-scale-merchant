@@ -1,11 +1,14 @@
 <ws-modal *ngIf="isOpened" [(isOpened)]="isOpened" [maxWidth]="700">
     <div modalBody>
-        <ws-invoice [item]="item" [showDeliveryDetails]="true" [showStatusDetails]="true"></ws-invoice>
-        <div>
-            <button *ngIf="item?.status !== 'cancelled' && item?.status !== 'refunded'" class="btn btn-sm btn-danger mr-2" (click)="isCancelledOpened = true; isOpened = false">Cancel</button>
-            <button class="btn btn-sm btn-controller float-right" (click)="close()">Close</button>
-            <button class="btn btn-sm btn-controller float-right mr-2" (click)="isModifyInvoiceModalOpened = true; isOpened = false">Edit</button>
-        </div>
+        <ng-container *ngIf="item; else loadingTemplate">
+            <ws-invoice [item]="item" [showDeliveryDetails]="true" [showStatusDetails]="true"></ws-invoice>
+            <div>
+                <button *ngIf="item?.status !== 'cancelled' && item?.status !== 'refunded'" class="btn btn-sm btn-danger mr-2" (click)="isCancelledOpened = true; isOpened = false">Cancel</button>
+                <button class="btn btn-sm btn-primary mr-2" (click)="copy($event)">Copy Link</button>
+                <button class="btn btn-sm btn-controller float-right" (click)="close()">Close</button>
+                <button class="btn btn-sm btn-controller float-right mr-2" (click)="isModifyInvoiceModalOpened = true; isOpened = false">Edit</button>
+            </div>
+        </ng-container>
     </div>
 </ws-modal>
 
@@ -25,3 +28,9 @@
 </ws-modal>
 
 <modify-invoice-modal [(isOpened)]="isModifyInvoiceModalOpened" [item]="item"></modify-invoice-modal>
+
+<ng-template #loadingTemplate>
+    <ng-container>
+        <ws-spinner class="text-center d-block w-100" style="padding-top: 30vh; padding-bottom: 30vh" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>
+    </ng-container>
+</ng-template>

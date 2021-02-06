@@ -1,8 +1,9 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { WSFormBuilder } from '@builders/wsformbuilder';
 import { WsLoading } from '@elements/ws-loading/ws-loading';
 import { WsToastService } from '@elements/ws-toast/ws-toast.service';
 import { environment } from '@environments/environment';
+import { Invoice } from '@objects/invoice';
 import { AuthInvoiceContributorService } from '@services/http/auth-store/contributor/auth-invoice-contributor.service';
 import { Subject } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
@@ -27,18 +28,31 @@ export class WsInvoiceCardComponent implements OnInit {
   isPayslipModalOpened: boolean;
   isPayModalOpened: boolean;
   isEtaDeliveryDateModalOpened: boolean;
+  allInvoices = [];
+  etaDate: Date;
   private ngUnsubscribe: Subject<any> = new Subject;
   constructor(private authInvoiceContributorService: AuthInvoiceContributorService) { }
 
   ngOnInit(): void {
     this.form = WSFormBuilder.createInvoiceForm();
   }
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes && changes['item']) {
+      this.etaDate = this.getEtaDate(this.item);
+    }
+  }
 
   payInvoice() {
     if (this.paymentMethod) {
       this.statusLoading.start();
-      this.authInvoiceContributorService.updateInvoiceStatus(this.item._id, {status: 'in_progress', paymentMethod: this.paymentMethod}).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.statusLoading.stop())).subscribe(result => {
-        this.item.status = 'paid';
+      this.authInvoiceContributorService.updateInvoiceStatus(this.item._id, {fromStatus: 'new', status: 'in_progress', paymentMethod: this.paymentMethod}).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.statusLoading.stop())).subscribe(result => {
+        this.item.status = 'in_progress';
+        this.isPayModalOpened = false;
+        this.authInvoiceContributorService.refreshStatusNewToInProgress();
+        this.authInvoiceContributorService.refreshDashboardInvoices(this.item);
+      }, err => {
+        WsToastService.toastSubject.next({ content: 'Invoice couldn\'t be updated due to status is outdated.', type: 'danger'})
+        WsToastService.toastSubject.next({ content: 'Dashboard is up to date.', type: 'info'})
         this.authInvoiceContributorService.refreshInvoices.next(true);
       });
     } else {
@@ -48,35 +62,63 @@ export class WsInvoiceCardComponent implements OnInit {
   confirmInvoice(event) {
     event.stopPropagation();
     this.statusLoading.start();
-    this.authInvoiceContributorService.updateInvoiceStatus(this.item._id, {status: 'in_progress'}).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.statusLoading.stop())).subscribe(result => {
+    this.authInvoiceContributorService.updateInvoiceStatus(this.item._id, {fromStatus: 'paid', status: 'in_progress'}).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.statusLoading.stop())).subscribe(result => {
       this.item.status = 'in_progress';
       this.isPayslipModalOpened = false;
-      this.authInvoiceContributorService.refreshInvoices.next(true);
+      this.authInvoiceContributorService.refreshStatusPaidToInProgress();
+      this.authInvoiceContributorService.refreshDashboardInvoices(this.item);
+    }, err => {
+      if (err.status === 400) {
+        WsToastService.toastSubject.next({ content: 'Invoice couldn\'t be updated due to status is outdated.', type: 'danger'})
+        WsToastService.toastSubject.next({ content: 'Dashboard is up to date.', type: 'info'})
+        this.authInvoiceContributorService.refreshInvoices.next(true);
+      }
     });
   }
   deliveryInvoice(event) {
     event.stopPropagation();
     this.statusLoading.start();
-    this.authInvoiceContributorService.updateInvoiceStatus(this.item._id, {status: 'delivered'}).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.statusLoading.stop())).subscribe(result => {
+    this.authInvoiceContributorService.updateInvoiceStatus(this.item._id, {fromStatus: 'in_progress', status: 'delivered'}).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.statusLoading.stop())).subscribe(result => {
       this.item.status = 'delivered';
-      this.authInvoiceContributorService.refreshInvoices.next(true);
+      this.authInvoiceContributorService.refreshStatusInProgressToDelivery();
+      this.authInvoiceContributorService.refreshDashboardInvoices(this.item);
+    }, err => {
+      if (err.status === 400) {
+        WsToastService.toastSubject.next({ content: 'Invoice couldn\'t be updated due to status is outdated.', type: 'danger'})
+        WsToastService.toastSubject.next({ content: 'Dashboard is up to date.', type: 'info'})
+        this.authInvoiceContributorService.refreshInvoices.next(true);
+      }
     });
   }
   completeInvoice(event) {
     event.stopPropagation();
     this.statusLoading.start();
-    this.authInvoiceContributorService.updateInvoiceStatus(this.item._id, {status: 'completed'}).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.statusLoading.stop())).subscribe(result => {
+    this.authInvoiceContributorService.updateInvoiceStatus(this.item._id, {fromStatus: 'delivered', status: 'completed'}).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.statusLoading.stop())).subscribe(result => {
       this.item.status = 'completed';
-      this.authInvoiceContributorService.refreshInvoices.next(true);
+      this.authInvoiceContributorService.refreshStatusDeliveryToComplete();
+      this.authInvoiceContributorService.refreshDashboardInvoices(this.item);
+    }, err => {
+      if (err.status === 400) {
+        WsToastService.toastSubject.next({ content: 'Invoice couldn\'t be updated due to status is outdated.', type: 'danger'})
+        WsToastService.toastSubject.next({ content: 'Dashboard is up to date.', type: 'info'})
+        this.authInvoiceContributorService.refreshInvoices.next(true);
+      }
     });
   }
   rejectPayslip(event) {
     event.stopPropagation();
     this.statusLoading.start();
-    this.authInvoiceContributorService.updateInvoiceStatus(this.item._id, {status: 'new'}).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.statusLoading.stop())).subscribe(result => {
+    this.authInvoiceContributorService.updateInvoiceStatus(this.item._id, {fromStatus: 'paid', status: 'new'}).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.statusLoading.stop())).subscribe(result => {
       this.item.status = 'new';
       this.isPayslipModalOpened = false;
-      this.authInvoiceContributorService.refreshInvoices.next(true);
+      this.authInvoiceContributorService.refreshStatusPaidToNew();
+      this.authInvoiceContributorService.refreshDashboardInvoices(this.item);
+    }, err => {
+      if (err.status === 400) {
+        WsToastService.toastSubject.next({ content: 'Invoice couldn\'t be updated due to status is outdated.', type: 'danger'})
+        WsToastService.toastSubject.next({ content: 'Dashboard is up to date.', type: 'info'})
+        this.authInvoiceContributorService.refreshInvoices.next(true);
+      }
     })
   }
   openEtaDeliveryDateModal(event) {
@@ -87,8 +129,8 @@ export class WsInvoiceCardComponent implements OnInit {
       let etaDateTimeMin = this.item.delivery.etaMin;
       this.form.patchValue({
         etaDate: this.item.delivery.etaDate,
-        etaDateTimeHour: etaDateTimeHour !== null ? ("0" + etaDateTimeHour).slice(-2): null,
-        etaDateTimeMin: etaDateTimeMin !== null ? ("0" + etaDateTimeMin).slice(-2): null
+        etaDateTimeHour: etaDateTimeHour !== null && etaDateTimeHour !== undefined? ("0" + etaDateTimeHour).slice(-2): null,
+        etaDateTimeMin: etaDateTimeMin !== null && etaDateTimeMin !== undefined ? ("0" + etaDateTimeMin).slice(-2): null
       });
     } else {
       this.form.patchValue({
@@ -104,9 +146,16 @@ export class WsInvoiceCardComponent implements OnInit {
     let etaMin = this.form.controls['etaDateTimeMin'].value;
     if (this.isValidatedEtaDate()) {
       this.editEtaLoading.start();
+      this.item.delivery = {
+        ...this.item.delivery,
+        etaDate,
+        etaHour,
+        etaMin
+      }
       this.authInvoiceContributorService.editInvoice({_id: this.item._id, delivery: {etaDate, etaHour, etaMin}}).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.editEtaLoading.stop())).subscribe(result => {
         if (result && result['result']) {
-          this.authInvoiceContributorService.refreshInvoices.next(true);
+          this.etaDate = this.getEtaDate(this.item);
+          this.authInvoiceContributorService.refreshDashboardInvoices(this.item);
           this.isEtaDeliveryDateModalOpened = false;
         }
       })
@@ -114,9 +163,14 @@ export class WsInvoiceCardComponent implements OnInit {
   }
   removeEtaDateTime() {
     this.editEtaLoading.start();
+    this.item.delivery = {
+      ...this.item.delivery,
+      etaDate: null
+    }
     this.authInvoiceContributorService.editInvoice({_id: this.item._id, delivery: {etaDate: null}}).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.editEtaLoading.stop())).subscribe(result => {
       if (result && result['result']) {
-        this.authInvoiceContributorService.refreshInvoices.next(true);
+        this.etaDate = this.getEtaDate(this.item);
+        this.authInvoiceContributorService.refreshDashboardInvoices(this.item);
         this.isEtaDeliveryDateModalOpened = false;
       }
     })
@@ -154,7 +208,18 @@ export class WsInvoiceCardComponent implements OnInit {
     tempInput.select();
     document.execCommand("copy");
     document.body.removeChild(tempInput);
-    WsToastService.toastSubject.next({ content: 'URL is copied!\n Send the link to your customer!', type: 'success'}); 
+    WsToastService.toastSubject.next({ content: 'Link is copied!\n Send the link to your customer!', type: 'success'}); 
+  }
+  getEtaDate(item: Invoice) {
+    let etaDate: Date = null;
+    if (item && item.delivery && item.delivery.etaDate) {
+      etaDate = new Date(item.delivery.etaDate)
+      if (item.delivery.etaHour > -1 && item.delivery.etaMin > -1) {
+        etaDate.setHours(item.delivery.etaHour);
+        etaDate.setMinutes(item.delivery.etaMin);
+      }
+    }
+    return etaDate;
   }
   ngOnDestroy() {
     this.ngUnsubscribe.next();

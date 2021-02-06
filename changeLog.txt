@@ -2,6 +2,54 @@
 - Wonder Scale Merchant                     -
 ---------------------------------------------
 
+- v1.0.1070                                 -
+---------------------------------------------
+- 2021-02-03                                -
+---------------------------------------------
+.: WSM: BugFix: Timezone issue when requesting of today analysis (WSM-301)
+
+---------------------------------------------
+- 2021-02-02                                -
+---------------------------------------------
+.: WSM: BugFix: Update to support timezone (WSM-270)
+
+---------------------------------------------
+- 2021-01-31                                -
+---------------------------------------------
+.: WSM: BugFix: Update UI in item list (WSM-286)
+.: WSM: Task: Able to add history invoice (WSM-297)
+.: WSM: BugFix: Fixed upload container size and button in item type (WSM-286)
+.: WSM: BugFix: Menu item type overlapped issue (WSM-299)
+.: WSM: BugFix: Refresh invoices when invoice is paid (WSM-299)
+.: WSM: BugFix: Fixed eta hour issue (WSM-269)
+
+---------------------------------------------
+- 2021-01-30                                -
+---------------------------------------------
+.: WSM: Task: Show analysis of delivery / pickup schedule by date time (WSM-269)
+.: WSM: BugFix: Fix variables missing in html (WSM-271)
+
+---------------------------------------------
+- 2021-01-24                                -
+---------------------------------------------
+.: WSM: Task: Diagram of total delivery fee (monthly + daily) (WSM-270)
+.: WSM: Task: Diagram of total invoice (WSM-264)
+
+---------------------------------------------
+- 2021-01-23                                -
+---------------------------------------------
+.: WSM: Task: Show monthly sales (WSM-271)
+
+---------------------------------------------
+- 2021-01-14                                -
+---------------------------------------------
+.: WSM: BugFix: Upload images in mobile size (WSM-286)
+
+---------------------------------------------
+- 2021-01-10                                -
+---------------------------------------------
+.: WSM: Task: Create an invoice link for merchant to copy (WSM-285)
+
 - v1.0.1062                                 -
 ---------------------------------------------
 - 2021-01-09                                -

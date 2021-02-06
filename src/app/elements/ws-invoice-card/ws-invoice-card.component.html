@@ -9,14 +9,20 @@
                 <span *ngSwitchCase="'new'" class="badge rounded-pill badge-light">New</span>
                 <span *ngSwitchCase="'paid'" class="badge rounded-pill badge-warning">Paid</span>
                 <span *ngSwitchCase="'in_progress'" class="badge rounded-pill badge-warning">In Progress</span>
-                <span *ngSwitchCase="'delivered'" class="badge rounded-pill badge-warning">{{ item?.deliveryOption == 'delivery' ? 'Delivered' : 'Ready to pickup'}}</span>
+                <span *ngSwitchCase="'delivered'" class="badge rounded-pill badge-warning" [class.badge-warning-deep]="item.deliveryOption !== 'delivery'">{{ item?.deliveryOption == 'delivery' ? 'Delivered' : 'Ready to pickup'}}</span>
                 <span *ngSwitchCase="'cancelled'" class="badge rounded-pill badge-danger">Cancelled</span>
                 <span *ngSwitchCase="'refunded'" class="badge rounded-pill badge-danger">Refunded</span>
                 <span *ngSwitchCase="'completed'" class="badge rounded-pill badge-success">Completed</span>
             </ng-container>
+            <span class="font-7 d-block mt-1 text-muted" *ngIf="etaDate && (item?.delivery?.etaHour == null || item?.delivery?.etaHour == undefined) && (item?.status == 'delivered' || item?.status == 'in_progress') ">
+                ETA: {{ etaDate | date: 'MMM d,y' }}
+            </span>
+            <span class="font-7 d-block mt-1 text-muted" *ngIf="etaDate && item?.delivery?.etaHour > -1 && (item?.status == 'delivered' || item?.status == 'in_progress')">
+                ETA: {{ etaDate | date: 'MMM d,y h:mm a' }}
+            </span>
             <span class="ws-invoice-id">{{ item.receiptId }}</span>
         </div>
-        <div>
+        <div style="display: flex; align-items: flex-end">
             <ng-container [ngSwitch]="item.status">
                 <div *ngSwitchCase="'new'" class="btn-group">
                     <button class="btn btn-sm mt-2 btn-controller" [disabled]="statusLoading.isRunning()" (click)="$event.stopPropagation(); isPayModalOpened = true">Pay</button>
