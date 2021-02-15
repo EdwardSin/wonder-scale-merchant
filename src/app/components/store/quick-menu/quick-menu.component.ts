@@ -137,6 +137,9 @@ export class QuickMenuComponent implements OnInit {
       });
     });
   }
+  onImagesOverflow() {
+    WsToastService.toastSubject.next({ content: 'Max 10 images are uploaded!', type: 'danger'});
+  }
   openMenuModal(selectedMenu) {
     this.isDeletedConfirmationModalOpened = true;
     this.selectedMenu = selectedMenu;
