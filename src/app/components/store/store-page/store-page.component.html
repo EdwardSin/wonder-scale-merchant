@@ -113,7 +113,8 @@
             </button>
             <ws-uploader [id]="'information_upload_input'" [max]="10"
                         [input]="editingAllBanners"
-                        (output)="fileBannerChangeEvent($event)"></ws-uploader>
+                        (output)="fileBannerChangeEvent($event)"
+                        (overflow)="onBannersOverflow()"></ws-uploader>
         </div>
         <div class="row no-gutters w-100 center">
             <div *ngIf="editingAllBanners?.length; else noImage" class="all-item-container pb-2 w-100" cdkDropList (cdkDropListDropped)="dropBanner($event)">
