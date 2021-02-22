@@ -1,0 +1,45 @@
+<div class="price-list text-center row no-gutters justify-content-center">
+    <div class="col-lg-4 mx-lg-5 mx-4 order-12 order-lg-1">
+        <div class="price-list-item-background price-list-item-background__free">
+            <div class="price-list-item">
+                <h5 class="price-list-item__header">Free Package</h5>
+                <div class="price-list-item__price-container price-list-item__price-container__free">
+                    <span class="price-list-item__price">RM 0 / MO</span>
+                </div>
+                <div style="height: 56px"></div>
+                <button (click)="onPackageClicked('free')" [disabled]="selectedPackage == 'free'" class="btn-md btn price-list-item__button price-list-item__button__free mb-4">
+                    {{selectedPackage == 'free' ? 'Subscribing': 'Join Now'}}
+                </button>
+                <ul class="price-list-item__list list-unstyled mb-0">
+                    <li class="price-list-item__list-item">Displaying your page in the website</li>
+                    <li class="price-list-item__list-item">Tracking your page traffic</li>
+                    <li class="price-list-item__list-item">Google SEO</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4 mx-lg-5 mx-4 order-lg-12 order-1">
+        <div class="price-list-item-background price-list-item-background__premium">
+            <div class="price-list-item">
+                <span class="badge badge-pill badge-primary position-absolute" style="left: calc(50% - 42px); top: -14px; font-size: .8rem">Preferred</span>
+                <h5 class="price-list-item__header">Premium Package</h5>
+                <div class="price-list-item__price-container price-list-item__price-container__premium">
+                    <span class="price-list-item__price">Free Trial</span>
+                </div>
+                <div class="py-3">
+                    <span style="text-decoration: line-through">was RM 38.00 / MO</span>
+                </div>
+                <button (click)="onPackageClicked('premium')"  [disabled]="selectedPackage == 'premium'" class="btn-md btn price-list-item__button price-list-item__button__premium mb-4">
+                    {{selectedPackage == 'premium' ? 'Subscribing': 'Try Now'}}
+                </button>
+                <ul class="price-list-item__list list-unstyled mb-0">
+                    <li class="price-list-item__list-item">Displaying your page in the website</li>
+                    <li class="price-list-item__list-item">Tracking your page traffic</li>
+                    <li class="price-list-item__list-item">Google SEO</li>
+                    <li class="price-list-item__list-item">Invoice Management</li>
+                    <li class="price-list-item__list-item">Sales Analysis</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

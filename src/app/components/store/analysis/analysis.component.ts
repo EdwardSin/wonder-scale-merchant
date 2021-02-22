@@ -13,6 +13,7 @@ import { takeUntil } from 'rxjs/operators';
 export class AnalysisComponent implements OnInit {
   analysisType: string = '';
   store;
+  selectedPackage: string;
   loading: WsLoading = new WsLoading();
   private ngUnsubscribe: Subject<any> = new Subject();
   constructor(private router: Router,
@@ -23,6 +24,9 @@ export class AnalysisComponent implements OnInit {
     }
     this.sharedStoreService.store.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       this.store = result;
+      if (result && result.package) {
+        this.selectedPackage = result.package.name;
+      }
     })
     this.router.events.pipe(takeUntil(this.ngUnsubscribe)).subscribe(event => {
         if (event instanceof NavigationEnd) {

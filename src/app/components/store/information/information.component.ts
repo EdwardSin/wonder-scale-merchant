@@ -10,7 +10,6 @@ import { ImageHelper } from '@helpers/imagehelper/image.helper';
 import _ from 'lodash';
 import { from as observableFrom, Subject } from 'rxjs';
 import { map, mergeMap, takeUntil } from 'rxjs/operators';
-import { AuthStoreUserService } from '@services/http/auth-user/auth-store-user.service';
 @Component({
   selector: 'app-information',
   templateUrl: './information.component.html',
@@ -30,7 +29,6 @@ export class InformationComponent implements OnInit {
   @ViewChild('informationUploadInput', { static: true }) informationUploadInput: ElementRef;
   private ngUnsubscribe: Subject<any> = new Subject();
   constructor(private sharedStoreService: SharedStoreService,
-    private authStoreUserService: AuthStoreUserService,
     private authStoreContributorService: AuthStoreContributorService) { }
 
   ngOnInit() {
@@ -39,7 +37,7 @@ export class InformationComponent implements OnInit {
   getStore() {
     this.loading.start();
     let storeUsername = this.sharedStoreService.storeUsername;
-    this.authStoreUserService.getAuthenticatedStoreByStoreUsername(storeUsername).pipe(takeUntil(this.ngUnsubscribe)).subscribe(res => {
+    this.authStoreContributorService.getStoreByUsername(storeUsername).pipe(takeUntil(this.ngUnsubscribe)).subscribe(res => {
       if (res) {
         DocumentHelper.setWindowTitleWithWonderScale('Information Banner - ' + res.name);
         this.store = res;

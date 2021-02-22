@@ -1,0 +1,102 @@
+.price-list {
+    .price-list-item-background {
+        padding-top: 3%;
+        padding-bottom: 3%;
+        border-radius: 3px;
+        margin-bottom: 1rem;
+
+        &.price-list-item-background__free {
+            background-color: #990057;
+        }
+        &.price-list-item-background__premium {
+            background-color: #FFD700;
+        }
+    }
+
+    .price-list-item {
+        background-color: #F0F2F4;
+        border-radius: 3px;
+        position: relative;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, .4);
+        margin-left: -1rem;
+        width: calc(100% + 2rem);
+
+        .price-list-item__header {
+            font-weight: bold;
+            font-size: 1.2rem;
+            padding-top: 2rem;
+            padding-bottom: 2rem;
+            margin-bottom: 0;
+        }
+
+        .price-list-item__price-container {
+            border-radius: 3px;
+            width: calc(100% + 1rem);
+            margin-left: -.5rem;
+            padding: .5rem;
+
+            &.price-list-item__price-container__free{
+                background-color: #990057;
+            }
+            &.price-list-item__price-container__premium{
+                background-color: #FFD700;
+            }
+
+            .price-list-item__price {
+                font-weight: bold;
+                font-size: 1.5rem;
+                color: #fff;
+            }
+        }
+
+        .price-list-item__button {
+            color: #fff;
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
+            border-radius: 20px;
+            transition: all ease .2s;
+
+            &.price-list-item__button__free{
+                border: 1px solid #990057;
+                color: #990057;
+
+                &:disabled {
+                    background-color: #990057;
+                    color: #fff;
+                }
+
+                &:hover {
+                    background-color: #990057;
+                    color: #fff;
+                }
+            }
+
+            &.price-list-item__button__premium{
+                border: 1px solid #FFD700;
+                color: #FFD700;
+
+                &:disabled {
+                    background-color: #FFD700;
+                    color: #fff;
+                }
+
+                &:hover {
+                    background-color: #ccad00;
+                    color: #fff;
+                }
+            }
+
+        }
+
+        .price-list-item__list {
+            padding: 0 1.5rem;
+            min-height: 300px;
+
+            .price-list-item__list-item {
+                font-size: .9rem;
+                padding: 1rem 0;
+                border-top: 1px solid #fff;
+            }
+        }
+    }
+}

@@ -9,7 +9,7 @@ import * as $ from 'jquery';
 import { WsToastService } from '@elements/ws-toast/ws-toast.service';
 import { environment } from '@environments/environment';
 import { AuthTrackContributorService } from '@services/http/auth-store/contributor/auth-track-contributor.service';
-import { AuthStoreUserService } from '@services/http/auth-user/auth-store-user.service';
+import { AuthStoreContributorService } from '@services/http/auth-store/contributor/auth-store-contributor.service';
 
 @Component({
   selector: 'app-qrcode',
@@ -49,13 +49,13 @@ export class QrcodeComponent implements OnInit {
   private ngUnsubscribe: Subject<any> = new Subject;
   constructor(
     private ref: ChangeDetectorRef,
-    private authStoreUserService: AuthStoreUserService,
+    private authStoreContributorService: AuthStoreContributorService,
     private sharedStoreService: SharedStoreService,
     private authTrackContributor: AuthTrackContributorService) {
     this.loading.start();
     let store_name = this.sharedStoreService.store_name;
     let storeUsername = this.sharedStoreService.storeUsername;
-    this.authStoreUserService.getAuthenticatedStoreByStoreUsername(storeUsername).pipe(takeUntil(this.ngUnsubscribe))
+    this.authStoreContributorService.getStoreByUsername(storeUsername).pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
         if (result) {
           DocumentHelper.setWindowTitleWithWonderScale('QR Code - ' + store_name);
