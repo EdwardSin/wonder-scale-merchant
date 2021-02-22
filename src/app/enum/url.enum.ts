@@ -59,6 +59,7 @@ export class AuthStoreUserUrl {
 }
 export class AuthStoreContributorUrl {
     static getContributorsUrl = URL.AUTH_STORE_CONTRIBUTOR_URL + '/contributors';
+    static getStoreByUsernameUrl = URL.AUTH_STORE_CONTRIBUTOR_URL + '/username/';
     static addBannerUrl = URL.AUTH_STORE_CONTRIBUTOR_URL + '/add/banner-image';
     static editStoreByIdUrl = URL.AUTH_STORE_CONTRIBUTOR_URL + '/';
     static editProfileUrl = URL.AUTH_STORE_CONTRIBUTOR_URL + '/edit/profile-image';
@@ -167,7 +168,7 @@ export class AuthStatementAdminUrl {
 }
 export class AuthPackageAdminUrl {
     static getStorePackageUrl = URL.AUTH_PACKAGE_ADMIN_URL + '/';
-    static changePackageUrl = URL.AUTH_PACKAGE_ADMIN_URL + '/';
+    static changePackageUrl = URL.AUTH_PACKAGE_ADMIN_URL + '/change-package';
     static unsubscribePackageUrl = URL.AUTH_PACKAGE_ADMIN_URL + '/unsubscribe';
 }
 export class AuthTableContributorUrl {

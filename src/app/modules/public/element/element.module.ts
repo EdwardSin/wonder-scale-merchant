@@ -36,6 +36,7 @@ import { WsInvoiceComponent } from '@elements/ws-invoice/ws-invoice.component';
 import { AppRoutingModule } from 'src/app/app-routing.module';
 import { RouterModule } from '@angular/router';
 import { WsMessageBarComponent } from '@elements/ws-message-bar/ws-message-bar.component';
+import { WsPriceListComponent } from '@elements/ws-price-list/ws-price-list.component';
 
 
 @NgModule({
@@ -60,7 +61,8 @@ import { WsMessageBarComponent } from '@elements/ws-message-bar/ws-message-bar.c
     ConfirmModalComponent,
     BusinessLocationComponent,
     WsInvoiceComponent,
-    WsMessageBarComponent
+    WsMessageBarComponent,
+    WsPriceListComponent
   ],
   imports: [
     AgmCoreModule,
@@ -100,7 +102,8 @@ import { WsMessageBarComponent } from '@elements/ws-message-bar/ws-message-bar.c
     ConfirmModalComponent,
     BusinessLocationComponent,
     WsInvoiceComponent,
-    WsMessageBarComponent
+    WsMessageBarComponent,
+    WsPriceListComponent
   ]
 })
 export class ElementModule { }

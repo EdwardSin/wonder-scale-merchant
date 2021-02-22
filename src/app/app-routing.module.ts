@@ -21,6 +21,9 @@ const routes: Routes = [{
   path: 'policy',
   loadChildren: () => import('./modules/policy/policy.module').then(m => m.PolicyModule)
 }, {
+  path: 'price',
+  loadChildren: () => import('./modules/price/price.module').then(m => m.PriceModule)
+}, {
   path: 'stores/:username',
   component: MainComponent,
   canActivate: [AuthGuard],
@@ -57,6 +60,12 @@ const routes: Routes = [{
       canActivate: [StoreGuard],
       data: { title: 'cat', breadcrumb: 'Catalogue' },
       loadChildren: () => import('./modules/store/catalogue/catalogue.module').then(m => m.CatalogueModule)
+    },
+    {
+      path: 'package',
+      canActivate: [StoreGuard],
+      data: { title: 'package', breadcrumb: 'Package' },
+      loadChildren: () => import('./modules/store/package/package.module').then(m => m.PackageModule)
     },
     {
       path: 'store-page',
