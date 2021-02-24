@@ -30,7 +30,7 @@
             <button class="dropdown-item" (click)="selectTabAndRefreshReceipts('new')" [class.selected]="selectedTab == 'new'">New ({{numberOfNewInvoices}})</button>
             <button class="dropdown-item" (click)="selectTabAndRefreshReceipts('paid')" [class.selected]="selectedTab == 'paid'">Paid ({{numberOfPaidInvoices}})</button>
             <button class="dropdown-item" (click)="selectTabAndRefreshReceipts('in_progress')" [class.selected]="selectedTab == 'in_progress'">In Progress ({{numberOfInProgressInvoices}})</button>
-            <button class="dropdown-item" (click)="selectTabAndRefreshReceipts('ready')" [class.selected]="selectedTab == 'ready'">In Progress ({{numberOfReadyInvoices}})</button>
+            <button class="dropdown-item" (click)="selectTabAndRefreshReceipts('ready')" [class.selected]="selectedTab == 'ready'">Ready ({{numberOfReadyInvoices}})</button>
             <button class="dropdown-item" (click)="selectTabAndRefreshReceipts('delivered')" [class.selected]="selectedTab == 'delivered'">Delivery / Pickup ({{numberOfDeliveryInvoices}})</button>
             <button class="dropdown-item" (click)="selectTabAndRefreshReceipts('completed')" [class.selected]="selectedTab == 'completed'">Completed</button>
             <button class="dropdown-item" (click)="selectTabAndRefreshReceipts('cancelled')" [class.selected]="selectedTab == 'cancelled'">Cancelled / Refunded</button>

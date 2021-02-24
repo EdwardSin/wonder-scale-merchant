@@ -91,8 +91,10 @@ export class AllInvoicesComponent implements OnInit {
       this.allInvoices = result.filter(invoice => {
         if (this.selectedTab === 'cancelled') {
           return invoice.status === 'cancelled' || invoice.status === 'refunded';
-        } else {
+        } else if (this.selectedTab !== 'all') {
           return this.selectedTab === invoice.status;
+        } else {
+          return true;
         }
       })
       this.allInvoices = this.groupInvoices(this.allInvoices);
@@ -174,7 +176,7 @@ export class AllInvoicesComponent implements OnInit {
   }
   getInvoicesSubscription() {
     let statuses = this.selectedTab == 'all' ? this.statusColumns : [this.selectedTab];
-    let numberPerPage = -1;
+    let numberPerPage = this.selectedTab !== 'delivered' && this.selectedTab !== 'in_progress' && this.selectedTab !== 'ready' ? 25 : -1;
     return this.authInvoiceControbutorService.getInvoices({ statuses, keyword: this.keyword, page: this.page, numberPerPage, updatedAt: this.updatedAt }).pipe(
       takeUntil(this.ngUnsubscribe));
   }
@@ -222,7 +224,7 @@ export class AllInvoicesComponent implements OnInit {
     });
   }
   selectTabAndRefreshReceipts(tab) {
-    this.router.navigate([], {queryParams: {tab}});
+    this.router.navigate([], {queryParams: {tab, page: 1}});
   }
   openCreateInvoiceModal() {
     this.isModifyInvoiceModalOpened = true;
@@ -244,6 +246,7 @@ export class AllInvoicesComponent implements OnInit {
     } else {
       this.statusColumns.push(value);
     }
+    this.router.navigate([], {queryParams: {page: 1}, queryParamsHandling: 'merge'});
     this.getInvoices(true);
     sessionStorage.setItem('shownStatusColumns', JSON.stringify(this.statusColumns));
   }
