@@ -37,6 +37,7 @@ export class AllInvoicesComponent implements OnInit {
   numberOfNewInvoices: number = 0;
   numberOfPaidInvoices: number = 0;
   numberOfInProgressInvoices: number = 0;
+  numberOfReadyInvoices: number = 0;
   numberOfDeliveryInvoices: number = 0;
   private ngUnsubscribe: Subject<any> = new Subject;
   refreshInvoicesInterval: Subscription;
@@ -111,6 +112,9 @@ export class AllInvoicesComponent implements OnInit {
     this.authInvoiceControbutorService.numberOfInProgressInvoices.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       this.numberOfInProgressInvoices = result;
     })
+    this.authInvoiceControbutorService.numberOfReadyInvoices.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+      this.numberOfReadyInvoices = result;
+    })
     this.authInvoiceControbutorService.numberOfDeliveryInvoices.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       this.numberOfDeliveryInvoices = result;
     })
@@ -145,6 +149,7 @@ export class AllInvoicesComponent implements OnInit {
           this.authInvoiceControbutorService.numberOfNewInvoices.next(result['meta']['numberOfNewInvoices']);
           this.authInvoiceControbutorService.numberOfPaidInvoices.next(result['meta']['numberOfPaidInvoices']);
           this.authInvoiceControbutorService.numberOfInProgressInvoices.next(result['meta']['numberOfInProgressInvoices']);
+          this.authInvoiceControbutorService.numberOfReadyInvoices.next(result['meta']['numberOfReadyInvoices']);
           this.authInvoiceControbutorService.numberOfDeliveryInvoices.next(result['meta']['numberOfDeliveryInvoices']);
         }
       }
@@ -175,7 +180,7 @@ export class AllInvoicesComponent implements OnInit {
   }
   groupInvoices(invoices) {
     let tempInvoices = [];
-    if (this.selectedTab == 'delivered' || this.selectedTab == 'in_progress') {
+    if (this.selectedTab == 'delivered' || this.selectedTab == 'in_progress' || this.selectedTab == 'ready') {
       invoices = _.chain(invoices).sortBy(invoice => {
         return invoice.deliveryOption
       })

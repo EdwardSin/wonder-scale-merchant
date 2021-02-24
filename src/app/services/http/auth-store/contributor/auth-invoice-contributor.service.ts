@@ -16,6 +16,7 @@ export class AuthInvoiceContributorService {
   numberOfNewInvoices: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   numberOfPaidInvoices: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   numberOfInProgressInvoices: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+  numberOfReadyInvoices: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   numberOfDeliveryInvoices: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   updatedAt: BehaviorSubject<Date> = new BehaviorSubject<Date>(null);
   
@@ -60,10 +61,16 @@ export class AuthInvoiceContributorService {
     this.numberOfPaidInvoices.next(--numberOfPaidInvoices);
     this.numberOfInProgressInvoices.next(++numberOfInProgressInvoices);
   }
-  refreshStatusInProgressToDelivery() {
+  refreshStatusInProgressToReady() {
     let numberOfInProgressInvoices = this.numberOfInProgressInvoices.getValue();
-    let numberOfDeliveryInvoices = this.numberOfDeliveryInvoices.getValue();
+    let numberOfReadyInvoices = this.numberOfReadyInvoices.getValue();
     this.numberOfInProgressInvoices.next(--numberOfInProgressInvoices);
+    this.numberOfReadyInvoices.next(++numberOfReadyInvoices);
+  }
+  refreshStatusReadyToDelivery() {
+    let numberOfReadyInvoices = this.numberOfReadyInvoices.getValue();
+    let numberOfDeliveryInvoices = this.numberOfDeliveryInvoices.getValue();
+    this.numberOfReadyInvoices.next(--numberOfReadyInvoices);
     this.numberOfDeliveryInvoices.next(++numberOfDeliveryInvoices);
   }
   refreshStatusDeliveryToComplete() {

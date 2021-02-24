@@ -5,8 +5,9 @@
                                                (!item && !form.controls['isCompletedChecked'].value) || 
                                                (item && (item.status == 'completed' || item.status == 'refunded' || item.status == 'cancelled'))">New</mat-option>
             <mat-option [value]="'paid'" *ngIf="item && (item.status == 'paid' || item.status == 'in_progress') && !form.controls['isCompletedChecked'].value">Paid</mat-option>
-            <mat-option [value]="'in_progress'" *ngIf="item && (item.status == 'paid' || item.status == 'in_progress' || item.status == 'delivered') && !form.controls['isCompletedChecked'].value">In Progress</mat-option>
-            <mat-option [value]="'delivered'" *ngIf="item && (item.status == 'in_progress' || item.status == 'delivered') && !form.controls['isCompletedChecked'].value">Delivered</mat-option>
+            <mat-option [value]="'in_progress'" *ngIf="item && (item.status == 'paid' || item.status == 'in_progress' || item.status == 'ready') && !form.controls['isCompletedChecked'].value">In Progress</mat-option>
+            <mat-option [value]="'ready'" *ngIf="item && (item.status == 'in_progress' || item.status == 'ready' || item.status == 'delivered') && !form.controls['isCompletedChecked'].value">Ready</mat-option>
+            <mat-option [value]="'delivered'" *ngIf="item && (item.status == 'ready' || item.status == 'delivered') && !form.controls['isCompletedChecked'].value">Delivered</mat-option>
             <mat-option [value]="'cancelled'" *ngIf="item && (item.status == 'cancelled' || item.status == 'refunded')">Cancelled</mat-option>
             <mat-option [value]="'refunded'" *ngIf="item && (item.status == 'cancelled' || item.status == 'refunded')">Refunded</mat-option>
             <mat-option [value]="'completed'" *ngIf="(item && (item.status == 'delivered' || item.status == 'completed')) || ((!item || item && item.status !== 'cancelled' && item.status !== 'refunded') && form.controls['isCompletedChecked'].value)">Completed</mat-option>
