@@ -17,6 +17,7 @@
                     <span *ngSwitchCase="'new'">New</span>
                     <span *ngSwitchCase="'paid'">Paid</span>
                     <span *ngSwitchCase="'in_progress'">In Progress</span>
+                    <span *ngSwitchCase="'ready'">Ready</span>
                     <span *ngSwitchCase="'delivered'">Delivery / Pickup</span>
                     <span *ngSwitchCase="'completed'">Completed</span>
                     <span *ngSwitchCase="'cancelled'">Cancelled / Refunded</span>
@@ -29,6 +30,7 @@
             <button class="dropdown-item" (click)="selectTabAndRefreshReceipts('new')" [class.selected]="selectedTab == 'new'">New ({{numberOfNewInvoices}})</button>
             <button class="dropdown-item" (click)="selectTabAndRefreshReceipts('paid')" [class.selected]="selectedTab == 'paid'">Paid ({{numberOfPaidInvoices}})</button>
             <button class="dropdown-item" (click)="selectTabAndRefreshReceipts('in_progress')" [class.selected]="selectedTab == 'in_progress'">In Progress ({{numberOfInProgressInvoices}})</button>
+            <button class="dropdown-item" (click)="selectTabAndRefreshReceipts('ready')" [class.selected]="selectedTab == 'ready'">Ready ({{numberOfReadyInvoices}})</button>
             <button class="dropdown-item" (click)="selectTabAndRefreshReceipts('delivered')" [class.selected]="selectedTab == 'delivered'">Delivery / Pickup ({{numberOfDeliveryInvoices}})</button>
             <button class="dropdown-item" (click)="selectTabAndRefreshReceipts('completed')" [class.selected]="selectedTab == 'completed'">Completed</button>
             <button class="dropdown-item" (click)="selectTabAndRefreshReceipts('cancelled')" [class.selected]="selectedTab == 'cancelled'">Cancelled / Refunded</button>
@@ -39,6 +41,7 @@
         <button class="btn btn-sm btn-controller mr-3" (click)="selectTabAndRefreshReceipts('new')" [class.selected]="selectedTab == 'new'">New ({{numberOfNewInvoices}})</button>
         <button class="btn btn-sm btn-controller mr-3" (click)="selectTabAndRefreshReceipts('paid')" [class.selected]="selectedTab == 'paid'">Paid ({{numberOfPaidInvoices}})</button>
         <button class="btn btn-sm btn-controller mr-3" (click)="selectTabAndRefreshReceipts('in_progress')" [class.selected]="selectedTab == 'in_progress'">In Progress ({{numberOfInProgressInvoices}})</button>
+        <button class="btn btn-sm btn-controller mr-3" (click)="selectTabAndRefreshReceipts('ready')" [class.selected]="selectedTab == 'ready'">Ready ({{numberOfReadyInvoices}})</button>
         <button class="btn btn-sm btn-controller mr-3" (click)="selectTabAndRefreshReceipts('delivered')" [class.selected]="selectedTab == 'delivered'">Delivery / Pickup ({{numberOfDeliveryInvoices}})</button>
         <button class="btn btn-sm btn-controller mr-3" (click)="selectTabAndRefreshReceipts('completed')" [class.selected]="selectedTab == 'completed'">Completed</button>
         <button class="btn btn-sm btn-controller mr-3" (click)="selectTabAndRefreshReceipts('cancelled')" [class.selected]="selectedTab == 'cancelled'">Cancelled / Refunded</button>
@@ -56,6 +59,9 @@
             </button>
             <button class="dropdown-item" (click)="$event.stopPropagation()">
                 <mat-checkbox (change)="triggerStatusColumns('in_progress')" [checked]="statusColumns.includes('in_progress')" [color]="'primary'" class="mr-2 d-inline-block">In Progress</mat-checkbox>
+            </button>
+            <button class="dropdown-item" (click)="$event.stopPropagation()">
+                <mat-checkbox (change)="triggerStatusColumns('ready')" [checked]="statusColumns.includes('ready')" [color]="'primary'" class="mr-2 d-inline-block">Ready</mat-checkbox>
             </button>
             <button class="dropdown-item" (click)="$event.stopPropagation()">
                 <mat-checkbox (change)="triggerStatusColumns('delivered')" [checked]="statusColumns.includes('delivered')" [color]="'primary'" class="mr-2 d-inline-block">Delivery / Pickup</mat-checkbox>
@@ -78,14 +84,14 @@
         </div>
     </div> -->
 </div>
-<div *ngIf="selectedTab != 'delivered' && selectedTab !== 'in_progress'">
+<div *ngIf="selectedTab != 'delivered' && selectedTab !== 'in_progress' && selectedTab !== 'ready'">
     <div class="row no-gutters mb-5 pb-3" *ngIf="allInvoices?.length && !loading.isRunning(); else loadingTemplate">
         <div class="col-lg-5ths col-md-4 col-sm-6 p-sm-2 py-2" *ngFor="let invoice of allInvoices; trackBy: trackInvoiceId">
             <ws-invoice-card [item]="invoice" [onInvoiceInfoModalClick]="openEditInvoiceModal.bind(this, invoice)"></ws-invoice-card>
         </div>
     </div>
 </div>
-<div *ngIf="selectedTab == 'delivered' || selectedTab == 'in_progress'">
+<div *ngIf="selectedTab == 'delivered' || selectedTab == 'in_progress' || selectedTab == 'ready'">
     <div class="row no-gutters mb-5 pb-3" *ngIf="allInvoices?.length && !loading.isRunning(); else loadingTemplate">
         <div class="invoice-group-container mb-2 pt-2 pb-1" *ngFor="let data of allInvoices;">
             <p class="mb-0 pb-1 px-2 font-8" style="color: #5e6c84" (click)="onDateGroupClicked(data?.date)">
@@ -101,7 +107,7 @@
         </div>
     </div>
 </div>
-<ws-pagination *ngIf="numberOfCurrentTotalItems && selectedTab != 'delivered' && selectedTab !== 'in_progress'" [expanded]="isNavOpen" [currentPage]="page"
+<ws-pagination *ngIf="numberOfCurrentTotalItems && selectedTab != 'delivered' && selectedTab !== 'in_progress' && selectedTab !== 'ready'" [expanded]="isNavOpen" [currentPage]="page"
             [pageSize]="50" [dbTotal]="numberOfAllItems" [total]="numberOfCurrentTotalItems" (getPageNumber)="navigate($event)"></ws-pagination>
 
 <ng-template #loadingTemplate>

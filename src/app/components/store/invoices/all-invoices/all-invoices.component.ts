@@ -37,6 +37,7 @@ export class AllInvoicesComponent implements OnInit {
   numberOfNewInvoices: number = 0;
   numberOfPaidInvoices: number = 0;
   numberOfInProgressInvoices: number = 0;
+  numberOfReadyInvoices: number = 0;
   numberOfDeliveryInvoices: number = 0;
   private ngUnsubscribe: Subject<any> = new Subject;
   refreshInvoicesInterval: Subscription;
@@ -90,8 +91,10 @@ export class AllInvoicesComponent implements OnInit {
       this.allInvoices = result.filter(invoice => {
         if (this.selectedTab === 'cancelled') {
           return invoice.status === 'cancelled' || invoice.status === 'refunded';
-        } else {
+        } else if (this.selectedTab !== 'all') {
           return this.selectedTab === invoice.status;
+        } else {
+          return true;
         }
       })
       this.allInvoices = this.groupInvoices(this.allInvoices);
@@ -110,6 +113,9 @@ export class AllInvoicesComponent implements OnInit {
     })
     this.authInvoiceControbutorService.numberOfInProgressInvoices.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       this.numberOfInProgressInvoices = result;
+    })
+    this.authInvoiceControbutorService.numberOfReadyInvoices.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+      this.numberOfReadyInvoices = result;
     })
     this.authInvoiceControbutorService.numberOfDeliveryInvoices.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       this.numberOfDeliveryInvoices = result;
@@ -145,6 +151,7 @@ export class AllInvoicesComponent implements OnInit {
           this.authInvoiceControbutorService.numberOfNewInvoices.next(result['meta']['numberOfNewInvoices']);
           this.authInvoiceControbutorService.numberOfPaidInvoices.next(result['meta']['numberOfPaidInvoices']);
           this.authInvoiceControbutorService.numberOfInProgressInvoices.next(result['meta']['numberOfInProgressInvoices']);
+          this.authInvoiceControbutorService.numberOfReadyInvoices.next(result['meta']['numberOfReadyInvoices']);
           this.authInvoiceControbutorService.numberOfDeliveryInvoices.next(result['meta']['numberOfDeliveryInvoices']);
         }
       }
@@ -169,13 +176,13 @@ export class AllInvoicesComponent implements OnInit {
   }
   getInvoicesSubscription() {
     let statuses = this.selectedTab == 'all' ? this.statusColumns : [this.selectedTab];
-    let numberPerPage = -1;
+    let numberPerPage = this.selectedTab !== 'delivered' && this.selectedTab !== 'in_progress' && this.selectedTab !== 'ready' ? 25 : -1;
     return this.authInvoiceControbutorService.getInvoices({ statuses, keyword: this.keyword, page: this.page, numberPerPage, updatedAt: this.updatedAt }).pipe(
       takeUntil(this.ngUnsubscribe));
   }
   groupInvoices(invoices) {
     let tempInvoices = [];
-    if (this.selectedTab == 'delivered' || this.selectedTab == 'in_progress') {
+    if (this.selectedTab == 'delivered' || this.selectedTab == 'in_progress' || this.selectedTab == 'ready') {
       invoices = _.chain(invoices).sortBy(invoice => {
         return invoice.deliveryOption
       })
@@ -217,7 +224,7 @@ export class AllInvoicesComponent implements OnInit {
     });
   }
   selectTabAndRefreshReceipts(tab) {
-    this.router.navigate([], {queryParams: {tab}});
+    this.router.navigate([], {queryParams: {tab, page: 1}});
   }
   openCreateInvoiceModal() {
     this.isModifyInvoiceModalOpened = true;
@@ -239,6 +246,7 @@ export class AllInvoicesComponent implements OnInit {
     } else {
       this.statusColumns.push(value);
     }
+    this.router.navigate([], {queryParams: {page: 1}, queryParamsHandling: 'merge'});
     this.getInvoices(true);
     sessionStorage.setItem('shownStatusColumns', JSON.stringify(this.statusColumns));
   }

@@ -11,6 +11,7 @@
     
     &.status-container-paid,
     &.status-container-in_progress,
+    &.status-container-ready,
     &.status-container-delivered {
         background-color: #ffc107;
         &:focus{
