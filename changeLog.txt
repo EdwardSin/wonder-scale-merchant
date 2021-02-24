@@ -8,6 +8,7 @@
 ---------------------------------------------
 .: WSM: Task: Adding invoice tracking dot (WSM-305)
 .: WSM: Task: Add ready status in invoice track (WSM-306)
+.: WSM: Task: Update Invoice UI in mobile (WSM-307)
 
 ---------------------------------------------
 - 2021-02-22                                -
