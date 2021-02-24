@@ -1,0 +1,56 @@
+.circle-view {
+    width: 100%;
+    filter: drop-shadow(0 0 5px #ccc);
+    padding: 0rem .5rem;
+    overflow: hidden;
+
+    .circle-view-container {
+
+        .circle-container {
+            position: relative;
+
+            .circle {
+                background-color: #fff;
+                border: 1.5px solid #ccc;
+                width: 22px;
+                height: 22px;
+                margin-top: -1px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                .circle-inner {
+                    width: 14px;
+                    height: 14px;
+                    background-color: #b71c1c;
+                    z-index: 2;
+                    position: relative;
+                    display: none;
+
+                    &.circle-inner__show {
+                        display: block;
+                    }
+                }
+            }
+
+            .circle-label {
+                position: absolute;
+                top: 2.5px;
+                left: 30px;
+            }
+        }
+
+        .pipe {
+            background-color: #fff;
+            width: 10px;
+            height: 18px;
+            border: 1.5px solid #ccc;
+            border-top: 0;
+            border-bottom: 0;
+            margin-top: -1px;
+            margin-left: 6px;
+            z-index: 1;
+            position: relative;
+        }
+    }
+}
