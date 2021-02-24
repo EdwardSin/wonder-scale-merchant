@@ -185,15 +185,13 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
       WsToastService.toastSubject.next({ content: 'Please enter a valid quantity!', type: 'danger'});
       return;
     }
-    if (this.form.status == 'VALID') {
-      this.inListItems.push({
-        name: this.form.controls['itemName'].value,
-        type: this.form.controls['itemType'].value ? this.form.controls['itemType'].value.name : 'Default',
-        quantity: this.form.controls['itemQuantity'].value || 1,
-        price: +this.form.controls['itemPrice'].value,
-      });
-      this.notifyCalculation();
-    }
+    this.inListItems.push({
+      name: this.form.controls['itemName'].value,
+      type: this.form.controls['itemType'].value ? this.form.controls['itemType'].value.name : 'Default',
+      quantity: this.form.controls['itemQuantity'].value || 1,
+      price: +this.form.controls['itemPrice'].value,
+    });
+    this.notifyCalculation();
   }
   isEditable() {
     return (!this.item) ||
