@@ -76,7 +76,6 @@ import { WsStepperComponent } from '@elements/ws-stepper/ws-stepper.component';
     MatRadioModule,
     MatCheckboxModule,
     MatDatepickerModule,
-    MatTabsModule,
     MatNativeDateModule,
     NgxMatSelectSearchModule,
     MatSelectInfiniteScrollModule,
@@ -106,7 +105,8 @@ import { WsStepperComponent } from '@elements/ws-stepper/ws-stepper.component';
     WsInvoiceComponent,
     WsMessageBarComponent,
     WsPriceListComponent,
-    WsStepperComponent
+    WsStepperComponent,
+    MatTabsModule
   ]
 })
 export class ElementModule { }
