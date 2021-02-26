@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, SimpleChanges, ViewEncapsulation } from '@angular/core';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { FormGroup } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { WSFormBuilder } from '@builders/wsformbuilder';
 import { WsModalComponent } from '@elements/ws-modal/ws-modal.component';
 import { WsToastService } from '@elements/ws-toast/ws-toast.service';
@@ -52,6 +52,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
   inListItems = [];
   promotions = [];
   itemTypes = [];
+  selectedTab = new FormControl(0);
   selectedItem = null;
   delivery: number = 0;
   subtotal: number = 0;
