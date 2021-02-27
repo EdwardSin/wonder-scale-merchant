@@ -2,7 +2,19 @@
   <div class="modal-wrap">
     <div class="modal-body">
       <div [ngSwitch]="phase.step" class="modal-body-content">
-        <form *ngSwitchCase="0" class="modal-content" style="max-width: 600px;">
+        <form *ngSwitchCase="0" class="modal-content" style="max-width: 1000px;">
+          <div class="modal-close">
+            <span class="fas fa-times" [routerLink]="[]" [queryParams]="{modal: null}"></span>
+          </div>
+          <div class="py-4">
+            <div class="text-center py-5">
+              <p class="mb-2 font-weight-bold" style="font-size: 1.5rem">Try Wonder Scale Premium for free now.</p>
+              <p class="text-muted mb-2">With all features unlocked. No credit card required.</p>
+            </div>
+            <ws-price-list (onPackageClicked)="onPackageClicked($event)"></ws-price-list>
+          </div>
+        </form>
+        <form *ngSwitchCase="1" class="modal-content" style="max-width: 600px;">
           <div class="modal-close">
             <span class="fas fa-times" [routerLink]="[]" [queryParams]="{modal: null}"></span>
           </div>
@@ -25,9 +37,12 @@
               </button>
             </div>
           </div>
-          <button class="btn btn-sm btn-controller" type="button" style="margin-left: auto" (click)="next()">Next</button>
+          <div class="row no-gutters">
+            <button class="btn btn-sm btn-controller" type="button" (click)="navigateToChangePlan()" (click)="navigateToChangePlan()">Previous</button>
+            <button class="btn btn-sm btn-controller" type="button" style="margin-left: auto" (click)="next()">Next</button>
+          </div>
         </form>
-        <form *ngSwitchCase="1" class="modal-content" style="max-width: 800px;">
+        <form *ngSwitchCase="2" class="modal-content" style="max-width: 800px;">
           <div class="modal-close">
             <span class="fas fa-times" [routerLink]="[]" [queryParams]="{modal: null}"></span>
           </div>
@@ -63,8 +78,7 @@
             <button [disabled]="storeType == undefined" class="btn btn-sm btn-controller" type="button" style="margin-left: auto" (click)="next()">Next</button>
           </div>
         </form>
-
-        <form *ngSwitchCase="2" class="modal-content" style="max-width: 500px" [formGroup]="basicFormGroup"
+        <form *ngSwitchCase="3" class="modal-content" style="max-width: 500px" [formGroup]="basicFormGroup"
           (keydown.enter)="$event.preventDefault()">
           <div class="modal-close">
             <span class="fas fa-times" [routerLink]="[]" [queryParams]="{modal: null}"></span>
@@ -146,8 +160,7 @@
             <button [disabled]="!basicFormGroup.valid" class="btn btn-sm btn-controller" type="button" style="margin-left: auto" (click)="next()">Next</button>
           </div>
         </form>
-
-        <form *ngSwitchCase="3" class="modal-content" style="max-width: 800px;"[formGroup]="addressFormGroup"
+        <form *ngSwitchCase="4" class="modal-content" style="max-width: 800px;"[formGroup]="addressFormGroup"
           (keydown.enter)="$event.preventDefault()">
           <div class="modal-close">
             <span class="fas fa-times" [routerLink]="[]" [queryParams]="{modal: null}"></span>
@@ -231,8 +244,7 @@
             <button class="btn btn-sm btn-controller" type="button" style="margin-left: auto" (click)="next()">Next</button>
           </div>
         </form>
-
-        <form *ngSwitchCase="4" class="modal-content" style="width: fit-content" [formGroup]="openingInfoFormGroup"
+        <form *ngSwitchCase="5" class="modal-content" style="width: fit-content" [formGroup]="openingInfoFormGroup"
           (keydown.enter)="$event.preventDefault()">
           <div class="modal-close">
             <span class="fas fa-times" [routerLink]="[]" [queryParams]="{modal: null}"></span>
@@ -245,8 +257,7 @@
             <button class="btn btn-sm btn-controller" type="button" style="margin-left: auto" (click)="next()">Next</button>
           </div>
         </form>
-
-        <form *ngSwitchCase="5" class="modal-content" style="max-width: 800px;" [formGroup]="termAndConfitionsFormGroup"
+        <form *ngSwitchCase="6" class="modal-content" style="max-width: 800px;" [formGroup]="termAndConfitionsFormGroup"
           (keydown.enter)="$event.preventDefault()">
           <div class="modal-close">
             <span class="fas fa-times" [routerLink]="[]" [queryParams]="{modal: null}"></span>
@@ -267,7 +278,7 @@
             (click)="next()">Next</ws-loading-button>
           </div>
         </form>
-        <div *ngSwitchCase="6" class="modal-content" style="max-width: 500px">
+        <div *ngSwitchCase="7" class="modal-content" style="max-width: 500px">
           <div class="modal-close" [routerLink]="[]" [queryParams]="{modal: null}">
             <span class="fas fa-times"></span>
           </div>

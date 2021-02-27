@@ -2,7 +2,7 @@
     <div class="modal-wrap">
         <div class="modal-body">
             <div class="modal-body-content">
-                <form [formGroup]="itemGroup" class="center modal-content">
+                <form [formGroup]="itemGroup" class="center modal-content" style="max-width: 665px">
                     <ng-container *ngIf="!loading.isRunning() else loadingTemplate">
                         <div class="mb-3">
                             <label class="mb-0 font-9">Product Name*:</label>

@@ -11,7 +11,6 @@ import { AuthStoreContributorService } from '@services/http/auth-store/contribut
 import { WsToastService } from '@elements/ws-toast/ws-toast.service';
 import { ImageHelper } from '@helpers/imagehelper/image.helper';
 import { DocumentHelper } from '@helpers/documenthelper/document.helper';
-import { AuthStoreUserService } from '@services/http/auth-user/auth-store-user.service';
 
 @Component({
   selector: 'app-quick-menu',
@@ -30,10 +29,10 @@ export class QuickMenuComponent implements OnInit {
   editedFlag: boolean = false;
   store: Store;
   private ngUnsubscribe: Subject<any> = new Subject;
-  constructor(private authStoreUserService: AuthStoreUserService, private authStoreContributorService: AuthStoreContributorService, private sharedStoreService: SharedStoreService) { 
+  constructor(private authStoreContributorService: AuthStoreContributorService, private sharedStoreService: SharedStoreService) { 
     let storeUsername = this.sharedStoreService.storeUsername;
     this.loading.start();
-    this.authStoreUserService.getAuthenticatedStoreByStoreUsername(storeUsername).pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+    this.authStoreContributorService.getStoreByUsername(storeUsername).pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       if (result) {
         DocumentHelper.setWindowTitleWithWonderScale('Quick Menu - ' + result.name);
         this.store = result;
@@ -136,6 +135,9 @@ export class QuickMenuComponent implements OnInit {
         }
       });
     });
+  }
+  onImagesOverflow() {
+    WsToastService.toastSubject.next({ content: 'Max 10 images are uploaded!', type: 'danger'});
   }
   openMenuModal(selectedMenu) {
     this.isDeletedConfirmationModalOpened = true;

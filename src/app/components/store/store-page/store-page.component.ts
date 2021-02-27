@@ -549,6 +549,9 @@ export class StorePageComponent implements OnInit {
       });
     });
   }
+  onBannersOverflow() {
+    WsToastService.toastSubject.next({ content: 'Max 10 images are uploaded!', type: 'danger'});
+  }
   fileMenuImageChangeEvent(event) {
     event.forEach(item => {
       let exist = this.editingAllMenuImages.find(image => {

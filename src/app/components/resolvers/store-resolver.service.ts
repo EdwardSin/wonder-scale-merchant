@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
-import { AuthStoreUserService } from '@services/http/auth-user/auth-store-user.service';
 import { SharedStoreService } from '@services/shared/shared-store.service';
 import { Store } from '@objects/store';
 import { Observable } from 'rxjs';
+import { AuthStoreContributorService } from '@services/http/auth-store/contributor/auth-store-contributor.service';
 
 @Injectable({ providedIn: 'root' })
 export class StoreResolver implements Resolve<Store>{
-    constructor(private sharedStoreService: SharedStoreService, private authStoreUserService: AuthStoreUserService) {
+    constructor(private sharedStoreService: SharedStoreService, private authStoreContributorService: AuthStoreContributorService) {
 
     }
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Store> | Promise<Store> | Store {
@@ -15,6 +15,6 @@ export class StoreResolver implements Resolve<Store>{
         if (route.params.username) {
             this.sharedStoreService.storeUsername = route.params.username;
         }
-        return this.authStoreUserService.getAuthenticatedStoreByStoreUsername(username);
+        return this.authStoreContributorService.getStoreByUsername(username);
     }
 }

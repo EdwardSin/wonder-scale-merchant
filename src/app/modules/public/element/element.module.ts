@@ -36,6 +36,8 @@ import { WsInvoiceComponent } from '@elements/ws-invoice/ws-invoice.component';
 import { AppRoutingModule } from 'src/app/app-routing.module';
 import { RouterModule } from '@angular/router';
 import { WsMessageBarComponent } from '@elements/ws-message-bar/ws-message-bar.component';
+import { WsPriceListComponent } from '@elements/ws-price-list/ws-price-list.component';
+import { WsStepperComponent } from '@elements/ws-stepper/ws-stepper.component';
 
 
 @NgModule({
@@ -60,7 +62,9 @@ import { WsMessageBarComponent } from '@elements/ws-message-bar/ws-message-bar.c
     ConfirmModalComponent,
     BusinessLocationComponent,
     WsInvoiceComponent,
-    WsMessageBarComponent
+    WsMessageBarComponent,
+    WsPriceListComponent,
+    WsStepperComponent
   ],
   imports: [
     AgmCoreModule,
@@ -72,7 +76,6 @@ import { WsMessageBarComponent } from '@elements/ws-message-bar/ws-message-bar.c
     MatRadioModule,
     MatCheckboxModule,
     MatDatepickerModule,
-    MatTabsModule,
     MatNativeDateModule,
     NgxMatSelectSearchModule,
     MatSelectInfiniteScrollModule,
@@ -100,7 +103,10 @@ import { WsMessageBarComponent } from '@elements/ws-message-bar/ws-message-bar.c
     ConfirmModalComponent,
     BusinessLocationComponent,
     WsInvoiceComponent,
-    WsMessageBarComponent
+    WsMessageBarComponent,
+    WsPriceListComponent,
+    WsStepperComponent,
+    MatTabsModule
   ]
 })
 export class ElementModule { }

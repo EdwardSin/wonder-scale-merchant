@@ -9,15 +9,16 @@
                 <span *ngSwitchCase="'new'" class="badge rounded-pill badge-light">New</span>
                 <span *ngSwitchCase="'paid'" class="badge rounded-pill badge-warning">Paid</span>
                 <span *ngSwitchCase="'in_progress'" class="badge rounded-pill badge-warning">In Progress</span>
+                <span *ngSwitchCase="'ready'" class="badge rounded-pill badge-warning">Ready</span>
                 <span *ngSwitchCase="'delivered'" class="badge rounded-pill badge-warning" [class.badge-warning-deep]="item.deliveryOption !== 'delivery'">{{ item?.deliveryOption == 'delivery' ? 'Delivered' : 'Ready to pickup'}}</span>
                 <span *ngSwitchCase="'cancelled'" class="badge rounded-pill badge-danger">Cancelled</span>
                 <span *ngSwitchCase="'refunded'" class="badge rounded-pill badge-danger">Refunded</span>
                 <span *ngSwitchCase="'completed'" class="badge rounded-pill badge-success">Completed</span>
             </ng-container>
-            <span class="font-7 d-block mt-1 text-muted" *ngIf="etaDate && (item?.delivery?.etaHour == null || item?.delivery?.etaHour == undefined) && (item?.status == 'delivered' || item?.status == 'in_progress') ">
+            <span class="font-7 d-block mt-1 text-muted" *ngIf="etaDate && (item?.delivery?.etaHour == null || item?.delivery?.etaHour == undefined) && (item?.status == 'delivered' || item?.status == 'in_progress'|| item?.status == 'ready') ">
                 ETA: {{ etaDate | date: 'MMM d,y' }}
             </span>
-            <span class="font-7 d-block mt-1 text-muted" *ngIf="etaDate && item?.delivery?.etaHour > -1 && (item?.status == 'delivered' || item?.status == 'in_progress')">
+            <span class="font-7 d-block mt-1 text-muted" *ngIf="etaDate && item?.delivery?.etaHour > -1 && (item?.status == 'delivered' || item?.status == 'in_progress' || item?.status == 'ready')">
                 ETA: {{ etaDate | date: 'MMM d,y h:mm a' }}
             </span>
             <span class="ws-invoice-id">{{ item.receiptId }}</span>
@@ -37,6 +38,9 @@
                     </button>
                 </div>
                 <div *ngSwitchCase="'in_progress'" class="btn-group">
+                    <button class="btn btn-sm mt-2 btn-controller" [disabled]="statusLoading.isRunning()" (click)="readyInvoice($event)">Ready</button>
+                </div>
+                <div *ngSwitchCase="'ready'" class="btn-group">
                     <button class="btn btn-sm mt-2 btn-controller" [disabled]="statusLoading.isRunning()" (click)="deliveryInvoice($event)">{{ item?.deliveryOption == 'delivery' ? 'Delivered' : 'Pickup'}}</button>
                     <button class="btn btn-sm mt-2 btn-controller btn-controller-icon" [disabled]="statusLoading.isRunning()" (click)="openEtaDeliveryDateModal($event)"
                     [title]="item?.delivery?.etaDate ? 'Scheduled: ' + (item.delivery.etaDate | date: 'MMM d y, h:mm a') : ''">

@@ -11,6 +11,7 @@
     
     &.status-container-paid,
     &.status-container-in_progress,
+    &.status-container-ready,
     &.status-container-delivered {
         background-color: #ffc107;
         &:focus{
@@ -38,4 +39,11 @@
             color: #fff !important;
         }
     }
+}
+
+mat-tab-group mat-tab-header .mat-elevation-z4{
+    box-shadow: none;
+}
+mat-tab-group mat-tab-header .mat-tab-label {
+    min-width: 0;
 }
