@@ -61,7 +61,7 @@
         </div>
         <mat-tab-group mat-align-tabs="start" [selectedIndex]="selectedTab.value" (selectedIndexChange)="selectedTab.setValue($event)" dynamicHeight>
             <mat-tab label="Items">
-                <div class="p-3">
+                <div class="p-lg-3 py-3">
                     <div class="border rounded mb-3 p-3">
                         <label id="paymentMethod" class="mb-0 font-9">Catalogue:</label>
                         <mat-select class="form-control form-control-sm mb-3" value="" [disabled]="!isEditable()" (selectionChange)="getItems($event.value)">
@@ -98,7 +98,7 @@
                     </div>
                     <div class="mb-3">
                         <h5 class="h6">Items ({{inListItems.length}})</h5>
-                        <ul class="list-group font-9" cdkDropList (cdkDropListDropped)="drop($event)" *ngIf="inListItems.length">
+                        <ul class="list-group font-9" cdkDropList [cdkDropListDisabled]="!isEditable()" (cdkDropListDropped)="drop($event)" *ngIf="inListItems.length">
                             <li cdkDrag class="list-group-item d-flex align-items-center" *ngFor="let targetItem of inListItems">
                                 <span class="col p-0">{{ targetItem.name }} {{ targetItem.type !== 'default' ? '- ' + targetItem.type : '' }} - RM {{ targetItem.price  | number: '1.2-2' }} x {{ targetItem.quantity}} </span>
                                 <span class="px-1">RM {{ targetItem.price * targetItem.quantity | number: '1.2-2' }}</span>
@@ -110,7 +110,7 @@
                 </div>
             </mat-tab>
             <mat-tab label="Delivery">
-                <div class="p-3">
+                <div class="p-lg-3 py-3">
                     <div class="mb-3">
                         <h5 class="h6">Delivery Fee</h5>
                         <input class="form-control form-control-sm" placeholder="Price ($)" formControlName="deliveryFee" (input)="notifyCalculation()" />
@@ -205,7 +205,7 @@
                 </div>
             </mat-tab>
             <mat-tab label="Promotion">
-                <div class="p-3">
+                <div class="p-lg-3 py-3">
                     <mat-select class="form-control form-control-sm" placeholder="Promotion" (selectionChange)="notifyCalculation()" formControlName="promotion">
                         <mat-option [value]="''">No promotion</mat-option>
                         <mat-option [value]="promotion._id" *ngFor="let promotion of promotions">{{ promotion.title }}</mat-option>
@@ -213,7 +213,7 @@
                 </div>
             </mat-tab>
             <mat-tab label="Others">
-                <div class="p-3">
+                <div class="p-lg-3 py-3">
                     <textarea class="form-control form-control-sm" rows="5" maxlength="300" placeholder="Write remark here" formControlName="remark"></textarea>
                 </div>
             </mat-tab>

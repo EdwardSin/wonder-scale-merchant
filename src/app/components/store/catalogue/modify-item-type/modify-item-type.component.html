@@ -2,7 +2,7 @@
     <div class="modal-wrap">
         <div class="modal-body">
             <div class="modal-body-content">
-                <form class="modal-content" [formGroup]="itemTypesForm">
+                <form class="modal-content" [formGroup]="itemTypesForm" style="max-width: 665px">
                     <ng-container formArrayName="itemTypes" *ngIf="!loading.isRunning() && currentItem; let i = index">
                         <div>
                             <h4 class="d-inline-block mt-1">{{ currentItem.name}}</h4>
