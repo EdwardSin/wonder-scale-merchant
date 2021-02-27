@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { WsLoading } from '@elements/ws-loading/ws-loading';
+import { WsToastService } from '@elements/ws-toast/ws-toast.service';
 import { AuthPackageAdminService } from '@services/http/auth-store/admin/auth-package-admin.service';
 import { SharedStoreService } from '@services/shared/shared-store.service';
 import { Subject } from 'rxjs';
@@ -39,6 +40,11 @@ export class PackageComponent implements OnInit {
         this.store.package.name = this.selectedPackage;
         this.sharedStoreService.store.next(this.store);
         this.isChangePackageModalOpened = false;
+        let packageName = 'Premium Package';
+        if (this.selectedPackage == 'free') {
+          packageName = 'Free Package';
+        }
+        WsToastService.toastSubject.next({ content: 'Successfully change package - ' + packageName, type: 'success'});
       }
     });
   }

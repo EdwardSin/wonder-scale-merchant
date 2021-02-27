@@ -7,6 +7,7 @@ import { QRCodeBuilder } from '@builders/qrcodebuilder';
 import { environment } from '@environments/environment';
 import { WsLoading } from '@elements/ws-loading/ws-loading';
 import { DocumentHelper } from '@helpers/documenthelper/document.helper';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home-control',
@@ -24,7 +25,8 @@ export class HomeControlComponent implements OnInit {
   isQRcodeLoading: WsLoading = new WsLoading;
   @ViewChild('downloadQRcode', {static: false}) downloadQRcode: ElementRef;
   private ngUnsubscribe: Subject<any> = new Subject;
-  constructor(private sharedStoreService: SharedStoreService,
+  constructor(private router: Router,
+    private sharedStoreService: SharedStoreService,
     private ref: ChangeDetectorRef) { }
 
   ngOnInit(): void {
@@ -96,6 +98,9 @@ export class HomeControlComponent implements OnInit {
     this.ref.detectChanges();
     this.downloadURL = url;
     this.renderQrcode(this.downloadQRcode.nativeElement, url, 200);
+  }
+  upgradeToPremium() {
+    this.router.navigate(['/stores/' + this.store.username + '/package'])
   }
   ngOnDestroy() {
     this.ngUnsubscribe.next();

@@ -58,11 +58,12 @@
 
             &.price-list-item__button__free{
                 border: 1px solid #990057;
-                color: #990057;
+                font-weight: bold;
+                color: #000;
 
                 &:disabled {
-                    background-color: #990057;
-                    color: #fff;
+                    background-color: #ccc;
+                    border-color: #ccc;
                 }
 
                 &:hover {
@@ -73,11 +74,12 @@
 
             &.price-list-item__button__premium{
                 border: 1px solid #FFD700;
-                color: #FFD700;
+                font-weight: bold;
+                color: #000;
 
                 &:disabled {
-                    background-color: #FFD700;
-                    color: #fff;
+                    background-color: #ccc;
+                    border-color: #ccc;
                 }
 
                 &:hover {
