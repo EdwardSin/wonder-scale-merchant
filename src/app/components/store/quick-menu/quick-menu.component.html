@@ -14,7 +14,7 @@
 <button class="btn btn-controller float-right" onclick="document.getElementById('menu_upload_input').click();" title="Upload">
     <span class="fas fa-upload"></span>
 </button>
-<ws-uploader [id]="'menu_upload_input'" [max]="10" [input]="allImages" (output)="fileChangeEvent($event)"></ws-uploader>
+<ws-uploader [id]="'menu_upload_input'" [max]="10" [input]="allImages" (output)="fileChangeEvent($event)" (overflow)="onImagesOverflow()"></ws-uploader>
 <div class="clearfix"></div>
 
 <div class="quick-menu__container mt-2" *ngIf="allImages?.length; else loadingTemplate">

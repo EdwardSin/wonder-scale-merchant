@@ -1,0 +1,49 @@
+<div class="circle-view" [style.overflow]="isOpen ? 'visible': 'hidden'" [style.height.px]="isOpen ? 212: 43">
+    <div class="circle-view-container" [style.margin-top.px]="isOpen ? 0 : 10 + (-38 * selectedIndex)">
+        <div class="circle-container">
+            <div class="circle">
+                <div class="circle-inner" [class.circle-inner__show]="selectedStage == 'new'"></div>
+            </div>
+            <div class="circle-label">New</div>
+        </div>
+        <div class="pipe"></div>
+        <div class="circle-container">
+            <div class="circle">
+                <div class="circle-inner" [class.circle-inner__show]="selectedStage == 'paid'"></div>
+            </div>
+            <div class="circle-label">
+                Paid (Waiting for the confirmation)
+            </div>
+        </div>
+        <div class="pipe"></div>
+        <div class="circle-container">
+            <div class="circle">
+                <div class="circle-inner" [class.circle-inner__show]="selectedStage == 'in_progress'"></div>
+            </div>
+            <div class="circle-label">In Progress</div>
+        </div>
+        <div class="pipe"></div>
+        <div class="circle-container">
+            <div class="circle">
+                <div class="circle-inner" [class.circle-inner__show]="selectedStage == 'ready'"></div>
+            </div>
+            <div class="circle-label">Ready</div>
+        </div>
+        <div class="pipe"></div>
+        <div class="circle-container">
+            <div class="circle">
+                <div class="circle-inner" [class.circle-inner__show]="selectedStage == 'delivered'"></div>
+            </div>
+            <div class="circle-label">
+                {{deliveryOption == 'delivery' ? 'Delivered' : 'Ready to pickup'}}
+            </div>
+        </div>
+        <div class="pipe"></div>
+        <div class="circle-container">
+            <div class="circle">
+                <div class="circle-inner" [class.circle-inner__show]="selectedStage == 'completed'"></div>
+            </div>
+            <div class="circle-label">Completed</div>
+        </div>
+    </div>
+</div>

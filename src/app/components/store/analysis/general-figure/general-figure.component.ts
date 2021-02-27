@@ -33,6 +33,7 @@ export class GeneralFigureComponent implements OnInit {
   generalAnalysisSubscription;
   loading: WsLoading = new WsLoading;
   store;
+  selectedPackage: string;
   private ngUnsubscribe: Subject<any> = new Subject();
   constructor(
     private authAnalysisContributorService: AuthAnalysisContributorService,
@@ -40,6 +41,9 @@ export class GeneralFigureComponent implements OnInit {
     
     this.sharedStoreService.store.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       this.store = result;
+      if (result && result.package) {
+        this.selectedPackage = result.package.name;
+      }
     })
   }
 
@@ -53,10 +57,18 @@ export class GeneralFigureComponent implements OnInit {
     }
     this.generalAnalysisSubscription = timer(0, this.REFRESH_INTERVAL).pipe(switchMap(() => this.authAnalysisContributorService.getGeneralAnalysis()), takeUntil(this.ngUnsubscribe)).subscribe(result => {
       this.analysis = result['result'];
-      this.authAnalysisContributorService.increment(this.salesFigureRef.nativeElement, 500, this.analysis.totalMonthlySales, true);
-      this.authAnalysisContributorService.increment(this.pageViewFigureRef.nativeElement, 500, this.analysis.totalPageview);
-      this.authAnalysisContributorService.increment(this.deliveryFigureRef.nativeElement, 500, this.analysis.totalMonthlyDelivery, true);
-      this.authAnalysisContributorService.increment(this.invoiceFigureRef.nativeElement, 500, this.analysis.totalMonthlyInvoice);
+      if (this.salesFigureRef) {
+        this.authAnalysisContributorService.increment(this.salesFigureRef.nativeElement, 500, this.analysis.totalMonthlySales, true);
+      }
+      if (this.pageViewFigureRef) {
+        this.authAnalysisContributorService.increment(this.pageViewFigureRef.nativeElement, 500, this.analysis.totalPageview);
+      }
+      if (this.deliveryFigureRef) {
+        this.authAnalysisContributorService.increment(this.deliveryFigureRef.nativeElement, 500, this.analysis.totalMonthlyDelivery, true);
+      }
+      if  (this.invoiceFigureRef) {
+        this.authAnalysisContributorService.increment(this.invoiceFigureRef.nativeElement, 500, this.analysis.totalMonthlyInvoice);
+      }
       this.loading.stop();
     });
   }

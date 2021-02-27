@@ -1,0 +1,16 @@
+<div class="container py-3 mb-5">
+    <div class="text-center py-5">
+        <p class="mb-2 font-weight-bold" style="font-size: 1.5rem">Try Wonder Scale Premium for free now.</p>
+        <p class="text-muted mb-2">With all features unlocked. No credit card required.</p>
+    </div>
+    <ws-price-list (onPackageClicked)="onPackageClicked($event)" [selectedPackage]="currentPackage"></ws-price-list>
+</div>
+
+<confirm-modal
+    id="changePackageModal"
+    *ngIf="isChangePackageModalOpened"
+    [(isOpened)]="isChangePackageModalOpened"
+    [loading]="changeLoading.isRunning()"
+    [message]="'Are you sure to change package?'"
+    [action]="changeCallback.bind(this)">
+</confirm-modal>

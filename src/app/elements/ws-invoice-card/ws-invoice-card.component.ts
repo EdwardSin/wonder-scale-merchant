@@ -75,12 +75,28 @@ export class WsInvoiceCardComponent implements OnInit {
       }
     });
   }
+  readyInvoice(event) {
+    event.stopPropagation();
+    this.statusLoading.start();
+    this.authInvoiceContributorService.updateInvoiceStatus(this.item._id, {fromStatus: 'in_progress', status: 'ready'}).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.statusLoading.stop())).subscribe(result => {
+      this.item.status = 'ready';
+      this.isPayslipModalOpened = false;
+      this.authInvoiceContributorService.refreshStatusInProgressToReady();
+      this.authInvoiceContributorService.refreshDashboardInvoices(this.item);
+    }, err => {
+      if (err.status === 400) {
+        WsToastService.toastSubject.next({ content: 'Invoice couldn\'t be updated due to status is outdated.', type: 'danger'})
+        WsToastService.toastSubject.next({ content: 'Dashboard is up to date.', type: 'info'})
+        this.authInvoiceContributorService.refreshInvoices.next(true);
+      }
+    });
+  }
   deliveryInvoice(event) {
     event.stopPropagation();
     this.statusLoading.start();
-    this.authInvoiceContributorService.updateInvoiceStatus(this.item._id, {fromStatus: 'in_progress', status: 'delivered'}).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.statusLoading.stop())).subscribe(result => {
+    this.authInvoiceContributorService.updateInvoiceStatus(this.item._id, {fromStatus: 'ready', status: 'delivered'}).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.statusLoading.stop())).subscribe(result => {
       this.item.status = 'delivered';
-      this.authInvoiceContributorService.refreshStatusInProgressToDelivery();
+      this.authInvoiceContributorService.refreshStatusReadyToDelivery();
       this.authInvoiceContributorService.refreshDashboardInvoices(this.item);
     }, err => {
       if (err.status === 400) {
