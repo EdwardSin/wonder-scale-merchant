@@ -35,7 +35,7 @@ export class InvoiceFigureComponent implements OnInit {
   monthlyInvoiceAnalysisSubscription;
   invoiceChart = Chart.createChart();
   cumulativeChart = Chart.createChart();
-  REFRESH_INTERVAL = 30 * 60 * 1000;
+  REFRESH_MONTHLY_INVOICE_INTERVAL = 30 * 60 * 1000;
   isMobileSize: boolean;
   private ngUnsubscribe: Subject<any> = new Subject();
   constructor(private authAnalysisContributorService: AuthAnalysisContributorService,
@@ -60,7 +60,7 @@ export class InvoiceFigureComponent implements OnInit {
     if (this.monthlyInvoiceAnalysisSubscription) {
       this.monthlyInvoiceAnalysisSubscription.unsubscribe();
     }
-    this.monthlyInvoiceAnalysisSubscription = timer(0, this.REFRESH_INTERVAL).pipe(switchMap(() => this.authAnalysisContributorService.getMonthInvoiceAnalysis()),
+    this.monthlyInvoiceAnalysisSubscription = timer(0, this.REFRESH_MONTHLY_INVOICE_INTERVAL).pipe(switchMap(() => this.authAnalysisContributorService.getMonthInvoiceAnalysis()),
       takeUntil(this.ngUnsubscribe)).subscribe(result => {
         this.invoice = result['result'];
         this.authAnalysisContributorService.increment(this.monthlyInvoice.nativeElement, 1000, this.invoice.totalMonthlyInvoice);

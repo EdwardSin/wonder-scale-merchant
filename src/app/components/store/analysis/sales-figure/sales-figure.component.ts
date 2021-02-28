@@ -37,7 +37,7 @@ export class SalesFigureComponent implements OnInit {
   salesChart = Chart.createChart();
   yearlySalesChart = Chart.createChart();
   cumulativeChart = Chart.createChart();
-  REFRESH_INTERVAL = 30 * 60 * 1000;
+  REFRESH_MONTHLY_SALES_INTERVAL = 30 * 60 * 1000;
   isMobileSize: boolean;
   private ngUnsubscribe: Subject<any> = new Subject();
   constructor(private authAnalysisContributorService: AuthAnalysisContributorService,
@@ -65,7 +65,7 @@ export class SalesFigureComponent implements OnInit {
     if (this.monthlySalesAnalysisSubscription) {
       this.monthlySalesAnalysisSubscription.unsubscribe();
     }
-    this.monthlySalesAnalysisSubscription = timer(0, this.REFRESH_INTERVAL).pipe(switchMap(() => this.authAnalysisContributorService.getMonthSalesAnalysis()),
+    this.monthlySalesAnalysisSubscription = timer(0, this.REFRESH_MONTHLY_SALES_INTERVAL).pipe(switchMap(() => this.authAnalysisContributorService.getMonthSalesAnalysis()),
       takeUntil(this.ngUnsubscribe)).subscribe(result => {
         this.sales = result['result'];
         this.authAnalysisContributorService.increment(this.monthlySales.nativeElement, 1000, this.sales.totalMonthlySales, true);

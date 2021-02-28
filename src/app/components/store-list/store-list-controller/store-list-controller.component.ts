@@ -19,6 +19,7 @@ export class StoreListControllerComponent implements OnInit {
   user;
   activeStoreList: Array<any> = [];
   pendingStoreList: Array<any> = [];
+  REFREASH_PENDING_STORE_INTERVAL = 60 * 1000;
   loading: WsLoading = new WsLoading;
 
   constructor(
@@ -86,7 +87,7 @@ export class StoreListControllerComponent implements OnInit {
     this.viewContainerRef.createComponent(this.cfr.resolveComponentFactory(CreateStoreComponent));
   }
   intervalGetPendingStores() {
-    interval(60 * 1000).pipe(switchMap(() => {return this.authStoreUserService.getInvitationStoresByUserId()}),
+    interval(this.REFREASH_PENDING_STORE_INTERVAL).pipe(switchMap(() => {return this.authStoreUserService.getInvitationStoresByUserId()}),
     takeUntil(this.ngUnsubscribe))
     .subscribe(result => {
       this.pendingStoreList = result['result'];

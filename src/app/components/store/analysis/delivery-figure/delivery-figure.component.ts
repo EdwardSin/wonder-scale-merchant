@@ -35,7 +35,7 @@ export class DeliveryFigureComponent implements OnInit {
   monthlyDeliveryAnalysisSubscription;
   deliveryChart = Chart.createChart();
   cumulativeChart = Chart.createChart();
-  REFRESH_INTERVAL = 30 * 60 * 1000;
+  REFRESH_MONTHLY_DELIVERY_INTERVAL = 30 * 60 * 1000;
   isMobileSize: boolean;
   private ngUnsubscribe: Subject<any> = new Subject();
   constructor(private authAnalysisContributorService: AuthAnalysisContributorService,
@@ -60,7 +60,7 @@ export class DeliveryFigureComponent implements OnInit {
     if (this.monthlyDeliveryAnalysisSubscription) {
       this.monthlyDeliveryAnalysisSubscription.unsubscribe();
     }
-    this.monthlyDeliveryAnalysisSubscription = timer(0, this.REFRESH_INTERVAL).pipe(switchMap(() => this.authAnalysisContributorService.getMonthDeliveryAnalysis()),
+    this.monthlyDeliveryAnalysisSubscription = timer(0, this.REFRESH_MONTHLY_DELIVERY_INTERVAL).pipe(switchMap(() => this.authAnalysisContributorService.getMonthDeliveryAnalysis()),
       takeUntil(this.ngUnsubscribe)).subscribe(result => {
         this.delivery = result['result'];
         this.authAnalysisContributorService.increment(this.monthlyDelivery.nativeElement, 1000, this.delivery.totalMonthlyDelivery, true);

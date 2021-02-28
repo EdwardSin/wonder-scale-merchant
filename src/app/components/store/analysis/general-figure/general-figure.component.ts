@@ -17,7 +17,7 @@ export class GeneralFigureComponent implements OnInit {
   @ViewChild('pageViewFigureRef', { static: true }) pageViewFigureRef: ElementRef;
   @ViewChild('deliveryFigureRef', { static: true }) deliveryFigureRef: ElementRef;
   @ViewChild('invoiceFigureRef', { static: true }) invoiceFigureRef: ElementRef;
-  REFRESH_INTERVAL = 10 * 1000;
+  REFRESH_INTERVAL = 60 * 1000;
   analysis = {
     totalMonthlySales: 0,
     lastMonthSales: 0,
