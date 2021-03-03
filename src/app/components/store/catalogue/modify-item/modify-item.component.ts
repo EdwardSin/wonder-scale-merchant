@@ -1,6 +1,6 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Constants } from '@constants/constants';
 import { environment } from '@environments/environment';
@@ -14,7 +14,7 @@ import { WsToastService } from '@elements/ws-toast/ws-toast.service';
 import { ImageHelper } from '@helpers/imagehelper/image.helper';
 import _ from 'lodash';
 import { from, of, Subject, forkJoin } from 'rxjs';
-import { finalize, map, mergeMap, takeUntil } from 'rxjs/operators';
+import { finalize, map, mergeMap, switchMap, takeUntil, tap } from 'rxjs/operators';
 import { WSFormBuilder } from '@builders/wsformbuilder';
 import { RoutePartsService } from '@services/general/route-parts.service';
 import { UploadHelper } from '@helpers/uploadhelper/upload.helper';
@@ -35,11 +35,14 @@ export class ModifyItemComponent implements OnInit {
   allProfileItems = [];
   allDescriptionItems = [];
   categories = [];
+  selectedTab = new FormControl(0);
   environment = environment;
   loading: WsLoading = new WsLoading;
   addItemLoading: WsLoading = new WsLoading;
   //selectedType: ItemType;
   selectedTypeIndex: number;
+  validateItemTypesForm: Function;
+  editItemTypesFunction: Function;
   private ngUnsubscribe: Subject<any> = new Subject;
   @ViewChild('itemProfileUpload', { static: false }) itemProfileUpload: ElementRef;
   @ViewChild('itemDescriptionUpload', { static: false }) itemDescriptionUpload: ElementRef;
@@ -233,9 +236,12 @@ export class ModifyItemComponent implements OnInit {
     return this.authItemContributorService.editItem(currentItem);
   }
   uploadAndAddItem() {
-    if (this.validateBasicForm()) {
+    if (this.validateBasicForm() && this.validateItemTypesForm()) {
       this.addItemLoading.start();
       this.addItem().pipe(takeUntil(this.ngUnsubscribe), 
+        tap((result) => {
+          this.currentItem = result['result'];
+        }),
         mergeMap((result) => 
           forkJoin((() => {
             this.itemId = result['result']['_id'];
@@ -245,6 +251,9 @@ export class ModifyItemComponent implements OnInit {
             return this.allDescriptionItems.length ? this.uploadDescriptionImages(this.allDescriptionItems) : of(0);
           })())
       ),
+      switchMap(result => {
+        return this.editItemTypesFunction(this.currentItem['_id']);
+      }),
       finalize(() => { this.addItemLoading.stop() }))
       .subscribe(result => {
         this.currentItem = this.tempItem;
@@ -257,9 +266,9 @@ export class ModifyItemComponent implements OnInit {
     }
   }
   uploadAndEditItem() {
-    if (this.validateBasicForm()) {
+    if (this.validateBasicForm() && this.validateItemTypesForm()) {
       this.addItemLoading.start();
-      this.editItem().pipe(takeUntil(this.ngUnsubscribe), 
+      this.editItem().pipe(takeUntil(this.ngUnsubscribe),
         mergeMap((result) => 
           forkJoin((() => {
             let profileItems = this.allProfileItems.filter(x => x.type == 'blob');
@@ -269,6 +278,9 @@ export class ModifyItemComponent implements OnInit {
             return descriptionItems.length ? this.uploadDescriptionImages(descriptionItems) : of(0);
           })())
       ),
+      switchMap(result => {
+        return this.editItemTypesFunction(this.currentItem['_id']);
+      }),
       finalize(() => { this.addItemLoading.stop(); }))
       .subscribe(result => {
         this.sharedCategoryService.refreshCategories();

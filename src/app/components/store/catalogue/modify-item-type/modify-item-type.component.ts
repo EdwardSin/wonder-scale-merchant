@@ -1,16 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormGroup, FormArray } from '@angular/forms';
 import { WSFormBuilder } from '@builders/wsformbuilder';
 import { ColorService } from '@services/general/color.service';
 import { environment } from '@environments/environment';
 import { Subject, from, forkJoin, of } from 'rxjs';
-import { takeUntil, finalize, mergeMap, map } from 'rxjs/operators';
+import { takeUntil, finalize, mergeMap, map, tap } from 'rxjs/operators';
 import { ImageHelper } from '@helpers/imagehelper/image.helper';
 import { WsToastService } from '@elements/ws-toast/ws-toast.service';
 import { moveItemInArray, CdkDragDrop } from '@angular/cdk/drag-drop';
 import { AuthItemContributorService } from '@services/http/auth-store/contributor/auth-item-contributor.service';
 import { WsLoading } from '@elements/ws-loading/ws-loading';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Item } from '@objects/item';
 import * as _ from 'lodash';
 import { SharedCategoryService } from '@services/shared/shared-category.service';
@@ -19,25 +19,26 @@ import { SharedStoreService } from '@services/shared/shared-store.service';
 import { UploadHelper } from '@helpers/uploadhelper/upload.helper';
 
 @Component({
-  selector: 'app-modify-item-type',
+  selector: 'modify-item-type',
   templateUrl: './modify-item-type.component.html',
   styleUrls: ['./modify-item-type.component.scss', '../modify-item/modify-item.component.scss']
 })
 export class ModifyItemTypeComponent implements OnInit {
-  itemId;
+  @Input('itemForm') itemForm;
+  @Input('item') currentItem: Item;
+  @Output('onSaveClick')  onSaveClick: EventEmitter<Function> = new EventEmitter();
+  @Output('validation') validateItemTypesForm: EventEmitter<Function> = new EventEmitter();
   itemTypesForm: FormGroup;
   environment = environment;
   colors = [];
   currencySymbol = '';
   currencies = [];
-  selectedCurrencyCode = '';
-  currentItem: Item;
+  selectedCurrencyCode = 'MYR';
   itemTypeLoading: WsLoading = new WsLoading;
   loading: WsLoading = new WsLoading;
   private ngUnsubscribe: Subject<any> = new Subject;
   constructor(
     private router: Router,
-    private route: ActivatedRoute,
     private uploadHelper: UploadHelper,
     private sharedCategoryService: SharedCategoryService,
     private authItemContributorService: AuthItemContributorService,
@@ -49,7 +50,6 @@ export class ModifyItemTypeComponent implements OnInit {
       this.colors = this.colorService.colors;
   }
   ngOnInit(): void {
-    this.getItem();
     this.sharedStoreService.store.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       if (result) {
         this.currencySymbol = this.currencyService.currencySymbols[result.currency];
@@ -63,6 +63,13 @@ export class ModifyItemTypeComponent implements OnInit {
     this.currencyService.currenciesBehaviourSubject.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       this.currencies = result;
     });
+    this.validateItemTypesForm.emit(this.validateBasicForm.bind(this));
+    this.onSaveClick.emit(this.editItemTypes.bind(this));
+  }
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes && changes['currentItem']) {
+      this.setupItemTypeForm(this.currentItem);
+    }
   }
   onItemTypeClicked(id){
     document.getElementById(id).click();
@@ -75,32 +82,22 @@ export class ModifyItemTypeComponent implements OnInit {
   onItemTypeImageOverflow() {
     WsToastService.toastSubject.next({ content: 'Max 3 images are uploaded!', type: 'danger'});
   }
-  getItem() {
-    this.itemId = this.route.snapshot.queryParams['id'];
-    if (this.itemId) {
-      this.loading.start();
-      this.authItemContributorService.getItemById(this.itemId)
-        .pipe(takeUntil(this.ngUnsubscribe), finalize(() => { _.delay(() => this.loading.stop(), 500)}))
-        .subscribe(result => {
-          if(result) {
-            this.currentItem = result['result'];
-            this.setupItemTypeForm(this.currentItem);
-          }
-        })
-    }
-  }
   setupItemTypeForm(item) {
+    this.itemTypesForm = WSFormBuilder.createItemTypesGroup();
     let itemTypes = this.itemTypesForm.get('itemTypes') as FormArray;
-    item.types.forEach(type => {
-      let form = WSFormBuilder.createItemTypeForm();
-      if (type.images) {
-        type.images = type.images.map(image => {return {name: image, type: 'url'}});
-      }
-      form.patchValue(type);
-      itemTypes.push(form);
-    });
+    if (item) {
+      item.types.forEach(type => {
+        let form = WSFormBuilder.createItemTypeForm();
+        if (type.images) {
+          type.images = type.images.map(image => {return {name: image, type: 'url'}});
+        }
+        form.patchValue(type);
+        itemTypes.push(form);
+      });
+    }
+    this.loading.stop();
   }
-  uploadItemImages(allImages, images, itemTypeId) {
+  uploadItemImages(allImages, images, itemTypeId, itemId) {
     images.forEach(image => image.loading = true);
     return from(images)
     .pipe(
@@ -117,7 +114,7 @@ export class ModifyItemTypeComponent implements OnInit {
       let obj = {
         id: image['id'],
         file: image['base64'],
-        itemId: this.itemId,
+        itemId,
         itemTypeId,
         position: index
       }
@@ -162,33 +159,32 @@ export class ModifyItemTypeComponent implements OnInit {
       WsToastService.toastSubject.next({ content: 'Max 15 items', type: 'danger' });
     }
   }
-  editItemTypes() {
-    if(this.validateBasicForm()) {
-      let obj = {
-        itemId: this.currentItem['_id'],
-        types: this.itemTypesForm.get('itemTypes').value.map(result => {
-            let images = result.images.filter(image => image.type == 'url')
-                        .map(image => image.name);
-            return {
-              ...result,
-              images
-            }
-        })
-      }
-      this.itemTypeLoading.start();
-      this.authItemContributorService.editItemTypes(obj).pipe(mergeMap(result => {
-        let itemTypes = result['result']['types'];
-        return forkJoin(from(itemTypes.map(type => type._id)).pipe(mergeMap((itemTypeId, index) => {
-          let allImages = this.itemTypesForm.get('itemTypes').value[index]['images'];
-          let images = allImages.filter(image => image.type == 'blob');
-          return images.length ? this.uploadItemImages(allImages, images, itemTypeId): of(0);
-        })))
-      }), takeUntil(this.ngUnsubscribe),
-      finalize(() => this.itemTypeLoading.stop())).subscribe(result => {
-          this.sharedCategoryService.refreshCategories();
-          this.router.navigate([], {queryParams: {id: null, modal: null}, queryParamsHandling: 'merge'});
-      });
+  editItemTypes(id) {
+    let obj = {
+      itemId: id,
+      types: this.itemTypesForm.get('itemTypes').value.map(result => {
+          let images = result.images.filter(image => image.type == 'url')
+                      .map(image => image.name);
+          return {
+            ...result,
+            images
+          }
+      })
     }
+    this.itemTypeLoading.start();
+    return this.authItemContributorService.editItemTypes(obj).pipe(mergeMap(result => {
+      let itemTypes = result['result']['types'];
+      return forkJoin(from(itemTypes.map(type => type._id)).pipe(mergeMap((itemTypeId, index) => {
+        let allImages = this.itemTypesForm.get('itemTypes').value[index]['images'];
+        let images = allImages.filter(image => image.type == 'blob');
+        return images.length ? this.uploadItemImages(allImages, images, itemTypeId, id): of(0);
+      })))
+    }), takeUntil(this.ngUnsubscribe),
+    finalize(() => this.itemTypeLoading.stop()),
+    tap(() => {
+      this.sharedCategoryService.refreshCategories();
+      this.router.navigate([], {queryParams: {id: null, modal: null}, queryParamsHandling: 'merge'});
+    }));
   }
   removeItemType(type) {
     if (type.value._id) {
@@ -224,19 +220,19 @@ export class ModifyItemTypeComponent implements OnInit {
         WsToastService.toastSubject.next({ content: 'Type ' + currentIndex + ' - name is required!', type: 'danger' });
         return false;
       }
-      if (price.value && !priceRegex.test(price.value)){
+      if (price.value && !priceRegex.test(price.value)) {
         WsToastService.toastSubject.next({ content: 'Type ' + currentIndex + ' - price is invalid!', type: 'danger' });
         return false;
       }
-      else if (discount.value && (!priceRegex.test(discount.value) || +discount.value > 100)){
+      else if (discount.value && (!priceRegex.test(discount.value) || +discount.value > 100)) {
         WsToastService.toastSubject.next({ content: 'Type ' + currentIndex + ' - discount is invalid!', type: 'danger' });
         return false;
       }
-      else if (weight.value && !priceRegex.test(weight.value)){
+      else if (weight.value && !priceRegex.test(weight.value)) {
         WsToastService.toastSubject.next({ content: 'Type ' + currentIndex + ' - weight is invalid!', type: 'danger' });
         return false;
       }
-      else if (quantity.value && !intergerRegex.test(quantity.value)){
+      else if (quantity.value && !intergerRegex.test(quantity.value)) {
         WsToastService.toastSubject.next({ content: 'Type ' + currentIndex + ' - quantity is invalid!', type: 'danger' });
         return false;
       } else if(quantity.value && +quantity.value > 999999) {
@@ -260,9 +256,6 @@ export class ModifyItemTypeComponent implements OnInit {
     } else {
       WsToastService.toastSubject.next({content: 'Please enter a valid hex color code!', type: 'danger'});
     }
-  }
-  navigateToEditItem(){
-    this.router.navigate([], {queryParams: { id: this.itemId, modal: 'modify-item' }, queryParamsHandling: 'merge'});
   }
   doneUpload(allItems, _id, filename) {
     var item = allItems.find(item => item.id == _id);

@@ -1,6 +1,6 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, ElementRef, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Constants } from '@constants/constants';
 import { environment } from '@environments/environment';
@@ -33,6 +33,7 @@ export class ModifyMenuItemComponent implements OnInit {
   currencies = [];
   allProfileItems = [];
   allTypes = [];
+  selectedTab = new FormControl(0);
   defaultType = { name: 'Normal (default)', incrementType: true, amount: 0 };
   allDescriptionItems = [];
   categories = [];
