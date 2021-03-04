@@ -168,7 +168,7 @@ export class WsInvoiceCardComponent implements OnInit {
         etaHour,
         etaMin
       }
-      this.authInvoiceContributorService.editInvoice({_id: this.item._id, delivery: {etaDate, etaHour, etaMin}}).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.editEtaLoading.stop())).subscribe(result => {
+      this.authInvoiceContributorService.editInvoice({_id: this.item._id, delivery: this.item.delivery}).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.editEtaLoading.stop())).subscribe(result => {
         if (result && result['result']) {
           this.etaDate = this.getEtaDate(this.item);
           this.authInvoiceContributorService.refreshDashboardInvoices(this.item);
