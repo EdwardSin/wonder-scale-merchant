@@ -6,7 +6,8 @@
 ---------------------------------------------
 - 2021-03-04                                -
 ---------------------------------------------
-.: WSM: Task: Delivery is being updated and delivery fee is being removed (WSM-309)
+.: WSM: BugFix: Delivery is being updated and delivery fee is being removed (WSM-309)
+.: WSM: Task: Update the location UI to not misleading user (WSM-310)
 
 - v1.0.1080                                 -
 ---------------------------------------------
