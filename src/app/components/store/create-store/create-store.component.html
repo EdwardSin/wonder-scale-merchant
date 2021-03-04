@@ -169,39 +169,6 @@
             <mat-checkbox [color]="'primary'" (change)="disabledControls()" class="mr-2 d-inline-block"  style="vertical-align: text-top"
                 formControlName="isShowLocation">Show Store Location</mat-checkbox>
           </div>
-          <div class="ws-input">
-            <input class="form-control font-9" autocomplete="nope" placeholder="Address" formControlName="address" required>
-          </div>
-          <mat-error *ngIf="addressFormGroup.controls['address'].hasError('required') &&
-              addressFormGroup.controls['address'].touched">Please enter an address.
-          </mat-error>
-
-          <div class="row pl-3 pr-3">
-            <div class="ws-input col-lg mr-lg-2">
-              <input class="form-control font-9" placeholder="State" formControlName="state" required>
-            </div>
-            <div class="ws-input col-lg">
-              <input class="form-control font-9" placeholder="Postcode" formControlName="postcode" required>
-            </div>
-            <div class="ws-input col-lg ml-lg-2">
-              <mat-select placeholder="Country" formControlName="country" class="form-control font-9">
-                <mat-option [value]="country" *ngFor="let country of countries.values">{{country}}</mat-option>
-              </mat-select>
-            </div>
-          </div>
-          <mat-error
-            *ngIf="addressFormGroup.controls['state'].hasError('required') && addressFormGroup.controls['state'].touched">
-            Please enter a state.
-          </mat-error>
-          <mat-error
-            *ngIf="addressFormGroup.controls['postcode'].hasError('required') && addressFormGroup.controls['postcode'].touched">
-            Please enter a postcode.
-          </mat-error>
-          <mat-error
-            *ngIf="addressFormGroup.controls['country'].hasError('required') && addressFormGroup.controls['country'].touched">
-            Please enter a country.
-          </mat-error>
-          <hr class="w-100 mb-0" style="margin-top: .75rem" />
           <div class="ws-input" style="display: flex">
             <span class="fas fa-search text-center mr-1" style="line-height: 35px; width: 40px; color: rgba(0,0,0,.3)"></span>
             <input style="border-top-left-radius: 0; border-bottom-left-radius: 0" autocomplete="nope" placeholder="Search..." class="form-control font-9" formControlName="searchAddress"
@@ -238,6 +205,39 @@
               <agm-marker [longitude]="mapController.markerPoint.longitude" [latitude]="mapController.markerPoint.latitude"></agm-marker>
             </agm-map>
           </div>
+          <hr class="w-100 mb-0" style="margin-top: .75rem" />
+          <div class="ws-input">
+            <input class="form-control font-9" autocomplete="nope" placeholder="Address" formControlName="address" required>
+          </div>
+          <mat-error *ngIf="addressFormGroup.controls['address'].hasError('required') &&
+              addressFormGroup.controls['address'].touched">Please enter an address.
+          </mat-error>
+
+          <div class="row pl-3 pr-3">
+            <div class="ws-input col-lg mr-lg-2">
+              <input class="form-control font-9" placeholder="State" formControlName="state" required>
+            </div>
+            <div class="ws-input col-lg">
+              <input class="form-control font-9" placeholder="Postcode" formControlName="postcode" required>
+            </div>
+            <div class="ws-input col-lg ml-lg-2">
+              <mat-select placeholder="Country" formControlName="country" class="form-control font-9">
+                <mat-option [value]="country" *ngFor="let country of countries.values">{{country}}</mat-option>
+              </mat-select>
+            </div>
+          </div>
+          <mat-error
+            *ngIf="addressFormGroup.controls['state'].hasError('required') && addressFormGroup.controls['state'].touched">
+            Please enter a state.
+          </mat-error>
+          <mat-error
+            *ngIf="addressFormGroup.controls['postcode'].hasError('required') && addressFormGroup.controls['postcode'].touched">
+            Please enter a postcode.
+          </mat-error>
+          <mat-error
+            *ngIf="addressFormGroup.controls['country'].hasError('required') && addressFormGroup.controls['country'].touched">
+            Please enter a country.
+          </mat-error>
           <div class="row no-gutters mt-4">
             <button class="btn btn-sm btn-controller" type="button" (click)="phase.previous()">Previous</button>
             <!-- [disabled]="addressFormGroup.value.isShowLocation && !addressFormGroup.valid"  -->
