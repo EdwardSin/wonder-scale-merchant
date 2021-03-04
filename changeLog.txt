@@ -2,6 +2,13 @@
 - Wonder Scale Merchant                     -
 ---------------------------------------------
 
+- v1.0.1081                                 -
+---------------------------------------------
+- 2021-03-04                                -
+---------------------------------------------
+.: WSM: BugFix: Delivery is being updated and delivery fee is being removed (WSM-309)
+.: WSM: Task: Update the location UI to not misleading user (WSM-310)
+
 - v1.0.1080                                 -
 ---------------------------------------------
 - 2021-02-27                                -

@@ -39,6 +39,10 @@
                 </div>
                 <div *ngSwitchCase="'in_progress'" class="btn-group">
                     <button class="btn btn-sm mt-2 btn-controller" [disabled]="statusLoading.isRunning()" (click)="readyInvoice($event)">Ready</button>
+                    <button class="btn btn-sm mt-2 btn-controller btn-controller-icon" [disabled]="statusLoading.isRunning()" (click)="openEtaDeliveryDateModal($event)"
+                    [title]="item?.delivery?.etaDate ? 'Scheduled: ' + (item.delivery.etaDate | date: 'MMM d y, h:mm a') : ''">
+                        <span class="fas" [ngClass]="item?.delivery?.etaDate ? 'fa-calendar-check text-success' : 'fa-calendar-alt'"></span>
+                    </button>
                 </div>
                 <div *ngSwitchCase="'ready'" class="btn-group">
                     <button class="btn btn-sm mt-2 btn-controller" [disabled]="statusLoading.isRunning()" (click)="deliveryInvoice($event)">{{ item?.deliveryOption == 'delivery' ? 'Delivered' : 'Pickup'}}</button>
