@@ -56,10 +56,6 @@
                 <div class="d-flex align-items-center col-lg-auto">
                     <button class="btn btn-sm btn-controller" [disabled]="salesLoading.isRunning()" (click)="getSalesBetweenDates()">Search</button>
                 </div>
-                <!-- <div class="float-right col text-right">
-                    <span class='fas fa-file-export mr-2'></span>
-                    <span>Export as</span>
-                </div> -->
             </div>
             <div *ngIf="salesLoading.isRunning()" class="d-flex justify-content-center align-items-center" style="height: 300px">
                 <ws-spinner [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>

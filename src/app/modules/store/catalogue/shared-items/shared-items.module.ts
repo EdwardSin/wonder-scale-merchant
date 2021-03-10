@@ -9,6 +9,7 @@ import { MoveToCategoriesModalComponent } from '@components/modals/move-to-categ
 import { EditMultipleItemsModalComponent } from '@components/modals/edit-multiple-items-modal/edit-multiple-items-modal.component';
 import { AddToCategoriesModalComponent } from '@components/modals/add-to-categories-modal/add-to-categories-modal.component';
 import { SharedItemsRoutingModule } from './shared-items-routing.module';
+import { ExportSalesModalComponent } from '@components/modals/export-sales-modal/export-sales-modal.component';
 
 
 @NgModule({
@@ -19,6 +20,7 @@ import { SharedItemsRoutingModule } from './shared-items-routing.module';
     EditMultipleItemsModalComponent,
     MoveToCategoriesModalComponent,
     ImportItemsModalComponent,
+    ExportSalesModalComponent
   ],
   imports: [
     CommonModule,
@@ -34,6 +36,7 @@ import { SharedItemsRoutingModule } from './shared-items-routing.module';
     EditMultipleItemsModalComponent,
     MoveToCategoriesModalComponent,
     ImportItemsModalComponent,
+    ExportSalesModalComponent
   ]
 })
 export class SharedItemsModule { }

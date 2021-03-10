@@ -2,6 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { WsLoading } from '@elements/ws-loading/ws-loading';
 import { AuthAnalysisContributorService } from '@services/http/auth-store/contributor/auth-analysis-contributor.service';
 import * as moment from 'moment';
+import _ from 'lodash';
 import { Chart } from '@objects/chart';
 import { finalize, switchMap, takeUntil } from 'rxjs/operators';
 import { Subject, timer } from 'rxjs';
@@ -89,13 +90,13 @@ export class SalesFigureComponent implements OnInit {
     this.salesLoading.start();
     this.authAnalysisContributorService.getSalesBetweenDates(this.fromDate, this.toDate).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.salesLoading.stop())).subscribe(result => {
       if (result['result']) {
-        let dateRange = this.getDateRange(this.fromDate, this.toDate);
-        this.salesChart.data[0].data = [];
-        dateRange.forEach(date => {
-          let sale = result['result'].find(sale => sale.name == date);
-          this.salesChart.data[0].data.push(sale ? sale.value : 0);
-        });
-        this.salesChart.labels = this.getDateRange(this.fromDate, this.toDate).map(date => moment(date).format('MM-DD (ddd)'));
+          let dateRange = this.getDateRange(this.fromDate, this.toDate);
+          this.salesChart.data[0].data = [];
+          dateRange.forEach(date => {
+            let sale = result['result'].find(sale => sale.name == date);
+            this.salesChart.data[0].data.push(sale ? sale.value : 0);
+          });
+          this.salesChart.labels = dateRange.map(date => moment(date).format('MM-DD (ddd)'));
       }
     });
   }
@@ -121,6 +122,9 @@ export class SalesFigureComponent implements OnInit {
   }
   openCalendar() {
     this.maxDate = new Date();
+  }
+  exportSales() {
+    
   }
   ngOnDestroy() {
     this.ngUnsubscribe.next();

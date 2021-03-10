@@ -14,6 +14,7 @@ export class AnalysisComponent implements OnInit {
   analysisType: string = '';
   store;
   selectedPackage: string;
+  isExportSalesModalOpened: boolean;
   loading: WsLoading = new WsLoading();
   private ngUnsubscribe: Subject<any> = new Subject();
   constructor(private router: Router,
