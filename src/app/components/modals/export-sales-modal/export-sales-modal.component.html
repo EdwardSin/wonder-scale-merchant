@@ -1,0 +1,112 @@
+<ws-modal [(isOpened)]="isOpened" [isCloseIconDisplayed]="false" [id]="id" [maxWidth]="isPreview ? 1000: 350">
+    <header modalHeader>Export sales</header>
+    <div modalBody>
+        <div *ngIf="!isPreview" [ngStyle]="{'max-width': isMobileSize? '100%' : '250px'}">
+            <div class="mb-2">
+                <label class="sales-figure__label d-block d-lg-inline-block">Type: </label>
+                <mat-select class="form-control form-control-sm" [formControl]="selectedType">
+                    <mat-option [value]="'day'">Day</mat-option>
+                    <mat-option [value]="'month'">Month</mat-option>
+                    <mat-option [value]="'year'">Year</mat-option>
+                </mat-select>
+            </div>
+            <div *ngIf="selectedType.value == 'day'">
+                <div dateFormat class="mb-2">
+                    <label class="sales-figure__label">From: </label>
+                    <div>
+                        <input (click)="fromPicker.open()" class="form-control form-control-sm d-inline-block" [formControl]="fromDate" [matDatepicker]="fromPicker" [min]="minDate" [max]="maxDate" />
+                        <mat-datepicker #fromPicker startView="month" (monthSelected)="chosenDayHandler($event, fromPicker, fromDate)" (daySelected)="chosenDayHandler($event, fromPicker, fromDate)" [startAt]="fromDate" (opened)="openCalendar()"></mat-datepicker>
+                    </div>
+                </div>
+                <div dateFormat class="mb-3">
+                    <label class="sales-figure__label">To: </label>
+                    <div>
+                        <input (click)="toPicker.open()" class="form-control form-control-sm d-inline-block" [formControl]="toDate" [matDatepicker]="toPicker" [min]="fromDate.value.toDate()" [min]="fromDate.value.toDate()" [max]="maxDate" />
+                        <mat-datepicker #toPicker startView="month" (monthSelected)="chosenDayHandler($event, toPicker, toDate)" (daySelected)="chosenDayHandler($event, toPicker, toDate)" [startAt]="toDate.value" (opened)="openCalendar()"></mat-datepicker>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="selectedType.value == 'month'">
+                <div yearMonthFormat class="mb-2">
+                    <label class="sales-figure__label">From: </label>
+                    <div>
+                        <input (click)="monthFromPicker.open()" class="form-control form-control-sm d-inline-block" [formControl]="monthFromDate" [matDatepicker]="monthFromPicker" [min]="minDate" [max]="maxDate" />
+                        <mat-datepicker
+                        #monthFromPicker
+                        startView="year"
+                        (yearSelected)="chosenMonthlySelectHandler($event, monthFromPicker)"
+                        (monthSelected)="chosenMonthlySelectHandler($event, monthFromPicker)"
+                        [startAt]="fromDate"
+                        (opened)="openCalendar()"></mat-datepicker>
+                    </div>
+                </div>
+                <div yearMonthFormat class="mb-3">
+                    <label class="sales-figure__label">To: </label>
+                    <div>
+                        <input (click)="monthToPicker.open()" class="form-control form-control-sm d-inline-block" [formControl]="monthToDate" [matDatepicker]="monthToPicker" [min]="monthFromDate.value.toDate()" [max]="maxDate" />
+                        <mat-datepicker
+                        #monthToPicker
+                        startView="year"
+                        (yearSelected)="chosenMonthlySelectHandler($event, monthToPicker, true)"
+                        (monthSelected)="chosenMonthlySelectHandler($event, monthToPicker, true)"
+                        [startAt]="fromDate"
+                        (opened)="openCalendar()"></mat-datepicker>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="selectedType.value == 'year'">
+                <div yearFormat class="mb-3">
+                    <label class="sales-figure__label">Select: </label>
+                    <div>
+                        <input (click)="yearPicker.open()" class="form-control form-control-sm d-inline-block" [formControl]="yearDate" [matDatepicker]="yearPicker" [min]="minDate" [max]="maxDate" />
+                        <mat-datepicker
+                        #yearPicker
+                        startView="multi-year"
+                        (yearSelected)="chosenYearlySelectHandler($event, yearPicker, yearDate)"
+                        [startAt]="fromDate"
+                        (opened)="openCalendar()"></mat-datepicker>
+                    </div>
+                </div>
+            </div>
+            <div class="row no-gutters">
+                <div>
+                    <button *ngIf="selectedType.value == 'day'" class="btn btn-sm btn-controller mr-2" (click)="preview()">Preview</button>
+                    <ws-loading-button [class]="'btn btn-sm btn-controller'" [color]="'#282c35'" [loading]="exportLoading.isRunning()" (click)="export()">Export</ws-loading-button>
+                </div>
+                <div class="ml-auto">
+                    <button class="btn btn-sm btn-controller" (click)="close()">Cancel</button>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="isPreview">
+            <h5 class="h6 mb-2">Preview</h5>
+            <table class="table table-striped table-sm font-8 mb-3">
+                <thead>
+                    <th>No Invoice</th>
+                    <th class="text-center">Completed Date</th>
+                    <th class="text-right">Delivery Fee (RM)</th>
+                    <th class="text-right">Discount (RM)</th>
+                    <th class="text-right">Subtotal (RM)</th>
+                    <th class="text-right">Total (RM)</th>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let sale of sales">
+                        <td>{{ sale?.receiptId }}</td>
+                        <td class="text-center">{{ sale?.completedAt | date: 'y-MMM-dd' }}</td>
+                        <td class="text-right">{{ sale?.totalDelivery | number: '1.2-2' }}</td>
+                        <td class="text-right">{{ sale?.totalDiscount | number: '1.2-2' }}</td>
+                        <td class="text-right">{{ sale?.subtotal | number: '1.2-2' }}</td>
+                        <td class="text-right">{{ sale?.total | number: '1.2-2' }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <ws-spinner *ngIf="previewLoading.isRunning()" class="text-center d-block w-100" style="padding-top: 10vh; padding-bottom: 10vh" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>
+            <p *ngIf="sales?.length == 0 && !previewLoading.isRunning()" class="py-5 text-center mb-0">No sale within the period</p>
+            <p *ngIf="sales?.length > 99" class="font-8 mb-0">Only preview 100 items, export to view more</p>
+            <div class="clearfix"></div>
+            <div class="center float-right">
+                <button class="btn btn-sm btn-controller ml-1" (click)="goBack()">Back</button>
+            </div>
+        </div>
+    </div>
+</ws-modal>

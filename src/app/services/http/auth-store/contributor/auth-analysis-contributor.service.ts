@@ -25,6 +25,30 @@ export class AuthAnalysisContributorService {
     let _toDate = DateTimeHelper.getDateWithCurrentTimezone(toDate);
     return this.http.post(AuthAnalysisContributorUrl.getSalesBetweenDatesUrl, {fromDate: _fromDate, toDate: _toDate}, this.accessTokenService.getAccessToken());
   }
+  getSalesDetailsBetweenDates(fromDate, toDate, preview) {
+    toDate.setDate(toDate.getDate() + 1);
+    let _fromDate = DateTimeHelper.getDateWithCurrentTimezone(fromDate);
+    let _toDate = DateTimeHelper.getDateWithCurrentTimezone(toDate);
+    return this.http.post(AuthAnalysisContributorUrl.getSalesDetailsBetweenDatesUrl, {fromDate: _fromDate, toDate: _toDate, preview}, this.accessTokenService.getAccessToken());
+  }
+  getMonthlySalesDetailsBetweenDates(fromDate, toDate, preview) {
+    toDate.setDate(toDate.getDate() + 1);
+    let _fromDate = DateTimeHelper.getDateWithCurrentTimezone(fromDate);
+    let _toDate = DateTimeHelper.getDateWithCurrentTimezone(toDate);
+    return this.http.post(AuthAnalysisContributorUrl.getMonthlySalesDetailsBetweenDatesUrl, {fromDate: _fromDate, toDate: _toDate, preview}, this.accessTokenService.getAccessToken());
+  }
+  getYearlySalesDetailsBetweenDates(fromDate, toDate, preview) {
+    toDate.setDate(toDate.getDate() + 1);
+    let _fromDate = DateTimeHelper.getDateWithCurrentTimezone(fromDate);
+    let _toDate = DateTimeHelper.getDateWithCurrentTimezone(toDate);
+    return this.http.post(AuthAnalysisContributorUrl.getYearlySalesDetailsBetweenDatesUrl, {fromDate: _fromDate, toDate: _toDate, preview}, this.accessTokenService.getAccessToken());
+  }
+  getSalesDetailsPreviewBetweenDates(fromDate, toDate) {
+    toDate.setDate(toDate.getDate() + 1);
+    let _fromDate = DateTimeHelper.getDateWithCurrentTimezone(fromDate);
+    let _toDate = DateTimeHelper.getDateWithCurrentTimezone(toDate);
+    return this.http.post(AuthAnalysisContributorUrl.getSalesPreviewBetweenDatesUrl, {fromDate: _fromDate, toDate: _toDate}, this.accessTokenService.getAccessToken());
+  }
   getYearlySalesAnalysis() {
     let dateAsString = DateTimeHelper.getTodayWithCurrentTimezone().toISOString();
     return this.http.get(AuthAnalysisContributorUrl.getYearlySalesAnalysisUrl + '?date=' + dateAsString, this.accessTokenService.getAccessToken());
