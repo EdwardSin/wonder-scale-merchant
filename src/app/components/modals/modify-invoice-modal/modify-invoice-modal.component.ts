@@ -148,6 +148,11 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
           isCompletedChecked: true,
         })
       }
+      if (this.item.promotions?.length) {
+        this.form.patchValue({
+          promotion: this.item.promotions[0]['_id']
+        })
+      }
       this.notifyCalculation();
     }
   }
