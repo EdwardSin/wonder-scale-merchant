@@ -2,14 +2,14 @@ import { Color } from "ng2-charts";
 import * as _ from 'lodash';
 
 export class Chart{
-    static  lineGraphType: string = 'line';
+    static  graphType: string = 'line';
     static lineChartColors: Color[] = [
       {
         borderColor: '#b71c1c',
         backgroundColor: 'rgba(127, 0, 0, .5)',
       },
     ];
-    static lineChartOptions = {
+    static chartOptions = {
       responsive: true,
       maintainAspectRatio: false,
       scales: {
@@ -22,8 +22,7 @@ export class Chart{
         }]
       },
       tooltips: {
-          mode: 'index',
-          axis: 'y'
+          intersect: false
       }
     }
     static colorSchema = [{
@@ -49,31 +48,27 @@ export class Chart{
       backgroundColor: 'rgba(112, 112, 219, .5)'
     }
     ];
-    lineChartOptions = {
-      responsive: true,
-      maintainAspectRatio: false,
-      scales: {
-        yAxes: [{
-          ticks: {
-            suggestedMax: 100,
-            beginAtZero: true,
-            callback: function (value) { if (Number.isInteger(value)) { return value; } }
-          }
-        }]
-      },
-      tooltips: {
-          mode: 'index',
-          axis: 'y'
-      }
-    }
-    public static createChart() {
+    public static createChart(options?, type?, colors?) {
       return _.cloneDeep({
         data: [{data: [], label: 1}],
         labels: [],
         legend: false,
-        options: this.lineChartOptions,
-        chartType: this.lineGraphType,
-        colors: this.colorSchema
+        options: _.assignIn({}, this.chartOptions, options),
+        chartType: type || this.graphType,
+        colors: colors || this.colorSchema
+      });
+    }
+    public static createPieChart(options?, colors?) {
+      return _.cloneDeep({
+        data: [],
+        labels: [],
+        legend: false,
+        options: _.assignIn({}, options, {
+          responsive: true,
+          maintainAspectRatio: false
+        }),
+        chartType: 'doughnut',
+        colors: colors || this.colorSchema
       });
     }
   }
