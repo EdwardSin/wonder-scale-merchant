@@ -80,7 +80,7 @@
             <mat-checkbox [color]="'primary'" class="font-9 mb-2 d-block" formControlName="isActiveToday" (change)="updateActiveDateToToday($event)">Active from today</mat-checkbox>
             <div>
                 <label id="activeDate" class="mb-0 font-9">Active Date:</label>
-                <input for="activeDate" (click)="activeDatePicker.open()" class="form-control form-control-sm" formControlName="activeDate" (dateChange)="updateActiveDate($event)" [matDatepicker]="activeDatePicker" [min]="today"/>
+                <input for="activeDate" (click)="activeDatePicker.open()" class="form-control form-control-sm" formControlName="activeDate" (dateChange)="updateActiveDate($event)" [matDatepicker]="activeDatePicker"/>
                 <mat-datepicker #activeDatePicker startView="month"></mat-datepicker>
             </div>
         </div>
@@ -104,3 +104,5 @@
         </div>
     </form>
 </ws-modal>
+<confirm-modal *ngIf="isModifyPastPromotionModalOpened" [(isOpened)]="isModifyPastPromotionModalOpened" id="modifyPastPromotionModal" [loading]="modifyLoading.isRunning()" [message]="'Are you sure to ' + (selectedPromotion  ? 'modify' : 'create') + ' a past promotion?'" [action]="modifyPromotionCallback.bind(this)" [closeCallback]="returnToModifyPromotion.bind(this)">
+</confirm-modal>
