@@ -194,7 +194,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
     this.inListItems.push({
       name: this.form.controls['itemName'].value,
       type: this.form.controls['itemType'].value ? this.form.controls['itemType'].value.name : 'Default',
-      quantity: this.form.controls['itemQuantity'].value || 1,
+      quantity: +this.form.controls['itemQuantity'].value || 1,
       price: +this.form.controls['itemPrice'].value,
     });
     this.notifyCalculation();
