@@ -14,6 +14,7 @@ import { AuthAnalysisContributorService } from '@services/http/auth-store/contri
 import { WsLoading } from '@elements/ws-loading/ws-loading';
 import * as XLSX from 'xlsx';
 import _ from 'lodash';
+import { ScreenService } from '@services/general/screen.service';
 export const DAY_FORMATS = {
   parse: {
     dateInput: 'MMM/YYYY',
@@ -47,6 +48,7 @@ export class ExportSalesModalComponent extends WsModalComponent implements OnIni
   minDate = new Date;
   maxDate = new Date;
   last60MonthsDate = new Date;
+  isMobileSize: boolean;
   selectedType = new FormControl('month');
   fromDate = new FormControl(moment().date(1));
   toDate = new FormControl(moment());
@@ -56,12 +58,15 @@ export class ExportSalesModalComponent extends WsModalComponent implements OnIni
   exportLoading: WsLoading = new WsLoading();
   previewLoading: WsLoading = new WsLoading();
   private ngUnsubscribe: Subject<any> = new Subject();
-  constructor(private ref: ChangeDetectorRef, private authAnalysisContributorService: AuthAnalysisContributorService) {
+  constructor(private screenService: ScreenService, private authAnalysisContributorService: AuthAnalysisContributorService) {
     super();
   }
   ngOnInit() {
     super.ngOnInit();
     this.minDate = moment().set('year', 2019).toDate();
+    this.screenService.isMobileSize.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+      this.isMobileSize = result;
+    })
   }
   ngOnDestroy() {
     super.ngOnDestroy();
