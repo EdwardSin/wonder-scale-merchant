@@ -12,10 +12,16 @@
                     <h4 class="h6 mb-0 font-weight-normal font-9" style="min-width: 200px">
                         Available Until:
                     </h4>
-                    <p class="font-9 p-2 mb-0 text-right">
-                        <span *ngIf="promotion?.to">{{promotion?.to | date: 'yyyy-MMM-dd'}}</span>
-                        <span *ngIf="!promotion?.to">No Expiration</span>
-                    </p>
+                    <div class="text-right">
+                        <p *ngIf="promotion?.from" class="font-9 p-1 mb-0 d-inline-block">
+                            <span>{{promotion?.from | date: 'yyyy-MMM-dd'}}</span>
+                        </p>
+                        <span class="font-9">until</span>
+                        <p class="font-9 p-1 mb-0 d-inline-block">
+                            <span *ngIf="promotion?.to">{{promotion?.to | date: 'yyyy-MMM-dd'}}</span>
+                            <span *ngIf="!promotion?.to">no expiration</span>
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>

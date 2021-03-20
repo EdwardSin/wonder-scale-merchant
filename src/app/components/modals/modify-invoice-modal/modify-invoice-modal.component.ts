@@ -348,12 +348,12 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
       isShownExpiry: true,
       isShownEnabled: true
     };
-    if (!this.isEditable()) {
-      obj['isShownInactive'] = true
-    }
     this.authPromotionContributorService.getPromotions(obj).pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       if (result && result['result']) {
         this.promotions = result['result'];
+        if (this.item && this.item.promotions && this.item.promotions.length) {
+          this.promotions = [...this.promotions, ...this.item.promotions];
+        }
         this.notifyCalculation();
       }
     })
