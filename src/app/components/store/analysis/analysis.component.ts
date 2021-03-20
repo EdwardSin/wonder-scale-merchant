@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { WsLoading } from '@elements/ws-loading/ws-loading';
+import { DocumentHelper } from '@helpers/documenthelper/document.helper';
 import { SharedStoreService } from '@services/shared/shared-store.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -25,6 +26,7 @@ export class AnalysisComponent implements OnInit {
     }
     this.sharedStoreService.store.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       this.store = result;
+      DocumentHelper.setWindowTitleWithWonderScale('Analysis - ' + result.name);
       if (result && result.package) {
         this.selectedPackage = result.package.name;
       }

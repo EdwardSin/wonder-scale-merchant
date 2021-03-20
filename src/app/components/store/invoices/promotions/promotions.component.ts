@@ -21,6 +21,7 @@ import { finalize, takeUntil } from 'rxjs/operators';
 })
 export class PromotionsComponent implements OnInit {
   form: FormGroup;
+  store;
   promotions = [];
   selectedPromotion;
   queryParams = { page: 1, keyword: '', order: '', orderBy: 'asc' };
@@ -78,6 +79,7 @@ export class PromotionsComponent implements OnInit {
       });
     this.sharedStoreService.store.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       if (result) {
+        this.store = result;
         DocumentHelper.setWindowTitleWithWonderScale('Promotions - ' + result.name);
       }
     });

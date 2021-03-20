@@ -81,6 +81,15 @@ export class AuthAnalysisContributorService {
     let dateAsString = DateTimeHelper.getTodayWithCurrentTimezone().toISOString();
     return this.http.get(AuthAnalysisContributorUrl.getYearlyInvoiceAnalysisUrl + '?date=' + dateAsString, this.accessTokenService.getAccessToken());
   }
+  getOngoingPromotions(){
+    return this.http.get(AuthAnalysisContributorUrl.getOngoingPromotionsUrl, this.accessTokenService.getAccessToken());
+  }
+  getPromotionsInvoiceNumber(obj) {
+    return this.http.post(AuthAnalysisContributorUrl.getPromotionsInvoiceNumberUrl, obj, this.accessTokenService.getAccessToken());
+  }
+  getPromotionInvoiceNumberBetweenDate(obj) {
+    return this.http.post(AuthAnalysisContributorUrl.getPromotionInvoiceNumberBetweenDateUrl, obj, this.accessTokenService.getAccessToken());
+  }
   increment(target, duration, value, isDecimal=false) {
     $(target).each(function () {
       $(target).animate({
