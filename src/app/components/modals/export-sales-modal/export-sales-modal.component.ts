@@ -188,6 +188,9 @@ export class ExportSalesModalComponent extends WsModalComponent implements OnIni
   }
   renderMonthlySalesToXLSX(result) {
     let monthlyResult = result;
+    monthlyResult = _.orderBy(monthlyResult, result => {
+      return moment(result.date)
+    });
     monthlyResult = monthlyResult.map((sale) => {
       return {
         'Date': moment(sale.date).format('DD/MMM/YYYY'),
@@ -203,6 +206,9 @@ export class ExportSalesModalComponent extends WsModalComponent implements OnIni
   }
   renderYearlySalesToXLSX(result) {
     let yearlyResult = result;
+    yearlyResult = _.orderBy(yearlyResult, result => {
+      return moment(result.date)
+    });
     yearlyResult = yearlyResult.map((sale) => {
       return {
         'Date': moment(sale.date).format('MMM/YYYY'),
