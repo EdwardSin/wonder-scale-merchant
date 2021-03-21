@@ -3,8 +3,8 @@ import { WsLoading } from '@elements/ws-loading/ws-loading';
 import { Chart as WsChart } from '@objects/chart';
 import { AuthAnalysisContributorService } from '@services/http/auth-store/contributor/auth-analysis-contributor.service';
 import { AuthPromotionContributorService } from '@services/http/auth-store/contributor/auth-promotion-contributor.service';
-import { Subject } from 'rxjs';
-import { delay, finalize, takeUntil } from 'rxjs/operators';
+import { Subject, timer } from 'rxjs';
+import { delay, finalize, switchMap, takeUntil } from 'rxjs/operators';
 import * as moment from 'moment';
 import _ from 'lodash';
 import { BaseChartDirective } from 'ng2-charts';
@@ -23,11 +23,14 @@ export class PromotionFigureComponent implements OnInit {
   ongoingPromotions = [];
   loading: WsLoading = new WsLoading;
   promotionChartLoading: WsLoading = new WsLoading;
+  boardLoading: WsLoading = new WsLoading;
   promotionsPieChart = WsChart.createPieChart();
   defaultPieChart = WsChart.createPieChart();
   isDisplayPieChart: boolean;
   previousSelectedPromotionPieChartItem;
   previousPromotionBackgroundColor;
+  ongoingPromotionsSubscription;
+  REFRESH_PROMOTIONS_INTERVAL = 2 * 60 * 1000;
   @ViewChildren( BaseChartDirective ) charts: QueryList<BaseChartDirective>;
   promotionsChartOptions = {
     title: {
@@ -41,11 +44,12 @@ export class PromotionFigureComponent implements OnInit {
   constructor(private authPromotionContributorService: AuthPromotionContributorService,
     private authAnalysisContributorService: AuthAnalysisContributorService) {
     this.setupChartConfiguration();
+    this.authAnalysisContributorService.refreshFunction.next(this.getOngoingPromotions.bind(this));
   }
   ngOnInit(): void {
     this.loading.start();
     this.getAllPromotions();
-    this.getOngoingPromotions();
+    this.refreshOngoingPromotions();
   }
   setupChartConfiguration() {
     this.promotionsPieChart.options = {
@@ -106,17 +110,32 @@ export class PromotionFigureComponent implements OnInit {
     });
   }
   getOngoingPromotions() {
-    this.authAnalysisContributorService.getOngoingPromotions().pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
-      this.ongoingPromotions = result['result'].map(promotion => {
-        return {
-          _id: promotion._id,
-          name: promotion.title,
-          from: promotion.activeDate,
-          to: promotion.expiryDate,
-          isEnabled: promotion.isEnabled,
-          value: promotion.numberOfInvoices
-        }
-      });
+    this.boardLoading.start();
+    this.authAnalysisContributorService.refreshLoading.next(this.boardLoading.isRunning());
+    this.authAnalysisContributorService.getOngoingPromotions().pipe(
+      takeUntil(this.ngUnsubscribe), finalize(() => {
+        this.boardLoading.stop();
+        this.authAnalysisContributorService.refreshLoading.next(this.boardLoading.isRunning());
+      })).subscribe(this.getOnGoingPromotionsCallback.bind(this));
+  }
+  refreshOngoingPromotions() {
+    if (this.ongoingPromotionsSubscription) {
+      this.ongoingPromotionsSubscription.unsubscribe();
+    }
+    this.ongoingPromotionsSubscription = timer(0, this.REFRESH_PROMOTIONS_INTERVAL).pipe(
+      switchMap(() => this.authAnalysisContributorService.getOngoingPromotions()),
+      takeUntil(this.ngUnsubscribe)).subscribe(this.getOnGoingPromotionsCallback.bind(this));
+  }
+  getOnGoingPromotionsCallback(result) {
+    this.ongoingPromotions = result['result'].map(promotion => {
+      return {
+        _id: promotion._id,
+        name: promotion.title,
+        from: promotion.activeDate,
+        to: promotion.expiryDate,
+        isEnabled: promotion.isEnabled,
+        value: promotion.numberOfInvoices
+      }
     });
   }
   getSelectedPromotionsPieDate() {

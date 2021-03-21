@@ -8,6 +8,7 @@
 ---------------------------------------------
 .: WSM: Task: Promotion benefit diagram (WSM-272)
 .: WSM: BugFix: Fix to store string quantity (WSM-273)
+.: WSM: Task: Add interval update to promotion (WSM-41)
 
 ---------------------------------------------
 - 2021-03-11                                -

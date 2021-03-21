@@ -21,6 +21,7 @@ export class SalesFigureComponent implements OnInit {
   yearlySalesLoading: WsLoading = new WsLoading;
   salesLoading: WsLoading = new WsLoading;
   cumulativeLoading: WsLoading = new WsLoading;
+  boardLoading: WsLoading = new WsLoading;
   startHour: Date = new Date;
   endHour: Date = new Date;
   totalMonthlySales = 0;
@@ -38,18 +39,20 @@ export class SalesFigureComponent implements OnInit {
   salesChart = Chart.createChart();
   yearlySalesChart = Chart.createChart();
   cumulativeChart = Chart.createChart();
-  REFRESH_MONTHLY_SALES_INTERVAL = 30 * 60 * 1000;
+  REFRESH_MONTHLY_SALES_INTERVAL = 2 * 60 * 1000;
   isMobileSize: boolean;
   private ngUnsubscribe: Subject<any> = new Subject();
   constructor(private authAnalysisContributorService: AuthAnalysisContributorService,
-    private screenService: ScreenService) { }
+    private screenService: ScreenService) { 
+      this.authAnalysisContributorService.refreshFunction.next(this.getMonthlySales.bind(this));
+  }
 
   ngOnInit(): void {
     this.setupData();
     this.salesChart.options.scales.yAxes[0].ticks.suggestedMax = 1000;
     this.yearlySalesChart.options.scales.yAxes[0].ticks.suggestedMax = 1000;
     this.cumulativeChart.options.scales.yAxes[0].ticks.suggestedMax = 1000;
-    this.getMonthlySales();
+    this.refreshMonthlySales();
     this.getYearlySales();
     this.getSalesBetweenDates();
     this.screenService.isMobileSize.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
@@ -63,14 +66,26 @@ export class SalesFigureComponent implements OnInit {
     this.toDate = new Date;
   }
   getMonthlySales() {
+    this.boardLoading.start();
+    this.authAnalysisContributorService.refreshLoading.next(this.boardLoading.isRunning());
+    this.authAnalysisContributorService.getMonthSalesAnalysis().pipe(
+      takeUntil(this.ngUnsubscribe),
+      finalize(() => {
+        this.boardLoading.stop();
+        this.authAnalysisContributorService.refreshLoading.next(this.boardLoading.isRunning());
+      })).subscribe(this.getMonthlySalesCallback.bind(this));
+  }
+  refreshMonthlySales() {
     if (this.monthlySalesAnalysisSubscription) {
       this.monthlySalesAnalysisSubscription.unsubscribe();
     }
-    this.monthlySalesAnalysisSubscription = timer(0, this.REFRESH_MONTHLY_SALES_INTERVAL).pipe(switchMap(() => this.authAnalysisContributorService.getMonthSalesAnalysis()),
-      takeUntil(this.ngUnsubscribe)).subscribe(result => {
-        this.sales = result['result'];
-        this.authAnalysisContributorService.increment(this.monthlySales.nativeElement, 1000, this.sales.totalMonthlySales, true);
-      });
+    this.monthlySalesAnalysisSubscription = timer(0, this.REFRESH_MONTHLY_SALES_INTERVAL).pipe(
+      switchMap(() => this.authAnalysisContributorService.getMonthSalesAnalysis()),
+      takeUntil(this.ngUnsubscribe)).subscribe(this.getMonthlySalesCallback.bind(this));
+  }
+  getMonthlySalesCallback(result) {
+    this.sales = result['result'];
+    this.authAnalysisContributorService.increment(this.monthlySales.nativeElement, 1000, this.sales.totalMonthlySales, true);
   }
   getYearlySales() {
     this.yearlySalesLoading.start();
