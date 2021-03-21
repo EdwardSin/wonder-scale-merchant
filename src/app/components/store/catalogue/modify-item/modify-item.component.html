@@ -186,12 +186,12 @@
                             </mat-tab>
                             <mat-tab label="Type">
                                 <div class="px-lg-3 py-3">
-                                    <modify-item-type [item]="currentItem" [itemForm]="itemGroup" (onSaveClick)="editItemTypesFunction = $event" (validation)="validateItemTypesForm = $event"></modify-item-type>
+                                    <modify-item-type [item]="currentItem" [itemForm]="itemGroup" (isRefresh)="onRefreshCallback($event)" (onSaveClick)="editItemTypesFunction = $event" (validation)="validateItemTypesForm = $event"></modify-item-type>
                                 </div>
                             </mat-tab>
                         </mat-tab-group>
                         <div>
-                            <button [routerLink]="[]" [queryParams]="{id: null, modal: null}" [queryParamsHandling]="'merge'" class="btn btn-sm btn-controller float-right ml-2">Cancel</button>
+                            <button (click)="closeModifyItemModal()" class="btn btn-sm btn-controller float-right ml-2">Cancel</button>
                             <ws-loading-button *ngIf="!currentItem" class="d-block" [loading]="addItemLoading.isRunning()" [class]="'btn btn-sm btn-controller float-right mr-0'" type="button" (click)="uploadAndAddItem()">Create
                             </ws-loading-button>
                             <ws-loading-button *ngIf="currentItem" class="d-block" [loading]="addItemLoading.isRunning()" [class]="'btn btn-sm btn-controller float-right mr-0'" type="button" (click)="uploadAndEditItem()">Save
