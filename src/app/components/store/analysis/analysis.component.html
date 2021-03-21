@@ -7,6 +7,8 @@
     <mat-option *ngIf="selectedPackage == 'premium'" value="invoice">Invoice</mat-option>
     <mat-option *ngIf="selectedPackage == 'premium'" value="promotion">Promotion</mat-option>
 </mat-select>
+<button [disabled]="refreshLoading" class="btn btn-sm btn-controller float-right ml-2" (click)="refreshFunction()">
+    <ws-spinner [width]="15" [height]="15" [borderWidth]="1" [spinnerColor]="'#b71c1c'" class="mr-2" *ngIf="refreshLoading"></ws-spinner>Refresh</button>
 <button *ngIf="analysisType == 'sales'" class="btn btn-sm btn-controller float-right" (click)="isExportSalesModalOpened = true">Export</button>
 <router-outlet></router-outlet>
 <export-sales-modal *ngIf="isExportSalesModalOpened" [(isOpened)]="isExportSalesModalOpened"></export-sales-modal>

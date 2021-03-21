@@ -4,11 +4,14 @@ import { AuthAnalysisContributorUrl } from '@enum/url.enum';
 import { AccessTokenService } from '../access-token.service';
 import * as moment from 'moment';
 import { DateTimeHelper } from '@helpers/datetimehelper/datetime.helper';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthAnalysisContributorService {
+  refreshFunction: Subject<any> = new Subject<any>();
+  refreshLoading: Subject<boolean> = new Subject<boolean>();
 
   constructor(private http: HttpClient, private accessTokenService: AccessTokenService) { }
   getGeneralAnalysis() {

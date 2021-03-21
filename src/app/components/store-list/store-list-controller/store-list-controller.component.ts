@@ -19,7 +19,7 @@ export class StoreListControllerComponent implements OnInit {
   user;
   activeStoreList: Array<any> = [];
   pendingStoreList: Array<any> = [];
-  REFREASH_PENDING_STORE_INTERVAL = 60 * 1000;
+  REFREASH_PENDING_STORE_INTERVAL = 2 * 60 * 1000;
   loading: WsLoading = new WsLoading;
 
   constructor(

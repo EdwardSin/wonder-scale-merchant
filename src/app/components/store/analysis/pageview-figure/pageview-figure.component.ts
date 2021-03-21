@@ -5,10 +5,11 @@ import * as moment from 'moment';
 import { Color } from 'ng2-charts';
 import { AuthTrackContributorService } from '@services/http/auth-store/contributor/auth-track-contributor.service';
 import { Subject, timer } from 'rxjs';
-import { takeUntil, delay, switchMap } from 'rxjs/operators';
+import { takeUntil, delay, switchMap, finalize } from 'rxjs/operators';
 import { ScreenService } from '@services/general/screen.service';
 import { DocumentHelper } from '@helpers/documenthelper/document.helper';
 import { SharedStoreService } from '@services/shared/shared-store.service';
+import { AuthAnalysisContributorService } from '@services/http/auth-store/contributor/auth-analysis-contributor.service';
 
 @Component({
   selector: 'app-pageview-figure',
@@ -48,6 +49,7 @@ export class PageviewFigureComponent implements OnInit {
   loading: WsLoading = new WsLoading;
   todayTrackLoading: WsLoading = new WsLoading;
   tracksLoading: WsLoading = new WsLoading;
+  boardLoading: WsLoading = new WsLoading;
   targets = ['Number of Total Customers'];
   fromDate = new Date;
   toDate = new Date;
@@ -86,7 +88,7 @@ export class PageviewFigureComponent implements OnInit {
   moment = moment;
   todayTrackSubscription;
   dateBetweenTrackSubscription;
-  REFRESH_TRACK_INTERVAL = 30 * 60 * 1000;
+  REFRESH_TRACK_INTERVAL = 2 * 60 * 1000;
   historyChart = {
     data: [],
     labels: [],
@@ -96,16 +98,19 @@ export class PageviewFigureComponent implements OnInit {
     colors: this.colorSchema
   }
   private ngUnsubscribe: Subject<any> = new Subject;
-  constructor(private sharedStoreService: SharedStoreService, private screenService: ScreenService, private authTrackContributorService: AuthTrackContributorService) {
+  constructor(
+    private authAnalysisContributorService: AuthAnalysisContributorService,
+    private sharedStoreService: SharedStoreService, private screenService: ScreenService, private authTrackContributorService: AuthTrackContributorService) {
     this.getTargetsInSession();
     this.screenService.isMobileSize.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       this.isMobileSize = result;
     })
+    this.authAnalysisContributorService.refreshFunction.next(this.getTodayTrack.bind(this));
   }
   ngOnInit(): void {
     this.setupData();
     this.getBetweenTracks();
-    this.getTodayTrack();
+    this.refreshTodayTrack();
     this.sharedStoreService.store.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
         if (result) {
@@ -154,19 +159,30 @@ export class PageviewFigureComponent implements OnInit {
       })
   }
   getTodayTrack() {
+    this.boardLoading.start();
+    this.authAnalysisContributorService.refreshLoading.next(this.boardLoading.isRunning());
+    this.authTrackContributorService.getTodayTrack(this.startHour).pipe(
+      takeUntil(this.ngUnsubscribe),
+      finalize(() => {
+        this.boardLoading.stop();
+        this.authAnalysisContributorService.refreshLoading.next(this.boardLoading.isRunning());
+      })).subscribe(this.getTodayTrackCallback.bind(this));
+  }
+  refreshTodayTrack() {
     this.todayTrackLoading.start();
     this.setStartHourInSession();
     if (this.todayTrackSubscription) {
       this.todayTrackSubscription.unsubscribe();
     }
-    this.todayTrackSubscription = timer(0, this.REFRESH_TRACK_INTERVAL).pipe(switchMap(() => this.authTrackContributorService.getTodayTrack(this.startHour)),
-      takeUntil(this.ngUnsubscribe))
-      .subscribe(result => {
-        this.updateTodayCustomer(result['result']);
-        this.increment(this.numberOfCustomer.nativeElement, 500, this.totalNumberOfCustomerToday);
-        this.todayTrackLoading.stop();
-        this.updatedDate = new Date;
-      })
+    this.todayTrackSubscription = timer(0, this.REFRESH_TRACK_INTERVAL).pipe(
+      switchMap(() => this.authTrackContributorService.getTodayTrack(this.startHour)),
+      takeUntil(this.ngUnsubscribe)).subscribe(this.getTodayTrackCallback.bind(this));
+  }
+  getTodayTrackCallback(result) {
+    this.updateTodayCustomer(result['result']);
+    this.increment(this.numberOfCustomer.nativeElement, 500, this.totalNumberOfCustomerToday);
+    this.todayTrackLoading.stop();
+    this.updatedDate = new Date;
   }
   getHourRange() {
     let toHour = this.startHour - 1;
