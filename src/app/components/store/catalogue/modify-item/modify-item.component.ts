@@ -49,7 +49,7 @@ export class ModifyItemComponent implements OnInit {
   profileImageIndex = 0;
   itemId;
   profileImageName;
-  isRefreashCategories: boolean;
+  isRefreshCategories: boolean;
   defaultSetting = {
     is__new: true,
     isInStock: true,
@@ -257,7 +257,7 @@ export class ModifyItemComponent implements OnInit {
       finalize(() => { this.addItemLoading.stop() }))
       .subscribe(() => {
         this.currentItem = this.tempItem;
-        this.isRefreashCategories = true;
+        this.isRefreshCategories = true;
         this.closeModifyItemModal();
       }, err => {
         let message = err.error && err.error.message ? err.error.message : 'Error when creating items!';
@@ -283,7 +283,7 @@ export class ModifyItemComponent implements OnInit {
       }),
       finalize(() => { this.addItemLoading.stop(); }))
       .subscribe(() => {
-        this.isRefreashCategories = true;
+        this.isRefreshCategories = true;
         this.closeModifyItemModal();
       }, err => {
         let message = err.error && err.error.message ? err.error.message : 'Error when editing items!';
@@ -373,7 +373,7 @@ export class ModifyItemComponent implements OnInit {
           }
           this.authItemContributorService.removeProfileImage(obj).pipe(takeUntil(this.ngUnsubscribe))
             .subscribe(result => {
-              this.isRefreashCategories = true;
+              this.isRefreshCategories = true;
               let removeIndex = this.allProfileItems.indexOf(file);
               this.profileImageIndex = ImageHelper.getRemoveProfileImageIndex(this.allProfileItems.length, removeIndex, this.profileImageIndex);
               this.allProfileItems = this.allProfileItems.filter(x => x.name != filename);
@@ -401,7 +401,7 @@ export class ModifyItemComponent implements OnInit {
           }
           this.authItemContributorService.removeDescriptionImage(obj).pipe(takeUntil(this.ngUnsubscribe))
             .subscribe(result => {
-              this.isRefreashCategories = true;
+              this.isRefreshCategories = true;
               this.allDescriptionItems = this.allDescriptionItems.filter(x => x.name != filename);
             });
         }
@@ -439,13 +439,13 @@ export class ModifyItemComponent implements OnInit {
     }
   }
   closeModifyItemModal() {
-    if (this.isRefreashCategories) {
+    if (this.isRefreshCategories) {
       this.sharedCategoryService.refreshCategories();
     }
     this.router.navigate([], {queryParams: {id: null, modal: null}, queryParamsHandling:'merge'});
   }
   onRefreshCallback(event) {
-    this.isRefreashCategories = event;
+    this.isRefreshCategories = event;
   }
   onDragEnter(event) {
     $('.upload-profile-images__drop-area').css({'z-index': 2});
