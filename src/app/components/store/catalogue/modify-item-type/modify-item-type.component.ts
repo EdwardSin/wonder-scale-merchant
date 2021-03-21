@@ -28,6 +28,7 @@ export class ModifyItemTypeComponent implements OnInit {
   @Input('item') currentItem: Item;
   @Output('onSaveClick')  onSaveClick: EventEmitter<Function> = new EventEmitter();
   @Output('validation') validateItemTypesForm: EventEmitter<Function> = new EventEmitter();
+  @Output('isRefresh') isRefresh: EventEmitter<boolean> = new EventEmitter();
   itemTypesForm: FormGroup;
   environment = environment;
   colors = [];
@@ -38,9 +39,7 @@ export class ModifyItemTypeComponent implements OnInit {
   loading: WsLoading = new WsLoading;
   private ngUnsubscribe: Subject<any> = new Subject;
   constructor(
-    private router: Router,
     private uploadHelper: UploadHelper,
-    private sharedCategoryService: SharedCategoryService,
     private authItemContributorService: AuthItemContributorService,
     public currencyService: CurrencyService,
     private sharedStoreService: SharedStoreService,
@@ -110,7 +109,7 @@ export class ModifyItemTypeComponent implements OnInit {
         }))
       }),
       mergeMap(image => {
-      let index = allImages.indexOf(image);
+      let index = allImages.findIndex(_image => _image.base64 === image.base64);
       let obj = {
         id: image['id'],
         file: image['base64'],
@@ -144,6 +143,7 @@ export class ModifyItemTypeComponent implements OnInit {
             .subscribe(() => {
               itemType.images = itemType.images.filter(x => x.name != filename);
               itemTypeControl.controls['images'].setValue(itemType.images);
+              this.isRefresh.emit(true);
             });
         }
       }
@@ -174,17 +174,16 @@ export class ModifyItemTypeComponent implements OnInit {
     this.itemTypeLoading.start();
     return this.authItemContributorService.editItemTypes(obj).pipe(mergeMap(result => {
       let itemTypes = result['result']['types'];
-      return forkJoin(from(itemTypes.map(type => type._id)).pipe(mergeMap((itemTypeId, index) => {
-        let allImages = this.itemTypesForm.get('itemTypes').value[index]['images'];
-        let images = allImages.filter(image => image.type == 'blob');
-        return images.length ? this.uploadItemImages(allImages, images, itemTypeId, id): of(0);
-      })))
+      if (itemTypes.length) {
+        return forkJoin([from(itemTypes.map(type => type._id)).pipe(mergeMap((itemTypeId, index) => {
+          let allImages = this.itemTypesForm.get('itemTypes').value[index]['images'];
+          let images = allImages.filter(image => image.type == 'blob');
+          return images.length ? this.uploadItemImages(allImages, images, itemTypeId, id): of(0);
+        }))])
+      }
+      return of(0);
     }), takeUntil(this.ngUnsubscribe),
-    finalize(() => this.itemTypeLoading.stop()),
-    tap(() => {
-      this.sharedCategoryService.refreshCategories();
-      this.router.navigate([], {queryParams: {id: null, modal: null}, queryParamsHandling: 'merge'});
-    }));
+    finalize(() => this.itemTypeLoading.stop()));
   }
   removeItemType(type) {
     if (type.value._id) {
@@ -196,6 +195,7 @@ export class ModifyItemTypeComponent implements OnInit {
         this.authItemContributorService.removeItemType(obj).pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
           let itemTypes = this.itemTypesForm.get('itemTypes') as FormArray;
           itemTypes.removeAt(itemTypes.controls.indexOf(type));
+          this.isRefresh.emit(true);
         });
       }
     } else {
