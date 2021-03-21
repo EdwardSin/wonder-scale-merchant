@@ -1,0 +1,106 @@
+<div class="promotion-figure-container">
+    <div *ngIf="ongoingPromotions.length">
+        <h6 class="h6">Ongoing</h6>
+        <div class="row no-gutters mb-2">
+            <div class="col-lg-3 col pr-lg-2 mb-2" *ngFor="let promotion of ongoingPromotions">
+                <div *ngIf="boardLoading.isRunning()" class="ws-board-loading">
+                    <ws-spinner [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>
+                </div>
+                <div class="promotion-figure promotion-figure__ongoing">
+                    <h4 class="h6 font-weight-bold">{{ promotion?.name }}</h4>
+                    <h4 class="h6 mb-0 font-weight-normal font-9" style="min-width: 200px">
+                        Total invoices:
+                    </h4>
+                    <p class="promotion-figure__ongoing__figure font-9">{{promotion?.value}}</p>
+                    <h4 class="h6 mb-0 font-weight-normal font-9" style="min-width: 200px">
+                        Available Until:
+                    </h4>
+                    <div class="text-right">
+                        <p *ngIf="promotion?.from" class="font-9 p-1 mb-0 d-inline-block">
+                            <span>{{promotion?.from | date: 'yyyy-MMM-dd'}}</span>
+                        </p>
+                        <span class="font-9">until</span>
+                        <p class="font-9 p-1 mb-0 d-inline-block">
+                            <span *ngIf="promotion?.to">{{promotion?.to | date: 'yyyy-MMM-dd'}}</span>
+                            <span *ngIf="!promotion?.to">no expiration</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row no-gutters promotion-figure mb-3">
+        <h4 class="h5 font-weight-normal mb-3">Promotion</h4>
+        <div class="bg-white p-3">
+            <div class="row no-gutters mb-3 justify-content-between">
+                <div class="col-lg-2">
+                    <mat-select class="form-control form-control-sm" (selectionChange)="onPromotionChanged($event)" [value]="selectedPromotions" placeholder="Select Promotions" multiple>
+                        <mat-option [disabled]="(!selectedPromotions.includes(promotion._id) && selectedPromotions.length > 9) || 
+                        (selectedPromotions.includes(promotion._id) && selectedPromotions.length == 1)" *ngFor="let promotion of promotions" [value]="promotion._id">{{promotion.name}}</mat-option>
+                    </mat-select>
+                </div>
+                <!-- <div class="col-lg-2">
+                    <mat-select class="form-control form-control-sm" [(ngModel)]="selectedKind" placeholder="Kind">
+                        <mat-option [value]="'invoiceNumber'">Invoice Number</mat-option>
+                        <mat-option [value]="'discountValue'">Discount Value</mat-option>
+                    </mat-select>
+                </div> -->
+            </div>
+            <div *ngIf="loading.isRunning()" class="d-flex justify-content-center align-items-center w-100" style="height: 300px">
+                <ws-spinner [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>
+            </div>
+            <div *ngIf="!loading.isRunning()" class="row no-gutters position-relative">
+                <div class="promotion-figure__analyzer col-lg-4 d-flex align-items-center">
+                    <canvas baseChart *ngIf="isDisplayPieChart"
+                        [data]="promotionsPieChart.data"
+                        [labels]="promotionsPieChart.labels"
+                        [legend]="promotionsPieChart.legend"
+                        [options]="promotionsPieChart.options"
+                        [chartType]="promotionsPieChart.chartType"
+                        [colors]="promotionsPieChart.colors"
+                        (chartClick)="onPieChartClick($event)"></canvas>
+                    <div *ngIf="!isDisplayPieChart" class="position-absolute w-100 d-flex align-items-center justify-content-center" style="height: 300px; right: 0">
+                        <p class="mb-0" style="user-select: none; width: 275px; background-color: #fff; text-align: center; padding: .25rem 0; border: 1px solid #f7f7f7;">No data available</p>
+                    </div>
+                    <canvas baseChart *ngIf="!isDisplayPieChart"
+                        [data]="defaultPieChart.data"
+                        [labels]="defaultPieChart.labels"
+                        [legend]="defaultPieChart.legend"
+                        [options]="defaultPieChart.options"
+                        [chartType]="defaultPieChart.chartType"
+                        [colors]="defaultPieChart.colors"></canvas>
+                </div>
+                <div class="col-lg-8 position-relative" style="height: 300px">
+                    <canvas baseChart
+                    [datasets]="promotionsChart.data"
+                    [labels]="promotionsChart.labels"
+                    [legend]="promotionsChart.legend"
+                    [options]="promotionsChart.options"
+                    [chartType]="promotionsChart.chartType"
+                    [colors]="promotionsChart.colors"
+                    *ngIf="selectedPromotion && !promotionChartLoading.isRunning() && isDisplayPieChart; else loadingTemplate"
+                    ></canvas>
+                    <canvas baseChart
+                    [datasets]="defaultPromotionsChart.data"
+                    [labels]="defaultPromotionsChart.labels"
+                    [legend]="defaultPromotionsChart.legend"
+                    [options]="defaultPromotionsChart.options"
+                    [chartType]="defaultPromotionsChart.chartType"
+                    [colors]="defaultPromotionsChart.colors"
+                    *ngIf="!isDisplayPieChart"
+                    ></canvas>
+                    <p *ngIf="selectedPromotion == null && isDisplayPieChart" class="mb-0 text-muted d-flex align-items-center justify-content-center" style="min-height: 300px;">Select an item on pie chart</p>
+                    <div *ngIf="!isDisplayPieChart" class="position-absolute w-100 d-flex align-items-center justify-content-center" style="height: 300px; right: 0; top: 0; background-color: rgba(255, 255, 255, .7)">
+                        <p class="mb-0" style="user-select: none; width: 275px; background-color: #fff; text-align: center; padding: .25rem 0; border: 1px solid #f7f7f7;">No data available</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #loadingTemplate>
+    <ng-container *ngIf="promotionChartLoading.isRunning();">
+        <ws-spinner class="text-center w-100 d-flex justify-content-center align-items-center" style="height: 300px" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>
+    </ng-container>
+</ng-template>

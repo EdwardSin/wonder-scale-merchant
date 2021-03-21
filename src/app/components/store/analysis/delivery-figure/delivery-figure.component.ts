@@ -19,6 +19,7 @@ export class DeliveryFigureComponent implements OnInit {
   loading: WsLoading = new WsLoading;
   deliveryLoading: WsLoading = new WsLoading;
   cumulativeLoading: WsLoading = new WsLoading;
+  boardLoading: WsLoading = new WsLoading;
   startHour: Date = new Date;
   endHour: Date = new Date;
   totalMonthlyDelivery = 0;
@@ -35,15 +36,17 @@ export class DeliveryFigureComponent implements OnInit {
   monthlyDeliveryAnalysisSubscription;
   deliveryChart = Chart.createChart();
   cumulativeChart = Chart.createChart();
-  REFRESH_INTERVAL = 30 * 60 * 1000;
+  REFRESH_MONTHLY_DELIVERY_INTERVAL = 2 * 60 * 1000;
   isMobileSize: boolean;
   private ngUnsubscribe: Subject<any> = new Subject();
   constructor(private authAnalysisContributorService: AuthAnalysisContributorService,
-    private screenService: ScreenService) { }
+    private screenService: ScreenService) {
+    this.authAnalysisContributorService.refreshFunction.next(this.getMonthlyDelivery.bind(this));
+  }
 
   ngOnInit(): void {
     this.setupData();
-    this.getMonthlyDelivery();
+    this.refreshMonthlyDelivery();
     this.getYearlyDelivery();
     this.getDeliveryBetweenDates();
     this.screenService.isMobileSize.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
@@ -57,19 +60,31 @@ export class DeliveryFigureComponent implements OnInit {
     this.toDate = new Date;
   }
   getMonthlyDelivery() {
+    this.boardLoading.start();
+    this.authAnalysisContributorService.refreshLoading.next(this.boardLoading.isRunning())
+    this.authAnalysisContributorService.getMonthDeliveryAnalysis().pipe(
+      takeUntil(this.ngUnsubscribe),
+      finalize(() => {
+        this.boardLoading.stop();
+        this.authAnalysisContributorService.refreshLoading.next(this.boardLoading.isRunning());
+      })).subscribe(this.getMonthlyDeliveryCallback.bind(this));
+  }
+  refreshMonthlyDelivery() {
     if (this.monthlyDeliveryAnalysisSubscription) {
       this.monthlyDeliveryAnalysisSubscription.unsubscribe();
     }
-    this.monthlyDeliveryAnalysisSubscription = timer(0, this.REFRESH_INTERVAL).pipe(switchMap(() => this.authAnalysisContributorService.getMonthDeliveryAnalysis()),
-      takeUntil(this.ngUnsubscribe)).subscribe(result => {
-        this.delivery = result['result'];
-        this.authAnalysisContributorService.increment(this.monthlyDelivery.nativeElement, 1000, this.delivery.totalMonthlyDelivery, true);
-      });
+    this.monthlyDeliveryAnalysisSubscription = timer(0, this.REFRESH_MONTHLY_DELIVERY_INTERVAL).pipe(
+      switchMap(() => this.authAnalysisContributorService.getMonthDeliveryAnalysis()),
+      takeUntil(this.ngUnsubscribe)).subscribe(this.getMonthlyDeliveryCallback.bind(this));
+  }
+  getMonthlyDeliveryCallback(result) {
+    this.delivery = result['result'];
+    this.authAnalysisContributorService.increment(this.monthlyDelivery.nativeElement, 1000, this.delivery.totalMonthlyDelivery, true);
   }
   getYearlyDelivery() {
     this.cumulativeLoading.start();
     this.authAnalysisContributorService.getYearlyDeliveryAnalysis().pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
-    if (result['result']) {
+      if (result['result']) {
         this.getCumulativeDelivery(result['result']);
       }
     });
@@ -101,7 +116,7 @@ export class DeliveryFigureComponent implements OnInit {
   getCumulativeDelivery(delivery) {
     let total = 0;
     this.cumulativeChart.data[0].data = [];
-    for(let index of Array(12).keys()) {
+    for (let index of Array(12).keys()) {
       let foundDelivery = delivery.find(_delivery => {
         return moment().subtract(12 - index, 'months').startOf('month').diff(moment(_delivery.date).startOf('month'), 'months', true) == 0;
       })

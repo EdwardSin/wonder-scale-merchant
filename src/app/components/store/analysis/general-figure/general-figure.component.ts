@@ -17,7 +17,7 @@ export class GeneralFigureComponent implements OnInit {
   @ViewChild('pageViewFigureRef', { static: true }) pageViewFigureRef: ElementRef;
   @ViewChild('deliveryFigureRef', { static: true }) deliveryFigureRef: ElementRef;
   @ViewChild('invoiceFigureRef', { static: true }) invoiceFigureRef: ElementRef;
-  REFRESH_INTERVAL = 10 * 1000;
+  REFRESH_INTERVAL = 2 * 60 * 1000;
   analysis = {
     totalMonthlySales: 0,
     lastMonthSales: 0,
@@ -45,32 +45,44 @@ export class GeneralFigureComponent implements OnInit {
         this.selectedPackage = result.package.name;
       }
     })
+    this.authAnalysisContributorService.refreshFunction.next(this.getGeneralAnalysis.bind(this));
   }
 
   ngOnInit(): void {
     this.loading.start();
-    this.getGeneralAnalysis();
+    this.refreshGeneralAnalysis();
   }
   getGeneralAnalysis() {
+    this.loading.start();
+    this.authAnalysisContributorService.refreshLoading.next(this.loading.isRunning());
+    this.authAnalysisContributorService.getGeneralAnalysis().pipe(
+      takeUntil(this.ngUnsubscribe), finalize(() => {
+        this.authAnalysisContributorService.refreshLoading.next(false);
+      })).subscribe(this.getGeneralAnalysisCallback.bind(this));
+  }
+  refreshGeneralAnalysis() {
     if (this.generalAnalysisSubscription) {
       this.generalAnalysisSubscription.unsubscribe();
     }
-    this.generalAnalysisSubscription = timer(0, this.REFRESH_INTERVAL).pipe(switchMap(() => this.authAnalysisContributorService.getGeneralAnalysis()), takeUntil(this.ngUnsubscribe)).subscribe(result => {
-      this.analysis = result['result'];
-      if (this.salesFigureRef) {
-        this.authAnalysisContributorService.increment(this.salesFigureRef.nativeElement, 500, this.analysis.totalMonthlySales, true);
-      }
-      if (this.pageViewFigureRef) {
-        this.authAnalysisContributorService.increment(this.pageViewFigureRef.nativeElement, 500, this.analysis.totalPageview);
-      }
-      if (this.deliveryFigureRef) {
-        this.authAnalysisContributorService.increment(this.deliveryFigureRef.nativeElement, 500, this.analysis.totalMonthlyDelivery, true);
-      }
-      if  (this.invoiceFigureRef) {
-        this.authAnalysisContributorService.increment(this.invoiceFigureRef.nativeElement, 500, this.analysis.totalMonthlyInvoice);
-      }
-      this.loading.stop();
-    });
+    this.generalAnalysisSubscription = timer(0, this.REFRESH_INTERVAL).pipe(
+      switchMap(() => this.authAnalysisContributorService.getGeneralAnalysis()),
+      takeUntil(this.ngUnsubscribe)).subscribe(this.getGeneralAnalysisCallback.bind(this));
+  }
+  getGeneralAnalysisCallback(result) {
+    this.analysis = result['result'];
+    if (this.salesFigureRef) {
+      this.authAnalysisContributorService.increment(this.salesFigureRef.nativeElement, 500, this.analysis.totalMonthlySales, true);
+    }
+    if (this.pageViewFigureRef) {
+      this.authAnalysisContributorService.increment(this.pageViewFigureRef.nativeElement, 500, this.analysis.totalPageview);
+    }
+    if (this.deliveryFigureRef) {
+      this.authAnalysisContributorService.increment(this.deliveryFigureRef.nativeElement, 500, this.analysis.totalMonthlyDelivery, true);
+    }
+    if  (this.invoiceFigureRef) {
+      this.authAnalysisContributorService.increment(this.invoiceFigureRef.nativeElement, 500, this.analysis.totalMonthlyInvoice);
+    }
+    this.loading.stop();
   }
   ngOnDestroy() {
     this.ngUnsubscribe.next();

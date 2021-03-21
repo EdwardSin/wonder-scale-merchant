@@ -2,6 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { WsLoading } from '@elements/ws-loading/ws-loading';
 import { AuthAnalysisContributorService } from '@services/http/auth-store/contributor/auth-analysis-contributor.service';
 import * as moment from 'moment';
+import _ from 'lodash';
 import { Chart } from '@objects/chart';
 import { finalize, switchMap, takeUntil } from 'rxjs/operators';
 import { Subject, timer } from 'rxjs';
@@ -20,6 +21,7 @@ export class SalesFigureComponent implements OnInit {
   yearlySalesLoading: WsLoading = new WsLoading;
   salesLoading: WsLoading = new WsLoading;
   cumulativeLoading: WsLoading = new WsLoading;
+  boardLoading: WsLoading = new WsLoading;
   startHour: Date = new Date;
   endHour: Date = new Date;
   totalMonthlySales = 0;
@@ -37,18 +39,20 @@ export class SalesFigureComponent implements OnInit {
   salesChart = Chart.createChart();
   yearlySalesChart = Chart.createChart();
   cumulativeChart = Chart.createChart();
-  REFRESH_INTERVAL = 30 * 60 * 1000;
+  REFRESH_MONTHLY_SALES_INTERVAL = 2 * 60 * 1000;
   isMobileSize: boolean;
   private ngUnsubscribe: Subject<any> = new Subject();
   constructor(private authAnalysisContributorService: AuthAnalysisContributorService,
-    private screenService: ScreenService) { }
+    private screenService: ScreenService) { 
+      this.authAnalysisContributorService.refreshFunction.next(this.getMonthlySales.bind(this));
+  }
 
   ngOnInit(): void {
     this.setupData();
     this.salesChart.options.scales.yAxes[0].ticks.suggestedMax = 1000;
     this.yearlySalesChart.options.scales.yAxes[0].ticks.suggestedMax = 1000;
     this.cumulativeChart.options.scales.yAxes[0].ticks.suggestedMax = 1000;
-    this.getMonthlySales();
+    this.refreshMonthlySales();
     this.getYearlySales();
     this.getSalesBetweenDates();
     this.screenService.isMobileSize.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
@@ -62,14 +66,26 @@ export class SalesFigureComponent implements OnInit {
     this.toDate = new Date;
   }
   getMonthlySales() {
+    this.boardLoading.start();
+    this.authAnalysisContributorService.refreshLoading.next(this.boardLoading.isRunning());
+    this.authAnalysisContributorService.getMonthSalesAnalysis().pipe(
+      takeUntil(this.ngUnsubscribe),
+      finalize(() => {
+        this.boardLoading.stop();
+        this.authAnalysisContributorService.refreshLoading.next(this.boardLoading.isRunning());
+      })).subscribe(this.getMonthlySalesCallback.bind(this));
+  }
+  refreshMonthlySales() {
     if (this.monthlySalesAnalysisSubscription) {
       this.monthlySalesAnalysisSubscription.unsubscribe();
     }
-    this.monthlySalesAnalysisSubscription = timer(0, this.REFRESH_INTERVAL).pipe(switchMap(() => this.authAnalysisContributorService.getMonthSalesAnalysis()),
-      takeUntil(this.ngUnsubscribe)).subscribe(result => {
-        this.sales = result['result'];
-        this.authAnalysisContributorService.increment(this.monthlySales.nativeElement, 1000, this.sales.totalMonthlySales, true);
-      });
+    this.monthlySalesAnalysisSubscription = timer(0, this.REFRESH_MONTHLY_SALES_INTERVAL).pipe(
+      switchMap(() => this.authAnalysisContributorService.getMonthSalesAnalysis()),
+      takeUntil(this.ngUnsubscribe)).subscribe(this.getMonthlySalesCallback.bind(this));
+  }
+  getMonthlySalesCallback(result) {
+    this.sales = result['result'];
+    this.authAnalysisContributorService.increment(this.monthlySales.nativeElement, 1000, this.sales.totalMonthlySales, true);
   }
   getYearlySales() {
     this.yearlySalesLoading.start();
@@ -89,13 +105,13 @@ export class SalesFigureComponent implements OnInit {
     this.salesLoading.start();
     this.authAnalysisContributorService.getSalesBetweenDates(this.fromDate, this.toDate).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.salesLoading.stop())).subscribe(result => {
       if (result['result']) {
-        let dateRange = this.getDateRange(this.fromDate, this.toDate);
-        this.salesChart.data[0].data = [];
-        dateRange.forEach(date => {
-          let sale = result['result'].find(sale => sale.name == date);
-          this.salesChart.data[0].data.push(sale ? sale.value : 0);
-        });
-        this.salesChart.labels = this.getDateRange(this.fromDate, this.toDate).map(date => moment(date).format('MM-DD (ddd)'));
+          let dateRange = this.getDateRange(this.fromDate, this.toDate);
+          this.salesChart.data[0].data = [];
+          dateRange.forEach(date => {
+            let sale = result['result'].find(sale => sale.name == date);
+            this.salesChart.data[0].data.push(sale ? sale.value : 0);
+          });
+          this.salesChart.labels = dateRange.map(date => moment(date).format('MM-DD (ddd)'));
       }
     });
   }
@@ -121,6 +137,9 @@ export class SalesFigureComponent implements OnInit {
   }
   openCalendar() {
     this.maxDate = new Date();
+  }
+  exportSales() {
+    
   }
   ngOnDestroy() {
     this.ngUnsubscribe.next();

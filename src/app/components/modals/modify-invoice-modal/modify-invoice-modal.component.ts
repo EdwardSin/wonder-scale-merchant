@@ -148,6 +148,11 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
           isCompletedChecked: true,
         })
       }
+      if (this.item.promotions?.length) {
+        this.form.patchValue({
+          promotion: this.item.promotions[0]['_id']
+        })
+      }
       this.notifyCalculation();
     }
   }
@@ -189,7 +194,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
     this.inListItems.push({
       name: this.form.controls['itemName'].value,
       type: this.form.controls['itemType'].value ? this.form.controls['itemType'].value.name : 'Default',
-      quantity: this.form.controls['itemQuantity'].value || 1,
+      quantity: +this.form.controls['itemQuantity'].value || 1,
       price: +this.form.controls['itemPrice'].value,
     });
     this.notifyCalculation();
@@ -346,6 +351,10 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
     this.authPromotionContributorService.getPromotions(obj).pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       if (result && result['result']) {
         this.promotions = result['result'];
+        if (this.item && this.item.promotions && this.item.promotions.length) {
+          this.promotions = [...this.promotions, ...this.item.promotions];
+        }
+        this.notifyCalculation();
       }
     })
   }

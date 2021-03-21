@@ -32,6 +32,11 @@ const routes: Routes = [{
       path: 'invoice',
       data: { title: 'invoice', breadcrumb: 'Invoice' },
       loadChildren: () => import('./invoice-figure/invoice-figure.module').then(m => m.InvoiceFigureModule)
+    },
+    {
+      path: 'promotion',
+      data: { title: 'promotion', breadcrumb: 'Promotion' },
+      loadChildren: () => import('./promotion-figure/promotion-figure.module').then(m => m.PromotionFigureModule)
     }
   ]
 }];

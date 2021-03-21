@@ -41,6 +41,7 @@ export class AllInvoicesComponent implements OnInit {
   numberOfDeliveryInvoices: number = 0;
   private ngUnsubscribe: Subject<any> = new Subject;
   refreshInvoicesInterval: Subscription;
+  REFRESH_ALL_INVOICES_INTERVAL: number = 2 * 60 * 1000;
   isMobileSize: boolean;
   updatedAt;
   constructor(private authInvoiceControbutorService: AuthInvoiceContributorService, private ref: ChangeDetectorRef,
@@ -166,7 +167,7 @@ export class AllInvoicesComponent implements OnInit {
     });
   }
   refreshInvoices() {
-    this.refreshInvoicesInterval = interval(120*1000).pipe(switchMap(() => {
+    this.refreshInvoicesInterval = interval(this.REFRESH_ALL_INVOICES_INTERVAL).pipe(switchMap(() => {
       return this.getUnseenInvoicesSubscription();
     }), takeUntil(this.ngUnsubscribe)).subscribe(result => {
       if (result['result']) {

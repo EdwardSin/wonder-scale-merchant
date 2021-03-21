@@ -19,6 +19,7 @@ export class InvoiceFigureComponent implements OnInit {
   loading: WsLoading = new WsLoading;
   invoiceLoading: WsLoading = new WsLoading;
   cumulativeLoading: WsLoading = new WsLoading;
+  boardLoading: WsLoading = new WsLoading;
   startHour: Date = new Date;
   endHour: Date = new Date;
   totalMonthlyInvoice = 0;
@@ -35,15 +36,17 @@ export class InvoiceFigureComponent implements OnInit {
   monthlyInvoiceAnalysisSubscription;
   invoiceChart = Chart.createChart();
   cumulativeChart = Chart.createChart();
-  REFRESH_INTERVAL = 30 * 60 * 1000;
+  REFRESH_MONTHLY_INVOICE_INTERVAL = 2 * 60 * 1000;
   isMobileSize: boolean;
   private ngUnsubscribe: Subject<any> = new Subject();
   constructor(private authAnalysisContributorService: AuthAnalysisContributorService,
-    private screenService: ScreenService) { }
+    private screenService: ScreenService) { 
+      this.authAnalysisContributorService.refreshFunction.next(this.getMonthlyInvoice.bind(this));
+  }
 
   ngOnInit(): void {
     this.setupData();
-    this.getMonthlyInvoice();
+    this.refreshMonthlyInvoice();
     this.getYearlyInvoice();
     this.getInvoiceBetweenDates();
     this.screenService.isMobileSize.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
@@ -57,14 +60,26 @@ export class InvoiceFigureComponent implements OnInit {
     this.toDate = new Date;
   }
   getMonthlyInvoice() {
+    this.boardLoading.start();
+    this.authAnalysisContributorService.refreshLoading.next(this.boardLoading.isRunning());
+    this.authAnalysisContributorService.getMonthInvoiceAnalysis().pipe(
+      takeUntil(this.ngUnsubscribe),
+      finalize(() => {
+        this.boardLoading.stop();
+        this.authAnalysisContributorService.refreshLoading.next(this.boardLoading.isRunning());
+      })).subscribe(this.getMonthlyInvoiceCallback.bind(this));
+  }
+  refreshMonthlyInvoice() {
     if (this.monthlyInvoiceAnalysisSubscription) {
       this.monthlyInvoiceAnalysisSubscription.unsubscribe();
     }
-    this.monthlyInvoiceAnalysisSubscription = timer(0, this.REFRESH_INTERVAL).pipe(switchMap(() => this.authAnalysisContributorService.getMonthInvoiceAnalysis()),
-      takeUntil(this.ngUnsubscribe)).subscribe(result => {
-        this.invoice = result['result'];
-        this.authAnalysisContributorService.increment(this.monthlyInvoice.nativeElement, 1000, this.invoice.totalMonthlyInvoice);
-      });
+    this.monthlyInvoiceAnalysisSubscription = timer(0, this.REFRESH_MONTHLY_INVOICE_INTERVAL).pipe(
+      switchMap(() => this.authAnalysisContributorService.getMonthInvoiceAnalysis()),
+      takeUntil(this.ngUnsubscribe)).subscribe(this.getMonthlyInvoiceCallback.bind(this));
+  }
+  getMonthlyInvoiceCallback(result) {
+    this.invoice = result['result'];
+    this.authAnalysisContributorService.increment(this.monthlyInvoice.nativeElement, 1000, this.invoice.totalMonthlyInvoice);
   }
   getYearlyInvoice() {
     this.cumulativeLoading.start();

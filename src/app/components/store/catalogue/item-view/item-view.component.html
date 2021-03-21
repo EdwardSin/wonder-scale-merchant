@@ -95,10 +95,6 @@
                 [routerLink]="[]" [queryParams]="{id: item?._id, modal: 'modify-item'}" [queryParamsHandling]="'merge'">
                 <span class="fas fa-edit"></span>
               </a>
-              <a title="Edit Item Types" href="javascript:void(0)" class="d-inline-block d-sm-inline-flex ws-dark-color btn-link p-2 text-decoration-none" (click)="$event.stopPropagation();"
-                [routerLink]="[]" [queryParams]="{id: item?._id, modal: 'modify-item-type'}" [queryParamsHandling]="'merge'">
-                <span class="fas fa-sitemap"></span>
-              </a>
             </ng-template>
           </td>
         </tr>

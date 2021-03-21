@@ -24,6 +24,7 @@ export class AdvancedComponent implements OnInit {
   isConfirmQuitStoreModalOpened: boolean;
   timeDifference: number;
   timeDifferenceString: string;
+  REFRESH_EXPIRY_DATE_INTERVAL: number = 2 * 1000;
   private ngUnsubscribe: Subject<any> = new Subject;
   constructor(private sharedStoreService: SharedStoreService,
     private authStoreContributorService: AuthStoreContributorService,
@@ -42,7 +43,7 @@ export class AdvancedComponent implements OnInit {
         if (this.store.status.status == 'closed' && this.store.status.expiryDate) {
           this.timeDifference = moment(this.store.status.expiryDate).diff(moment());
           this.timeDifferenceString = moment(this.store.status.expiryDate).fromNow();
-          interval(2000).pipe(takeUntil(this.ngUnsubscribe)).subscribe(() => {
+          interval(this.REFRESH_EXPIRY_DATE_INTERVAL).pipe(takeUntil(this.ngUnsubscribe)).subscribe(() => {
             this.timeDifference = moment(this.store.status.expiryDate).diff(moment());
             this.timeDifferenceString = moment(this.store.status.expiryDate).fromNow();
           });

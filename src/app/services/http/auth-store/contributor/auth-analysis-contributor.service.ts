@@ -4,11 +4,14 @@ import { AuthAnalysisContributorUrl } from '@enum/url.enum';
 import { AccessTokenService } from '../access-token.service';
 import * as moment from 'moment';
 import { DateTimeHelper } from '@helpers/datetimehelper/datetime.helper';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthAnalysisContributorService {
+  refreshFunction: BehaviorSubject<any> = new BehaviorSubject<any>(null);
+  refreshLoading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
   constructor(private http: HttpClient, private accessTokenService: AccessTokenService) { }
   getGeneralAnalysis() {
@@ -24,6 +27,30 @@ export class AuthAnalysisContributorService {
     let _fromDate = DateTimeHelper.getDateWithCurrentTimezone(fromDate);
     let _toDate = DateTimeHelper.getDateWithCurrentTimezone(toDate);
     return this.http.post(AuthAnalysisContributorUrl.getSalesBetweenDatesUrl, {fromDate: _fromDate, toDate: _toDate}, this.accessTokenService.getAccessToken());
+  }
+  getSalesDetailsBetweenDates(fromDate, toDate, preview) {
+    toDate.setDate(toDate.getDate() + 1);
+    let _fromDate = DateTimeHelper.getDateWithCurrentTimezone(fromDate);
+    let _toDate = DateTimeHelper.getDateWithCurrentTimezone(toDate);
+    return this.http.post(AuthAnalysisContributorUrl.getSalesDetailsBetweenDatesUrl, {fromDate: _fromDate, toDate: _toDate, preview}, this.accessTokenService.getAccessToken());
+  }
+  getMonthlySalesDetailsBetweenDates(fromDate, toDate, preview) {
+    toDate.setDate(toDate.getDate() + 1);
+    let _fromDate = DateTimeHelper.getDateWithCurrentTimezone(fromDate);
+    let _toDate = DateTimeHelper.getDateWithCurrentTimezone(toDate);
+    return this.http.post(AuthAnalysisContributorUrl.getMonthlySalesDetailsBetweenDatesUrl, {fromDate: _fromDate, toDate: _toDate, preview}, this.accessTokenService.getAccessToken());
+  }
+  getYearlySalesDetailsBetweenDates(fromDate, toDate, preview) {
+    toDate.setDate(toDate.getDate() + 1);
+    let _fromDate = DateTimeHelper.getDateWithCurrentTimezone(fromDate);
+    let _toDate = DateTimeHelper.getDateWithCurrentTimezone(toDate);
+    return this.http.post(AuthAnalysisContributorUrl.getYearlySalesDetailsBetweenDatesUrl, {fromDate: _fromDate, toDate: _toDate, preview}, this.accessTokenService.getAccessToken());
+  }
+  getSalesDetailsPreviewBetweenDates(fromDate, toDate) {
+    toDate.setDate(toDate.getDate() + 1);
+    let _fromDate = DateTimeHelper.getDateWithCurrentTimezone(fromDate);
+    let _toDate = DateTimeHelper.getDateWithCurrentTimezone(toDate);
+    return this.http.post(AuthAnalysisContributorUrl.getSalesPreviewBetweenDatesUrl, {fromDate: _fromDate, toDate: _toDate}, this.accessTokenService.getAccessToken());
   }
   getYearlySalesAnalysis() {
     let dateAsString = DateTimeHelper.getTodayWithCurrentTimezone().toISOString();
@@ -56,6 +83,15 @@ export class AuthAnalysisContributorService {
   getYearlyInvoiceAnalysis() {
     let dateAsString = DateTimeHelper.getTodayWithCurrentTimezone().toISOString();
     return this.http.get(AuthAnalysisContributorUrl.getYearlyInvoiceAnalysisUrl + '?date=' + dateAsString, this.accessTokenService.getAccessToken());
+  }
+  getOngoingPromotions(){
+    return this.http.get(AuthAnalysisContributorUrl.getOngoingPromotionsUrl, this.accessTokenService.getAccessToken());
+  }
+  getPromotionsInvoiceNumber(obj) {
+    return this.http.post(AuthAnalysisContributorUrl.getPromotionsInvoiceNumberUrl, obj, this.accessTokenService.getAccessToken());
+  }
+  getPromotionInvoiceNumberBetweenDate(obj) {
+    return this.http.post(AuthAnalysisContributorUrl.getPromotionInvoiceNumberBetweenDateUrl, obj, this.accessTokenService.getAccessToken());
   }
   increment(target, duration, value, isDecimal=false) {
     $(target).each(function () {
