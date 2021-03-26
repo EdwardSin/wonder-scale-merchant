@@ -216,7 +216,7 @@ export class WSFormBuilder {
         let formBuilder = new FormBuilder;
         return formBuilder.group({
             firstName: ['', [Validators.required, Validators.maxLength(36)]],
-            lastName: ['', [Validators.maxLength(36)]],
+            lastName: ['', [Validators.required, Validators.maxLength(36)]],
             email: ['', [Validators.email, Validators.maxLength(128)]],
             phoneNumber: ['', [Validators.maxLength(36)]],
             dateOfBirth: [''],
