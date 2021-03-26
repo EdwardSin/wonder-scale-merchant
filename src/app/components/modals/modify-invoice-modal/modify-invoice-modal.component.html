@@ -64,10 +64,9 @@
                 <div class="p-lg-3 py-3">
                     <div class="border rounded mb-3 p-3">
                         <label id="paymentMethod" class="mb-0 font-9">Catalogue:</label>
-                        <mat-select class="form-control form-control-sm mb-3" value="" [disabled]="!isEditable()" (selectionChange)="getItems($event.value)">
-                            <mat-option [value]="''">All</mat-option>
-                            <mat-option [value]="'uncategorized'">Uncategorized</mat-option>
+                        <mat-select class="form-control form-control-sm mb-3" [disabled]="!isEditable()" (selectionChange)="getItems($event.value)">
                             <mat-option [value]="category.id" *ngFor="let category of categories">{{ category?.name }}</mat-option>
+                            <mat-option [value]="'uncategorized'">Uncategorized</mat-option>
                         </mat-select>
                         <label id="itemtype" class="mb-0 font-9">Item: </label>
                         <ws-search-select for="itemtype" [items]="items" [loading]="itemLoading.isRunning()" (selectionChange)="selectionChange($event)" (searchValueChange)="searchItemValueChange($event)" (scroll)="getItems(categoryId, true)" (open)="openItemChange($event)" [class.disabled]="!isEditable()" class="d-block form-control form-control-sm mb-2"></ws-search-select>
