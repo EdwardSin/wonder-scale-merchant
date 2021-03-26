@@ -174,6 +174,7 @@ export class ExportSalesModalComponent extends WsModalComponent implements OnIni
     result = result.map(sale => {
       return {
         'No Invoice': sale.receiptId,
+        'Customer Name': this.getCustomerName(sale),
         'Completed Date': moment(sale.completedAt).format('YYYY-MM-DD'),
         'Delivery Fee (RM)': sale.totalDelivery.toFixed(2),
         'Discount (RM)': sale.totalDelivery.toFixed(2),
@@ -185,6 +186,12 @@ export class ExportSalesModalComponent extends WsModalComponent implements OnIni
     let fromDate = moment(this.fromDate.value).format('DD_MMM_YYYY');
     let toDate = moment(this.toDate.value).format('DD_MMM_YYYY');
     this.exportExcel(result, 'daily_sales', `${fromDate}-${toDate}`);
+  }
+  getCustomerName(sale) {
+    if (sale && sale.customer && sale.customer.firstName) {
+      return sale.customer.firstName + ' ' + sale.customer.lastName;
+    }
+    return '-';
   }
   renderMonthlySalesToXLSX(result) {
     let monthlyResult = result;
