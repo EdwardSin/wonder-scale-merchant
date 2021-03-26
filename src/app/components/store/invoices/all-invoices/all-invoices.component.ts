@@ -177,7 +177,7 @@ export class AllInvoicesComponent implements OnInit {
   }
   getInvoicesSubscription() {
     let statuses = this.selectedTab == 'all' ? this.statusColumns : [this.selectedTab];
-    let numberPerPage = this.selectedTab !== 'delivered' && this.selectedTab !== 'in_progress' && this.selectedTab !== 'ready' ? 25 : -1;
+    let numberPerPage = this.selectedTab !== 'delivered' && this.selectedTab !== 'in_progress' && this.selectedTab !== 'ready' ? 50 : -1;
     return this.authInvoiceControbutorService.getInvoices({ statuses, keyword: this.keyword, page: this.page, numberPerPage, updatedAt: this.updatedAt }).pipe(
       takeUntil(this.ngUnsubscribe));
   }
