@@ -38,6 +38,9 @@ export class AuthInvoiceContributorService {
   updateInvoiceStatus(id, obj) {
     return this.http.put(AuthInvoiceContributorUrl.updateInvoiceStatusUrl + '/' + id, obj, this.accessTokenService.getAccessToken());
   }
+  getInvoiceGroup(obj) {
+    return this.http.post(AuthInvoiceContributorUrl.getInvoiceGroupUrl, obj, this.accessTokenService.getAccessToken());
+  }
   getUnseenInvoices(obj) {
     return this.http.post(AuthInvoiceContributorUrl.getUnseenInvoicesUrl, obj, this.accessTokenService.getAccessToken());
   }

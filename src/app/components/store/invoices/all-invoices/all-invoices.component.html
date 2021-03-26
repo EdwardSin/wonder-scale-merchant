@@ -92,16 +92,21 @@
     </div>
 </div>
 <div *ngIf="selectedTab == 'delivered' || selectedTab == 'in_progress' || selectedTab == 'ready'">
-    <div class="row no-gutters mb-5 pb-3" *ngIf="allInvoices?.length && !loading.isRunning(); else loadingTemplate">
-        <div class="invoice-group-container mb-2 pt-2 pb-1" *ngFor="let data of allInvoices;">
-            <p class="mb-0 pb-1 px-2 font-8" style="color: #5e6c84" (click)="onDateGroupClicked(data?.date)">
-                <span *ngIf="data?.date !== 'others'">{{data?.date | date:'yyy-MMM-dd (EEE)'}}</span>
-                <span *ngIf="data?.date === 'others'">Others</span>
-                <span class="float-right">Total: {{data?.data?.length }}</span>
+    <div class="row no-gutters mb-5 pb-3" *ngIf="invoiceGroups?.length && !loading.isRunning(); else loadingTemplate">
+        <div class="invoice-group-container mb-2" *ngFor="let data of invoiceGroups;">
+            <p class="mb-0 p-2 font-8" style="color: #5e6c84" (click)="onDateGroupClicked(data?._id)">
+                <span *ngIf="data?._id !== 'Others'">{{data?._id | date:'yyy-MMM-dd (EEE)'}}</span>
+                <span *ngIf="data?._id === 'Others'">Others</span>
+                <span class="float-right">Total: {{data?.numberOfInvoices }}</span>
             </p>
-            <div class="row no-gutters" [hidden]="selectedDate !== data?.date">
-                <div class="col-lg-5ths col-md-4 col-sm-6 p-2" *ngFor="let invoice of data?.data; trackBy: trackInvoiceId">
-                    <ws-invoice-card [item]="invoice" [onInvoiceInfoModalClick]="openEditInvoiceModal.bind(this, invoice)"></ws-invoice-card>
+            <div class="row no-gutters" [hidden]="selectedDate !== data?._id">
+                <ng-container *ngIf="!invoiceLoading.isRunning()">
+                    <div class="col-lg-5ths col-md-4 col-sm-6 p-2" *ngFor="let invoice of allInvoices; trackBy: trackInvoiceId">
+                        <ws-invoice-card [item]="invoice" [onInvoiceInfoModalClick]="openEditInvoiceModal.bind(this, invoice)"></ws-invoice-card>
+                    </div>
+                </ng-container>
+                <div class="d-block py-5 center">
+                    <ws-spinner [width]="30" [height]="30"  [borderWidth]="1" [spinnerColor]="'#b71c1c'" *ngIf="invoiceLoading.isRunning()"></ws-spinner>
                 </div>
             </div>
         </div>

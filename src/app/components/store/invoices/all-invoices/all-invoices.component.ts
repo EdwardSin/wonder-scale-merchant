@@ -23,12 +23,13 @@ export class AllInvoicesComponent implements OnInit {
   keyword: string = '';
   page: number = 1;
   selectedTab: string = 'new';
-  selectedDate;
+  selectedDate = null;
   isHelpModalOpened: boolean;
   isModifyInvoiceModalOpened: boolean;
   isInvoiceInfoModalOpened: boolean;
   selectedItem: any;
   loading: WsLoading = new WsLoading;
+  invoiceLoading: WsLoading = new WsLoading;
   _statusColumns = sessionStorage.getItem('shownStatusColumns') || '["new", "paid", "in_progress", "delivered"]';
   statusColumns = JSON.parse(this._statusColumns);
   numberOfAllItems = 0;
@@ -98,7 +99,6 @@ export class AllInvoicesComponent implements OnInit {
           return true;
         }
       })
-      this.allInvoices = this.groupInvoices(this.allInvoices);
     });
     this.authInvoiceControbutorService.numberOfAllItems.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       this.numberOfAllItems = result;
@@ -138,26 +138,43 @@ export class AllInvoicesComponent implements OnInit {
     if (loading) {
       this.loading.start();
     }
-    let subscription = this.getInvoicesSubscription();
-    subscription.pipe(finalize(() => {
-      this.loading.stop();
-      WsMessageBarService.close.next();
-    })).subscribe(result => {
-      if (result) {
-        this.authInvoiceControbutorService.allInvoices.next(result['result']);
-        this.authInvoiceControbutorService.updatedAt.next(new Date);
-        if (result['meta']) {
-          this.authInvoiceControbutorService.numberOfAllItems.next(result['meta']['numberOfTotal']);
-          this.authInvoiceControbutorService.numberOfCurrentTotalItems.next(result['meta']['numberOfTotal']);
-          this.authInvoiceControbutorService.numberOfNewInvoices.next(result['meta']['numberOfNewInvoices']);
-          this.authInvoiceControbutorService.numberOfPaidInvoices.next(result['meta']['numberOfPaidInvoices']);
-          this.authInvoiceControbutorService.numberOfInProgressInvoices.next(result['meta']['numberOfInProgressInvoices']);
-          this.authInvoiceControbutorService.numberOfReadyInvoices.next(result['meta']['numberOfReadyInvoices']);
-          this.authInvoiceControbutorService.numberOfDeliveryInvoices.next(result['meta']['numberOfDeliveryInvoices']);
+    let isGroup = this.selectedTab === 'delivered' || this.selectedTab === 'in_progress' || this.selectedTab === 'ready';
+    if (!isGroup) {
+      let subscription = this.getInvoicesSubscription();
+      subscription.pipe(finalize(() => {
+        this.loading.stop();
+        WsMessageBarService.close.next();
+      })).subscribe(result => {
+        if (result) {
+          this.authInvoiceControbutorService.allInvoices.next(result['result']);
+          this.authInvoiceControbutorService.updatedAt.next(new Date);
+          if (result['meta']) {
+            this.authInvoiceControbutorService.numberOfAllItems.next(result['meta']['numberOfTotal']);
+            this.authInvoiceControbutorService.numberOfCurrentTotalItems.next(result['meta']['numberOfTotal']);
+            this.authInvoiceControbutorService.numberOfNewInvoices.next(result['meta']['numberOfNewInvoices']);
+            this.authInvoiceControbutorService.numberOfPaidInvoices.next(result['meta']['numberOfPaidInvoices']);
+            this.authInvoiceControbutorService.numberOfInProgressInvoices.next(result['meta']['numberOfInProgressInvoices']);
+            this.authInvoiceControbutorService.numberOfReadyInvoices.next(result['meta']['numberOfReadyInvoices']);
+            this.authInvoiceControbutorService.numberOfDeliveryInvoices.next(result['meta']['numberOfDeliveryInvoices']);
+          }
         }
-      }
-    });
+      });
+    } else {
+      let subscription = this.getInvoiceGroupSubscription()
+      subscription.pipe(finalize(() => {
+        this.loading.stop();
+        WsMessageBarService.close.next();
+      })).subscribe(result => {
+        this.invoiceGroups = result['result'];
+        this.authInvoiceControbutorService.numberOfNewInvoices.next(result['meta']['numberOfNewInvoices']);
+        this.authInvoiceControbutorService.numberOfPaidInvoices.next(result['meta']['numberOfPaidInvoices']);
+        this.authInvoiceControbutorService.numberOfInProgressInvoices.next(result['meta']['numberOfInProgressInvoices']);
+        this.authInvoiceControbutorService.numberOfReadyInvoices.next(result['meta']['numberOfReadyInvoices']);
+        this.authInvoiceControbutorService.numberOfDeliveryInvoices.next(result['meta']['numberOfDeliveryInvoices']);
+      });
+    }
   }
+  invoiceGroups = [];
   triggerNotification () {
     WsMessageBarService.toastSubject.next({
       type: 'info',
@@ -177,40 +194,14 @@ export class AllInvoicesComponent implements OnInit {
   }
   getInvoicesSubscription() {
     let statuses = this.selectedTab == 'all' ? this.statusColumns : [this.selectedTab];
-    let numberPerPage = this.selectedTab !== 'delivered' && this.selectedTab !== 'in_progress' && this.selectedTab !== 'ready' ? 50 : -1;
-    return this.authInvoiceControbutorService.getInvoices({ statuses, keyword: this.keyword, page: this.page, numberPerPage, updatedAt: this.updatedAt }).pipe(
+    return this.authInvoiceControbutorService.getInvoices({ statuses, keyword: this.keyword, page: this.page, updatedAt: this.updatedAt }).pipe(
       takeUntil(this.ngUnsubscribe));
   }
-  groupInvoices(invoices) {
-    let tempInvoices = [];
-    if (this.selectedTab == 'delivered' || this.selectedTab == 'in_progress' || this.selectedTab == 'ready') {
-      invoices = _.chain(invoices).sortBy(invoice => {
-        return invoice.deliveryOption
-      })
-        .sortBy((invoice) => {
-          if (invoice && invoice.delivery && invoice.delivery.etaDate) {
-            let deliveryDate = new Date(invoice.delivery.etaDate);
-            if (invoice.delivery.etaHour > -1) {
-              deliveryDate.setHours(invoice.delivery.etaHour);
-              deliveryDate.setMinutes(invoice.delivery.etaMin);
-            }
-            return deliveryDate;
-          }
-        }).value();
-      invoices = _.groupBy(invoices, (invoice) => {
-        if (invoice && invoice.delivery && invoice.delivery.etaDate) {
-          return new Date(invoice.delivery.etaDate)
-        }
-      });
-      for (let date of Object.keys(invoices)) {
-        tempInvoices.push({
-          date: date !== 'undefined' ? date : 'others',
-          data: invoices[date]
-        })
-      }
-      invoices = tempInvoices;
+  getInvoiceGroupSubscription() {
+    let obj = {
+      status: this.selectedTab
     }
-    return invoices;
+    return this.authInvoiceControbutorService.getInvoiceGroup(obj).pipe(takeUntil(this.ngUnsubscribe));
   }
   getUnseenInvoicesSubscription() {
     let obj = {updatedAt: this.updatedAt};
@@ -259,6 +250,10 @@ export class AllInvoicesComponent implements OnInit {
       this.selectedDate = null;
     } else {
       this.selectedDate = date;
+      this.invoiceLoading.start();
+      this.authInvoiceControbutorService.getInvoices({statuses: [this.selectedTab], etaDate: date, keyword: this.keyword, numberPerPage: -1, page: 1, updatedAt: this.updatedAt }).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.invoiceLoading.stop())).subscribe(result => {
+        this.authInvoiceControbutorService.allInvoices.next(result['result']);
+      });
     }
   }
   navigate(event) {
