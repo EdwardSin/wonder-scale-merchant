@@ -10,6 +10,7 @@
 .: WSM: Task: Preview with customer name in daily sales (WSM-314)
 .: WSM: Task: Discount with showing minor symbol in invoice (WSM-316)
 .: WSM: Task: Completed invoice is not found over 25 items (WSM-321)
+.: WSM: Task: Refactoring grouping invoices (WSM-320)
 
 - v1.0.1090                                 -
 ---------------------------------------------
