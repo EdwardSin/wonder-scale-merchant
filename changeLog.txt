@@ -7,6 +7,7 @@
 - 2021-03-26                                -
 ---------------------------------------------
 .: WSM: Task: Allow empty last name (WSM-313)
+.: WSM: Task: Preview with customer name in daily sales (WSM-314)
 
 - v1.0.1090                                 -
 ---------------------------------------------

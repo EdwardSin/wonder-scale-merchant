@@ -83,6 +83,7 @@
             <table class="table table-striped table-sm font-8 mb-3">
                 <thead>
                     <th>No Invoice</th>
+                    <th class="text-center">Customer Name</th>
                     <th class="text-center">Completed Date</th>
                     <th class="text-right">Delivery Fee (RM)</th>
                     <th class="text-right">Discount (RM)</th>
@@ -92,6 +93,7 @@
                 <tbody>
                     <tr *ngFor="let sale of sales">
                         <td>{{ sale?.receiptId }}</td>
+                        <td class="text-center">{{ sale?.customer?.firstName + ' ' + sale?.customer?.lastName | wsEmptyDash }}</td>
                         <td class="text-center">{{ sale?.completedAt | date: 'y-MMM-dd' }}</td>
                         <td class="text-right">{{ sale?.totalDelivery | number: '1.2-2' }}</td>
                         <td class="text-right">{{ sale?.totalDiscount | number: '1.2-2' }}</td>
