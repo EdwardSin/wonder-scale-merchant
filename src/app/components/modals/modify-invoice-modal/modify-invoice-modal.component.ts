@@ -81,6 +81,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
   }
   ngOnChanges(changes: SimpleChanges) {
     if (changes && changes['isOpened']) {
+      this.selectedTab.setValue(0);
       this.getCatalogue();
       this.getPromotions();
       this.getItems(this.categoryId);
@@ -387,7 +388,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
     let etaDateTimeHour = this.form.controls['etaDateTimeHour'].value;
     let etaDateTimeMin = this.form.controls['etaDateTimeMin'].value;
     
-    if (form.controls['firstName'].value && !form.controls['lastName'].value) {
+    if (form.controls['firstName'].value && form.controls['isCustomerSaved'].value && !form.controls['lastName'].value) {
       WsToastService.toastSubject.next({ content: 'Please enter last name!', type: 'danger'});
       return;
     }
