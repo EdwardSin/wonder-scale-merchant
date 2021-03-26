@@ -18,7 +18,7 @@
             <span class="font-7 d-block mt-1 text-muted" *ngIf="etaDate && (item?.delivery?.etaHour == null || item?.delivery?.etaHour == undefined) && (item?.status == 'delivered' || item?.status == 'in_progress'|| item?.status == 'ready') ">
                 ETA: {{ etaDate | date: 'MMM d,y' }}
             </span>
-            <span class="font-7 d-block mt-1 text-muted" *ngIf="etaDate && item?.delivery?.etaHour > -1 && (item?.status == 'delivered' || item?.status == 'in_progress' || item?.status == 'ready')">
+            <span class="font-7 d-block mt-1 text-muted" *ngIf="etaDate && item?.delivery?.etaHour != null && (item?.status == 'delivered' || item?.status == 'in_progress' || item?.status == 'ready')">
                 ETA: {{ etaDate | date: 'MMM d,y h:mm a' }}
             </span>
             <span class="ws-invoice-id">{{ item.receiptId }}</span>
