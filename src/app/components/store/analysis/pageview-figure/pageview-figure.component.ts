@@ -39,8 +39,7 @@ export class PageviewFigureComponent implements OnInit {
       }]
     },
     tooltips: {
-        mode: 'index',
-        axis: 'y'
+        intersect: false
     }
   }
 

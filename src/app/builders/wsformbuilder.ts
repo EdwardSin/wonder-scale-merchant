@@ -261,6 +261,7 @@ export class WSFormBuilder {
             etaDateTimeHour: [''],
             etaDateTimeMin: [''],
             promotion: [''],
+            numberOfPromotion: ['1'],
             itemName: [''],
             itemType: [''],
             isCompletedChecked: [false],
