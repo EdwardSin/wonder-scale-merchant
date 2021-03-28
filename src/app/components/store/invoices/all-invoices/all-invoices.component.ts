@@ -40,6 +40,7 @@ export class AllInvoicesComponent implements OnInit {
   numberOfInProgressInvoices: number = 0;
   numberOfReadyInvoices: number = 0;
   numberOfDeliveryInvoices: number = 0;
+  invoiceGroups = [];
   private ngUnsubscribe: Subject<any> = new Subject;
   refreshInvoicesInterval: Subscription;
   REFRESH_ALL_INVOICES_INTERVAL: number = 2 * 60 * 1000;
@@ -99,6 +100,10 @@ export class AllInvoicesComponent implements OnInit {
           return true;
         }
       })
+      let invoiceGroup = this.invoiceGroups.find(invoice => invoice._id === this.selectedDate);
+      if (invoiceGroup) {
+        invoiceGroup.numberOfInvoices = this.allInvoices.length;
+      }
     });
     this.authInvoiceControbutorService.numberOfAllItems.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       this.numberOfAllItems = result;
@@ -174,7 +179,6 @@ export class AllInvoicesComponent implements OnInit {
       });
     }
   }
-  invoiceGroups = [];
   triggerNotification () {
     WsMessageBarService.toastSubject.next({
       type: 'info',
