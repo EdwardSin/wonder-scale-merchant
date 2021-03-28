@@ -8,6 +8,7 @@
 ---------------------------------------------
 .: WSM: Task: Able to add numbers of promotion (WSM-318)
 .: WSM: Task: View name in invoice card (WSM-313)
+.: WSM: Task: Fix to remove group when empty invoices (WSM-320)
 
 ---------------------------------------------
 - 2021-03-26                                -
