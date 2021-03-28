@@ -205,10 +205,15 @@
             </mat-tab>
             <mat-tab label="Promotion">
                 <div class="p-lg-3 py-3">
-                    <mat-select class="form-control form-control-sm" placeholder="Promotion" (selectionChange)="notifyCalculation()" formControlName="promotion">
-                        <mat-option [value]="''">No promotion</mat-option>
-                        <mat-option [value]="promotion._id" *ngFor="let promotion of promotions">{{ promotion.title }}</mat-option>
-                    </mat-select>
+                    <div class="input-group">
+                        <mat-select class="form-control form-control-sm" placeholder="Promotion" (selectionChange)="notifyCalculation()" formControlName="promotion">
+                            <mat-option [value]="''">No promotion</mat-option>
+                            <mat-option [value]="promotion._id" *ngFor="let promotion of promotions">{{ promotion.title }}</mat-option>
+                        </mat-select>
+                        <div class="input-group-append" *ngIf="form.controls['promotion'].value !== '' && selectedPromotion?.option == 'fixed_amount'">
+                            <input formControlName="numberOfPromotion" (change)="notifyCalculation()" type="number" class="form-control form-control-sm" style="border-radius: 0 .2rem .2rem 0" max="10" min="1" />
+                        </div>
+                    </div>
                 </div>
             </mat-tab>
             <mat-tab label="Others">
