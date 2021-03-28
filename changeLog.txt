@@ -7,6 +7,7 @@
 - 2021-03-28                                -
 ---------------------------------------------
 .: WSM: Task: Able to add numbers of promotion (WSM-318)
+.: WSM: Task: View name in invoice card (WSM-313)
 
 ---------------------------------------------
 - 2021-03-26                                -
