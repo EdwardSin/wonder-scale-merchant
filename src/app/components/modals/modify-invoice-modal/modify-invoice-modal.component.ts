@@ -62,6 +62,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
   itemKeyword: string = '';
   page: number = 1;
   open: boolean;
+  selectedPromotion;
   defaultPrice: number = 0;
   tempInvoice: Invoice = null;
   _previousStatus: boolean;
@@ -81,6 +82,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
   }
   ngOnChanges(changes: SimpleChanges) {
     if (changes && changes['isOpened']) {
+      this.selectedTab.setValue(0);
       this.getCatalogue();
       this.getPromotions();
       this.getItems(this.categoryId);
@@ -148,9 +150,10 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
           isCompletedChecked: true,
         })
       }
-      if (this.item.promotions?.length) {
+      if (this.item.promotions?.length && this.item.promotions[0]['_id']) {
         this.form.patchValue({
-          promotion: this.item.promotions[0]['_id']
+          promotion: this.item.promotions[0]['_id']['_id'],
+          numberOfPromotion: this.item.promotions[0]['quantity'] || 1
         })
       }
       this.notifyCalculation();
@@ -215,8 +218,9 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
   notifyCalculation() {
     let discountValue = 0;
     let promotionId = this.form.controls['promotion'].value;
+    let numberOfPromotion = this.form.controls['numberOfPromotion'].value;
     let promotion = this.promotions.find(promotion => promotion._id == promotionId);
-    
+    this.selectedPromotion = promotion;
     this.delivery = this.isCalculateDeliveryFee() ? +this.form.controls['deliveryFee'].value: 0;
     this.subtotal = _.sumBy(this.inListItems, function (x) {
       return x.price * x.quantity;
@@ -229,7 +233,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
       }
       if (promotion.option == 'fixed_amount') {
         discountValue = promotion.value;
-        this.discount = discountValue;
+        this.discount = discountValue * numberOfPromotion;
       }
     } else {
       this.discount = 0;
@@ -352,7 +356,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
       if (result && result['result']) {
         this.promotions = result['result'];
         if (this.item && this.item.promotions && this.item.promotions.length) {
-          this.promotions = [...this.promotions, ...this.item.promotions];
+          this.promotions.concat(this.item.promotions);
         }
         this.notifyCalculation();
       }
@@ -387,7 +391,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
     let etaDateTimeHour = this.form.controls['etaDateTimeHour'].value;
     let etaDateTimeMin = this.form.controls['etaDateTimeMin'].value;
     
-    if (form.controls['firstName'].value && !form.controls['lastName'].value) {
+    if (form.controls['firstName'].value && form.controls['isCustomerSaved'].value && !form.controls['lastName'].value) {
       WsToastService.toastSubject.next({ content: 'Please enter last name!', type: 'danger'});
       return;
     }
@@ -452,7 +456,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
       invoice['_id'] =  this.item._id
     }
     if (form.controls['promotion'].value) {
-      invoice['promotions'] = form.controls['promotion'].value;
+      invoice['promotions'] = [{_id: form.controls['promotion'].value, quantity: +form.controls['numberOfPromotion'].value}];
     }
     if (form.controls['isCompletedChecked'].value) {
       invoice['completedAt'] = DateTimeHelper.getDateWithCurrentTimezone(new Date(form.controls['completedAt'].value));

@@ -1,7 +1,7 @@
 <div class="ws-invoice-card-container row no-gutters justify-content-between h-100" style="flex-direction: column;" (click)="onInvoiceInfoModalClick()">
     <p class="mb-0 ws-invoice-title text-break">
-        <span *ngIf="item?.customer?.firstName && item?.customer?.lastName">{{item?.customer?.firstName + ' ' + item?.customer?.lastName}}</span>
-        <span *ngIf="!item?.customer?.firstName || !item?.customer?.lastName">{{item?.receiptId}}</span>
+        <span *ngIf="item?.customer?.firstName">{{item?.customer?.firstName}}<span *ngIf="item?.customer?.lastName"> {{item?.customer?.lastName}}</span></span>
+        <span *ngIf="!item?.customer?.firstName && !item?.customer?.lastName">{{item?.receiptId}}</span>
     </p>
     <div class="row no-gutters justify-content-between">
         <div class="col">
@@ -18,7 +18,7 @@
             <span class="font-7 d-block mt-1 text-muted" *ngIf="etaDate && (item?.delivery?.etaHour == null || item?.delivery?.etaHour == undefined) && (item?.status == 'delivered' || item?.status == 'in_progress'|| item?.status == 'ready') ">
                 ETA: {{ etaDate | date: 'MMM d,y' }}
             </span>
-            <span class="font-7 d-block mt-1 text-muted" *ngIf="etaDate && item?.delivery?.etaHour > -1 && (item?.status == 'delivered' || item?.status == 'in_progress' || item?.status == 'ready')">
+            <span class="font-7 d-block mt-1 text-muted" *ngIf="etaDate && item?.delivery?.etaHour != null && (item?.status == 'delivered' || item?.status == 'in_progress' || item?.status == 'ready')">
                 ETA: {{ etaDate | date: 'MMM d,y h:mm a' }}
             </span>
             <span class="ws-invoice-id">{{ item.receiptId }}</span>
