@@ -11,7 +11,7 @@ export const environment = {
   MENU_IMG_PATH: 'env_development/menu_thumbnails',
   HERE_APP_API: 'h9LLOE7i3CG3y1OKhWxw',
   HERE_APP_CODE: 'ERx9SWBfCHLlbN1vKOvlng',
-  ITEMS_PER_PAGE: 25,
+  ITEMS_PER_PAGE: 50,
   RETURN_URL: '/stores/all',
   SOURCE: 'merchant',
   QRCODE_BORDER: 'assets/images/png/icon-with-profile-image-borderless.png',
