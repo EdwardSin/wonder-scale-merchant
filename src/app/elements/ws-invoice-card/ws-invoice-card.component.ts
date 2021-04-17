@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
-import { WSFormBuilder } from '@builders/wsformbuilder';
+import { WsFormBuilder } from '@builders/wsformbuilder';
 import { WsLoading } from '@elements/ws-loading/ws-loading';
 import { WsToastService } from '@elements/ws-toast/ws-toast.service';
 import { environment } from '@environments/environment';
@@ -34,7 +34,7 @@ export class WsInvoiceCardComponent implements OnInit {
   constructor(private authInvoiceContributorService: AuthInvoiceContributorService) { }
 
   ngOnInit(): void {
-    this.form = WSFormBuilder.createInvoiceForm();
+    this.form = WsFormBuilder.createInvoiceForm();
   }
   ngOnChanges(changes: SimpleChanges): void {
     if (changes && changes['item']) {

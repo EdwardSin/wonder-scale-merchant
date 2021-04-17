@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { WSFormBuilder } from '@builders/wsformbuilder';
+import { WsFormBuilder } from '@builders/wsformbuilder';
 import { UserService } from '@services/http/general/user.service';
 import { WsLoading } from '@elements/ws-loading/ws-loading';
 import { WsToastService } from '@elements/ws-toast/ws-toast.service';
@@ -21,7 +21,7 @@ export class ForgotPasswordComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.forgotPasswordForm = WSFormBuilder.createForgetPasswordForm();
+    this.forgotPasswordForm = WsFormBuilder.createForgetPasswordForm();
   }
   forgotPassword() {
     if (this.forgotPasswordForm.status == 'VALID') {
