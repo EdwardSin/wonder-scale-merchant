@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormGroup, FormArray } from '@angular/forms';
-import { WSFormBuilder } from '@builders/wsformbuilder';
+import { WsFormBuilder } from '@builders/wsformbuilder';
 import { ColorService } from '@services/general/color.service';
 import { environment } from '@environments/environment';
 import { Subject, from, forkJoin, of } from 'rxjs';
@@ -45,7 +45,7 @@ export class ModifyItemTypeComponent implements OnInit {
     private sharedStoreService: SharedStoreService,
     private colorService: ColorService) {  
       this.loading.start();
-      this.itemTypesForm = WSFormBuilder.createItemTypesGroup();
+      this.itemTypesForm = WsFormBuilder.createItemTypesGroup();
       this.colors = this.colorService.colors;
   }
   ngOnInit(): void {
@@ -82,11 +82,11 @@ export class ModifyItemTypeComponent implements OnInit {
     WsToastService.toastSubject.next({ content: 'Max 3 images are uploaded!', type: 'danger'});
   }
   setupItemTypeForm(item) {
-    this.itemTypesForm = WSFormBuilder.createItemTypesGroup();
+    this.itemTypesForm = WsFormBuilder.createItemTypesGroup();
     let itemTypes = this.itemTypesForm.get('itemTypes') as FormArray;
     if (item) {
       item.types.forEach(type => {
-        let form = WSFormBuilder.createItemTypeForm();
+        let form = WsFormBuilder.createItemTypeForm();
         if (type.images) {
           type.images = type.images.map(image => {return {name: image, type: 'url'}});
         }
@@ -154,7 +154,7 @@ export class ModifyItemTypeComponent implements OnInit {
   addNewItemType() {
     let itemTypes = this.itemTypesForm.get('itemTypes') as FormArray;
     if (itemTypes.controls.length < 15) {
-      itemTypes.push(WSFormBuilder.createItemTypeForm());
+      itemTypes.push(WsFormBuilder.createItemTypeForm());
     } else {
       WsToastService.toastSubject.next({ content: 'Max 15 items', type: 'danger' });
     }

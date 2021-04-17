@@ -15,7 +15,7 @@ import { ImageHelper } from '@helpers/imagehelper/image.helper';
 import _ from 'lodash';
 import { from, of, Subject, forkJoin } from 'rxjs';
 import { finalize, map, mergeMap, takeUntil } from 'rxjs/operators';
-import { WSFormBuilder } from '@builders/wsformbuilder';
+import { WsFormBuilder } from '@builders/wsformbuilder';
 import { RoutePartsService } from '@services/general/route-parts.service';
 import { UploadHelper } from '@helpers/uploadhelper/upload.helper';
 
@@ -74,7 +74,7 @@ export class ModifyMenuItemComponent implements OnInit {
     private authItemContributorService: AuthItemContributorService) {
     this.loading.start();
     this.getCurrency();
-    this.itemGroup = WSFormBuilder.createMenuItemForm();
+    this.itemGroup = WsFormBuilder.createMenuItemForm();
   }
   ngOnInit() {
     this.sharedStoreService.store.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {

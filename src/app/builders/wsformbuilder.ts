@@ -6,7 +6,7 @@ import { GenderValidation } from "../validations/validators/gendervalidation";
 import { PasswordValidation } from './../validations/validators/passwordvalidation';
 
 
-export class WSFormBuilder {
+export class WsFormBuilder {
 
     public static createPasswordForm(): FormGroup {
         let formBuilder = new FormBuilder();
@@ -273,6 +273,12 @@ export class WSFormBuilder {
             remark: ['', Validators.maxLength(300)]
         }, {
             validator: [AddressValidation.validAddressWithoutCountry]
+        });
+    }
+    public static createDeliveryForm() {
+        let formBuilder = new FormBuilder;
+        return formBuilder.group({
+            fee: ['', [Validators.pattern("^[0-9.,]+$")]]
         });
     }
 }

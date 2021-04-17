@@ -19,6 +19,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ElementModule } from '../element/element.module';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
+import { OrderModule } from 'ngx-order-pipe';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { MDBBootstrapModule } from 'angular-bootstrap-md';
   imports: [
     CommonModule,
     FormsModule,
+    OrderModule,
     ReactiveFormsModule,
     PipeModule,
     DirectiveModule,
@@ -49,6 +51,7 @@ import { MDBBootstrapModule } from 'angular-bootstrap-md';
   exports: [
     AgmCoreModule,
     FormsModule,
+    OrderModule,
     ReactiveFormsModule,
     ElementModule,
     PipeModule,

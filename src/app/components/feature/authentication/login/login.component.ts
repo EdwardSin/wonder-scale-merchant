@@ -2,7 +2,7 @@ import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { WSFormBuilder } from '@builders/wsformbuilder';
+import { WsFormBuilder } from '@builders/wsformbuilder';
 import { Title } from '@constants/title';
 import { AuthUserService } from '@services/http/general/auth-user.service';
 import { AuthenticationService } from '@services/http/general/authentication.service';
@@ -144,10 +144,10 @@ export class LoginComponent implements OnInit {
   }
 
   createPasswordForm() {
-    this.forgotPasswordForm = WSFormBuilder.createForgetPasswordForm();
+    this.forgotPasswordForm = WsFormBuilder.createForgetPasswordForm();
   }
   createLoginForm() {
-    this.loginForm = WSFormBuilder.createLoginForm();
+    this.loginForm = WsFormBuilder.createLoginForm();
   }
   getUser() {
     this.authUserService.getUser().pipe(takeUntil(this.ngUnsubscribe))

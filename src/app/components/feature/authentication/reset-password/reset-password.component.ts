@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { WSFormBuilder } from '@builders/wsformbuilder';
+import { WsFormBuilder } from '@builders/wsformbuilder';
 import { PasswordValidator } from '@validations/user-validation/password.validator';
 import { User } from '@objects/user';
 import { WsLoading } from '@elements/ws-loading/ws-loading';
@@ -35,7 +35,7 @@ export class ResetPasswordComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.resetPasswordForm = WSFormBuilder.createResetPasswordForm();
+    this.resetPasswordForm = WsFormBuilder.createResetPasswordForm();
     this.getResetPasswordUser();
   }
   getResetPasswordUser() {

@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { DateBuilder } from '@builders/date.builder';
-import { WSFormBuilder } from '@builders/wsformbuilder';
+import { WsFormBuilder } from '@builders/wsformbuilder';
 import { environment } from '@environments/environment';
 import { UserService } from '@services/http/general/user.service';
 import { DateOfBirthValidator } from '@validations/user-validation/dateofbirth.validator';
@@ -76,7 +76,7 @@ export class RegisterComponent implements OnInit {
     });
   }
   setupRegisterForm() {
-    this.registerForm = WSFormBuilder.createRegisterForm();
+    this.registerForm = WsFormBuilder.createRegisterForm();
   }
   isValidated() {
     let emailController = this.registerForm.get('email');
