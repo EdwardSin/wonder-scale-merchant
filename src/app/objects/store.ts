@@ -1,4 +1,5 @@
 import { OpeningInfoType } from "../types/opening-info.type";
+import { Delivery } from "./delivery";
 import { OpeningInfo } from "./opening-info";
 
 export class Store {
@@ -20,6 +21,7 @@ export class Store {
     };
     phone?: Array<string>;
     website?: Array<string>;
+    deliveries?: Array<Delivery>;
     location?: {
         type?: string,
         coordinates: [number, number]
