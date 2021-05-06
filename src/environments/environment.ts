@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   DEFAULT_STRING: '',
-  URL: 'https://192.168.0.111:4200/',
+  URL: 'https://192.168.1.111:4200/',
   IMAGE_URL: 'https://assets.wonderscale.com/',
   INFORMATION_IMG_PATH: 'env_development/information_thumbnails',
   MENU_IMG_PATH: 'env_development/menu_thumbnails',

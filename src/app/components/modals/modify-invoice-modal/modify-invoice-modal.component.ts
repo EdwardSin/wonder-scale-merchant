@@ -14,7 +14,6 @@ import { Invoice } from '@objects/invoice';
 import { environment } from '@environments/environment';
 import { AuthPromotionContributorService } from '@services/http/auth-store/contributor/auth-promotion-contributor.service';
 import { WsLoading } from '@elements/ws-loading/ws-loading';
-import * as moment from 'moment';
 import { DateTimeHelper } from '@helpers/datetimehelper/datetime.helper';
 import { AuthDeliveryContributorService } from '@services/http/auth-store/contributor/auth-delivery-contributor.service';
 import { Delivery } from '@objects/delivery';
@@ -211,7 +210,8 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
     return (!this.item) ||
           this.item.status !== 'completed' &&
           this.item.status !== 'refunded' &&
-          this.item.status !== 'cancelled'
+          this.item.status !== 'cancelled' &&
+          this.item.status !== 'rejected';
   }
   removeItem(item) {
     let index = this.inListItems.indexOf(item);

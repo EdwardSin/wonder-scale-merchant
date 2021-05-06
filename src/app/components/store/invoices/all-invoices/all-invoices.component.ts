@@ -9,7 +9,7 @@ import { AuthInvoiceContributorService } from '@services/http/auth-store/contrib
 import { SharedNavbarService } from '@services/shared/shared-nav-bar.service';
 import { SharedStoreService } from '@services/shared/shared-store.service';
 import { interval, Subject, Subscription } from 'rxjs';
-import { delay, finalize, map, switchMap, takeUntil } from 'rxjs/operators';
+import { debounceTime, delay, finalize, map, switchMap, takeUntil } from 'rxjs/operators';
 import * as _ from 'lodash';
 import { WsMessageBarService } from '@elements/ws-message-bar/ws-message-bar.service';
 
@@ -22,7 +22,7 @@ export class AllInvoicesComponent implements OnInit {
   allInvoices = [];
   keyword: string = '';
   page: number = 1;
-  selectedTab: string = 'new';
+  selectedTab: string = 'wait_for_approval';
   selectedDate = null;
   isHelpModalOpened: boolean;
   isModifyInvoiceModalOpened: boolean;
@@ -36,6 +36,7 @@ export class AllInvoicesComponent implements OnInit {
   numberOfCurrentTotalItems = 0;
   isNavOpen: Boolean = false;
   numberOfNewInvoices: number = 0;
+  numberOfWaitForApprovalInvoices: number = 0;
   numberOfPaidInvoices: number = 0;
   numberOfInProgressInvoices: number = 0;
   numberOfReadyInvoices: number = 0;
@@ -45,6 +46,7 @@ export class AllInvoicesComponent implements OnInit {
   refreshInvoicesInterval: Subscription;
   REFRESH_ALL_INVOICES_INTERVAL: number = 2 * 60 * 1000;
   isMobileSize: boolean;
+  store;
   updatedAt;
   constructor(private authInvoiceControbutorService: AuthInvoiceContributorService, private ref: ChangeDetectorRef,
     private router: Router, private route: ActivatedRoute,
@@ -52,23 +54,27 @@ export class AllInvoicesComponent implements OnInit {
     private sharedNavbarService: SharedNavbarService,
     private sharedStoreService: SharedStoreService
     ) {
+      this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe(queryParams => {
+        if (queryParams.page > 0 && (
+          this.selectedTab !== queryParams['tab'] ||
+          this.keyword !== queryParams['s_keyword'] ||
+          this.page !== queryParams['page']
+        )) {
+          this.selectedDate = null;
+          this.selectedTab = queryParams['tab'] || 'wait_for_approval';
+          this.keyword = queryParams['s_keyword'] || '';
+          this.page = queryParams['page'] || 1;
+          this.getInvoices(true);
+        }
+      });
   }
   ngOnInit(): void {
     this.isMobileSize = ScreenHelper.isMobileSize();
-    this.selectedTab = this.route.snapshot.queryParams['tab'] || 'new';
+    this.selectedTab = this.route.snapshot.queryParams['tab'] || 'wait_for_approval';
     this.keyword = this.route.snapshot.queryParams['s_keyword'] || '';
-    this.getInvoices(true);
-    this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe(queryParams => {
-      if (this.selectedTab !== queryParams['tab'] ||
-          this.keyword !== queryParams['s_keyword'] ||
-          this.page !== queryParams['page']) {
-        this.selectedDate = null;
-        this.selectedTab = queryParams['tab'] || 'new';
-        this.keyword = queryParams['s_keyword'] || '';
-        this.page = queryParams['page'] || 1;
-        this.getInvoices(true);
-      }
-    });
+    if (!this.route.snapshot.queryParams['page']) {
+      this.router.navigate([], { queryParams: {page: 1}, queryParamsHandling: 'merge'});
+    }
     this.authInvoiceControbutorService.refreshInvoices.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       if (result) {
         this.getInvoices();
@@ -88,6 +94,7 @@ export class AllInvoicesComponent implements OnInit {
     this.sharedStoreService.store.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       if (result) {
         DocumentHelper.setWindowTitleWithWonderScale('All Invoices - ' + result.name);
+        this.store = result;
       }
     });
     this.authInvoiceControbutorService.allInvoices.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
@@ -113,6 +120,9 @@ export class AllInvoicesComponent implements OnInit {
     })
     this.authInvoiceControbutorService.numberOfNewInvoices.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       this.numberOfNewInvoices = result;
+    })
+    this.authInvoiceControbutorService.numberOfWaitForApprovalInvoices.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+      this.numberOfWaitForApprovalInvoices = result;
     })
     this.authInvoiceControbutorService.numberOfPaidInvoices.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       this.numberOfPaidInvoices = result;
@@ -157,6 +167,7 @@ export class AllInvoicesComponent implements OnInit {
             this.authInvoiceControbutorService.numberOfAllItems.next(result['meta']['numberOfTotal']);
             this.authInvoiceControbutorService.numberOfCurrentTotalItems.next(result['meta']['numberOfTotal']);
             this.authInvoiceControbutorService.numberOfNewInvoices.next(result['meta']['numberOfNewInvoices']);
+            this.authInvoiceControbutorService.numberOfWaitForApprovalInvoices.next(result['meta']['numberOfWaitForApprovalInvoices']);
             this.authInvoiceControbutorService.numberOfPaidInvoices.next(result['meta']['numberOfPaidInvoices']);
             this.authInvoiceControbutorService.numberOfInProgressInvoices.next(result['meta']['numberOfInProgressInvoices']);
             this.authInvoiceControbutorService.numberOfReadyInvoices.next(result['meta']['numberOfReadyInvoices']);
@@ -172,6 +183,7 @@ export class AllInvoicesComponent implements OnInit {
       })).subscribe(result => {
         this.invoiceGroups = result['result'];
         this.authInvoiceControbutorService.numberOfNewInvoices.next(result['meta']['numberOfNewInvoices']);
+        this.authInvoiceControbutorService.numberOfWaitForApprovalInvoices.next(result['meta']['numberOfWaitForApprovalInvoices']);
         this.authInvoiceControbutorService.numberOfPaidInvoices.next(result['meta']['numberOfPaidInvoices']);
         this.authInvoiceControbutorService.numberOfInProgressInvoices.next(result['meta']['numberOfInProgressInvoices']);
         this.authInvoiceControbutorService.numberOfReadyInvoices.next(result['meta']['numberOfReadyInvoices']);

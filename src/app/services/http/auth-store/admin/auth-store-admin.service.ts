@@ -13,6 +13,12 @@ export class AuthStoreAdminService {
 
   constructor(private http: HttpClient, private accessTokenService: AccessTokenService) { }
 
+  clearBankDetails() {
+    return this.http.delete(AuthStoreAdminUrl.removeBankDetailslUrl, this.accessTokenService.getAccessToken());
+  }
+  editBankDetails(obj) {
+    return this.http.put(AuthStoreAdminUrl.editBankDetailsUrl, obj, this.accessTokenService.getAccessToken());
+  }
   searchContributors(query): Observable<User> {
     return this.http.get<User>(AuthStoreAdminUrl.searchContributorUrl + query, this.accessTokenService.getAccessToken());
   }

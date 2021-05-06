@@ -16,6 +16,9 @@ export class CurrencyService {
   currencySymbols = Constants.currencySymbols;
   currencyRate: BehaviorSubject<any> = new BehaviorSubject(null);
   selectedCurrency: BehaviorSubject<string> = new BehaviorSubject('MYR');
+  get currencies(): Array<Currency> {
+    return this._currencies;
+}
 
   constructor(private http: HttpClient,
     @Inject(PLATFORM_ID) private platformId) {

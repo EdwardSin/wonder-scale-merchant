@@ -27,6 +27,7 @@ export class WsInvoiceCardComponent implements OnInit {
   paymentMethod: String;
   isPayslipModalOpened: boolean;
   isPayModalOpened: boolean;
+  isApproveModalOpened: boolean;
   isEtaDeliveryDateModalOpened: boolean;
   allInvoices = [];
   etaDate: Date;
@@ -104,6 +105,18 @@ export class WsInvoiceCardComponent implements OnInit {
         WsToastService.toastSubject.next({ content: 'Dashboard is up to date.', type: 'info'})
         this.authInvoiceContributorService.refreshInvoices.next(true);
       }
+    });
+  }
+  approveInvoice() {
+    this.statusLoading.start();
+    this.authInvoiceContributorService.updateInvoiceStatus(this.item._id, {fromStatus: 'wait_for_approval', status: 'new'}).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.statusLoading.stop())).subscribe(result => {
+      this.item.status = 'new';
+      this.authInvoiceContributorService.refreshStatusWaitForApprovalToNew();
+      this.authInvoiceContributorService.refreshDashboardInvoices(this.item);
+    }, err => {
+      WsToastService.toastSubject.next({ content: 'Invoice couldn\'t be updated due to status is outdated.', type: 'danger'})
+        WsToastService.toastSubject.next({ content: 'Dashboard is up to date.', type: 'info'})
+        this.authInvoiceContributorService.refreshInvoices.next(true);
     });
   }
   completeInvoice(event) {
