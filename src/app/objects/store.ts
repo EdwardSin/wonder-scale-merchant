@@ -50,6 +50,17 @@ export class Store {
     categoryList?: Array<string>;
     trackExpiration: string;
     number_of_all_items: number;
+    bankDetails?: {
+        bankName: string,
+        accountName: string,
+        accountNo: string
+    }
+    defaultSetting?: {
+        invoice?: {
+            isPublicReceivable?: boolean,
+            isApprovalEnabled?: boolean
+        }
+    }
     contactButton?: {
         label: string,
         type: string,

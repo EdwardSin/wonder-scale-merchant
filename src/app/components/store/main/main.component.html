@@ -112,6 +112,12 @@
           <li *ngIf="isInvoiceEnabled && store?.package?.name == 'premium'">
             <a [routerLinkActive]="'active'" [routerLink]="['invoices', 'customers']">Customers</a>
           </li>
+          <li *ngIf="isInvoiceEnabled && store?.package?.name == 'premium'">
+            <a [routerLinkActive]="'active'" [routerLink]="['invoices', 'payment-methods']">Payment Methods</a>
+          </li>
+          <li *ngIf="isInvoiceEnabled && store?.package?.name == 'premium'">
+            <a [routerLinkActive]="'active'" [routerLink]="['invoices', 'configurations']">Configurations</a>
+          </li>
         </ul>
       </li>
       <li wsNavItem class="ws-main-nav-list-item" [routerLinkActive]="'selected'">

@@ -43,8 +43,8 @@ export class Cashier{
     }
     getSubtotal(): number {
         return _.sumBy(this._cartItems, function (item) {
-            item = Object.assign(new CartItem, item)
-            if (item.amount) {
+            item = Object.assign(new CartItem, item);
+            if (item.amount || item.price) {
                 return item.amount() * item.quantity;
             }
             return 0;

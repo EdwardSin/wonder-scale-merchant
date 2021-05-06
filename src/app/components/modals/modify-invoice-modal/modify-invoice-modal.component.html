@@ -1,9 +1,10 @@
 <ws-modal *ngIf="isOpened" [(isOpened)]="isOpened" [isCloseIconDisplayed]="false" [maxWidth]="700">
     <form modalBody [formGroup]="form">
         <mat-select class="form-control form-control-sm mb-3 border-0 float-right status-container" style="width: 150px; padding-top: .35rem" placeholder="Status" formControlName="status" [ngClass]="'status-container-' + form.controls['status'].value" (selectionChange)="updateInvoiceStatus($event.value)">
+            <mat-option [value]="'wait_for_approval'" *ngIf="item?.status == 'wait_for_approval' || item?.status == 'new'">Wait for approval</mat-option>
             <mat-option [value]="'new'" *ngIf="(item && (item.status == 'new' || item.status == 'paid') && !form.controls['isCompletedChecked'].value) || 
                                                (!item && !form.controls['isCompletedChecked'].value) || 
-                                               (item && (item.status == 'completed' || item.status == 'refunded' || item.status == 'cancelled'))">New</mat-option>
+                                               (item && (item.status == 'completed' || item.status == 'refunded' || item.status == 'cancelled'))">Wait for payment</mat-option>
             <mat-option [value]="'paid'" *ngIf="item && (item.status == 'paid' || item.status == 'in_progress') && !form.controls['isCompletedChecked'].value">Paid</mat-option>
             <mat-option [value]="'in_progress'" *ngIf="item && (item.status == 'paid' || item.status == 'in_progress' || item.status == 'ready') && !form.controls['isCompletedChecked'].value">In Progress</mat-option>
             <mat-option [value]="'ready'" *ngIf="item && (item.status == 'in_progress' || item.status == 'ready' || item.status == 'delivered') && !form.controls['isCompletedChecked'].value">Ready</mat-option>
@@ -11,6 +12,7 @@
             <mat-option [value]="'cancelled'" *ngIf="item && (item.status == 'cancelled' || item.status == 'refunded')">Cancelled</mat-option>
             <mat-option [value]="'refunded'" *ngIf="item && (item.status == 'cancelled' || item.status == 'refunded')">Refunded</mat-option>
             <mat-option [value]="'completed'" *ngIf="(item && (item.status == 'delivered' || item.status == 'completed')) || ((!item || item && item.status !== 'cancelled' && item.status !== 'refunded') && form.controls['isCompletedChecked'].value)">Completed</mat-option>
+            <mat-option [value]="'rejected'" *ngIf="item?.status == 'rejected'">Rejected</mat-option>
         </mat-select>
         <p class="mb-0 font-8" *ngIf="item?.receiptId">ID: {{ item?.receiptId }}</p>
         <div class="font-8 mb-3" *ngIf="item">
@@ -99,7 +101,7 @@
                         <h5 class="h6">Items ({{inListItems.length}})</h5>
                         <ul class="list-group font-9" cdkDropList [cdkDropListDisabled]="!isEditable()" (cdkDropListDropped)="drop($event)" *ngIf="inListItems.length">
                             <li cdkDrag class="list-group-item d-flex align-items-center" *ngFor="let targetItem of inListItems">
-                                <span class="col p-0">{{ targetItem.name }} {{ targetItem.type !== 'default' ? '- ' + targetItem.type : '' }} - RM {{ targetItem.price  | number: '1.2-2' }} x {{ targetItem.quantity}} </span>
+                                <span class="col p-0">{{ targetItem.name }} {{ targetItem.type !== 'default' && targetItem.type !== null ? '- ' + targetItem.type : '' }} - RM {{ targetItem.price  | number: '1.2-2' }} x {{ targetItem.quantity}} </span>
                                 <span class="px-1">RM {{ targetItem.price * targetItem.quantity | number: '1.2-2' }}</span>
                                 <span *ngIf="isEditable()" class="fas fa-times pl-2 clickable" (click)="removeItem(targetItem)"></span>
                             </li>

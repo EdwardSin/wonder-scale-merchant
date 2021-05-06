@@ -1,0 +1,49 @@
+<div class="d-flex justify-content-center align-items-center" *ngIf="store && !loading.isRunning(); else loadingTemplate">
+    <div>
+        <h3 class="my-4 text-center">A quick setup guide to start the feature</h3>
+        <ul class="list-unstyled mb-5 setup-list">
+            <li class="row no-gutters setup-list-item">
+                <span class="setup-list-item-icon d-none d-lg-block fas fa-store"></span>
+                <div class="mr-lg-auto col-lg-auto">
+                    <div class="row no-gutters mb-1 d-flex align-items-center">
+                        <span class="setup-list-item-sm-icon d-inline-block d-lg-none fas fa-store"></span>
+                        <p class="setup-list-item-label">Bank Details</p>
+                        <span class="setup-list-item-checked fas fa-check-circle" [class.text-success]="store?.bankDetails"></span>
+                    </div>
+                    <p class="setup-list-item-text">Add bank details for customers to bank-in</p>
+                </div>
+                <button class="btn btn-sm btn-setup ml-lg-5 mt-3 mt-lg-0 ml-auto" [routerLink]="['/stores', store?.username, 'invoices', 'payment-methods']">Change Details</button>
+            </li>
+            <li class="row no-gutters setup-list-item">
+                <span class="setup-list-item-icon d-none d-lg-block fas fa-tag"></span>
+                <div class="mr-lg-auto col-lg-auto">
+                    <div class="row no-gutters mb-1 d-flex align-items-center">
+                        <span class="setup-list-item-sm-icon d-inline-block d-lg-none fas fa-tag"></span>
+                        <p class="setup-list-item-label">Delivery (Optional)</p>
+                        <span class="setup-list-item-checked fas fa-check-circle" [class.text-success]="store?.deliveries?.length"></span>
+                    </div>
+                    <p class="setup-list-item-text">Add your delivery details and area</p>
+                    <p class="setup-list-item-text font-8 text-danger">If no delivery provided, it will claim as free delivery.</p>
+                </div>
+                <button class="btn btn-sm btn-setup ml-lg-5 mt-3 mt-lg-0 ml-auto" [routerLink]="['/stores', store?.username, 'invoices', 'delivery']">Add Delivery</button>
+            </li>
+            <li class="row no-gutters setup-list-item">
+                <span class="setup-list-item-icon d-none d-lg-block fas fa-qrcode"></span>
+                <div class="mr-lg-auto col-lg-auto">
+                    <div class="row no-gutters mb-1 d-flex align-items-center">
+                        <span class="setup-list-item-sm-icon d-inline-block d-lg-none fas fa-qrcode"></span>
+                        <p class="setup-list-item-label">Start receiving order</p>
+                    </div>
+                    <p class="setup-list-item-text">Start receiving orders from your customers</p>
+                </div>
+                <button class="btn btn-sm btn-setup ml-lg-5 mt-3 mt-lg-0 ml-auto" [routerLink]="['/stores', store?.username, 'invoices', 'configurations']">Get Started</button>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<ng-template #loadingTemplate>
+    <ng-container *ngIf="loading.isRunning();">
+        <ws-spinner class="text-center d-block w-100" style="padding-top: 30vh; padding-bottom: 30vh" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>
+    </ng-container>
+</ng-template>

@@ -14,6 +14,7 @@ export class AuthInvoiceContributorService {
   numberOfAllItems: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   numberOfCurrentTotalItems: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   numberOfNewInvoices: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+  numberOfWaitForApprovalInvoices: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   numberOfPaidInvoices: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   numberOfInProgressInvoices: BehaviorSubject<number> = new BehaviorSubject<number>(0);
   numberOfReadyInvoices: BehaviorSubject<number> = new BehaviorSubject<number>(0);
@@ -34,6 +35,9 @@ export class AuthInvoiceContributorService {
   }
   editInvoice(invoice) {
     return this.http.put(AuthInvoiceContributorUrl.editInvoiceUrl + '/' + invoice._id, invoice, this.accessTokenService.getAccessToken());
+  }
+  updateInvoiceDelivery(invoice) {
+    return this.http.put(AuthInvoiceContributorUrl.editInvoiceUrl + '/delivery/' + invoice._id, {delivery: invoice.delivery}, this.accessTokenService.getAccessToken());
   }
   updateInvoiceStatus(id, obj) {
     return this.http.put(AuthInvoiceContributorUrl.updateInvoiceStatusUrl + '/' + id, obj, this.accessTokenService.getAccessToken());
@@ -75,6 +79,12 @@ export class AuthInvoiceContributorService {
     let numberOfDeliveryInvoices = this.numberOfDeliveryInvoices.getValue();
     this.numberOfReadyInvoices.next(--numberOfReadyInvoices);
     this.numberOfDeliveryInvoices.next(++numberOfDeliveryInvoices);
+  }
+  refreshStatusWaitForApprovalToNew() {
+    let numberOfWaitForApprovalInvoices = this.numberOfWaitForApprovalInvoices.getValue();
+    let numberOfNewInvoices = this.numberOfNewInvoices.getValue();
+    this.numberOfWaitForApprovalInvoices.next(--numberOfWaitForApprovalInvoices);
+    this.numberOfNewInvoices.next(++numberOfNewInvoices);
   }
   refreshStatusDeliveryToComplete() {
     let numberOfDeliveryInvoices = this.numberOfDeliveryInvoices.getValue();

@@ -1,10 +1,18 @@
-<div class="circle-view" [style.overflow]="isOpen ? 'visible': 'hidden'" [style.height.px]="isOpen ? 212: 43">
+<div class="circle-view" [style.overflow]="isOpen ? 'visible': 'hidden'"
+    [style.height.px]="isOpen ? (isApprovalEnabled ? 270 : 212): 43">
     <div class="circle-view-container" [style.margin-top.px]="isOpen ? 0 : 10 + (-38 * selectedIndex)">
+        <div class="circle-container" *ngIf="isApprovalEnabled">
+            <div class="circle">
+                <div class="circle-inner" [class.circle-inner__show]="selectedStage == 'wait_for_approval'"></div>
+            </div>
+            <div class="circle-label">Wait for approval</div>
+        </div>
+        <div class="pipe" *ngIf="isApprovalEnabled"></div>
         <div class="circle-container">
             <div class="circle">
                 <div class="circle-inner" [class.circle-inner__show]="selectedStage == 'new'"></div>
             </div>
-            <div class="circle-label">New</div>
+            <div class="circle-label">Wait for payment</div>
         </div>
         <div class="pipe"></div>
         <div class="circle-container">

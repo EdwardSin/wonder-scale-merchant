@@ -6,6 +6,7 @@ import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
   styleUrls: ['./ws-stepper.component.scss']
 })
 export class WsStepperComponent implements OnInit {
+  @Input() isApprovalEnabled: boolean = true;
   @Input() selectedStage: string = 'delivered';
   @Input() deliveryOption: string = 'delivery';
   @Input() isOpen: boolean;
