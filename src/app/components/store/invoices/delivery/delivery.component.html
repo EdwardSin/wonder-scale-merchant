@@ -35,7 +35,7 @@
 <div *ngIf="!deliveries.length && !loading.isRunning(); else loadingTemplate">
     <div class="text-center w-100 py-5">
         <h6 class="mb-2">No Delivery</h6>
-        <h6 class="text-danger">If no delivery provided, it will claim as free delivery.</h6>
+        <h6>Add delivery to display in public.</h6>
     </div>
 </div>
 
@@ -94,5 +94,3 @@
         </div>
     </form>
 </ws-modal>
-<confirm-modal *ngIf="isModifyPastDeliveryModalOpened" [(isOpened)]="isModifyPastDeliveryModalOpened" id="modifyPastDeliveryModal" [loading]="modifyLoading.isRunning()" [message]="'Are you sure to ' + (selectedDelivery  ? 'modify' : 'create') + ' a past delivery?'" [action]="modifyDeliveryCallback.bind(this)" [closeCallback]="returnToModifyDelivery.bind(this)">
-</confirm-modal>
