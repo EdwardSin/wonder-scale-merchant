@@ -126,6 +126,8 @@ export class DeliveryComponent implements OnInit {
         this.deliveries = result['result'];
         this.numberOfAllItems = result['total'];
         this.numberOfCurrentTotalItems = result['total'];
+        this.store.deliveries = this.deliveries;
+        this.sharedStoreService.store.next(this.store);
       }
     });
   }

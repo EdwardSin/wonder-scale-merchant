@@ -120,7 +120,11 @@ export class InvoiceInfoModalComponent extends WsModalComponent implements OnIni
   }
   updateDelivery(event) {
     this.authInvoiceContributorService.updateInvoiceDelivery(event).pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
-      WsToastService.toastSubject.next({content: 'Delivery status is updated!', type: 'success'});
+      if (this.item.status == 'wait_for_approval') {
+        WsToastService.toastSubject.next({content: 'Delivery is updated!<br/>Approval is required and wait for the payment!', type: 'success'});
+      } else {
+        WsToastService.toastSubject.next({content: 'Delivery is updated!', type: 'success'});
+      }
     });
   }
   ngOnDestroy() {

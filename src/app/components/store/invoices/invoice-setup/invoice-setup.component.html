@@ -12,7 +12,10 @@
                     </div>
                     <p class="setup-list-item-text">Add bank details for customers to bank-in</p>
                 </div>
-                <button class="btn btn-sm btn-setup ml-lg-5 mt-3 mt-lg-0 ml-auto" [routerLink]="['/stores', store?.username, 'invoices', 'payment-methods']">Change Details</button>
+                <button class="btn btn-sm btn-setup ml-lg-5 mt-3 mt-lg-0 ml-auto" [routerLink]="['/stores', store?.username, 'invoices', 'payment-methods']">
+                    <span *ngIf="store?.bankDetails == null">Add Details</span>
+                    <span *ngIf="store?.bankDetails?.bankName || store?.bankDetails?.accountName || store?.bankDetails?.accountNo">Change Details</span>
+                </button>
             </li>
             <li class="row no-gutters setup-list-item">
                 <span class="setup-list-item-icon d-none d-lg-block fas fa-tag"></span>
@@ -23,7 +26,6 @@
                         <span class="setup-list-item-checked fas fa-check-circle" [class.text-success]="store?.deliveries?.length"></span>
                     </div>
                     <p class="setup-list-item-text">Add your delivery details and area</p>
-                    <p class="setup-list-item-text font-8 text-danger">If no delivery provided, it will claim as free delivery.</p>
                 </div>
                 <button class="btn btn-sm btn-setup ml-lg-5 mt-3 mt-lg-0 ml-auto" [routerLink]="['/stores', store?.username, 'invoices', 'delivery']">Add Delivery</button>
             </li>
@@ -33,6 +35,7 @@
                     <div class="row no-gutters mb-1 d-flex align-items-center">
                         <span class="setup-list-item-sm-icon d-inline-block d-lg-none fas fa-qrcode"></span>
                         <p class="setup-list-item-label">Start receiving order</p>
+                        <span class="setup-list-item-checked fas fa-check-circle" [class.text-success]="store?.defaultSetting?.invoice?.isPublicReceivable"></span>
                     </div>
                     <p class="setup-list-item-text">Start receiving orders from your customers</p>
                 </div>
