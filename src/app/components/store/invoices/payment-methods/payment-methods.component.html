@@ -1,11 +1,14 @@
 <h4 class="ws-title">Payment Methods</h4>
-<div class="alert alert-secondary ws-bg-light-grey-4 mb-2 font-9 py-4">
+<div class="alert alert-secondary ws-bg-light-grey-4 mb-2 font-9 py-4 d-inline-block">
     We are now only supporting customers to bank-in to your account and complete their purchase.<br />
     More payment methods in the future.
 </div>
 
 <form [formGroup]="form">
     <h5>Bank Details</h5>
+    <div class="alert alert-sm alert-warning font-8 d-inline-block">
+        Only the customers that you approve their orders are available to see the bank details for payment purpose.
+    </div>
     <div class="mb-2">
         <label>Bank Name:</label>
         <mat-select name="bankName" class="form-control d-block font-9" style="max-width: 400px" type="text" maxlength="36" formControlName="bankName">
