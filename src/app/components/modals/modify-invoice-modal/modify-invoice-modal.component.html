@@ -115,7 +115,7 @@
                     <div class="mb-3" *ngIf="form.controls['deliveryOption'].value == 'delivery'">
                         <h5 class="h6">Delivery Fee</h5>
                         <div class="row no-gutters">
-                            <div class="col-lg-6 pr-lg-1">
+                            <div class="col-lg-6 pr-lg-1 mb-2">
                                 <mat-select class="form-control form-control-sm" [value]="''" placeholder="Type" (selectionChange)="onDeliveryChange($event)">
                                     <mat-option value="">Custom</mat-option>
                                     <mat-option [value]="delivery.fee" *ngFor="let delivery of deliveries">{{delivery.name}}</mat-option>
