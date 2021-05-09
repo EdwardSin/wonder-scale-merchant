@@ -153,7 +153,7 @@ export class AllInvoicesComponent implements OnInit {
     if (loading) {
       this.loading.start();
     }
-    let isGroup = this.selectedTab === 'delivered' || this.selectedTab === 'in_progress' || this.selectedTab === 'ready';
+    let isGroup = this.selectedTab === 'delivered' || this.selectedTab === 'in_progress' || this.selectedTab === 'ready' || this.selectedTab === 'completed';
     if (!isGroup) {
       let subscription = this.getInvoicesSubscription();
       subscription.pipe(finalize(() => {
@@ -215,7 +215,9 @@ export class AllInvoicesComponent implements OnInit {
   }
   getInvoiceGroupSubscription() {
     let obj = {
-      status: this.selectedTab
+      status: this.selectedTab,
+      keyword: this.keyword,
+      updatedAt: this.updatedAt
     }
     return this.authInvoiceControbutorService.getInvoiceGroup(obj).pipe(takeUntil(this.ngUnsubscribe));
   }
@@ -267,7 +269,11 @@ export class AllInvoicesComponent implements OnInit {
     } else {
       this.selectedDate = date;
       this.invoiceLoading.start();
-      this.authInvoiceControbutorService.getInvoices({statuses: [this.selectedTab], etaDate: date, keyword: this.keyword, numberPerPage: -1, page: 1, updatedAt: this.updatedAt }).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.invoiceLoading.stop())).subscribe(result => {
+      let targetDate: any = {etaDate: date};
+      if (this.selectedTab === 'completed') {
+        targetDate = { completedAt: date };
+      }
+      this.authInvoiceControbutorService.getInvoices({statuses: [this.selectedTab], ...targetDate, keyword: this.keyword, numberPerPage: -1, page: 1, updatedAt: this.updatedAt }).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.invoiceLoading.stop())).subscribe(result => {
         this.authInvoiceControbutorService.allInvoices.next(result['result']);
       });
     }
