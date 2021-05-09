@@ -9,8 +9,13 @@ const routes: Routes = [{
   children: [
     {
       path: '',
-      redirectTo: 'all-invoices',
+      redirectTo: 'get-started',
       pathMatch: 'full'
+    },
+    {
+      path: 'get-started',
+      data: { title: 'get-started', breadcrumb: 'Get Started' },
+      loadChildren: () => import('./invoice-setup/invoice-setup.module').then(m => m.InvoiceSetupModule)
     },
     {
       path: 'all-invoices',
@@ -23,14 +28,24 @@ const routes: Routes = [{
       loadChildren: () => import('./customers/customers.module').then(m => m.CustomersModule)
     },
     {
+      path: 'delivery',
+      data: { title: 'delivery', breadcrumb: 'Delivery' },
+      loadChildren: () => import('./delivery/delivery.module').then(m => m.DeliveryModule)
+    },
+    {
       path: 'promotions',
       data: { title: 'promotions', breadcrumb: 'Promotions' },
       loadChildren: () => import('./promotions/promotions.module').then(m => m.PromotionsModule)
     },
     {
-      path: 'accounting',
-      data: { title: 'accounting', breadcrumb: 'Accounting' },
-      loadChildren: () => import('./accounting/accounting.module').then(m => m.AccountingModule)
+      path: 'payment-methods',
+      data: { title: 'payment-methods', breadcrumb: 'Payment Methods' },
+      loadChildren: () => import('./payment-methods/payment-methods.module').then(m => m.PaymentMethodsModule)
+    },
+    {
+      path: 'configurations',
+      data: { title: 'configurations', breadcrumb: 'Configurations' },
+      loadChildren: () => import('./configurations/configurations.module').then(m => m.ConfigurationsModule)
     }
   ]
 }];

@@ -1,0 +1,39 @@
+<h4 class="ws-title">Payment Methods</h4>
+<div class="alert alert-secondary ws-bg-light-grey-4 mb-2 font-9 py-4 d-inline-block">
+    We are now only supporting customers to bank-in to your account and complete their purchase.<br />
+    More payment methods in the future.
+</div>
+
+<form [formGroup]="form">
+    <h5>Bank Details</h5>
+    <div class="alert alert-sm alert-warning font-8 d-inline-block">
+        Only the customers that you approve their orders are available to see the bank details for payment purpose.
+    </div>
+    <div class="mb-2">
+        <label>Bank Name:</label>
+        <mat-select name="bankName" class="form-control d-block font-9" style="max-width: 400px" type="text" maxlength="36" formControlName="bankName">
+            <mat-option *ngFor="let paymentMethod of paymentMethods() | keyvalue" [value]="paymentMethod.key">
+                {{paymentMethod.value}}
+            </mat-option>
+        </mat-select>
+    </div>
+    <div class="mb-2">
+        <label>Account Name:</label>
+        <input name="accountName" class="form-control" style="max-width: 400px" type="text" maxlength="72" formControlName="accountName" />
+    </div>
+    <div class="mb-3">
+        <label>Account No:</label>
+        <input name="accountNo" class="form-control" style="max-width: 400px" type="text" maxlength="36" formControlName="accountNo" />
+    </div>
+    <div style="max-width: 400px" class="w-100">
+        <button class="btn btn-danger btn-sm" [disabled]="removeBankDetailsLoading.isRunning()" (click)="clearBankDetails()">
+            <ws-spinner class="mr-2" *ngIf="removeBankDetailsLoading.isRunning()" [width]="15" [height]="15" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>Clear
+        </button>
+        <button class="btn btn-controller btn-sm float-right" [disabled]="saveLoading.isRunning()" (click)="editBankDetails()">
+            <ws-spinner class="mr-2" *ngIf="saveLoading.isRunning()" [width]="15" [height]="15" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>Save
+        </button>
+    </div>
+</form>
+
+
+<confirm-modal *ngIf="isRemoveBankDetailsModalOpened" [(isOpened)]="isRemoveBankDetailsModalOpened" id="removeBankDetailsModal" [loading]="removeBankDetailsLoading.isRunning()" [message]="'Are you sure to remove the bank details?'" [action]="clearBankDetailsCallback.bind(this)"></confirm-modal>

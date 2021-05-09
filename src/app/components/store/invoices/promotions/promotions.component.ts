@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { WSFormBuilder } from '@builders/wsformbuilder';
+import { WsFormBuilder } from '@builders/wsformbuilder';
 import { WsLoading } from '@elements/ws-loading/ws-loading';
 import { WsToastService } from '@elements/ws-toast/ws-toast.service';
 import { environment } from '@environments/environment';
@@ -47,7 +47,7 @@ export class PromotionsComponent implements OnInit {
     private screenService: ScreenService,
     private sharedStoreService: SharedStoreService,
     private ref: ChangeDetectorRef) {
-    this.form = WSFormBuilder.createAddPromotionForm();
+    this.form = WsFormBuilder.createAddPromotionForm();
   }
   ngOnInit(): void {
     this.loading.start();
@@ -186,7 +186,7 @@ export class PromotionsComponent implements OnInit {
     this.router.navigate([], { queryParams: { page: event }, queryParamsHandling: 'merge' });
   }
   resetForm() {
-    this.form = WSFormBuilder.createAddPromotionForm();
+    this.form = WsFormBuilder.createAddPromotionForm();
     this.today = new Date;
     this.today.setHours(0, 0, 0, 0);
     this.selectedPromotion = null;

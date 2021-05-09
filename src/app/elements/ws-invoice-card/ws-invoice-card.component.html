@@ -6,7 +6,8 @@
     <div class="row no-gutters justify-content-between">
         <div class="col">
             <ng-container [ngSwitch]="item.status">
-                <span *ngSwitchCase="'new'" class="badge rounded-pill badge-light">New</span>
+                <span *ngSwitchCase="'wait_for_approval'" class="badge rounded-pill badge-light">Wait for approval</span>
+                <span *ngSwitchCase="'new'" class="badge rounded-pill badge-light">Wait for payment</span>
                 <span *ngSwitchCase="'paid'" class="badge rounded-pill badge-warning">Paid</span>
                 <span *ngSwitchCase="'in_progress'" class="badge rounded-pill badge-warning">In Progress</span>
                 <span *ngSwitchCase="'ready'" class="badge rounded-pill badge-warning">Ready</span>
@@ -18,7 +19,7 @@
             <span class="font-7 d-block mt-1 text-muted" *ngIf="etaDate && (item?.delivery?.etaHour == null || item?.delivery?.etaHour == undefined) && (item?.status == 'delivered' || item?.status == 'in_progress'|| item?.status == 'ready') ">
                 ETA: {{ etaDate | date: 'MMM d,y' }}
             </span>
-            <span class="font-7 d-block mt-1 text-muted" *ngIf="etaDate && item?.delivery?.etaHour != null && (item?.status == 'delivered' || item?.status == 'in_progress' || item?.status == 'ready')">
+            <span class="font-7 d-block mt-1 text-muted" *ngIf="etaDate && item?.delivery?.etaHour != null && item?.delivery?.etaHour > -1 && (item?.status == 'delivered' || item?.status == 'in_progress' || item?.status == 'ready')">
                 ETA: {{ etaDate | date: 'MMM d,y h:mm a' }}
             </span>
             <span class="ws-invoice-id">{{ item.receiptId }}</span>
@@ -30,6 +31,9 @@
                     <button class="btn btn-sm mt-2 btn-controller btn-controller-icon" title="Copy invoice link" [disabled]="statusLoading.isRunning()" (click)="copy($event)">
                         <span class="fas fa-copy"></span>
                     </button>
+                </div>
+                <div *ngSwitchCase="'wait_for_approval'" class="btn-group">
+                    <button class="btn btn-sm mt-2 btn-controller" [disabled]="statusLoading.isRunning()" (click)="$event.stopPropagation(); isApproveModalOpened = true">Approve</button>
                 </div>
                 <div *ngSwitchCase="'paid'" class="btn-group">
                     <button class="btn btn-sm mt-2 btn-controller" [disabled]="statusLoading.isRunning()" (click)="confirmInvoice($event)">Confirm</button>
@@ -115,6 +119,8 @@
         </div>
     </form>
 </ws-modal>
+
+<confirm-modal *ngIf="isApproveModalOpened" [(isOpened)]="isApproveModalOpened" [loading]="statusLoading.isRunning()" [message]="'Are you sure to approve the invoice?'" [action]="approveInvoice.bind(this)"></confirm-modal>
 
 <ng-template #receiptLoadingTemplate>
     <ws-loading *ngIf="receiptLoading.isRunning(); else noReceiptTemplate"></ws-loading>

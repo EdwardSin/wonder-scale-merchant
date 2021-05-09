@@ -1,5 +1,5 @@
 
-<div class="d-flex justify-content-center align-items-center" *ngIf="selectedPackage !== 'premium' && !loading.isRunning(); else loadingTemplate">
+<div class="d-flex justify-content-center align-items-center" *ngIf="selectedPackage !== 'premium' && !loading.isRunning();">
     <div>
         <div class="text-center pt-5 mt-5">
             <span class="fas fa-clipboard-list"></span>
@@ -48,7 +48,7 @@
 
 <ng-template #loadingTemplate>
     <ng-container *ngIf="loading.isRunning()">
-        <ws-spinner class="text-center d-block w-100" style="padding-top: 10vh; padding-bottom: 10vh" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>
+        <ws-spinner class="text-center d-block w-100" style="padding-top: 30vh; padding-bottom: 30vh" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>
     </ng-container>
   </ng-template>
 

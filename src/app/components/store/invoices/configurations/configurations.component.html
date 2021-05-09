@@ -1,0 +1,35 @@
+<h4 class="ws-title">Configurations</h4>
+<div class="alert alert-secondary ws-bg-light-grey-4 mb-2 font-9 py-3">
+    <p class="mb-2">Start receiving order from the public now.</p>
+    <p *ngIf="!store?.bankDetails?.bankName || !store?.bankDetails?.accountName || !store?.bankDetails?.accountNo" class="text-danger font-8">Your payment method is not configured yet.</p>
+    <button *ngIf="!isServiceStarted" [disabled]="!store?.bankDetails?.bankName || !store?.bankDetails?.accountName || !store?.bankDetails?.accountNo" class="btn btn-primary mb-2" (click)="isStartServiceModalOpened = true">Start receiving orders</button>
+    <button *ngIf="isServiceStarted" class="btn btn-danger mb-2" (click)="isStopServiceModalOpened = true">Stop receiving orders</button>
+    <p class="mb-0 mt-3">Current Services:</p>
+    <ul class="mb-0">
+        <li>Manually to create invoice</li>
+        <li *ngIf="isServiceStarted">Receiving order publicly</li>
+    </ul>
+</div>
+<!-- <div class="my-3 px-3" *ngIf="isServiceStarted">
+    <h6 class="font-weight-bold">Approval from seller</h6>
+    <p class="mb-2">Orders from public will wait for the confirmation from seller before able to upload the payslip.</p>
+    <mat-radio-group class="d-block font-9 mb-3" [(ngModel)]="isApprovalEnabled" (change)="onApprovalModalClicked($event)">
+        <mat-radio-button [color]="'primary'" class="d-block" [value]="true">Enable</mat-radio-button>
+        <mat-radio-button [color]="'primary'" class="d-block" [value]="false">Disable</mat-radio-button>
+    </mat-radio-group>
+</div>
+<hr /> -->
+<p class="mb-0 text-muted font-9" *ngIf="isServiceStarted">Shopping button will be added to your page as below,</p>
+<div class="row no-gutters mb-5" *ngIf="isServiceStarted">
+    <div class="p-3 col-lg-6">
+        <label class="d-block font-weight-normal">Website page:</label>
+        <img class="w-100" style="box-shadow: 0 0 5px #ccc; height: 50vh; object-fit: contain" src="assets/images/png/shopping-button-page.png" alt="Shopping button page" />
+    </div>
+    <div class="p-3 col-lg-6">
+        <label class="d-block font-weight-normal">Mobile page:</label>
+        <img style="box-shadow: 0 0 5px #ccc; height: 50vh;" src="assets/images/png/shopping-button-mobile.png" alt="Shopping button mobile" />
+    </div>
+</div>
+<confirm-modal *ngIf="isStartServiceModalOpened" [(isOpened)]="isStartServiceModalOpened" [loading]="startService.isRunning()" [message]="'Are you sure to start receiving orders?'" [action]="updateToStartReceivingInvoicesCallback.bind(this)"></confirm-modal>
+<confirm-modal *ngIf="isStopServiceModalOpened" [(isOpened)]="isStopServiceModalOpened" [loading]="stopService.isRunning()" [message]="'Are you sure to stop receiving orders?'" [action]="updateToStopReceivingInvoicesCallback.bind(this)"></confirm-modal>
+<confirm-modal *ngIf="isApprovalModalOpened" [(isOpened)]="isApprovalModalOpened" [loading]="approvalFeature.isRunning()" [message]="'Are you sure to disable the approval of order? (Not Recommanded)'" [action]="updateApprovalInvoiceCallback.bind(this, false)" [closeCallback]="cancelApprovalInvoiceCallback.bind(this)"></confirm-modal>

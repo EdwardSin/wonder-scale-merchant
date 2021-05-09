@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { WSFormBuilder } from '@builders/wsformbuilder';
+import { WsFormBuilder } from '@builders/wsformbuilder';
 import { WsLoading } from '@elements/ws-loading/ws-loading';
 import { WsToastService } from '@elements/ws-toast/ws-toast.service';
 import { environment } from '@environments/environment';
@@ -61,7 +61,7 @@ export class CustomersComponent implements OnInit {
     private router: Router,
     private sharedStoreService: SharedStoreService,
     private ref: ChangeDetectorRef) { 
-    this.form = WSFormBuilder.createAddCustomerForm();
+    this.form = WsFormBuilder.createAddCustomerForm();
   }
   ngOnInit(): void {
     this.loading.start();

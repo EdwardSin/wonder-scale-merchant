@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, SimpleChanges, ViewEncapsulation } from '@angular/core';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { FormControl, FormGroup } from '@angular/forms';
-import { WSFormBuilder } from '@builders/wsformbuilder';
+import { WsFormBuilder } from '@builders/wsformbuilder';
 import { WsModalComponent } from '@elements/ws-modal/ws-modal.component';
 import { WsToastService } from '@elements/ws-toast/ws-toast.service';
 import { AuthCategoryContributorService } from '@services/http/auth-store/contributor/auth-category-contributor.service';
@@ -14,8 +14,9 @@ import { Invoice } from '@objects/invoice';
 import { environment } from '@environments/environment';
 import { AuthPromotionContributorService } from '@services/http/auth-store/contributor/auth-promotion-contributor.service';
 import { WsLoading } from '@elements/ws-loading/ws-loading';
-import * as moment from 'moment';
 import { DateTimeHelper } from '@helpers/datetimehelper/datetime.helper';
+import { AuthDeliveryContributorService } from '@services/http/auth-store/contributor/auth-delivery-contributor.service';
+import { Delivery } from '@objects/delivery';
 
 @Component({
   selector: 'modify-invoice-modal',
@@ -52,6 +53,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
   inListItems = [];
   promotions = [];
   itemTypes = [];
+  deliveries: Array<Delivery> = [];
   selectedTab = new FormControl(0);
   selectedItem = null;
   delivery: number = 0;
@@ -71,7 +73,8 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
   itemLoading: WsLoading = new WsLoading;
   private ngUnsubscribe: Subject<any> = new Subject;
   
-  constructor(private authCategoryContributorService: AuthCategoryContributorService,
+  constructor(private authDeliveryContributorService: AuthDeliveryContributorService, 
+    private authCategoryContributorService: AuthCategoryContributorService,
     private authItemContributorService: AuthItemContributorService,
     private authInvoiceContributorService: AuthInvoiceContributorService,
     private authPromotionContributorService: AuthPromotionContributorService) {
@@ -85,17 +88,18 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
       this.selectedTab.setValue(0);
       this.getCatalogue();
       this.getPromotions();
+      this.getDeliveries();
       this.getItems(this.categoryId);
       if (this.item) {
         this.setupItem();
       } else if (!this.tempInvoice) {
-        this.form = WSFormBuilder.createInvoiceForm();
+        this.form = WsFormBuilder.createInvoiceForm();
         this.inListItems = [];
       }
     }
   }
   setupItem() {
-    this.form = WSFormBuilder.createInvoiceForm();
+    this.form = WsFormBuilder.createInvoiceForm();
     this.resetForm();
     if (this.item) {
       this.form.patchValue({
@@ -206,7 +210,8 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
     return (!this.item) ||
           this.item.status !== 'completed' &&
           this.item.status !== 'refunded' &&
-          this.item.status !== 'cancelled'
+          this.item.status !== 'cancelled' &&
+          this.item.status !== 'rejected';
   }
   removeItem(item) {
     let index = this.inListItems.indexOf(item);
@@ -294,6 +299,11 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
       })
     }
   }
+  getDeliveries() {
+    this.authDeliveryContributorService.getDeliveries(null).pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+      this.deliveries = result['result'];
+    });
+  }
   openItemChange(event) {
     this.open = event;
     if(event && !this.items.length) {
@@ -345,6 +355,22 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
           itemPrice: priceAfterDiscount
         });
       }
+    }
+  }
+  onDeliveryChange(event) {
+    if (event.value) {
+      this.form.patchValue({
+        deliveryFee: event.value
+      });
+      this.notifyCalculation();
+    }
+  }
+  onDeliveryOptionChange(event) {
+    if (event.value == 'self_pickup') {
+      this.form.patchValue({
+        deliveryFee: ''
+      });
+      this.notifyCalculation();
     }
   }
   getPromotions() {
