@@ -34,6 +34,18 @@
                 <button class="btn btn-sm btn-setup ml-lg-5 mt-3 mt-lg-0 ml-auto" [routerLink]="['/stores', storeUsername, 'store-page']">Change Details</button>
             </li>
             <li class="row no-gutters setup-list-item">
+                <span class="setup-list-item-icon d-none d-lg-block fas fa-clipboard-list"></span>
+                <div class="mr-lg-auto col-lg-auto">
+                    <div class="row no-gutters mb-1 d-flex align-items-center">
+                        <span class="setup-list-item-sm-icon d-inline-block d-lg-none fas fa-clipboard-list"></span>
+                        <p class="setup-list-item-label">Invoice Management</p>
+                        <span class="setup-list-item-checked fas fa-check-circle" [class.text-success]="store?.invoiceConfiguration"></span>
+                    </div>
+                    <p class="setup-list-item-text">Start using invoices management system now.</p>
+                </div>
+                <button class="btn btn-sm btn-setup ml-lg-5 mt-3 mt-lg-0 ml-auto" [routerLink]="['/stores', store?.username, 'invoices', 'all-invoices']">Start Now</button>
+            </li>
+            <li class="row no-gutters setup-list-item">
                 <span class="setup-list-item-icon d-none d-lg-block fas fa-qrcode"></span>
                 <div class="mr-lg-auto col-lg-auto">
                     <div class="row no-gutters mb-1 d-flex align-items-center">

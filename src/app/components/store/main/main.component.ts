@@ -88,8 +88,8 @@ export class MainComponent implements OnInit {
           this.sharedStoreService.store_name = this.store.name;
           this.sharedStoreService.storeUsername = this.store.username;
           this.storeUsername = this.store.username;
+          this.authInvoiceConfigurationContributorService.isInvoiceEnabled.next(this.store.invoiceConfiguration != null);
           this.refreshContributors();
-          this.getInvoiceConfiguration();
         }
         this.loading.stop();
       })
@@ -152,13 +152,6 @@ export class MainComponent implements OnInit {
   isAdminAuthorizedRefresh(userId: string) {
     let isAdminAuthorized = this.contributorController.existsContributors.some(x => x.user == userId && x.role == Role.Admin);
     this.storeAuthorizationService.isAdminAuthorized.next(isAdminAuthorized);
-  }
-  getInvoiceConfiguration() {
-    this.authInvoiceConfigurationContributorService.getInvoiceConfiguration().pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.loading.stop())).subscribe(result => {
-      if (result) {
-        this.authInvoiceConfigurationContributorService.isInvoiceEnabled.next(result['result'] != null);
-      }
-    });
   }
   // getUnrepliedRequests() {
   //   this.authRequestContributorService.getUnrepliedRequests().pipe(takeUntil(this.ngUnsubscribe))

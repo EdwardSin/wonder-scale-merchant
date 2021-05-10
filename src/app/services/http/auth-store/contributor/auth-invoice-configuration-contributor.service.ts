@@ -12,6 +12,9 @@ export class AuthInvoiceConfigurationContributorService {
 
   constructor(private http: HttpClient, private accessTokenService: AccessTokenService) { }
 
+  startInvoiceFeature(obj) {
+    return this.http.post(AuthInvoiceConfigurationContributorUrl.startInvoiceFeatureUrl, obj, this.accessTokenService.getAccessToken());
+  }
   getInvoiceConfiguration() {
     return this.http.get(AuthInvoiceConfigurationContributorUrl.getInvoiceConfigurationUrl, this.accessTokenService.getAccessToken());
   }
