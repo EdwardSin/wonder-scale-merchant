@@ -96,7 +96,7 @@
         </div>
     </div> -->
 </div>
-<div *ngIf="selectedTab === 'wait_for_approval' && !loading.isRunning() && !store?.defaultSetting?.isPublicReceivable">
+<div *ngIf="selectedTab === 'wait_for_approval' && !loading.isRunning() && !store?.defaultSetting?.invoice?.isPublicReceivable">
     <p class="mb-0 font-9 text-muted py-2">You have disabled to receive orders publicly.</p>
 </div>
 <div *ngIf="selectedTab != 'delivered' && selectedTab !== 'in_progress' && selectedTab !== 'ready' && selectedTab !== 'completed'">
