@@ -5,6 +5,8 @@ import { AuthPackageAdminService } from '@services/http/auth-store/admin/auth-pa
 import { SharedStoreService } from '@services/shared/shared-store.service';
 import { Subject } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
+import * as _ from 'lodash';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-package',
@@ -19,7 +21,9 @@ export class PackageComponent implements OnInit {
   changeLoading: WsLoading = new WsLoading;
   private ngUnsubscribe: Subject<any> = new Subject;
   constructor(private sharedStoreService: SharedStoreService,
-    private authPackageService: AuthPackageAdminService) { }
+    private authPackageService: AuthPackageAdminService,
+    private route: ActivatedRoute,
+    private router: Router) { }
 
   ngOnInit(): void {
     this.sharedStoreService.store.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
@@ -45,6 +49,12 @@ export class PackageComponent implements OnInit {
           packageName = 'Free Package';
         }
         WsToastService.toastSubject.next({ content: 'Successfully change package - ' + packageName, type: 'success'});
+        let returnUrl = this.route.snapshot.queryParams['returnUrl'];
+        if (returnUrl) {
+          _.delay(() => {
+            this.router.navigateByUrl(returnUrl);
+          }, 1000);
+        }
       }
     });
   }

@@ -228,6 +228,7 @@ export class AuthInvoiceContributorUrl {
     static getInvoiceGroupUrl = URL.AUTH_INVOICE_CONTRIBUTOR_URL + '/group'
 }
 export class AuthInvoiceConfigurationContributorUrl {
+    static startInvoiceFeatureUrl = URL.AUTH_INVOICE_CONFIGURATION_CONTRIBUTOR_URL + '/start-feature';
     static getInvoiceConfigurationUrl = URL.AUTH_INVOICE_CONFIGURATION_CONTRIBUTOR_URL + '/';
     static addInvoiceConfigurationUrl = URL.AUTH_INVOICE_CONFIGURATION_CONTRIBUTOR_URL + '/';
 }
