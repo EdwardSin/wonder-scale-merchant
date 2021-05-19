@@ -453,6 +453,10 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
       WsToastService.toastSubject.next({ content: 'Please enter completion date!', type: 'danger'});
       return;
     }
+    if (form.value.promotion && (!form.value.numberOfPromotion || form.value.numberOfPromotion < 1 || form.value.numberOfPromotion > 10)) {
+      WsToastService.toastSubject.next({ content: 'Number of promotion should be between 1 to 10!', type: 'danger'});
+      return;
+    }
     
     let invoice: Invoice = {
       customer: {
