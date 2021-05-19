@@ -248,7 +248,7 @@ export class StorePageComponent implements OnInit {
     this.isMenuImagesOpened = false;
   }
   async onConfirmEditProfileImageClicked() {
-    this.editingStore.profileImage = await this.croppieObj.result({size: {width: 300, height: 300}})
+    this.editingStore.profileImage = await this.croppieObj.result({size: {width: 500, height: 500}})
     this.editingProfileImage = this.editingStore.profileImage;
     this.isChanged = true;
     this.isProfileImageOpened = false;
