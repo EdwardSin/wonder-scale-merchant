@@ -13,7 +13,7 @@ export class AuthCategoryContributorService {
   constructor(private http: HttpClient, private accessTokenService: AccessTokenService) { }
 
   getCategoryByNameAndStoreId(name) {
-    return this.http.get<Category>(AuthCategoryContributorUrl.getCategoryByNameAndStoreIdUrl + `?name=${name}`, this.accessTokenService.getAccessToken());
+    return this.http.post<Category>(AuthCategoryContributorUrl.getCategoryByNameAndStoreIdUrl, {name}, this.accessTokenService.getAccessToken());
   }
   addCategory(obj) {
     return this.http.post(AuthCategoryContributorUrl.addCategoryUrl, obj, this.accessTokenService.getAccessToken());
