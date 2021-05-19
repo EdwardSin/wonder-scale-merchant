@@ -106,7 +106,8 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
         status: this.item.status,
         remark: this.item.remark,
         deliveryOption: this.item.deliveryOption,
-        paymentMethod: this.item.paymentMethod || ''
+        paymentMethod: this.item.paymentMethod || '',
+        numberOfPromotion: '1'
       });
       if (!this.isEditable()) {
         this.disableAllFields()
@@ -483,6 +484,8 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
     }
     if (form.controls['promotion'].value) {
       invoice['promotions'] = [{_id: form.controls['promotion'].value, quantity: +form.controls['numberOfPromotion'].value}];
+    } else {
+      invoice['promotions'] = []
     }
     if (form.controls['isCompletedChecked'].value) {
       invoice['completedAt'] = DateTimeHelper.getDateWithCurrentTimezone(new Date(form.controls['completedAt'].value));
@@ -494,7 +497,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
         this.isOpened = false;
         this.tempInvoice = invoice;
         return;
-      } 
+      }
       this.modifyCallback(invoice);
     }
   }
