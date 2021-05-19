@@ -47,6 +47,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
   ]
   todayDate: Date = new Date;
   immutedTodayDate: Date = new Date;
+  focusCompletedDate: Date;
   form: FormGroup;
   categories = [];
   items = [];
@@ -100,6 +101,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
   }
   setupItem() {
     this.form = WsFormBuilder.createInvoiceForm();
+    this.focusCompletedDate = this.immutedTodayDate;
     this.resetForm();
     if (this.item) {
       this.form.patchValue({
@@ -154,6 +156,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
           completedAt: this.item.completedAt,
           isCompletedChecked: true,
         })
+        this.focusCompletedDate = this.item.completedAt;
       }
       if (this.item.promotions?.length && this.item.promotions[0]['_id']) {
         this.form.patchValue({
