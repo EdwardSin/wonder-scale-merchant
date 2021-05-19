@@ -8,6 +8,7 @@
 ---------------------------------------------
 .: WSM: BugFix - Encode category name  (WSM-363)
 .: WSM: BugFix - Promotion in invoice is not able to remove (WSM-356)
+.: WSM: BugFix - Promotion with empty value (WSM-351)
 
 - v1.0.10922                                -
 ---------------------------------------------
