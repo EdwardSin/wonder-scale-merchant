@@ -10,6 +10,7 @@
 .: WSM: BugFix - Promotion in invoice is not able to remove (WSM-356)
 .: WSM: BugFix - Promotion with empty value (WSM-351)
 .: WSM: Task - Open Completion Date in ORder and it will focus on the selected Date (WSM-354)
+.: WSM: Task - Back button to close image modal (WSM-365)
 
 - v1.0.10922                                -
 ---------------------------------------------
