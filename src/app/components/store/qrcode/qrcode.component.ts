@@ -60,7 +60,7 @@ export class QrcodeComponent implements OnInit {
         if (result) {
           DocumentHelper.setWindowTitleWithWonderScale('QR Code - ' + store_name);
           this.store = result;
-          this.displayImage = this.store.profileImage ? 'api/images/' + this.store.profileImage.replace(/\//g, ',') : 'assets/images/png/shop.png';
+          this.displayImage = this.store.profileImage ? 'api/images/' + this.store.profileImage.replace(/\//g, ',') : '';
           this.url = environment.URL + 'page/' + this.store.username + '?type=qr_scan';
           this.getTracks();
         }
@@ -76,17 +76,23 @@ export class QrcodeComponent implements OnInit {
     size = Math.min(300, size);
     this.qrSize = size;
     setTimeout(() => {
-      let newImage = <HTMLImageElement>document.createElement('img');
-      newImage.alt = 'profile-image';
-      newImage.src = this.displayImage;
-      newImage.addEventListener('load', e => {
-        QRCodeBuilder.createQRcode(target, url, {width: size, height: size, callback: () => {
+      if (this.displayImage) {
+        let newImage = <HTMLImageElement>document.createElement('img');
+        newImage.alt = 'profile-image';
+        newImage.src = this.displayImage;
+        newImage.addEventListener('load', e => {
+          QRCodeBuilder.createQRcode(target, url, {width: size, height: size, color: '#505f79',  callback: () => {
+            $(target).find('ws-spinner').css({display: 'none'});
+          }})
+          .then(() => {
+              QRCodeBuilder.renderProfileImageToQrcode(target, newImage, size);
+          });
+        });
+      } else {
+        QRCodeBuilder.createQRcode(target, url, {width: size, height: size, color: '#505f79',  callback: () => {
           $(target).find('ws-spinner').css({display: 'none'});
         }})
-        .then(() => {
-          QRCodeBuilder.renderProfileImageToQrcode(target, newImage, size);
-        });
-      });
+      }
     });
   }
   imageChangeEvent(event) {
