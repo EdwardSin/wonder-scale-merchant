@@ -687,6 +687,70 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
   drop(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.inListItems, event.previousIndex, event.currentIndex);
   }
+  decrease() {
+    let quantity = this.form.value.itemQuantity || 1;
+    quantity--;
+    if (quantity < 1) {
+      quantity = 1;
+    }
+    this.form.patchValue({
+      itemQuantity: quantity
+    })
+  }
+  increase() {
+    let quantity = this.form.value.itemQuantity || 1;
+    quantity++;
+    if (quantity <= 999) {
+      this.form.patchValue({
+        itemQuantity: quantity
+      })
+    }
+  }
+  quantityChange() {
+    let quantity = this.form.value.itemQuantity;
+    if (quantity > 999) {
+      this.form.patchValue({
+        itemQuantity: 999
+      })
+    }
+    if (quantity < 1) {
+      this.form.patchValue({
+        itemQuantity: 1
+      })
+    }
+  }
+  promotionDecrease() {
+    let numberOfPromotion = this.form.value.numberOfPromotion || 1;
+    numberOfPromotion--;
+    if (numberOfPromotion < 1) {
+      numberOfPromotion = 1;
+    }
+    this.form.patchValue({
+      numberOfPromotion
+    })
+  }
+  promotionIncrease() {
+    let numberOfPromotion = this.form.value.numberOfPromotion || 1;
+    numberOfPromotion++;
+    if (numberOfPromotion <= 10) {
+      this.form.patchValue({
+        numberOfPromotion
+      })
+    }
+  }
+  promotionChange() {
+    let numberOfPromotion = this.form.value.numberOfPromotion;
+    if (numberOfPromotion > 10) {
+      this.form.patchValue({
+        numberOfPromotion: 10
+      })
+    }
+    if (numberOfPromotion < 1) {
+      this.form.patchValue({
+        numberOfPromotion: 1
+      })
+    }
+  }
   ngOnDestroy() {
     super.ngOnDestroy();
   }

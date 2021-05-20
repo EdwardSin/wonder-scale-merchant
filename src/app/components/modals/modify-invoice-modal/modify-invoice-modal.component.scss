@@ -49,3 +49,14 @@ mat-tab-group mat-tab-header .mat-elevation-z4{
 mat-tab-group mat-tab-header .mat-tab-label {
     min-width: 0;
 }
+
+.invoice__quantity {
+    .invoice__quantity-input {
+        width: 60px;
+    }
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+}
