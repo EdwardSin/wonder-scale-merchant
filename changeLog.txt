@@ -8,6 +8,7 @@
 ---------------------------------------------
 .: WSM: Task - Back button to close image modal (WSM-365)
 .: WSM: Task - Change create order quantity input to button (WSM-338)
+.: WSM: Task - Fix QRcode in production (WSM-370)
 
 ---------------------------------------------
 - 2021-05-19                                -

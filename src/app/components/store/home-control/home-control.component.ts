@@ -35,7 +35,7 @@ export class HomeControlComponent implements OnInit {
       if (result) {
         this.store = result;
         DocumentHelper.setWindowTitleWithWonderScale('Home - ' + this.store.name);
-        this.displayImage = this.store.profileImage ? 'api/images/' + this.store.profileImage.replace(/\//g, ',') : 'assets/images/svg/dot.svg';
+        this.displayImage = this.store.profileImage ? 'api/images/' + this.store.profileImage.replace(/\//g, ',') : '';
         this.url = environment.URL + 'page/' + this.store.username + '?type=qr_scan';
       }
     })
@@ -70,17 +70,23 @@ export class HomeControlComponent implements OnInit {
     size = Math.min(300, size);
     this.qrSize = size;
     setTimeout(() => {
-      let newImage = <HTMLImageElement>document.createElement('img');
-      newImage.alt = 'profile-image';
-      newImage.src = this.displayImage;
-      newImage.addEventListener('load', e => {
-        QRCodeBuilder.createQRcode(target, url, {width: size, height: size, callback: () => {
+      if (this.displayImage) {
+        let newImage = <HTMLImageElement>document.createElement('img');
+        newImage.alt = 'profile-image';
+        newImage.src = this.displayImage;
+        newImage.addEventListener('load', e => {
+          QRCodeBuilder.createQRcode(target, url, {width: size, height: size, color: '#505f79',  callback: () => {
+            $(target).find('ws-spinner').css({display: 'none'});
+          }})
+          .then(() => {
+              QRCodeBuilder.renderProfileImageToQrcode(target, newImage, size);
+          });
+        });
+      } else {
+        QRCodeBuilder.createQRcode(target, url, {width: size, height: size, color: '#505f79',  callback: () => {
           $(target).find('ws-spinner').css({display: 'none'});
         }})
-        .then(() => {
-          QRCodeBuilder.renderProfileImageToQrcode(target, newImage, size);
-        });
-      });
+      }
     });
   }
   download() {
