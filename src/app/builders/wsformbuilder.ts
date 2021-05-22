@@ -278,6 +278,7 @@ export class WsFormBuilder {
     public static createDeliveryForm() {
         let formBuilder = new FormBuilder;
         return formBuilder.group({
+            isEnabled: [true],
             fee: ['', [Validators.pattern("^[0-9.,]+$")]]
         });
     }
