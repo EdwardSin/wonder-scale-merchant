@@ -10,6 +10,7 @@
 .: WSM: Task - Decided whether want to show the selected delivery item (WSM-366)
 .: WSM: Task - Update customer firstname and lastname to recipient name instead (WSM-371)
 .: WSM: Task - Disable customer feature (WSM-372)
+.: WSW: Task - Link the order button in website to local shopping (WSW-116)
 
 ---------------------------------------------
 - 2021-05-20                                -
