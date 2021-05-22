@@ -25,6 +25,7 @@ export class DeliveryComponent implements OnInit {
   form: FormGroup;
   store;
   deliveries: Array<Delivery> = [];
+  displayedDeliveries: Array<Delivery> = [];
   selectedDelivery;
   queryParams = { page: 1, keyword: '', order: '', orderBy: 'asc'};
   numberOfAllItems = 0;
@@ -92,6 +93,7 @@ export class DeliveryComponent implements OnInit {
   setupDelivery() {
     if (this.selectedDelivery) {
       this.form.patchValue({
+        isEnabled: this.selectedDelivery.isEnabled,
         fee: (this.selectedDelivery.fee).toFixed(2)
       });
       this.locationName = this.selectedDelivery.name;
@@ -149,10 +151,12 @@ export class DeliveryComponent implements OnInit {
   }
   openPreviewDeliveryModal() {
     this.isPreviewDeliveryModalOpened = true;
+    this.displayedDeliveries = this.deliveries.filter(delivery => delivery.isEnabled);
   }
   modifyDeliveryCallback() {
     if (this.form.valid && this.validateLocationName()) {
       let obj = {
+        isEnabled: this.form.value.isEnabled,
         name: _.compact(this.locationName),
         fee: this.form.controls['fee'].value || 0
       }
