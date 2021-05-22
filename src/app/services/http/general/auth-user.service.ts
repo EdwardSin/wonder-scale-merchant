@@ -21,6 +21,15 @@ export class AuthUserService {
   getProfile(): Observable<Result<User>> {
     return this.http.get<Result<User>>(AuthUserUrl.getProfileUrl);
   }
+  getAddressbook() {
+    return this.http.get(AuthUserUrl.getAddressbookUrl);
+  }
+  saveAddress(obj) {
+    return this.http.post(AuthUserUrl.saveAddressbookUrl, obj);
+  }
+  removeAddress(id) {
+    return this.http.delete(AuthUserUrl.removeAddressbookUrl + '/' + id);
+  }
   removeProfileImage() {
     return this.http.put(AuthUserUrl.removeProfileImageUrl, {});
   }

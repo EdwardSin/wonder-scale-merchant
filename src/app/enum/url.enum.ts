@@ -43,6 +43,9 @@ export class FeatureUrl {
 export class AuthUserUrl {
     static getUserUrl = URL.AUTH_USERS_URL + '/users';
     static getProfileUrl = URL.AUTH_USERS_URL + '/users/profile';
+    static getAddressbookUrl = URL.AUTH_USERS_URL + '/users/address-book';
+    static saveAddressbookUrl = URL.AUTH_USERS_URL + '/users/address-book';
+    static removeAddressbookUrl = URL.AUTH_USERS_URL + '/users/address-book';
     static getPasswordExistedUrl = URL.AUTH_USERS_URL + '/users/is-password';
     static removeProfileImageUrl = URL.AUTH_USERS_URL + '/users/remove/profile-image';
     static editProfileUrl = URL.AUTH_USERS_URL + '/users/edit/profile-image';
