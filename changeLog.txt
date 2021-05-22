@@ -6,6 +6,11 @@
 ---------------------------------------------
 - 2021-05-20                                -
 ---------------------------------------------
+.: WSM: Task - Retrieve user details to place order + save inserted details (WSW-115)
+
+---------------------------------------------
+- 2021-05-20                                -
+---------------------------------------------
 .: WSM: Task - Back button to close image modal (WSM-365)
 .: WSM: Task - Change create order quantity input to button (WSM-338)
 .: WSM: Task - Fix QRcode in production (WSM-370)

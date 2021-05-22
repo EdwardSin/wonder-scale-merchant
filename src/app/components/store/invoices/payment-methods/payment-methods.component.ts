@@ -93,7 +93,6 @@ export class PaymentMethodsComponent implements OnInit {
         this.sharedStoreService.store.next(this.store);
         this.isRemoveBankDetailsModalOpened = false;
       }, error => {
-        console.log(error);
         if (error?.status === 403) {
           WsToastService.toastSubject.next({ content: error?.error, type: 'danger' });
         }
