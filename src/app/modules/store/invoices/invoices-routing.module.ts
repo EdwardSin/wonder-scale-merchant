@@ -22,11 +22,11 @@ const routes: Routes = [{
       data: { title: 'all-invoices', breadcrumb: 'All Invoices' },
       loadChildren: () => import('./all-invoices/all-invoices.module').then(m => m.AllInvoicesModule)
     },
-    { 
-      path: 'customers',
-      data: { title: 'customers', breadcrumb: 'Customers' },
-      loadChildren: () => import('./customers/customers.module').then(m => m.CustomersModule)
-    },
+    // { 
+    //   path: 'customers',
+    //   data: { title: 'customers', breadcrumb: 'Customers' },
+    //   loadChildren: () => import('./customers/customers.module').then(m => m.CustomersModule)
+    // },
     {
       path: 'delivery',
       data: { title: 'delivery', breadcrumb: 'Delivery' },
