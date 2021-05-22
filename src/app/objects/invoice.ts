@@ -1,8 +1,7 @@
 export class Invoice{
     customerId?: string;
     customer?: string | {
-        firstName?: string,
-        lastName?: string,
+        recipientName?: string,
         address?: {
             address: string,
             state: string,
