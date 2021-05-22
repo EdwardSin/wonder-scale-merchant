@@ -249,8 +249,7 @@ export class WsFormBuilder {
         return formBuilder.group({
             deliveryFee: ['', [Validators.pattern("^[0-9.,]+$")]],
             deliveryOption: ['delivery', [Validators.required]],
-            firstName: ['', [Validators.maxLength(36)]],
-            lastName: ['', [Validators.maxLength(36)]],
+            recipientName: ['', [Validators.maxLength(36)]],
             address: ['', [Validators.maxLength(128)]],
             postcode: ['', [Validators.maxLength(36)]],
             state: ['', [Validators.maxLength(36)]],

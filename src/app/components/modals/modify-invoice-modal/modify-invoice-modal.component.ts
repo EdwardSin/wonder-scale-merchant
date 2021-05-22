@@ -133,8 +133,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
       }
       if (this.item.customer) {
         this.form.patchValue({
-          firstName: this.item.customer['firstName'],
-          lastName: this.item.customer['lastName'],
+          recipientName: this.item.customer['recipientName'],
           phoneNumber: this.item.customer['phoneNumber']
         })
         if (this.item.customer['address']) {
@@ -394,15 +393,17 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
   }
   private validatePickup() {
     let form = this.form;
-    return form.controls['isCustomerSaved'].value && form.controls['firstName'].value && form.controls['lastName'].value && form.controls['phoneNumber'].value ||
-          (!form.controls['isCustomerSaved'].value && form.controls['firstName'].value && form.controls['lastName'].value && form.controls['phoneNumber'].value) ||
+    return form.controls['isCustomerSaved'].value && form.controls['recipientName'].value && form.controls['phoneNumber'].value ||
+          (!form.controls['isCustomerSaved'].value && form.controls['recipientName'].value && form.controls['phoneNumber'].value) ||
           (!form.controls['isCustomerSaved'].value && !form.controls['phoneNumber'].value);
   }
   private validateDelivery() {
     let form = this.form;
-    return form.controls['isCustomerSaved'].value && form.controls['firstName'].value && form.controls['lastName'].value && form.controls['phoneNumber'].value ||
-           (!form.controls['isCustomerSaved'].value && (form.controls['phoneNumber'].value || form.controls['address'].value || form.controls['postcode'].value ||form.controls['state'].value) && form.controls['lastName'].value && form.controls['firstName'].value) ||
-           (!form.controls['isCustomerSaved'].value && !(form.controls['phoneNumber'].value || form.controls['address'].value || form.controls['postcode'].value ||form.controls['state'].value));
+    return form.controls['isCustomerSaved'].value && form.controls['recipientName'].value && form.controls['phoneNumber'].value ||
+           (!form.controls['isCustomerSaved'].value && 
+              (form.controls['phoneNumber'].value || form.controls['address'].value || form.controls['postcode'].value || form.controls['state'].value) && 
+                form.controls['recipientName'].value) ||
+           (!form.controls['isCustomerSaved'].value && !(form.controls['phoneNumber'].value || form.controls['address'].value || form.controls['postcode'].value || form.controls['state'].value));
   }
   private getPriceAfterDiscount(price, discount) {
     let _discount = 0;
@@ -421,12 +422,12 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
     let etaDateTimeHour = this.form.controls['etaDateTimeHour'].value;
     let etaDateTimeMin = this.form.controls['etaDateTimeMin'].value;
     
-    if (form.controls['firstName'].value && form.controls['isCustomerSaved'].value && !form.controls['lastName'].value) {
+    if (form.controls['recipientName'].value && form.controls['isCustomerSaved'].value && !form.controls['lastName'].value) {
       WsToastService.toastSubject.next({ content: 'Please enter last name!', type: 'danger'});
       return;
     }
-    else if (!form.controls['firstName'].value && form.controls['lastName'].value) {
-      WsToastService.toastSubject.next({ content: 'Please enter first name!', type: 'danger'});
+    else if (!form.controls['recipientName'].value) {
+      WsToastService.toastSubject.next({ content: 'Please enter recipient\'s name!', type: 'danger'});
       return;
     }
     if (!this.validatePickup() || !this.validateDelivery()) {
@@ -463,8 +464,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
     
     let invoice: Invoice = {
       customer: {
-        firstName: form.controls['firstName'].value,
-        lastName: form.controls['lastName'].value,
+        recipientName: form.controls['recipientName'].value,
         address: {
           address: form.controls['address'].value,
           postcode: form.controls['postcode'].value,
@@ -617,8 +617,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
   disableAllFields() {
     this.form.get('deliveryFee').disable();
     this.form.get('deliveryOption').disable();
-    this.form.get('firstName').disable();
-    this.form.get('lastName').disable();
+    this.form.get('recipientName').disable();
     this.form.get('address').disable();
     this.form.get('postcode').disable();
     this.form.get('state').disable();
@@ -641,8 +640,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
   enableAllFields() {
     this.form.get('deliveryFee').enable();
     this.form.get('deliveryOption').enable();
-    this.form.get('firstName').enable();
-    this.form.get('lastName').enable();
+    this.form.get('recipientName').enable();
     this.form.get('address').enable();
     this.form.get('postcode').enable();
     this.form.get('state').enable();
