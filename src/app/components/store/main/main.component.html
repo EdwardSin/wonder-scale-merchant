@@ -109,9 +109,9 @@
           <li *ngIf="isInvoiceEnabled && store?.package?.name == 'premium'">
             <a [routerLinkActive]="'active'" [routerLink]="['invoices', 'promotions']">Promotions</a>
           </li>
-          <li *ngIf="isInvoiceEnabled && store?.package?.name == 'premium'">
+          <!-- <li *ngIf="isInvoiceEnabled && store?.package?.name == 'premium'">
             <a [routerLinkActive]="'active'" [routerLink]="['invoices', 'customers']">Customers</a>
-          </li>
+          </li> -->
           <li *ngIf="isInvoiceEnabled && store?.package?.name == 'premium'">
             <a [routerLinkActive]="'active'" [routerLink]="['invoices', 'payment-methods']">Payment Methods</a>
           </li>
