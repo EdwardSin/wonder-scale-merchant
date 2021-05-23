@@ -167,6 +167,32 @@
     }
 }
 
+.scrollbar {
+    overflow: auto;
+
+    &::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+    }
+    
+    /* Track */
+    &::-webkit-scrollbar-track {
+        background: #f7f7f7;
+    }
+     
+    /* Handle */
+    &::-webkit-scrollbar-thumb {
+        background-color: #ccc;
+        border-radius: 10px;
+        transition: background-color ease .5s;
+    }
+    
+    /* Handle on hover */
+    &::-webkit-scrollbar-thumb:hover {
+        background-color: #bbb;
+    }
+}
+
 mat-checkbox label{
     margin-bottom: 0;
 }
