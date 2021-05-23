@@ -12,6 +12,7 @@ export class Invoice{
     };
     deliveryOption: 'self_pickup' | 'delivery';
     delivery?: {
+        _id?: string,
         fee?:  number,
         etaDate?: string,
         etaHour?: number,

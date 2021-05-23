@@ -116,9 +116,14 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
       }
       this.inListItems = this.item.items;
       if (this.item.delivery) {
-        if (this.item.delivery.fee) {
+        if (this.item.delivery.fee !== null) {
           this.form.patchValue({
             deliveryFee: this.item.delivery.fee
+          });
+        }
+        if (this.item.delivery._id) {
+          this.form.patchValue({
+            deliveryId: this.item.delivery._id
           });
         }
         if (this.item.delivery.etaDate) {
@@ -168,6 +173,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
   }
   resetForm() {
     this.form.reset({
+      deliveryId: '',
       deliveryFee: '',
       status: 'new',
       country: 'MYS',
@@ -327,7 +333,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
     this.selectedItem = event;
     this.itemTypes = [
       {
-        name: 'Default',
+        name: '',
         price: this.getPriceAfterDiscount(this.selectedItem.price, this.selectedItem.discount)
       },
       ...this.selectedItem.types];
@@ -363,8 +369,16 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
   onDeliveryChange(event) {
     if (event.value) {
       this.form.patchValue({
-        deliveryFee: event.value
+        deliveryId: event.value
       });
+      let delivery = this.deliveries.find(delivery => {
+        return delivery._id === event.value
+      });
+      if (delivery) {
+        this.form.patchValue({
+          deliveryFee: delivery.fee
+        });
+      }
       this.notifyCalculation();
     }
   }
@@ -474,6 +488,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
         phoneNumber: form.controls['phoneNumber'].value
       },
       delivery: {
+        _id: form.value.deliveryId || undefined,
         fee: form.controls['deliveryFee'].value,
         etaDate: etaDate,
         etaHour: etaDateTimeHour,
@@ -615,6 +630,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
     return obj;
   }
   disableAllFields() {
+    this.form.get('deliveryId').disable();
     this.form.get('deliveryFee').disable();
     this.form.get('deliveryOption').disable();
     this.form.get('recipientName').disable();
@@ -638,6 +654,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
     this.form.get('paymentMethod').disable();
   }
   enableAllFields() {
+    this.form.get('deliveryId').enable();
     this.form.get('deliveryFee').enable();
     this.form.get('deliveryOption').enable();
     this.form.get('recipientName').enable();

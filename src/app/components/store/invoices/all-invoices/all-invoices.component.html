@@ -1,7 +1,11 @@
 <h4 class="ws-title">All Invoices</h4>
 <search-bar class="d-inline-block mr-2 mb-3" [placeholder]="'Search ID, Name...'" [searchKeyword]="keyword"></search-bar>
-<button class="btn btn-sm btn-controller float-right ml-2" title="View flow chart" (click)="isHelpModalOpened = true">
+<button class="btn btn-sm btn-controller float-right" title="View flow chart" (click)="isHelpModalOpened = true">
     <span class="fas fa-question-circle d-inline-block"></span>
+</button>
+<button class="btn btn-sm btn-controller float-right mx-2" (click)="openAnalysisInvoiceModal()">
+    <span class="fas fa-chart-bar mr-lg-1 d-inline-block"></span>
+    <span class="d-inline-block" *ngIf="!isMobileSize">Analysis</span>
 </button>
 <button class="btn btn-sm btn-controller float-right" (click)="openCreateInvoiceModal()">
     <span class="fas fa-plus mr-lg-2 d-inline-block"></span>
@@ -56,7 +60,7 @@
         <button mdbDropdownToggle class="btn btn-controller clickable d-inline">
             <span class="fa fa-ellipsis-v"></span>
         </button>
-        <div class="dropdown-menu dropdown-menu-right mt-0 pb-0 pt-0 font-9"  style="left: inherit; top: -15px">
+        <div class="dropdown-menu dropdown-menu-right mt-0 pb-0 pt-0 font-9" style="left: inherit; top: -15px">
             <button class="dropdown-item" (click)="$event.stopPropagation()">
                 <mat-checkbox (change)="triggerStatusColumns('wait_for_approval')" [checked]="statusColumns.includes('wait_for_approval')" [color]="'primary'" class="mr-2 d-inline-block">Wait for approval</mat-checkbox>
             </button>
@@ -124,15 +128,14 @@
                         </div>
                     </ng-container>
                     <div class="d-block py-5 center">
-                        <ws-spinner [width]="30" [height]="30"  [borderWidth]="1" [spinnerColor]="'#b71c1c'" *ngIf="invoiceLoading.isRunning()"></ws-spinner>
+                        <ws-spinner [width]="30" [height]="30" [borderWidth]="1" [spinnerColor]="'#b71c1c'" *ngIf="invoiceLoading.isRunning()"></ws-spinner>
                     </div>
                 </div>
             </ng-container>
         </div>
     </div>
 </div>
-<ws-pagination *ngIf="numberOfCurrentTotalItems && selectedTab != 'delivered' && selectedTab !== 'in_progress' && selectedTab !== 'ready' && selectedTab !== 'completed'" [expanded]="isNavOpen" [currentPage]="page"
-            [pageSize]="50" [dbTotal]="numberOfAllItems" [total]="numberOfCurrentTotalItems" (getPageNumber)="navigate($event)"></ws-pagination>
+<ws-pagination *ngIf="numberOfCurrentTotalItems && selectedTab != 'delivered' && selectedTab !== 'in_progress' && selectedTab !== 'ready' && selectedTab !== 'completed'" [expanded]="isNavOpen" [currentPage]="page" [pageSize]="50" [dbTotal]="numberOfAllItems" [total]="numberOfCurrentTotalItems" (getPageNumber)="navigate($event)"></ws-pagination>
 
 <ng-template #loadingTemplate>
     <ng-container *ngIf="loading.isRunning(); else noInvoice">
@@ -149,6 +152,96 @@
 <ws-modal *ngIf="isHelpModalOpened" [(isOpened)]="isHelpModalOpened" [maxWidth]="700">
     <div class="pt-3" modalBody>
         <img style="max-width: 100%" class="center d-block" src="assets/images/jpg/flowchart.jpg" alt="flow chart" />
+    </div>
+</ws-modal>
+
+<ws-modal *ngIf="isAnalysisInvoiceModalOpened" [(isOpened)]="isAnalysisInvoiceModalOpened" [maxWidth]="1200">
+    <div class="pt-3" modalBody>
+        <h5 class="h5">Analysis</h5>
+        <div class="row no-gutters">
+            <div class="col-lg-3 pr-lg-3">
+                <label class="mb-0 font-9">Target</label>
+                <mat-select class="form-control form-control-sm mb-2" [(ngModel)]="analysis.target">
+                    <mat-option value="items">Items</mat-option>
+                    <mat-option value="delivery">Delivery</mat-option>
+                </mat-select>
+                <label class="mb-0 font-9">Status</label>
+                <mat-select [multiple]="true" class="form-control form-control-sm mb-2" [(ngModel)]="analysis.status">
+                    <mat-option value="wait_for_approval">Wait for approval</mat-option>
+                    <mat-option value="new">Wait for payment</mat-option>
+                    <mat-option value="paid">Paid</mat-option>
+                    <mat-option value="in_progress">In Progress</mat-option>
+                    <mat-option value="ready">Ready</mat-option>
+                    <mat-option value="delivery">Delivery / Pickup</mat-option>
+                    <mat-option value="completed">Completed</mat-option>
+                    <mat-option value="cancelled">Cancelled / Refunded</mat-option>
+                    <mat-option value="rejected">Rejected</mat-option>
+                </mat-select>
+                <label class="mb-0 font-9">ETA From date</label>
+                <!-- [min]="last60MonthsDate" [max]="maxDate"  -->
+                <input (click)="fromPicker.open()" class="form-control form-control-sm" [(ngModel)]="analysis.fromDate" [matDatepicker]="fromPicker" />
+                <mat-datepicker #fromPicker startView="month"></mat-datepicker>
+                <label class="mb-0 font-9">ETA To date</label>
+                <!--  [max]="maxDate" -->
+                <input (click)="toPicker.open()" class="form-control form-control-sm" [(ngModel)]="analysis.toDate" [matDatepicker]="toPicker" [min]="analysis.fromDate" />
+                <mat-datepicker #toPicker startView="month"></mat-datepicker>
+                <div class="mb-3">
+                    <mat-checkbox [(ngModel)]="analysis.isIncludedWithoutEta" class="font-8" [color]="'primary'">Include without ETA delivery / pickup date.</mat-checkbox>
+                </div>
+                <button class="btn btn-sm btn-controller float-right" (click)="getAnalysis()">Analyze</button>
+            </div>
+            <div class="col-lg-9 pl-lg-3">
+                <div class="table-responsive" *ngIf="currentAnalysis">
+                    <div class="mb-2">
+                        <span class="font-8 font-weight-bold" *ngIf="currentAnalysis?.target == 'items'">
+                            Items in the invoices
+                        </span>
+                        <span class="font-8 font-weight-bold" *ngIf="currentAnalysis?.target == 'delivery'">
+                            Invoices with delivery
+                        </span>
+                        <span class="font-8 float-right">
+                            {{currentAnalysis?.fromDate | date: 'dd MMM y'}} - {{currentAnalysis?.toDate | date: 'dd MMM y'}}
+                        </span>
+                    </div>
+                    <table class="table table-sm table-hover font-9" *ngIf="currentAnalysis?.target == 'items'">
+                        <thead>
+                            <th>Item Name</th>
+                            <th class="text-center" width="150">Number of items</th>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of itemsAnalysis">
+                                <td>{{ item?.name }}</td>
+                                <td class="text-center">{{ item?.numberOfItems }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="table table-sm table-hover font-9" *ngIf="currentAnalysis?.target == 'delivery'">
+                        <thead>
+                            <th>Delivery</th>
+                            <th class="text-center" width="150">Number of invoices</th>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of itemsAnalysis">
+                                <td>{{ item?.name }}</td>
+                                <td class="text-center">{{ item?.numberOfItems }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div *ngIf="!analysisLoading.isRunning() && !itemsAnalysis?.length">
+                        <p class="my-5 text-center">No data is available now</p>
+                    </div>
+                </div>
+                <div class="py-5" *ngIf="analysisLoading.isRunning()">
+                    <ws-spinner class="text-center d-block w-100" [width]="30" [height]="30" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>
+                </div>
+                <div *ngIf="!currentAnalysis">
+                    <p class="text-center w-100 py-5">No data is displayed!</p>
+                </div>
+            </div>
+        </div>
+        <div class="float-right">
+            <button class="btn btn-sm btn-controller" (click)="isAnalysisInvoiceModalOpened = false">Cancel</button>
+        </div>
     </div>
 </ws-modal>
 
