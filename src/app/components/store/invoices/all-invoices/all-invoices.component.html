@@ -190,8 +190,8 @@
                 </div>
                 <button class="btn btn-sm btn-controller float-right" (click)="getAnalysis()">Analyze</button>
             </div>
-            <div class="col-lg-9 pl-lg-3">
-                <div class="table-responsive" *ngIf="currentAnalysis">
+            <div class="col-lg-9 pl-lg-3 analysis-table">
+                <div class="table-responsive scrollbar" *ngIf="currentAnalysis">
                     <div class="mb-2">
                         <span class="font-8 font-weight-bold" *ngIf="currentAnalysis?.target == 'items'">
                             Items in the invoices
