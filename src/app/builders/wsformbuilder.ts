@@ -247,6 +247,7 @@ export class WsFormBuilder {
     public static createInvoiceForm() {
         let formBuilder = new FormBuilder;
         return formBuilder.group({
+            deliveryId: [''],
             deliveryFee: ['', [Validators.pattern("^[0-9.,]+$")]],
             deliveryOption: ['delivery', [Validators.required]],
             recipientName: ['', [Validators.maxLength(36)]],

@@ -229,6 +229,7 @@ export class AuthInvoiceContributorUrl {
     static updateInvoiceStatusUrl = URL.AUTH_INVOICE_CONTRIBUTOR_URL + '/change-status';
     static getUnseenInvoicesUrl = URL.AUTH_INVOICE_CONTRIBUTOR_URL + '/unseen'
     static getInvoiceGroupUrl = URL.AUTH_INVOICE_CONTRIBUTOR_URL + '/group'
+    static getInvoicesAnalysisUrl = URL.AUTH_INVOICE_CONTRIBUTOR_URL + '/analysis'
 }
 export class AuthInvoiceConfigurationContributorUrl {
     static startInvoiceFeatureUrl = URL.AUTH_INVOICE_CONFIGURATION_CONTRIBUTOR_URL + '/start-feature';

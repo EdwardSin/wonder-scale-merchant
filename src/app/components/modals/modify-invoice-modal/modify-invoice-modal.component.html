@@ -74,7 +74,7 @@
                         <ws-search-select for="itemtype" [items]="items" [loading]="itemLoading.isRunning()" (selectionChange)="selectionChange($event)" (searchValueChange)="searchItemValueChange($event)" (scroll)="getItems(categoryId, true)" (open)="openItemChange($event)" [class.disabled]="!isEditable()" class="d-block form-control form-control-sm mb-2"></ws-search-select>
                         <label id="itemtype" class="mb-0 font-9">Item Type: </label>
                         <mat-select for="itemtype" class="form-control form-control-sm mb-2" formControlName="itemType" (selectionChange)="selectItemType($event.value)">
-                            <mat-option [value]="itemType" *ngFor="let itemType of itemTypes">{{itemType.name}}</mat-option>
+                            <mat-option [value]="itemType" *ngFor="let itemType of itemTypes">{{itemType.name || 'Default'}}</mat-option>
                         </mat-select>
                         <div class="row no-gutters mb-3">
                             <div class="col pr-lg-2">
@@ -105,7 +105,7 @@
                         <h5 class="h6">Items ({{inListItems.length}})</h5>
                         <ul class="list-group font-9" cdkDropList [cdkDropListDisabled]="!isEditable()" (cdkDropListDropped)="drop($event)" *ngIf="inListItems.length">
                             <li cdkDrag class="list-group-item d-flex align-items-center" *ngFor="let targetItem of inListItems">
-                                <span class="col p-0">{{ targetItem.name }} {{ targetItem.type !== 'default' && targetItem.type !== null ? '- ' + targetItem.type : '' }} - RM {{ targetItem.price  | number: '1.2-2' }} x {{ targetItem.quantity}} </span>
+                                <span class="col p-0">{{ targetItem.name }} {{ targetItem?.type?.toLowerCase() !== 'default' && targetItem?.type ? '- ' + targetItem.type : '' }} - RM {{ targetItem.price  | number: '1.2-2' }} x {{ targetItem.quantity}} </span>
                                 <span class="px-1">RM {{ targetItem.price * targetItem.quantity | number: '1.2-2' }}</span>
                                 <span *ngIf="isEditable()" class="fas fa-times pl-2 clickable" (click)="removeItem(targetItem)"></span>
                             </li>
@@ -120,9 +120,9 @@
                         <h5 class="h6">Delivery Fee</h5>
                         <div class="row no-gutters">
                             <div class="col-lg-6 pr-lg-1 mb-2">
-                                <mat-select class="form-control form-control-sm" [value]="''" placeholder="Type" (selectionChange)="onDeliveryChange($event)">
+                                <mat-select class="form-control form-control-sm" formControlName="deliveryId" placeholder="Type" (selectionChange)="onDeliveryChange($event)">
                                     <mat-option value="">Custom</mat-option>
-                                    <mat-option [value]="delivery.fee" *ngFor="let delivery of deliveries">{{delivery.name}}</mat-option>
+                                    <mat-option [value]="delivery?._id" *ngFor="let delivery of deliveries">{{delivery.name}}</mat-option>
                                 </mat-select>
                             </div>
                             <div class="col-lg-6 pl-lg-1">

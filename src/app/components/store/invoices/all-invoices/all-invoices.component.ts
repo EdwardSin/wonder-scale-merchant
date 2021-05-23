@@ -10,13 +10,40 @@ import { SharedNavbarService } from '@services/shared/shared-nav-bar.service';
 import { SharedStoreService } from '@services/shared/shared-store.service';
 import { interval, Subject, Subscription } from 'rxjs';
 import { debounceTime, delay, finalize, map, switchMap, takeUntil } from 'rxjs/operators';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import {MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS} from '@angular/material-moment-adapter';
 import * as _ from 'lodash';
+import * as moment from 'moment';
 import { WsMessageBarService } from '@elements/ws-message-bar/ws-message-bar.service';
+import { AuthAnalysisContributorService } from '@services/http/auth-store/contributor/auth-analysis-contributor.service';
+
+export const DAY_FORMATS = {
+  parse: {
+    dateInput: 'MMM/YYYY',
+  },
+  display: {
+    dateInput: 'DD/MMM/YYYY',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+};
 
 @Component({
   selector: 'app-all-invoices',
   templateUrl: './all-invoices.component.html',
-  styleUrls: ['./all-invoices.component.scss']
+  styleUrls: ['./all-invoices.component.scss'],
+  providers: [
+    // `MomentDateAdapter` can be automatically provided by importing `MomentDateModule` in your
+    // application's root module. We provide it at the component level here, due to limitations of
+    // our example generation script.
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
+    },
+    {provide: MAT_DATE_FORMATS, useValue: DAY_FORMATS}
+  ],
 })
 export class AllInvoicesComponent implements OnInit {
   allInvoices = [];
@@ -27,9 +54,11 @@ export class AllInvoicesComponent implements OnInit {
   isHelpModalOpened: boolean;
   isModifyInvoiceModalOpened: boolean;
   isInvoiceInfoModalOpened: boolean;
+  isAnalysisInvoiceModalOpened: boolean;
   selectedItem: any;
   loading: WsLoading = new WsLoading;
   invoiceLoading: WsLoading = new WsLoading;
+  analysisLoading: WsLoading = new WsLoading;
   _statusColumns = sessionStorage.getItem('shownStatusColumns') || '["new", "paid", "in_progress", "delivered"]';
   statusColumns = JSON.parse(this._statusColumns);
   numberOfAllItems = 0;
@@ -42,13 +71,24 @@ export class AllInvoicesComponent implements OnInit {
   numberOfReadyInvoices: number = 0;
   numberOfDeliveryInvoices: number = 0;
   invoiceGroups = [];
+  analysis = {
+    target: 'items',
+    status: ['new', 'paid', 'in_progress'],
+    fromDate: moment().subtract(2, 'days').format('YYYY-MM-DD'),
+    toDate: moment().add(7, 'days').format('YYYY-MM-DD'),
+    isIncludedWithoutEta: true
+  }
+  currentAnalysis;
+  itemsAnalysis = [];
+  deliveryAnalysis = [];
   private ngUnsubscribe: Subject<any> = new Subject;
   refreshInvoicesInterval: Subscription;
   REFRESH_ALL_INVOICES_INTERVAL: number = 2 * 60 * 1000;
   isMobileSize: boolean;
   store;
   updatedAt;
-  constructor(private authInvoiceControbutorService: AuthInvoiceContributorService, private ref: ChangeDetectorRef,
+  constructor(
+    private authInvoiceContributorService: AuthInvoiceContributorService, private ref: ChangeDetectorRef,
     private router: Router, private route: ActivatedRoute,
     private screenService: ScreenService,
     private sharedNavbarService: SharedNavbarService,
@@ -75,7 +115,7 @@ export class AllInvoicesComponent implements OnInit {
     if (!this.route.snapshot.queryParams['page']) {
       this.router.navigate([], { queryParams: {page: 1}, queryParamsHandling: 'merge'});
     }
-    this.authInvoiceControbutorService.refreshInvoices.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+    this.authInvoiceContributorService.refreshInvoices.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       if (result) {
         this.getInvoices();
       }
@@ -97,7 +137,7 @@ export class AllInvoicesComponent implements OnInit {
         this.store = result;
       }
     });
-    this.authInvoiceControbutorService.allInvoices.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+    this.authInvoiceContributorService.allInvoices.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       this.allInvoices = result.filter(invoice => {
         if (this.selectedTab === 'cancelled') {
           return invoice.status === 'cancelled' || invoice.status === 'refunded';
@@ -112,31 +152,31 @@ export class AllInvoicesComponent implements OnInit {
         invoiceGroup.numberOfInvoices = this.allInvoices.length;
       }
     });
-    this.authInvoiceControbutorService.numberOfAllItems.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+    this.authInvoiceContributorService.numberOfAllItems.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       this.numberOfAllItems = result;
     })
-    this.authInvoiceControbutorService.numberOfCurrentTotalItems.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+    this.authInvoiceContributorService.numberOfCurrentTotalItems.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       this.numberOfCurrentTotalItems = result;
     })
-    this.authInvoiceControbutorService.numberOfNewInvoices.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+    this.authInvoiceContributorService.numberOfNewInvoices.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       this.numberOfNewInvoices = result;
     })
-    this.authInvoiceControbutorService.numberOfWaitForApprovalInvoices.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+    this.authInvoiceContributorService.numberOfWaitForApprovalInvoices.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       this.numberOfWaitForApprovalInvoices = result;
     })
-    this.authInvoiceControbutorService.numberOfPaidInvoices.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+    this.authInvoiceContributorService.numberOfPaidInvoices.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       this.numberOfPaidInvoices = result;
     })
-    this.authInvoiceControbutorService.numberOfInProgressInvoices.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+    this.authInvoiceContributorService.numberOfInProgressInvoices.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       this.numberOfInProgressInvoices = result;
     })
-    this.authInvoiceControbutorService.numberOfReadyInvoices.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+    this.authInvoiceContributorService.numberOfReadyInvoices.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       this.numberOfReadyInvoices = result;
     })
-    this.authInvoiceControbutorService.numberOfDeliveryInvoices.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+    this.authInvoiceContributorService.numberOfDeliveryInvoices.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       this.numberOfDeliveryInvoices = result;
     })
-    this.authInvoiceControbutorService.updatedAt.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+    this.authInvoiceContributorService.updatedAt.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       this.updatedAt = result;
     });
     this.refreshInvoices();
@@ -161,17 +201,17 @@ export class AllInvoicesComponent implements OnInit {
         WsMessageBarService.close.next();
       })).subscribe(result => {
         if (result) {
-          this.authInvoiceControbutorService.allInvoices.next(result['result']);
-          this.authInvoiceControbutorService.updatedAt.next(new Date);
+          this.authInvoiceContributorService.allInvoices.next(result['result']);
+          this.authInvoiceContributorService.updatedAt.next(new Date);
           if (result['meta']) {
-            this.authInvoiceControbutorService.numberOfAllItems.next(result['meta']['numberOfTotal']);
-            this.authInvoiceControbutorService.numberOfCurrentTotalItems.next(result['meta']['numberOfTotal']);
-            this.authInvoiceControbutorService.numberOfNewInvoices.next(result['meta']['numberOfNewInvoices']);
-            this.authInvoiceControbutorService.numberOfWaitForApprovalInvoices.next(result['meta']['numberOfWaitForApprovalInvoices']);
-            this.authInvoiceControbutorService.numberOfPaidInvoices.next(result['meta']['numberOfPaidInvoices']);
-            this.authInvoiceControbutorService.numberOfInProgressInvoices.next(result['meta']['numberOfInProgressInvoices']);
-            this.authInvoiceControbutorService.numberOfReadyInvoices.next(result['meta']['numberOfReadyInvoices']);
-            this.authInvoiceControbutorService.numberOfDeliveryInvoices.next(result['meta']['numberOfDeliveryInvoices']);
+            this.authInvoiceContributorService.numberOfAllItems.next(result['meta']['numberOfTotal']);
+            this.authInvoiceContributorService.numberOfCurrentTotalItems.next(result['meta']['numberOfTotal']);
+            this.authInvoiceContributorService.numberOfNewInvoices.next(result['meta']['numberOfNewInvoices']);
+            this.authInvoiceContributorService.numberOfWaitForApprovalInvoices.next(result['meta']['numberOfWaitForApprovalInvoices']);
+            this.authInvoiceContributorService.numberOfPaidInvoices.next(result['meta']['numberOfPaidInvoices']);
+            this.authInvoiceContributorService.numberOfInProgressInvoices.next(result['meta']['numberOfInProgressInvoices']);
+            this.authInvoiceContributorService.numberOfReadyInvoices.next(result['meta']['numberOfReadyInvoices']);
+            this.authInvoiceContributorService.numberOfDeliveryInvoices.next(result['meta']['numberOfDeliveryInvoices']);
           }
         }
       });
@@ -182,12 +222,12 @@ export class AllInvoicesComponent implements OnInit {
         WsMessageBarService.close.next();
       })).subscribe(result => {
         this.invoiceGroups = result['result'];
-        this.authInvoiceControbutorService.numberOfNewInvoices.next(result['meta']['numberOfNewInvoices']);
-        this.authInvoiceControbutorService.numberOfWaitForApprovalInvoices.next(result['meta']['numberOfWaitForApprovalInvoices']);
-        this.authInvoiceControbutorService.numberOfPaidInvoices.next(result['meta']['numberOfPaidInvoices']);
-        this.authInvoiceControbutorService.numberOfInProgressInvoices.next(result['meta']['numberOfInProgressInvoices']);
-        this.authInvoiceControbutorService.numberOfReadyInvoices.next(result['meta']['numberOfReadyInvoices']);
-        this.authInvoiceControbutorService.numberOfDeliveryInvoices.next(result['meta']['numberOfDeliveryInvoices']);
+        this.authInvoiceContributorService.numberOfNewInvoices.next(result['meta']['numberOfNewInvoices']);
+        this.authInvoiceContributorService.numberOfWaitForApprovalInvoices.next(result['meta']['numberOfWaitForApprovalInvoices']);
+        this.authInvoiceContributorService.numberOfPaidInvoices.next(result['meta']['numberOfPaidInvoices']);
+        this.authInvoiceContributorService.numberOfInProgressInvoices.next(result['meta']['numberOfInProgressInvoices']);
+        this.authInvoiceContributorService.numberOfReadyInvoices.next(result['meta']['numberOfReadyInvoices']);
+        this.authInvoiceContributorService.numberOfDeliveryInvoices.next(result['meta']['numberOfDeliveryInvoices']);
       });
     }
   }
@@ -210,7 +250,7 @@ export class AllInvoicesComponent implements OnInit {
   }
   getInvoicesSubscription() {
     let statuses = this.selectedTab == 'all' ? this.statusColumns : [this.selectedTab];
-    return this.authInvoiceControbutorService.getInvoices({ statuses, keyword: this.keyword, page: this.page, updatedAt: this.updatedAt }).pipe(
+    return this.authInvoiceContributorService.getInvoices({ statuses, keyword: this.keyword, page: this.page, updatedAt: this.updatedAt }).pipe(
       takeUntil(this.ngUnsubscribe));
   }
   getInvoiceGroupSubscription() {
@@ -219,11 +259,11 @@ export class AllInvoicesComponent implements OnInit {
       keyword: this.keyword,
       updatedAt: this.updatedAt
     }
-    return this.authInvoiceControbutorService.getInvoiceGroup(obj).pipe(takeUntil(this.ngUnsubscribe));
+    return this.authInvoiceContributorService.getInvoiceGroup(obj).pipe(takeUntil(this.ngUnsubscribe));
   }
   getUnseenInvoicesSubscription() {
     let obj = {updatedAt: this.updatedAt};
-    return this.authInvoiceControbutorService.getUnseenInvoices(obj).pipe(takeUntil(this.ngUnsubscribe));
+    return this.authInvoiceContributorService.getUnseenInvoices(obj).pipe(takeUntil(this.ngUnsubscribe));
   }
   getRefreshNotification () {
     WsMessageBarService.toastSubject.next({
@@ -240,10 +280,13 @@ export class AllInvoicesComponent implements OnInit {
     this.isModifyInvoiceModalOpened = true;
     this.selectedItem = null;
   }
+  openAnalysisInvoiceModal() {
+    this.isAnalysisInvoiceModalOpened = true;
+  }
   openEditInvoiceModal(invoice) {
     this.selectedItem = null;
     this.isInvoiceInfoModalOpened = true;
-    this.authInvoiceControbutorService.getInvoice(invoice).pipe(delay(500), takeUntil(this.ngUnsubscribe)).subscribe(result => {
+    this.authInvoiceContributorService.getInvoice(invoice).pipe(delay(500), takeUntil(this.ngUnsubscribe)).subscribe(result => {
       if (result['result']) {
         this.selectedItem = result['result'];
         this.ref.detectChanges();
@@ -263,6 +306,32 @@ export class AllInvoicesComponent implements OnInit {
   trackInvoiceId(index: number, invoiceReceipt: Invoice) {
     return invoiceReceipt._id;
   }
+  getAnalysis() {
+    this.currentAnalysis = _.cloneDeep(this.analysis);
+    this.itemsAnalysis = [];
+    switch (this.currentAnalysis.target) {
+      case 'items': this.getItemsAnalysis(); break;
+      case 'delivery': this.getDeliveryAnalysis(); break;
+    }
+  }
+  getItemsAnalysis() {
+    let obj = {
+      ...this.currentAnalysis
+    };
+    this.analysisLoading.start();
+    this.authInvoiceContributorService.getInvoicesAnalysis(obj).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.analysisLoading.stop())).subscribe(result => {
+      this.itemsAnalysis = result['result'];
+    });
+  }
+  getDeliveryAnalysis() {
+    let obj = {
+      ...this.currentAnalysis
+    }
+    this.analysisLoading.start();
+    this.authInvoiceContributorService.getInvoicesAnalysis(obj).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.analysisLoading.stop())).subscribe(result => {
+      this.itemsAnalysis = result['result'];
+    });
+  }
   onDateGroupClicked(date) {
     if (this.selectedDate == date) {
       this.selectedDate = null;
@@ -273,8 +342,8 @@ export class AllInvoicesComponent implements OnInit {
       if (this.selectedTab === 'completed') {
         targetDate = { completedAt: date };
       }
-      this.authInvoiceControbutorService.getInvoices({statuses: [this.selectedTab], ...targetDate, keyword: this.keyword, numberPerPage: -1, page: 1, updatedAt: this.updatedAt }).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.invoiceLoading.stop())).subscribe(result => {
-        this.authInvoiceControbutorService.allInvoices.next(result['result']);
+      this.authInvoiceContributorService.getInvoices({statuses: [this.selectedTab], ...targetDate, keyword: this.keyword, numberPerPage: -1, page: 1, updatedAt: this.updatedAt }).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.invoiceLoading.stop())).subscribe(result => {
+        this.authInvoiceContributorService.allInvoices.next(result['result']);
       });
     }
   }
