@@ -4,6 +4,7 @@ import { WsLoading } from '@elements/ws-loading/ws-loading';
 import { WsToastService } from '@elements/ws-toast/ws-toast.service';
 import { environment } from '@environments/environment';
 import { Invoice } from '@objects/invoice';
+import { DateTimeHelper } from '@helpers/datetimehelper/datetime.helper';
 import { AuthInvoiceContributorService } from '@services/http/auth-store/contributor/auth-invoice-contributor.service';
 import { Subject } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
@@ -177,9 +178,9 @@ export class WsInvoiceCardComponent implements OnInit {
       this.editEtaLoading.start();
       this.item.delivery = {
         ...this.item.delivery,
-        etaDate,
-        etaHour,
-        etaMin
+        etaDate: DateTimeHelper.getDateWithCurrentTimezone(new Date(etaDate)),
+        etaHour: etaHour !== '' && etaHour > -1 && etaHour < 24 ? etaHour : null,
+        etaMin: etaMin !== '' && etaMin > -1 && etaMin < 60 ? etaMin : null
       }
       this.authInvoiceContributorService.editInvoice({_id: this.item._id, delivery: this.item.delivery}).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.editEtaLoading.stop())).subscribe(result => {
         if (result && result['result']) {

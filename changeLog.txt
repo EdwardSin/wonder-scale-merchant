@@ -7,6 +7,7 @@
 - 2021-05-24                                -
 ---------------------------------------------
 .: WSM: Task - Update total value when number of promotion is changed (WSM-338)
+.: WSM: Task - ETA is not accurate (WSM-379)
 
 ---------------------------------------------
 - 2021-05-23                                -
