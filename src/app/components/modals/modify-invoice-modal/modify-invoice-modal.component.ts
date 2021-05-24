@@ -743,6 +743,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
     this.form.patchValue({
       numberOfPromotion
     })
+    this.notifyCalculation();
   }
   promotionIncrease() {
     let numberOfPromotion = this.form.value.numberOfPromotion || 1;
@@ -752,6 +753,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
         numberOfPromotion
       })
     }
+    this.notifyCalculation();
   }
   promotionChange() {
     let numberOfPromotion = this.form.value.numberOfPromotion;
@@ -765,6 +767,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
         numberOfPromotion: 1
       })
     }
+    this.notifyCalculation();
   }
   ngOnDestroy() {
     super.ngOnDestroy();

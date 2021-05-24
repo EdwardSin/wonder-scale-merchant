@@ -4,6 +4,11 @@
 
 - v1.0.10923                                -
 ---------------------------------------------
+- 2021-05-24                                -
+---------------------------------------------
+.: WSM: Task - Update total value when number of promotion is changed (WSM-338)
+
+---------------------------------------------
 - 2021-05-23                                -
 ---------------------------------------------
 .: WSM: Task - Showing the number of the products which is going to be prepared in In Progress phase (WSM-352)
