@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewEncapsulation, EventEmitter, Output, SimpleChanges } from '@angular/core';
+import { Component, Input, OnInit, ViewEncapsulation, EventEmitter, Output, SimpleChanges, HostListener, ViewChild, ElementRef } from '@angular/core';
 
 @Component({
   selector: 'ws-modal',
@@ -13,9 +13,16 @@ export class WsModalComponent implements OnInit {
   @Input() isCloseIconDisplayed: boolean = true;
   @Input() maxWidth: number = 800;
   @Input() closeCallback: Function;
+  @Input() isCloseOutside: boolean;
   _isOpened: boolean;
   @Input() get isOpened() { return this._isOpened; }
   @Output() isOpenedChange: EventEmitter<boolean> = new EventEmitter;
+  @ViewChild('wsModalBody', {static: true}) modalBody: ElementRef;
+  set isOpened(val) {
+    this._isOpened = val;
+    this.isOpenedChange.emit(val);
+  }
+  
   constructor() {
   }
   ngOnInit() {
@@ -28,18 +35,16 @@ export class WsModalComponent implements OnInit {
       }
     }
   }
-  set isOpened(val) {
-    this._isOpened = val;
-    this.isOpenedChange.emit(val);
-  }
   close() {
     this.isOpened = false;
     if (this.closeCallback) {
       this.closeCallback();
     }
   }
-  closeOutside() {
-    if (this.isCloseIconDisplayed) {
+  closeOutside(event) {
+    const clickedOutside = event.target.contains(this.modalBody.nativeElement);
+    if (clickedOutside) {
+      this.isOpened = false;
     }
   }
   ngOnDestroy() {

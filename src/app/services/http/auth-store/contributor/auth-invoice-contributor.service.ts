@@ -1,9 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthInvoiceContributorUrl } from '@enum/url.enum';
+import { DateTimeHelper } from '@helpers/datetimehelper/datetime.helper';
 import { Invoice } from '@objects/invoice';
 import { BehaviorSubject } from 'rxjs';
 import { AccessTokenService } from '../access-token.service';
+import * as moment from 'moment';
 
 @Injectable({
   providedIn: 'root'
@@ -47,6 +49,15 @@ export class AuthInvoiceContributorService {
   }
   getUnseenInvoices(obj) {
     return this.http.post(AuthInvoiceContributorUrl.getUnseenInvoicesUrl, obj, this.accessTokenService.getAccessToken());
+  }
+  getInvoicesAnalysis(obj) {
+    let endDate = new Date(obj?.toDate);
+    obj = {
+      ...obj,
+      fromDate: DateTimeHelper.getDateWithCurrentTimezone(new Date(obj?.fromDate)),
+      toDate: DateTimeHelper.getDateWithCurrentTimezone(moment(endDate).add(1, 'days').toDate())
+    }
+    return this.http.post(AuthInvoiceContributorUrl.getInvoicesAnalysisUrl, obj, this.accessTokenService.getAccessToken());
   }
   refreshDashboardInvoices(item) {
     let allInvoices = this.allInvoices.getValue();

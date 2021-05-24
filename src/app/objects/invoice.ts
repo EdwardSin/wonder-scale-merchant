@@ -1,8 +1,7 @@
 export class Invoice{
     customerId?: string;
     customer?: string | {
-        firstName?: string,
-        lastName?: string,
+        recipientName?: string,
         address?: {
             address: string,
             state: string,
@@ -13,6 +12,7 @@ export class Invoice{
     };
     deliveryOption: 'self_pickup' | 'delivery';
     delivery?: {
+        _id?: string,
         fee?:  number,
         etaDate?: string,
         etaHour?: number,

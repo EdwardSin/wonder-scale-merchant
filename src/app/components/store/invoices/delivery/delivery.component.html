@@ -12,12 +12,16 @@
 <div class="w-100 mb-5" style="z-index: 1; overflow-x: auto;">
     <table class="table table-hover w-100 font-9">
         <thead>
+            <th style="white-space: nowrap" class="text-center" width="100">Enabled</th>
             <th style="white-space: nowrap">Location Name</th>
             <th style="white-space: nowrap" width="180">Price (RM)</th>
             <th style="white-space: nowrap" width="100">Actions</th>
         </thead>
         <tbody *ngIf="!loading.isRunning()">
             <tr *ngFor="let delivery of deliveries">
+                <td style="white-space: nowrap" class="text-center">
+                    <span class="fas fa-check-circle" [ngClass]="delivery.isEnabled ? 'text-success': 'text-muted'"></span>
+                </td>
                 <td style="white-space: nowrap">{{ delivery.name }}</td>
                 <td style="white-space: nowrap">{{ delivery.fee | number: '1.2-2' }}</td>
                 <td style="white-space: nowrap">
@@ -53,7 +57,7 @@
             No delivery is shown!
         </p>
         <table class="font-9 text-muted w-100">
-            <tr *ngFor="let delivery of deliveries | orderBy: 'fee'" class="border-bottom">
+            <tr *ngFor="let delivery of displayedDeliveries | orderBy: 'fee'" class="border-bottom">
                 <td class="align-top">
                     <ul class="mb-0 py-3">
                         <li *ngFor="let name of delivery?.name">
@@ -75,6 +79,9 @@
 
 <ws-modal *ngIf="isModifyDeliveryModalOpened" [(isOpened)]="isModifyDeliveryModalOpened" [maxWidth]="600">
     <form modalBody class="py-3" [formGroup]="form">
+        <div class="mb-3">
+            <mat-checkbox [color]="'primary'" formControlName="isEnabled" name="isEnabled">Enable to display the delivery</mat-checkbox>
+        </div>
         <div class="mb-3">
             <label id="title" class="mb-0 font-9">Location Name*:</label>
             <ws-multiple-input [maxlength]="30" [(items)]="locationName" [type]="'text'" [placeholder]="'Example: Cheras, PJ'" [maxItems]="10" [name]="'name'"></ws-multiple-input>

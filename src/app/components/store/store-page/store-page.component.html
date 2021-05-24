@@ -104,7 +104,7 @@
     </div>
 </div>
 
-<ws-modal *ngIf="isBannersOpened" [isCloseIconDisplayed]="false" [(isOpened)]="isBannersOpened" [maxWidth]="600">
+<ws-modal *ngIf="isBannersOpened" [isCloseIconDisplayed]="true" [(isOpened)]="isBannersOpened" [maxWidth]="600">
     <div class="pt-3" modalBody>
         <div class="ws-circle-button">
             <button class="btn btn-controller small" title="Upload"
@@ -176,7 +176,7 @@
         </div>
     </div>
 </ws-modal>
-<ws-modal *ngIf="isMenuImagesOpened" [isCloseIconDisplayed]="false" [(isOpened)]="isMenuImagesOpened" [maxWidth]="600">
+<ws-modal *ngIf="isMenuImagesOpened" [isCloseIconDisplayed]="true" [(isOpened)]="isMenuImagesOpened" [maxWidth]="600">
     <div class="pt-3" modalBody>
         <div class="ws-circle-button">
             <button class="btn btn-controller small" title="Upload"
@@ -322,7 +322,7 @@
     <div class="pt-3" modalBody>
         <div class="mb-3" style="max-width: 300px">
             <mat-label class="font-weight-bold mb-2 font-9">Contact Button Label:</mat-label>
-            <mat-select name="contactLabel" class="form-control mb-3" style="border-radius: 25px" [(ngModel)]="selectedContactButtonLabel" placeholder="Contact Button Label">
+            <mat-select name="contactLabel" class="form-control mb-3" [(ngModel)]="selectedContactButtonLabel" placeholder="Contact Button Label">
                 <mat-option [value]="'contactUs'">Contact Us</mat-option>
                 <mat-option [value]="'orderNow'">Order Now</mat-option>
                 <mat-option [value]="'bookNow'">Book Now</mat-option>
@@ -330,7 +330,7 @@
                 <mat-option [value]="'learnMore'">Learn More</mat-option>
             </mat-select>
             <mat-label class="font-weight-bold mb-2 font-9">Contact Method:</mat-label>
-            <mat-select name="contactType" class="form-control mb-3" style="border-radius: 25px" [(ngModel)]="selectedContactButtonType" (selectionChange)="selectedContactButtonValue = ''" placeholder="Contact Button Type">
+            <mat-select name="contactType" class="form-control mb-3" [(ngModel)]="selectedContactButtonType" (selectionChange)="selectedContactButtonValue = ''" placeholder="Contact Button Type">
                 <mat-option [value]="'url'">Website URL</mat-option>
                 <mat-option [value]="'phoneCall'">Phone Call</mat-option>
                 <mat-option [value]="'whatsapp'">Whatsapp</mat-option>

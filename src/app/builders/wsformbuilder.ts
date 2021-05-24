@@ -247,10 +247,10 @@ export class WsFormBuilder {
     public static createInvoiceForm() {
         let formBuilder = new FormBuilder;
         return formBuilder.group({
+            deliveryId: [''],
             deliveryFee: ['', [Validators.pattern("^[0-9.,]+$")]],
             deliveryOption: ['delivery', [Validators.required]],
-            firstName: ['', [Validators.maxLength(36)]],
-            lastName: ['', [Validators.maxLength(36)]],
+            recipientName: ['', [Validators.maxLength(36)]],
             address: ['', [Validators.maxLength(128)]],
             postcode: ['', [Validators.maxLength(36)]],
             state: ['', [Validators.maxLength(36)]],
@@ -268,7 +268,7 @@ export class WsFormBuilder {
             completedAt: [''],
             paymentMethod: [''],
             itemPrice: ['', [Validators.pattern("^[0-9.,]+$")]],
-            itemQuantity: ['', [Validators.pattern("^[0-9]+$")]],
+            itemQuantity: [1, [Validators.pattern("^[0-9]+$")]],
             status: ['new', Validators.required],
             remark: ['', Validators.maxLength(300)]
         }, {
@@ -278,6 +278,7 @@ export class WsFormBuilder {
     public static createDeliveryForm() {
         let formBuilder = new FormBuilder;
         return formBuilder.group({
+            isEnabled: [true],
             fee: ['', [Validators.pattern("^[0-9.,]+$")]]
         });
     }

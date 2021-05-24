@@ -47,6 +47,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
   ]
   todayDate: Date = new Date;
   immutedTodayDate: Date = new Date;
+  focusCompletedDate: Date;
   form: FormGroup;
   categories = [];
   items = [];
@@ -100,22 +101,29 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
   }
   setupItem() {
     this.form = WsFormBuilder.createInvoiceForm();
+    this.focusCompletedDate = this.immutedTodayDate;
     this.resetForm();
     if (this.item) {
       this.form.patchValue({
         status: this.item.status,
         remark: this.item.remark,
         deliveryOption: this.item.deliveryOption,
-        paymentMethod: this.item.paymentMethod || ''
+        paymentMethod: this.item.paymentMethod || '',
+        numberOfPromotion: '1'
       });
       if (!this.isEditable()) {
         this.disableAllFields()
       }
       this.inListItems = this.item.items;
       if (this.item.delivery) {
-        if (this.item.delivery.fee) {
+        if (this.item.delivery.fee !== null) {
           this.form.patchValue({
             deliveryFee: this.item.delivery.fee
+          });
+        }
+        if (this.item.delivery._id) {
+          this.form.patchValue({
+            deliveryId: this.item.delivery._id
           });
         }
         if (this.item.delivery.etaDate) {
@@ -130,8 +138,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
       }
       if (this.item.customer) {
         this.form.patchValue({
-          firstName: this.item.customer['firstName'],
-          lastName: this.item.customer['lastName'],
+          recipientName: this.item.customer['recipientName'],
           phoneNumber: this.item.customer['phoneNumber']
         })
         if (this.item.customer['address']) {
@@ -153,6 +160,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
           completedAt: this.item.completedAt,
           isCompletedChecked: true,
         })
+        this.focusCompletedDate = this.item.completedAt;
       }
       if (this.item.promotions?.length && this.item.promotions[0]['_id']) {
         this.form.patchValue({
@@ -165,6 +173,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
   }
   resetForm() {
     this.form.reset({
+      deliveryId: '',
       deliveryFee: '',
       status: 'new',
       country: 'MYS',
@@ -324,7 +333,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
     this.selectedItem = event;
     this.itemTypes = [
       {
-        name: 'Default',
+        name: '',
         price: this.getPriceAfterDiscount(this.selectedItem.price, this.selectedItem.discount)
       },
       ...this.selectedItem.types];
@@ -360,8 +369,16 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
   onDeliveryChange(event) {
     if (event.value) {
       this.form.patchValue({
-        deliveryFee: event.value
+        deliveryId: event.value
       });
+      let delivery = this.deliveries.find(delivery => {
+        return delivery._id === event.value
+      });
+      if (delivery) {
+        this.form.patchValue({
+          deliveryFee: delivery.fee
+        });
+      }
       this.notifyCalculation();
     }
   }
@@ -390,15 +407,17 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
   }
   private validatePickup() {
     let form = this.form;
-    return form.controls['isCustomerSaved'].value && form.controls['firstName'].value && form.controls['lastName'].value && form.controls['phoneNumber'].value ||
-          (!form.controls['isCustomerSaved'].value && form.controls['firstName'].value && form.controls['lastName'].value && form.controls['phoneNumber'].value) ||
+    return form.controls['isCustomerSaved'].value && form.controls['recipientName'].value && form.controls['phoneNumber'].value ||
+          (!form.controls['isCustomerSaved'].value && form.controls['recipientName'].value && form.controls['phoneNumber'].value) ||
           (!form.controls['isCustomerSaved'].value && !form.controls['phoneNumber'].value);
   }
   private validateDelivery() {
     let form = this.form;
-    return form.controls['isCustomerSaved'].value && form.controls['firstName'].value && form.controls['lastName'].value && form.controls['phoneNumber'].value ||
-           (!form.controls['isCustomerSaved'].value && (form.controls['phoneNumber'].value || form.controls['address'].value || form.controls['postcode'].value ||form.controls['state'].value) && form.controls['lastName'].value && form.controls['firstName'].value) ||
-           (!form.controls['isCustomerSaved'].value && !(form.controls['phoneNumber'].value || form.controls['address'].value || form.controls['postcode'].value ||form.controls['state'].value));
+    return form.controls['isCustomerSaved'].value && form.controls['recipientName'].value && form.controls['phoneNumber'].value ||
+           (!form.controls['isCustomerSaved'].value && 
+              (form.controls['phoneNumber'].value || form.controls['address'].value || form.controls['postcode'].value || form.controls['state'].value) && 
+                form.controls['recipientName'].value) ||
+           (!form.controls['isCustomerSaved'].value && !(form.controls['phoneNumber'].value || form.controls['address'].value || form.controls['postcode'].value || form.controls['state'].value));
   }
   private getPriceAfterDiscount(price, discount) {
     let _discount = 0;
@@ -417,12 +436,12 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
     let etaDateTimeHour = this.form.controls['etaDateTimeHour'].value;
     let etaDateTimeMin = this.form.controls['etaDateTimeMin'].value;
     
-    if (form.controls['firstName'].value && form.controls['isCustomerSaved'].value && !form.controls['lastName'].value) {
+    if (form.controls['recipientName'].value && form.controls['isCustomerSaved'].value && !form.controls['lastName'].value) {
       WsToastService.toastSubject.next({ content: 'Please enter last name!', type: 'danger'});
       return;
     }
-    else if (!form.controls['firstName'].value && form.controls['lastName'].value) {
-      WsToastService.toastSubject.next({ content: 'Please enter first name!', type: 'danger'});
+    else if (!form.controls['recipientName'].value) {
+      WsToastService.toastSubject.next({ content: 'Please enter recipient\'s name!', type: 'danger'});
       return;
     }
     if (!this.validatePickup() || !this.validateDelivery()) {
@@ -452,11 +471,14 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
       WsToastService.toastSubject.next({ content: 'Please enter completion date!', type: 'danger'});
       return;
     }
+    if (form.value.promotion && (!form.value.numberOfPromotion || form.value.numberOfPromotion < 1 || form.value.numberOfPromotion > 10)) {
+      WsToastService.toastSubject.next({ content: 'Number of promotion should be between 1 to 10!', type: 'danger'});
+      return;
+    }
     
     let invoice: Invoice = {
       customer: {
-        firstName: form.controls['firstName'].value,
-        lastName: form.controls['lastName'].value,
+        recipientName: form.controls['recipientName'].value,
         address: {
           address: form.controls['address'].value,
           postcode: form.controls['postcode'].value,
@@ -466,6 +488,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
         phoneNumber: form.controls['phoneNumber'].value
       },
       delivery: {
+        _id: form.value.deliveryId || undefined,
         fee: form.controls['deliveryFee'].value,
         etaDate: etaDate,
         etaHour: etaDateTimeHour,
@@ -483,6 +506,8 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
     }
     if (form.controls['promotion'].value) {
       invoice['promotions'] = [{_id: form.controls['promotion'].value, quantity: +form.controls['numberOfPromotion'].value}];
+    } else {
+      invoice['promotions'] = []
     }
     if (form.controls['isCompletedChecked'].value) {
       invoice['completedAt'] = DateTimeHelper.getDateWithCurrentTimezone(new Date(form.controls['completedAt'].value));
@@ -494,7 +519,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
         this.isOpened = false;
         this.tempInvoice = invoice;
         return;
-      } 
+      }
       this.modifyCallback(invoice);
     }
   }
@@ -605,10 +630,10 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
     return obj;
   }
   disableAllFields() {
+    this.form.get('deliveryId').disable();
     this.form.get('deliveryFee').disable();
     this.form.get('deliveryOption').disable();
-    this.form.get('firstName').disable();
-    this.form.get('lastName').disable();
+    this.form.get('recipientName').disable();
     this.form.get('address').disable();
     this.form.get('postcode').disable();
     this.form.get('state').disable();
@@ -629,10 +654,10 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
     this.form.get('paymentMethod').disable();
   }
   enableAllFields() {
+    this.form.get('deliveryId').enable();
     this.form.get('deliveryFee').enable();
     this.form.get('deliveryOption').enable();
-    this.form.get('firstName').enable();
-    this.form.get('lastName').enable();
+    this.form.get('recipientName').enable();
     this.form.get('address').enable();
     this.form.get('postcode').enable();
     this.form.get('state').enable();
@@ -676,6 +701,73 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
   }
   drop(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.inListItems, event.previousIndex, event.currentIndex);
+  }
+  decrease() {
+    let quantity = this.form.value.itemQuantity || 1;
+    quantity--;
+    if (quantity < 1) {
+      quantity = 1;
+    }
+    this.form.patchValue({
+      itemQuantity: quantity
+    })
+  }
+  increase() {
+    let quantity = this.form.value.itemQuantity || 1;
+    quantity++;
+    if (quantity <= 999) {
+      this.form.patchValue({
+        itemQuantity: quantity
+      })
+    }
+  }
+  quantityChange() {
+    let quantity = this.form.value.itemQuantity;
+    if (quantity > 999) {
+      this.form.patchValue({
+        itemQuantity: 999
+      })
+    }
+    if (quantity < 1) {
+      this.form.patchValue({
+        itemQuantity: 1
+      })
+    }
+  }
+  promotionDecrease() {
+    let numberOfPromotion = this.form.value.numberOfPromotion || 1;
+    numberOfPromotion--;
+    if (numberOfPromotion < 1) {
+      numberOfPromotion = 1;
+    }
+    this.form.patchValue({
+      numberOfPromotion
+    })
+    this.notifyCalculation();
+  }
+  promotionIncrease() {
+    let numberOfPromotion = this.form.value.numberOfPromotion || 1;
+    numberOfPromotion++;
+    if (numberOfPromotion <= 10) {
+      this.form.patchValue({
+        numberOfPromotion
+      })
+    }
+    this.notifyCalculation();
+  }
+  promotionChange() {
+    let numberOfPromotion = this.form.value.numberOfPromotion;
+    if (numberOfPromotion > 10) {
+      this.form.patchValue({
+        numberOfPromotion: 10
+      })
+    }
+    if (numberOfPromotion < 1) {
+      this.form.patchValue({
+        numberOfPromotion: 1
+      })
+    }
+    this.notifyCalculation();
   }
   ngOnDestroy() {
     super.ngOnDestroy();

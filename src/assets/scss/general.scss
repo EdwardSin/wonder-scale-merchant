@@ -104,8 +104,6 @@
         background-color: #fff;
         color: #b71c1c;
     }
-    &:active{
-    }
 }
 .dropdown-menu{
     border: 0;
@@ -164,6 +162,33 @@
             color: map-get($ws-color, clear);
             background-color: map-get($ws-color, primary);
         }
+    }
+}
+
+.scrollbar {
+    overflow: auto;
+    height: 100%;
+
+    &::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+    }
+    
+    /* Track */
+    &::-webkit-scrollbar-track {
+        background: #f7f7f7;
+    }
+     
+    /* Handle */
+    &::-webkit-scrollbar-thumb {
+        background-color: #ccc;
+        border-radius: 10px;
+        transition: background-color ease .5s;
+    }
+    
+    /* Handle on hover */
+    &::-webkit-scrollbar-thumb:hover {
+        background-color: #bbb;
     }
 }
 

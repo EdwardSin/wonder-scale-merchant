@@ -46,7 +46,6 @@ export class ConfigurationsComponent implements OnInit {
       }
       this.sharedStoreService.store.next(this.store);
     }, error => {
-      console.log(error);
       if (error?.status == '403') {
         WsToastService.toastSubject.next({ content: error?.error, type: 'danger'});
       }

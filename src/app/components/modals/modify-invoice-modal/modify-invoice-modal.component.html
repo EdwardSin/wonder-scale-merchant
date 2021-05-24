@@ -25,7 +25,7 @@
             <div class="mt-2" [hidden]="!form.controls['isCompletedChecked'].value">
                 <label id="completionDate" class="mb-0 font-9">Completion Date:</label>
                 <input for="completionDate" (click)="completedPicker.open()" formControlName="completedAt" class="form-control form-control-sm mb-2" style="max-width: 200px" [matDatepicker]="completedPicker" />
-                <mat-datepicker #completedPicker startView="month" [startAt]="immutedTodayDate"></mat-datepicker>
+                <mat-datepicker #completedPicker startView="month" [startAt]="focusCompletedDate"></mat-datepicker>
             </div>
             <div class="my-2" *ngIf="item || form.controls['isCompletedChecked'].value">
                 <label id="paymentMethod" class="mb-0 font-9">Payment Method:</label>
@@ -66,7 +66,7 @@
                 <div class="p-lg-3 py-3">
                     <div class="border rounded mb-3 p-3">
                         <label id="paymentMethod" class="mb-0 font-9">Catalogue:</label>
-                        <mat-select class="form-control form-control-sm mb-3" [disabled]="!isEditable()" (selectionChange)="getItems($event.value)">
+                        <mat-select class="form-control form-control-sm mb-2" [disabled]="!isEditable()" (selectionChange)="getItems($event.value)">
                             <mat-option [value]="category.id" *ngFor="let category of categories">{{ category?.name }}</mat-option>
                             <mat-option [value]="'uncategorized'">Uncategorized</mat-option>
                         </mat-select>
@@ -74,19 +74,23 @@
                         <ws-search-select for="itemtype" [items]="items" [loading]="itemLoading.isRunning()" (selectionChange)="selectionChange($event)" (searchValueChange)="searchItemValueChange($event)" (scroll)="getItems(categoryId, true)" (open)="openItemChange($event)" [class.disabled]="!isEditable()" class="d-block form-control form-control-sm mb-2"></ws-search-select>
                         <label id="itemtype" class="mb-0 font-9">Item Type: </label>
                         <mat-select for="itemtype" class="form-control form-control-sm mb-2" formControlName="itemType" (selectionChange)="selectItemType($event.value)">
-                            <mat-option [value]="itemType" *ngFor="let itemType of itemTypes">{{itemType.name}}</mat-option>
+                            <mat-option [value]="itemType" *ngFor="let itemType of itemTypes">{{itemType.name || 'Default'}}</mat-option>
                         </mat-select>
-                        <div class="row no-gutters mb-2">
-                            <div class="col-lg-6 pr-lg-2">
+                        <div class="row no-gutters mb-3">
+                            <div class="col pr-lg-2">
                                 <label id="price" class="mb-0 font-9">Price: </label>
                                 <div class="position-relative">
                                     <a *ngIf="form.controls['itemType'].value" (click)="setDefaultPrice()" href="javascript:void(0)" class="position-absolute font-9" style="right: 8px; top: 5px; z-index: 99;">Set default</a>
                                     <input for="price" class="form-control form-control-sm" style="padding-right: 5.25rem" formControlName="itemPrice" />
                                 </div>
                             </div>
-                            <div class="col-lg-6 mt-2 mt-lg-0">
+                            <div class="col-auto mt-2 mt-lg-0">
                                 <label id="quantity" class="mb-0 font-9">Quantity: </label>
-                                <input for="quantity" class="form-control form-control-sm" formControlName="itemQuantity" />
+                                <div class="invoice__quantity row no-gutters w-100 align-items-center">
+                                    <span class="invoice__quantity-decrease btn btn-controller btn-sm fas fa-minus mr-1 clickable" (click)="decrease()"></span>
+                                    <input class="invoice__quantity-input text-center form-control form-control-sm" type="number" formControlName="itemQuantity" (change)="quantityChange()" />
+                                    <span class="invoice__quantity-increase btn btn-controller btn-sm fas fa-plus ml-1 clickable" (click)="increase()"></span>
+                                </div>
                             </div>
                         </div>
                         <div>
@@ -101,7 +105,7 @@
                         <h5 class="h6">Items ({{inListItems.length}})</h5>
                         <ul class="list-group font-9" cdkDropList [cdkDropListDisabled]="!isEditable()" (cdkDropListDropped)="drop($event)" *ngIf="inListItems.length">
                             <li cdkDrag class="list-group-item d-flex align-items-center" *ngFor="let targetItem of inListItems">
-                                <span class="col p-0">{{ targetItem.name }} {{ targetItem.type !== 'default' && targetItem.type !== null ? '- ' + targetItem.type : '' }} - RM {{ targetItem.price  | number: '1.2-2' }} x {{ targetItem.quantity}} </span>
+                                <span class="col p-0">{{ targetItem.name }} {{ targetItem?.type?.toLowerCase() !== 'default' && targetItem?.type ? '- ' + targetItem.type : '' }} - RM {{ targetItem.price  | number: '1.2-2' }} x {{ targetItem.quantity}} </span>
                                 <span class="px-1">RM {{ targetItem.price * targetItem.quantity | number: '1.2-2' }}</span>
                                 <span *ngIf="isEditable()" class="fas fa-times pl-2 clickable" (click)="removeItem(targetItem)"></span>
                             </li>
@@ -116,9 +120,9 @@
                         <h5 class="h6">Delivery Fee</h5>
                         <div class="row no-gutters">
                             <div class="col-lg-6 pr-lg-1 mb-2">
-                                <mat-select class="form-control form-control-sm" [value]="''" placeholder="Type" (selectionChange)="onDeliveryChange($event)">
+                                <mat-select class="form-control form-control-sm" formControlName="deliveryId" placeholder="Type" (selectionChange)="onDeliveryChange($event)">
                                     <mat-option value="">Custom</mat-option>
-                                    <mat-option [value]="delivery.fee" *ngFor="let delivery of deliveries">{{delivery.name}}</mat-option>
+                                    <mat-option [value]="delivery?._id" *ngFor="let delivery of deliveries">{{delivery.name}}</mat-option>
                                 </mat-select>
                             </div>
                             <div class="col-lg-6 pl-lg-1">
@@ -136,12 +140,8 @@
                         <h5 class="h6">Customer Details</h5>
                         <div class="row no-gutters">
                             <div class="col-lg-6 pr-lg-1">
-                                <label id="firstName" class="mb-0 font-9">First Name: </label>
-                                <input for="firstName" class="form-control form-control-sm mb-2" maxlength="36" formControlName="firstName" />
-                            </div>
-                            <div class="col-lg-6 pl-lg-1">
-                                <label id="lastName" class="mb-0 font-9">Last Name: </label>
-                                <input for="lastName" class="form-control form-control-sm mb-2" maxlength="36" formControlName="lastName" />
+                                <label id="recipientName" class="mb-0 font-9">Recipient's Name: </label>
+                                <input for="recipientName" class="form-control form-control-sm mb-2" maxlength="36" formControlName="recipientName" />
                             </div>
                         </div>
                         <label id="contactTel" class="mb-0 font-9">Contact Tel: </label>
@@ -154,16 +154,16 @@
                         <h5 class="h6">Delivery Details</h5>
                         <div class="row no-gutters">
                             <div class="col-lg-6 pr-lg-1">
-                                <label id="firstName" class="mb-0 font-9">First Name: </label>
-                                <input for="firstName" class="form-control form-control-sm mb-2" maxlength="36" formControlName="firstName" />
-                            </div>
-                            <div class="col-lg-6 pl-lg-1">
-                                <label id="lastName" class="mb-0 font-9">Last Name: </label>
-                                <input for="lastName" class="form-control form-control-sm mb-2" maxlength="36" formControlName="lastName" />
+                                <label id="recipientName" class="mb-0 font-9">Recipient's Name: </label>
+                                <input for="recipientName" class="form-control form-control-sm mb-2" maxlength="36" formControlName="recipientName" />
                             </div>
                         </div>
-                        <label id="contactTel" class="mb-0 font-9">Contact Tel: </label>
-                        <input for="contactTel" class="form-control form-control-sm mb-2" maxlength="36" formControlName="phoneNumber" />
+                        <div class="row no-gutters">
+                            <div class="col-lg-6 pr-lg-1">
+                                <label id="contactTel" class="mb-0 font-9">Contact Tel: </label>
+                                <input for="contactTel" class="form-control form-control-sm mb-2" maxlength="36" formControlName="phoneNumber" />
+                            </div>
+                        </div>
                         <div class="mb-2">
                             <div class="mb-2">
                                 <label id="deliveryAddress" class="mb-0 font-9">Delivery Address:</label>
@@ -189,9 +189,9 @@
                                     </mat-select>
                                 </div>
                             </div>
-                            <mat-checkbox [color]="'primary'" class="pt-1 mr-2 d-inline-block" formControlName="isCustomerSaved">
+                            <!-- <mat-checkbox [color]="'primary'" class="pt-1 mr-2 d-inline-block" formControlName="isCustomerSaved">
                                 <span class="font-8 align-middle">Check to save customer</span>
-                            </mat-checkbox>
+                            </mat-checkbox> -->
                         </div>
                     </div>
                 <div class="mb-3">
@@ -217,13 +217,19 @@
             </mat-tab>
             <mat-tab label="Promotion">
                 <div class="p-lg-3 py-3">
-                    <div class="input-group">
-                        <mat-select class="form-control form-control-sm" placeholder="Promotion" (selectionChange)="notifyCalculation()" formControlName="promotion">
-                            <mat-option [value]="''">No promotion</mat-option>
-                            <mat-option [value]="promotion._id" *ngFor="let promotion of promotions">{{ promotion.title }}</mat-option>
-                        </mat-select>
-                        <div class="input-group-append" *ngIf="form.controls['promotion'].value !== '' && selectedPromotion?.option == 'fixed_amount'">
-                            <input formControlName="numberOfPromotion" (change)="notifyCalculation()" type="number" class="form-control form-control-sm" style="border-radius: 0 .2rem .2rem 0" max="10" min="1" />
+                    <div class="row no-gutters">
+                        <div class="col">
+                            <mat-select class="form-control form-control-sm" placeholder="Promotion" (selectionChange)="notifyCalculation()" formControlName="promotion">
+                                <mat-option [value]="''">No promotion</mat-option>
+                                <mat-option [value]="promotion._id" *ngFor="let promotion of promotions">{{ promotion.title }}</mat-option>
+                            </mat-select>
+                        </div>
+                        <div class="col-auto">
+                            <div class="invoice__quantity mx-2 row no-gutters w-100 align-items-center" *ngIf="form.controls['promotion'].value !== '' && selectedPromotion?.option == 'fixed_amount'">
+                                <span class="invoice__quantity-decrease btn btn-controller btn-sm fas fa-minus mr-1 clickable" (click)="promotionDecrease()"></span>
+                                <input class="invoice__quantity-input text-center form-control form-control-sm" type="number" formControlName="numberOfPromotion" (change)="promotionChange()" />
+                                <span class="invoice__quantity-increase btn btn-controller btn-sm fas fa-plus ml-1 clickable" (click)="promotionIncrease()"></span>
+                            </div>
                         </div>
                     </div>
                 </div>
