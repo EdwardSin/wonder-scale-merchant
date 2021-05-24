@@ -190,8 +190,8 @@
                 </div>
                 <button class="btn btn-sm btn-controller float-right" (click)="getAnalysis()">Analyze</button>
             </div>
-            <div class="col-lg-9 pl-lg-3 analysis-table">
-                <div class="table-responsive scrollbar" *ngIf="currentAnalysis">
+            <div class="col-lg-9 pl-lg-3 analysis-table mb-3">
+                <div class="table-responsive scrollbar" *ngIf="currentAnalysis && !analysisLoading.isRunning()">
                     <div class="mb-2">
                         <span class="font-8 font-weight-bold" *ngIf="currentAnalysis?.target == 'items'">
                             Items in the invoices
@@ -203,7 +203,7 @@
                             {{currentAnalysis?.fromDate | date: 'dd MMM y'}} - {{currentAnalysis?.toDate | date: 'dd MMM y'}}
                         </span>
                     </div>
-                    <table class="table table-sm table-hover font-9" *ngIf="currentAnalysis?.target == 'items'">
+                    <table class="table table-sm table-hover font-9 mb-0" *ngIf="currentAnalysis?.target == 'items'">
                         <thead>
                             <th>Item Name</th>
                             <th class="text-center" width="150">Number of items</th>
@@ -215,7 +215,7 @@
                             </tr>
                         </tbody>
                     </table>
-                    <table class="table table-sm table-hover font-9" *ngIf="currentAnalysis?.target == 'delivery'">
+                    <table class="table table-sm table-hover font-9 mb-0" *ngIf="currentAnalysis?.target == 'delivery'">
                         <thead>
                             <th>Delivery</th>
                             <th class="text-center" width="150">Number of invoices</th>
