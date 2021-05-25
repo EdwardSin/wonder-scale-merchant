@@ -155,6 +155,10 @@
             *ngIf="basicFormGroup.controls['website'].hasError('maxlength') && basicFormGroup.controls['website'].touched">
             Max 128 characters.
           </mat-error>
+          <mat-error
+            *ngIf="basicFormGroup.controls['website'].hasError('pattern') && basicFormGroup.controls['website'].touched">
+            URL is not valid.
+          </mat-error>
           <div class="row no-gutters mt-4">
             <button class="btn btn-sm btn-controller" type="button" (click)="phase.previous()">Previous</button>
             <button [disabled]="!basicFormGroup.valid" class="btn btn-sm btn-controller" type="button" style="margin-left: auto" (click)="next()">Next</button>
