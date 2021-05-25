@@ -17,6 +17,7 @@ import { WsLoading } from '@elements/ws-loading/ws-loading';
 import { DateTimeHelper } from '@helpers/datetimehelper/datetime.helper';
 import { AuthDeliveryContributorService } from '@services/http/auth-store/contributor/auth-delivery-contributor.service';
 import { Delivery } from '@objects/delivery';
+import * as moment from 'moment';
 
 @Component({
   selector: 'modify-invoice-modal',
@@ -433,14 +434,10 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
   modifyItem() {
     let form = this.form;
     let etaDate = this.form.controls['etaDate'].value;
-    let etaDateTimeHour = this.form.controls['etaDateTimeHour'].value;
-    let etaDateTimeMin = this.form.controls['etaDateTimeMin'].value;
+    let etaHour = this.form.controls['etaDateTimeHour'].value;
+    let etaMin = this.form.controls['etaDateTimeMin'].value;
     
-    if (form.controls['recipientName'].value && form.controls['isCustomerSaved'].value && !form.controls['lastName'].value) {
-      WsToastService.toastSubject.next({ content: 'Please enter last name!', type: 'danger'});
-      return;
-    }
-    else if (!form.controls['recipientName'].value) {
+    if (!form.controls['recipientName'].value) {
       WsToastService.toastSubject.next({ content: 'Please enter recipient\'s name!', type: 'danger'});
       return;
     }
@@ -461,8 +458,8 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
     if (this.isValidatedEtaDate()) {
       if (etaDate == null) {
         etaDate = null;
-        etaDateTimeHour = null;
-        etaDateTimeMin = null
+        etaHour = null;
+        etaMin = null
       }
     } else {
       return;
@@ -490,9 +487,9 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
       delivery: {
         _id: form.value.deliveryId || undefined,
         fee: form.controls['deliveryFee'].value,
-        etaDate: etaDate,
-        etaHour: etaDateTimeHour,
-        etaMin: etaDateTimeMin
+        etaDate: DateTimeHelper.getDateWithCurrentTimezone(new Date(etaDate)),
+        etaHour: etaHour !== '' && etaHour > -1 && etaHour < 24 ? etaHour : null,
+        etaMin: etaMin !== '' && etaMin > -1 && etaMin < 60 ? etaMin : null
       },
       items: this.inListItems,
       remark: form.controls['remark'].value,

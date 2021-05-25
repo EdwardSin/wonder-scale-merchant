@@ -7,6 +7,7 @@
 - 2021-05-25                                -
 ---------------------------------------------
 .: WSM: BugFix - Url is not valid issue when creating store (WSM-380)
+.: WSM: BugFix - Fix ETA when modifying invoice (WSM-379)
 
 ---------------------------------------------
 - 2021-05-24                                -
