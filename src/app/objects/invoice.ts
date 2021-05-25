@@ -14,7 +14,7 @@ export class Invoice{
     delivery?: {
         _id?: string,
         fee?:  number,
-        etaDate?: string,
+        etaDate?: string | Date,
         etaHour?: number,
         etaMin?: number,
         date?: Date
