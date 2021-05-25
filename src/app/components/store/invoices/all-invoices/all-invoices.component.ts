@@ -228,6 +228,9 @@ export class AllInvoicesComponent implements OnInit {
         this.authInvoiceContributorService.numberOfInProgressInvoices.next(result['meta']['numberOfInProgressInvoices']);
         this.authInvoiceContributorService.numberOfReadyInvoices.next(result['meta']['numberOfReadyInvoices']);
         this.authInvoiceContributorService.numberOfDeliveryInvoices.next(result['meta']['numberOfDeliveryInvoices']);
+        if (this.selectedDate) {
+          this.refreshDateGroup(this.selectedDate);
+        }
       });
     }
   }
@@ -338,14 +341,17 @@ export class AllInvoicesComponent implements OnInit {
     } else {
       this.selectedDate = date;
       this.invoiceLoading.start();
-      let targetDate: any = {etaDate: date};
-      if (this.selectedTab === 'completed') {
-        targetDate = { completedAt: date };
-      }
-      this.authInvoiceContributorService.getInvoices({statuses: [this.selectedTab], ...targetDate, keyword: this.keyword, numberPerPage: -1, page: 1, updatedAt: this.updatedAt }).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.invoiceLoading.stop())).subscribe(result => {
-        this.authInvoiceContributorService.allInvoices.next(result['result']);
-      });
+      this.refreshDateGroup(date);
     }
+  }
+  refreshDateGroup(date) {
+    let targetDate: any = {etaDate: date};
+    if (this.selectedTab === 'completed') {
+      targetDate = { completedAt: date };
+    }
+    this.authInvoiceContributorService.getInvoices({statuses: [this.selectedTab], ...targetDate, keyword: this.keyword, numberPerPage: -1, page: 1, updatedAt: this.updatedAt }).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.invoiceLoading.stop())).subscribe(result => {
+      this.authInvoiceContributorService.allInvoices.next(result['result']);
+    });
   }
   navigate(event) {
     this.router.navigate([], { queryParams: {page: event}, queryParamsHandling: 'merge' });
