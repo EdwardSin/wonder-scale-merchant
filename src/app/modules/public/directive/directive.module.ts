@@ -9,6 +9,7 @@ import { NavItemDirective } from '../../../directives/nav-item.directive';
 import { YearMonthFormatDirective } from 'src/app/directives/date_format/year-month-format.directive';
 import { DateFormatDirective } from 'src/app/directives/date_format/date-format.directive';
 import { YearFormatDirective } from 'src/app/directives/date_format/year-format.directive';
+import { NgLazyLoadScrollDirective } from 'src/app/directives/ng-lazy-load-scroll.directive';
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import { YearFormatDirective } from 'src/app/directives/date_format/year-format.
     NavItemDirective,
     DateFormatDirective,
     YearMonthFormatDirective,
-    YearFormatDirective
+    YearFormatDirective,
+    NgLazyLoadScrollDirective
   ],
   imports: [
     CommonModule
@@ -33,7 +35,8 @@ import { YearFormatDirective } from 'src/app/directives/date_format/year-format.
     NavItemDirective,
     DateFormatDirective,
     YearMonthFormatDirective,
-    YearFormatDirective
+    YearFormatDirective,
+    NgLazyLoadScrollDirective
   ]
 })
 export class DirectiveModule { }

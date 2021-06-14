@@ -1,4 +1,4 @@
-<ws-modal *ngIf="isOpened" [(isOpened)]="isOpened" [maxWidth]="700">
+<ws-modal *ngIf="isOpened" [(isOpened)]="isOpened" [maxWidth]="700" [closeCallback]="closeCallback">
     <div modalBody>
         <ng-container *ngIf="item; else loadingTemplate">
             <div mdbDropdown class="float-right" style="margin-top: .5rem">
