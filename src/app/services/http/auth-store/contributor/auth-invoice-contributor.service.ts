@@ -29,8 +29,8 @@ export class AuthInvoiceContributorService {
   getInvoices(obj) {
     return this.http.post(AuthInvoiceContributorUrl.getInvoicesUrl, obj, this.accessTokenService.getAccessToken());
   }
-  getInvoice(obj) {
-    return this.http.get(AuthInvoiceContributorUrl.getInvoiceUrl + '/' + obj._id, this.accessTokenService.getAccessToken());
+  getInvoice(invoiceId) {
+    return this.http.get(AuthInvoiceContributorUrl.getInvoiceUrl + '/' + invoiceId, this.accessTokenService.getAccessToken());
   }
   addInvoice(invoice) {
     return this.http.post(AuthInvoiceContributorUrl.addInvoiceUrl, invoice, this.accessTokenService.getAccessToken());

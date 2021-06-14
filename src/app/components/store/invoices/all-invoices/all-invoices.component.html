@@ -106,7 +106,7 @@
 <div *ngIf="selectedTab != 'delivered' && selectedTab !== 'in_progress' && selectedTab !== 'ready' && selectedTab !== 'completed'">
     <div class="row no-gutters mb-5 pb-3" *ngIf="allInvoices?.length && !loading.isRunning(); else loadingTemplate">
         <div class="col-lg-5ths col-md-4 col-sm-6 p-sm-2 py-2" *ngFor="let invoice of allInvoices; trackBy: trackInvoiceId">
-            <ws-invoice-card [item]="invoice" [onInvoiceInfoModalClick]="openEditInvoiceModal.bind(this, invoice)"></ws-invoice-card>
+            <ws-invoice-card [item]="invoice" [onInvoiceInfoModalClick]="openEditInvoiceModal.bind(this, invoice._id)"></ws-invoice-card>
         </div>
     </div>
 </div>
@@ -124,7 +124,7 @@
                 <div class="row no-gutters" [hidden]="selectedDate !== data?._id">
                     <ng-container *ngIf="!invoiceLoading.isRunning()">
                         <div class="col-lg-5ths col-md-4 col-sm-6 p-2" *ngFor="let invoice of allInvoices; trackBy: trackInvoiceId">
-                            <ws-invoice-card [item]="invoice" [onInvoiceInfoModalClick]="openEditInvoiceModal.bind(this, invoice)"></ws-invoice-card>
+                            <ws-invoice-card [item]="invoice" [onInvoiceInfoModalClick]="openEditInvoiceModal.bind(this, invoice._id)"></ws-invoice-card>
                         </div>
                     </ng-container>
                     <div class="d-block py-5 center">
@@ -246,4 +246,4 @@
 </ws-modal>
 
 <modify-invoice-modal [(isOpened)]="isModifyInvoiceModalOpened" [item]="selectedItem"></modify-invoice-modal>
-<invoice-info-modal [(isOpened)]="isInvoiceInfoModalOpened" [item]="selectedItem"></invoice-info-modal>
+<invoice-info-modal [(isOpened)]="isInvoiceInfoModalOpened" [item]="selectedItem" [closeCallback]="closeInvoiceInfo.bind(this)"></invoice-info-modal>

@@ -8,6 +8,7 @@ import { DateTimeHelper } from '@helpers/datetimehelper/datetime.helper';
 import { AuthInvoiceContributorService } from '@services/http/auth-store/contributor/auth-invoice-contributor.service';
 import { Subject } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'ws-invoice-card',
@@ -32,8 +33,17 @@ export class WsInvoiceCardComponent implements OnInit {
   isEtaDeliveryDateModalOpened: boolean;
   allInvoices = [];
   etaDate: Date;
+  queryParams;
   private ngUnsubscribe: Subject<any> = new Subject;
-  constructor(private authInvoiceContributorService: AuthInvoiceContributorService) { }
+  constructor(private authInvoiceContributorService: AuthInvoiceContributorService, private route: ActivatedRoute,
+    private router: Router) { 
+    this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe(queryParams => {
+      this.queryParams = queryParams;
+      if (this.queryParams.invoiceId === this.item?._id && this.queryParams.paid) {
+        this.isPayslipModalOpened = true;
+      }
+    });
+  }
 
   ngOnInit(): void {
     this.form = WsFormBuilder.createInvoiceForm();
@@ -41,6 +51,9 @@ export class WsInvoiceCardComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes && changes['item']) {
       this.etaDate = this.getEtaDate(this.item);
+      if (this.queryParams.invoiceId === this.item?._id && this.queryParams.paid) {
+        this.isPayslipModalOpened = true;
+      }
     }
   }
 
@@ -250,6 +263,10 @@ export class WsInvoiceCardComponent implements OnInit {
       }
     }
     return etaDate;
+  }
+  closePayslipModal() {
+    this.isPayslipModalOpened = false;
+    this.router.navigate([], {queryParams: {invoiceId: null, paid: null}, queryParamsHandling: 'merge'});
   }
   ngOnDestroy() {
     this.ngUnsubscribe.next();

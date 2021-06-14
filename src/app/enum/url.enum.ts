@@ -21,6 +21,7 @@ export class URL {
     static AUTH_PACKAGE_CONTRIBUTOR_URL = '/api/auth-stores/package-contributors'
     static AUTH_STORE_USER_URL = '/api/auth-users/store-users';
     static AUTH_USERS_URL = '/api/auth-users';
+    static AUTH_NOTIFICATION_USERS_URL = '/api/auth-users/notification-users';
     static FEATURE_URL = '/api/features';
     // static AUTH_ADVERTISING_CONTRIBUTOR_URL = '/api/auth-stores/advertising-contributors';
     // static AUTH_CART_CONTRIBUTOR_URL = '/api/auth-stores/cart-contributors';
@@ -255,7 +256,13 @@ export class AuthAnalysisContributorUrl {
     static getPromotionsInvoiceNumberUrl = URL.AUTH_ANALYSIS_CONTRIBUTOR_URL + '/promotions/invoice-number';
     static getPromotionInvoiceNumberBetweenDateUrl = URL.AUTH_ANALYSIS_CONTRIBUTOR_URL + '/promotions/invoice-number-between-date';
 }
+export class AuthNotificationUserUrl {
+    static getNotificationStreamUrl = URL.AUTH_NOTIFICATION_USERS_URL + '/sse';
+    static getNotificationsUrl = URL.AUTH_NOTIFICATION_USERS_URL;
+    static loadedNewNotificationsUrl = URL.AUTH_NOTIFICATION_USERS_URL + '/loaded';
+    static readNotificationUrl = URL.AUTH_NOTIFICATION_USERS_URL + '/read';
 
+}
 // export class AuthVoucherContributorUrl {
 //     static getClaimedVouchersUrl = URL.AUTH_VOURCHER_CONTRIBUTOR_URL + '/claimed-vouchers';
 //     static getClaimedVouchersInDetailsUrl = URL.AUTH_VOURCHER_CONTRIBUTOR_URL + '/claimed-vouchers-in-details';

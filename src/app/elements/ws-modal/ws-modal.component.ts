@@ -45,6 +45,9 @@ export class WsModalComponent implements OnInit {
     const clickedOutside = event.target.contains(this.modalBody.nativeElement);
     if (clickedOutside) {
       this.isOpened = false;
+      if (this.closeCallback) {
+        this.closeCallback();
+      }
     }
   }
   ngOnDestroy() {
