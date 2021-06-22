@@ -335,7 +335,8 @@ export class AuthAnalysisContributorUrl {
     static getPromotionInvoiceNumberBetweenDateUrl = URL.AUTH_ANALYSIS_CONTRIBUTOR_URL + '/promotions/invoice-number-between-date';
 }
 export class AuthNotificationUserUrl {
-    static getNotificationStreamUrl = URL.AUTH_NOTIFICATION_USERS_URL + '/sse';
+    // static getNotificationStreamUrl = URL.AUTH_NOTIFICATION_USERS_URL + '/sse';
+    static checkNotificationsUrl = URL.AUTH_NOTIFICATION_USERS_URL + '/check-notifications';
     static getNotificationsUrl = URL.AUTH_NOTIFICATION_USERS_URL;
     static loadedNewNotificationsUrl = URL.AUTH_NOTIFICATION_USERS_URL + '/loaded';
     static readNotificationUrl = URL.AUTH_NOTIFICATION_USERS_URL + '/read';
