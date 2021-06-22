@@ -31,7 +31,10 @@ export class HeaderComponent implements OnInit {
   numberOfNewNotifications: number = 0;
   totalOfNotification: number = 20;
   offsetOfNotification: number = 0;
+  updatedAt = new Date;
   notifications: Array<NotificationMessage> = [];
+  checkNotificationSubscription;
+  REFRESHER_NOTIFICATIONS_INTERVAL = 30 * 1000;
   private ngUnsubscribe: Subject<any> = new Subject;
   constructor(private route: ActivatedRoute,
     private router: Router,
@@ -49,6 +52,10 @@ export class HeaderComponent implements OnInit {
     this.sharedUserService.user.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
         this.user = result;
+        if (result) {
+          this.getNotifications();
+          this.checkNotifications();
+        }
       })
     this.authenticationService.isAuthenticated().then(result => {
       if (result) {
@@ -89,33 +96,51 @@ export class HeaderComponent implements OnInit {
       .subscribe(result => {
         if(result) {
           this.sharedUserService.user.next(result.result);
-          this.getNotifications();
-          this.setupNotificationStream();
+          // temp disable sse
+          // this.setupNotificationStream();
         }
       })
   }
   isAuthenticateUrl(url) {
     return url =='login' || url == 'register' || url == 'forgot-password' || url == 'activate' || url == 'reset-password';
   }
-  currentStream;
-  setupNotificationStream(delaySeconds=0) {
-    if (this.currentStream) {
-      this.currentStream.unsubscribe();
+  // temp disable sse
+  // currentStream;
+  // setupNotificationStream(delaySeconds=0) {
+  //   if (this.currentStream) {
+  //     this.currentStream.unsubscribe();
+  //   }
+  //   this.currentStream = of('init').pipe(delay(delaySeconds), switchMap(() => {
+  //       return this.authNotificationUserService.getNotificationStream()
+  //     }), switchMap((result) => {
+  //     if (result['data'] === 'true') {
+  //       return this.authNotificationUserService.getNotifications();
+  //     }
+  //     return of(null);
+  //   }), takeUntil(this.ngUnsubscribe)).subscribe(result => {
+  //     if (result) {
+  //       this.notifications = [...result['result']];
+  //       this.numberOfNewNotifications = result['meta']['isNewItem'];
+  //     }
+  //   }, err => {
+  //     this.setupNotificationStream(30000);
+  //   });
+  // }
+  checkNotifications() {
+    if (this.checkNotificationSubscription) {
+      this.checkNotificationSubscription.unsubscribe();
     }
-    this.currentStream = of('init').pipe(delay(delaySeconds), switchMap(() => {
-        return this.authNotificationUserService.getNotificationStream()
-      }), switchMap((result) => {
-      if (result['data'] === 'true') {
-        return this.authNotificationUserService.getNotifications();
-      }
-      return of(null);
-    }), takeUntil(this.ngUnsubscribe)).subscribe(result => {
-      if (result) {
-        this.notifications = [...result['result']];
-        this.numberOfNewNotifications = result['meta']['isNewItem'];
+    this.checkNotificationSubscription = timer(5000, this.REFRESHER_NOTIFICATIONS_INTERVAL).pipe(
+      switchMap(() => {
+        let obj = { updatedAt: this.updatedAt };
+        return this.authNotificationUserService.checkNotifications(obj)}),
+      takeUntil(this.ngUnsubscribe)).subscribe(result => {
+      if (result['result'] && result['result'].notification) {
+        this.updatedAt = result['result'].notification;
+        this.getNotifications();
       }
     }, err => {
-      this.setupNotificationStream(30000);
+      this.checkNotifications();
     });
   }
   async createLazyLoginComponent() {
@@ -208,6 +233,9 @@ export class HeaderComponent implements OnInit {
         this.sharedLoadingService.screenLoading.next({loading: false});
         this.router.navigate(['']);
         this.sharedStoreService.store.next(null);
+        if (this.checkNotificationSubscription) {
+          this.checkNotificationSubscription.unsubscribe();
+        }
       }, 500);
     });
   }
