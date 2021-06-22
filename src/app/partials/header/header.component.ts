@@ -130,7 +130,7 @@ export class HeaderComponent implements OnInit {
     if (this.checkNotificationSubscription) {
       this.checkNotificationSubscription.unsubscribe();
     }
-    this.checkNotificationSubscription = timer(0, this.REFRESHER_NOTIFICATIONS_INTERVAL).pipe(
+    this.checkNotificationSubscription = timer(5000, this.REFRESHER_NOTIFICATIONS_INTERVAL).pipe(
       switchMap(() => {
         let obj = { updatedAt: this.updatedAt };
         return this.authNotificationUserService.checkNotifications(obj)}),
