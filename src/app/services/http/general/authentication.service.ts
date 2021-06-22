@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 // import { CookieService } from 'ngx-cookie-service';
 import { SharedUserService } from '@services/shared/shared-user.service';
+import { AuthUserUrl, UserUrl } from '@enum/url.enum';
 
 @Injectable({
     providedIn: 'root'
@@ -32,7 +33,7 @@ export class AuthenticationService {
         // }
         if(!AuthenticationService.token){
             return new Promise<boolean>((resolve, reject) => {
-                this.http.get('/api/users/is-authenticated').subscribe(result => {
+                this.http.get(UserUrl.isAuthenticatedUrl).subscribe(result => {
                     this.setupAuthentication(result);
                     resolve(result['loggedIn']);
                 }, err => {
@@ -64,7 +65,7 @@ export class AuthenticationService {
             AuthenticationService.token = null;
             AuthenticationService.user_id = null;
             // if (this.cookieService.get('accessJwt')) {
-                this.http.post('/api/auth-users/users/logout', {}).subscribe(result => {
+                this.http.post(AuthUserUrl.logout, {}).subscribe(result => {
                     this.sharedUserService.user.next(null);
                     this.sharedUserService.followStores.next([]);
                     this.sharedUserService.followItems.next([]);

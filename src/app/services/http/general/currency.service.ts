@@ -4,6 +4,7 @@ import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Constants } from '@constants/constants';
 import { Currency } from '@objects/currency';
+import { CurrencyUrl } from '@enum/url.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -33,6 +34,6 @@ export class CurrencyService {
   }
 
   getCurrency() {
-    return this.http.get('/api/currency');
+    return this.http.get(CurrencyUrl.getCurrencyUrl);
   }
 }
