@@ -1,4 +1,11 @@
 export class URL {
+    static USER_URL = '/api/users';
+    static CATEGORY_URL = '/api/categories';
+    static TRACK_URL = '/api/tracks';
+    static STORE_URL = '/api/stores';
+    static INVOICE_URL = '/api/invoices';
+    static ITEM_URL = '/api/items';
+    static AUTH_INVOICE_URL = '/api/auth-users/invoice-users';
     static AUTH_DEFAULT_SETTING_ADMIN_URL = '/api/auth-stores/default-setting-admins';
     static AUTH_PACKAGE_ADMIN_URL = '/api/auth-stores/package-admins';
     static AUTH_STORE_ADMIN_URL = '/api/auth-stores/store-admins';
@@ -21,7 +28,10 @@ export class URL {
     static AUTH_PACKAGE_CONTRIBUTOR_URL = '/api/auth-stores/package-contributors'
     static AUTH_STORE_USER_URL = '/api/auth-users/store-users';
     static AUTH_USERS_URL = '/api/auth-users';
+    static AUTH_TRACK_CONTRIBUTORS_URL = '/api/auth-stores/track-contributors'
+    static AUTH_NOTIFICATION_USERS_URL = '/api/auth-users/notification-users';
     static FEATURE_URL = '/api/features';
+    static CURRENCY_URL = '/api/currency';
     // static AUTH_ADVERTISING_CONTRIBUTOR_URL = '/api/auth-stores/advertising-contributors';
     // static AUTH_CART_CONTRIBUTOR_URL = '/api/auth-stores/cart-contributors';
     // static AUTH_CREDIT_CONTRIBUTOR_URL = '/api/auth-stores/credit-contributors';
@@ -34,11 +44,56 @@ export class URL {
     // static AUTH_VOURCHER_CONTRIBUTOR_URL = '/api/auth-stores/voucher-contributors';
     // static REVIEW_URL = '/api/reviews';
 }
+export class UserUrl {
+    static loginUrl = URL.USER_URL + '/login';
+    static registerUrl = URL.USER_URL + '/register';
+    static registerByFbUrl = URL.USER_URL + '/register-by-fb';
+    static registerByGoogleUrl = URL.USER_URL + '/register-by-google';
+    static activateUrl = URL.USER_URL + '/activate';
+    static savePasswordUrl = URL.USER_URL + '/save/password';
+    static checkEmailUrl = URL.USER_URL + '/checkemail';
+    static resetUsernameUrl = URL.USER_URL + '/reset/username';
+    static resendActivationEmailConfirmationUrl = URL.USER_URL + '/resend/activation-email';
+    static resendActivationEmailUrl = URL.USER_URL + '/resend/activation-email';
+    static resetPasswordUrl = URL.USER_URL + '/reset/password';
+    static isAuthenticatedUrl = URL.USER_URL + '/is-authenticated';
+}
+export class CategoryUrl {
+    static getCategoriesByStoreIdUrl = URL.CATEGORY_URL + '/storeid/';
+}
+export class TrackUrl {
+    static addTrackUrl = URL.TRACK_URL;
+}
+export class StoreUrl {
+    static getStoreByUsernameUrl = URL.STORE_URL + '/username';
+    static getStoreByKeywordUrl = URL.STORE_URL + '/search';
+    static getRecommandedStoresUrl = URL.STORE_URL + '/random';
+}
+export class InvoiceUrl {
+    static getInvoiceByIdUrl = URL.INVOICE_URL;
+    static uploadPayslipUrl = URL.INVOICE_URL + '/upload-payslip';
+}
+export class ItemUrl {
+    static getItemWithSellerByIdUrl = URL.ITEM_URL + '/items-with-seller';
+    static getAllItemsByStoreIdUrl = URL.ITEM_URL + '/public/all';
+    static getNewItemsByStoreIdUrl = URL.ITEM_URL + '/public/new';
+    static getDiscountItemsByStoreIdUrl = URL.ITEM_URL + '/public/discount';
+    static getTodaySpecialItemsByStoreIdUrl = URL.ITEM_URL + '/public/todayspecial';
+    static getItemsByCategoryIdUrl = URL.ITEM_URL + '/public';
+}
 export class FeatureUrl {
     static sendEmailUrl = URL.FEATURE_URL + '/send/email';
     static sendReportReviewUrl = URL.FEATURE_URL + '/send/report';
     static sendStoreInvitationEmailUrl = URL.FEATURE_URL + 'send/invitation';
     static sendInformationUrl = URL.FEATURE_URL + 'send/information';
+}
+export class AuthInvoiceUrl {
+    static getInvoicesUrl = URL.AUTH_INVOICE_URL;
+    static placeorderUrl = URL.AUTH_INVOICE_URL + '/placeorder';
+    static isSavedInvoiceUrl = URL.AUTH_INVOICE_URL + '/is-saved';
+    static saveInvoiceUrl = URL.AUTH_INVOICE_URL + '/save';
+    static unsaveInvoiceUrl = URL.AUTH_INVOICE_URL + '/unsave';
+
 }
 export class AuthUserUrl {
     static getUserUrl = URL.AUTH_USERS_URL + '/users';
@@ -52,6 +107,20 @@ export class AuthUserUrl {
     static editGeneralUrl = URL.AUTH_USERS_URL + '/users/edit/general';
     static changePasswordUrl = URL.AUTH_USERS_URL + '/users/edit/password';
     static savePasswordUrl = URL.AUTH_USERS_URL + '/users/save/password';
+    static logout = URL.AUTH_USERS_URL + '/users/logout';
+    // follow
+    static getFollowStoresUrl = URL.AUTH_USERS_URL + '/users/follow/stores'
+    static getFollowItemsUrl = URL.AUTH_USERS_URL + '/users/follow/items'
+    static getFollowStoresByPositionUrl = URL.AUTH_USERS_URL + '/users/follow/stores/position'
+    static getFollowItemsByPositionUrl = URL.AUTH_USERS_URL + '/users/follow/items/position'
+    static getFollowStoreIdsUrl = URL.AUTH_USERS_URL + '/users/follow-ids'
+    static getFollowItemIdsUrl = URL.AUTH_USERS_URL + '/users/follow-ids'
+    static isFollowStoreUrl = URL.AUTH_USERS_URL + '/users/is-following'
+    static isFollowItemUrl = URL.AUTH_USERS_URL + '/users/is-following'
+    static followStoreUrl = URL.AUTH_USERS_URL + '/users/follow'
+    static followItemUrl = URL.AUTH_USERS_URL + '/users/follow'
+    static unfollowStoreUrl = URL.AUTH_USERS_URL + '/users/unfollow'
+    static unfollowItemUrl = URL.AUTH_USERS_URL + '/users/unfollow'
 }
 export class AuthStoreUserUrl {
     static isAuthenticatedStoreByStoreUsernameUrl = URL.AUTH_STORE_USER_URL + '/is-authenticated';
@@ -121,7 +190,7 @@ export class AuthItemContributorUrl {
     static removeProfileImageUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/remove/profile-image';
     static removeDescriptionImageUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/remove/description-image';
     static removeItemTypeImageUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/remove/item-type-image';
-
+    static getPreviewItemWithSellerByIdUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/preview/item';
 }
 export class AuthDefaultSettingContributorUrl {
     static getDefaultItemSettingByStoreIdUrl = URL.AUTH_DEFAULT_SETTING_CONTRIBUTOR_URL + '/item'
@@ -215,6 +284,16 @@ export class AuthPromotionContributorUrl {
     static updatePromotionUrl = URL.AUTH_PROMOTION_CONTRIBUTOR_URL + '/';
     static removePromotionUrl = URL.AUTH_PROMOTION_CONTRIBUTOR_URL + '/';
 }
+export class AuthTrackContributorUrl {
+    static getTracksUrl = URL.AUTH_TRACK_CONTRIBUTORS_URL + '/';
+    static getTracksBetweenDatesUrl = URL.AUTH_TRACK_CONTRIBUTORS_URL + '/tracks-between-dates';
+    static getTodayTrackUrl = URL.AUTH_TRACK_CONTRIBUTORS_URL + '/today-track';
+    static addNewTrackUrl = URL.AUTH_TRACK_CONTRIBUTORS_URL;
+    static editNewTrackUrl = URL.AUTH_TRACK_CONTRIBUTORS_URL;
+    static activateTrackUrl = URL.AUTH_TRACK_CONTRIBUTORS_URL + '/activate';
+    static inactivateTrackUrl = URL.AUTH_TRACK_CONTRIBUTORS_URL + '/inactivate';
+    static removeTrackUrl = URL.AUTH_TRACK_CONTRIBUTORS_URL;
+}
 export class AuthDeliveryContributorUrl {
     static getDeliveriesUrl = URL.AUTH_DELIVERY_CONTRIBUTOR_URL + '/';
     static addDeliveryUrl = URL.AUTH_DELIVERY_CONTRIBUTOR_URL + '/';
@@ -255,7 +334,17 @@ export class AuthAnalysisContributorUrl {
     static getPromotionsInvoiceNumberUrl = URL.AUTH_ANALYSIS_CONTRIBUTOR_URL + '/promotions/invoice-number';
     static getPromotionInvoiceNumberBetweenDateUrl = URL.AUTH_ANALYSIS_CONTRIBUTOR_URL + '/promotions/invoice-number-between-date';
 }
+export class AuthNotificationUserUrl {
+    // static getNotificationStreamUrl = URL.AUTH_NOTIFICATION_USERS_URL + '/sse';
+    static checkNotificationsUrl = URL.AUTH_NOTIFICATION_USERS_URL + '/check-notifications';
+    static getNotificationsUrl = URL.AUTH_NOTIFICATION_USERS_URL;
+    static loadedNewNotificationsUrl = URL.AUTH_NOTIFICATION_USERS_URL + '/loaded';
+    static readNotificationUrl = URL.AUTH_NOTIFICATION_USERS_URL + '/read';
 
+}
+export class CurrencyUrl {
+    static getCurrencyUrl = URL.CURRENCY_URL + '/';
+}
 // export class AuthVoucherContributorUrl {
 //     static getClaimedVouchersUrl = URL.AUTH_VOURCHER_CONTRIBUTOR_URL + '/claimed-vouchers';
 //     static getClaimedVouchersInDetailsUrl = URL.AUTH_VOURCHER_CONTRIBUTOR_URL + '/claimed-vouchers-in-details';

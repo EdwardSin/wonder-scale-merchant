@@ -132,8 +132,8 @@ export class InvoiceInfoModalComponent extends WsModalComponent implements OnIni
   }
   close() {
     super.close();
-    if (this.closeCallback) {
-      this.closeCallback();
+    if (super.closeCallback) {
+      super.closeCallback();
     }
   }
 }

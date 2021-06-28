@@ -9,13 +9,12 @@ import { AuthInvoiceContributorService } from '@services/http/auth-store/contrib
 import { SharedNavbarService } from '@services/shared/shared-nav-bar.service';
 import { SharedStoreService } from '@services/shared/shared-store.service';
 import { interval, Subject, Subscription } from 'rxjs';
-import { debounceTime, delay, finalize, map, switchMap, takeUntil } from 'rxjs/operators';
+import { delay, finalize, switchMap, takeUntil } from 'rxjs/operators';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import {MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS} from '@angular/material-moment-adapter';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { WsMessageBarService } from '@elements/ws-message-bar/ws-message-bar.service';
-import { AuthAnalysisContributorService } from '@services/http/auth-store/contributor/auth-analysis-contributor.service';
 
 export const DAY_FORMATS = {
   parse: {
@@ -105,6 +104,10 @@ export class AllInvoicesComponent implements OnInit {
           this.keyword = queryParams['s_keyword'] || '';
           this.page = queryParams['page'] || 1;
           this.getInvoices(true);
+          this.router.navigate([], {queryParams: {tab: this.selectedTab, page: this.page, s_keyword: this.keyword}, queryParamsHandling: 'merge'});
+        }
+        if (queryParams.invoiceId && !queryParams.paid) {
+          this.openEditInvoiceModal(queryParams.invoiceId);
         }
       });
   }
@@ -286,15 +289,18 @@ export class AllInvoicesComponent implements OnInit {
   openAnalysisInvoiceModal() {
     this.isAnalysisInvoiceModalOpened = true;
   }
-  openEditInvoiceModal(invoice) {
+  openEditInvoiceModal(invoiceId) {
     this.selectedItem = null;
     this.isInvoiceInfoModalOpened = true;
-    this.authInvoiceContributorService.getInvoice(invoice).pipe(delay(500), takeUntil(this.ngUnsubscribe)).subscribe(result => {
+    this.authInvoiceContributorService.getInvoice(invoiceId).pipe(delay(500), takeUntil(this.ngUnsubscribe)).subscribe(result => {
       if (result['result']) {
         this.selectedItem = result['result'];
         this.ref.detectChanges();
       }
     });
+  }
+  closeInvoiceInfo() {
+    this.router.navigate([], { queryParams: {invoiceId: null}, queryParamsHandling: 'merge'});
   }
   triggerStatusColumns(value) {
     if (this.statusColumns.includes(value)) {
