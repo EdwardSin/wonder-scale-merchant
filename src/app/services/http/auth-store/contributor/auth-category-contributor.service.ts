@@ -39,31 +39,7 @@ export class AuthCategoryContributorService {
   removeCategories(categories) {
     return this.http.put(AuthCategoryContributorUrl.removeCategoriesUrl, categories, this.accessTokenService.getAccessToken());
   }
-  removeCategory(category_id) {
-    return this.http.delete(AuthCategoryContributorUrl.removeCategoryUrl + '/' + category_id, this.accessTokenService.getAccessToken());
-  }
   getNumberOfAllCategoriesItems() {
     return this.http.get(AuthCategoryContributorUrl.getNumberOfAllCategoriesItemsUrl, this.accessTokenService.getAccessToken());
-  }
-  getNumberOfAllItems() {
-    return this.http.get<{ result: number }>(AuthCategoryContributorUrl.getNumberOfAllItemsUrl, this.accessTokenService.getAccessToken());
-  }
-  getNumberOfNewItems() {
-    return this.http.get<{ result: number }>(AuthCategoryContributorUrl.getNumberOfNewItemsUrl, this.accessTokenService.getAccessToken());
-  }
-  getNumberOfTodaySpecialItems() {
-    return this.http.get<{ result: number }>(AuthCategoryContributorUrl.getNumberOfTodaySpecialItemsUrl, this.accessTokenService.getAccessToken());
-  }
-  getNumberOfDiscountItems() {
-    return this.http.get<{ result: number }>(AuthCategoryContributorUrl.getNumberOfDiscountItemsUrl, this.accessTokenService.getAccessToken());
-  }
-  getNumberOfPublishedItems() {
-    return this.http.get<{ result: number }>(AuthCategoryContributorUrl.getNumberOfPublishedItemsUrl, this.accessTokenService.getAccessToken());
-  }
-  getNumberOfUnpublishedItems() {
-    return this.http.get<{ result: number }>(AuthCategoryContributorUrl.getNumberOfUnpublishedItemsUrl, this.accessTokenService.getAccessToken());
-  }
-  getNumberOfUncategorizedItems() {
-    return this.http.get<{ result: number }>(AuthCategoryContributorUrl.getNumberOfUncategorizedItemsUrl, this.accessTokenService.getAccessToken());
   }
 }

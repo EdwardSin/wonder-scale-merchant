@@ -144,7 +144,6 @@ export class WsFormBuilder {
             description: ['', [Validators.maxLength(256)]],
             isEntityNew: [true, [Validators.required]],
             isPriceDisplayed: [false, [Validators.required]],
-            isPublished: [false, Validators.required],
             isOffer: [false, Validators.required],
             isPickup: [false]
         })
@@ -166,7 +165,6 @@ export class WsFormBuilder {
             isEntityNew: [true, [Validators.required]],
             isInStock: [true, [Validators.required]],
             isPriceDisplayed: [false, [Validators.required]],
-            isPublished: [false, Validators.required],
             isOffer: [false, Validators.required],
             isEcommerce: [false],
             isPickup: [false]
@@ -199,7 +197,6 @@ export class WsFormBuilder {
             isMarkedAsNew: [''],
             isInStock: [''],
             isPriceDisplayed: [''],
-            isPublished: [''],
             isOffer: [''],
             isEcommerce: [''],
             isPickup: [''],

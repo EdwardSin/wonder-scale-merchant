@@ -41,7 +41,6 @@ export class ImportItemsModalComponent extends WsModalComponent implements OnIni
   isPreviewLoading: WsLoading = new WsLoading;
   phase: number = 0;
   isEntityNew: boolean = true;
-  isPublished: boolean;
   categories = [];
   selectedCategories = [];
 
@@ -205,8 +204,7 @@ export class ImportItemsModalComponent extends WsModalComponent implements OnIni
         price: item['Price'],
         description: item['Description'],
         categories: this.selectedCategories,
-        isEntityNew: this.isEntityNew,
-        isPublished: this.isPublished
+        isEntityNew: this.isEntityNew
       }
     })
     //this.store.currency

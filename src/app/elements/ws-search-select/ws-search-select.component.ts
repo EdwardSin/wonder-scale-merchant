@@ -13,6 +13,7 @@ import { WsLoading } from '@elements/ws-loading/ws-loading';
 export class WsSearchSelectComponent implements OnInit {
 
   @Input() items = [];
+  @Input() item;
   @Input() loading: boolean;
   @Input() placeholder: string = '';
   @Output() searchValueChange: EventEmitter<any> = new EventEmitter();

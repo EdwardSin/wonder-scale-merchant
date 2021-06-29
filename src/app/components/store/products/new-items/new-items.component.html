@@ -1,0 +1,32 @@
+<h4 class="ws-title">New<span title="Display all marked as new items" class='fas fa-info-circle ml-2 font-9'></span></h4>
+<item-controller></item-controller>
+<div *ngIf="numberOfNewItems && !loading.isRunning(); else loadingTemplate">
+    <div *ngIf="displayItems.length && !loading.isRunning(); else searchLoadingTemplate">
+        <item-view [showCategory]="true"></item-view>
+    </div>
+</div>
+<ws-pagination *ngIf="numberOfCurrentTotalItems" [expanded]="isNavOpen" [currentPage]="currentPage" [numberOfSelectedItems]="editItems.length" 
+            [pageSize]="environment.ITEMS_PER_PAGE"  [dbTotal]="numberOfNewItems" [total]="numberOfCurrentTotalItems" (deselectAll)="deselectAll()" (getPageNumber)="navigate($event)"></ws-pagination>
+
+<ng-template #noItem>
+    <div class="py-5 text-center">
+        <p class="ws-no-title">New item</p>
+        <span class="text-muted">Items will be advertised and displayed in the user's news feed.</span>
+    </div>
+</ng-template>
+<ng-template #noSearchItem>
+    <div class="text-center">
+        <h6 class="py-5">No item found.</h6>
+    </div>
+</ng-template>
+<ng-template #loadingTemplate>
+    <ng-container *ngIf="loading.isRunning(); else noItem">
+        <ws-spinner class="text-center d-block w-100" style="padding-top: 30vh" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>
+    </ng-container>
+</ng-template>
+
+<ng-template #searchLoadingTemplate>
+    <ng-container *ngIf="loading.isRunning(); else noSearchItem">
+        <ws-spinner class="text-center d-block w-100" style="padding-top: 30vh" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>
+    </ng-container>
+</ng-template>

@@ -35,7 +35,6 @@ export class ImportTablesModalComponent extends WsModalComponent implements OnIn
   isPreviewLoading: WsLoading = new WsLoading;
   phase: number = 0;
   isEntityNew: boolean;
-  isPublished: boolean;
   categories = [];
   selectedCategories = [];
 

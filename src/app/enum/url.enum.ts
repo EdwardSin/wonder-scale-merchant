@@ -21,6 +21,8 @@ export class URL {
     static AUTH_DELIVERY_CONTRIBUTOR_URL = '/api/auth-stores/delivery-contributors';
     static AUTH_ANALYSIS_CONTRIBUTOR_URL = '/api/auth-stores/analysis-contributors';
     static AUTH_ITEM_CONTRIBUTOR_URL = '/api/auth-stores/item-contributors';
+    static AUTH_ON_SELLING_CATEGORY_CONTRIBUTOR_URL = '/api/auth-stores/on-selling-category-contributors';
+    static AUTH_ON_SELLING_ITEM_CONTRIBUTOR_URL = '/api/auth-stores/on-selling-item-contributors';
     static AUTH_STORE_CONTRIBUTOR_URL = '/api/auth-stores/store-contributors';
     static AUTH_TABLE_CONTRIBUTOR_URL = '/api/auth-stores/ordering-contributors/table-contributors';
     static AUTH_SALE_CONTRIBUTOR_URL = '/api/auth-stores/ordering-contributors/sale-contributors';
@@ -159,8 +161,6 @@ export class AuthStoreContributorUrl {
     static isPackageExpiredByUsernameUrl = URL.AUTH_STORE_CONTRIBUTOR_URL + '/is-expired';
 }
 export class AuthItemContributorUrl {
-    static markAsNewUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/markasnew/items';
-    static unmarkNewUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/unmarknew/items';
     static markAsTodaySpecialUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/markastodayspecial/items';
     static unmarkTodaySpecialUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/unmarktodayspecial/items';
     static markAsOfferUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/markasoffer/items';
@@ -215,6 +215,28 @@ export class AuthCategoryContributorUrl {
     static getNumberOfUnpublishedItemsUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL + '/number_of_unpublished_items';
     static getNumberOfUncategorizedItemsUrl = URL.AUTH_CATEGORY_CONTRIBUTOR_URL + '/number_of_uncategorized_items';
 
+}
+export class AuthOnSellingCategoryContributorUrl {
+    static getCategoryByNameAndStoreIdUrl = URL.AUTH_ON_SELLING_CATEGORY_CONTRIBUTOR_URL + '/name';
+    static addCategoryUrl = URL.AUTH_ON_SELLING_CATEGORY_CONTRIBUTOR_URL;
+    static editCategoryUrl = URL.AUTH_ON_SELLING_CATEGORY_CONTRIBUTOR_URL;
+    static removeCategoriesUrl = URL.AUTH_ON_SELLING_CATEGORY_CONTRIBUTOR_URL + '/remove/categories';
+    static getAuthenticatedCategoriesByStoreIdUrl = URL.AUTH_ON_SELLING_CATEGORY_CONTRIBUTOR_URL + '/storeid';
+    static addItemsToCategoryUrl = URL.AUTH_ON_SELLING_CATEGORY_CONTRIBUTOR_URL + '/items/add';
+    static removeItemsFromCategoryUrl = URL.AUTH_ON_SELLING_CATEGORY_CONTRIBUTOR_URL + '/remove/itemsfromcategory';
+    static moveCategoryUrl = URL.AUTH_ON_SELLING_CATEGORY_CONTRIBUTOR_URL + '/move';
+    static rearrangeCategoriesUrl = URL.AUTH_ON_SELLING_CATEGORY_CONTRIBUTOR_URL + '/rearrange';
+}
+export class AuthOnSellingItemContributorUrl {
+    static getItemById = URL.AUTH_ON_SELLING_ITEM_CONTRIBUTOR_URL + '';
+    static getItemsByCategoryIdUrl = URL.AUTH_ON_SELLING_ITEM_CONTRIBUTOR_URL + '/items-by-categoryid';
+    static getAuthenticatedNewItemsByStoreIdUrl = URL.AUTH_ON_SELLING_ITEM_CONTRIBUTOR_URL + '/new';
+    static getAuthenticatedAllItemsByStoreIdUrl = URL.AUTH_ON_SELLING_ITEM_CONTRIBUTOR_URL + '/all';
+    static saveItemUrl = URL.AUTH_ON_SELLING_ITEM_CONTRIBUTOR_URL + '';
+    static markAsNewUrl = URL.AUTH_ON_SELLING_ITEM_CONTRIBUTOR_URL + '/markasnew/items';
+    static unmarkNewUrl = URL.AUTH_ON_SELLING_ITEM_CONTRIBUTOR_URL + '/unmarknew/items';
+    static editMultipleItemsUrl = URL.AUTH_ON_SELLING_ITEM_CONTRIBUTOR_URL + '/edit-multiple';
+    static removeItemsPermanantlyUrl = URL.AUTH_ON_SELLING_ITEM_CONTRIBUTOR_URL + '/remove/items/permanently';
 }
 export class AuthStoreAdminUrl {
     static removeBankDetailslUrl = URL.AUTH_STORE_ADMIN_URL + '/bank-details/remove';
