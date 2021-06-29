@@ -64,7 +64,7 @@ export class MainContainerComponent implements OnInit {
     this.router.events.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(event => {
         if (event instanceof NavigationEnd) {
-          this.isCatalogueRoute = this.router.url.includes('/catalogue');
+          this.isCatalogueRoute = this.router.url.includes('/products');
         }
     });
   }

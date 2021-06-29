@@ -13,12 +13,6 @@ export class AuthItemContributorService {
 
   constructor(private http: HttpClient, private accessTokenService: AccessTokenService) { }
 
-  markAsNew(items) {
-    return this.http.put(AuthItemContributorUrl.markAsNewUrl, { items }, this.accessTokenService.getAccessToken());
-  }
-  unmarkNew(items) {
-    return this.http.put(AuthItemContributorUrl.unmarkNewUrl, { items }, this.accessTokenService.getAccessToken());
-  }
   markAsTodaySpecial(items) {
     return this.http.put(AuthItemContributorUrl.markAsTodaySpecialUrl, { items }, this.accessTokenService.getAccessToken());
   }

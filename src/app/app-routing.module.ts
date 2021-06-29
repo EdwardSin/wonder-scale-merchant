@@ -56,10 +56,10 @@ const routes: Routes = [{
       loadChildren: () => import('./modules/store/quick-menu/quick-menu.module').then(m => m.QuickMenuModule)
     },
     {
-      path: 'catalogue',
+      path: 'products',
       canActivate: [StoreGuard],
-      data: { title: 'cat', breadcrumb: 'Catalogue' },
-      loadChildren: () => import('./modules/store/catalogue/catalogue.module').then(m => m.CatalogueModule)
+      data: { title: 'cat', breadcrumb: 'Products' },
+      loadChildren: () => import('./modules/store/products/products.module').then(m => m.ProductsModule)
     },
     {
       path: 'package',
@@ -78,6 +78,12 @@ const routes: Routes = [{
       canActivate: [StoreGuard],
       data: { title: 'invoices', breadcrumb: 'Invoices' },
       loadChildren: () => import('./modules/store/invoices/invoices.module').then(m => m.InvoicesModule)
+    },
+    {
+      path: 'on-selling-products',
+      canActivate: [StoreGuard],
+      data: { title: 'cat', breadcrumb: 'On Selling Products' },
+      loadChildren: () => import('./modules/store/on-selling-products/on-selling-products.module').then(m => m.OnSellingProductsModule)
     },
     // {
     //   path: 'advertising',

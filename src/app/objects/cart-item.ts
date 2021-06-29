@@ -8,6 +8,7 @@ export class CartItem{
     price: number;
     currency: string;
     remark?: string;
+    subItems?: Array<any>;
     profileImage?: string;
 
     constructor() {

@@ -27,8 +27,9 @@ export class SharedCategoryService {
     unpublishedItemsRefresh: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
     uncategorizedItemsRefresh: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
     categoryRefresh: BehaviorSubject<{refresh: boolean, loading: boolean}> = new BehaviorSubject<{refresh: boolean, loading: boolean}>({refresh: false, loading:false});
-
+    category: BehaviorSubject<any> = new BehaviorSubject<any>(null);
     categories: BehaviorSubject<Item[]> = new BehaviorSubject<Item[]>([]);
+    onSellingCategories: BehaviorSubject<[]> = new BehaviorSubject<[]>([]);
 
     constructor(
         private sharedItemService: SharedItemService,
@@ -63,6 +64,7 @@ export class SharedCategoryService {
                 this.numberOfUnpublishedItems.next(result['number_of_unpublished_items']);
                 this.numberOfUncategorizedItems.next(result['number_of_uncategorized_items']);
                 this.categories.next(result['categories']);
+                this.onSellingCategories.next(result['onSellingCategories']);
                 this.sharedLoadingService.screenLoading.next({loading: false});
                 if (callback) {
                     callback();

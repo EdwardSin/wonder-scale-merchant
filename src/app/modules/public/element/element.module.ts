@@ -38,6 +38,8 @@ import { RouterModule } from '@angular/router';
 import { WsMessageBarComponent } from '@elements/ws-message-bar/ws-message-bar.component';
 import { WsPriceListComponent } from '@elements/ws-price-list/ws-price-list.component';
 import { WsStepperComponent } from '@elements/ws-stepper/ws-stepper.component';
+import { MenuItemComponent } from '@elements/menu-item/menu-item.component';
+import { PipeModule } from '../pipe/pipe.module';
 
 
 @NgModule({
@@ -61,6 +63,7 @@ import { WsStepperComponent } from '@elements/ws-stepper/ws-stepper.component';
     BusinessTimetableComponent,
     ConfirmModalComponent,
     BusinessLocationComponent,
+    MenuItemComponent,
     WsInvoiceComponent,
     WsMessageBarComponent,
     WsPriceListComponent,
@@ -80,7 +83,8 @@ import { WsStepperComponent } from '@elements/ws-stepper/ws-stepper.component';
     NgxMatSelectSearchModule,
     MatSelectInfiniteScrollModule,
     DirectiveModule,
-    RouterModule
+    RouterModule,
+    PipeModule
   ],
   exports: [
     WsSpinnerComponent,
@@ -102,6 +106,7 @@ import { WsStepperComponent } from '@elements/ws-stepper/ws-stepper.component';
     BusinessTimetableComponent,
     ConfirmModalComponent,
     BusinessLocationComponent,
+    MenuItemComponent,
     WsInvoiceComponent,
     WsMessageBarComponent,
     WsPriceListComponent,

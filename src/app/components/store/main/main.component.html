@@ -25,13 +25,24 @@
         </ul>
       </li>
       <li wsNavItem class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
-        <a [routerLink]="['catalogue']">
+        <a [routerLink]="['products']">
           <span class="ws-main-nav-icon fas fa-th"></span>
-          <span class="ws-main-nav-text">{{store?.type == 'restaurant' ? 'Menu' : 'Catalogue'}}</span>
+          <span class="ws-main-nav-text">Products</span>
         </a>
         <ul class="ws-main-nav-sub-list">
           <li class="ws-main-nav-sub-list__title">
-            <a [routerLink]="['catalogue']">{{store?.type == 'restaurant' ? 'Menu' : 'Catalogue'}}</a>
+            <a [routerLink]="['products']">Products</a>
+          </li>
+        </ul>
+      </li>
+      <li wsNavItem class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
+        <a [routerLink]="['on-selling-products']">
+          <span class="ws-main-nav-icon fas fa-shopping-cart"></span>
+          <span class="ws-main-nav-text">On-Selling Products</span>
+        </a>
+        <ul class="ws-main-nav-sub-list">
+          <li class="ws-main-nav-sub-list__title">
+            <a [routerLink]="['on-selling-products']">On-Selling Products</a>
           </li>
         </ul>
       </li>
