@@ -1,6 +1,6 @@
 <div class="menu-item__container">
     <div class="menu-item">
-        <div class="row no-gutters" [class.clickable]="!isEditable" [style.border-bottom]="isShown? '1px solid #ddd': '0'">
+        <div class="row no-gutters" [class.clickable]="!isEditable && (onSellingItem?.subItemGroups?.length || item?.types?.length || item?.description)" [style.border-bottom]="isShown? '1px solid #ddd': '0'">
             <span class="menu-item__image-container" [class.clickable]="!isEditable">
                 <img *ngIf="images?.length" [src]="environment.IMAGE_URL + images[imageIndex]" class="menu-item__image" alt="profile Image" />
                 <img *ngIf="!images?.length" src="/assets/images/png/profileImage.png" class="menu-item__image" alt="item detault profile image" />
@@ -17,7 +17,7 @@
                 </div>
             </span>
             
-            <div class="menu-item__middle col px-2 px-lg-3" (click)="isEditable? null : isShown = !isShown">
+            <div class="menu-item__middle col px-2 px-lg-3" (click)="isEditable? null : onDetailsClick()">
                 <p class="menu-item__text">{{ item?.name }}</p>
                 <div class="float-right mb-2">
                     <p [class.menu-item__price__offer]="item?.isDiscountExisting" class="menu-item__price mb-0" *ngIf="item?.currency && item?.isOffer"><span class="pr-1">RM</span>{{ item?.price | wsCurrency: 1:1 | discountconverter : item?.discount }}</p>
@@ -26,7 +26,7 @@
                 </div>
                 <div class="menu-item__number-cart-item" *ngIf="isAddedToCart">Added</div>
                 <div class="mb-3 w-100 justify-content-between d-flex">
-                    <div class="menu-item__quantity float-right d-inline-block mx-2">
+                    <div *ngIf="!isMobileSize" class="menu-item__quantity float-right d-inline-block mx-2">
                         <button class="btn btn-default fas fa-minus font-8 mr-2" [disabled]="isEditable" [style.opacity]="isEditable ? .3 : 1" (click)="isEditable? null: $event.stopPropagation(); decrease()"></button>
                         <input class="menu-item__input text-center font-9" [style.opacity]="isEditable ? .3 : 1" [disabled]="isEditable" [(ngModel)]="onSellingItem.quantity" readonly />
                         <button class="btn btn-default fas fa-plus font-8 ml-2" [disabled]="isEditable" [style.opacity]="isEditable ? .3 : 1" (click)="isEditable? null: $event.stopPropagation(); increase()"></button>
@@ -35,11 +35,20 @@
                         <button class="btn btn-default fas fa-plus font-8 ml-2" (click)="$event.stopPropagation(); increase()"></button> -->
                     </div>
                     <!-- [disabled]="item?.types?.length > 0 && !selectedType"  -->
-                    <button class="btn btn-second float-right" [style.opacity]="isEditable ? .3 : 1" [disabled]="isEditable" (click)="$event.stopPropagation(); addToCart()">Add To Cart</button>
+                    <button *ngIf="!isMobileSize" class="btn btn-second float-right" [style.opacity]="isEditable ? .3 : 1" [disabled]="isEditable" (click)="$event.stopPropagation(); addToCart()">Add To Cart</button>
                 </div>
                 <div class="clearfix"></div>
             </div>
         </div>
+        <div *ngIf="isMobileSize" class="menu-item__quantity d-flex justify-content-center w-100 py-3">
+            <button class="btn btn-default fas fa-minus font-8 mr-2" [disabled]="isEditable" [style.opacity]="isEditable ? .3 : 1" (click)="isEditable? null: $event.stopPropagation(); decrease()"></button>
+            <input class="menu-item__input text-center font-9" [style.opacity]="isEditable ? .3 : 1" [disabled]="isEditable" [(ngModel)]="onSellingItem.quantity" readonly />
+            <button class="btn btn-default fas fa-plus font-8 ml-2" [disabled]="isEditable" [style.opacity]="isEditable ? .3 : 1" (click)="isEditable? null: $event.stopPropagation(); increase()"></button>
+            <!-- <button class="btn btn-default fas fa-minus font-8 mr-2" (click)="$event.stopPropagation(); decrease()"></button>
+            <input class="menu-item__input text-center font-9" [(ngModel)]="onSellingItem.quantity" readonly />
+            <button class="btn btn-default fas fa-plus font-8 ml-2" (click)="$event.stopPropagation(); increase()"></button> -->
+        </div>
+        <button *ngIf="isMobileSize" class="btn btn-second w-100 rounded-0" [style.opacity]="isEditable ? .3 : 1" [disabled]="isEditable" (click)="$event.stopPropagation(); addToCart()">Add To Cart</button>
         <div class="p-3" *ngIf="isShown || isEditable">
             <div class="font-9" *ngIf="item?.types?.length && onSellingItem?.isTypeShown">
                 <p class="menu-item__title mb-2">Types:</p>
@@ -129,7 +138,7 @@
             </div>
             <div class="clearfix"></div>
             <div class="mb-2" *ngIf="item?.description">
-                <hr />
+                <hr *ngIf="item?.types?.length || onSellingItem?.subItemGroups?.length" />
                 <p class="mb-0 text-muted font-8">{{ item?.description }}</p>
             </div>
         </div>

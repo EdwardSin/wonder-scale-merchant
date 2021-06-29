@@ -7,6 +7,7 @@ import { WsToastService } from '@elements/ws-toast/ws-toast.service';
 import * as _ from 'lodash';
 import { OnSellingItem } from '@objects/on-selling-item';
 import { CartItem } from '@objects/cart-item';
+import { ScreenService } from '@services/general/screen.service';
 
 @Component({
   selector: 'menu-item',
@@ -15,7 +16,6 @@ import { CartItem } from '@objects/cart-item';
 })
 export class MenuItemComponent implements OnInit {
   @Input() onSellingItem: OnSellingItem;
-  oriOnSellingItem: OnSellingItem;
   @Input() isAddedToCart: boolean;
   item: Item;
   type: string = '';
@@ -34,8 +34,12 @@ export class MenuItemComponent implements OnInit {
   currencies = [];
   images = [];
   imageIndex: number = 0;
+  isMobileSize: boolean;
   ngUnsubscribe: Subject<any> = new Subject;
-  constructor() {
+  constructor(private screenService: ScreenService) {
+    this.screenService.isMobileSize.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+      this.isMobileSize = result;
+    });
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -43,12 +47,11 @@ export class MenuItemComponent implements OnInit {
       if (!this.onSellingItem.quantity) {
         this.onSellingItem.quantity = 1;
       }
-      this.oriOnSellingItem = _.cloneDeep(this.onSellingItem);
       this.item = this.onSellingItem.item as Item;
-      this.images = _.union(_.flattenDeep([this.item.profileImages, this.item?.types.map(type => type.images), (this.item.descriptionImages || [])]));
+      this.item.isDiscountExisting = this.item.isOffer && (this.item.types.find(type => type.discount > 0) != null || this.item.discount > 0);
+      this.images = _.union(_.flattenDeep([this.item.profileImages, this.item?.types?.map(type => type.images), (this.item.descriptionImages || [])]));
       this.images = _.filter(this.images, image => !_.isEmpty(image));
       this.imageIndex = this.item.profileImageIndex > -1 ? this.item.profileImageIndex : 0;
-      this.item.isDiscountExisting = this.item.isOffer && (this.item.types.find(type => type.discount > 0) != null || this.item.discount > 0);
     }
   }
   ngOnInit(): void {
@@ -76,7 +79,7 @@ export class MenuItemComponent implements OnInit {
     cartItem.discount = item?.isOffer ? item.discount : 0;
     if (this.onSellingItem?.subItemGroups?.length) {
       cartItem.subItems = _.flattenDeep(this.onSellingItem?.subItemGroups.map(group => {
-        return group.subItems;
+        return _.cloneDeep(group.subItems);
       })).filter(subItem => {
         return subItem.quantity > 0;
       });
@@ -85,8 +88,9 @@ export class MenuItemComponent implements OnInit {
     if (this.images.length && this.imageIndex > -1) {
       cartItem.profileImage = this.images[this.imageIndex];
     }
-    this.reset();
+    WsToastService.toastSubject.next({ content: 'Item is added into cart!', type: 'success'});
     this.onAddToCartClicked.emit(cartItem);
+    this.reset();
   }
   increase() {
     if (!this.onSellingItem.quantity) {
@@ -135,8 +139,20 @@ export class MenuItemComponent implements OnInit {
       return item.quantity || 0;
     });
   }
+  onDetailsClick() {
+    if (this.onSellingItem?.subItemGroups?.length ||
+      this.item?.types?.length ||
+      this.item?.description) {
+      this.isShown = !this.isShown;
+    }
+  }
   reset() {
-    this.onSellingItem = _.cloneDeep(this.oriOnSellingItem);
+    this.onSellingItem.quantity = 1;
+    this.onSellingItem?.subItemGroups?.forEach(group => {
+      group?.subItems?.forEach(item => {
+        item.quantity = 0;
+      });
+    });
     this.isShown = false;
   }
   ngOnDestroy(){

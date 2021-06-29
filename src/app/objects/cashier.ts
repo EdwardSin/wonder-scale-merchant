@@ -43,9 +43,15 @@ export class Cashier{
     }
     getSubtotal(): number {
         return _.sumBy(this._cartItems, function (item) {
+            let subtotal = 0;
             item = Object.assign(new CartItem, item);
+            if (item?.subItems?.length) {
+                subtotal = _.sumBy(item.subItems, function (subItem) {
+                    return subItem.quantity * subItem.price;
+                });
+            }
             if (item.amount || item.price) {
-                return item.amount() * item.quantity;
+                return item.amount() * item.quantity + subtotal;
             }
             return 0;
         });
@@ -99,6 +105,7 @@ export class Cashier{
         return total * this.commission / 100;
     }
     getTotal(): number {
-        return this.getSubtotal() - this.getDiscount() + this.getTax();
+        // return this.getSubtotal() - this.getDiscount() + this.getTax();
+        return this.getSubtotal();
     }
 }
