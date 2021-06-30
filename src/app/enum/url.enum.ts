@@ -76,7 +76,7 @@ export class InvoiceUrl {
     static uploadPayslipUrl = URL.INVOICE_URL + '/upload-payslip';
 }
 export class ItemUrl {
-    static getItemWithSellerByIdUrl = URL.ITEM_URL + '/items-with-seller';
+    static getItemWithSellerByIdUrl = URL.ITEM_URL + '/item-with-seller';
     static getAllItemsByStoreIdUrl = URL.ITEM_URL + '/public/all';
     static getNewItemsByStoreIdUrl = URL.ITEM_URL + '/public/new';
     static getDiscountItemsByStoreIdUrl = URL.ITEM_URL + '/public/discount';
