@@ -16,7 +16,7 @@
             <th class="border-top-0 text-right" style="width: 100px">Actions</th>
         </thead>
         <tbody class="ws-drag-container" cdkDropList (cdkDropListDropped)="dropOrder($event)">
-            <tr>
+            <!-- <tr>
                 <td></td>
                 <td></td>
                 <td>
@@ -28,7 +28,7 @@
                     </span>
                 </td>
                 <td class="text-center">-</td>
-            </tr>
+            </tr> -->
             <tr *ngFor="let category of categories" cdkDrag class="ws-drag">
                 <td class="align-middle drag-handle" style="width: 50px" cdkDragHandle>
                     <span class="fas fa-bars moveable"></span>
