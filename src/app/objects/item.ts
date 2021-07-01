@@ -11,7 +11,7 @@ export class Item {
     store?: any;
     price: number;
     currency: string;
-    discount: number;
+    // discount: number;
     quantity: number;
     weight: number;
     isEntityNew: boolean;

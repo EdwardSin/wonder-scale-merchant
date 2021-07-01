@@ -69,7 +69,6 @@ export class ModifyItemComponent implements OnInit {
     private authDefaultSettingContributorService: AuthDefaultSettingContributorService,
     private authItemContributorService: AuthItemContributorService) {
       this.loading.start();
-      this.getCurrency();
       this.itemGroup = WsFormBuilder.createItemForm();
   }
 
@@ -103,16 +102,6 @@ export class ModifyItemComponent implements OnInit {
         this.setDefaultCategory(this.categories);
       })
   }
-  getCurrency() {
-    var currencyFullName = Constants.currencyFullnames;
-    var currencySymbols = Constants.currencySymbols;
-    this.currencies = Object.keys(currencyFullName).map(name => {
-      return {
-        name,
-        symbol: currencySymbols[name]
-      }
-    });
-  }
   getDefaultSetting() {
     this.authDefaultSettingContributorService.getDefaultItemSettingByStoreId().pipe(takeUntil(this.ngUnsubscribe), finalize(() => _.delay(() => { this.loading.stop();}, 500)))
       .subscribe(result => {
@@ -145,7 +134,7 @@ export class ModifyItemComponent implements OnInit {
     let refId = this.itemGroup.get('refId');
     let name = this.itemGroup.get('name');
     let price = this.itemGroup.get('price');
-    let discount = this.itemGroup.get('discount');
+    // let discount = this.itemGroup.get('discount');
     let weight = this.itemGroup.get('weight');
     let quantity = this.itemGroup.get('quantity');
     let description = this.itemGroup.get('description');
@@ -172,10 +161,10 @@ export class ModifyItemComponent implements OnInit {
       WsToastService.toastSubject.next({ content: 'Price is invalid!', type: 'danger' });
       return false;
     } 
-    else if (discount.value && (!priceRegex.test(discount.value) || +discount.value > 100)){
-      WsToastService.toastSubject.next({ content: 'Discount is invalid!', type: 'danger' });
-      return false;
-    }
+    // else if (discount.value && (!priceRegex.test(discount.value) || +discount.value > 100)){
+    //   WsToastService.toastSubject.next({ content: 'Discount is invalid!', type: 'danger' });
+    //   return false;
+    // }
     else if (weight.value && !priceRegex.test(weight.value)){
       WsToastService.toastSubject.next({ content: 'Weight is invalid!', type: 'danger' });
       return false;

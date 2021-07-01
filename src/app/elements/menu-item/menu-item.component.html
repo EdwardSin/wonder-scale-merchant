@@ -20,9 +20,8 @@
             <div class="menu-item__middle col px-2 px-lg-3" (click)="isEditable? null : onDetailsClick()">
                 <p class="menu-item__text">{{ item?.name }}</p>
                 <div class="float-right mb-2">
-                    <p [class.menu-item__price__offer]="item?.isDiscountExisting" class="menu-item__price mb-0" *ngIf="item?.currency && item?.isOffer"><span class="pr-1">RM</span>{{ item?.price | wsCurrency: 1:1 | discountconverter : item?.discount }}</p>
                     <p class="menu-item__price mb-1" *ngIf="item?.currency && !item?.isOffer"><span class="pr-1">RM</span>{{ item?.price | wsCurrency: 1:1 }}</p>
-                    <p class="menu-item__discount-price mb-0" *ngIf="item?.currency && item?.isOffer && item.priceAfterDiscount != item.price" style="text-decoration: line-through;"><span class="pr-1">RM</span>{{ item?.price | wsCurrency: 1:1 }}</p>
+                    <!-- <p class="menu-item__discount-price mb-0" *ngIf="item?.currency && item?.isOffer && item.priceAfterDiscount != item.price" style="text-decoration: line-through;"><span class="pr-1">RM</span>{{ item?.price | wsCurrency: 1:1 }}</p> -->
                 </div>
                 <div class="menu-item__number-cart-item" *ngIf="isAddedToCart">Added</div>
                 <div class="mb-3 w-100 justify-content-between d-flex">

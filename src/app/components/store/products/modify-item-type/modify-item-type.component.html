@@ -82,13 +82,13 @@
                 <div class="px-1 mb-3">
                     <label class="mb-0 font-9">Price:</label>
                     <input class="form-control form-control-sm" tabIndex="1" placeholder="Blank to use default price" formControlName="price" />
-                    <span *ngIf="currencies.length && itemForm" class="font-8 text-muted">Default price: {{currencySymbol}}{{ (itemForm?.get('price').value || 0) | wsCurrency: currencyService.getCurrencyWithCode((itemForm?.get('currency').value || 'MYR')).rate: currencyService.getCurrencyWithCode(selectedCurrencyCode).rate | number: '1.2-2' }}</span>
+                    <span *ngIf="currencies.length && itemForm" class="font-8 text-muted">Default price: RM{{ (itemForm?.get('price').value || 0) | wsCurrency: 1: 1 | number: '1.2-2' }}</span>
                 </div>
-                <div class="px-1">
+                <!-- <div class="px-1">
                     <label class="mb-0 font-9">Discount (%):</label>
                     <input class="form-control form-control-sm" tabIndex="1" placeholder="Blank to use default discount" formControlName="discount" />
                     <span class="font-8 text-muted">Default discount: {{itemForm?.get('discount').value || '0'}}%</span>
-                </div>
+                </div> -->
                 <div *ngIf="false" class="col-sm-6 px-1">
                     <div class="ws-input">
                         <div class="input-group">

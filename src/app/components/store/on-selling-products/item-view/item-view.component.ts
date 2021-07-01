@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit } 
 import { ActivatedRoute, Router } from '@angular/router';
 import { environment } from '@environments/environment';
 import { Item } from '@objects/item';
-import { CurrencyService } from '@services/http/general/currency.service';
 import { SharedItemService } from '@services/shared/shared-item.service';
 import { SharedStoreService } from '@services/shared/shared-store.service';
 import { ViewType } from '@wstypes/view.type';
@@ -10,7 +9,6 @@ import { PriceHelper } from '@helpers/pricehelper/price.helper';
 import { ScreenHelper } from '@helpers/screenhelper/screen.helper';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { SharedNavbarService } from '@services/shared/shared-nav-bar.service';
 import { SharedCategoryService } from '@services/shared/shared-category.service';
 import { ScreenService } from '@services/general/screen.service';
 import * as _ from 'lodash';
@@ -28,8 +26,6 @@ export class ItemViewComponent implements OnInit {
   @Input() showCategory: boolean = false;
   param;
   store;
-  selectedCurrencyCode;
-  currencySymbol;
   display: ViewType = 'list';
   isMobileSize: boolean;
   environment = environment;
@@ -52,8 +48,7 @@ export class ItemViewComponent implements OnInit {
     private sharedStoreService: SharedStoreService,
     private ref: ChangeDetectorRef,
     private screenService: ScreenService,
-    private authOnSellingItemContributorService: AuthOnSellingItemContributorService,
-    public currencyService: CurrencyService
+    private authOnSellingItemContributorService: AuthOnSellingItemContributorService
   ) { 
   }
 
@@ -68,7 +63,6 @@ export class ItemViewComponent implements OnInit {
     .subscribe(result => {
       if(result) {
         this.store = result;
-        this.currencySymbol = this.currencyService.currencySymbols[this.store.currency];
       }
     });
     this.sharedItemService.displayItems.pipe(takeUntil(this.ngUnsubscribe))
@@ -76,7 +70,6 @@ export class ItemViewComponent implements OnInit {
         if (res) {
           this.displayItems = res;
           this.display = this.route.snapshot.queryParams['display'] || 'list';
-          PriceHelper.getDisplayPrice(this.displayItems, PriceHelper.currencies, PriceHelper.rate);
           this.ref.detectChanges();
         }
       })
@@ -95,12 +88,6 @@ export class ItemViewComponent implements OnInit {
     this.screenService.isMobileSize.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       this.isMobileSize = result;
     });
-    this.currencyService.selectedCurrency
-    .pipe(takeUntil(this.ngUnsubscribe))
-    .subscribe(result => {
-      this.selectedCurrencyCode = result;
-    });
-    
     this.sharedItemService.shownColumns.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       this.columns = result;
       this.ref.detectChanges();

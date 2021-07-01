@@ -166,17 +166,6 @@ export class ModifyOnSellingItemModalComponent extends WsModalComponent implemen
     this.selectedItemType = event;
     this.extraItemPrice = this.selectedItemType.price || 0;
   }
-  private getPriceAfterDiscount(price, discount) {
-    let _discount = 0;
-    let _price = 0;
-    if (discount) {
-      _discount = discount;
-    }
-    if (price) {
-      _price = price;
-    }
-    return _price * (100 - _discount)/ 100;
-  }
   searchItemValueChange = _.debounce((event) => {
     if (this.open) {
       this.page = 1;
@@ -198,6 +187,10 @@ export class ModifyOnSellingItemModalComponent extends WsModalComponent implemen
     this.selectedGroup = group;
   }
   onAddSubItemGroupClickedCallback() {
+    if (this.onSellingItem.subItemGroups.length > 9) {
+      WsToastService.toastSubject.next({ content: 'Currently only support max 10 groups!', type: 'danger'});
+      return ;
+    }
     this.onSellingItem.subItemGroups.push({
       name: '',
       isMultiSelect: false,
@@ -215,13 +208,17 @@ export class ModifyOnSellingItemModalComponent extends WsModalComponent implemen
     this.itemTypes = [
       {
         name: '',
-        price: this.getPriceAfterDiscount(this.selectedSubItem.price, this.selectedSubItem.discount)
+        price: this.selectedSubItem.price
       },
       ...this.selectedSubItem.types];
     this.selectedItemType = this.itemTypes[0];
     this.extraItemPrice = this.itemTypes[0].price;
   }
   addSubItem() {
+    if (this.selectedGroup.subItems.length > 14) {
+      WsToastService.toastSubject.next({ content: 'Currently only support max 15 items in a group!', type: 'danger'});
+      return ;
+    }
     this.selectedGroup.subItems.push({
       _id: this.selectedSubItem._id,
       name: this.selectedSubItem.name + (this.selectedItemType && this.selectedItemType?.name ? ' - ' + this.selectedItemType?.name : ''),

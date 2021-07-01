@@ -79,7 +79,6 @@ export class ItemUrl {
     static getItemWithSellerByIdUrl = URL.ITEM_URL + '/item-with-seller';
     static getAllItemsByStoreIdUrl = URL.ITEM_URL + '/public/all';
     static getNewItemsByStoreIdUrl = URL.ITEM_URL + '/public/new';
-    static getDiscountItemsByStoreIdUrl = URL.ITEM_URL + '/public/discount';
     static getTodaySpecialItemsByStoreIdUrl = URL.ITEM_URL + '/public/todayspecial';
     static getItemsByCategoryIdUrl = URL.ITEM_URL + '/public';
 }
@@ -163,14 +162,12 @@ export class AuthStoreContributorUrl {
 export class AuthItemContributorUrl {
     static markAsTodaySpecialUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/markastodayspecial/items';
     static unmarkTodaySpecialUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/unmarktodayspecial/items';
-    static markAsOfferUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/markasoffer/items';
-    static unmarkOfferUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/unmarkoffer/items';
     static getItemById = URL.AUTH_ITEM_CONTRIBUTOR_URL + '';
     static getItemsByCategoryIdUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/items-by-categoryid';
     static getAuthenticatedAllItemsByStoreIdUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/all';
     static getAuthenticatedNewItemsByStoreIdUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/new';
     static getAuthenticatedTodaySpecialItemsByStoreIdUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/todayspecial';
-    static getAuthenticatedDiscountItemsByStoreIdUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/discount';
+    // static getAuthenticatedDiscountItemsByStoreIdUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/discount';
     static getAuthenticatedPublishedItemCategoryByStoreIdUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/published';
     static getAuthenticatedUnpublishedItemCategoryByStoreIdUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/unpublished';
     static getAuthenticatedUncategorizedItemCategoryByStoreIdUrl = URL.AUTH_ITEM_CONTRIBUTOR_URL + '/uncategorized';

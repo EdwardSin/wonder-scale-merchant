@@ -4,17 +4,14 @@ import { WsFormBuilder } from '@builders/wsformbuilder';
 import { ColorService } from '@services/general/color.service';
 import { environment } from '@environments/environment';
 import { Subject, from, forkJoin, of } from 'rxjs';
-import { takeUntil, finalize, mergeMap, map, tap } from 'rxjs/operators';
+import { takeUntil, finalize, mergeMap, map } from 'rxjs/operators';
 import { ImageHelper } from '@helpers/imagehelper/image.helper';
 import { WsToastService } from '@elements/ws-toast/ws-toast.service';
 import { moveItemInArray, CdkDragDrop } from '@angular/cdk/drag-drop';
 import { AuthItemContributorService } from '@services/http/auth-store/contributor/auth-item-contributor.service';
 import { WsLoading } from '@elements/ws-loading/ws-loading';
-import { Router } from '@angular/router';
 import { Item } from '@objects/item';
 import * as _ from 'lodash';
-import { SharedCategoryService } from '@services/shared/shared-category.service';
-import { CurrencyService } from '@services/http/general/currency.service';
 import { SharedStoreService } from '@services/shared/shared-store.service';
 import { UploadHelper } from '@helpers/uploadhelper/upload.helper';
 
@@ -32,36 +29,18 @@ export class ModifyItemTypeComponent implements OnInit {
   itemTypesForm: FormGroup;
   environment = environment;
   colors = [];
-  currencySymbol = '';
-  currencies = [];
-  selectedCurrencyCode = 'MYR';
   itemTypeLoading: WsLoading = new WsLoading;
   loading: WsLoading = new WsLoading;
   private ngUnsubscribe: Subject<any> = new Subject;
   constructor(
     private uploadHelper: UploadHelper,
     private authItemContributorService: AuthItemContributorService,
-    public currencyService: CurrencyService,
-    private sharedStoreService: SharedStoreService,
     private colorService: ColorService) {  
       this.loading.start();
       this.itemTypesForm = WsFormBuilder.createItemTypesGroup();
       this.colors = this.colorService.colors;
   }
   ngOnInit(): void {
-    this.sharedStoreService.store.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
-      if (result) {
-        this.currencySymbol = this.currencyService.currencySymbols[result.currency];
-      }
-    });
-    this.currencyService.selectedCurrency
-    .pipe(takeUntil(this.ngUnsubscribe))
-    .subscribe(result => {
-      this.selectedCurrencyCode = result;
-    });
-    this.currencyService.currenciesBehaviourSubject.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
-      this.currencies = result;
-    });
     this.validateItemTypesForm.emit(this.validateBasicForm.bind(this));
     this.onSaveClick.emit(this.editItemTypes.bind(this));
   }
@@ -209,7 +188,7 @@ export class ModifyItemTypeComponent implements OnInit {
       let formGroup = controls[i];
       let name = formGroup.get('name');
       let price = formGroup.get('price');
-      let discount = formGroup.get('discount');
+      // let discount = formGroup.get('discount');
       let weight = formGroup.get('weight');
       let quantity = formGroup.get('quantity');
       let priceRegex = /^\d*(?:\.\d{1,2})?$/;
@@ -224,10 +203,10 @@ export class ModifyItemTypeComponent implements OnInit {
         WsToastService.toastSubject.next({ content: 'Type ' + currentIndex + ' - price is invalid!', type: 'danger' });
         return false;
       }
-      else if (discount.value && (!priceRegex.test(discount.value) || +discount.value > 100)) {
-        WsToastService.toastSubject.next({ content: 'Type ' + currentIndex + ' - discount is invalid!', type: 'danger' });
-        return false;
-      }
+      // else if (discount.value && (!priceRegex.test(discount.value) || +discount.value > 100)) {
+      //   WsToastService.toastSubject.next({ content: 'Type ' + currentIndex + ' - discount is invalid!', type: 'danger' });
+      //   return false;
+      // }
       else if (weight.value && !priceRegex.test(weight.value)) {
         WsToastService.toastSubject.next({ content: 'Type ' + currentIndex + ' - weight is invalid!', type: 'danger' });
         return false;

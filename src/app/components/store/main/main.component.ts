@@ -5,7 +5,6 @@ import { Constants } from '@constants/constants';
 import { Role } from '@enum/Role.enum';
 import { ContributorController } from '@objects/contributor.controller';
 import { AuthStoreContributorService } from '@services/http/auth-store/contributor/auth-store-contributor.service';
-import { CurrencyService } from '@services/http/general/currency.service';
 import { StoreAuthorizationService } from '@services/http/general/store-authorization.service';
 import { SharedStoreService } from '@services/shared/shared-store.service';
 import { SharedUserService } from '@services/shared/shared-user.service';
@@ -42,7 +41,6 @@ export class MainComponent implements OnInit {
   private ngUnsubscribe: Subject<any> = new Subject;
   constructor(private router: Router, private route: ActivatedRoute,
     private authStoreContributorService: AuthStoreContributorService,
-    private currencyService: CurrencyService,
     private sharedStoreService: SharedStoreService,
     private sharedUserService: SharedUserService,
     private storeAuthorizationService: StoreAuthorizationService,
@@ -122,25 +120,6 @@ export class MainComponent implements OnInit {
     this.authInvoiceConfigurationContributorService.isInvoiceEnabled.pipe(takeUntil(this.ngUnsubscribe)).subscribe(res => {
       this.isInvoiceEnabled = res;
     });
-    this.currencyService.currencyRate
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(result => {
-        if (result) {
-          PriceHelper.currencies = result;
-          this.currencyService.selectedCurrency
-            .pipe(takeUntil(this.ngUnsubscribe))
-            .subscribe(result => {
-              if (result) {
-                PriceHelper.currencySymbols = Constants.currencySymbols;
-                PriceHelper.targetCurrency = result;
-                PriceHelper.rate = PriceHelper.currencies[PriceHelper.targetCurrency];
-                PriceHelper.symbol = PriceHelper.currencySymbols[PriceHelper.targetCurrency];
-                this.ref.detectChanges();
-              }
-            });
-          this.ref.detectChanges();
-        }
-      });
   }
   refreshContributors() {
     this.authStoreContributorService.getContributors().pipe(takeUntil(this.ngUnsubscribe))

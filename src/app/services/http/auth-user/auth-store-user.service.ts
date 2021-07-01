@@ -4,7 +4,6 @@ import { AuthStoreUserUrl } from '@enum/url.enum';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { SharedStoreService } from '../../shared/shared-store.service';
-import { CurrencyService } from '../general/currency.service';
 import { environment } from '@environments/environment';
 
 @Injectable({
