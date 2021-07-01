@@ -90,11 +90,7 @@ export class ItemControllerComponent implements OnInit {
     this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe(queryParams => {
       this.searchController.searchKeyword = queryParams['s_keyword'];
       if(queryParams['modal']) {
-        if (queryParams['modal'] == 'modify-item') {
-          this.createLazyModifyItemComponent();
-        } else if (queryParams['modal'] == 'modify-menu-item') {
-          this.createLazyModifyMenuItemComponent();
-        }
+        this.createLazyModifyItemComponent();
       } else {
         this.viewContainerRef.clear();
       }
@@ -140,12 +136,6 @@ export class ItemControllerComponent implements OnInit {
     await import ('../../../../modules/store/products/modify-item/modify-item.module');
     const { ModifyItemComponent } = await import('@components/store/products/modify-item/modify-item.component');
     this.viewContainerRef.createComponent(this.cfr.resolveComponentFactory(ModifyItemComponent));
-  }
-  async createLazyModifyMenuItemComponent() {
-    this.viewContainerRef.clear();
-    await import ('../../../../modules/store/products/modify-menu-item/modify-menu-item.module');
-    const { ModifyMenuItemComponent } = await import('@components/store/products/modify-menu-item/modify-menu-item.component');
-    this.viewContainerRef.createComponent(this.cfr.resolveComponentFactory(ModifyMenuItemComponent));
   }
   updateMessage() {
     this.authStoreContributorService
@@ -225,36 +215,6 @@ export class ItemControllerComponent implements OnInit {
       .subscribe(results => {
         this.sharedCategoryService.refreshCategories(() => {
           WsToastService.toastSubject.next({ content: "Unmark from today special!", type: 'success' });
-        })
-      }, (err) => {
-        WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
-      });
-  }
-  markAsOffer() {
-    this.previousEditedItems = [...this.editItems];
-    this.authItemContributorService.markAsOffer(this.editItems)
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(results => {
-        let items = this.editItems.filter(item => !item.discount);
-        this.sharedCategoryService.refreshCategories(() => {
-          WsToastService.toastSubject.next({ content: "Mark as discount!", type: 'success' });
-          if (items.length > 1) {
-            WsToastService.toastSubject.next({ content: items.length + " items don't have discount value!", type: 'warning' });
-          } else if (items.length == 1) {
-            WsToastService.toastSubject.next({ content: "Item doesn't have discount value!", type: 'warning' });
-          }
-        })
-      }, (err) => {
-        WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
-      });
-  }
-  unmarkOffer() {
-    this.previousEditedItems = [...this.editItems];
-    this.authItemContributorService.unmarkOffer(this.editItems)
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(results => {
-        this.sharedCategoryService.refreshCategories(() => {
-          WsToastService.toastSubject.next({ content: "Unmark from offer!", type: 'success' });
         })
       }, (err) => {
         WsToastService.toastSubject.next({ content: err.error, type: 'danger' });

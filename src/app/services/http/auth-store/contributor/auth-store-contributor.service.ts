@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { AuthStoreContributorUrl } from '@enum/url.enum';
 import { Store } from '@objects/store';
 import { AccessTokenService } from '@services/http/auth-store/access-token.service';
-import { CurrencyService } from '@services/http/general/currency.service';
 import { SharedStoreService } from '@services/shared/shared-store.service';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
@@ -15,15 +14,13 @@ export class AuthStoreContributorService {
 
   constructor(private http: HttpClient,
     private accessTokenService: AccessTokenService,
-    private sharedStoreService: SharedStoreService,
-    private currencyService: CurrencyService) { }
+    private sharedStoreService: SharedStoreService) { }
   getContributors() {
     return this.http.get(AuthStoreContributorUrl.getContributorsUrl, this.accessTokenService.getAccessToken());
   }
   getStoreByUsername(username): Observable<Store> {
     return this.http.get<Store>(AuthStoreContributorUrl.getStoreByUsernameUrl + username)
     .pipe(tap(store => {
-      this.currencyService.selectedCurrency.next(store['currency']);
       this.sharedStoreService.store.next(store);
     }));
   }

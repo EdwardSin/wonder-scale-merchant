@@ -7,15 +7,15 @@ export class PriceHelper {
   public static symbol;
   public static rate;
 
-  public static getDisplayPrice(items: Array<any>, currencies, rate: number) {
-    for (let item of items) {
-      if (item['isOffer']) {
-        item.discount_price = this.priceAfterDiscount(item['price'], item['discount']);
-      }
-      item.display_price = +(this.getDisplayCurrencyPrice(item.price, currencies[item.currency], rate).toFixed(2));
-      item.display_discount_price = item.display_price - (+(this.getDisplayCurrencyPrice(this.displayPriceAfterDiscount(item.price, item.discount), currencies[item.currency], rate).toFixed(2)));
-    }
-  }
+  // public static getDisplayPrice(items: Array<any>, currencies, rate: number) {
+  //   for (let item of items) {
+  //     // if (item['isOffer']) {
+  //     //   item.discount_price = this.priceAfterDiscount(item['price'], item['discount']);
+  //     // }
+  //     item.display_price = +(this.getDisplayCurrencyPrice(item.price, currencies[item.currency], rate).toFixed(2));
+  //     item.display_discount_price = item.display_price - (+(this.getDisplayCurrencyPrice(this.displayPriceAfterDiscount(item.price, item.discount), currencies[item.currency], rate).toFixed(2)));
+  //   }
+  // }
   private static getDisplayCurrencyPrice(price, currency, rate): number{
     return (price / currency) * rate;
   }

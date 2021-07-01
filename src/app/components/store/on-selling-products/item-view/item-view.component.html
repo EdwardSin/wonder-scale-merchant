@@ -40,9 +40,6 @@
                 <mat-checkbox (change)="triggerStatusItem('todaySpecial')" [checked]="statusItems.includes('todaySpecial')" [color]="'primary'" class="mr-2 d-inline-block" style="vertical-align: text-bottom"></mat-checkbox>Today Special
               </button>
               <button class="dropdown-item" (click)="$event.stopPropagation()">
-                <mat-checkbox (change)="triggerStatusItem('discount')" [checked]="statusItems.includes('discount')" [color]="'primary'" class="mr-2 d-inline-block" style="vertical-align: text-bottom"></mat-checkbox>Discount
-              </button>
-              <button class="dropdown-item" (click)="$event.stopPropagation()">
                 <mat-checkbox (change)="triggerStatusItem('categorized')" [checked]="statusItems.includes('categorized')" [color]="'primary'" class="mr-2 d-inline-block" style="vertical-align: text-bottom"></mat-checkbox>Categorized
               </button>
             </div>
@@ -50,7 +47,7 @@
       </th>
       <th *ngIf="columns.includes('sku')" width="200px">SKU</th>
       <th *ngIf="columns.includes('name')">Name</th>
-      <th *ngIf="columns.includes('price')" width="200px">Price({{ currencySymbol }})</th>
+      <th *ngIf="columns.includes('price')" width="200px">Price(RM)</th>
       <th width="120px">Actions</th>
       <tbody>
         <tr *ngFor="let item of displayItems; let i = index">
@@ -58,8 +55,8 @@
             <mat-checkbox [color]="'primary'" [checked]="isInclude(item)" (change)="addToItemList(item)"></mat-checkbox>
           </td>
           <td *ngIf="columns.includes('status')">
-            <span *ngIf="statusItems.includes('new')" [class.badge-default]="!item?.isEntityNew" class="badge badge-warning default mr-1" style="padding-top: 5px" title="New">N</span>
-            <span *ngIf="store?.type == 'restaurant' && statusItems.includes('todaySpecial')" [class.badge-default]="!item?.isTodaySpecial" class="badge badge-primary default mr-1" style="padding-top: 5px" title="Today Special">T</span>
+            <span *ngIf="statusItems.includes('new')" [class.badge-default]="!item?.isEntityNew" class="badge badge-warning default mr-1 py-1" title="New">N</span>
+            <span *ngIf="store?.type == 'restaurant' && statusItems.includes('todaySpecial')" [class.badge-default]="!item?.isTodaySpecial" class="badge badge-primary default mr-1 py-1" title="Today Special">T</span>
           </td>
           <td *ngIf="columns.includes('sku')">{{ item?.item?.refId}}</td>
           <td *ngIf="columns.includes('name')">

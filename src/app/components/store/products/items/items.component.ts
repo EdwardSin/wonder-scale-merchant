@@ -129,7 +129,6 @@ export class ItemsComponent implements OnInit {
         this.displayItems = result['result'];
         this.sharedItemService.displayItems.next(this.displayItems);
         this.sharedCategoryService.numberOfCurrentTotalItems.next(result['total']);
-        PriceHelper.getDisplayPrice(this.displayItems, PriceHelper.currencies, PriceHelper.rate);
         this.sharedLoadingService.screenLoading.next({ loading: false });
         this.sharedCategoryService.categoryRefresh.next({refresh: false, loading: false});
       })
@@ -146,7 +145,6 @@ export class ItemsComponent implements OnInit {
         this.displayItems = result['result'];
         this.sharedItemService.displayItems.next(this.displayItems);
         this.sharedCategoryService.numberOfCurrentTotalItems.next(result['total']);
-        PriceHelper.getDisplayPrice(this.displayItems, PriceHelper.currencies, PriceHelper.rate);
         // this.displayBanner = this.isBannerShow();
         this.sharedLoadingService.screenLoading.next({ loading: false });
         this.sharedCategoryService.categoryRefresh.next({refresh: false, loading: false});

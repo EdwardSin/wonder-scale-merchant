@@ -41,12 +41,6 @@ export class OrderHelper {
             case "related":
                 list = itemList;
                 break;
-            case "price_low_to_high":
-                list = _.sortBy(itemList, ["display_discount_price"]);
-                break;
-            case "price_high_to_low":
-                list = _.sortBy(itemList, ["display_discount_price"]).reverse();
-                break;
             case "alphabet":
                 list = _.sortBy(itemList, x => x["name"].toLowerCase());
                 break;

@@ -48,7 +48,7 @@ export class MenuItemComponent implements OnInit {
         this.onSellingItem.quantity = 1;
       }
       this.item = this.onSellingItem.item as Item;
-      this.item.isDiscountExisting = this.item.isOffer && (this.item.types.find(type => type.discount > 0) != null || this.item.discount > 0);
+      // this.item.isDiscountExisting = this.item.isOffer && (this.item.types.find(type => type.discount > 0) != null || this.item.discount > 0);
       this.images = _.union(_.flattenDeep([this.item.profileImages, this.item?.types?.map(type => type.images), (this.item.descriptionImages || [])]));
       this.images = _.filter(this.images, image => !_.isEmpty(image));
       this.imageIndex = this.item.profileImageIndex > -1 ? this.item.profileImageIndex : 0;
@@ -76,7 +76,7 @@ export class MenuItemComponent implements OnInit {
     cartItem.name = item?.name;
     cartItem.price = item?.price;
     cartItem.quantity = this.onSellingItem.quantity;
-    cartItem.discount = item?.isOffer ? item.discount : 0;
+    cartItem.discount = 0;
     if (this.onSellingItem?.subItemGroups?.length) {
       cartItem.subItems = _.flattenDeep(this.onSellingItem?.subItemGroups.map(group => {
         return _.cloneDeep(group.subItems);

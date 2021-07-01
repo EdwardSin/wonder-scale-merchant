@@ -92,15 +92,6 @@ export class ItemControllerComponent implements OnInit {
     this.searchController.searchKeyword = this.route.snapshot['queryParams']['s_keyword'];
     this.route.queryParams.pipe(takeUntil(this.ngUnsubscribe)).subscribe(queryParams => {
       this.searchController.searchKeyword = queryParams['s_keyword'];
-      // if(queryParams['modal']) {
-      //   if (queryParams['modal'] == 'modify-item') {
-      //     this.createLazyModifyItemComponent();
-      //   } else if (queryParams['modal'] == 'modify-menu-item') {
-      //     this.createLazyModifyMenuItemComponent();
-      //   }
-      // } else {
-      //   this.viewContainerRef.clear();
-      // }
     })
     this.sharedStoreService.store.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
@@ -138,18 +129,6 @@ export class ItemControllerComponent implements OnInit {
       this.ref.detectChanges();
     })
   }
-  // async createLazyModifyItemComponent() {
-  //   this.viewContainerRef.clear();
-  //   await import ('../../../../modules/store/products/modify-item/modify-item.module');
-  //   const { ModifyItemComponent } = await import('@components/store/products/modify-item/modify-item.component');
-  //   this.viewContainerRef.createComponent(this.cfr.resolveComponentFactory(ModifyItemComponent));
-  // }
-  // async createLazyModifyMenuItemComponent() {
-  //   this.viewContainerRef.clear();
-  //   await import ('../../../../modules/store/products/modify-menu-item/modify-menu-item.module');
-  //   const { ModifyMenuItemComponent } = await import('@components/store/products/modify-menu-item/modify-menu-item.component');
-  //   this.viewContainerRef.createComponent(this.cfr.resolveComponentFactory(ModifyMenuItemComponent));
-  // }
   updateMessage() {
     this.authStoreContributorService
       .updateNewItemMessage({message: this.message})

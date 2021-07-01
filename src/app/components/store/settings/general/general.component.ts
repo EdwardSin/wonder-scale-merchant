@@ -5,7 +5,6 @@ import { DocumentHelper } from '@helpers/documenthelper/document.helper';
 import { Store } from '@objects/store';
 import { AuthStoreAdminService } from '@services/http/auth-store/admin/auth-store-admin.service';
 import { AuthStoreContributorService } from '@services/http/auth-store/contributor/auth-store-contributor.service';
-import { CurrencyService } from '@services/http/general/currency.service';
 import { SharedStoreService } from '@services/shared/shared-store.service';
 import { Subject } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
@@ -29,8 +28,7 @@ export class GeneralComponent implements OnInit {
   constructor(
     private authStoreContributorService: AuthStoreContributorService,
     private authStoreAdminService: AuthStoreAdminService,
-    private sharedStoreService: SharedStoreService,
-    public currencyService: CurrencyService,) { }
+    private sharedStoreService: SharedStoreService) { }
 
   ngOnInit(): void {
     this.username = this.sharedStoreService.storeUsername;
@@ -47,18 +45,18 @@ export class GeneralComponent implements OnInit {
     let obj = {
       currency: this.selectedCurrency
     }
-    if (this.isGeneralValidated(this.selectedCurrency)) {
-      this.isEditingLoading.start();
-      this.authStoreContributorService.editGeneral(obj).pipe(takeUntil(this.ngUnsubscribe), finalize((() => this.isEditingLoading.stop())))
-        .subscribe(result => {
-          WsToastService.toastSubject.next({ content: "Settings are updated!", type: 'success' });
-          this.store.currency = this.selectedCurrency;
-          this.currencyService.selectedCurrency.next(this.store.currency);
-          this.sharedStoreService.store.next(this.store);
-        }, err => {
-          WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
-        });
-    }
+    // if (this.isGeneralValidated(this.selectedCurrency)) {
+    //   this.isEditingLoading.start();
+    //   this.authStoreContributorService.editGeneral(obj).pipe(takeUntil(this.ngUnsubscribe), finalize((() => this.isEditingLoading.stop())))
+    //     .subscribe(result => {
+    //       WsToastService.toastSubject.next({ content: "Settings are updated!", type: 'success' });
+    //       this.store.currency = this.selectedCurrency;
+    //       this.currencyService.selectedCurrency.next(this.store.currency);
+    //       this.sharedStoreService.store.next(this.store);
+    //     }, err => {
+    //       WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
+    //     });
+    // }
   }
   isGeneralValidated(currency) {
     if(!currency) {
