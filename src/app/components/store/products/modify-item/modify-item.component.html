@@ -62,10 +62,8 @@
                                         <div class="input-group">
                                             <div class="input-group-prepend border-right-0 pr-0 ws-bg-clear">
                                                 <mat-select class="form-control form-control-sm border-right-0" style="width: 100px;" formControlName="currency">
-                                                    <ng-container *ngFor="let currency of currencies">
-                                                        <mat-option *ngIf="currency.name == 'MYR' || currentItem?.currency == currency.name" [value]="currency.name">
-                                                            {{currency.name + " (" + currency.symbol + ")"}}</mat-option>
-                                                    </ng-container>
+                                                    <mat-option [value]="'MYR'">
+                                                        MYR (RM)</mat-option>
                                                 </mat-select>
                                             </div>
                                             <input name="price" autocomplete="off" class="form-control form-control-sm p-1" lang="en-150" placeholder="0.00" formControlName="price" />

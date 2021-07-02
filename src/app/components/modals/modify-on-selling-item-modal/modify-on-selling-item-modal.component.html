@@ -94,19 +94,19 @@
             (open)="openItemChange($event)"
             class="d-block form-control form-control-sm mb-2">
         </ws-search-select>
-        <label id="itemtype" class="mb-0 font-9">Item Type: </label>
-        <mat-select [disabled]="!selectedSubItem"
+        <label *ngIf="itemTypes?.length" id="itemtype" class="mb-0 font-9">Item Type: </label>
+        <mat-select *ngIf="itemTypes?.length" [disabled]="!selectedSubItem"
             for="itemtype"
             class="form-control form-control-sm mb-2"
             (selectionChange)="selectItemType($event.value)"
             [value]="selectedItemType">
             <mat-option
                 [value]="itemType"
-                *ngFor="let itemType of itemTypes">{{itemType.name || 'Default'}}
+                *ngFor="let itemType of itemTypes">{{itemType.name}}
             </mat-option>
         </mat-select>
         <label id="itemtype" class="mb-0 font-9">Price: </label>
-        <input name="extraItemPrice" type="number" class="form-control form-control-sm mb-2" [(ngModel)]="extraItemPrice" />
+        <input name="extraItemPrice" type="number" class="form-control form-control-sm mb-2" (change)="onExtraItemPriceChange(event)" [(ngModel)]="extraItemPrice" />
         <div class="float-right">
             <button class="btn btn-sm btn-controller mr-2" (click)="addSubItem()">Add</button>
             <button class="btn btn-sm btn-controller" (click)="isSubItemOpened = false">Cancel</button>

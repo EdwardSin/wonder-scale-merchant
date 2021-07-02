@@ -4,8 +4,6 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { WsFormBuilder } from '@builders/wsformbuilder';
 import { WsModalComponent } from '@elements/ws-modal/ws-modal.component';
 import { WsToastService } from '@elements/ws-toast/ws-toast.service';
-import { AuthCategoryContributorService } from '@services/http/auth-store/contributor/auth-category-contributor.service';
-import { AuthItemContributorService } from '@services/http/auth-store/contributor/auth-item-contributor.service';
 import { Subject } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
 import * as _ from 'lodash';
@@ -17,7 +15,10 @@ import { WsLoading } from '@elements/ws-loading/ws-loading';
 import { DateTimeHelper } from '@helpers/datetimehelper/datetime.helper';
 import { AuthDeliveryContributorService } from '@services/http/auth-store/contributor/auth-delivery-contributor.service';
 import { Delivery } from '@objects/delivery';
-import * as moment from 'moment';
+import { AuthOnSellingCategoryContributorService } from '@services/http/auth-store/contributor/auth-on-selling-category-contributor.service';
+import { AuthOnSellingItemContributorService } from '@services/http/auth-store/contributor/auth-on-selling-item-contributor.service';
+import { CartItem } from '@objects/cart-item';
+import { Cashier } from '@objects/cashier';
 
 @Component({
   selector: 'modify-invoice-modal',
@@ -52,9 +53,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
   form: FormGroup;
   categories = [];
   items = [];
-  inListItems = [];
   promotions = [];
-  itemTypes = [];
   deliveries: Array<Delivery> = [];
   selectedTab = new FormControl(0);
   selectedItem = null;
@@ -67,17 +66,18 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
   page: number = 1;
   open: boolean;
   selectedPromotion;
-  defaultPrice: number = 0;
   tempInvoice: Invoice = null;
   _previousStatus: boolean;
   isCreateEmptyInvoiceModalOpened: boolean;
   modifyLoading: WsLoading = new WsLoading;
   itemLoading: WsLoading = new WsLoading;
+  cartItems: Array<CartItem> = [];
+  cashier: Cashier = new Cashier();
   private ngUnsubscribe: Subject<any> = new Subject;
   
   constructor(private authDeliveryContributorService: AuthDeliveryContributorService, 
-    private authCategoryContributorService: AuthCategoryContributorService,
-    private authItemContributorService: AuthItemContributorService,
+    private authOnSellingCategoryContributorService: AuthOnSellingCategoryContributorService,
+    private authOnSellingItemContributorService: AuthOnSellingItemContributorService,
     private authInvoiceContributorService: AuthInvoiceContributorService,
     private authPromotionContributorService: AuthPromotionContributorService) {
     super();
@@ -96,7 +96,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
         this.setupItem();
       } else if (!this.tempInvoice) {
         this.form = WsFormBuilder.createInvoiceForm();
-        this.inListItems = [];
+        this.cartItems = [];
       }
     }
   }
@@ -115,7 +115,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
       if (!this.isEditable()) {
         this.disableAllFields()
       }
-      this.inListItems = this.item.items;
+      this.cartItems = this.item.items;
       if (this.item.delivery) {
         if (this.item.delivery.fee !== null) {
           this.form.patchValue({
@@ -180,40 +180,11 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
       country: 'MYS',
       deliveryOption: 'delivery'
     });
-    this.inListItems = [];
+    this.cartItems = [];
     this.notifyCalculation();
   }
-  addItem() {
-    if (!this.form.controls['itemName'].value || !this.form.controls['itemName'].value.trim()) {
-      WsToastService.toastSubject.next({ content: 'Please select an item!', type: 'danger'});
-      return;
-    }
-    if (this.form.controls['itemPrice'].value == undefined || 
-        this.form.controls['itemPrice'].value == null || 
-        ('' + this.form.controls['itemPrice'].value).trim() == '') {
-      WsToastService.toastSubject.next({ content: 'Please enter the price!', type: 'danger'});
-      return;
-    }
-    if (this.form.controls['itemPrice'].errors && this.form.controls['itemPrice'].errors.pattern) {
-      WsToastService.toastSubject.next({ content: 'Please enter a valid price!', type: 'danger'});
-      return;
-    }
-    if (this.form.controls['itemQuantity'].value == undefined || 
-        this.form.controls['itemQuantity'].value == null || 
-        ('' + this.form.controls['itemQuantity'].value).trim() == '') {
-      WsToastService.toastSubject.next({ content: 'Please enter the quantity!', type: 'danger'});
-      return;
-    }
-    if (this.form.controls['itemQuantity'].errors && this.form.controls['itemQuantity'].errors.pattern) {
-      WsToastService.toastSubject.next({ content: 'Please enter a valid quantity!', type: 'danger'});
-      return;
-    }
-    this.inListItems.push({
-      name: this.form.controls['itemName'].value,
-      type: this.form.controls['itemType'].value ? this.form.controls['itemType'].value.name : 'Default',
-      quantity: +this.form.controls['itemQuantity'].value || 1,
-      price: +this.form.controls['itemPrice'].value,
-    });
+  addItem(item) {
+    this.cartItems.push(item);
     this.notifyCalculation();
   }
   isEditable() {
@@ -224,36 +195,32 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
           this.item.status !== 'rejected';
   }
   removeItem(item) {
-    let index = this.inListItems.indexOf(item);
+    let index = this.cartItems.indexOf(item);
     if (index > -1) {
-      this.inListItems.splice(index, 1);
+      this.cartItems.splice(index, 1);
       this.notifyCalculation();
     }
   }
+  totalOfItem(item) {
+    return item.quantity * item.price + _.sumBy(item.subItems, function (subItem) {
+      return subItem?.quantity * subItem?.price * item?.quantity;
+    });
+  }
   notifyCalculation() {
-    let discountValue = 0;
     let promotionId = this.form.controls['promotion'].value;
-    let numberOfPromotion = this.form.controls['numberOfPromotion'].value;
     let promotion = this.promotions.find(promotion => promotion._id == promotionId);
     this.selectedPromotion = promotion;
-    this.delivery = this.isCalculateDeliveryFee() ? +this.form.controls['deliveryFee'].value: 0;
-    this.subtotal = _.sumBy(this.inListItems, function (x) {
-      return x.price * x.quantity;
-    });
-    
-    if (promotion) {
-      if (promotion.option == 'percentage') {
-        discountValue = promotion.value;
-        this.discount = this.subtotal * discountValue / 100;
-      }
-      if (promotion.option == 'fixed_amount') {
-        discountValue = promotion.value;
-        this.discount = discountValue * numberOfPromotion;
-      }
+    if (this.selectedPromotion) {
+      this.cashier.promotions = [{...this.selectedPromotion, quantity: this.form.value.numberOfPromotion || 1}];
     } else {
-      this.discount = 0;
+      this.cashier.promotions = [];
     }
-    this.total = this.delivery + this.subtotal - this.discount;
+    this.cashier.cartItems = <CartItem[]>this.cartItems;
+    this.cashier.delivery = this.isCalculateDeliveryFee() ? +this.form.controls['deliveryFee'].value: 0;
+    this.discount = this.cashier.getPromotionDiscount();
+    this.delivery = this.cashier.getDelivery();
+    this.subtotal = this.cashier.getSubtotal();
+    this.total = this.cashier.getTotal();
   }
   isCalculateDeliveryFee() {
     let deliveryFee = this.form.controls['deliveryFee'].value;
@@ -263,7 +230,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
     return false;
   }
   getCatalogue() {
-    this.authCategoryContributorService.getAuthenticatedCategoriesByStoreId().pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+    this.authOnSellingCategoryContributorService.getAuthenticatedCategoriesByStoreId().pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       if (result) {
         this.categories = result['result'];
       }
@@ -275,35 +242,23 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
     }
     this.categoryId = categoryId;
     this.itemLoading.start();
-    if (categoryId == 'uncategorized') {
-      this.authItemContributorService.getAuthenticatedUncategorizedItemCategoryByStoreId({keyword: this.itemKeyword, page: this.page}).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.itemLoading.stop()))
-      .subscribe(result => {
+    if (categoryId) {
+      this.authOnSellingItemContributorService.getItemsByCategoryId(categoryId, this.itemKeyword, this.page, 'alphabet', false).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.itemLoading.stop())).subscribe(result => {
         if (result) {
           if (isNextPage) {
-            this.items = this.items.concat(result['result']);
+            this.items = this.items.concat(this.mapItems(result['result']));
           } else {
-            this.items = result['result'];
-          }
-        }
-      })
-    } else if (categoryId) {
-      this.authItemContributorService.getItemsByCategoryId(categoryId, this.itemKeyword, this.page, 'alphabet', false).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.itemLoading.stop())).subscribe(result => {
-        if (result) {
-          if (isNextPage) {
-            this.items = this.items.concat(result['result']);
-          } else {
-            this.items = result['result'];
+            this.items = this.mapItems(result['result']);
           }
         }
       });
-    }
-    else {
-      this.authItemContributorService.getAuthenticatedAllItemsByStoreId({keyword: this.itemKeyword, page: this.page}).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.itemLoading.stop())).subscribe(result => {
+    } else {
+      this.authOnSellingItemContributorService.getAuthenticatedAllItemsByStoreId({keyword: this.itemKeyword, page: this.page}).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.itemLoading.stop())).subscribe(result => {
         if (result) {
           if (isNextPage) {
-            this.items = this.items.concat(result['result']);
+            this.items = this.items.concat(this.mapItems(result['result']));
           } else {
-            this.items = result['result'];
+            this.items = this.mapItems(result['result']);
           }
         }
       })
@@ -323,6 +278,15 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
       this.getItems(this.categoryId);
     }
   }
+  mapItems(items) {
+    return items.map(item => {
+      return {
+        id: item._id,
+        name: item?.item?.name || '',
+        ...item
+      }
+    });
+  }
   searchItemValueChange = _.debounce((event) => {
     if (this.open) {
       this.page = 1;
@@ -332,40 +296,9 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
   }, 500);
   selectionChange(event) {
     this.selectedItem = event;
-    this.itemTypes = [
-      {
-        name: '',
-        price: this.getPriceAfterDiscount(this.selectedItem.price, this.selectedItem.discount)
-      },
-      ...this.selectedItem.types];
-    this.getItemType(this.selectedItem);
   }
-  getItemType(item) {
-    let priceAfterDiscount = this.getPriceAfterDiscount(item.price, item.discount);
-    this.selectedItem = item;
-    this.defaultPrice = priceAfterDiscount;
-    this.form.patchValue({
-      itemType: this.itemTypes[0],
-      itemName: item.name,
-      itemPrice: priceAfterDiscount.toFixed(2),
-      itemQuantity: 1
-    });
-  }
-  selectItemType(itemType) {
-    if (itemType) {
-      if (itemType.price) {
-        let priceAfterDiscount = this.getPriceAfterDiscount(itemType.price, itemType.discount);
-        this.form.patchValue({
-          itemPrice: priceAfterDiscount
-        });
-      } else if (itemType.amount !== undefined && itemType.incrementType !== undefined) {
-        let price = itemType.incrementType ? this.selectedItem.price + itemType.amount: this.selectedItem.price - itemType.amount;
-        let priceAfterDiscount = this.getPriceAfterDiscount(price, this.selectedItem.discount);
-        this.form.patchValue({
-          itemPrice: priceAfterDiscount
-        });
-      }
-    }
+  onPromotionChange() {
+    this.notifyCalculation();
   }
   onDeliveryChange(event) {
     if (event.value) {
@@ -419,17 +352,6 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
               (form.controls['phoneNumber'].value || form.controls['address'].value || form.controls['postcode'].value || form.controls['state'].value) && 
                 form.controls['recipientName'].value) ||
            (!form.controls['isCustomerSaved'].value && !(form.controls['phoneNumber'].value || form.controls['address'].value || form.controls['postcode'].value || form.controls['state'].value));
-  }
-  private getPriceAfterDiscount(price, discount) {
-    let _discount = 0;
-    let _price = 0;
-    if (discount) {
-      _discount = discount;
-    }
-    if (price) {
-      _price = price;
-    }
-    return _price * (100 - _discount)/ 100;
   }
   modifyItem() {
     let form = this.form;
@@ -491,7 +413,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
         etaHour: etaHour !== '' && etaHour > -1 && etaHour < 24 ? etaHour : null,
         etaMin: etaMin !== '' && etaMin > -1 && etaMin < 60 ? etaMin : null
       },
-      items: this.inListItems,
+      items: this.cartItems,
       remark: form.controls['remark'].value,
       status: form.controls['status'].value,
       paymentMethod: form.controls['paymentMethod'].value,
@@ -678,11 +600,6 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
     this.isOpened = true;
     this.isCloseIconDisplayed = false;
   }
-  setDefaultPrice() {
-    this.form.patchValue({
-      itemPrice: this.defaultPrice.toFixed(2)
-    });
-  }
   changeToCompletedStatus(event) {
     if (event.checked) {
       this._previousStatus = this.form.controls['status'].value;
@@ -697,39 +614,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
     }
   }
   drop(event: CdkDragDrop<string[]>) {
-    moveItemInArray(this.inListItems, event.previousIndex, event.currentIndex);
-  }
-  decrease() {
-    let quantity = this.form.value.itemQuantity || 1;
-    quantity--;
-    if (quantity < 1) {
-      quantity = 1;
-    }
-    this.form.patchValue({
-      itemQuantity: quantity
-    })
-  }
-  increase() {
-    let quantity = this.form.value.itemQuantity || 1;
-    quantity++;
-    if (quantity <= 999) {
-      this.form.patchValue({
-        itemQuantity: quantity
-      })
-    }
-  }
-  quantityChange() {
-    let quantity = this.form.value.itemQuantity;
-    if (quantity > 999) {
-      this.form.patchValue({
-        itemQuantity: 999
-      })
-    }
-    if (quantity < 1) {
-      this.form.patchValue({
-        itemQuantity: 1
-      })
-    }
+    moveItemInArray(this.cartItems, event.previousIndex, event.currentIndex);
   }
   promotionDecrease() {
     let numberOfPromotion = this.form.value.numberOfPromotion || 1;

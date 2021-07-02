@@ -31,7 +31,6 @@ export class ModifyItemComponent implements OnInit {
   store;
   currentItem;
   tempItem;
-  currencies = [];
   allProfileItems = [];
   allDescriptionItems = [];
   categories = [];

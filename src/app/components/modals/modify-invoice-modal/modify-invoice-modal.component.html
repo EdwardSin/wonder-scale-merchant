@@ -68,49 +68,35 @@
                         <label id="paymentMethod" class="mb-0 font-9">Catalogue:</label>
                         <mat-select class="form-control form-control-sm mb-2" [disabled]="!isEditable()" (selectionChange)="getItems($event.value)">
                             <mat-option [value]="category.id" *ngFor="let category of categories">{{ category?.name }}</mat-option>
-                            <mat-option [value]="'uncategorized'">Uncategorized</mat-option>
                         </mat-select>
                         <label id="itemtype" class="mb-0 font-9">Item: </label>
                         <ws-search-select for="itemtype" [items]="items" [loading]="itemLoading.isRunning()" (selectionChange)="selectionChange($event)" (searchValueChange)="searchItemValueChange($event)" (scroll)="getItems(categoryId, true)" (open)="openItemChange($event)" [class.disabled]="!isEditable()" class="d-block form-control form-control-sm mb-2"></ws-search-select>
-                        <label id="itemtype" class="mb-0 font-9">Item Type: </label>
-                        <mat-select for="itemtype" class="form-control form-control-sm mb-2" formControlName="itemType" (selectionChange)="selectItemType($event.value)">
-                            <mat-option [value]="itemType" *ngFor="let itemType of itemTypes">{{itemType.name || 'Default'}}</mat-option>
-                        </mat-select>
-                        <div class="row no-gutters mb-3">
-                            <div class="col pr-lg-2">
-                                <label id="price" class="mb-0 font-9">Price: </label>
-                                <div class="position-relative">
-                                    <a *ngIf="form.controls['itemType'].value" (click)="setDefaultPrice()" href="javascript:void(0)" class="position-absolute font-9" style="right: 8px; top: 5px; z-index: 99;">Set default</a>
-                                    <input for="price" class="form-control form-control-sm" style="padding-right: 5.25rem" formControlName="itemPrice" />
-                                </div>
-                            </div>
-                            <div class="col-auto mt-2 mt-lg-0">
-                                <label id="quantity" class="mb-0 font-9">Quantity: </label>
-                                <div class="invoice__quantity row no-gutters w-100 align-items-center">
-                                    <span class="invoice__quantity-decrease btn btn-controller btn-sm fas fa-minus mr-1 clickable" (click)="decrease()"></span>
-                                    <input class="invoice__quantity-input text-center form-control form-control-sm" type="number" formControlName="itemQuantity" (change)="quantityChange()" />
-                                    <span class="invoice__quantity-increase btn btn-controller btn-sm fas fa-plus ml-1 clickable" (click)="increase()"></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div>
-                            <button [disabled]="!isEditable()" class="float-right btn btn-controller btn-sm" (click)="addItem()">
-                                <span class="fas fa-plus mr-2 d-inline-block"></span>
-                                Add Item
-                            </button>
-                        </div>
+                        <menu-item class="px-2 py-2" *ngIf="selectedItem"
+                            [isOpenedAuto]="true"
+                            [isImageShown]="false"
+                            [onSellingItem]="selectedItem"
+                            (onAddToCartClicked)="addItem($event)">
+                        </menu-item>
                         <div class="clearfix"></div>
                     </div>
                     <div class="mb-3">
-                        <h5 class="h6">Items ({{inListItems.length}})</h5>
-                        <ul class="list-group font-9" cdkDropList [cdkDropListDisabled]="!isEditable()" (cdkDropListDropped)="drop($event)" *ngIf="inListItems.length">
-                            <li cdkDrag class="list-group-item d-flex align-items-center" *ngFor="let targetItem of inListItems">
-                                <span class="col p-0">{{ targetItem.name }} {{ targetItem?.type?.toLowerCase() !== 'default' && targetItem?.type ? '- ' + targetItem.type : '' }} - RM {{ targetItem.price  | number: '1.2-2' }} x {{ targetItem.quantity}} </span>
-                                <span class="px-1">RM {{ targetItem.price * targetItem.quantity | number: '1.2-2' }}</span>
-                                <span *ngIf="isEditable()" class="fas fa-times pl-2 clickable" (click)="removeItem(targetItem)"></span>
+                        <h5 class="h6">Items ({{cartItems.length}})</h5>
+                        <ul class="list-group font-9" cdkDropList [cdkDropListDisabled]="!isEditable()" (cdkDropListDropped)="drop($event)" *ngIf="cartItems.length">
+                            <li cdkDrag class="list-group-item d-flex align-items-center" *ngFor="let cartItem of cartItems">
+                                <div class="col-lg p-0">
+                                    <span class="col p-0">{{ cartItem.name }} {{ cartItem?.type?.toLowerCase() !== 'default' && cartItem?.type ? '- ' + cartItem.type : '' }} - RM {{ cartItem.price  | number: '1.2-2' }} x {{ cartItem.quantity}} </span>
+                                    <!-- <span class="px-1">RM {{ cartItem.price * cartItem.quantity | number: '1.2-2' }}</span> -->
+                                    <ul *ngIf="cartItem?.subItems?.length" class="list-unstyled d-block">
+                                        <li class="ml-2 font-8 text-muted" *ngFor="let subitem of cartItem?.subItems">{{subitem?.name}} - RM {{subitem?.price | number: '1.2-2'}} x {{ subitem?.quantity }}</li>
+                                    </ul>
+                                </div>
+                                <div class="col-auto">
+                                    <p class="mb-0 font-9">RM{{totalOfItem(cartItem) | number: '1.2-2' }}</p>
+                                </div>
+                                <span *ngIf="isEditable()" class="fas fa-times pl-2 clickable" (click)="removeItem(cartItem)"></span>
                             </li>
                         </ul>
-                        <p class="text-center py-3 d-block font-9" *ngIf="!inListItems.length">No Item</p>
+                        <p class="text-center py-3 d-block font-9" *ngIf="!cartItems.length">No Item</p>
                     </div>
                 </div>
             </mat-tab>
@@ -126,7 +112,7 @@
                                 </mat-select>
                             </div>
                             <div class="col-lg-6 pl-lg-1">
-                                <input class="form-control form-control-sm" placeholder="Fee (RM)" formControlName="deliveryFee" (input)="notifyCalculation()" />
+                                <input class="form-control form-control-sm" type="number" placeholder="Fee (RM)" formControlName="deliveryFee" (input)="notifyCalculation()" />
                             </div>
                         </div>
                         <hr />
@@ -219,7 +205,7 @@
                 <div class="p-lg-3 py-3">
                     <div class="row no-gutters">
                         <div class="col">
-                            <mat-select class="form-control form-control-sm" placeholder="Promotion" (selectionChange)="notifyCalculation()" formControlName="promotion">
+                            <mat-select class="form-control form-control-sm" placeholder="Promotion" (selectionChange)="onPromotionChange(event)" formControlName="promotion">
                                 <mat-option [value]="''">No promotion</mat-option>
                                 <mat-option [value]="promotion._id" *ngFor="let promotion of promotions">{{ promotion.title }}</mat-option>
                             </mat-select>
