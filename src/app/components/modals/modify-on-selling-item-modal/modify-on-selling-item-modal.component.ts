@@ -5,13 +5,12 @@ import { OnSellingItem } from '@objects/on-selling-item';
 import { AuthCategoryContributorService } from '@services/http/auth-store/contributor/auth-category-contributor.service';
 import { AuthItemContributorService } from '@services/http/auth-store/contributor/auth-item-contributor.service';
 import { Subject } from 'rxjs';
-import { finalize, switchMap, takeUntil } from 'rxjs/operators';
+import { finalize, takeUntil } from 'rxjs/operators';
 import * as _ from 'lodash';
 import { SharedStoreService } from '@services/shared/shared-store.service';
 import { SharedCategoryService } from '@services/shared/shared-category.service';
 import { WsToastService } from '@elements/ws-toast/ws-toast.service';
 import { AuthOnSellingItemContributorService } from '@services/http/auth-store/contributor/auth-on-selling-item-contributor.service';
-import { of } from 'rxjs';
 
 @Component({
   selector: 'modify-on-selling-item-modal',
@@ -164,7 +163,7 @@ export class ModifyOnSellingItemModalComponent extends WsModalComponent implemen
   }
   selectItemType(event) {
     this.selectedItemType = event;
-    this.extraItemPrice = this.selectedItemType.price || 0;
+    this.extraItemPrice = this.selectedItemType.price || this.selectedSubItem.price || 0;
   }
   searchItemValueChange = _.debounce((event) => {
     if (this.open) {
@@ -205,14 +204,17 @@ export class ModifyOnSellingItemModalComponent extends WsModalComponent implemen
   }
   selectionChangeSubItem(event) {
     this.selectedSubItem = event;
-    this.itemTypes = [
-      {
-        name: '',
-        price: this.selectedSubItem.price
-      },
-      ...this.selectedSubItem.types];
-    this.selectedItemType = this.itemTypes[0];
-    this.extraItemPrice = this.itemTypes[0].price;
+    if (this.selectedSubItem?.types?.length) {
+      this.itemTypes = [
+        ...this.selectedSubItem.types];
+      this.selectedItemType = this.itemTypes[0];
+    }
+    if (this.selectedSubItem) {
+      this.extraItemPrice = this.selectedItemType?.price || this.selectedSubItem?.price || 0;
+    }
+  }
+  onExtraItemPriceChange(event) {
+    console.log(event);
   }
   addSubItem() {
     if (this.selectedGroup.subItems.length > 14) {

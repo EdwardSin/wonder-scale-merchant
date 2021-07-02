@@ -29,13 +29,13 @@ export class AuthOnSellingItemContributorService {
       params
     });
   }
-  getAuthenticatedNewItemsByStoreId(params) {
-    return this.http.get(AuthOnSellingItemContributorUrl.getAuthenticatedNewItemsByStoreIdUrl,
-      {
-        ...this.accessTokenService.getAccessToken(),
-        params
-      });
-  }
+  // getAuthenticatedNewItemsByStoreId(params) {
+  //   return this.http.get(AuthOnSellingItemContributorUrl.getAuthenticatedNewItemsByStoreIdUrl,
+  //     {
+  //       ...this.accessTokenService.getAccessToken(),
+  //       params
+  //     });
+  // }
   saveItem(obj) {
     return this.http.post(AuthOnSellingItemContributorUrl.saveItemUrl, obj, this.accessTokenService.getAccessToken());  
   }

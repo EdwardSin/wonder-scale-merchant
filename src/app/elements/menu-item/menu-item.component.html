@@ -1,13 +1,13 @@
 <div class="menu-item__container">
     <div class="menu-item">
-        <div class="row no-gutters" [class.clickable]="!isEditable && (onSellingItem?.subItemGroups?.length || item?.types?.length || item?.description)" [style.border-bottom]="isShown? '1px solid #ddd': '0'">
-            <span class="menu-item__image-container" [class.clickable]="!isEditable">
+        <div class="row no-gutters" [class.clickable]="!isEditable && hasDetails() && !isOpenedAuto">
+            <span class="menu-item__image-container" [class.clickable]="!isEditable && !isOpenedAuto">
                 <img *ngIf="images?.length" [src]="environment.IMAGE_URL + images[imageIndex]" class="menu-item__image" alt="profile Image" />
                 <img *ngIf="!images?.length" src="/assets/images/png/profileImage.png" class="menu-item__image" alt="item detault profile image" />
-                <span *ngIf="images?.length && !isEditable" class="menu-item__image-hint" (click)="isImagesOpened = true">
+                <span *ngIf="images?.length && !isEditable && isImageShown" class="menu-item__image-hint" (click)="isImagesOpened = true">
                     <span class="menu-item__image-hint-icon fas fa-images"></span>
                 </span>
-                <div *ngIf="!isEditable && isImagesOpened" class="images-fullscreen-container position-fixed pt-2">
+                <div *ngIf="!isEditable && isImageShown && isImagesOpened" class="images-fullscreen-container position-fixed pt-2">
                     <span class="images-fullscreen__icon fas fa-times" (click)="isImagesOpened = false"></span>
                     <swiper [index]="selectedImagesIndex" [config]="{slidesPerView: 'auto', spaceBetween: 10, navigation: false, centeredSlides: true, direction: 'horizontal', mousewheel: true}"> 
                         <ng-container class="swiper-slide" *ngFor="let image of images">
@@ -16,8 +16,7 @@
                     </swiper>
                 </div>
             </span>
-            
-            <div class="menu-item__middle col px-2 px-lg-3" (click)="isEditable? null : onDetailsClick()">
+            <div class="menu-item__middle col px-2 px-lg-3" (click)="isEditable || isOpenedAuto ? null : onDetailsClick()">
                 <p class="menu-item__text">{{ item?.name }}</p>
                 <div class="float-right mb-2">
                     <p class="menu-item__price mb-1" *ngIf="item?.currency && !item?.isOffer"><span class="pr-1">RM</span>{{ item?.price | wsCurrency: 1:1 }}</p>
@@ -34,7 +33,7 @@
                         <button class="btn btn-default fas fa-plus font-8 ml-2" (click)="$event.stopPropagation(); increase()"></button> -->
                     </div>
                     <!-- [disabled]="item?.types?.length > 0 && !selectedType"  -->
-                    <button *ngIf="!isMobileSize" class="btn btn-second float-right" [style.opacity]="isEditable ? .3 : 1" [disabled]="isEditable" (click)="$event.stopPropagation(); addToCart()">Add To Cart</button>
+                    <button *ngIf="!isMobileSize" class="btn btn-sm btn-second float-right" [style.opacity]="isEditable ? .3 : 1" [disabled]="isEditable" (click)="$event.stopPropagation(); addToCart()">Add To Cart</button>
                 </div>
                 <div class="clearfix"></div>
             </div>
@@ -48,7 +47,7 @@
             <button class="btn btn-default fas fa-plus font-8 ml-2" (click)="$event.stopPropagation(); increase()"></button> -->
         </div>
         <button *ngIf="isMobileSize" class="btn btn-second w-100 rounded-0" [style.opacity]="isEditable ? .3 : 1" [disabled]="isEditable" (click)="$event.stopPropagation(); addToCart()">Add To Cart</button>
-        <div class="p-3" *ngIf="isShown || isEditable">
+        <div class="p-3" *ngIf="isEditable || hasDetails() && (isShown || isOpenedAuto)">
             <div class="font-9" *ngIf="item?.types?.length && onSellingItem?.isTypeShown">
                 <p class="menu-item__title mb-2">Types:</p>
                 <mat-radio-group [(ngModel)]="selectedType" class="center d-block ml-3">
@@ -71,7 +70,7 @@
                     <button *ngIf="isEditable" class="btn btn-sm btn-controller float-right mr-2" (click)="onAddExtraItemClickedCallback(subItemGroup)">
                         <span class="fas fa-plus mr-2 d-inline-block"></span>Add Subitem
                     </button>
-                    <input *ngIf="isEditable" class="form-control form-control-sm mb-3" style="width: 250px" [(ngModel)]="subItemGroup.name" placeholder="Title (e.g. Sources, Extra)" />
+                    <input *ngIf="isEditable" class="form-control form-control-sm mb-3" style="width: 250px" [maxLength]="30" [(ngModel)]="subItemGroup.name" placeholder="Title (e.g. Sources, Extra)" />
                     <p *ngIf="!isEditable" class="mb-0 font-weight-bold font-9">{{subItemGroup?.name}}:</p>
                     <div class="clearfix"></div>
                     <div *ngIf="isEditable" class="font-8 border rounded p-3">
@@ -136,7 +135,7 @@
                 <textarea class="menu-item__textarea form-control" rows="5" [(ngModel)]="remark"></textarea>
             </div>
             <div class="clearfix"></div>
-            <div class="mb-2" *ngIf="item?.description">
+            <div class="mb-2" *ngIf="item?.description && !isOpenedAuto">
                 <hr *ngIf="item?.types?.length || onSellingItem?.subItemGroups?.length" />
                 <p class="mb-0 text-muted font-8">{{ item?.description }}</p>
             </div>

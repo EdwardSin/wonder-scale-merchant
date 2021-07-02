@@ -22,6 +22,8 @@ export class MenuItemComponent implements OnInit {
   remark: string;
   @Input() isShown: boolean;
   @Input() isEditable: boolean;
+  @Input() isOpenedAuto: boolean;
+  @Input() isImageShown: boolean = true;
   @Input() onAddExtraItemClickedCallback: Function;
   @Input() onAddExtraItemGroupClickedCallback: Function;
   @Input() onRemoveExtraitemClickedCallback: Function;
@@ -140,11 +142,14 @@ export class MenuItemComponent implements OnInit {
     });
   }
   onDetailsClick() {
-    if (this.onSellingItem?.subItemGroups?.length ||
-      this.item?.types?.length ||
-      this.item?.description) {
+    if (this.hasDetails()) {
       this.isShown = !this.isShown;
     }
+  }
+  hasDetails() {
+    return this.onSellingItem?.subItemGroups?.length ||
+      this.item?.types?.length ||
+      this.item?.description
   }
   reset() {
     this.onSellingItem.quantity = 1;
