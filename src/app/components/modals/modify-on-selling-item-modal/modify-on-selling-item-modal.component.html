@@ -106,7 +106,7 @@
             </mat-option>
         </mat-select>
         <label id="itemtype" class="mb-0 font-9">Price: </label>
-        <input name="extraItemPrice" type="number" class="form-control form-control-sm mb-2" (change)="onExtraItemPriceChange(event)" [(ngModel)]="extraItemPrice" />
+        <input name="extraItemPrice" type="number" class="form-control form-control-sm mb-2" [(ngModel)]="extraItemPrice" />
         <div class="float-right">
             <button class="btn btn-sm btn-controller mr-2" (click)="addSubItem()">Add</button>
             <button class="btn btn-sm btn-controller" (click)="isSubItemOpened = false">Cancel</button>

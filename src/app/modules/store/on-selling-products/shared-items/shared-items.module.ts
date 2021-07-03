@@ -6,14 +6,13 @@ import { ItemControllerComponent } from '@components/store/on-selling-products/i
 import { SharedModule } from 'src/app/modules/public/shared/shared.module';
 import { SharedItemsRoutingModule } from './shared-items-routing.module';
 import { ModifyOnSellingItemModalComponent } from '@components/modals/modify-on-selling-item-modal/modify-on-selling-item-modal.component';
-import { MoveToCategoriesModalComponent } from '@components/modals/move-to-categories-modal/move-to-categories-modal.component';
+import { ElementModule } from 'src/app/modules/public/element/element.module';
 
 
 @NgModule({
   declarations: [
     ItemControllerComponent,
     ItemViewComponent,
-    MoveToCategoriesModalComponent,
     ModifyOnSellingItemModalComponent
   ],
   imports: [
@@ -23,11 +22,10 @@ import { MoveToCategoriesModalComponent } from '@components/modals/move-to-categ
   ],
   exports: [
     CommonModule,
-    SharedModule,
     ItemControllerComponent,
     ItemViewComponent,
-    MoveToCategoriesModalComponent,
-    ModifyOnSellingItemModalComponent
+    ModifyOnSellingItemModalComponent,
+    SharedModule
   ]
 })
 export class SharedItemsModule { }
