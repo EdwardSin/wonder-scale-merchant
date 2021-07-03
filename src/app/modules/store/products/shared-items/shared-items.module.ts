@@ -5,7 +5,6 @@ import { ItemViewComponent } from '@components/store/products/item-view/item-vie
 import { ItemControllerComponent } from '@components/store/products/item-controller/item-controller.component';
 import { SharedModule } from 'src/app/modules/public/shared/shared.module';
 import { ImportItemsModalComponent } from '@components/modals/import-items-modal/import-items-modal.component';
-import { MoveToCategoriesModalComponent } from '@components/modals/move-to-categories-modal/move-to-categories-modal.component';
 import { EditMultipleItemsModalComponent } from '@components/modals/edit-multiple-items-modal/edit-multiple-items-modal.component';
 import { AddToCategoriesModalComponent } from '@components/modals/add-to-categories-modal/add-to-categories-modal.component';
 import { SharedItemsRoutingModule } from './shared-items-routing.module';
@@ -18,7 +17,6 @@ import { ExportSalesModalComponent } from '@components/modals/export-sales-modal
     ItemViewComponent,
     AddToCategoriesModalComponent,
     EditMultipleItemsModalComponent,
-    MoveToCategoriesModalComponent,
     ImportItemsModalComponent,
     ExportSalesModalComponent
   ],
@@ -34,7 +32,6 @@ import { ExportSalesModalComponent } from '@components/modals/export-sales-modal
     ItemViewComponent,
     AddToCategoriesModalComponent,
     EditMultipleItemsModalComponent,
-    MoveToCategoriesModalComponent,
     ImportItemsModalComponent,
     ExportSalesModalComponent
   ]

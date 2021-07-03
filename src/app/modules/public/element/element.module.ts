@@ -34,11 +34,13 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { MatSelectInfiniteScrollModule } from 'ng-mat-select-infinite-scroll';
 import { WsInvoiceComponent } from '@elements/ws-invoice/ws-invoice.component';
 import { AppRoutingModule } from 'src/app/app-routing.module';
+import { SwiperModule } from 'ngx-swiper-wrapper';
 import { RouterModule } from '@angular/router';
 import { WsMessageBarComponent } from '@elements/ws-message-bar/ws-message-bar.component';
 import { WsPriceListComponent } from '@elements/ws-price-list/ws-price-list.component';
 import { WsStepperComponent } from '@elements/ws-stepper/ws-stepper.component';
 import { MenuItemComponent } from '@elements/menu-item/menu-item.component';
+import { MoveToCategoriesModalComponent } from '@components/modals/move-to-categories-modal/move-to-categories-modal.component';
 import { PipeModule } from '../pipe/pipe.module';
 
 
@@ -63,6 +65,7 @@ import { PipeModule } from '../pipe/pipe.module';
     BusinessTimetableComponent,
     ConfirmModalComponent,
     BusinessLocationComponent,
+    MoveToCategoriesModalComponent,
     MenuItemComponent,
     WsInvoiceComponent,
     WsMessageBarComponent,
@@ -84,6 +87,7 @@ import { PipeModule } from '../pipe/pipe.module';
     MatSelectInfiniteScrollModule,
     DirectiveModule,
     RouterModule,
+    SwiperModule,
     PipeModule
   ],
   exports: [
@@ -104,6 +108,7 @@ import { PipeModule } from '../pipe/pipe.module';
     WsDropdownComponent,
     SearchBarComponent,
     BusinessTimetableComponent,
+    MoveToCategoriesModalComponent,
     ConfirmModalComponent,
     BusinessLocationComponent,
     MenuItemComponent,
@@ -111,7 +116,8 @@ import { PipeModule } from '../pipe/pipe.module';
     WsMessageBarComponent,
     WsPriceListComponent,
     WsStepperComponent,
-    MatTabsModule
+    MatTabsModule,
+    SwiperModule
   ]
 })
 export class ElementModule { }

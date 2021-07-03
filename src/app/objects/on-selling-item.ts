@@ -17,6 +17,7 @@ class SubItemGroup {
     minSubItem: number;
     isOnePerSubItem: boolean;
     subItems: Array<SubItem>;
+    isSelected?: boolean;
 }
 
 class SubItem {

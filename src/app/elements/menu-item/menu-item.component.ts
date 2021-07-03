@@ -32,7 +32,7 @@ export class MenuItemComponent implements OnInit {
   isImagesOpened: boolean;
   selectedImagesIndex: number = 0;
   environment = environment;
-  selectedType = '';
+  selectedType;
   currencies = [];
   images = [];
   imageIndex: number = 0;
@@ -49,6 +49,9 @@ export class MenuItemComponent implements OnInit {
       if (!this.onSellingItem.quantity) {
         this.onSellingItem.quantity = 1;
       }
+      this.onSellingItem.subItemGroups.forEach(itemGroup => {
+        itemGroup.isSelected = true;
+      });;
       this.item = this.onSellingItem.item as Item;
       // this.item.isDiscountExisting = this.item.isOffer && (this.item.types.find(type => type.discount > 0) != null || this.item.discount > 0);
       this.images = _.union(_.flattenDeep([this.item.profileImages, this.item?.types?.map(type => type.images), (this.item.descriptionImages || [])]));
@@ -58,6 +61,15 @@ export class MenuItemComponent implements OnInit {
   }
   ngOnInit(): void {
   }
+  onSubItemChange(subItemGroup, event) {
+    subItemGroup.subItems.forEach(item => {
+      if (item.name === event.value.name) {
+        item.quantity = 1;
+      } else {
+        item.quantity = 0;
+      }
+    });
+  }
   addToCart() {
     if (this.onSellingItem.isTypeShown && this.onSellingItem?.item['types']?.length > 0 && !this.selectedType) {
       WsToastService.toastSubject.next({ content: 'Please select a type!', type: 'danger'});
@@ -66,17 +78,31 @@ export class MenuItemComponent implements OnInit {
     }
     for (let i = 0; i < this.onSellingItem.subItemGroups.length; i++) {
       let subItemGroup = this.onSellingItem.subItemGroups[i];
-      if (subItemGroup.minSubItem > this.totalGroupQuantity(subItemGroup)) {
-        WsToastService.toastSubject.next({ content: `${subItemGroup.name} - Please select at least ${subItemGroup.minSubItem} item(s).`, type: 'danger'});
-        this.isShown = true;
-        return;
+      if (subItemGroup.isSelected) {
+        if (subItemGroup.isMultiSelect && subItemGroup.minSubItem == 0 && this.totalGroupQuantity(subItemGroup) == 0) {
+          WsToastService.toastSubject.next({ content: `${subItemGroup.name} - Please select at least 1 item or uncheck to not select.`, type: 'danger'});
+          this.isShown = true;
+          return;
+        }
+        else if (subItemGroup.isMultiSelect && subItemGroup.minSubItem > this.totalGroupQuantity(subItemGroup)) {
+          WsToastService.toastSubject.next({ content: `${subItemGroup.name} - Please select at least ${subItemGroup.minSubItem} item(s).`, type: 'danger'});
+          this.isShown = true;
+          return;
+        } else if (!subItemGroup.isMultiSelect && this.totalGroupQuantity(subItemGroup) == 0) {
+          WsToastService.toastSubject.next({ content: `${subItemGroup.name} - Please select an item.`, type: 'danger'});
+          this.isShown = true;
+          return;
+        }
       }
     }
     let cartItem: CartItem = new CartItem();
     let item = this.onSellingItem.item as Item;
-    cartItem.itemId = item?._id;
+    cartItem.itemId = this.onSellingItem?._id;
     cartItem.name = item?.name;
     cartItem.price = item?.price;
+    if (this.selectedType) {
+      cartItem.type = this.selectedType?.name;
+    }
     cartItem.quantity = this.onSellingItem.quantity;
     cartItem.discount = 0;
     if (this.onSellingItem?.subItemGroups?.length) {
@@ -148,7 +174,7 @@ export class MenuItemComponent implements OnInit {
   }
   hasDetails() {
     return this.onSellingItem?.subItemGroups?.length ||
-      this.item?.types?.length ||
+      (this.item?.types?.length && this.onSellingItem?.isTypeShown) ||
       this.item?.description
   }
   reset() {

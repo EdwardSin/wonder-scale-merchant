@@ -54,7 +54,7 @@
                     <!-- <mat-radio-button [color]="'primary'" [checked]="true" class="d-block font-weight-normal font-9"  [disabled]="isEditable" value="">
                         <span class="mr-3">Normal</span></mat-radio-button> -->
                     <mat-radio-button [color]="'primary'" class="d-block font-weight-normal font-9" [disabled]="isEditable" [value]="type" *ngFor="let type of item?.types">
-                        <span class="mr-3">{{ type?.name }}</span><span *ngIf="type?.incrementType !== undefined">({{ type?.incrementType ? '+' : '-' }}) {{ type?.amount | number: '1.2-2' }}</span>
+                        <span class="mr-3">{{ type?.name }}</span><span *ngIf="type?.price"> - {{ type?.price | number: '1.2-2' }}</span>
                     </mat-radio-button>
                 </mat-radio-group>
             </div>
@@ -71,7 +71,12 @@
                         <span class="fas fa-plus mr-2 d-inline-block"></span>Add Subitem
                     </button>
                     <input *ngIf="isEditable" class="form-control form-control-sm mb-3" style="width: 250px" [maxLength]="30" [(ngModel)]="subItemGroup.name" placeholder="Title (e.g. Sources, Extra)" />
-                    <p *ngIf="!isEditable" class="mb-0 font-weight-bold font-9">{{subItemGroup?.name}}:</p>
+                    <p *ngIf="!isEditable" class="mb-0 font-weight-bold font-9">
+                        <mat-checkbox [color]="'primary'" class="pr-2 d-inline-block" [class.mb-0]="subItemGroup.isSelected" [(ngModel)]="subItemGroup.isSelected" *ngIf="subItemGroup.minSubItem == 0">
+                            {{subItemGroup?.name}}
+                        </mat-checkbox>
+                        <span *ngIf="subItemGroup.minSubItem > 0">{{subItemGroup?.name}}</span>
+                    </p>
                     <div class="clearfix"></div>
                     <div *ngIf="isEditable" class="font-8 border rounded p-3">
                         <mat-checkbox [color]="'primary'" class="d-block" [(ngModel)]="subItemGroup.isMultiSelect">
@@ -88,11 +93,19 @@
                                 Check to only allow customer to select 1 per subitem
                             </mat-checkbox>
                             <br *ngIf="subItemGroup.isOnePerSubItem && subItemGroup.minSubItem > subItemGroup.subItems.length"/>
-                            <span *ngIf="subItemGroup.isOnePerSubItem && subItemGroup.minSubItem > subItemGroup.subItems.length" class="font-8 text-danger ml-4">Subitems must be more than min ({{subItemGroup.minSubItem}}) selected items</span>
+                            <span *ngIf="subItemGroup.isOnePerSubItem && subItemGroup.minSubItem > subItemGroup.subItems.length" class="font-8 text-danger ml-4">
+                                <span class="fas fa-exclamation-triangle mr-2"></span>Subitems must be more than min ({{subItemGroup.minSubItem}}) selected items
+                            </span>
+                            <br *ngIf="subItemGroup.isOnePerSubItem && subItemGroup.maxSubItem > subItemGroup.subItems.length"/>
+                            <span *ngIf="subItemGroup.isOnePerSubItem && subItemGroup.maxSubItem > subItemGroup.subItems.length" class="font-8 ml-4 text-warning">
+                                <span class="fas fa-exclamation-triangle mr-2"></span>
+                                Max selected subitems are greater than current subitems (not applicable)
+                            </span>
                         </div>
                     </div>
-                    <div class="rounded mt-2" [ngClass]="isEditable ? 'border p-3': ''" *ngIf="subItemGroup.subItems.length">
-                        <p *ngIf="subItemGroup.isMultiSelect" class="font-8 mb-2 text-warning">Select maximum {{ subItemGroup.maxSubItem }} items<span *ngIf="subItemGroup.minSubItem"> and minimum {{ subItemGroup.minSubItem }} items</span></p>
+                    <div class="rounded mt-2" [ngClass]="isEditable ? 'border p-3': ''" *ngIf="subItemGroup.subItems.length && (isEditable || subItemGroup.isSelected)">
+                        <p *ngIf="subItemGroup.isMultiSelect" [class.mb-2]="!subItemGroup.isOnePerSubItem" class="font-8 mb-0 text-warning">Select maximum {{ subItemGroup.maxSubItem }} items<span *ngIf="subItemGroup.minSubItem"> and minimum {{ subItemGroup.minSubItem }} items</span></p>
+                        <p *ngIf="subItemGroup.isOnePerSubItem" class="font-8 mb-2">(Only can select max 1 per item)</p>
                         <div *ngFor="let subitem of subItemGroup.subItems; let j = index">
                             <div *ngIf="subItemGroup.isMultiSelect">
                                 <div class="menu-item__extra_quantity float-right d-inline-block mx-2">
@@ -113,16 +126,16 @@
                                 </div>
                             </div>
                         </div>
-                        <mat-radio-group class="center d-block mt-2" *ngIf="!subItemGroup.isMultiSelect && subItemGroup.subItems.length">
+                        <mat-radio-group class="center d-block mt-2" *ngIf="!subItemGroup.isMultiSelect && subItemGroup.subItems.length" (change)="onSubItemChange(subItemGroup, $event)">
                             <!-- <mat-radio-button [color]="'primary'" [checked]="true" class="d-block font-weight-normal font-9" value="">
                                 <span class="mr-3">Normal</span></mat-radio-button> -->
                             <span class="d-block" *ngFor="let subitem of subItemGroup.subItems; let j = index">
-                                <mat-radio-button [color]="'primary'" class="d-font-weight-normal font-9" value="" [disabled]="isEditable">
+                                <mat-radio-button [disabled]="isEditable" [color]="'primary'" class="d-font-weight-normal font-9" [value]="subitem">
                                     <span class="mr-3">{{subitem?.name}}</span>
                                     <!-- <span *ngIf="type?.incrementType !== undefined">({{ type?.incrementType ? '+' : '-' }}) {{ type?.amount | number: '1.2-2' }}</span> -->
                                     <span class="d-block font-8">+ RM {{subitem.price | number: '1.2-2'}}</span>
                                 </mat-radio-button>
-                                <span class="fas fa-times d-inline-block clickable ws-secondary ml-3" (click)="onRemoveExtraitemClickedCallback(subItemGroup, j)"></span>
+                                <span *ngIf="isEditable" class="fas fa-times d-inline-block clickable ws-secondary ml-3" (click)="onRemoveExtraitemClickedCallback(subItemGroup, j)"></span>
                             </span>
                         </mat-radio-group>
                     </div>

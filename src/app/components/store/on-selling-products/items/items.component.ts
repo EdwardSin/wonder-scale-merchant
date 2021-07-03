@@ -11,7 +11,6 @@ import { SharedLoadingService } from '@services/shared/shared-loading.service';
 import { SharedStoreService } from '@services/shared/shared-store.service';
 import { WsLoading } from '@elements/ws-loading/ws-loading';
 import { DocumentHelper } from '@helpers/documenthelper/document.helper';
-import { PriceHelper } from '@helpers/pricehelper/price.helper';
 import { WsToastService } from '@elements/ws-toast/ws-toast.service';
 // import { saveAs } from 'file-saver';
 import { Subject, Subscription } from 'rxjs';

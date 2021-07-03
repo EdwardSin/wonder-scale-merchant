@@ -208,21 +208,29 @@ export class ModifyOnSellingItemModalComponent extends WsModalComponent implemen
       this.itemTypes = [
         ...this.selectedSubItem.types];
       this.selectedItemType = this.itemTypes[0];
+    } else {
+      this.itemTypes = [];
+      this.selectedItemType = null;
     }
     if (this.selectedSubItem) {
       this.extraItemPrice = this.selectedItemType?.price || this.selectedSubItem?.price || 0;
     }
-  }
-  onExtraItemPriceChange(event) {
-    console.log(event);
   }
   addSubItem() {
     if (this.selectedGroup.subItems.length > 14) {
       WsToastService.toastSubject.next({ content: 'Currently only support max 15 items in a group!', type: 'danger'});
       return ;
     }
+    if (!this.selectedSubItem) {
+      WsToastService.toastSubject.next({ content: 'Please select a subitem!', type: 'danger'});
+      return;
+    }
+    if (this.extraItemPrice == null || this.extraItemPrice == undefined) {
+      WsToastService.toastSubject.next({ content: 'Please enter the price!', type: 'danger'});
+      return;
+    }
     this.selectedGroup.subItems.push({
-      _id: this.selectedSubItem._id,
+      _id: this.selectedItemType._id,
       name: this.selectedSubItem.name + (this.selectedItemType && this.selectedItemType?.name ? ' - ' + this.selectedItemType?.name : ''),
       price: this.extraItemPrice
     } as any);

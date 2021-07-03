@@ -3,10 +3,8 @@ import { CommonModule } from '@angular/common';
 
 import { NgxDropzoneModule } from 'ngx-dropzone';
 import { SortablejsModule } from 'ngx-sortablejs';
-import { SwiperModule } from 'ngx-swiper-wrapper';
 import { AgmCoreModule } from '@agm/core';
 import { MatNativeDateModule } from '@angular/material/core';
-
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
@@ -41,6 +39,7 @@ import { OrderModule } from 'ngx-order-pipe';
     LazyLoadImageModule,
     MDBBootstrapModule.forRoot(),
     NgxDropzoneModule,
+    ElementModule,
     SortablejsModule.forRoot({
       animation: 150
     }),
@@ -55,7 +54,6 @@ import { OrderModule } from 'ngx-order-pipe';
     ReactiveFormsModule,
     ElementModule,
     PipeModule,
-    SwiperModule,
     DirectiveModule,
     DragDropModule,
     MatInputModule,
