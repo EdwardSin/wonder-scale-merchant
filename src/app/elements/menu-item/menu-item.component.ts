@@ -102,6 +102,9 @@ export class MenuItemComponent implements OnInit {
     cartItem.price = item?.price;
     if (this.selectedType) {
       cartItem.type = this.selectedType?.name;
+      if (this.selectedType?.price !== null && this.selectedType?.price !== undefined) {
+        cartItem.price = this.selectedType?.price
+      }
     }
     cartItem.quantity = this.onSellingItem.quantity;
     cartItem.discount = 0;
