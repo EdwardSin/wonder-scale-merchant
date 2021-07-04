@@ -127,7 +127,7 @@ export class Cashier{
             if (promotion.option === 'fixed_amount') {
                 return promotion.value * (promotion.quantity || 1);
             } else if (promotion.option === 'percentage') {
-                return this.getTotal() * (100 - promotion.value || 0) / 100;
+                return this.getSubtotal() * (promotion.value || 0) / 100;
             }
         }
         return 0;
