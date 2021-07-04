@@ -25,26 +25,19 @@
                 <div class="menu-item__number-cart-item" *ngIf="isAddedToCart">Added</div>
                 <div class="mb-3 w-100 justify-content-between d-flex">
                     <div *ngIf="!isMobileSize" class="menu-item__quantity float-right d-inline-block mx-2">
-                        <button class="btn btn-default fas fa-minus font-8 mr-2" [disabled]="isEditable" [style.opacity]="isEditable ? .3 : 1" (click)="isEditable? null: $event.stopPropagation(); decrease()"></button>
+                        <button class="btn btn-controller fas fa-minus font-8 mr-2" [disabled]="isEditable" [style.opacity]="isEditable ? .3 : 1" (click)="isEditable? null: $event.stopPropagation(); decrease()"></button>
                         <input class="menu-item__input text-center font-9" [style.opacity]="isEditable ? .3 : 1" [disabled]="isEditable" [(ngModel)]="onSellingItem.quantity" readonly />
-                        <button class="btn btn-default fas fa-plus font-8 ml-2" [disabled]="isEditable" [style.opacity]="isEditable ? .3 : 1" (click)="isEditable? null: $event.stopPropagation(); increase()"></button>
-                        <!-- <button class="btn btn-default fas fa-minus font-8 mr-2" (click)="$event.stopPropagation(); decrease()"></button>
-                        <input class="menu-item__input text-center font-9" [(ngModel)]="onSellingItem.quantity" readonly />
-                        <button class="btn btn-default fas fa-plus font-8 ml-2" (click)="$event.stopPropagation(); increase()"></button> -->
+                        <button class="btn btn-controller fas fa-plus font-8 ml-2" [disabled]="isEditable" [style.opacity]="isEditable ? .3 : 1" (click)="isEditable? null: $event.stopPropagation(); increase()"></button>
                     </div>
-                    <!-- [disabled]="item?.types?.length > 0 && !selectedType"  -->
-                    <button *ngIf="!isMobileSize" class="btn btn-sm btn-second float-right" [style.opacity]="isEditable ? .3 : 1" [disabled]="isEditable" (click)="$event.stopPropagation(); addToCart()">Add To Cart</button>
+                    <button *ngIf="!isMobileSize" class="btn btn-sm btn-second float-right" style="border-radius: 20px" [style.opacity]="isEditable ? .3 : 1" [disabled]="isEditable" (click)="$event.stopPropagation(); addToCart()">Add To Cart</button>
                 </div>
                 <div class="clearfix"></div>
             </div>
         </div>
         <div *ngIf="isMobileSize" class="menu-item__quantity d-flex justify-content-center w-100 py-3">
-            <button class="btn btn-default fas fa-minus font-8 mr-2" [disabled]="isEditable" [style.opacity]="isEditable ? .3 : 1" (click)="isEditable? null: $event.stopPropagation(); decrease()"></button>
+            <button class="btn btn-controller fas fa-minus font-8 mr-2" [disabled]="isEditable" [style.opacity]="isEditable ? .3 : 1" (click)="isEditable? null: $event.stopPropagation(); decrease()"></button>
             <input class="menu-item__input text-center font-9" [style.opacity]="isEditable ? .3 : 1" [disabled]="isEditable" [(ngModel)]="onSellingItem.quantity" readonly />
-            <button class="btn btn-default fas fa-plus font-8 ml-2" [disabled]="isEditable" [style.opacity]="isEditable ? .3 : 1" (click)="isEditable? null: $event.stopPropagation(); increase()"></button>
-            <!-- <button class="btn btn-default fas fa-minus font-8 mr-2" (click)="$event.stopPropagation(); decrease()"></button>
-            <input class="menu-item__input text-center font-9" [(ngModel)]="onSellingItem.quantity" readonly />
-            <button class="btn btn-default fas fa-plus font-8 ml-2" (click)="$event.stopPropagation(); increase()"></button> -->
+            <button class="btn btn-controller fas fa-plus font-8 ml-2" [disabled]="isEditable" [style.opacity]="isEditable ? .3 : 1" (click)="isEditable? null: $event.stopPropagation(); increase()"></button>
         </div>
         <button *ngIf="isMobileSize" class="btn btn-second w-100 rounded-0" [style.opacity]="isEditable ? .3 : 1" [disabled]="isEditable" (click)="$event.stopPropagation(); addToCart()">Add To Cart</button>
         <div class="p-3" *ngIf="isEditable || hasDetails() && (isShown || isOpenedAuto)">
@@ -54,7 +47,7 @@
                     <!-- <mat-radio-button [color]="'primary'" [checked]="true" class="d-block font-weight-normal font-9"  [disabled]="isEditable" value="">
                         <span class="mr-3">Normal</span></mat-radio-button> -->
                     <mat-radio-button [color]="'primary'" class="d-block font-weight-normal font-9" [disabled]="isEditable" [value]="type" *ngFor="let type of item?.types">
-                        <span class="mr-3">{{ type?.name }}</span><span *ngIf="type?.price"> - {{ type?.price | number: '1.2-2' }}</span>
+                        <span class="mr-2">{{ type?.name }}</span><span class="text-muted" *ngIf="type?.price">(RM {{ type?.price | number: '1.2-2' }})</span>
                     </mat-radio-button>
                 </mat-radio-group>
             </div>
@@ -107,23 +100,18 @@
                         <p *ngIf="subItemGroup.isMultiSelect" [class.mb-2]="!subItemGroup.isOnePerSubItem" class="font-8 mb-0 text-warning">Select maximum {{ subItemGroup.maxSubItem }} items<span *ngIf="subItemGroup.minSubItem"> and minimum {{ subItemGroup.minSubItem }} items</span></p>
                         <p *ngIf="subItemGroup.isOnePerSubItem" class="font-8 mb-2">(Only can select max 1 per item)</p>
                         <div *ngFor="let subitem of subItemGroup.subItems; let j = index">
-                            <div *ngIf="subItemGroup.isMultiSelect">
-                                <div class="menu-item__extra_quantity float-right d-inline-block mx-2">
-                                    <button class="btn btn-default nooutline fas fa-minus font-8 mr-2" [disabled]="isEditable" [style.opacity]="isEditable ? .3 : 1" (click)="isEditable ? null : extraItemDecrease(subItemGroup, subitem)"></button>
-                                    <input class="menu-item__input text-center" [disabled]="isEditable" [style.opacity]="isEditable ? .3 : 1" [(ngModel)]="subitem.quantity" placeholder="0" readonly />
-                                    <button class="btn btn-default nooutline fas fa-plus font-8 ml-2" [disabled]="isEditable" [style.opacity]="isEditable ? .3 : 1" (click)="isEditable ? null : extraItemIncrease(subItemGroup, subitem)"></button>
-                                    <!-- <button class="btn btn-default nooutline fas fa-minus font-8 mr-2" (click)="extraItemDecrease(subItemGroup, subitem)"></button>
-                                    <input class="menu-item__input text-center" [(ngModel)]="subitem.quantity" placeholder="0" readonly />
-                                    <button class="btn btn-default nooutline fas fa-plus font-8 ml-2" (click)="extraItemIncrease(subItemGroup, subitem)"></button> -->
-                                </div>
-                                <div class="font-8">
-                                    <p class="mb-0">
+                            <div *ngIf="subItemGroup.isMultiSelect" class="mb-2">
+                                <p class="mb-0 font-8 d-inline-block">
                                     <span *ngIf="isEditable" class="fas fa-times d-inline-block clickable ws-secondary mx-2" (click)="onRemoveExtraitemClickedCallback(subItemGroup, j)"></span>
-                                    {{subitem?.name}}
-                                    <br/>
-                                    <span class="font-8" [style.margin-left.rem]="isEditable ? 1.9 : 0">+ RM {{subitem.price | number: '1.2-2'}}</span>
-                                    </p>
+                                    <span class="mr-2">{{subitem?.name}}</span>
+                                    <span class="font-8 text-muted" *ngIf="subitem.price !== null || subitem.price !== undefined">(+ RM {{subitem.price | number: '1.2-2'}})</span>
+                                </p>
+                                <div class="menu-item__extra_quantity float-right d-inline-block ml-2">
+                                    <button class="btn btn-controller nooutline fas fa-minus font-8 mr-2" [disabled]="isEditable" [style.opacity]="isEditable ? .3 : 1" (click)="isEditable ? null : extraItemDecrease(subItemGroup, subitem)"></button>
+                                    <input class="menu-item__input text-center" [disabled]="isEditable" [style.opacity]="isEditable ? .3 : 1" [(ngModel)]="subitem.quantity" placeholder="0" readonly />
+                                    <button class="btn btn-controller nooutline fas fa-plus font-8 ml-2" [disabled]="isEditable" [style.opacity]="isEditable ? .3 : 1" (click)="isEditable ? null : extraItemIncrease(subItemGroup, subitem)"></button>
                                 </div>
+                                <div class="clearfix"></div>
                             </div>
                         </div>
                         <mat-radio-group class="center d-block mt-2" *ngIf="!subItemGroup.isMultiSelect && subItemGroup.subItems.length" (change)="onSubItemChange(subItemGroup, $event)">
@@ -133,9 +121,9 @@
                                 <mat-radio-button [disabled]="isEditable" [color]="'primary'" class="d-font-weight-normal font-9" [value]="subitem">
                                     <span class="mr-3">{{subitem?.name}}</span>
                                     <!-- <span *ngIf="type?.incrementType !== undefined">({{ type?.incrementType ? '+' : '-' }}) {{ type?.amount | number: '1.2-2' }}</span> -->
-                                    <span class="d-block font-8">+ RM {{subitem.price | number: '1.2-2'}}</span>
+                                    <span class="d-block font-8 text-muted">(+) RM {{subitem.price | number: '1.2-2'}}</span>
                                 </mat-radio-button>
-                                <span *ngIf="isEditable" class="fas fa-times d-inline-block clickable ws-secondary ml-3" (click)="onRemoveExtraitemClickedCallback(subItemGroup, j)"></span>
+                                <span *ngIf="isEditable" class="fas fa-times d-inline-block clickable ws-secondary" (click)="onRemoveExtraitemClickedCallback(subItemGroup, j)"></span>
                             </span>
                         </mat-radio-group>
                     </div>
