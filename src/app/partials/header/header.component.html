@@ -96,7 +96,8 @@
                     <span *ngIf="!notification.isRead" class="px-2 fas fa-circle text-muted position-absolute" style="top: .15rem; right: .05rem; font-size: .4rem; line-height: 1rem; vertical-align: middle"></span>
                     <div class="row no-gutters">
                         <div class="mr-3 col-auto">
-                            <img [src]="notification?.fromUser?.profileImage" style="width: 60px; height: 60px" alt="profile image" />
+                            <img *ngIf="notification?.fromUser?.profileImage" [src]="notification?.fromUser?.profileImage" style="width: 75px; height: 75px" alt="profile image" />
+                            <img *ngIf="!notification?.fromUser?.profileImage" [src]="'/assets/images/png/profile.png'" style="width: 75px; height: 75px" alt="profile image" />
                         </div>
                         <div class="col">
                             <div>
@@ -111,7 +112,8 @@
                     <span *ngIf="!notification.isRead" class="px-2 fas fa-circle text-muted position-absolute" style="top: .15rem; right: .05rem; font-size: .4rem; line-height: 1rem; vertical-align: middle"></span>
                     <div class="row no-gutters">
                         <div class="mr-3 col-auto">
-                            <img [src]="notification?.fromUser?.profileImage" style="width: 60px; height: 60px" alt="profile image" />
+                            <img *ngIf="notification?.fromUser?.profileImage" [src]="notification?.fromUser?.profileImage" style="width: 75px; height: 75px" alt="profile image" />
+                            <img *ngIf="!notification?.fromUser?.profileImage" [src]="'/assets/images/png/profile.png'" style="width: 75px; height: 75px" alt="profile image" />
                         </div>
                         <div class="col">
                             <div>

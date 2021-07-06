@@ -1,5 +1,6 @@
 import * as _ from 'lodash';
 import { CartItem } from './cart-item';
+import { Promotion } from './promotion';
 export class Tax {
     name: string;
     rate: number = 0;
@@ -16,6 +17,8 @@ export class Cashier{
     private _discount: Array<Discount> = [];
     private _tax: Array<Tax> = [];
     private _commission: number;
+    private _delivery: number = 0;
+    private _promotions: Array<Promotion> = [];
 
     set tax(value: Array<Tax>) {
         this._tax = value;
@@ -29,6 +32,12 @@ export class Cashier{
     set cartItems(value: Array<CartItem>) {
         this._cartItems = value;
     }
+    set promotions(value: Array<Promotion>) {
+        this._promotions = value;
+    }
+    set delivery(value) {
+        this._delivery = value;
+    }
     get cartItems(): Array<CartItem> {
         return this._cartItems;
     }
@@ -41,11 +50,23 @@ export class Cashier{
     get commission(): number {
         return this._commission;
     }
+    get promotions(): Array<Promotion> {
+        return this._promotions;
+    }
+    get delivery(): number {
+        return this._delivery;
+    }
     getSubtotal(): number {
         return _.sumBy(this._cartItems, function (item) {
+            let subtotal = 0;
             item = Object.assign(new CartItem, item);
+            if (item?.subItems?.length) {
+                subtotal = _.sumBy(item.subItems, function (subItem) {
+                    return subItem.quantity * subItem.price * item.quantity;
+                });
+            }
             if (item.amount || item.price) {
-                return item.amount() * item.quantity;
+                return item.amount() * item.quantity + subtotal;
             }
             return 0;
         });
@@ -98,7 +119,24 @@ export class Cashier{
         let total = this.getTotal();
         return total * this.commission / 100;
     }
+    getPromotionDiscount(): number {
+        let promotions = this.promotions.filter(promotion => {
+            return promotion.status === 'active';
+        });
+        for (let promotion of promotions) {
+            if (promotion.option === 'fixed_amount') {
+                return promotion.value * (promotion.quantity || 1);
+            } else if (promotion.option === 'percentage') {
+                return this.getSubtotal() * (promotion.value || 0) / 100;
+            }
+        }
+        return 0;
+    }
+    getDelivery(): number {
+        return this.delivery;
+    }
     getTotal(): number {
-        return this.getSubtotal() - this.getDiscount() + this.getTax();
+        // return this.getSubtotal() - this.getDiscount() + this.getTax();
+        return this.getSubtotal() + this.getDelivery() - this.getPromotionDiscount();
     }
 }

@@ -1,0 +1,53 @@
+<h4 class="ws-title">{{ categoryName }} <span class="badge font-7 ml-1"
+    [ngClass]="selectedCategory?.isPublished ? 'badge-success' : 'badge-default'">Published</span></h4>
+<div class="text-center text-lg-left">
+  <!-- <button class="btn btn-md btn-second" onclick="document.getElementById('importFile').click()">
+    <i class="fas fa-upload mr-1"></i>Import</button>
+  <button class="btn btn-md btn-second" (click)="export()"><i class="fas fa-download mr-1"></i> Export</button>
+  <a href="https://assets.wonderscale.com/template/template.xlsx" download style="color: white">
+    <button class="btn btn-md btn-second" (click)="toastDownload()"><i class="fas fa-download mr-1"></i>
+      Save Template</button>
+  </a> -->
+</div>
+
+<div *ngIf="displayBanner" class="p-3 alert-danger mb-2">Published item to show to public!</div>
+<item-controller></item-controller>
+<div *ngIf="numberOfItems && !loading.isRunning(); else loadingTemplate">
+  <div *ngIf="displayItems.length; else searchLoadingTemplate">
+    <item-view></item-view>
+  </div>
+</div>
+<ws-pagination *ngIf="numberOfCurrentTotalItems" [expanded]="isNavOpen" [currentPage]="currentPage" [numberOfSelectedItems]="editItems.length" 
+            [pageSize]="environment.ITEMS_PER_PAGE" [dbTotal]="numberOfItems" [total]="numberOfCurrentTotalItems" (deselectAll)="deselectAll()" (getPageNumber)="navigate($event)"></ws-pagination>
+<ng-template #noItem>
+  <ng-container *ngIf="categoryFound; else noCategoryFound">
+    <div class="text-center">
+      <h6 class="py-5">No item in the category.</h6>
+    </div>
+  </ng-container>
+</ng-template>
+
+<ng-template #noSearchItem>
+  <div class="text-center">
+    <h6 class="py-5">No item found.</h6>
+  </div>
+  <!-- <notitle [titles]="['no.found_item']"></notitle> -->
+</ng-template>
+
+<ng-template #loadingTemplate>
+  <ng-container *ngIf="loading.isRunning(); else noItem">
+    <ws-spinner class="text-center d-block w-100" style="padding-top: 30vh" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>
+  </ng-container>
+</ng-template>
+
+<ng-template #searchLoadingTemplate>
+  <ng-container *ngIf="loading.isRunning(); else noSearchItem">
+    <ws-spinner class="text-center d-block w-100" style="padding-top: 30vh" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>
+  </ng-container>
+</ng-template>
+
+<ng-template #noCategoryFound>
+  <h4 class="mt-5 mb-5 text-center">No item found.</h4>
+</ng-template>
+
+<!-- <import-items-modal id="importItemsModal"></import-items-modal> -->

@@ -1,0 +1,115 @@
+<ws-modal *ngIf="isOpened" [(isOpened)]="isOpened" [maxWidth]="maxWidth" [isCloseIconDisplayed]="false" [isCloseOutside]="true">
+    <div modalBody class="p-3">
+        <div *ngIf="!selectedActionType" class="text-center">
+            <button class="btn btn-controller" (click)="selectActionType('add_from_existing_category')">Add items from existing category</button>
+            <hr />
+            <button class="btn btn-controller" (click)="selectActionType('add_main_sub')">Create item combination</button>
+        </div>
+        <div *ngIf="selectedActionType === 'add_from_existing_category'">
+            <ng-container *ngTemplateOutlet="addFromExistingCategoryTemplate"></ng-container>
+        </div>
+        <div *ngIf="selectedActionType === 'add_main_sub'">
+            <ng-container *ngTemplateOutlet="itemCombinationTemplate"></ng-container>
+        </div>
+    </div>
+</ws-modal>
+
+<ng-template #addFromExistingCategoryTemplate>
+
+</ng-template>
+
+<ng-template #itemCombinationTemplate>
+    <div *ngIf="!onSellingItem?.item">
+        <!-- <button class="btn btn-controller w-100" style="height: 300px">
+            <span class="fas fa-plus mr-2 d-inline-block"></span>Main Item
+        </button> -->
+        <p class="mb-2 text-muted font-9">Select an item from category.</p>
+        <label class="mb-0 font-9">Search by Category:</label>
+        <!-- [disabled]="!isEditable()"  -->
+        <mat-select class="form-control form-control-sm mb-2" (selectionChange)="getItems($event.value)">
+            <mat-option [value]="category.id" *ngFor="let category of categories">{{ category?.name }}</mat-option>
+        </mat-select>
+        <label id="itemtype" class="mb-0 font-9">Main Item: </label>
+        <ws-search-select
+            for="itemtype"
+            [items]="items"
+            [loading]="itemLoading.isRunning()"
+            (selectionChange)="selectionChange($event)"
+            (searchValueChange)="searchItemValueChange($event)"
+            (scroll)="getItems(categoryId, true)"
+            (open)="openItemChange($event)"
+            class="d-block form-control form-control-sm mb-3">
+        </ws-search-select>
+        <div class="float-right">
+            <button class="btn btn-sm btn-controller mr-2" (click)="confirmMainItem()">Confirm</button>
+            <button class="btn btn-sm btn-controller" (click)="close()">Cancel</button>
+        </div>
+        <!-- [class.disabled]="!isEditable()" -->
+    </div>
+    <div *ngIf="onSellingItem?.item">
+        <div class="text-left mb-3 font-9 rounded">
+            <h5>Configuration:</h5>
+            <mat-checkbox [color]="'primary'" class="d-block" [(ngModel)]="onSellingItem.isTypeShown">
+                  Check to display item types (if any)
+            </mat-checkbox>
+        </div>
+        <hr />
+        <menu-item
+            [onSellingItem]="onSellingItem"
+            [isShown]="true"
+            [isEditable]="true"
+            [onRemoveExtraItemGroupClickedCallback]="onDeleteSubItemGroupClickedCallback.bind(this)"
+            [onAddExtraItemClickedCallback]="onAddSubItemClickedCallback.bind(this)"
+            [onAddExtraItemGroupClickedCallback]="onAddSubItemGroupClickedCallback.bind(this)"
+            [onRemoveExtraitemClickedCallback]="onRemoveSubitemClickedCallback.bind(this)"
+            class="mb-3">
+        </menu-item>
+        <div>
+            <button class="btn btn-sm btn-controller mr-2" (click)="onSellingItem.item = null; maxWidth = 400">Previous</button>
+            <div class="float-right">
+                <button class="btn btn-sm btn-controller mr-2" (click)="saveItem()" [disabled]="modifyLoading.isRunning()">
+                    <ws-spinner class="mr-2" *ngIf="modifyLoading.isRunning()" [width]="15" [height]="15" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>{{ isEditMode ? 'Edit' : 'Add' }}</button>
+                <button class="btn btn-sm btn-controller" (click)="close()">Cancel</button>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ws-modal *ngIf="isSubItemOpened" [(isOpened)]="isSubItemOpened" [maxWidth]="400" [isCloseIconDisplayed]="false">
+    <div modalBody class="p-3">
+        <p class="mb-2 text-muted font-9">Select a subitem from category.</p>
+        <label id="paymentMethod" class="mb-0 font-9">Search by Category:</label>
+        <mat-select class="form-control form-control-sm mb-2" (selectionChange)="getItems($event.value)">
+            <mat-option [value]="category.id" *ngFor="let category of categories">{{ category?.name }}</mat-option>
+        </mat-select>
+        <label id="subitem" class="mb-0 font-9">Subitem: </label>
+        <ws-search-select
+            for="subitem"
+            [item]="selectedSubItem"
+            [items]="items"
+            [loading]="itemLoading.isRunning()"
+            (selectionChange)="selectionChangeSubItem($event)"
+            (searchValueChange)="searchItemValueChange($event)"
+            (scroll)="getItems(categoryId, true)"
+            (open)="openItemChange($event)"
+            class="d-block form-control form-control-sm mb-2">
+        </ws-search-select>
+        <label *ngIf="itemTypes?.length" id="itemtype" class="mb-0 font-9">Item Type: </label>
+        <mat-select *ngIf="itemTypes?.length" [disabled]="!selectedSubItem"
+            for="itemtype"
+            class="form-control form-control-sm mb-2"
+            (selectionChange)="selectItemType($event.value)"
+            [value]="selectedItemType">
+            <mat-option
+                [value]="itemType"
+                *ngFor="let itemType of itemTypes">{{itemType.name}}
+            </mat-option>
+        </mat-select>
+        <label id="itemtype" class="mb-0 font-9">Price: </label>
+        <input name="extraItemPrice" type="number" class="form-control form-control-sm mb-2" [(ngModel)]="extraItemPrice" />
+        <div class="float-right">
+            <button class="btn btn-sm btn-controller mr-2" (click)="addSubItem()">Add</button>
+            <button class="btn btn-sm btn-controller" (click)="isSubItemOpened = false">Cancel</button>
+        </div>
+    </div>
+</ws-modal>
