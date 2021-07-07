@@ -1,5 +1,6 @@
 import { OpeningInfoType } from "../types/opening-info.type";
 import { Delivery } from "./delivery";
+import { FAQ } from "./faq";
 import { OpeningInfo } from "./opening-info";
 
 export class Store {
@@ -61,6 +62,7 @@ export class Store {
             isApprovalEnabled?: boolean
         }
     }
+    faq?: Array<FAQ>;
     contactButton?: {
         label: string,
         type: string,
