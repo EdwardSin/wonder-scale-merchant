@@ -46,6 +46,8 @@
         (onEditTelegramClicked)="onEditTelegramClicked()"
         (onEditWechatClicked)="onEditWechatClicked()"
         (onAddMediaClicked)="onAddMediaClicked()"
+        (onEditFAQClicked)="onEditFAQClicked($event)"
+        (onDeleteFAQClicked)="onDeleteFAQClicked($event)"
         (onDeleteContactButtonClicked)="onDeleteContactButtonClicked()"
         ></merchant-page>
     </div>
@@ -87,6 +89,8 @@
                 (onEditTelegramClicked)="onEditTelegramClicked()"
                 (onEditWechatClicked)="onEditWechatClicked()"
                 (onAddMediaClicked)="onAddMediaClicked()"
+                (onEditFAQClicked)="onEditFAQClicked($event)"
+                (onDeleteFAQClicked)="onDeleteFAQClicked($event)"
                 (onDeleteContactButtonClicked)="onDeleteContactButtonClicked()"
             ></merchant-info>
             <merchant-menu style="display: block; min-height: calc(100vh - 317px)" *ngIf="selectedNav == 'menu'" 
@@ -95,10 +99,17 @@
             (onEditQuickMenuClicked)="onEditQuickMenuClicked()"
             [isEditing]="true" [navigateToStore]="navigateToInfo.bind(this)"></merchant-menu>
             <merchant-share style="display: block; min-height: calc(100vh - 317px)" *ngIf="selectedNav == 'share'" [store]="store" [profileImage]="editingProfileImage" [isEditing]="true"></merchant-share>
+            <merchant-faq style="display: block; min-height: calc(100vh - 317px)"
+                *ngIf="selectedNav == 'faq'"
+                [store]="store" 
+                [isEditing]="true"
+                (onEditFAQClicked)="onEditFAQClicked($event)"
+                (onDeleteFAQClicked)="onDeleteFAQClicked($event)"></merchant-faq>
             <merchant-footer *ngIf="selectedNav != 'menu'" [selectedNav]="selectedNav" [isEditing]="true"
             [navigateToInfo]="navigateToInfo.bind(this)"
             [navigateToMenu]="navigateToMenu.bind(this)"
             [navigateToShare]="navigateToShare.bind(this)"
+            [navigateToFAQ]="navigateToFAQ.bind(this)"
             ></merchant-footer>
         </div>
     </div>
@@ -510,6 +521,18 @@
         </div>
     </div>
 </ws-modal>
+<ws-modal *ngIf="isFAQOpened" [isCloseIconDisplayed]="false" [(isOpened)]="isFAQOpened" [maxWidth]="500">
+    <form modalBody>
+        <input class="form-control mb-2" [maxlength]="256" name="question" [(ngModel)]="editingFAQ.question" placeholder="Question" />
+        <textarea class="form-control mb-2" [maxlength]="512" name="answer" rows="5" [(ngModel)]="editingFAQ.answer" placeholder="Enter the answer here..."></textarea>
+        <div>
+            <button class="btn btn-sm btn-controller float-right" (click)="isFAQOpened = false">Close</button>
+            <button class="btn btn-sm btn-controller float-right mr-2" (click)="onConfirmEditFAQClicked()">Save</button>
+        </div>
+    </form>
+</ws-modal>
+<confirm-modal *ngIf="isFAQRemoveOpened" [(isOpened)]="isFAQRemoveOpened" id="removeFAQModal" [message]="'Are you sure to remove the FAQ?'" [action]="onConfirmRemoveFAQClicked.bind(this)">
+</confirm-modal>
 <ws-modal *ngIf="isAddMediaOpened" [isCloseIconDisplayed]="false" [(isOpened)]="isAddMediaOpened" [maxWidth]="400">
     <form #form="ngForm" class="pt-3" modalBody>
         <div class="mb-3">

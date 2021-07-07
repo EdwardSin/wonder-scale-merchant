@@ -22,6 +22,7 @@ import { EmailValidator } from '@validations/email.validator';
 import { URLValidator } from '@validations/url.validator';
 import { DocumentHelper } from '@helpers/documenthelper/document.helper';
 import { ImageHelper } from '@helpers/imagehelper/image.helper';
+import { FAQ } from '@objects/faq';
 
 @Component({
   selector: 'app-store-page',
@@ -31,7 +32,7 @@ import { ImageHelper } from '@helpers/imagehelper/image.helper';
 export class StorePageComponent implements OnInit {
   environment = environment;
   store: Store;
-  selectedPreview: string = 'website';
+  selectedPreview: string = 'mobile';
   isChanged: boolean = false;
   isMobileSize: boolean = false;
   isSaveStoreLoading: WsLoading = new WsLoading;
@@ -56,6 +57,8 @@ export class StorePageComponent implements OnInit {
   isSnapchatOpened: boolean = false;
   isTelegramOpened: boolean = false;
   isWechatOpened: boolean = false;
+  isFAQOpened: boolean = false;
+  isFAQRemoveOpened: boolean = false;
   isAddMediaOpened: boolean = false;
   selectedNav: string = 'info';
   editingStore: Store;
@@ -64,6 +67,8 @@ export class StorePageComponent implements OnInit {
   editingBanners: Array<string> = [];
   editingMenuImages: Array<string> = [];
   editingProfileImage: string;
+  editingFAQ: FAQ = new FAQ;
+  faqIndex: number = -1;
   address: Address = new Address;
   tag = new Tag;
   previewImage;
@@ -218,6 +223,20 @@ export class StorePageComponent implements OnInit {
   onEditWechatClicked() {
     this.isWechatOpened = true;
     this.editingMedias = this.store.media.filter(media => media.type == 'wechat').map(media => media.value);
+  }
+  targetFAQ: FAQ;
+  onEditFAQClicked(faqIndex) {
+    this.editingFAQ = new FAQ();
+    this.faqIndex = -1;
+    if (faqIndex > -1) {
+      this.faqIndex = faqIndex;
+      this.editingFAQ = _.cloneDeep(this.store.faq[faqIndex]);
+    }
+    this.isFAQOpened = true;
+  }
+  onDeleteFAQClicked(faqIndex) {
+    this.faqIndex = faqIndex;
+    this.isFAQRemoveOpened = true;
   }
   onAddMediaClicked() {
     this.isAddMediaOpened = true;
@@ -393,6 +412,33 @@ export class StorePageComponent implements OnInit {
     this.isChanged = true;
     this.isWechatOpened = false;
   }
+  onConfirmEditFAQClicked() {
+    this.store.faq = this.store.faq || [];
+    if (!this.editingFAQ.question?.trim()) {
+      WsToastService.toastSubject.next({ content: 'Please enter the question!', type: 'danger'});
+      return;
+    }
+    if (!this.editingFAQ.answer?.trim()) {
+      WsToastService.toastSubject.next({ content: 'Please enter the answer!', type: 'danger'});
+      return;
+    }
+    if (this.faqIndex > -1) {
+      this.store.faq[this.faqIndex] = this.editingFAQ;
+    } else {
+      this.store.faq.push(this.editingFAQ);
+    }
+    this.store = {...this.store};
+    this.isChanged = true;
+    this.isFAQOpened = false;
+  }
+  onConfirmRemoveFAQClicked() {
+    if (this.faqIndex > -1) {
+      this.store.faq.splice(this.faqIndex, 1);
+    }
+    this.store = {...this.store};
+    this.isChanged = true;
+    this.isFAQRemoveOpened = false;
+  }
   onConfirmAddMediaClicked(type, value) {
     if (validateMedia.bind(this)(type, value)) {
       this.store.media.push({ type, value });
@@ -494,6 +540,9 @@ export class StorePageComponent implements OnInit {
   }
   navigateToShare() {
     this.router.navigate([], {queryParams: {nav: 'share'}, queryParamsHandling: 'merge'});
+  }
+  navigateToFAQ() {
+    this.router.navigate([], {queryParams: {nav: 'faq'}, queryParamsHandling: 'merge'});
   }
   removeInformationImagesObservable() {
     return forkJoin(this.removingBanners.map(image => {
