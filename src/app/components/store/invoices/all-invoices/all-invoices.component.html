@@ -160,12 +160,12 @@
         <h5 class="h5">Analysis</h5>
         <div class="row no-gutters">
             <div class="col-lg-3 pr-lg-3">
-                <label class="mb-0 font-9">Target</label>
+                <label class="mb-0 font-9">Target:</label>
                 <mat-select class="form-control form-control-sm mb-2" [(ngModel)]="analysis.target">
                     <mat-option value="items">Items</mat-option>
                     <mat-option value="delivery">Delivery</mat-option>
                 </mat-select>
-                <label class="mb-0 font-9">Status</label>
+                <label class="mb-0 font-9">Status:</label>
                 <mat-select [multiple]="true" class="form-control form-control-sm mb-2" [(ngModel)]="analysis.status">
                     <mat-option value="wait_for_approval">Wait for approval</mat-option>
                     <mat-option value="new">Wait for payment</mat-option>
@@ -177,16 +177,21 @@
                     <mat-option value="cancelled">Cancelled / Refunded</mat-option>
                     <mat-option value="rejected">Rejected</mat-option>
                 </mat-select>
-                <label class="mb-0 font-9">ETA From date</label>
-                <!-- [min]="last60MonthsDate" [max]="maxDate"  -->
-                <input (click)="fromPicker.open()" class="form-control form-control-sm" [(ngModel)]="analysis.fromDate" [matDatepicker]="fromPicker" />
-                <mat-datepicker #fromPicker startView="month"></mat-datepicker>
-                <label class="mb-0 font-9">ETA To date</label>
-                <!--  [max]="maxDate" -->
-                <input (click)="toPicker.open()" class="form-control form-control-sm" [(ngModel)]="analysis.toDate" [matDatepicker]="toPicker" [min]="analysis.fromDate" />
-                <mat-datepicker #toPicker startView="month"></mat-datepicker>
-                <div class="mb-3">
+                <div class="mb-1">
+                    <mat-checkbox [(ngModel)]="analysis.isShownAllSubItems" class="font-8" [color]="'primary'">Show all subitems.</mat-checkbox>
+                </div>
+                <div class="mb-1">
                     <mat-checkbox [(ngModel)]="analysis.isIncludedWithoutEta" class="font-8" [color]="'primary'">Include without ETA delivery / pickup date.</mat-checkbox>
+                </div>
+                <div *ngIf="!analysis.isIncludedWithoutEta" class="mb-3">
+                    <label class="mb-0 font-9">ETA From Date:</label>
+                    <!-- [min]="last60MonthsDate" [max]="maxDate"  -->
+                    <input (click)="fromPicker.open()" class="form-control form-control-sm mb-2" [(ngModel)]="analysis.fromDate" [matDatepicker]="fromPicker" />
+                    <mat-datepicker #fromPicker startView="month"></mat-datepicker>
+                    <label class="mb-0 font-9">ETA To Date:</label>
+                    <!--  [max]="maxDate" -->
+                    <input (click)="toPicker.open()" class="form-control form-control-sm" [(ngModel)]="analysis.toDate" [matDatepicker]="toPicker" [min]="analysis.fromDate" />
+                    <mat-datepicker #toPicker startView="month"></mat-datepicker>
                 </div>
                 <button class="btn btn-sm btn-controller float-right" (click)="getAnalysis()">Analyze</button>
             </div>
@@ -199,7 +204,7 @@
                         <span class="font-8 font-weight-bold" *ngIf="currentAnalysis?.target == 'delivery'">
                             Invoices with delivery
                         </span>
-                        <span class="font-8 float-right">
+                        <span class="font-8 float-right" *ngIf="!analysis.isIncludedWithoutEta">
                             {{currentAnalysis?.fromDate | date: 'dd MMM y'}} - {{currentAnalysis?.toDate | date: 'dd MMM y'}}
                         </span>
                     </div>
