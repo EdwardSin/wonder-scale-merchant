@@ -32,7 +32,7 @@ import { FAQ } from '@objects/faq';
 export class StorePageComponent implements OnInit {
   environment = environment;
   store: Store;
-  selectedPreview: string = 'mobile';
+  selectedPreview: string = 'website';
   isChanged: boolean = false;
   isMobileSize: boolean = false;
   isSaveStoreLoading: WsLoading = new WsLoading;

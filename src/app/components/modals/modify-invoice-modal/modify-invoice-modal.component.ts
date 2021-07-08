@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, SimpleChanges, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { FormControl, FormGroup } from '@angular/forms';
 import { WsFormBuilder } from '@builders/wsformbuilder';
@@ -29,6 +29,7 @@ import { Cashier } from '@objects/cashier';
 export class ModifyInvoiceModalComponent extends WsModalComponent implements OnInit {
   @Input() item: Invoice;
   @Input() closeCallback: Function;
+  @ViewChild('recipientName', {static: false}) recipientName: ElementRef;
   hours = ['06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '00', '01', '02', '03', '04', '05'];
   mins = ['00', '15', '30', '45'];
   states = [
@@ -360,7 +361,11 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
     let etaMin = this.form.controls['etaDateTimeMin'].value;
     
     if (!form.controls['recipientName'].value) {
-      WsToastService.toastSubject.next({ content: 'Please enter recipient\'s name!', type: 'danger'});
+      WsToastService.toastSubject.next({ content: 'Please enter recipient\'s name in delivery!', type: 'danger'});
+      this.selectedTab.setValue(1);
+      setTimeout(() => {
+        this.recipientName.nativeElement.focus();
+      }, 500);
       return;
     }
     if (!this.validatePickup() || !this.validateDelivery()) {

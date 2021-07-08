@@ -75,7 +75,8 @@ export class AllInvoicesComponent implements OnInit {
     status: ['new', 'paid', 'in_progress'],
     fromDate: moment().subtract(2, 'days').format('YYYY-MM-DD'),
     toDate: moment().add(7, 'days').format('YYYY-MM-DD'),
-    isIncludedWithoutEta: true
+    isIncludedWithoutEta: true,
+    isShownAllSubItems: false
   }
   currentAnalysis;
   itemsAnalysis = [];
