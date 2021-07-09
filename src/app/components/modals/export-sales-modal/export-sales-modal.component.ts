@@ -188,10 +188,7 @@ export class ExportSalesModalComponent extends WsModalComponent implements OnIni
     this.exportExcel(result, 'daily_sales', `${fromDate}-${toDate}`);
   }
   getCustomerName(sale) {
-    if (sale && sale.customer && sale.customer.firstName) {
-      return sale.customer.firstName + ' ' + sale.customer.lastName;
-    }
-    return '-';
+    return sale?.customer?.recipientName || '-';
   }
   renderMonthlySalesToXLSX(result) {
     let monthlyResult = result;
