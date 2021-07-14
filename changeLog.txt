@@ -8,6 +8,7 @@
 ---------------------------------------------
 .: WSM: Task - Showing pay-slip in invoice info (WSM-390)
 .: WSM: Task - When create store, it is difficult to see the selected item (WSM-389)
+.: WSM: Task - A customize name for on-selling item (WSM-412)
 
 - v1.0.10942                                -
 ---------------------------------------------

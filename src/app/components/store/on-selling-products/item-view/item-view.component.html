@@ -60,7 +60,7 @@
           </td>
           <td *ngIf="columns.includes('sku')">{{ item?.item?.refId}}</td>
           <td *ngIf="columns.includes('name')">
-            <a class="default" href="javascript:void(0)" (click)="$event.stopPropagation(); openEditItem(item)">{{ item?.item?.name | titlecase | limitTo: 128 }}</a>
+            <a class="default" href="javascript:void(0)" (click)="$event.stopPropagation(); openEditItem(item)">{{ (item?.name || item?.item?.name) | titlecase | limitTo: 128 }}</a>
           </td>
           <td *ngIf="columns.includes('price')">
             {{ item?.item?.price | wsCurrency: 1: 1 | number: '1.2-2' }}

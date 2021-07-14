@@ -5,7 +5,6 @@ import { Item } from '@objects/item';
 import { SharedItemService } from '@services/shared/shared-item.service';
 import { SharedStoreService } from '@services/shared/shared-store.service';
 import { ViewType } from '@wstypes/view.type';
-import { PriceHelper } from '@helpers/pricehelper/price.helper';
 import { ScreenHelper } from '@helpers/screenhelper/screen.helper';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';

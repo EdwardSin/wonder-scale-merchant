@@ -11,6 +11,7 @@ import { SharedStoreService } from '@services/shared/shared-store.service';
 import { SharedCategoryService } from '@services/shared/shared-category.service';
 import { WsToastService } from '@elements/ws-toast/ws-toast.service';
 import { AuthOnSellingItemContributorService } from '@services/http/auth-store/contributor/auth-on-selling-item-contributor.service';
+import { Item } from '@objects/item';
 
 @Component({
   selector: 'modify-on-selling-item-modal',
@@ -21,6 +22,7 @@ export class ModifyOnSellingItemModalComponent extends WsModalComponent implemen
   @Input() closeCallback: Function;
   @Input() onSellingItem: OnSellingItem = {
     item: '',
+    name: '',
     categories: [],
     store: '',
     isTypeShown: true,
@@ -72,6 +74,9 @@ export class ModifyOnSellingItemModalComponent extends WsModalComponent implemen
       this.maxWidth = this.onSellingItem?.item ? 800 : 400;
       if (this.onSellingItem?.item) {
         this.isEditMode = true;
+        if (!this.onSellingItem?.name) {
+          this.onSellingItem.name = (<Item>this.onSellingItem?.item)?.name;
+        }
       }
       this.getCategories();
     }
@@ -79,6 +84,7 @@ export class ModifyOnSellingItemModalComponent extends WsModalComponent implemen
   saveItem() {
     let obj = {
       _id: this.onSellingItem._id,
+      name: this.onSellingItem.name,
       item: this.onSellingItem.item,
       store: this.onSellingItem.store,
       categories: [this.category._id],
@@ -115,6 +121,9 @@ export class ModifyOnSellingItemModalComponent extends WsModalComponent implemen
   }
   confirmMainItem() {
     this.onSellingItem.item = this.selectedItem;
+    if (!this.onSellingItem?.name) {
+      this.onSellingItem.name = this.selectedItem.name;
+    }
     this.categoryId = '';
     this.maxWidth = 800;
   }
@@ -251,6 +260,11 @@ export class ModifyOnSellingItemModalComponent extends WsModalComponent implemen
   onRemoveSubitemClickedCallback(group, index) {
     if (index > -1) {
       group.subItems.splice(index, 1);
+    }
+  }
+  onSellingItemNameChanged() {
+    if (!this.onSellingItem?.name) {
+      this.onSellingItem.name = (<Item>this.onSellingItem?.item).name;
     }
   }
   ngOnDestroy() {
