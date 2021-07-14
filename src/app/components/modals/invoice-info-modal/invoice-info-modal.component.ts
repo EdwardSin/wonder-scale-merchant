@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { WsLoading } from '@elements/ws-loading/ws-loading';
 import { WsModalComponent } from '@elements/ws-modal/ws-modal.component';
 import { WsToastService } from '@elements/ws-toast/ws-toast.service';
@@ -34,7 +35,8 @@ export class InvoiceInfoModalComponent extends WsModalComponent implements OnIni
   rejectReason: string = '';
   private ngUnsubscribe: Subject<any> = new Subject;
   constructor(private authInvoiceContributorService: AuthInvoiceContributorService,
-    private authDeliveryContributorService: AuthDeliveryContributorService) { 
+    private authDeliveryContributorService: AuthDeliveryContributorService,
+    private router: Router) { 
     super();
   }
   ngOnInit(): void {
@@ -126,6 +128,10 @@ export class InvoiceInfoModalComponent extends WsModalComponent implements OnIni
         WsToastService.toastSubject.next({content: 'Delivery is updated!', type: 'success'});
       }
     });
+  }
+  onPayslipClicked() {
+    this.isOpened = false;
+    this.router.navigate([], {queryParams: {'invoiceId': this.item._id, paid: true}, queryParamsHandling: 'merge'});
   }
   ngOnDestroy() {
     super.ngOnDestroy();

@@ -268,6 +268,10 @@ export class WsInvoiceCardComponent implements OnInit {
     this.isPayslipModalOpened = false;
     this.router.navigate([], {queryParams: {invoiceId: null, paid: null}, queryParamsHandling: 'merge'});
   }
+  navigateToInvoiceDetails() {
+    this.isPayslipModalOpened = false;
+    this.router.navigate([], {queryParams: {invoiceId: this.item._id, paid: null}, queryParamsHandling: 'merge'});
+  }
   ngOnDestroy() {
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
