@@ -2,6 +2,7 @@ import { Item } from "./item";
 
 export class OnSellingItem {
     _id?: string;
+    name: string;
     item?: string | Item;
     categories: Array<string>;
     store: string;

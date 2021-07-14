@@ -17,7 +17,7 @@
                 </div>
             </span>
             <div class="menu-item__middle col px-2 px-lg-3" (click)="isEditable || isOpenedAuto ? null : onDetailsClick()">
-                <p class="menu-item__text">{{ item?.name }}</p>
+                <p class="menu-item__text">{{ onSellingItem?.name || item?.name }}</p>
                 <div class="float-right mb-2">
                     <p class="menu-item__price mb-1" *ngIf="!selectedType"><span class="pr-1">RM</span>{{ item?.price | wsCurrency: 1:1 }}</p>
                     <p class="menu-item__price mb-1" *ngIf="selectedType"><span class="pr-1">RM</span>{{ (selectedType?.price || item?.price) | wsCurrency: 1:1 }}</p>

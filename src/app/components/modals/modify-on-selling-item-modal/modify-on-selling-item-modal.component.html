@@ -49,6 +49,8 @@
     <div *ngIf="onSellingItem?.item">
         <div class="text-left mb-3 font-9 rounded">
             <h5>Configuration:</h5>
+            <label class="mb-1">Name:</label>
+            <input class="form-control form-control-sm mb-3" maxlength="128" [(ngModel)]="onSellingItem.name" (change)="onSellingItemNameChanged()"/>
             <mat-checkbox [color]="'primary'" class="d-block" [(ngModel)]="onSellingItem.isTypeShown">
                   Check to display item types (if any)
             </mat-checkbox>
