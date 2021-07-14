@@ -9,6 +9,7 @@ import { MerchantFooterComponent } from '@elements/mobile/merchant-footer/mercha
 import { MerchantInfoComponent } from '@elements/mobile/merchant-info/merchant-info.component';
 import { MerchantMenuComponent } from '@elements/mobile/merchant-menu/merchant-menu.component';
 import { MerchantShareComponent } from '@elements/mobile/merchant-share/merchant-share.component';
+import { MerchantFaqComponent } from '@elements/mobile/merchant-faq/merchant-faq.component';
 
 
 
@@ -16,7 +17,8 @@ import { MerchantShareComponent } from '@elements/mobile/merchant-share/merchant
   declarations: [StorePageComponent, MerchantPageComponent, MerchantInfoComponent,
     MerchantFooterComponent,
     MerchantMenuComponent,
-    MerchantShareComponent],
+    MerchantShareComponent,
+    MerchantFaqComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   imports: [
     CommonModule,
