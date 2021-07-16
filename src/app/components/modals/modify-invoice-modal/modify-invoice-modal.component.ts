@@ -243,27 +243,15 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
     }
     this.categoryId = categoryId;
     this.itemLoading.start();
-    if (categoryId) {
-      this.authOnSellingItemContributorService.getItemsByCategoryId(categoryId, this.itemKeyword, this.page, 'alphabet', false).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.itemLoading.stop())).subscribe(result => {
-        if (result) {
-          if (isNextPage) {
-            this.items = this.items.concat(this.mapItems(result['result']));
-          } else {
-            this.items = this.mapItems(result['result']);
-          }
+    this.authOnSellingItemContributorService.getAuthenticatedAllItemsByStoreId({keyword: this.itemKeyword, page: this.page}).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.itemLoading.stop())).subscribe(result => {
+      if (result) {
+        if (isNextPage) {
+          this.items = this.items.concat(this.mapItems(result['result']));
+        } else {
+          this.items = this.mapItems(result['result']);
         }
-      });
-    } else {
-      this.authOnSellingItemContributorService.getAuthenticatedAllItemsByStoreId({keyword: this.itemKeyword, page: this.page}).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.itemLoading.stop())).subscribe(result => {
-        if (result) {
-          if (isNextPage) {
-            this.items = this.items.concat(this.mapItems(result['result']));
-          } else {
-            this.items = this.mapItems(result['result']);
-          }
-        }
-      })
-    }
+      }
+    })
   }
   getDeliveries() {
     this.authDeliveryContributorService.getDeliveries(null).pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {

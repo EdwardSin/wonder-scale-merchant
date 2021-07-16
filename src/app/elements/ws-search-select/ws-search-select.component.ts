@@ -3,7 +3,6 @@ import { FormControl } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { MatSelect } from '@angular/material/select';
-import { WsLoading } from '@elements/ws-loading/ws-loading';
 
 @Component({
   selector: 'ws-search-select',
@@ -16,6 +15,7 @@ export class WsSearchSelectComponent implements OnInit {
   @Input() item;
   @Input() loading: boolean;
   @Input() placeholder: string = '';
+  @Input() searchPlaceholder: string = 'Search';
   @Output() searchValueChange: EventEmitter<any> = new EventEmitter();
   @Output() selectionChange: EventEmitter<any> = new EventEmitter<any>();
   @Output('scroll') scrollChange: EventEmitter<any> = new EventEmitter<any>();
@@ -23,6 +23,7 @@ export class WsSearchSelectComponent implements OnInit {
   
   @ViewChild('matSelectInfiniteScroll', { static: true } )
   infiniteScrollSelect: MatSelect;
+  opened: boolean;
   searchCtrl: FormControl = new FormControl();
   private ngUnsubscribe: Subject<void> = new Subject<void>();
 
@@ -35,6 +36,7 @@ export class WsSearchSelectComponent implements OnInit {
   ngOnInit() {
     this.infiniteScrollSelect.openedChange.pipe(takeUntil(this.ngUnsubscribe)).subscribe(opened => {
       // after opening, reset the batch offset
+      this.opened = opened;
       this.openChange.emit(opened);
     });
   }
