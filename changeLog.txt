@@ -6,6 +6,11 @@
 ---------------------------------------------
 - 2021-07-14                                -
 ---------------------------------------------
+.: WSM: Task - Search item by category (WSM-400)
+
+---------------------------------------------
+- 2021-07-14                                -
+---------------------------------------------
 .: WSM: Task - Showing pay-slip in invoice info (WSM-390)
 .: WSM: Task - When create store, it is difficult to see the selected item (WSM-389)
 .: WSM: Task - A customize name for on-selling item (WSM-412)

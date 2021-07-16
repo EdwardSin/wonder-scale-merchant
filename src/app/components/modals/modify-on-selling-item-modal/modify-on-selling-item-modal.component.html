@@ -20,19 +20,13 @@
 
 <ng-template #itemCombinationTemplate>
     <div *ngIf="!onSellingItem?.item">
-        <!-- <button class="btn btn-controller w-100" style="height: 300px">
-            <span class="fas fa-plus mr-2 d-inline-block"></span>Main Item
-        </button> -->
         <p class="mb-2 text-muted font-9">Select an item from category.</p>
-        <label class="mb-0 font-9">Search by Category:</label>
-        <!-- [disabled]="!isEditable()"  -->
-        <mat-select class="form-control form-control-sm mb-2" (selectionChange)="getItems($event.value)">
-            <mat-option [value]="category.id" *ngFor="let category of categories">{{ category?.name }}</mat-option>
-        </mat-select>
         <label id="itemtype" class="mb-0 font-9">Main Item: </label>
         <ws-search-select
             for="itemtype"
             [items]="items"
+            [item]="selectedItem"
+            [searchPlaceholder]="'Search (Item, Category)'"
             [loading]="itemLoading.isRunning()"
             (selectionChange)="selectionChange($event)"
             (searchValueChange)="searchItemValueChange($event)"
@@ -44,7 +38,6 @@
             <button class="btn btn-sm btn-controller mr-2" (click)="confirmMainItem()">Confirm</button>
             <button class="btn btn-sm btn-controller" (click)="close()">Cancel</button>
         </div>
-        <!-- [class.disabled]="!isEditable()" -->
     </div>
     <div *ngIf="onSellingItem?.item">
         <div class="text-left mb-3 font-9 rounded">
@@ -79,16 +72,12 @@
 
 <ws-modal *ngIf="isSubItemOpened" [(isOpened)]="isSubItemOpened" [maxWidth]="400" [isCloseIconDisplayed]="false">
     <div modalBody class="p-3">
-        <p class="mb-2 text-muted font-9">Select a subitem from category.</p>
-        <label id="paymentMethod" class="mb-0 font-9">Search by Category:</label>
-        <mat-select class="form-control form-control-sm mb-2" (selectionChange)="getItems($event.value)">
-            <mat-option [value]="category.id" *ngFor="let category of categories">{{ category?.name }}</mat-option>
-        </mat-select>
         <label id="subitem" class="mb-0 font-9">Subitem: </label>
         <ws-search-select
             for="subitem"
             [item]="selectedSubItem"
             [items]="items"
+            [searchPlaceholder]="'Search (Item, Category)'"
             [loading]="itemLoading.isRunning()"
             (selectionChange)="selectionChangeSubItem($event)"
             (searchValueChange)="searchItemValueChange($event)"
