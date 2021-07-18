@@ -35,7 +35,7 @@
             class="d-block form-control form-control-sm mb-3">
         </ws-search-select>
         <div class="float-right">
-            <button class="btn btn-sm btn-controller mr-2" (click)="confirmMainItem()">Confirm</button>
+            <button class="btn btn-sm btn-controller mr-2" [disabled]="!selectedItem" (click)="confirmMainItem()">Confirm</button>
             <button class="btn btn-sm btn-controller" (click)="close()">Cancel</button>
         </div>
     </div>
