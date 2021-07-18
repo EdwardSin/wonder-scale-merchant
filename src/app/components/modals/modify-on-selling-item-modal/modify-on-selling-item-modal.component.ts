@@ -146,9 +146,17 @@ export class ModifyOnSellingItemModalComponent extends WsModalComponent implemen
         } else {
           this.items = result['result'];
         }
-        this.items = this.items.filter(x => x._id !== this.selectedItem?._id);
+        this.items = this.mapItems(this.items.filter(x => x._id !== this.selectedItem?.id));
       }
     })
+  }
+  mapItems(items) {
+    return items.map(item => {
+      return {
+        id: item._id,
+        ...item
+      }
+    });
   }
   selectItemType(event) {
     this.selectedItemType = event;
