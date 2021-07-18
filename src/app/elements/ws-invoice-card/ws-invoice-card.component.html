@@ -124,7 +124,7 @@
     </form>
 </ws-modal>
 
-<confirm-modal *ngIf="isApproveModalOpened" [(isOpened)]="isApproveModalOpened" [loading]="statusLoading.isRunning()" [message]="'Are you sure to approve the invoice?'" [action]="approveInvoice.bind(this)"></confirm-modal>
+<confirm-modal *ngIf="isApproveModalOpened" [(isOpened)]="isApproveModalOpened" [loading]="statusLoading.isRunning()" [message]="'Are you sure to approve the invoice?'" [submessage]="!this.item?.delivery?.fee ? 'Is the order free delivery?' : ''" [action]="approveInvoice.bind(this)"></confirm-modal>
 
 <ng-template #receiptLoadingTemplate>
     <ws-loading *ngIf="receiptLoading.isRunning(); else noReceiptTemplate"></ws-loading>
