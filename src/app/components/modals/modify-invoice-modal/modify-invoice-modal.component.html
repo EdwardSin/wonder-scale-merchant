@@ -70,8 +70,13 @@
                             [items]="items"
                             [item]="selectedItem"
                             [searchPlaceholder]="'Search (Item, Category)'"
-                            [loading]="itemLoading.isRunning()" (selectionChange)="selectionChange($event)" (searchValueChange)="searchItemValueChange($event)" (scroll)="getItems(categoryId, true)" (open)="openItemChange($event)"
-                            [class.disabled]="!isEditable()" class="d-block form-control form-control-sm mb-2"></ws-search-select>
+                            [loading]="itemLoading.isRunning()"
+                            (selectionChange)="selectionChange($event)"
+                            (searchValueChange)="searchItemValueChange($event)"
+                            (scroll)="getItems(true)"
+                            (open)="openItemChange($event)"
+                            [class.disabled]="!isEditable()"
+                            class="d-block form-control form-control-sm mb-2"></ws-search-select>
                         <menu-item class="px-2 py-2" *ngIf="selectedItem"
                             [isOpenedAuto]="true"
                             [isImageShown]="false"
