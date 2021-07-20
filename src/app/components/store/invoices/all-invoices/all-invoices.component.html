@@ -106,7 +106,10 @@
 <div *ngIf="selectedTab != 'delivered' && selectedTab !== 'in_progress' && selectedTab !== 'ready' && selectedTab !== 'completed'">
     <div class="row no-gutters mb-5 pb-3" *ngIf="allInvoices?.length && !loading.isRunning(); else loadingTemplate">
         <div class="col-lg-5ths col-md-4 col-sm-6 p-sm-2 py-2" *ngFor="let invoice of allInvoices; trackBy: trackInvoiceId">
-            <ws-invoice-card [item]="invoice" [onInvoiceInfoModalClick]="openEditInvoiceModal.bind(this, invoice._id)"></ws-invoice-card>
+            <ws-invoice-card [item]="invoice"
+                [onInvoiceInfoModalClick]="openEditInvoiceModal.bind(this, invoice._id)"
+                [onInvoiceMessageClick]="openInvoiceMessageModal.bind(this, invoice._id)"
+            ></ws-invoice-card>
         </div>
     </div>
 </div>
@@ -139,6 +142,11 @@
 
 <ng-template #loadingTemplate>
     <ng-container *ngIf="loading.isRunning(); else noInvoice">
+        <ws-spinner class="text-center d-block w-100" style="padding-top: 10vh; padding-bottom: 10vh" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>
+    </ng-container>
+</ng-template>
+<ng-template #invoiceLoadingTemplate>
+    <ng-container *ngIf="invoiceLoading.isRunning(); else noInvoice">
         <ws-spinner class="text-center d-block w-100" style="padding-top: 10vh; padding-bottom: 10vh" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>
     </ng-container>
 </ng-template>
@@ -252,3 +260,26 @@
 
 <modify-invoice-modal [(isOpened)]="isModifyInvoiceModalOpened" [item]="selectedItem"></modify-invoice-modal>
 <invoice-info-modal [(isOpened)]="isInvoiceInfoModalOpened" [item]="selectedItem" [closeCallback]="closeInvoiceInfo.bind(this)"></invoice-info-modal>
+
+<ws-modal *ngIf="isInvoiceNotesModalOpened" [isCloseIconDisplayed]="false" [(isOpened)]="isInvoiceNotesModalOpened" [maxWidth]="400">
+    <div class="pt-3" modalBody>
+        <ng-container *ngIf="selectedItem; else invoiceLoadingTemplate">
+            <div class="mb-3" *ngFor="let note of selectedItem?.orderNotes">
+                <div *ngIf="note?.type == 'general'">
+                    <label class="mb-1">Order Notes:</label>
+                    <div class="scrollbar font-9" style="max-height: 120px; white-space: pre-line;">{{ note?.message }}</div>
+                </div>
+                <div *ngIf="note?.type == 'gift'">
+                    <label class="mb-1">Gift Message:</label>
+                    <div class="scrollbar font-9" style="max-height: 120px; white-space: pre-line;">{{ note?.message }}</div>
+                </div>
+            </div>
+        </ng-container>
+        <div>
+            <button class="btn btn-sm btn-controller float-right" (click)="isInvoiceNotesModalOpened = false">Close</button>
+            <!-- <button [disabled]="editNotesLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="markInvoiceNote()">
+                <ws-spinner class="mr-2" *ngIf="editNotesLoading.isRunning()" [width]="15" [height]="15" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>Confirm</button> -->
+        </div>
+        <!-- <mat-checkbox [color]="'primary'" class="font-9">Mark as complete</mat-checkbox> -->
+    </div>
+</ws-modal>

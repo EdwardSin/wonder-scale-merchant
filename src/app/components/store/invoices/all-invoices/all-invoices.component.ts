@@ -54,6 +54,7 @@ export class AllInvoicesComponent implements OnInit {
   isModifyInvoiceModalOpened: boolean;
   isInvoiceInfoModalOpened: boolean;
   isAnalysisInvoiceModalOpened: boolean;
+  isInvoiceNotesModalOpened: boolean;
   selectedItem: any;
   loading: WsLoading = new WsLoading;
   invoiceLoading: WsLoading = new WsLoading;
@@ -294,6 +295,17 @@ export class AllInvoicesComponent implements OnInit {
     this.selectedItem = null;
     this.isInvoiceInfoModalOpened = true;
     this.authInvoiceContributorService.getInvoice(invoiceId).pipe(delay(500), takeUntil(this.ngUnsubscribe)).subscribe(result => {
+      if (result['result']) {
+        this.selectedItem = result['result'];
+        this.ref.detectChanges();
+      }
+    });
+  }
+  openInvoiceMessageModal(invoiceId) {
+    this.selectedItem = null;
+    this.isInvoiceNotesModalOpened = true;
+    this.invoiceLoading.start();
+    this.authInvoiceContributorService.getInvoice(invoiceId).pipe(delay(500), takeUntil(this.ngUnsubscribe), finalize(() => this.invoiceLoading.stop())).subscribe(result => {
       if (result['result']) {
         this.selectedItem = result['result'];
         this.ref.detectChanges();

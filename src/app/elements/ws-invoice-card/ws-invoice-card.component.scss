@@ -23,6 +23,18 @@
         font-size: .8rem;
     }
 
+    .ws-message-icon {
+        right: 10px;
+        top: 10px;
+        color: #b71c1c;
+        cursor: pointer;
+        transition: transform ease .2s;
+
+        &:hover {
+            transform: scale(1.2);
+        }
+    }
+
     .badge-light {
         background-color: #E5E5E5;
     }
