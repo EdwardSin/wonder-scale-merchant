@@ -1,8 +1,9 @@
 <div class="ws-invoice-card-container row no-gutters justify-content-between h-100" style="flex-direction: column;" (click)="onInvoiceInfoModalClick()">
-    <p class="mb-0 ws-invoice-title text-break">
+    <p class="mb-0 ws-invoice-title text-break" style="width: calc(100% - 25px)">
         <span *ngIf="item?.customer?.recipientName">{{item?.customer?.recipientName}}</span>
         <span *ngIf="!item?.customer?.recipientName">{{item?.receiptId}}</span>
     </p>
+    <span *ngIf="item?.hasMessage" (click)="$event.stopPropagation(); onInvoiceMessageClick()" title="Message from customer" class="fas fa-sticky-note position-absolute ws-message-icon" ></span>
     <div class="row no-gutters justify-content-between">
         <div class="col">
             <ng-container [ngSwitch]="item.status">
