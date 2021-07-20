@@ -144,7 +144,7 @@ export class ProductsComponent implements OnInit {
     if (name == '' || name.trim() == '') {
       WsToastService.toastSubject.next({ content: 'Category name is invalid!', type: 'danger' });
       return false;
-    } else if (name.length > 30) {
+    } else if (name.length > 32) {
       WsToastService.toastSubject.next({ content: 'Category name is too long!', type: 'danger' });
       return false;
     }

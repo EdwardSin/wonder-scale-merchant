@@ -75,7 +75,7 @@
 <ws-modal *ngIf="isEditCategoryOpened" [isCloseIconDisplayed]="false" [(isOpened)]="isEditCategoryOpened" [maxWidth]="400">
     <div class="pt-3" modalBody>
         <div class="mb-1">
-            <input class="form-control" maxlength="30" placeholder="Catalogue Name" [(ngModel)]="editingName" />
+            <input class="form-control" maxlength="32" placeholder="Catalogue Name" [(ngModel)]="editingName" />
         </div>
         <div class="mb-3">
             <mat-checkbox [color]="'primary'" class="font-8" [(ngModel)]="isPublished">Check to publish category</mat-checkbox>

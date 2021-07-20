@@ -71,7 +71,12 @@
                                     </div>
                                     <div class="mb-3">
                                         <label class="mb-0 font-9">Catagories:</label>
-                                        <mat-select class="form-control form-control-sm" formControlName="categories" multiple>
+                                        <mat-select #categoryMatSelect class="form-control form-control-sm" formControlName="categories" multiple>
+                                            <div (click)="isEditCategoryOpened = true; editingName = ''; categoryMatSelect.close()" class="mat-option mat-focus-indicator mat-option-multiple d-flex" style="align-items: baseline;">
+                                                <span class="fas fa-plus mr-2"></span>
+                                                Create New
+                                            </div>
+                                            <hr class="my-0"/>
                                             <mat-option *ngIf="!categories.length" [value]="''" disabled>No Category</mat-option>
                                             <mat-option *ngFor="let category of categories" [value]="category._id">{{category.name}}</mat-option>
                                         </mat-select>
@@ -191,3 +196,15 @@
         </div>
     </div>
 </div>
+<ws-modal *ngIf="isEditCategoryOpened" [isCloseIconDisplayed]="false" [(isOpened)]="isEditCategoryOpened" [maxWidth]="400">
+    <div class="pt-3" modalBody>
+        <div class="mb-3">
+            <input class="form-control" maxlength="32" placeholder="Catalogue Name" [(ngModel)]="editingName" />
+        </div>
+        <div>
+            <button class="btn btn-sm btn-controller float-right" (click)="isEditCategoryOpened = false">Close</button>
+            <button [disabled]="editLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="addCategory()">
+                <ws-spinner class="mr-2" *ngIf="editLoading.isRunning()" [width]="15" [height]="15" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>Confirm</button>
+        </div>
+    </div>
+</ws-modal>
