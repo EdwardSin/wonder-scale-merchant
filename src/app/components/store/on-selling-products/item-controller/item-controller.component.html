@@ -34,10 +34,10 @@
                     <button *ngIf="param != 'new'" class="dropdown-item" (click)="markAsNew()">Mark as new</button>
                     <button class="dropdown-item" (click)="unmarkNew()">Unmark from new</button>
                     <button *ngIf="param == 'custom'" class="dropdown-item" (click)="openMoveModal()">Move to</button>
-                    <button class="dropdown-item" (click)="openRemovePermanentlyModal()">Remove Permanently</button>
+                    <button *ngIf="param != 'new'" class="dropdown-item" (click)="openRemovePermanentlyModal()">Remove Permanently</button>
                 </div>
             </div>
-            <div *ngIf="param == 'new'" class="d-inline-block">
+            <!-- <div *ngIf="param == 'new'" class="d-inline-block">
                 <button (click)="isAdvertiseDropdownOpened = !isAdvertiseDropdownOpened" title="Advertise" wsTippy class="btn btn-controller small">
                     <span class="fas fa-bullhorn"></span>
                 </button>
@@ -53,7 +53,7 @@
                     <button class="btn btn-sm btn-controller float-right" [disabled]="isAdvertised" (click)="advertiseItems()">Advertise</button>
                     <span class="clearfix d-block"></span>
                 </ws-dropdown>
-            </div>
+            </div> -->
     </div>
     <div class="col-auto">
         <div class="row no-gutters order-2 center">
