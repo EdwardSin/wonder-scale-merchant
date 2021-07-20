@@ -7,6 +7,7 @@
 - 2021-07-20                                -
 ---------------------------------------------
 .: WSM: Task - Add message note before send to merchant (WSM-410)
+.: WSM: Task - Display New Products Category (WSM-404)
 
 - v1.0.10943                                -
 ---------------------------------------------

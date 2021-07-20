@@ -94,7 +94,7 @@ export class NewItemsComponent implements OnInit {
     this.getNewItemsSubscription = this.authOnSellingItemContributorService.getAuthenticatedNewItemsByStoreId({ keyword, page, order, orderBy })
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
-        this.displayItems = result.result;
+        this.displayItems = result['result'];
         this.sharedItemService.displayItems.next(this.displayItems);
         this.sharedCategoryService.numberOfCurrentTotalItems.next(result['total']);
         this.loading.stop();
