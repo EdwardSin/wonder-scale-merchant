@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { WsLoading } from '@elements/ws-loading/ws-loading';
 import { WsModalComponent } from '@elements/ws-modal/ws-modal.component';
 import { OnSellingItem } from '@objects/on-selling-item';
@@ -11,6 +11,7 @@ import { SharedStoreService } from '@services/shared/shared-store.service';
 import { SharedCategoryService } from '@services/shared/shared-category.service';
 import { WsToastService } from '@elements/ws-toast/ws-toast.service';
 import { AuthOnSellingItemContributorService } from '@services/http/auth-store/contributor/auth-on-selling-item-contributor.service';
+import { Item } from '@objects/item';
 
 @Component({
   selector: 'modify-on-selling-item-modal',
@@ -21,6 +22,7 @@ export class ModifyOnSellingItemModalComponent extends WsModalComponent implemen
   @Input() closeCallback: Function;
   @Input() onSellingItem: OnSellingItem = {
     item: '',
+    name: '',
     categories: [],
     store: '',
     isTypeShown: true,
@@ -29,7 +31,6 @@ export class ModifyOnSellingItemModalComponent extends WsModalComponent implemen
   selectedActionType = 'add_main_sub';
   maxWidth = 400;
   categoryId: string = '';
-  categories;
   items = [];
   page: number = 1;
   itemKeyword: string = '';
@@ -51,7 +52,8 @@ export class ModifyOnSellingItemModalComponent extends WsModalComponent implemen
     private authCategoryContributorService: AuthCategoryContributorService,
     private authOnSellingItemContributorService: AuthOnSellingItemContributorService,
     private sharedStoreService: SharedStoreService,
-    private sharedCategoryService: SharedCategoryService) {
+    private sharedCategoryService: SharedCategoryService,
+    private ref: ChangeDetectorRef) {
     super();
     this.sharedStoreService.store.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       if (result) {
@@ -66,19 +68,23 @@ export class ModifyOnSellingItemModalComponent extends WsModalComponent implemen
   }
   ngOnInit(): void {
     super.ngOnInit();
+    this.itemLoading.start();
   }
   ngOnChanges(changes: SimpleChanges) {
     if (changes && changes['isOpened']) {
       this.maxWidth = this.onSellingItem?.item ? 800 : 400;
       if (this.onSellingItem?.item) {
         this.isEditMode = true;
+        if (!this.onSellingItem?.name) {
+          this.onSellingItem.name = (<Item>this.onSellingItem?.item)?.name;
+        }
       }
-      this.getCategories();
     }
   }
   saveItem() {
     let obj = {
       _id: this.onSellingItem._id,
+      name: this.onSellingItem.name,
       item: this.onSellingItem.item,
       store: this.onSellingItem.store,
       categories: [this.category._id],
@@ -115,6 +121,9 @@ export class ModifyOnSellingItemModalComponent extends WsModalComponent implemen
   }
   confirmMainItem() {
     this.onSellingItem.item = this.selectedItem;
+    if (!this.onSellingItem?.name) {
+      this.onSellingItem.name = this.selectedItem.name;
+    }
     this.categoryId = '';
     this.maxWidth = 800;
   }
@@ -127,39 +136,27 @@ export class ModifyOnSellingItemModalComponent extends WsModalComponent implemen
     }
     this.categoryId = categoryId;
     this.itemLoading.start();
-    if (categoryId == 'uncategorized') {
-      this.authItemContributorService.getAuthenticatedUncategorizedItemCategoryByStoreId({keyword: this.itemKeyword, page: this.page}).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.itemLoading.stop()))
-      .subscribe(result => {
-        if (result) {
-          if (isNextPage) {
-            this.items = this.items.concat(result['result']);
-          } else {
-            this.items = result['result'];
-          }
+    this.authItemContributorService.getAuthenticatedAllItemsByStoreId({keyword: this.itemKeyword, page: this.page}).pipe(takeUntil(this.ngUnsubscribe), finalize(() => {
+      this.itemLoading.stop();
+      this.ref.detectChanges();
+    })).subscribe(result => {
+      if (result) {
+        if (isNextPage) {
+          this.items = this.items.concat(result['result']);
+        } else {
+          this.items = result['result'];
         }
-      })
-    } else if (categoryId) {
-      this.authItemContributorService.getItemsByCategoryId(categoryId, this.itemKeyword, this.page, 'alphabet', false).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.itemLoading.stop())).subscribe(result => {
-        if (result) {
-          if (isNextPage) {
-            this.items = this.items.concat(result['result']);
-          } else {
-            this.items = result['result'];
-          }
-        }
-      });
-    }
-    else {
-      this.authItemContributorService.getAuthenticatedAllItemsByStoreId({keyword: this.itemKeyword, page: this.page}).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.itemLoading.stop())).subscribe(result => {
-        if (result) {
-          if (isNextPage) {
-            this.items = this.items.concat(result['result']);
-          } else {
-            this.items = result['result'];
-          }
-        }
-      })
-    }
+        this.items = this.mapItems(this.items.filter(x => x._id !== this.selectedItem?.id));
+      }
+    })
+  }
+  mapItems(items) {
+    return items.map(item => {
+      return {
+        id: item._id,
+        ...item
+      }
+    });
   }
   selectItemType(event) {
     this.selectedItemType = event;
@@ -174,16 +171,20 @@ export class ModifyOnSellingItemModalComponent extends WsModalComponent implemen
   }, 500);
   openItemChange(event) {
     this.open = event;
-    if(event && !this.items.length) {
+    if(event) {
       this.page = 1;
       this.itemKeyword = '';
       this.items = [];
       this.getItems(this.categoryId);
+    } else {
+      this.itemLoading.start();
+      this.items = [];
     }
   }
   onAddSubItemClickedCallback(group) {
     this.isSubItemOpened = true;
     this.selectedGroup = group;
+    this.items = [];
   }
   onAddSubItemGroupClickedCallback() {
     if (this.onSellingItem.subItemGroups.length > 9) {
@@ -230,18 +231,11 @@ export class ModifyOnSellingItemModalComponent extends WsModalComponent implemen
       return;
     }
     this.selectedGroup.subItems.push({
-      _id: this.selectedItemType._id,
+      _id: this.selectedItemType?._id,
       name: this.selectedSubItem.name + (this.selectedItemType && this.selectedItemType?.name ? ' - ' + this.selectedItemType?.name : ''),
       price: this.extraItemPrice
     } as any);
     this.isSubItemOpened = false;
-  }
-  getCategories() {
-    this.authCategoryContributorService.getAuthenticatedCategoriesByStoreId().pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
-      if (result) {
-        this.categories = result['result'];
-      }
-    });
   }
   onDeleteSubItemGroupClickedCallback(index) {
     if (index > -1) {
@@ -251,6 +245,11 @@ export class ModifyOnSellingItemModalComponent extends WsModalComponent implemen
   onRemoveSubitemClickedCallback(group, index) {
     if (index > -1) {
       group.subItems.splice(index, 1);
+    }
+  }
+  onSellingItemNameChanged() {
+    if (!this.onSellingItem?.name) {
+      this.onSellingItem.name = (<Item>this.onSellingItem?.item).name;
     }
   }
   ngOnDestroy() {

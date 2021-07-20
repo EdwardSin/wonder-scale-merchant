@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { WsLoading } from '@elements/ws-loading/ws-loading';
 import { WsModalComponent } from '@elements/ws-modal/ws-modal.component';
 import { WsToastService } from '@elements/ws-toast/ws-toast.service';
@@ -7,7 +8,8 @@ import { Delivery } from '@objects/delivery';
 import { Invoice } from '@objects/invoice';
 import { AuthDeliveryContributorService } from '@services/http/auth-store/contributor/auth-delivery-contributor.service';
 import { AuthInvoiceContributorService } from '@services/http/auth-store/contributor/auth-invoice-contributor.service';
-import { Subject } from 'rxjs';
+import { merge } from 'jquery';
+import { concat, of, Subject } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
 
 @Component({
@@ -31,22 +33,36 @@ export class InvoiceInfoModalComponent extends WsModalComponent implements OnIni
   refundLoading: WsLoading = new WsLoading();
   isModifyInvoiceModalOpened: boolean;
   isRejectInvoiceModalOpened: boolean;
+  isApproveEmptyDeliveryFeeModalOpened: boolean;
   rejectReason: string = '';
   private ngUnsubscribe: Subject<any> = new Subject;
   constructor(private authInvoiceContributorService: AuthInvoiceContributorService,
-    private authDeliveryContributorService: AuthDeliveryContributorService) { 
+    private authDeliveryContributorService: AuthDeliveryContributorService,
+    private router: Router) { 
     super();
   }
   ngOnInit(): void {
     super.ngOnInit();
     this.getDeliveries();
   }
+  openApproveConfirmation() {
+    if (this.item?.delivery?.fee) {
+      this.approve();
+    } else {
+      this.isOpened = false;
+      this.isApproveEmptyDeliveryFeeModalOpened = true;
+    }
+  }
   approve() {
     this.statusLoading.start();
-    this.authInvoiceContributorService.updateInvoiceStatus(this.item._id, {fromStatus: 'wait_for_approval', status: 'new'}).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.statusLoading.stop())).subscribe(result => {
+    concat(
+      this.authInvoiceContributorService.updateInvoiceDelivery(this.item),
+      this.authInvoiceContributorService.updateInvoiceStatus(this.item._id, {fromStatus: 'wait_for_approval', status: 'new'})
+    ).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.statusLoading.stop())).subscribe(result => {
       this.item.status = 'new';
       this.authInvoiceContributorService.refreshStatusWaitForApprovalToNew();
       this.authInvoiceContributorService.refreshDashboardInvoices(this.item);
+      this.isApproveEmptyDeliveryFeeModalOpened = false;
       this.close();
     }, err => {
       WsToastService.toastSubject.next({ content: 'Invoice couldn\'t be updated due to status is outdated.', type: 'danger'})
@@ -119,16 +135,23 @@ export class InvoiceInfoModalComponent extends WsModalComponent implements OnIni
     });
   }
   updateDelivery(event) {
-    this.authInvoiceContributorService.updateInvoiceDelivery(event).pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
-      if (this.item.status == 'wait_for_approval') {
-        WsToastService.toastSubject.next({content: 'Delivery is updated!<br/>Approval is required and wait for the payment!', type: 'success'});
-      } else {
-        WsToastService.toastSubject.next({content: 'Delivery is updated!', type: 'success'});
-      }
-    });
+    if (this.item.status == 'new') {
+      this.authInvoiceContributorService.updateInvoiceDelivery(event).pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+          WsToastService.toastSubject.next({content: 'Delivery is updated!', type: 'success'});
+      });
+    } else if (this.item.status == 'wait_for_approval') {
+      this.item = event;
+    }
+  }
+  onPayslipClicked() {
+    this.isOpened = false;
+    this.router.navigate([], {queryParams: {'invoiceId': this.item._id, paid: true}, queryParamsHandling: 'merge'});
   }
   ngOnDestroy() {
     super.ngOnDestroy();
+  }
+  confirmationClose() {
+    this.isOpened = true;
   }
   close() {
     super.close();

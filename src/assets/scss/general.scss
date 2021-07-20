@@ -196,8 +196,26 @@
     }
 }
 
+img.img-shadow {
+    box-shadow: 0 3px 6px rgb(0 0 0 / 16%);
+
+    &.img-hoverable {
+        cursor: pointer;
+        transition: transform ease .2s;
+
+        &:hover{
+            transform: scale(1.1);
+        }
+    }
+}
+
 mat-checkbox label{
     margin-bottom: 0;
+}
+
+.mat-select-search-inside-mat-option .mat-select-search-clear {
+    top: 0px !important;
+    right: 0px !important;
 }
 
 @media (max-width: 992px) {

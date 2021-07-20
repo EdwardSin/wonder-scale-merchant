@@ -98,7 +98,7 @@ export class MenuItemComponent implements OnInit {
     let cartItem: CartItem = new CartItem();
     let item = this.onSellingItem.item as Item;
     cartItem.itemId = this.onSellingItem?._id;
-    cartItem.name = item?.name;
+    cartItem.name = this.onSellingItem?.name || item?.name;
     cartItem.price = item?.price;
     if (this.selectedType) {
       cartItem.type = this.selectedType?.name;

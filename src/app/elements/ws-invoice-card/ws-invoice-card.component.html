@@ -61,14 +61,18 @@
     </div>
 </div>
 
-<ws-modal *ngIf="isPayslipModalOpened" [(isOpened)]="isPayslipModalOpened" [maxWidth]="700" [closeCallback]="closePayslipModal.bind(this)">
-    <div class="pt-3" modalBody>
-        <img *ngIf="!receiptLoading.isRunning() && item.payslip; else receiptLoadingTemplate" class="w-100 mb-3" [src]="environment.IMAGE_URL + item.payslip" alt="flow chart" />
-        <button [disabled]="statusLoading.isRunning()" class="btn btn-sm btn-danger" (click)="rejectPayslip($event)" title="Reject payslip">
-            <ws-spinner class="mr-2" *ngIf="statusLoading.isRunning()" [width]="15" [height]="15" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>Reject</button>
-        <button class="btn btn-sm btn-controller float-right" (click)="closePayslipModal()">Cancel</button>
-        <button [disabled]="statusLoading.isRunning()" class="btn btn-sm btn-controller float-right mr-2" (click)="confirmInvoice($event)">
-            <ws-spinner class="mr-2" *ngIf="statusLoading.isRunning()" [width]="15" [height]="15" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>Confirm</button>
+<ws-modal *ngIf="isPayslipModalOpened" [(isOpened)]="isPayslipModalOpened" [maxWidth]="500" [closeCallback]="closePayslipModal.bind(this)">
+    <div class="pt-3" style="cursor: default" modalBody>
+        <button class="btn btn-sm btn-controller mb-2 float-right" (click)="navigateToInvoiceDetails()">View Details</button>
+        <div class="clearfix"></div>
+        <img *ngIf="!receiptLoading.isRunning() && item.payslip; else receiptLoadingTemplate" class="w-100 mb-3" [src]="environment.IMAGE_URL + item.payslip" alt="payslip" />
+        <div *ngIf="item?.status == 'paid'">
+            <button [disabled]="statusLoading.isRunning()" class="btn btn-sm btn-danger" (click)="rejectPayslip($event)" title="Reject payslip">
+                <ws-spinner class="mr-2" *ngIf="statusLoading.isRunning()" [width]="15" [height]="15" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>Reject</button>
+            <button class="btn btn-sm btn-controller float-right" (click)="closePayslipModal()">Cancel</button>
+            <button [disabled]="statusLoading.isRunning()" class="btn btn-sm btn-primary float-right mr-2" (click)="confirmInvoice($event)">
+                <ws-spinner class="mr-2" *ngIf="statusLoading.isRunning()" [width]="15" [height]="15" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>Confirm</button>
+        </div>
     </div>
 </ws-modal>
 <ws-modal *ngIf="isPayModalOpened" [isCloseIconDisplayed]="false" [(isOpened)]="isPayModalOpened" [maxWidth]="400">
@@ -120,7 +124,7 @@
     </form>
 </ws-modal>
 
-<confirm-modal *ngIf="isApproveModalOpened" [(isOpened)]="isApproveModalOpened" [loading]="statusLoading.isRunning()" [message]="'Are you sure to approve the invoice?'" [action]="approveInvoice.bind(this)"></confirm-modal>
+<confirm-modal *ngIf="isApproveModalOpened" [(isOpened)]="isApproveModalOpened" [loading]="statusLoading.isRunning()" [message]="'Are you sure to approve the invoice?'" [submessage]="!this.item?.delivery?.fee ? 'Is the order free delivery?' : ''" [action]="approveInvoice.bind(this)"></confirm-modal>
 
 <ng-template #receiptLoadingTemplate>
     <ws-loading *ngIf="receiptLoading.isRunning(); else noReceiptTemplate"></ws-loading>

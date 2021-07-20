@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Input, OnInit, SimpleChanges, ViewChild, ViewEncapsulation } from '@angular/core';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { FormControl, FormGroup } from '@angular/forms';
 import { WsFormBuilder } from '@builders/wsformbuilder';
@@ -62,7 +62,6 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
   subtotal: number = 0;
   discount: number = 0;
   total: number = 0;
-  categoryId: string = '';
   itemKeyword: string = '';
   page: number = 1;
   open: boolean;
@@ -80,11 +79,13 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
     private authOnSellingCategoryContributorService: AuthOnSellingCategoryContributorService,
     private authOnSellingItemContributorService: AuthOnSellingItemContributorService,
     private authInvoiceContributorService: AuthInvoiceContributorService,
-    private authPromotionContributorService: AuthPromotionContributorService) {
+    private authPromotionContributorService: AuthPromotionContributorService,
+    private ref: ChangeDetectorRef) {
     super();
   }
   ngOnInit() {
     super.ngOnInit();
+    this.itemLoading.start();
   }
   ngOnChanges(changes: SimpleChanges) {
     if (changes && changes['isOpened']) {
@@ -92,7 +93,6 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
       this.getCatalogue();
       this.getPromotions();
       this.getDeliveries();
-      this.getItems(this.categoryId);
       if (this.item) {
         this.setupItem();
       } else if (!this.tempInvoice) {
@@ -237,33 +237,24 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
       }
     });
   }
-  getItems(categoryId=null, isNextPage?) {
+  getItems(isNextPage?) {
     if (isNextPage) {
       this.page++;
     }
-    this.categoryId = categoryId;
     this.itemLoading.start();
-    if (categoryId) {
-      this.authOnSellingItemContributorService.getItemsByCategoryId(categoryId, this.itemKeyword, this.page, 'alphabet', false).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.itemLoading.stop())).subscribe(result => {
-        if (result) {
-          if (isNextPage) {
-            this.items = this.items.concat(this.mapItems(result['result']));
-          } else {
-            this.items = this.mapItems(result['result']);
-          }
+    this.authOnSellingItemContributorService.getAuthenticatedAllItemsByStoreId({keyword: this.itemKeyword, page: this.page}).pipe(takeUntil(this.ngUnsubscribe), finalize(() => {
+      this.itemLoading.stop();
+      this.ref.detectChanges();
+    })).subscribe(result => {
+      if (result) {
+        if (isNextPage) {
+          this.items = this.items.concat(result['result']);
+        } else {
+          this.items = result['result'];
         }
-      });
-    } else {
-      this.authOnSellingItemContributorService.getAuthenticatedAllItemsByStoreId({keyword: this.itemKeyword, page: this.page}).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.itemLoading.stop())).subscribe(result => {
-        if (result) {
-          if (isNextPage) {
-            this.items = this.items.concat(this.mapItems(result['result']));
-          } else {
-            this.items = this.mapItems(result['result']);
-          }
-        }
-      })
-    }
+        this.items = this.mapItems(this.items.filter(x => x._id !== this.selectedItem?.id));
+      }
+    })
   }
   getDeliveries() {
     this.authDeliveryContributorService.getDeliveries(null).pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
@@ -276,7 +267,10 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
       this.page = 1;
       this.itemKeyword = '';
       this.items = [];
-      this.getItems(this.categoryId);
+      this.getItems();
+    } else {
+      this.itemLoading.start();
+      this.items = [];
     }
   }
   mapItems(items) {
@@ -292,7 +286,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
     if (this.open) {
       this.page = 1;
       this.itemKeyword = event;
-      this.getItems(this.categoryId);
+      this.getItems();
     }
   }, 500);
   selectionChange(event) {
@@ -662,7 +656,6 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
   close() {
     super.close();
     this.tempInvoice = null;
-    this.categoryId = '';
     if (this.closeCallback) {
       this.closeCallback();
     }
