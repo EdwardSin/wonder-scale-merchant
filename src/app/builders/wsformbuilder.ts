@@ -267,7 +267,10 @@ export class WsFormBuilder {
             itemPrice: ['', [Validators.pattern("^[0-9.,]+$")]],
             itemQuantity: [1, [Validators.pattern("^[0-9]+$")]],
             status: ['new', Validators.required],
-            remark: ['', Validators.maxLength(300)]
+            isGift: [false],
+            giftMessage: ['', Validators.maxLength(256)],
+            orderNotes: ['', Validators.maxLength(256)],
+            remark: ['', Validators.maxLength(256)]
         }, {
             validator: [AddressValidation.validAddressWithoutCountry]
         });

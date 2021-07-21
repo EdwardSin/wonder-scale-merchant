@@ -16,7 +16,7 @@
             <th class="border-top-0 text-right" style="width: 100px">Actions</th>
         </thead>
         <tbody class="ws-drag-container" cdkDropList (cdkDropListDropped)="dropOrder($event)">
-            <tr>
+            <tr *ngIf="categories.length">
                 <td></td>
                 <td></td>
                 <td>
