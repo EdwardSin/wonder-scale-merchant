@@ -170,6 +170,15 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
           numberOfPromotion: this.item.promotions[0]['quantity'] || 1
         })
       }
+      if (this.item.orderNotes?.length) {
+        let giftNote = this.item.orderNotes?.find(x => x.type == 'gift');
+        let generalNote = this.item.orderNotes?.find(x => x.type == 'general');
+        this.form.patchValue({
+          isGift: this.item.isGift,
+          giftMessage: giftNote ? giftNote.message : '',
+          orderNotes: generalNote ? generalNote.message: ''
+        });
+      }
       this.notifyCalculation();
     }
   }
@@ -393,7 +402,19 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
       WsToastService.toastSubject.next({ content: 'Number of promotion should be between 1 to 10!', type: 'danger'});
       return;
     }
-    
+    let orderNotes = [];
+      if (this.form.value.orderNotes.trim().length > 0) {
+        orderNotes.push({
+          type: 'general',
+          message: this.form.value.orderNotes.trim()
+        });
+      }
+      if (this.form.value.isGift && this.form.value.giftMessage.trim().length > 0) {
+        orderNotes.push({
+          type: 'gift',
+          message: this.form.value.giftMessage.trim()
+      });
+    }
     let invoice: Invoice = {
       customer: {
         recipientName: form.controls['recipientName'].value,
@@ -408,11 +429,13 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
       delivery: {
         _id: form.value.deliveryId || undefined,
         fee: form.controls['deliveryFee'].value,
-        etaDate: DateTimeHelper.getDateWithCurrentTimezone(new Date(etaDate)),
+        etaDate: etaDate ? DateTimeHelper.getDateWithCurrentTimezone(new Date(etaDate)) : null,
         etaHour: etaHour !== '' && etaHour > -1 && etaHour < 24 ? etaHour : null,
         etaMin: etaMin !== '' && etaMin > -1 && etaMin < 60 ? etaMin : null
       },
       items: this.cartItems,
+      isGift: this.form.value.isGift,
+      orderNotes,
       remark: form.controls['remark'].value,
       status: form.controls['status'].value,
       paymentMethod: form.controls['paymentMethod'].value,
