@@ -53,7 +53,7 @@
 <ws-modal *ngIf="isEditCategoryOpened" [isCloseIconDisplayed]="false" [(isOpened)]="isEditCategoryOpened" [maxWidth]="400">
     <div class="pt-3" modalBody>
         <div class="mb-3">
-            <input class="form-control" maxlength="30" placeholder="Catalogue Name" [(ngModel)]="editingName" />
+            <input class="form-control" maxlength="32" placeholder="Catalogue Name" [(ngModel)]="editingName" />
         </div>
         <div>
             <button class="btn btn-sm btn-controller float-right" (click)="onEditCategoryClosed()">Close</button>

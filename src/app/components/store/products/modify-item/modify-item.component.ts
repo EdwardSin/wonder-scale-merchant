@@ -43,12 +43,16 @@ export class ModifyItemComponent implements OnInit {
   validateItemTypesForm: Function;
   editItemTypesFunction: Function;
   private ngUnsubscribe: Subject<any> = new Subject;
+  @ViewChild('categoryMatSelect', { static: false }) categoryMatSelect: ElementRef;
   @ViewChild('itemProfileUpload', { static: false }) itemProfileUpload: ElementRef;
   @ViewChild('itemDescriptionUpload', { static: false }) itemDescriptionUpload: ElementRef;
   profileImageIndex = 0;
   itemId;
   profileImageName;
   isRefreshCategories: boolean;
+  isEditCategoryOpened: boolean;
+  editLoading: WsLoading = new WsLoading();
+  editingName: string;
   defaultSetting = {
     is__new: true,
     isInStock: true,
@@ -451,6 +455,36 @@ export class ModifyItemComponent implements OnInit {
   }
   onSort = () => {
     this.profileImageIndex = this.allProfileItems.findIndex(x => x.name == this.profileImageName);
+  }
+  addCategory() {
+    if (this.isValidated(this.editingName)) {
+      let obj = {
+        name: this.editingName
+      };
+      this.editLoading.start();
+      this.authCategoryContributorService
+        .addCategory(obj)
+        .pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.editLoading.stop()))
+        .subscribe(result => {
+          WsToastService.toastSubject.next({ content: 'Category is added!', type: 'success' });
+          result['result'].items = [];
+          this.categories.push(result['result']);
+          this.editingName = '';
+          this.isEditCategoryOpened = false;
+        }, (err) => {
+          WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
+        });
+    }
+  }
+  isValidated(name) {
+    if (name == '' || name.trim() == '') {
+      WsToastService.toastSubject.next({ content: 'Category name is invalid!', type: 'danger' });
+      return false;
+    } else if (name.length > 32) {
+      WsToastService.toastSubject.next({ content: 'Category name is too long!', type: 'danger' });
+      return false;
+    }
+    return true;
   }
   ngOnDestroy() {
     this.ngUnsubscribe.next();
