@@ -222,6 +222,24 @@ export class HeaderComponent implements OnInit {
     });
     this.router.navigate(['/stores', notification?.fromStore?.username, 'invoices', 'all-invoices'], {queryParams: {invoiceId: notification?.data?.invoiceId, tab: 'wait_for_approval'}, queryParamsHandling: 'merge'});
   }
+  navigateToStoreSetting(notification) {
+    this.loadedNewNotifications();
+    this.isNotificationDropdown = false;
+    this.authNotificationUserService.readNotification(notification?._id).pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+      notification.isRead = true;
+    });
+    this.router.navigate(['/stores', notification?.fromStore?.username, 'settings', 'staff'], {queryParamsHandling: 'merge'});
+  }
+  navigateToPendingStore(notification) {
+    this.loadedNewNotifications();
+    this.isNotificationDropdown = false;
+    this.authNotificationUserService.readNotification(notification?._id).pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+      notification.isRead = true;
+    });
+    this.sharedStoreService.refresh.next(true);
+    this.router.navigate(['/stores/pending']);
+    this.sharedStoreService.store.next(null);
+  }
   navigateToHome() {
     this.router.navigate(['/stores/all']);
     this.sharedStoreService.store.next(null);

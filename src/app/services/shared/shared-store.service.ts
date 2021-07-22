@@ -21,7 +21,7 @@ export class SharedStoreService {
 
   refreshContributor: BehaviorSubject<Boolean> = new BehaviorSubject<Boolean>(false);
 
-  refresh: Subject<Boolean> = new Subject;
+  refresh: BehaviorSubject<Boolean> = new BehaviorSubject(true);
   recruitmentRefresh: BehaviorSubject<Boolean> = new BehaviorSubject<Boolean>(false);
   items: Subject<any> = new BehaviorSubject<any>(null);
   payments: Subject<any> = new BehaviorSubject<any>([]);

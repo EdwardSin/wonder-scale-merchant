@@ -124,6 +124,45 @@
                         </div>
                     </div>
                 </div>
+                <div *ngSwitchCase="'store-joined-contributor'" class="user-container__notification__padding" (click)="navigateToStoreSetting(notification)">
+                    <span *ngIf="!notification.isRead" class="px-2 fas fa-circle text-muted position-absolute" style="top: .15rem; right: .05rem; font-size: .4rem; line-height: 1rem; vertical-align: middle"></span>
+                    <div class="row no-gutters">
+                        <div class="mr-3 col-auto">
+                            <img *ngIf="notification?.fromUser?.profileImage" [src]="notification?.fromUser?.profileImage" style="width: 75px; height: 75px" alt="profile image" />
+                            <img *ngIf="!notification?.fromUser?.profileImage" [src]="'/assets/images/png/profile.png'" style="width: 75px; height: 75px" alt="profile image" />
+                        </div>
+                        <div class="col">
+                            <p class="inline-block mb-0"><span class="font-weight-bold">{{notification?.fromUser?.firstName}}</span> has joined {{ notification?.fromStore?.name }}.</p>
+                            <span class="d-block text-muted font-8">{{ moment(notification.updatedAt).fromNow() }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div *ngSwitchCase="'store-rejected-contributor'" class="user-container__notification__padding" (click)="navigateToStoreSetting(notification)">
+                    <span *ngIf="!notification.isRead" class="px-2 fas fa-circle text-muted position-absolute" style="top: .15rem; right: .05rem; font-size: .4rem; line-height: 1rem; vertical-align: middle"></span>
+                    <div class="row no-gutters">
+                        <div class="mr-3 col-auto">
+                            <img *ngIf="notification?.fromUser?.profileImage" [src]="notification?.fromUser?.profileImage" style="width: 75px; height: 75px" alt="profile image" />
+                            <img *ngIf="!notification?.fromUser?.profileImage" [src]="'/assets/images/png/profile.png'" style="width: 75px; height: 75px" alt="profile image" />
+                        </div>
+                        <div class="col">
+                            <p class="inline-block mb-0"><span class="font-weight-bold">{{notification?.fromUser?.firstName}}</span> has rejected to join {{ notification?.fromStore?.name }}.</p>
+                            <span class="d-block text-muted font-8">{{ moment(notification.updatedAt).fromNow() }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div *ngSwitchCase="'store-invite-contributor'" class="user-container__notification__padding" (click)="navigateToPendingStore(notification)">
+                    <span *ngIf="!notification.isRead" class="px-2 fas fa-circle text-muted position-absolute" style="top: .15rem; right: .05rem; font-size: .4rem; line-height: 1rem; vertical-align: middle"></span>
+                    <div class="row no-gutters">
+                        <div class="mr-3 col-auto">
+                            <img *ngIf="notification?.fromUser?.profileImage" [src]="notification?.fromUser?.profileImage" style="width: 75px; height: 75px" alt="profile image" />
+                            <img *ngIf="!notification?.fromUser?.profileImage" [src]="'/assets/images/png/profile.png'" style="width: 75px; height: 75px" alt="profile image" />
+                        </div>
+                        <div class="col">
+                            <p class="inline-block mb-0"><span class="font-weight-bold">{{notification?.fromStore?.name}}</span> is inviting you to join as contributor.</p>
+                            <span class="d-block text-muted font-8">{{ moment(notification.updatedAt).fromNow() }}</span>
+                        </div>
+                    </div>
+                </div>
             </ng-container>
         </div>
     </ng-container>
