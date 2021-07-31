@@ -1,4 +1,4 @@
-<ws-modal *ngIf="isOpened" [(isOpened)]="isOpened" [maxWidth]="maxWidth" [isCloseIconDisplayed]="false" [isCloseOutside]="true">
+<ws-modal *ngIf="isOpened" [(isOpened)]="isOpened" [maxWidth]="maxWidth" [isCloseIconDisplayed]="false">
     <div modalBody class="p-3">
         <div *ngIf="!selectedActionType" class="text-center">
             <button class="btn btn-controller" (click)="selectActionType('add_from_existing_category')">Add items from existing category</button>

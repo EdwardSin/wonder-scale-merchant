@@ -1,0 +1,17 @@
+<h4 class="ws-title d-inline-block">Reviews ({{totalReviews}})</h4>
+<div class="mb-5 container px-0" *ngIf="reviews.length; else loadingTemplate">
+    <ws-review *ngFor="let review of reviews" [item]="review" [isDetails]="true"></ws-review>
+    <ws-spinner *ngIf="lazyLoading.isRunning()" class="text-center d-block w-100" style="padding: 1rem 0" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>
+</div>
+
+<ng-template #loadingTemplate>
+    <ng-container *ngIf="loading.isRunning(); else noReviewTemplate">
+        <ws-spinner class="text-center d-block w-100" style="padding-top: 10vh; padding-bottom: 10vh" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>
+    </ng-container>
+</ng-template>
+
+<ng-template #noReviewTemplate>
+    <div class="h5 text-muted text-center font-weight-light" style="padding-top: 10vh; padding-bottom: 10vh">
+        No Review
+    </div>
+</ng-template>

@@ -47,6 +47,17 @@
         </ul>
       </li>
       <li wsNavItem class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
+        <a [routerLink]="['reviews']">
+          <span class="ws-main-nav-icon fas fa-comment-dots"></span>
+          <span class="ws-main-nav-text">Reviews</span>
+        </a>
+        <ul class="ws-main-nav-sub-list">
+          <li class="ws-main-nav-sub-list__title">
+            <a [routerLink]="['reviews']">Reviews</a>
+          </li>
+        </ul>
+      </li>
+      <li wsNavItem class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
         <a [routerLink]="['qrcode']">
           <span class="ws-main-nav-icon fas fa-qrcode"></span>
           <span class="ws-main-nav-text">QR code</span>
