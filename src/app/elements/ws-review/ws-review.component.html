@@ -1,0 +1,64 @@
+<div *ngIf="item" class="row no-gutters py-3" style="border-bottom: 1px solid #eee;" [class.clickable]="isDetails" (click)="isDetails ? isOpened = true: null">
+    <div class="px-3">
+        <div style="border: 1px solid #eee; border-radius: 50%; width: 65px; height: 65px">
+            <div style="border-radius: 50%; width: 55px; height: 55px; overflow: hidden; margin: 4px">
+                <img class="w-100 h-100" style="object-fit: cover;" *ngIf="item?.user?.profileImage" src="{{item?.user?.profileImage}}" alt="profile image" />
+                <img class="w-100 h-100" *ngIf="!item?.user?.profileImage" src="{{environment.IMAGE_URL + 'upload/images/profile.png'}}" alt="profile image" />
+            </div>
+        </div>
+    </div>
+    <div class="pr-3 col">
+        <p class="mb-0 font-9" *ngIf="item?.name">{{ item?.name }}</p>
+        <div class="font-9 mb-2">
+            <span *ngFor="let mark of [].constructor(item.overall)" class="fas fa-star" style="color: #b71c1c"></span>
+            <span *ngFor="let mark of [].constructor(5 - item.overall)" class="far fa-star" style="color: #ddd"></span>
+        </div>
+        <p class="font-9" style="white-space: pre-line;">{{ item?.comment }}</p>
+        <p class="font-8 mb-0 text-muted">{{ item?.createdAt | date: 'yyyy-MM-dd H:mm' }}</p>
+    </div>
+</div>
+
+<ws-modal *ngIf="isOpened" [(isOpened)]="isOpened" [isCloseIconDisplayed]="false" [maxWidth]="400">
+    <div modalBody class="text-center py-3">
+        <div class="row no-gutters pb-4 d-flex align-items-center justify-content-center">
+            <div class="px-3">
+                <div style="border: 1px solid #eee; border-radius: 50%; width: 65px; height: 65px">
+                    <div style="border-radius: 50%; width: 55px; height: 55px; overflow: hidden; margin: 4px">
+                        <img class="w-100 h-100" style="object-fit: cover;" *ngIf="item?.user?.profileImage" src="{{item?.user?.profileImage}}" alt="profile image" />
+                        <img class="w-100 h-100" *ngIf="!item?.user?.profileImage" src="{{environment.IMAGE_URL + 'upload/images/profile.png'}}" alt="profile image" />
+                    </div>
+                </div>
+            </div>
+            <div class="pr-3">
+                <p class="mb-0 font-9">{{ item?.name }}</p>
+                <div class="font-9 mb-2">
+                    <span *ngFor="let mark of [].constructor(item.overall)" class="fas fa-star" style="color: #b71c1c"></span>
+                    <span *ngFor="let mark of [].constructor(5 - item.overall)" class="far fa-star" style="color: #ddd"></span>
+                </div>
+            </div>
+        </div>
+        <div class="d-inline-block">
+            <div class="row no-gutters">
+                <p class="d-inline-block mb-0 text-muted font-9" style="width: 130px;">Product Quality</p>
+                <div class="font-9 mb-2">
+                    <span *ngFor="let mark of [].constructor(item.productQuality)" class="fas fa-star" style="color: #b71c1c"></span>
+                    <span *ngFor="let mark of [].constructor(5 - item.productQuality)" class="far fa-star" style="color: #ddd"></span>
+                </div>
+            </div>
+            <div class="row no-gutters">
+                <p class="d-inline-block mb-0 text-muted font-9" style="width: 130px;">Seller's Service</p>
+                <div class="font-9 mb-2">
+                    <span *ngFor="let mark of [].constructor(item.sellerService)" class="fas fa-star" style="color: #b71c1c"></span>
+                    <span *ngFor="let mark of [].constructor(5 - item.sellerService)" class="far fa-star" style="color: #ddd"></span>
+                </div>
+            </div>
+            <div class="row no-gutters">
+                <p class="d-inline-block mb-0 text-muted font-9" style="width: 130px;">Delivery Service</p>
+                <div class="font-9 mb-2">
+                    <span *ngFor="let mark of [].constructor(item.deliveryService)" class="fas fa-star" style="color: #b71c1c"></span>
+                    <span *ngFor="let mark of [].constructor(5 - item.deliveryService)" class="far fa-star" style="color: #ddd"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</ws-modal>

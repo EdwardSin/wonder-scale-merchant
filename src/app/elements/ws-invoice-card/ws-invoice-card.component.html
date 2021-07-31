@@ -72,7 +72,7 @@
                 <ws-spinner class="mr-2" *ngIf="statusLoading.isRunning()" [width]="15" [height]="15" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>Reject</button>
             <button class="btn btn-sm btn-controller float-right" (click)="closePayslipModal()">Cancel</button>
             <button [disabled]="statusLoading.isRunning()" class="btn btn-sm btn-primary float-right mr-2" (click)="confirmInvoice($event)">
-                <ws-spinner class="mr-2" *ngIf="statusLoading.isRunning()" [width]="15" [height]="15" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>Confirm</button>
+                <ws-spinner class="mr-2" *ngIf="statusLoading.isRunning()" [width]="15" [height]="15" [borderWidth]="1" [spinnerColor]="'#fff'"></ws-spinner>Confirm</button>
         </div>
     </div>
 </ws-modal>

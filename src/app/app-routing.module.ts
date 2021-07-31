@@ -80,6 +80,12 @@ const routes: Routes = [{
       loadChildren: () => import('./modules/store/invoices/invoices.module').then(m => m.InvoicesModule)
     },
     {
+      path: 'reviews',
+      canActivate: [StoreGuard],
+      data: { title: 'reviews', breadcrumb: 'Reviews' },
+      loadChildren: () => import('./modules/store/reviews/reviews.module').then(m => m.ReviewsModule)
+    },
+    {
       path: 'on-selling-products',
       canActivate: [StoreGuard],
       data: { title: 'cat', breadcrumb: 'On Selling Products' },
