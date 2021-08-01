@@ -34,6 +34,7 @@ import { WsReviewComponent } from '@elements/ws-review/ws-review.component';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { MatSelectInfiniteScrollModule } from 'ng-mat-select-infinite-scroll';
 import { WsInvoiceComponent } from '@elements/ws-invoice/ws-invoice.component';
+import { WsRatingComponent } from '@elements/ws-rating/ws-rating.component';
 import { AppRoutingModule } from 'src/app/app-routing.module';
 import { SwiperModule } from 'ngx-swiper-wrapper';
 import { RouterModule } from '@angular/router';
@@ -73,6 +74,7 @@ import { PipeModule } from '../pipe/pipe.module';
     WsPriceListComponent,
     WsStepperComponent,
     WsReviewComponent,
+    WsRatingComponent
   ],
   imports: [
     AgmCoreModule,
@@ -115,6 +117,7 @@ import { PipeModule } from '../pipe/pipe.module';
     BusinessLocationComponent,
     MenuItemComponent,
     WsInvoiceComponent,
+    WsRatingComponent,
     WsMessageBarComponent,
     WsPriceListComponent,
     WsStepperComponent,
