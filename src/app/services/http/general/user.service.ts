@@ -32,7 +32,7 @@ export class UserService {
     return this.http.post(UserUrl.registerByGoogleUrl, user, { headers: headers });
   }
   activateAccount = function (token) {
-    return this.http.put(UserUrl.activateUrl + token);
+    return this.http.put(UserUrl.activateUrl + '/' + token);
   };
   savePassword = function (regData) {
     return this.http.put(UserUrl.savePasswordUrl, regData);
