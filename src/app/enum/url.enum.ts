@@ -5,6 +5,7 @@ export class URL {
     static STORE_URL = '/api/stores';
     static INVOICE_URL = '/api/invoices';
     static ITEM_URL = '/api/items';
+    static REVIEW_URL = '/api/reviews';
     static AUTH_INVOICE_URL = '/api/auth-users/invoice-users';
     static AUTH_DEFAULT_SETTING_ADMIN_URL = '/api/auth-stores/default-setting-admins';
     static AUTH_PACKAGE_ADMIN_URL = '/api/auth-stores/package-admins';
@@ -23,6 +24,7 @@ export class URL {
     static AUTH_ITEM_CONTRIBUTOR_URL = '/api/auth-stores/item-contributors';
     static AUTH_ON_SELLING_CATEGORY_CONTRIBUTOR_URL = '/api/auth-stores/on-selling-category-contributors';
     static AUTH_ON_SELLING_ITEM_CONTRIBUTOR_URL = '/api/auth-stores/on-selling-item-contributors';
+    static AUTH_REVIEW_CONTRIBUTOR_URL = '/api/auth-stores/review-contributors';
     static AUTH_STORE_CONTRIBUTOR_URL = '/api/auth-stores/store-contributors';
     static AUTH_TABLE_CONTRIBUTOR_URL = '/api/auth-stores/ordering-contributors/table-contributors';
     static AUTH_SALE_CONTRIBUTOR_URL = '/api/auth-stores/ordering-contributors/sale-contributors';
@@ -32,6 +34,7 @@ export class URL {
     static AUTH_USERS_URL = '/api/auth-users';
     static AUTH_TRACK_CONTRIBUTORS_URL = '/api/auth-stores/track-contributors'
     static AUTH_NOTIFICATION_USERS_URL = '/api/auth-users/notification-users';
+    static AUTH_REVIEW_USERS_URL = '/api/auth-users/review-users';
     static FEATURE_URL = '/api/features';
     static CURRENCY_URL = '/api/currency';
     // static AUTH_ADVERTISING_CONTRIBUTOR_URL = '/api/auth-stores/advertising-contributors';
@@ -44,7 +47,6 @@ export class URL {
     // static AUTH_QUOTATION_CONTRIBUTOR_URL = '/api/auth-stores/quotation-contributors';
     // static AUTH_REVIEW_CONTRIBUTOR_URL = '/api/auth-stores/review-contributors';
     // static AUTH_VOURCHER_CONTRIBUTOR_URL = '/api/auth-stores/voucher-contributors';
-    // static REVIEW_URL = '/api/reviews';
 }
 export class UserUrl {
     static loginUrl = URL.USER_URL + '/login';
@@ -81,6 +83,9 @@ export class ItemUrl {
     static getNewItemsByStoreIdUrl = URL.ITEM_URL + '/public/new';
     static getTodaySpecialItemsByStoreIdUrl = URL.ITEM_URL + '/public/todayspecial';
     static getItemsByCategoryIdUrl = URL.ITEM_URL + '/public';
+}
+export class ReviewUrl {
+    static getReviewsUrl = URL.REVIEW_URL + '/';
 }
 export class FeatureUrl {
     static sendEmailUrl = URL.FEATURE_URL + '/send/email';
@@ -235,6 +240,9 @@ export class AuthOnSellingItemContributorUrl {
     static editMultipleItemsUrl = URL.AUTH_ON_SELLING_ITEM_CONTRIBUTOR_URL + '/edit-multiple';
     static removeItemsPermanantlyUrl = URL.AUTH_ON_SELLING_ITEM_CONTRIBUTOR_URL + '/remove/items/permanently';
 }
+export class AuthReviewContributorUrl {
+    static getReviewsUrl = URL.AUTH_REVIEW_CONTRIBUTOR_URL + '/';
+}
 export class AuthStoreAdminUrl {
     static removeBankDetailslUrl = URL.AUTH_STORE_ADMIN_URL + '/bank-details/remove';
     static editBankDetailsUrl = URL.AUTH_STORE_ADMIN_URL + '/bank-details/edit';
@@ -361,6 +369,9 @@ export class AuthNotificationUserUrl {
     static readNotificationUrl = URL.AUTH_NOTIFICATION_USERS_URL + '/read';
 
 }
+export class AuthReviewUserUrl {
+    static addReviewUrl = URL.AUTH_REVIEW_USERS_URL + '/';
+}
 export class CurrencyUrl {
     static getCurrencyUrl = URL.CURRENCY_URL + '/';
 }
@@ -372,13 +383,6 @@ export class CurrencyUrl {
 //     static publishPromotionUrl = URL.AUTH_VOURCHER_CONTRIBUTOR_URL + '/publish';
 // }
 
-// export class AuthReviewContributorUrl {
-//     static getReviewByStoreIdUrl = URL.AUTH_REVIEW_CONTRIBUTOR_URL + '/storeid';
-//     static addReplyUrl = URL.AUTH_REVIEW_CONTRIBUTOR_URL + '/store-reply';
-//     static editReplyUrl = URL.AUTH_REVIEW_CONTRIBUTOR_URL + '/store-reply/edit';
-//     static removeReplyUrl = URL.AUTH_REVIEW_CONTRIBUTOR_URL + '/store-reply/remove';
-//     static getRepliesByReviewIdUrl = URL.AUTH_REVIEW_CONTRIBUTOR_URL + '/replies';
-// }
 // export class AuthQuotationContributorUrl {
 //     static getUnrepliedRequestsUrl = URL.AUTH_QUOTATION_CONTRIBUTOR_URL + '/unreplied';
 //     static getHistoryRequestsUrl = URL.AUTH_QUOTATION_CONTRIBUTOR_URL + '/history';

@@ -228,7 +228,9 @@
             </mat-tab>
             <mat-tab label="Others">
                 <div class="p-lg-3 py-3">
-                    <textarea class="form-control form-control-sm" rows="5" maxlength="300" placeholder="Write remark here" formControlName="remark"></textarea>
+                    <textarea class="form-control form-control-sm mb-2" rows="5" style="resize: none" maxlength="256" placeholder="Order Notes" formControlName="orderNotes"></textarea>
+                    <mat-checkbox [color]="'primary'" class="font-9 mb-2 d-block" formControlName="isGift">Purchase as a gift?</mat-checkbox>
+                    <textarea *ngIf="form.value.isGift" class="form-control form-control-sm" rows="5" style="resize: none" maxlength="256" placeholder="Gift Message" formControlName="giftMessage"></textarea>
                 </div>
             </mat-tab>
         </mat-tab-group>

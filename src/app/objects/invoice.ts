@@ -30,4 +30,9 @@ export class Invoice{
     createdAt?: Date;
     updatedAt?: Date;
     completedAt?: Date;
+    isGift?: boolean;
+    orderNotes?: Array<{
+        type: string,
+        message: string
+    }>;
 }

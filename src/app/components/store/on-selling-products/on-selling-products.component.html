@@ -16,7 +16,7 @@
             <th class="border-top-0 text-right" style="width: 100px">Actions</th>
         </thead>
         <tbody class="ws-drag-container" cdkDropList (cdkDropListDropped)="dropOrder($event)">
-            <!-- <tr>
+            <tr *ngIf="categories.length">
                 <td></td>
                 <td></td>
                 <td>
@@ -28,7 +28,7 @@
                     </span>
                 </td>
                 <td class="text-center">-</td>
-            </tr> -->
+            </tr>
             <tr *ngFor="let category of categories" cdkDrag class="ws-drag">
                 <td class="align-middle drag-handle" style="width: 50px" cdkDragHandle>
                     <span class="fas fa-bars moveable"></span>
@@ -75,7 +75,7 @@
 <ws-modal *ngIf="isEditCategoryOpened" [isCloseIconDisplayed]="false" [(isOpened)]="isEditCategoryOpened" [maxWidth]="400">
     <div class="pt-3" modalBody>
         <div class="mb-1">
-            <input class="form-control" maxlength="30" placeholder="Catalogue Name" [(ngModel)]="editingName" />
+            <input class="form-control" maxlength="32" placeholder="Catalogue Name" [(ngModel)]="editingName" />
         </div>
         <div class="mb-3">
             <mat-checkbox [color]="'primary'" class="font-8" [(ngModel)]="isPublished">Check to publish category</mat-checkbox>

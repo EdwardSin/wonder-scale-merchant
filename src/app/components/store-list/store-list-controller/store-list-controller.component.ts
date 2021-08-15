@@ -64,11 +64,10 @@ export class StoreListControllerComponent implements OnInit {
     this.intervalGetPendingStores();
   }
   getPendingStores() {
-    this.sharedLoadingService.loading.next(this.loading.isRunning());
-    combineLatest(timer(500),
-    this.authStoreUserService.getInvitationStoresByUserId())
+    this.loading.start();
+    this.sharedLoadingService.loading.next(true);
+    this.authStoreUserService.getInvitationStoresByUserId()
     .pipe(
-      map(x => x[1]),
       takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
         this.pendingStoreList = result['result'];
@@ -97,7 +96,6 @@ export class StoreListControllerComponent implements OnInit {
     });
   }
   refresh() {
-    this.loading.start();
     this.sharedStoreService.refresh.next(true);
   }
   ngOnDestroy() {
