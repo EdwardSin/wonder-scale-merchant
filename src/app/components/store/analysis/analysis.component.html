@@ -1,11 +1,11 @@
 <h4 class="ws-title">Analysis</h4>
 <mat-select class="form form-control mb-3" style="max-width: 300px;" [(ngModel)]="analysisType" (selectionChange)="changeAnalysisType($event)">
     <mat-option value="general">General</mat-option>
-    <mat-option *ngIf="selectedPackage == 'premium'" value="sales">Sales</mat-option>
+    <mat-option value="sales">Sales</mat-option>
     <mat-option value="pageview">Pageview</mat-option>
-    <mat-option *ngIf="selectedPackage == 'premium'" value="delivery">Delivery</mat-option>
-    <mat-option *ngIf="selectedPackage == 'premium'" value="invoice">Invoice</mat-option>
-    <mat-option *ngIf="selectedPackage == 'premium'" value="promotion">Promotion</mat-option>
+    <mat-option value="delivery">Delivery</mat-option>
+    <mat-option value="invoice">Invoice</mat-option>
+    <mat-option value="promotion">Promotion</mat-option>
 </mat-select>
 <button [disabled]="refreshLoading" class="btn btn-sm btn-controller float-right ml-2" (click)="refreshFunction()">
     <ws-spinner [width]="15" [height]="15" [borderWidth]="1" [spinnerColor]="'#b71c1c'" class="mr-2" *ngIf="refreshLoading"></ws-spinner>Refresh</button>

@@ -28,13 +28,14 @@ export class AnalysisComponent implements OnInit {
     if (this.route.snapshot['_urlSegment'].segments.length == 4) {
       this.analysisType = this.route.snapshot['_urlSegment'].segments[3].path;
     }
-    this.sharedStoreService.store.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
-      this.store = result;
-      DocumentHelper.setWindowTitleWithWonderScale('Analysis - ' + result.name);
-      if (result && result.package) {
-        this.selectedPackage = result.package.name;
-      }
-    })
+    // temp disable package
+    // this.sharedStoreService.store.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+    //   this.store = result;
+    //   DocumentHelper.setWindowTitleWithWonderScale('Analysis - ' + result.name);
+    //   if (result && result.package) {
+    //     this.selectedPackage = result.package.name;
+    //   }
+    // })
     this.router.events.pipe(takeUntil(this.ngUnsubscribe)).subscribe(event => {
         if (event instanceof NavigationEnd) {
           if (this.route.snapshot['_urlSegment'].segments.length == 4) {
