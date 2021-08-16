@@ -86,6 +86,8 @@ export class InvoicesComponent implements OnInit {
       this.sharedStoreService.store.next(this.store);
       this.authInvoiceConfigurationContributorService.isInvoiceEnabled.next(true);
       WsToastService.toastSubject.next({ content: 'Invoice management is enabled!', type: 'success' });
+    }, err => {
+      WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
     });
   }
   upgradeToPremium() {

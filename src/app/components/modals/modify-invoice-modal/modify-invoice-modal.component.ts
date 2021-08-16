@@ -109,6 +109,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
       this.form.patchValue({
         status: this.item.status,
         remark: this.item.remark,
+        isGift: this.item.isGift,
         deliveryOption: this.item.deliveryOption,
         paymentMethod: this.item.paymentMethod || '',
         numberOfPromotion: '1'
@@ -174,7 +175,6 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
         let giftNote = this.item.orderNotes?.find(x => x.type == 'gift');
         let generalNote = this.item.orderNotes?.find(x => x.type == 'general');
         this.form.patchValue({
-          isGift: this.item.isGift,
           giftMessage: giftNote ? giftNote.message : '',
           orderNotes: generalNote ? generalNote.message: ''
         });
@@ -183,13 +183,7 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
     }
   }
   resetForm() {
-    this.form.reset({
-      deliveryId: '',
-      deliveryFee: '',
-      status: 'new',
-      country: 'MYS',
-      deliveryOption: 'delivery'
-    });
+    this.form = WsFormBuilder.createInvoiceForm();
     this.cartItems = [];
     this.notifyCalculation();
   }
@@ -403,16 +397,16 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
       return;
     }
     let orderNotes = [];
-      if (this.form.value.orderNotes.trim().length > 0) {
-        orderNotes.push({
-          type: 'general',
-          message: this.form.value.orderNotes.trim()
-        });
-      }
-      if (this.form.value.isGift && this.form.value.giftMessage.trim().length > 0) {
-        orderNotes.push({
-          type: 'gift',
-          message: this.form.value.giftMessage.trim()
+    if (this.form.value.orderNotes?.trim().length > 0) {
+      orderNotes.push({
+        type: 'general',
+        message: this.form.value.orderNotes.trim()
+      });
+    }
+    if (this.form.value.isGift && this.form.value.giftMessage.trim().length > 0) {
+      orderNotes.push({
+        type: 'gift',
+        message: this.form.value.giftMessage.trim()
       });
     }
     let invoice: Invoice = {
@@ -474,6 +468,8 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
           this.isCreateEmptyInvoiceModalOpened = false;
           this.resetForm();
         }
+      }, () => {
+        WsToastService.toastSubject.next({content: 'Failed to update invoice!', type: 'danger'});
       });
     } else {
       this.modifyLoading.start();
@@ -487,6 +483,8 @@ export class ModifyInvoiceModalComponent extends WsModalComponent implements OnI
           this.isCreateEmptyInvoiceModalOpened = false;
           this.resetForm();
         }
+      }, () => {
+        WsToastService.toastSubject.next({content: 'Failed to add invoice!', type: 'danger'});
       });
     }   
   }

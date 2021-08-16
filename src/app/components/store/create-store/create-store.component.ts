@@ -203,7 +203,7 @@ export class CreateStoreComponent implements OnInit {
             this.navigateToStore();
           }, 3000);
         }, (err) => {
-          WsToastService.toastSubject.next({ content: err.error.message, type: 'danger' });
+          WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
         })
     }
   }

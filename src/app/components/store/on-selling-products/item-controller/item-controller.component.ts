@@ -273,6 +273,7 @@ export class ItemControllerComponent implements OnInit {
           WsToastService.toastSubject.next({ content: "Moved to category!", type: 'success' });
         })
       }, (err) => {
+        this.loading.stop();
         WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
       });
   }

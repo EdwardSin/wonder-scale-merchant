@@ -67,9 +67,13 @@ export class WsInvoiceCardComponent implements OnInit {
         this.authInvoiceContributorService.refreshStatusNewToInProgress();
         this.authInvoiceContributorService.refreshDashboardInvoices(this.item);
       }, err => {
-        WsToastService.toastSubject.next({ content: 'Invoice couldn\'t be updated due to status is outdated.', type: 'danger'})
-        WsToastService.toastSubject.next({ content: 'Dashboard is up to date.', type: 'info'})
-        this.authInvoiceContributorService.refreshInvoices.next(true);
+        if (err.status === 400) {
+          WsToastService.toastSubject.next({ content: 'Invoice couldn\'t be updated due to status is outdated.', type: 'danger'})
+          WsToastService.toastSubject.next({ content: 'Dashboard is up to date.', type: 'info'})
+          this.authInvoiceContributorService.refreshInvoices.next(true);
+        } else {
+          WsToastService.toastSubject.next({ content: err.error, type: 'danger'});
+        }
       });
     } else {
       WsToastService.toastSubject.next({ content: 'Please select a payment method!', type: 'danger'});
@@ -88,6 +92,8 @@ export class WsInvoiceCardComponent implements OnInit {
         WsToastService.toastSubject.next({ content: 'Invoice couldn\'t be updated due to status is outdated.', type: 'danger'})
         WsToastService.toastSubject.next({ content: 'Dashboard is up to date.', type: 'info'})
         this.authInvoiceContributorService.refreshInvoices.next(true);
+      } else {
+        WsToastService.toastSubject.next({ content: err.error, type: 'danger'});
       }
     });
   }
@@ -104,6 +110,8 @@ export class WsInvoiceCardComponent implements OnInit {
         WsToastService.toastSubject.next({ content: 'Invoice couldn\'t be updated due to status is outdated.', type: 'danger'})
         WsToastService.toastSubject.next({ content: 'Dashboard is up to date.', type: 'info'})
         this.authInvoiceContributorService.refreshInvoices.next(true);
+      } else {
+        WsToastService.toastSubject.next({ content: err.error, type: 'danger'});
       }
     });
   }
@@ -119,6 +127,8 @@ export class WsInvoiceCardComponent implements OnInit {
         WsToastService.toastSubject.next({ content: 'Invoice couldn\'t be updated due to status is outdated.', type: 'danger'})
         WsToastService.toastSubject.next({ content: 'Dashboard is up to date.', type: 'info'})
         this.authInvoiceContributorService.refreshInvoices.next(true);
+      } else {
+        WsToastService.toastSubject.next({ content: err.error, type: 'danger'});
       }
     });
   }
@@ -129,9 +139,13 @@ export class WsInvoiceCardComponent implements OnInit {
       this.authInvoiceContributorService.refreshStatusWaitForApprovalToNew();
       this.authInvoiceContributorService.refreshDashboardInvoices(this.item);
     }, err => {
-      WsToastService.toastSubject.next({ content: 'Invoice couldn\'t be updated due to status is outdated.', type: 'danger'})
-        WsToastService.toastSubject.next({ content: 'Dashboard is up to date.', type: 'info'})
-        this.authInvoiceContributorService.refreshInvoices.next(true);
+      if (err.status === 400) {
+        WsToastService.toastSubject.next({ content: 'Invoice couldn\'t be updated due to status is outdated.', type: 'danger'})
+          WsToastService.toastSubject.next({ content: 'Dashboard is up to date.', type: 'info'})
+          this.authInvoiceContributorService.refreshInvoices.next(true);
+      } else {
+        WsToastService.toastSubject.next({ content: err.error, type: 'danger'});
+      }
     });
   }
   completeInvoice(event) {
@@ -146,6 +160,8 @@ export class WsInvoiceCardComponent implements OnInit {
         WsToastService.toastSubject.next({ content: 'Invoice couldn\'t be updated due to status is outdated.', type: 'danger'})
         WsToastService.toastSubject.next({ content: 'Dashboard is up to date.', type: 'info'})
         this.authInvoiceContributorService.refreshInvoices.next(true);
+      } else {
+        WsToastService.toastSubject.next({ content: err.error, type: 'danger'});
       }
     });
   }
@@ -162,6 +178,8 @@ export class WsInvoiceCardComponent implements OnInit {
         WsToastService.toastSubject.next({ content: 'Invoice couldn\'t be updated due to status is outdated.', type: 'danger'})
         WsToastService.toastSubject.next({ content: 'Dashboard is up to date.', type: 'info'})
         this.authInvoiceContributorService.refreshInvoices.next(true);
+      } else {
+        WsToastService.toastSubject.next({ content: err.error, type: 'danger'});
       }
     })
   }
