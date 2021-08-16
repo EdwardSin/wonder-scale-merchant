@@ -24,7 +24,7 @@ import { SharedStoreService } from '@services/shared/shared-store.service';
 export class CreateStoreComponent implements OnInit {
   storeServiceType: 'physical' | 'online' = 'physical';
   storeType: 'restaurant' | 'shopping' | 'services';
-  phase: Phase<number> = new Phase(0, 8);
+  phase: Phase<number> = new Phase(1, 8);
   mapController: MapController;
   loading: WsLoading = new WsLoading;
   store: Store;
@@ -188,7 +188,8 @@ export class CreateStoreComponent implements OnInit {
     let store = this.createNewStore();
     let obj = {
       ...store,
-      selectedPackage: this.selectedPackage
+      // temp remove package
+      // selectedPackage: this.selectedPackage
     }
     this.loading.start();
     if (this.termAndConfitionsFormGroup.valid) {
@@ -227,10 +228,10 @@ export class CreateStoreComponent implements OnInit {
       this.router.navigate(['/stores', this.store.username]);
     });
   }
-  navigateToChangePlan() {
-    this.phase.setStep(0);
-    this.router.navigate([], {queryParams:{package: null}, queryParamsHandling: 'merge'});
-  }
+  // navigateToChangePlan() {
+  //   this.phase.setStep(0);
+  //   this.router.navigate([], {queryParams:{package: null}, queryParamsHandling: 'merge'});
+  // }
   onPackageClicked(event) {
     this.selectedPackage = event;
     this.phase.setStep(1);

@@ -20,9 +20,10 @@ const routes: Routes = [{
 }, {
   path: 'policy',
   loadChildren: () => import('./modules/policy/policy.module').then(m => m.PolicyModule)
-}, {
-  path: 'price',
-  loadChildren: () => import('./modules/price/price.module').then(m => m.PriceModule)
+// temp remove package
+// }, {
+//   path: 'price',
+//   loadChildren: () => import('./modules/price/price.module').then(m => m.PriceModule)
 }, {
   path: 'stores/:username',
   component: MainComponent,
@@ -61,12 +62,12 @@ const routes: Routes = [{
       data: { title: 'cat', breadcrumb: 'Products' },
       loadChildren: () => import('./modules/store/products/products.module').then(m => m.ProductsModule)
     },
-    {
-      path: 'package',
-      canActivate: [StoreGuard],
-      data: { title: 'package', breadcrumb: 'Package' },
-      loadChildren: () => import('./modules/store/package/package.module').then(m => m.PackageModule)
-    },
+    // {
+    //   path: 'package',
+    //   canActivate: [StoreGuard],
+    //   data: { title: 'package', breadcrumb: 'Package' },
+    //   loadChildren: () => import('./modules/store/package/package.module').then(m => m.PackageModule)
+    // },
     {
       path: 'store-page',
       canActivate: [StoreGuard],
