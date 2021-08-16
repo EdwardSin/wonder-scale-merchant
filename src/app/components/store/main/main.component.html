@@ -79,7 +79,7 @@
           </li>
         </ul>
       </li>
-      <li wsNavItem class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
+      <!-- <li wsNavItem class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
         <a [routerLink]="['package']">
           <span class="ws-main-nav-icon fas fa-crown"></span>
           <span class="ws-main-nav-text">Package</span>
@@ -89,30 +89,11 @@
             <a [routerLink]="['package']">Package</a>
           </li>
         </ul>
-      </li>
-      <li wsNavItem class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
-        <a [routerLink]="['settings']">
-          <span class="ws-main-nav-icon fas fa-cog"></span>
-          <span class="ws-main-nav-text">Settings</span>
-        </a>
-        <ul class="ws-main-nav-sub-list">
-          <li class="ws-main-nav-sub-list__title">
-            <a [routerLink]="['settings', 'about']">Settings</a>
-          </li>
-          <li>
-            <a [routerLinkActive]="'active'" [routerLink]="['settings', 'general']">General</a>
-          </li>
-          <li *ngIf="isAdminAuthorized">
-            <a [routerLinkActive]="'active'" [routerLink]="['settings', 'staff']">Staff</a>
-          </li>
-          <li>
-            <a [routerLinkActive]="'active'" [routerLink]="['settings', 'advanced']">Advanced</a>
-          </li>
-        </ul>
-      </li>
-      <li *ngIf="isNavOpen" class="pl-3 mt-3">
+      </li> -->
+      <!-- temp disable package -->
+      <!-- <li *ngIf="isNavOpen" class="pl-3 mt-3">
         <span class="font-weight-bold" style="font-size: .7rem;">Premium Features</span>
-      </li>
+      </li> -->
       <li wsNavItem class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
         <a [routerLink]="['invoices']">
           <span class="ws-main-nav-icon fas fa-clipboard-list"></span>
@@ -185,6 +166,26 @@
               *ngIf="unreplied_quotations.length">{{unreplied_quotations.length}}</span>
           </span>
         </a>
+      </li>
+      <li wsNavItem class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
+        <a [routerLink]="['settings']">
+          <span class="ws-main-nav-icon fas fa-cog"></span>
+          <span class="ws-main-nav-text">Settings</span>
+        </a>
+        <ul class="ws-main-nav-sub-list">
+          <li class="ws-main-nav-sub-list__title">
+            <a [routerLink]="['settings', 'about']">Settings</a>
+          </li>
+          <li>
+            <a [routerLinkActive]="'active'" [routerLink]="['settings', 'general']">General</a>
+          </li>
+          <li *ngIf="isAdminAuthorized">
+            <a [routerLinkActive]="'active'" [routerLink]="['settings', 'staff']">Staff</a>
+          </li>
+          <li>
+            <a [routerLinkActive]="'active'" [routerLink]="['settings', 'advanced']">Advanced</a>
+          </li>
+        </ul>
       </li>
       <!-- <li wsNavItem *ngIf="false" class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
         <a [routerLink]="['ecommerce']">

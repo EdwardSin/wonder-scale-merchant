@@ -7,6 +7,7 @@
 - 2021-08-16                                -
 ---------------------------------------------
 .: WSM: Task - Using session to commit multiple collection update (WSM-421)
+.: WSM: Task - Remove package selection (WSM-422)
 
 - v1.0.10944                                -
 ---------------------------------------------
