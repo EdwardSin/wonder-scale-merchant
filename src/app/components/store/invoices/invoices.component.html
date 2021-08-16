@@ -1,5 +1,6 @@
+<!-- temp disable package -->
 
-<div class="d-flex justify-content-center align-items-center" *ngIf="selectedPackage !== 'premium' && !loading.isRunning();">
+<!-- <div class="d-flex justify-content-center align-items-center" *ngIf="selectedPackage !== 'premium' && !loading.isRunning();">
     <div>
         <div class="text-center pt-5 mt-5">
             <span class="fas fa-clipboard-list"></span>
@@ -9,14 +10,14 @@
             <li>Create invoice and place your customer order.</li>
             <li>Merchant and customer can easily track the orders.</li>
             <li>Easily to view and export monthly account.</li>
-            <!-- <li>Order analysis to check the hot items.</li> -->
         </ol>
         <div class="text-center py-2">
             <button class="btn btn-start" (click)="upgradeToPremium()">Upgrade to Premium</button>
         </div>
     </div>
 </div>
-<div class="d-flex justify-content-center align-items-center" *ngIf="selectedPackage == 'premium' && !isInvoiceEnabled && !loading.isRunning(); else loadingTemplate">
+selectedPackage == 'premium' &&  -->
+<div class="d-flex justify-content-center align-items-center" *ngIf="!isInvoiceEnabled && !loading.isRunning(); else loadingTemplate">
     <div *ngIf="phase.isStep(0)">
         <div class="text-center pt-5 mt-5">
             <span class="fas fa-clipboard-list"></span>
@@ -81,6 +82,6 @@
     </ng-container>
   </ng-template>
 
-<ng-container *ngIf="selectedPackage == 'premium' && isInvoiceEnabled">
+<ng-container *ngIf="isInvoiceEnabled">
     <router-outlet></router-outlet>
 </ng-container>

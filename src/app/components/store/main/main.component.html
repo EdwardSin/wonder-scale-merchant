@@ -103,22 +103,22 @@
           <li class="ws-main-nav-sub-list__title">
             <a [routerLink]="['invoices']">Invoices</a>
           </li>
-          <li *ngIf="isInvoiceEnabled && store?.package?.name == 'premium'">
+          <li *ngIf="isInvoiceEnabled">
             <a [routerLinkActive]="'active'" [routerLink]="['invoices', 'all-invoices']">All Invoices</a>
           </li>
-          <li *ngIf="isInvoiceEnabled && store?.package?.name == 'premium'">
+          <li *ngIf="isInvoiceEnabled">
             <a [routerLinkActive]="'active'" [routerLink]="['invoices', 'delivery']">Delivery</a>
           </li>
-          <li *ngIf="isInvoiceEnabled && store?.package?.name == 'premium'">
+          <li *ngIf="isInvoiceEnabled">
             <a [routerLinkActive]="'active'" [routerLink]="['invoices', 'promotions']">Promotions</a>
           </li>
-          <!-- <li *ngIf="isInvoiceEnabled && store?.package?.name == 'premium'">
+          <!-- <li *ngIf="isInvoiceEnabled">
             <a [routerLinkActive]="'active'" [routerLink]="['invoices', 'customers']">Customers</a>
           </li> -->
-          <li *ngIf="isInvoiceEnabled && store?.package?.name == 'premium'">
+          <li *ngIf="isInvoiceEnabled">
             <a [routerLinkActive]="'active'" [routerLink]="['invoices', 'payment-methods']">Payment Methods</a>
           </li>
-          <li *ngIf="isInvoiceEnabled && store?.package?.name == 'premium'">
+          <li *ngIf="isInvoiceEnabled">
             <a [routerLinkActive]="'active'" [routerLink]="['invoices', 'configurations']">Configurations</a>
           </li>
         </ul>
