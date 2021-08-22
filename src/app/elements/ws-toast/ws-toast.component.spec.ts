@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { WsToastComponent } from './ws-toast.component';
 
@@ -6,7 +6,7 @@ describe('WsToastComponent', () => {
   let component: WsToastComponent;
   let fixture: ComponentFixture<WsToastComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ WsToastComponent ]
     })

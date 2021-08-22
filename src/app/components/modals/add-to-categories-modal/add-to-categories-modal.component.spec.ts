@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { AddToCategoriesModalComponent } from './add-to-categories-modal.component';
 
@@ -6,7 +6,7 @@ describe('AddToCategoriesModalComponent', () => {
   let component: AddToCategoriesModalComponent;
   let fixture: ComponentFixture<AddToCategoriesModalComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ AddToCategoriesModalComponent ]
     })
