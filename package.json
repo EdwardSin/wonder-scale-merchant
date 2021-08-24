@@ -55,9 +55,9 @@
     "ngx-order-pipe": "^2.1.1",
     "ngx-progressbar": "^6.0.2",
     "ngx-sortablejs": "^3.1.4",
-    "ngx-swiper-wrapper": "^10.0.0",
     "rxjs": "~6.5.4",
     "sortablejs": "^1.10.2",
+    "swiper": "^6.8.4",
     "tslib": "^2.0.0",
     "xlsx": "^0.17.0",
     "zone.js": "~0.11.4"
@@ -81,7 +81,6 @@
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "^1.5.0",
     "protractor": "~7.0.0",
-    "swiper": "^6.8.1",
     "ts-node": "~8.3.0",
     "tslint": "~6.1.0",
     "typescript": "~4.3.5"

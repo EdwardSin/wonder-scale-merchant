@@ -4,7 +4,9 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ScreenService } from '@services/general/screen.service';
 import { ScreenHelper } from '@helpers/screenhelper/screen.helper';
-import { Currency } from '@objects/currency';
+import SwiperCode, {Navigation, Pagination} from 'swiper/core';
+
+SwiperCode.use([Navigation, Pagination]);
 
 @Component({
   selector: 'app-root',
