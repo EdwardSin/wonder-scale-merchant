@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { ExportSalesModalComponent } from './export-sales-modal.component';
 
@@ -6,7 +6,7 @@ describe('ExportSalesModalComponent', () => {
   let component: ExportSalesModalComponent;
   let fixture: ComponentFixture<ExportSalesModalComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ ExportSalesModalComponent ]
     })

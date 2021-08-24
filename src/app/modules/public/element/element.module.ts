@@ -36,7 +36,6 @@ import { MatSelectInfiniteScrollModule } from 'ng-mat-select-infinite-scroll';
 import { WsInvoiceComponent } from '@elements/ws-invoice/ws-invoice.component';
 import { WsRatingComponent } from '@elements/ws-rating/ws-rating.component';
 import { AppRoutingModule } from 'src/app/app-routing.module';
-import { SwiperModule } from 'ngx-swiper-wrapper';
 import { RouterModule } from '@angular/router';
 import { WsMessageBarComponent } from '@elements/ws-message-bar/ws-message-bar.component';
 import { WsPriceListComponent } from '@elements/ws-price-list/ws-price-list.component';
@@ -44,6 +43,7 @@ import { WsStepperComponent } from '@elements/ws-stepper/ws-stepper.component';
 import { MenuItemComponent } from '@elements/menu-item/menu-item.component';
 import { MoveToCategoriesModalComponent } from '@components/modals/move-to-categories-modal/move-to-categories-modal.component';
 import { PipeModule } from '../pipe/pipe.module';
+import { SwiperModule } from 'swiper/angular';
 
 
 @NgModule({

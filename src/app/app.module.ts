@@ -1,7 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, PLATFORM_ID } from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { SWIPER_CONFIG, SwiperConfigInterface } from 'ngx-swiper-wrapper';
 import { JwtModule, JWT_OPTIONS } from '@auth0/angular-jwt';
 import { SocialLoginModule, GoogleLoginProvider, FacebookLoginProvider, SocialAuthServiceConfig } from 'angularx-social-login';
 import { NgProgressModule } from 'ngx-progressbar';
@@ -24,18 +23,6 @@ import { SharedModule } from './modules/public/shared/shared.module';
 import { HomeControlComponent } from '@components/store/home-control/home-control.component';
 import { NoCacheHeadersInterceptor } from '@components/resolvers/no-cache-headers.interceptor.service';
 import { InvoicesComponent } from './components/store/invoices/invoices.component';
-
-const DEFAULT_SWIPER_CONFIG: SwiperConfigInterface = {
-  direction: 'horizontal',
-  slidesPerView: 'auto',
-  observer: true,
-  observeParents: true,
-  pagination: true,
-  navigation: {
-    nextEl: '.swiper-button-next',
-    prevEl: '.swiper-button-prev',
-  },
-}
 
 export function jwtOptionsFactory(platformId) {
   return {
@@ -100,10 +87,6 @@ export function jwtOptionsFactory(platformId) {
           }
         ]
       } as SocialAuthServiceConfig
-    },
-    {
-      provide: SWIPER_CONFIG,
-      useValue: DEFAULT_SWIPER_CONFIG
     },
     {
       provide: HTTP_INTERCEPTORS,

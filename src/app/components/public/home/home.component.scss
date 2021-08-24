@@ -1,7 +1,8 @@
-@import "src/assets/scss/variables.scss";
+@import "/src/assets/scss/variables.scss";
+
 
 .background-container {
-    background-image: url('src/assets/images/png/home-background.png');
+    background-image: url('/assets/images/png/home-background.png');
     background-position: center;
 }
 
@@ -32,7 +33,7 @@
 }
 
 .subbackground {
-    background-image: url('src/assets/images/png/home-background-1.png');
+    background-image: url('/assets/images/png/home-background-1.png');
     background-position: center;
     padding: 3% 0;
 }

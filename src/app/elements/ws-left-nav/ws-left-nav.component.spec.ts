@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { WsLeftNavComponent } from './ws-left-nav.component';
 
@@ -6,7 +6,7 @@ describe('WsLeftNavComponent', () => {
   let component: WsLeftNavComponent;
   let fixture: ComponentFixture<WsLeftNavComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ WsLeftNavComponent ]
     })

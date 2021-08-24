@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { WsLoadingButtonComponent } from './ws-loading-button.component';
 
@@ -6,7 +6,7 @@ describe('WsLoadingButtonComponent', () => {
   let component: WsLoadingButtonComponent;
   let fixture: ComponentFixture<WsLoadingButtonComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ WsLoadingButtonComponent ]
     })

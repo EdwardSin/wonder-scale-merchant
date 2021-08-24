@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { WsSpinnerBarComponent } from './ws-spinner-bar.component';
 
@@ -6,7 +6,7 @@ describe('WsSpinnerBarComponent', () => {
   let component: WsSpinnerBarComponent;
   let fixture: ComponentFixture<WsSpinnerBarComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ WsSpinnerBarComponent ]
     })

@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { WsSpinnerHDotComponent } from './ws-spinner-h-dot.component';
 
@@ -6,7 +6,7 @@ describe('WsSpinnerHDotComponent', () => {
   let component: WsSpinnerHDotComponent;
   let fixture: ComponentFixture<WsSpinnerHDotComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ WsSpinnerHDotComponent ]
     })
