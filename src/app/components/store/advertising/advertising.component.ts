@@ -268,7 +268,8 @@ export class AdvertisingComponent implements OnInit {
       image: null,
       url: '',
       startDate: null,
-      endDate: null
+      endDate: null,
+      reason: undefined
     }
   }
   getAdvertisementConfiguration() {

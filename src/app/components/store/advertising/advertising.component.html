@@ -307,7 +307,7 @@
             <div *ngIf="configuration.reason !== 'payment-error'">
                 <ng-container *ngTemplateOutlet="editAdvertisementTemplate; context: {configuration: configuration, isEdit: true}"></ng-container>
                 <div>
-                    <button class="btn btn-sm btn-controller float-right" [disabled]="submitLoading.isRunning()" type="button" style="margin-left: auto" (click)="editAdvertisement(selectedAdvertisement)">Update</button>
+                    <button class="btn btn-sm btn-controller float-right" [disabled]="submitLoading.isRunning()" type="button" style="margin-left: auto" (click)="editAdvertisement()">Update</button>
                 </div>
             </div>
             <div *ngIf="configuration.reason === 'payment-error'">
@@ -324,7 +324,7 @@
         </div>
     </div>
 </ws-modal>
-<ws-modal *ngIf="isAdvertisementModalOpened" [(isOpened)]="isiAdvertisementModalOpened" [closeCallback]="onViewAdsClosed.bind(this)" [maxWidth]="selectedAdvertisement?.type === 'medium' ? 1180 : 800">
+<ws-modal *ngIf="isAdvertisementModalOpened" [(isOpened)]="isAdvertisementModalOpened" [closeCallback]="onViewAdsClosed.bind(this)" [maxWidth]="selectedAdvertisement?.type === 'medium' ? 1180 : 800">
     <div modalBody>
         <div *ngIf="selectedAdvertisement && !analysisLoading.isRunning(); else analysisLoadingTemplate">
             <div class="row no-gutters">
