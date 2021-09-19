@@ -1,0 +1,19 @@
+<div @openClose class="ads-card" [class.ads-modal]="isModal" *ngIf="!isModal || (isOpen && isModal)">
+    <div class="ads-image-container"
+        [class.clickable]="isNavigable"
+        [style.background-color]="!imageUrl ? '#f7f7f7': 'transparent'" 
+        (click)="onClickUpload()">
+        <ws-uploader *ngIf="isUpload" [id]="'imageAdsUploadInput'" [isMultiple]="false" [max]="1" (output)="onImageUpload($event)"></ws-uploader>
+        <a *ngIf="isNavigable && (item?.url || item?.store?.username) && !isUpload" [href]="item?.url || environment.URL + 'page/' + item?.store?.username">
+            <img class="ads-image" [class.isUpload]="isUpload" [src]="imageUrl" alt="ads image" />
+        </a>
+        <img *ngIf="imageUrl && !isNavigable" class="ads-image" [class.isUpload]="isUpload" [src]="imageUrl" alt="ads image" />
+        <div class="ads-image-cover" [class.isUpload]="isUpload">
+            <span class="fas fa-times ads-close p-2" (click)="isModal? onModalClose() : null"></span>
+            <div class="text-center" *ngIf="isUpload">
+                <span class="fas fa-images mb-2" style="font-size: 4rem; color: #888"></span>
+                <span class="font-9 d-block">Upload your ads image here (350 x 380)</span>
+            </div>
+        </div>
+    </div>
+</div>

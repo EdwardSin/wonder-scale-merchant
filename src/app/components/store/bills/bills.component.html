@@ -1,0 +1,41 @@
+<div class="d-flex justify-content-center align-items-center mb-5" *ngIf="bills.length; else loadingTemplate">
+    <div *ngIf="bills?.length" class="w-100">
+        <h4 class="ws-title">Bills</h4>
+        <div class="clearfix mb-3"></div>
+        <table class="table list-table font-9">
+            <thead style="background-color: #f7f7f7">
+                <th class="border-top-0">Items</th>
+                <th class="border-top-0 text-center" style="width: 150px">Purchase Date</th>
+                <th class="border-top-0 text-center" style="width: 150px">Status</th>
+                <th class="border-top-0 text-right" style="width: 150px">Total (RM)</th>
+            </thead>
+            <tbody>
+                <tr *ngFor="let bill of bills">
+                    <td>
+                        {{ bill.name }}
+                    </td>
+                    <td class="text-center">
+                       {{ bill?.purchaseDate | date: 'y-MMM-dd' }}
+                    </td>
+                    <td class="text-center text-capitalize">
+                       {{ bill?.status }}
+                    </td>
+                    <td class="text-right">
+                       {{ bill?.total | number: '1.2-2' }}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<ng-template #loadingTemplate>
+    <ng-container *ngIf="loading.isRunning(); else noBill">
+        <ws-spinner class="text-center d-block w-100" style="padding-top: 30vh; padding-bottom: 30vh" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>
+    </ng-container>
+</ng-template>
+<ng-template #noBill>
+    <div *ngIf="!bills.length" class="h5 text-muted text-center font-weight-light" style="padding-top: 10vh; padding-bottom: 10vh">
+        No Bill
+    </div>
+</ng-template>

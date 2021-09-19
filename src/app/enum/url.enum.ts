@@ -6,6 +6,7 @@ export class URL {
     static INVOICE_URL = '/api/invoices';
     static ITEM_URL = '/api/items';
     static REVIEW_URL = '/api/reviews';
+    static ADVERTISEMENT_URL = '/api/advertisements';
     static AUTH_INVOICE_URL = '/api/auth-users/invoice-users';
     static AUTH_DEFAULT_SETTING_ADMIN_URL = '/api/auth-stores/default-setting-admins';
     static AUTH_PACKAGE_ADMIN_URL = '/api/auth-stores/package-admins';
@@ -34,7 +35,9 @@ export class URL {
     static AUTH_USERS_URL = '/api/auth-users';
     static AUTH_TRACK_CONTRIBUTORS_URL = '/api/auth-stores/track-contributors'
     static AUTH_NOTIFICATION_USERS_URL = '/api/auth-users/notification-users';
+    static AUTH_ADVERTISEMENT_CONTRIBUTORS_URL = '/api/auth-stores/advertisement-contributors';
     static AUTH_REVIEW_USERS_URL = '/api/auth-users/review-users';
+    static AUTH_BILL_USERS_URL = '/api/auth-stores/bill-contributors';
     static FEATURE_URL = '/api/features';
     static CURRENCY_URL = '/api/currency';
     // static AUTH_ADVERTISING_CONTRIBUTOR_URL = '/api/auth-stores/advertising-contributors';
@@ -71,7 +74,7 @@ export class TrackUrl {
 export class StoreUrl {
     static getStoreByUsernameUrl = URL.STORE_URL + '/username';
     static getStoreByKeywordUrl = URL.STORE_URL + '/search';
-    static getRecommandedStoresUrl = URL.STORE_URL + '/random';
+    static getRecommendedStoresUrl = URL.STORE_URL + '/recommended';
 }
 export class InvoiceUrl {
     static getInvoiceByIdUrl = URL.INVOICE_URL;
@@ -83,9 +86,15 @@ export class ItemUrl {
     static getNewItemsByStoreIdUrl = URL.ITEM_URL + '/public/new';
     static getTodaySpecialItemsByStoreIdUrl = URL.ITEM_URL + '/public/todayspecial';
     static getItemsByCategoryIdUrl = URL.ITEM_URL + '/public';
+    static getRecommendedItemsUrl = URL.ITEM_URL + '/public/recommended';
 }
 export class ReviewUrl {
     static getReviewsUrl = URL.REVIEW_URL + '/';
+}
+export class AdvertisementUrl {
+    static getAdvertisementsUrl = URL.ADVERTISEMENT_URL + '/';
+    static viewAdvertisementUrl = URL.ADVERTISEMENT_URL + '/view';
+    static clickAdvertisementUrl = URL.ADVERTISEMENT_URL + '/click';
 }
 export class FeatureUrl {
     static sendEmailUrl = URL.FEATURE_URL + '/send/email';
@@ -371,6 +380,19 @@ export class AuthNotificationUserUrl {
 }
 export class AuthReviewUserUrl {
     static addReviewUrl = URL.AUTH_REVIEW_USERS_URL + '/';
+}
+export class AuthAdvertisementContributorUrl {
+    static getAdvertisementConfigurationUrl = URL.AUTH_ADVERTISEMENT_CONTRIBUTORS_URL + '/config';
+    static getAdvertisementsUrl = URL.AUTH_ADVERTISEMENT_CONTRIBUTORS_URL + '/';
+    static addAdvertisementUrl = URL.AUTH_ADVERTISEMENT_CONTRIBUTORS_URL + '/';
+    static editAdvertisementUrl = URL.AUTH_ADVERTISEMENT_CONTRIBUTORS_URL + '/';
+    static getAdvertisementUrl = URL.AUTH_ADVERTISEMENT_CONTRIBUTORS_URL + '/';
+    static getAvailableAdvertisementDatesUrl = URL.AUTH_ADVERTISEMENT_CONTRIBUTORS_URL + '/available-dates';
+    static startAdvertisingUrl  = URL.AUTH_ADVERTISEMENT_CONTRIBUTORS_URL + '/start';
+    static stopAdvertisingUrl = URL.AUTH_ADVERTISEMENT_CONTRIBUTORS_URL + '/stop';
+}
+export class AuthBillContributorUrl {
+    static getBillsUrl = URL.AUTH_BILL_USERS_URL + '/';
 }
 export class CurrencyUrl {
     static getCurrencyUrl = URL.CURRENCY_URL + '/';

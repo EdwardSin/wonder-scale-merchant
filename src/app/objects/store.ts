@@ -50,7 +50,8 @@ export class Store {
     contributors: [];
     categoryList?: Array<string>;
     trackExpiration: string;
-    number_of_all_items: number;
+    numberOfAllItems: number;
+    numberOfPublishedItems: number;
     bankDetails?: {
         bankName: string,
         accountName: string,

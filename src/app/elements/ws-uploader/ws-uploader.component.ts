@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, ViewChild, EventEmitter, ElementRef } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
@@ -10,6 +10,7 @@ export class WsUploaderComponent implements OnInit {
   @Input() id;
   @Input() input = [];
   @Input() max = 5;
+  @Input() isMultiple: boolean = true;
   @Input() accept = 'image/*';
   @Output() output: EventEmitter<any> = new EventEmitter;
   @Output() overflow: EventEmitter<any> = new EventEmitter;

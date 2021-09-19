@@ -8,7 +8,7 @@
                     <div class="row no-gutters mb-1 d-flex align-items-center">
                         <span class="setup-list-item-sm-icon d-inline-block d-lg-none fas fa-tag"></span>
                         <p class="setup-list-item-label">First Product</p>
-                        <span class="setup-list-item-checked fas fa-check-circle" [class.text-success]="store.number_of_all_items > 0"></span>
+                        <span class="setup-list-item-checked fas fa-check-circle" [class.text-success]="store.numberOfAllItems > 0"></span>
                     </div>
                     <p class="setup-list-item-text">Add your first product</p>
                 </div>
@@ -55,6 +55,17 @@
                     <p class="setup-list-item-text">Place your QR code in obvious place</p>
                 </div>
                 <button class="btn btn-sm btn-setup ml-lg-5 mt-3 mt-lg-0 ml-auto" (click)="openQRcodeModal(url)">View QR code</button>
+            </li>
+            <li class="row no-gutters setup-list-item">
+                <span class="setup-list-item-icon d-none d-lg-block fas fa-bullhorn"></span>
+                <div class="mr-lg-auto col-lg-auto">
+                    <div class="row no-gutters mb-1 d-flex align-items-center">
+                        <span class="setup-list-item-sm-icon d-inline-block d-lg-none fas fa-bullhorn"></span>
+                        <p class="setup-list-item-label">Advertising</p>
+                    </div>
+                    <p class="setup-list-item-text">Advertise in the platform, get more exposure and more sales</p>
+                </div>
+                <button class="btn btn-sm btn-setup ml-lg-5 mt-3 mt-lg-0 ml-auto" [routerLink]="['/stores', store?.username, 'advertising']">Advertise Now</button>
             </li>
             <!-- temp disable package -->
             <!-- <li class="row no-gutters setup-list-item">

@@ -1,0 +1,23 @@
+<div class="ads-card">
+    <div class="ads-image-container" [class.clickable]="isNavigable" [ngClass]="item?.type"
+        [style.background-color]="!item?.imageUrl ? '#f7f7f7': 'transparent'" 
+        [class.clickable]="isUpload"
+        (click)="onClickUpload()">
+        <ws-uploader *ngIf="isUpload" [id]="'imageAdsUploadInput'" [isMultiple]="false" [max]="1" (output)="onImageUpload($event)"></ws-uploader>
+        <a *ngIf="isNavigable && (item?.url || item?.store?.username) && !isUpload" [href]="item?.url || environment.URL + 'page/' + item?.store?.username">
+            <img *ngIf="imageUrl" class="ads-image" [class.isUpload]="isUpload" [src]="imageUrl" alt="ads image" />
+        </a>
+        <img *ngIf="imageUrl && !isNavigable" class="ads-image" [class.isUpload]="isUpload" [src]="imageUrl" alt="ads image" />
+        <div class="ads-image-cover" [class.isUpload]="isUpload">
+            <div class="text-center" *ngIf="isUpload">
+                <span class="fas fa-images mb-2" style="font-size: 4rem; color: #888"></span>
+                <span class="font-9 d-block">Upload your ads image here 
+                    <span *ngIf="item?.type === 'square'">(200 x 240)</span>
+                    <span *ngIf="item?.type === 'large'">(720 x 240)</span>
+                    <span *ngIf="item?.type === 'medium'">(1080 x 120)</span>
+                    <span *ngIf="item?.type === 'small'">(360 x 120)</span>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>

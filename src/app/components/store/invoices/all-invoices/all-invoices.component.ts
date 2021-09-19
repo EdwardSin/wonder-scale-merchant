@@ -128,9 +128,6 @@ export class AllInvoicesComponent implements OnInit {
     this.screenService.isMobileSize.pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       this.isMobileSize = result;
     });
-    if (this.refreshInvoicesInterval) {
-      this.refreshInvoicesInterval.unsubscribe();
-    }
     this.sharedNavbarService.isNavSubject.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(res => {
         this.isNavOpen = res;
@@ -248,6 +245,9 @@ export class AllInvoicesComponent implements OnInit {
     });
   }
   refreshInvoices() {
+    if (this.refreshInvoicesInterval) {
+      this.refreshInvoicesInterval.unsubscribe();
+    }
     this.refreshInvoicesInterval = interval(this.REFRESH_ALL_INVOICES_INTERVAL).pipe(switchMap(() => {
       return this.getUnseenInvoicesSubscription();
     }), takeUntil(this.ngUnsubscribe)).subscribe(result => {

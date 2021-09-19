@@ -1,0 +1,597 @@
+<div class="d-flex justify-content-center align-items-center mb-5" *ngIf="!loading.isRunning(); else loadingTemplate">
+    <div *ngIf="!advertisings?.length">
+        <div class="text-center pt-5 mt-5">
+            <span class="fas fa-bullhorn"></span>
+        </div>
+        <h4 class="my-4 text-center">Advertising</h4>
+        <ol class="font-9">
+            <li>Advertise your page and products now.</li>
+            <li>Page will be advertised in the website, our FB's and Instagram's page.</li>
+        </ol>
+        <div class="text-center py-2">
+            <button class="btn btn-start" (click)="openAdvertisingModal()">
+                <span class="fas fa-plus mr-2"></span>Add New</button>
+        </div>
+    </div>
+    <div *ngIf="advertisings?.length" class="w-100">
+        <h4 class="ws-title">Advertising</h4>
+        <button class="btn btn-sm btn-controller float-right" (click)="openAdvertisingModal()">
+            <span class="fas fa-plus mr-2 d-inline-block"></span>Add New
+        </button>
+        <div class="clearfix mb-3"></div>
+        <table class="table list-table">
+            <thead style="background-color: #f7f7f7">
+                <th class="border-top-0" style="width: 100px">Enabled</th>
+                <th class="border-top-0" style="width: 100px">Banner</th>
+                <th class="border-top-0" style="width: 100px">Type</th>
+                <th class="border-top-0">URL</th>
+                <th class="border-top-0 text-center" style="width: 150px">Start Date</th>
+                <th class="border-top-0 text-center" style="width: 150px">End Date</th>
+                <th class="border-top-0 text-center" style="width: 50px">Status</th>
+                <th class="border-top-0 text-right" style="width: 100px">Actions</th>
+            </thead>
+            <tbody class="font-9">
+                <tr *ngFor="let advertising of advertisings">
+                    <td class="align-middle text-center">
+                        <span class="fas fa-check-circle text-muted" [class.text-success]="advertising.isEnabled"></span>
+                    </td>
+                    <td class="align-middle">
+                        <img *ngIf="advertising?.imageUrl" class="d-block center" style="max-width: 32px; max-height: 32px" [src]="environment.IMAGE_URL + advertising?.imageUrl" alt="advertisement image" />
+                    </td>
+                    <td class="align-middle text-capitalize">
+                       {{ advertising?.type }}
+                    </td>
+                    <td class="align-middle">
+                        <a class="secondary text-nowrap" [href]="advertising?.url ||  environment.URL + 'page/' + advertising?.store?.username" target="_blank">{{ advertising.url || advertising?.store?.name }}</a>
+                    </td>
+                    <td class="align-middle text-center" style="width: 150px">
+                        {{ advertising.startDate | date: 'y-MMM-dd' }}
+                    </td>
+                    <td class="align-middle text-center" style="width: 150px">
+                        {{ advertising.endDate | date: 'y-MMM-dd' }}
+                    </td>
+                    <td class="align-middle text-center" style="width: 50px">
+                        <ng-container *ngTemplateOutlet="advertisementstatusTemplate; context: {status: advertising?.status}"></ng-container>
+                    </td>
+                    <td style="width: 50px" class="align-middle text-nowrap text-right">
+                        <a *ngIf="advertising?.status === 'rejected'" class="secondary" title="View" href="javascript:void(0)" class="d-inline-block d-sm-inline-flex btn btn-sm btn-controller p-2 mr-2" (click)="onEditAdsModalClicked(advertising)">
+                            <span class="fas fa-pencil-alt"></span>
+                        </a>
+                        <a class="secondary" title="View" href="javascript:void(0)" class="d-inline-block d-sm-inline-flex btn btn-sm btn-controller p-2 mr-2" (click)="onViewAdsClicked(advertising)">
+                            <span class="fas fa-chart-line"></span>
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<ws-modal *ngIf="isModifyAdvertisingModalOpened" [(isOpened)]="isModifyAdvertisingModalOpened" [isClosedOutside]="false" [maxWidth]="maxWidth">
+    <div modalBody>
+        <div *ngIf="adsConfiguration && !configLoading.isRunning(); else configLoadingTemplate">
+            <div *ngIf="phase.isStep(0)" class="text-center row no-gutters">
+                <div class="col-6 p-4">
+                    <button class="btn btn-type list-table advertising p-4" [disabled]="!adsConfiguration.isFreeAvailable" (click)="onAdvertisementTypeClicked('free')">
+                        <span class="btn-type-icon fas fa-dollar-sign mb-3"></span>
+                        <p class="font-weight-bold mb-2">Free 1-week Advertisement x 1</p>
+                        <p class="mb-0 font-8">Provide free advertisement for new store to promote their products in the website.</p>
+                    </button>
+                </div>
+                <div class="col-6 p-4">
+                    <button class="btn btn-type list-table advertising p-4" (click)="onAdvertisementTypeClicked('paid')">
+                        <span class="btn-type-icon fas fa-crown mb-3"></span>
+                        <p class="font-weight-bold mb-2">Paid Advertisement</p>
+                        <p class="mb-0" style="font-size: .8rem">Pay for advertising store or the business webpage.</p>
+                    </button>
+                </div>
+            </div>
+            <div *ngIf="phase.isStep(1)">
+                <h4 class="h6">Advertising Types:</h4>
+                <div class="alert alert-danger font-8" *ngIf="isAdsFree && (!store?.isPublished || store?.numberOfPublishedItems === 0)">
+                    <p class="mb-0">Requirements: </p>
+                    <ul class="mb-0 pl-4">
+                        <li *ngIf="!store?.isPublished">Store must be published.</li>
+                        <li *ngIf="store?.numberOfPublishedItems === 0">At least 1 product is displayed publicly.</li>
+                    </ul>
+                </div>
+                <div>
+                    <div (click)="nextToAdsConfig('pop-out')" class="d-flex list-table p-4 my-3 advertising">
+                        <div class="w-100">
+                            <div class="d-flex align-items-center">
+                                <div class="border rounded advertising-banner pop-out mx-2">
+                                    <img class="h-100 w-100" style="object-fit: cover" src="/assets/images/png/ads_pop_out.png" alt="pop-out-image" />
+                                </div>
+                                <div class="col">
+                                    <h5 class="h6">Pop out Advertisement
+                                        <span class="position-relative ml-1 text-success font-9" title="Exposure Rate: High">
+                                            <span class="fas fa-angle-up position-absolute"></span>
+                                            <span class="fas fa-angle-up"></span>
+                                            <span class="fas fa-angle-up position-absolute" style="left: 0; top: .5rem"></span>
+                                        </span>
+                                    </h5>
+                                    <p class="mb-2 font-9">Pop out when users view the home page.</p>
+                                    <p class="mt-4 mb-1 font-9 font-weight-bold">Example:</p>
+                                    <div class="row no-gutters">
+                                        <div class="border rounded advertising-example-banner mr-2 p-0" (click)="onImageExampleClicked($event, ['/assets/images/png/ads_home_pop_out.png'])">
+                                            <img class="h-100 w-100" style="object-fit: cover" src="/assets/images/png/ads_home_pop_out.png" alt="small-image" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-center" style="position: absolute; top: 0rem; right: 0rem; border-radius: 0 0 0 20px; padding: .5rem 1rem; background-color: #f7f7f7">
+                                    <div *ngIf="!isAdsFree" class="font-weight-bold">
+                                        <span style="color: #b71c1c" class="mr-1">RM{{ adsConfiguration.advertisementPopOutAmount }}</span><span class="font-8">/week</span>
+                                    </div>
+                                    <div *ngIf="isAdsFree" class="font-weight-bold">
+                                        <span style="color: #b71c1c" class="mr-1">Free</span><span class="font-8">/ week</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div (click)="nextToAdsConfig('large')" class="d-flex list-table p-4 my-3 advertising">
+                        <div class="w-100">
+                            <div class="d-flex align-items-center">
+                                <div class="border rounded advertising-banner mx-2">
+                                    <img class="h-100 w-100" style="object-fit: cover" src="/assets/images/png/ads_large.png" alt="large-image" />
+                                </div>
+                                <div class="col">
+                                    <h5 class="h6">Large Advertisement Banner
+                                        <span class="position-relative ml-1 text-success font-9" title="Exposure Rate: High">
+                                            <span class="fas fa-angle-up position-absolute"></span>
+                                            <span class="fas fa-angle-up"></span>
+                                            <span class="fas fa-angle-up position-absolute" style="left: 0; top: .5rem"></span>
+                                        </span>
+                                    </h5>
+                                    <p class="mb-0 font-9">Swipe between banners in home page.</p>
+                                    <p class="mb-2 font-9">Auto display the next banner every 5s.</p>
+                                    <p class="mt-4 mb-1 font-9 font-weight-bold">Example:</p>
+                                    <div class="row no-gutters">
+                                        <div class="border rounded advertising-example-banner mr-2" (click)="onImageExampleClicked($event, ['/assets/images/png/ads_home_large.png'])">
+                                            <img class="h-100 w-100" style="object-fit: cover" src="/assets/images/png/ads_home_large.png" alt="large-image" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-center" style="position: absolute; top: 0rem; right: 0rem; border-radius: 0 0 0 20px; padding: .5rem 1rem; background-color: #f7f7f7">
+                                    <div *ngIf="!isAdsFree" class="font-weight-bold">
+                                        <span style="color: #b71c1c" class="mr-1">RM{{ adsConfiguration.advertisementBannerLargeAmount }}</span><span class="font-8">/week</span>
+                                    </div>
+                                    <div *ngIf="isAdsFree" class="font-weight-bold">
+                                        <span style="color: #b71c1c" class="mr-1">Free</span><span class="font-8">/ week</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div (click)="nextToAdsConfig('square')" class="d-flex list-table p-4 my-3 advertising">
+                        <div class="w-100">
+                            <div class="d-flex align-items-center">
+                                <div class="border rounded advertising-banner mx-2">
+                                    <img class="h-100 w-100" style="object-fit: cover" src="/assets/images/png/ads_square.png" alt="small-image" />
+                                </div>
+                                <div class="col">
+                                    <h5 class="h6">Square Advertisement Banner
+                                        <span class="text-warning position-relative ml-1 font-9" title="Moderate">
+                                            <span class="fas fa-angle-up position-absolute"></span>
+                                            <span class="fas fa-angle-up"></span>
+                                        </span>
+                                    </h5>
+                                    <p class="mb-2 font-9">Display in the first item on recommendation and searched result.</p>
+                                    <p class="mt-4 mb-1 font-9 font-weight-bold">Example:</p>
+                                    <div class="row no-gutters">
+                                        <div class="border rounded advertising-example-banner mr-2" (click)="onImageExampleClicked($event, ['/assets/images/png/ads_home_square.png', '/assets/images/png/ads_search_square.png'])">
+                                            <img class="h-100 w-100" style="object-fit: cover" src="/assets/images/png/ads_home_square.png" alt="pop-out-image" />
+                                        </div>
+                                        <div class="border rounded advertising-example-banner mr-2" (click)="onImageExampleClicked($event, ['/assets/images/png/ads_home_square.png', '/assets/images/png/ads_search_square.png'])">
+                                            <img class="h-100 w-100" style="object-fit: cover" src="/assets/images/png/ads_search_square.png" alt="search-square-image" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-center" style="position: absolute; top: 0rem; right: 0rem; border-radius: 0 0 0 20px; padding: .5rem 1rem; background-color: #f7f7f7">
+                                    <div *ngIf="!isAdsFree" class="font-weight-bold">
+                                        <span style="color: #b71c1c" class="mr-1">RM{{ adsConfiguration.advertisementBannerSquareAmount }}</span><span class="font-8">/week</span>
+                                    </div>
+                                    <div *ngIf="isAdsFree" class="font-weight-bold">
+                                        <span style="color: #b71c1c" class="mr-1">Free</span><span class="font-8">/ week</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div (click)="nextToAdsConfig('medium')" class="d-flex list-table p-4 my-3 advertising">
+                        <div class="w-100">
+                            <div class="d-flex align-items-center">
+                                <div class="border rounded advertising-banner mx-2">
+                                    <img class="h-100 w-100" style="object-fit: cover" src="/assets/images/png/ads_medium.png" alt="medium-image" />
+                                </div>
+                                <div class="col">
+                                    <h5 class="h6">Medium Advertisement Banner
+                                        <span class="text-warning position-relative ml-1 font-9" title="Moderate">
+                                            <span class="fas fa-angle-up position-absolute"></span>
+                                            <span class="fas fa-angle-up"></span>
+                                        </span>
+                                    </h5>
+                                    <p class="mb-2 font-9">Display in the middle of recommendation in home page and searching page.</p>
+                                    <p class="mt-4 mb-1 font-9 font-weight-bold">Example:</p>
+                                    <div class="row no-gutters">
+                                        <div class="border rounded advertising-example-banner mr-2" (click)="onImageExampleClicked($event, ['/assets/images/png/ads_home_medium.png', '/assets/images/png/ads_search_medium.png'])">
+                                            <img class="h-100 w-100" style="object-fit: cover" src="/assets/images/png/ads_home_medium.png" alt="home-medium-image" />
+                                        </div>
+                                        <div class="border rounded advertising-example-banner mr-2" (click)="onImageExampleClicked($event, ['/assets/images/png/ads_home_medium.png', '/assets/images/png/ads_search_medium.png'])">
+                                            <img class="h-100 w-100" style="object-fit: cover" src="/assets/images/png/ads_search_medium.png" alt="search-medium-image" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-center" style="position: absolute; top: 0rem; right: 0rem; border-radius: 0 0 0 20px; padding: .5rem 1rem; background-color: #f7f7f7">
+                                    <div *ngIf="!isAdsFree" class="font-weight-bold">
+                                        <span style="color: #b71c1c" class="mr-1">RM{{ adsConfiguration.advertisementBannerMediumAmount }}</span><span class="font-8">/week</span>
+                                    </div>
+                                    <div *ngIf="isAdsFree" class="font-weight-bold">
+                                        <span style="color: #b71c1c" class="mr-1">Free</span><span class="font-8">/ week</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div (click)="nextToAdsConfig('small')" class="d-flex list-table p-4 my-3 advertising">
+                        <div class="w-100">
+                            <div class="d-flex align-items-center">
+                                <div class="border rounded advertising-banner mx-2">
+                                    <img class="h-100 w-100" style="object-fit: cover" src="/assets/images/png/ads_small.png" alt="small-image" />
+                                </div>
+                                <div class="col">
+                                    <h5 class="h6">Small Advertisement Banner
+                                        <span class="text-warning position-relative ml-1 font-9" title="Moderate">
+                                            <span class="fas fa-angle-up position-absolute"></span>
+                                            <span class="fas fa-angle-up"></span>
+                                        </span>
+                                    </h5>
+                                    <p class="mb-2 font-9">Display on top and in the middle in home page and searching page.</p>
+                                    <p class="mt-4 mb-1 font-9 font-weight-bold">Example:</p>
+                                    <div class="row no-gutters">
+                                        <div class="border rounded advertising-example-banner mr-2" (click)="onImageExampleClicked($event, ['/assets/images/png/ads_home_small.png', '/assets/images/png/ads_search_small.png'])">
+                                            <img class="h-100 w-100" style="object-fit: cover" src="/assets/images/png/ads_home_small.png" alt="small-image" />
+                                        </div>
+                                        <div class="border rounded advertising-example-banner mr-2" (click)="onImageExampleClicked($event, ['/assets/images/png/ads_home_small.png', '/assets/images/png/ads_search_small.png'])">
+                                            <img class="h-100 w-100" style="object-fit: cover" src="/assets/images/png/ads_search_small.png" alt="small-image" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="text-center" style="position: absolute; top: 0rem; right: 0rem; border-radius: 0 0 0 20px; padding: .5rem 1rem; background-color: #f7f7f7">
+                                    <div *ngIf="!isAdsFree" class="font-weight-bold">
+                                        <span style="color: #b71c1c" class="mr-1">RM{{ adsConfiguration.advertisementBannerSmallAmount }}</span><span class="font-8">/week</span>
+                                    </div>
+                                    <div *ngIf="isAdsFree" class="font-weight-bold">
+                                        <span style="color: #b71c1c" class="mr-1">Free</span><span class="font-8">/ week</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="adsConfiguration.isFreeAvailable">
+                    <button class="btn btn-sm btn-controller" type="button" (click)="previousToAdsFreePaidType()">Previous</button>
+                </div>
+            </div>
+            <div *ngIf="phase.isStep(2)">
+                <ng-container *ngTemplateOutlet="editAdvertisementTemplate; context: {configuration: configuration}"></ng-container>
+                <div>
+                    <button class="btn btn-sm btn-controller" type="button" style="margin-left: auto" (click)="previousToAdsType()">Previous</button>
+                    <button class="btn btn-sm btn-controller float-right" type="button" style="margin-left: auto" (click)="showConfirmation()">Next</button>
+                </div>
+            </div>
+            <div *ngIf="phase.isStep(3)">
+                <ws-spinner *ngIf="confirmationLoading.isRunning()" class="text-center d-block w-100" style="padding: 30vh" [width]="30" [height]="30" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>
+                <div *ngIf="!confirmationLoading.isRunning()">
+                    <ng-container *ngTemplateOutlet="editPaymentTemplate; context: {configuration: configuration}"></ng-container>
+                    <div>
+                        <button class="btn btn-sm btn-controller" type="button" (click)="phase.previous()">Previous</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ws-modal>
+<ws-modal *ngIf="isDisplayAdvertisementExample" [(isOpened)]="isDisplayAdvertisementExample" [maxWidth]="1300">
+    <div modalBody>
+        <swiper class="h-100" [slidesPerView]="'auto'" [spaceBetween]="10" [navigation]="false" [pagination]="true" [centeredSlides]="true" [direction]="'horizontal'" [mousewheel]="true"> 
+            <ng-template swiperSlide *ngFor="let image of exampleImages">
+                <img class="h-100 w-100 mb-2" style="object-fit: contain;" [src]="image" alt="upload-image" />
+            </ng-template>
+        </swiper>
+        <!-- <image /> -->
+    </div>
+</ws-modal>
+<ws-modal *ngIf="isEditAdvertisementOpened" [(isOpened)]="isEditAdvertisementOpened">
+    <div modalBody>
+        <div *ngIf="configuration && !editingAdsLoading.isRunning(); else editingAdsLoadingTemplate">
+            <div *ngIf="configuration.reason !== 'payment-error'">
+                <ng-container *ngTemplateOutlet="editAdvertisementTemplate; context: {configuration: configuration, isEdit: true}"></ng-container>
+                <div>
+                    <button class="btn btn-sm btn-controller float-right" [disabled]="submitLoading.isRunning()" type="button" style="margin-left: auto" (click)="editAdvertisement(selectedAdvertisement)">Update</button>
+                </div>
+            </div>
+            <div *ngIf="configuration.reason === 'payment-error'">
+                <ng-container *ngTemplateOutlet="editPaymentTemplate; context: {configuration: configuration, isEdit: true}"></ng-container>
+            </div>
+        </div>
+    </div>
+</ws-modal>
+<ws-modal *ngIf="isAdvertisingPolicyOpened" [(isOpened)]="isAdvertisingPolicyOpened">
+    <div modalBody>
+        <div class="termContainer scrollbar mb-2 font-9" style="height: 80vh">{{advertisingPolicy}}</div>
+        <div>
+            <button class="btn btn-sm btn-controller float-right" (click)="isAdvertisingPolicyOpened = false">Close</button>
+        </div>
+    </div>
+</ws-modal>
+<ws-modal *ngIf="isAdvertisementModalOpened" [(isOpened)]="isiAdvertisementModalOpened" [closeCallback]="onViewAdsClosed.bind(this)" [maxWidth]="selectedAdvertisement?.type === 'medium' ? 1180 : 800">
+    <div modalBody>
+        <div *ngIf="selectedAdvertisement && !analysisLoading.isRunning(); else analysisLoadingTemplate">
+            <div class="row no-gutters">
+                <div class="col-lg-6 col py-2 pr-lg-2 mb-3 mb-lg-0">
+                    <div class="analysis-figure">
+                        <div *ngIf="analysisLoading.isRunning()" class="ws-board-loading">
+                            <ws-spinner [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>
+                        </div>
+                        <h4 class="h6 mb-0 font-weight-normal" style="min-width: 200px">
+                            Total page views:
+                        </h4>
+                        <p class="analysis-figure__value mb-0"><span>{{ (selectedAdvertisement?.views || 0) }}</span></p>
+                    </div>
+                </div>
+                <div class="col-lg-6 col py-2 pl-lg-2 mb-3 mb-lg-0">
+                    <div class="analysis-figure">
+                        <div *ngIf="analysisLoading.isRunning()" class="ws-board-loading">
+                            <ws-spinner [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>
+                        </div>
+                        <h4 class="h6 mb-0 font-weight-normal" style="min-width: 200px">
+                            Total page clicked:
+                        </h4>
+                        <p class="analysis-figure__value mb-0"><span>{{ (selectedAdvertisement?.clicks || 0) }}</span></p>
+                    </div>
+                </div>
+            </div>
+            <label class="font-weight-bold">Preview: </label>
+            <div class="d-flex justify-content-center mb-3">
+                <ng-container *ngTemplateOutlet="advertisementTemplate; context: {advertisement: selectedAdvertisement}"></ng-container>
+            </div>
+            <div class="rounded p-3 mb-3" style="background-color: #f7f7f7">
+                <label class="mb-0 font-weight-bold">Type: </label>
+                <p class="font-9 mb-2">{{ selectedAdvertisement?.type }}</p>
+                <label class="mb-0 font-weight-bold">Page After Clicking: </label>
+                <div class="mb-2">
+                    <a class="font-9" [href]="selectedAdvertisement?.url || environment?.URL + 'page/' + selectedAdvertisement?.store?.username">{{ selectedAdvertisement?.url || selectedAdvertisement?.store?.name }}</a>
+                </div>
+                <label class="mb-0 font-weight-bold">Start Date: </label>
+                <p class="font-9 mb-2">{{ selectedAdvertisement?.startDate | date: 'y-MMM-dd' }}</p>
+                <label class="mb-0 font-weight-bold">End Date: </label>
+                <p class="font-9 mb-2">{{ selectedAdvertisement?.endDate | date: 'y-MMM-dd' }}</p>
+                <label class="mb-0 font-weight-bold">Status: </label>
+                <div>
+                    <ng-container *ngTemplateOutlet="advertisementstatusTemplate; context: {status: selectedAdvertisement?.status}"></ng-container>
+                </div>
+            </div>
+            <div class="float-right" *ngIf="selectedAdvertisement.status === 'in_progress' || selectedAdvertisement.status === 'approved'">
+                <button *ngIf="!selectedAdvertisement.isEnabled" [disabled]="submitLoading.isRunning()" class="btn btn-primary btn-sm" (click)="openStartAdvertisingModal()">Start</button>
+                <button *ngIf="selectedAdvertisement.isEnabled" [disabled]="submitLoading.isRunning()" class="btn btn-danger btn-sm" (click)="openStopAdvertisingModal()">Stop</button>
+            </div>
+        </div>
+    </div>
+</ws-modal>
+<confirm-modal *ngIf="isAdvertisementEnabledModalOpened" [(isOpened)]="isAdvertisementEnabledModalOpened" id="AdvertisementEnabledModal" [message]="'Are you sure to start advertising?'" [action]="startAdvertising.bind(this)">
+</confirm-modal>
+<confirm-modal *ngIf="isAdvertisementDisabledModalOpened" [(isOpened)]="isAdvertisementDisabledModalOpened" id="AdvertisementDisabledModal" [message]="'Are you sure to stop advertising?'" [action]="stopAdvertising.bind(this)">
+</confirm-modal>
+<ng-template #advertisementTemplate let-advertisement="advertisement" let-isUpload="isUpload">
+    <ws-ads-popout class="d-block" *ngIf="advertisement?.type === 'pop-out'" [item]="advertisement" (onImageChange)="onImageChange($event)" [isUpload]="isUpload"></ws-ads-popout>
+    <ws-ads-banner class="d-block" *ngIf="advertisement?.type !== 'pop-out'" [item]="advertisement" (onImageChange)="onImageChange($event)" [isUpload]="isUpload"></ws-ads-banner>
+</ng-template>
+<ng-template #advertisementstatusTemplate let-status="status">
+    <span class="badge badge-pill badge-secondary text-capitalize" *ngIf="status === 'wait-for-payment'">Wait For Payment</span>
+    <span class="badge badge-pill badge-secondary text-capitalize" *ngIf="status === 'wait-for-approval'">Wait For Approval <span class="ml-1 font-7 fas fa-exclamation-circle" title="Payment will only be proceeded after being approved"></span></span>
+    <span class="badge badge-pill badge-success text-capitalize" *ngIf="status === 'approved'">Approved</span>
+    <span class="badge badge-pill badge-warning text-capitalize" *ngIf="status === 'in_progress'">In Progress</span>
+    <span class="badge badge-pill badge-danger text-capitalize" *ngIf="status === 'rejected'">Rejected</span>
+</ng-template>
+<ng-template #configLoadingTemplate>
+    <ng-container *ngIf="configLoading.isRunning(); else noConfigTemplate">
+        <ws-spinner class="text-center d-block w-100" style="padding-top: 30vh; padding-bottom: 30vh" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>
+    </ng-container>
+</ng-template>
+<ng-template #analysisLoadingTemplate>
+    <ng-container *ngIf="analysisLoading.isRunning(); else noAnalysisTemplate">
+        <ws-spinner class="text-center d-block w-100" style="padding-top: 30vh; padding-bottom: 30vh" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>
+    </ng-container>
+</ng-template>
+<ng-template #editingAdsLoadingTemplate>
+    <ng-container *ngIf="editingAdsLoading.isRunning(); else noEditingAdsTemplate">
+        <ws-spinner class="text-center d-block w-100" style="padding-top: 30vh; padding-bottom: 30vh" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>
+    </ng-container>
+</ng-template>
+<ng-template #loadingTemplate>
+    <ng-container *ngIf="loading.isRunning()">
+        <ws-spinner class="text-center d-block w-100" style="padding-top: 30vh; padding-bottom: 30vh" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>
+    </ng-container>
+</ng-template>
+<ng-template #noConfigTemplate>
+    <div class="text-center w-100">
+        <h6 class="py-5 text-center">Please refresh the website</h6>
+        <button class="btn btn-sm btn-controller text-center">Refresh</button>
+    </div>
+</ng-template>
+<ng-template #noAnalysisTemplate>
+    <div class="text-center w-100">
+        <h6 class="py-5">No details</h6>
+    </div>
+</ng-template>
+<ng-template #noEditingAdsTemplate>
+    <div class="text-center w-100">
+        <h6 class="py-5">No details</h6>
+    </div>
+</ng-template>
+<ng-template #editAdvertisementTemplate let-configuration="configuration" let-isEdit="isEdit">
+    <h4 class="h6">Preview:</h4>
+    <div class="d-flex justify-content-center pb-3">
+        <ng-container *ngTemplateOutlet="advertisementTemplate; context: {advertisement: configuration, isUpload: true}"></ng-container>
+    </div>
+    <div class="alert alert-danger font-9" *ngIf="configuration?.reason">
+        <label class="mb-0 font-weight-bold">Rejected Reason:</label>
+        <p class="mb-0" *ngIf="configuration?.reason === 'payment-error'">Payment is not able to proceed, please update your payment.</p>
+        <p class="mb-0" *ngIf="configuration?.reason === 'banner-error'">Banner image is not complied with the policy, please upload your advertising banner again.</p>
+        <p class="mb-0" *ngIf="configuration?.reason === 'date-error'">The selected start date and end date is already full, please selected the other start date and end date.</p>
+        <p class="mb-0" *ngIf="configuration?.reason === 'url-error'">URL is not complied with the policy, please enter the valid URL.</p>
+    </div>
+    <h4 class="h6">Configuration:</h4>
+    <div class="list-table mb-3 font-9 p-2 p-lg-4">
+        <mat-label>Start date - End date</mat-label>
+        <mat-date-range-input class="form-control form-control-sm" style="width: 300px" [separator]="'to'" [min]="minDate" [rangePicker]="picker" [dateFilter]="dateFilter" (click)="openDatePicker()">
+            <input matStartDate [(ngModel)]="configuration.startDate" (dateChange)="startDateChange()">
+            <input matEndDate [(ngModel)]="configuration.endDate" (dateChange)="calculateWeek()">
+        </mat-date-range-input>
+        <mat-date-range-picker #picker (closed)="closeDatePicker()"></mat-date-range-picker>
+        <p *ngIf="week > 0" class="mt-2 mb-0 ml-2 text-primary">{{week}} week(s) are selected.</p>
+        <div class="mb-3"></div>
+        <label class="mb-2 font-9">Page after clicking:</label>
+        <mat-radio-group [(ngModel)]="configuration.pageClickedType" class="font-9">
+            <mat-radio-button [color]="'primary'" value="local" class="w-100 px-3">
+                Wonder Scale's Store Page
+                <span *ngIf="configuration.pageClickedType === 'local' && !store?.isPublished" style="color: #b71c1c" class="d-block font-7">Store is not published.</span>
+                <span *ngIf="configuration.pageClickedType === 'local' && store?.numberOfPublishedItems === 0 && isAdsFree" style="color: #b71c1c" class="d-block font-7">No product is published.</span>
+            </mat-radio-button>
+            <mat-radio-button [color]="'primary'" value="custom" class="w-100 px-3" *ngIf="!isAdsFree">
+                Custom Website
+            </mat-radio-button>
+        </mat-radio-group>
+        <div class="pl-5" style="width: 300px">
+            <input *ngIf="configuration.pageClickedType == 'custom'" class="mb-2" [(ngModel)]="configuration.url" class="form-control form-control-sm" placeholder="https://www.example.com" />
+        </div>
+        <div *ngIf="configuration.type === 'square' || configuration.type === 'pop-out'">
+            <label class="w-100 mb-0 font-9">Extra:</label>
+            <div class="px-3">
+                <mat-checkbox [color]="'primary'" [disabled]="isEdit" class="d-block font-9" [(ngModel)]="configuration.isFbPromoting">
+                    Promote on Facebook (1 time x <span *ngIf="!isAdsFree">RM{{ adsConfiguration.advertisementBannerFBAmount | number: '1.2-2'}}</span><span *ngIf="isAdsFree">RM 0.00</span>)
+                </mat-checkbox>
+                <mat-checkbox [color]="'primary'" [disabled]="isEdit" class="d-block font-9" [(ngModel)]="configuration.isInstaPromoting">
+                    Promote on Instagram (1 time x <span *ngIf="!isAdsFree">RM{{ adsConfiguration.advertisementBannerInstaAmount | number: '1.2-2'}}</span><span *ngIf="isAdsFree">RM 0.00</span>)
+                </mat-checkbox>
+            </div>
+        </div>
+    </div>
+</ng-template>
+<ng-template #editPaymentTemplate let-configuration="configuration" let-isEdit="isEdit">
+    <div>
+        <h4 class="h6">Confirmation:</h4>
+        <div class="d-flex justify-content-center pb-3">
+            <ng-container *ngTemplateOutlet="advertisementTemplate; context: {advertisement: configuration}"></ng-container>
+        </div>
+        <div class="list-table font-9 p-3 mb-3">
+            <label class="mb-0 font-weight-bold">Types:</label>
+            <p class="mb-2" *ngIf="configuration?.type == 'pop-out'">Pop out advertisement</p>
+            <p class="mb-2" *ngIf="configuration?.type == 'square'">Square banner advertisement</p>
+            <p class="mb-2" *ngIf="configuration?.type == 'large'">Large banner advertisement</p>
+            <p class="mb-2" *ngIf="configuration?.type == 'medium'">Medium banner advertisement</p>
+            <p class="mb-2" *ngIf="configuration?.type == 'small'">Small banner advertisement</p>
+            <label class="mb-0 font-weight-bold">Start Date:</label>
+            <p class="mb-2">{{ configuration.startDate | date: 'y-MMM-dd' }}</p>
+            <label class="mb-0 font-weight-bold">End Date:</label>
+            <p class="mb-2">{{ configuration.endDate | date: 'y-MMM-dd' }}</p>
+            <label class="mb-0 font-weight-bold">Page after clicking:</label>
+            <div>
+                <a class="mb-2" [href]="configuration.url || environment.URL + 'page/' + store?.username" target="_blank">{{ configuration.url || store?.name }}</a>
+            </div>
+            <label class="mb-0 font-weight-bold" *ngIf="configuration.isFbPromoting || configuration.isInstaPromoting">Extra:</label>
+            <ul class="mb-0">
+                <li class="mb-0" *ngIf="configuration.isFbPromoting">Advertising on Facebook</li>
+                <li class="mb-0" *ngIf="configuration.isInstaPromoting">Advertising on Instagram</li>
+            </ul>
+        </div>
+    </div>
+    <div class="font-9 alert alert-warning mb-3">
+        <ul class="mb-0">
+            <li *ngIf="!isAdsFree">Payment will only be proceeded after advertisement is being approved.</li>
+            <li>Kindly confirm the details, once processed, it is not allowed to amend.</li>
+        </ul>
+    </div>
+    <div class="row no-gutters">
+        <div *ngIf="!isAdsFree" class="list-table col-lg-6 ml-3 p-3 mb-lg-3 order-12 position-relative" style="height: 270px">
+            <h4 class="h6">Credit Card Details:</h4>
+            <div *ngIf="paymentLoading.isRunning()" style="background: rgba(255, 255, 255, .7); top: 0; left: 0; z-index: 1" class="w-100 h-100 position-absolute d-flex align-items-center">
+                <ws-spinner class="text-center d-block w-100" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>
+            </div>
+            <div class="font-9">
+                <label class="mb-0">Card Name:</label>
+                <div id="cardholder-name" class="form-control form-control-sm mb-2"></div>
+                <div class="row no-gutters">
+                    <div class="col">
+                        <label class="mb-0">Card Number:</label>
+                        <div id="card-number" class="form-control form-control-sm mb-2"></div>
+                    </div>
+                </div>
+                <div class="row no-gutters">
+                    <div class="col mr-2">
+                        <label class="mb-0">Expiration Date:</label>
+                        <div id="expiration-date" class="form-control form-control-sm mb-2" ></div>
+                    </div>
+                    <div class="col-auto">
+                        <label class="mb-0">CVV:</label>
+                        <div id="cvv" class="form-control form-control-sm mb-2" style="width: 50px" maxlength="3"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="mb-2">
+                <mat-checkbox [color]="'primary'" [(ngModel)]="isAcceptAgreement" class="font-9">I accept Wonder Scale <a href="javascript:void(0)" (click)="viewTermAndCondition()">advertising policy</a>.</mat-checkbox>
+            </div>
+            <button class="btn btn-sm btn-danger float-right" [disabled]="!isAcceptAgreement" type="button" style="margin-left: auto" #submit>Place Order</button>
+        </div>
+        <div class="list-table col-lg font-9 p-3 mb-3 order-1 d-flex justify-content-between flex-column" style="background-color: #f7f7f7">
+            <div>
+                <h4 class="h6">Payment Details:</h4>
+                <div class="mb-2" style="background-color: #eee; border-radius: 5px; padding: 5px 10px;">
+                    <ng-container [ngSwitch]="configuration.type">
+                        <div *ngSwitchCase="'pop-out'">
+                            <p class="mb-0">Pop out advertisement<br/><span class="font-8">({{ week }} week(s) x RM {{ (isAdsFree ? 0 : adsConfiguration.advertisementPopOutAmount) | number: '1.2-2'}})</span></p>
+                            <p class="mb-0 float-right">RM <span>{{ (isAdsFree ? 0 : adsConfiguration.advertisementPopOutAmount * week)  | number: '1.2-2'}}</span></p>
+                        </div>
+                        <div *ngSwitchCase="'large'">
+                            <p class="mb-0">Large advertisement banner<br/><span class="font-8">({{ week }} week(s) x RM {{ (isAdsFree ? 0 : adsConfiguration.advertisementBannerLargeAmount) | number: '1.2-2'}})</span></p>
+                            <p class="mb-0 float-right">RM <span>{{ (isAdsFree ? 0 : adsConfiguration.advertisementBannerLargeAmount * week)  | number: '1.2-2'}}</span></p>
+                        </div>
+                        <div *ngSwitchCase="'medium'">
+                            <p class="mb-0">Medium advertisement banner<br/><span class="font-8">({{ week }} week(s) x RM {{ (isAdsFree ? 0 : adsConfiguration.advertisementBannerMediumAmount) | number: '1.2-2'}})</span></p>
+                            <p class="mb-0 float-right">RM <span>{{ (isAdsFree ? 0 : adsConfiguration.advertisementBannerMediumAmount * week)  | number: '1.2-2'}}</span></p>
+                        </div>
+                        <div *ngSwitchCase="'small'">
+                            <p class="mb-0">Small advertisement banner<br/><span class="font-8">({{ week }} week(s) x RM {{ (isAdsFree ? 0 : adsConfiguration.advertisementBannerSmallAmount) | number: '1.2-2'}})</span></p>
+                            <p class="mb-0 float-right">RM <span>{{ (isAdsFree ? 0 : adsConfiguration.advertisementBannerSmallAmount * week)  | number: '1.2-2'}}</span></p>
+                        </div>
+                        <div *ngSwitchCase="'square'">
+                            <p class="mb-0">Square advertisement banner<br/><span class="font-8">({{ week }} week(s) x RM {{ (isAdsFree ? 0 : adsConfiguration.advertisementBannerSquareAmount) | number: '1.2-2'}})</span></p>
+                            <p class="mb-0 float-right">RM <span>{{ (isAdsFree ? 0 : adsConfiguration.advertisementBannerSquareAmount * week)  | number: '1.2-2'}}</span></p>
+                        </div>
+                    </ng-container>
+                    <div class="clearfix"></div>
+                </div>
+                <div *ngIf="configuration?.isFbPromoting" class="mb-2" style="background-color: #eee; border-radius: 5px; padding: 5px 10px;">
+                    <p class="mb-0">Advertising on Facebook<br/><span class="font-8">(1 time x RM {{ (isAdsFree ? 0 : adsConfiguration.advertisementBannerFBAmount) | number: '1.2-2' }})</span></p>
+                    <p class="mb-0 float-right">RM <span>{{ (isAdsFree ? 0 : adsConfiguration.advertisementBannerFBAmount) | number: '1.2-2'}}</span></p>
+                    <div class="clearfix"></div>
+                </div>
+                <div *ngIf="configuration?.isInstaPromoting" class="mb-2" style="background-color: #eee; border-radius: 5px; padding: 5px 10px;">
+                    <p class="mb-0">Advertising on Instagram<br/><span class="font-8">(1 time x RM {{ (isAdsFree ? 0 : adsConfiguration.advertisementBannerInstaAmount) | number: '1.2-2' }})</span></p>
+                    <p class="mb-0 float-right">RM <span>{{ (isAdsFree ? 0 : adsConfiguration.advertisementBannerInstaAmount) | number: '1.2-2'}}</span></p>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div>
+                <span class="d-inline-block font-weight-bold" style="line-height: 2">Total:</span>
+                <span class="float-right font-weight-bold" style="font-size: 1.2rem">RM{{ (isAdsFree ? 0 : totalAmount) | number: '1.2-2'}}</span>
+            </div>
+            <div *ngIf="isAdsFree" class="mt-2">
+                <mat-checkbox [color]="'primary'" [(ngModel)]="isAcceptAgreement" class="font-9">I accept Wonder Scale <a href="javascript:void(0)" (click)="viewTermAndCondition()">advertising policy</a>.</mat-checkbox>
+                <div>
+                    <button class="float-right btn btn-sm btn-danger" [disabled]="!isAcceptAgreement || submitLoading.isRunning()" type="button" (click)="placeorder(null)">Place Order</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>

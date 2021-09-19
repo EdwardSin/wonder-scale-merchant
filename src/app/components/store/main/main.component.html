@@ -47,6 +47,17 @@
         </ul>
       </li>
       <li wsNavItem class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
+        <a [routerLink]="['advertising']">
+          <span class="ws-main-nav-icon fas fa-bullhorn"></span>
+          <span class="ws-main-nav-text">Advertising</span>
+        </a>
+        <ul class="ws-main-nav-sub-list">
+          <li class="ws-main-nav-sub-list__title">
+            <a [routerLink]="['advertising']">Advertising</a>
+          </li>
+        </ul>
+      </li>
+      <li wsNavItem class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
         <a [routerLink]="['reviews']">
           <span class="ws-main-nav-icon fas fa-comment-dots"></span>
           <span class="ws-main-nav-text">Reviews</span>
@@ -141,12 +152,6 @@
         </a>
       </li>
       <li wsNavItem *ngIf="false" class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
-        <a [routerLink]="['advertising']">
-          <span class="ws-main-nav-icon fas fa-bullhorn"></span>
-          <span class="ws-main-nav-text">Advertising</span>
-        </a>
-      </li>
-      <li wsNavItem *ngIf="false" class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
         <a [routerLink]="['promotion']">
           <span class="ws-main-nav-icon fas fa-tags"></span>
           <span class="ws-main-nav-text">Promotions</span>
@@ -165,6 +170,12 @@
             <span class="badge ws-bg-secondary badge-pill float-right" style="margin-top: 3px;"
               *ngIf="unreplied_quotations.length">{{unreplied_quotations.length}}</span>
           </span>
+        </a>
+      </li>
+      <li wsNavItem class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
+        <a [routerLink]="['bills']">
+          <span class="ws-main-nav-icon fas fa-file-invoice"></span>
+          <span class="ws-main-nav-text">Bills</span>
         </a>
       </li>
       <li wsNavItem class="ws-main-nav-list-item" [routerLinkActive]="'selected'">
