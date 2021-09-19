@@ -6,7 +6,7 @@
     <span class="fas fa-plus mr-2 d-inline-block"></span>Add New
 </button>
 <div class="clearfix mb-3"></div>
-<div class="mb-5 pt-2 px-2" style="overflow-x: auto;" *ngIf="!loading.isRunning(); else loadingTemplate">
+<div class="mb-5 pt-2 px-2" style="overflow-x: auto;" *ngIf="categories.length; else loadingTemplate">
     <table class="table list-table">
         <thead style="background-color: #f7f7f7">
             <th class="border-top-0" style="width: 50px"></th>
@@ -64,9 +64,6 @@
             </tr> -->
         </tbody>
     </table>
-    <div *ngIf="!categories.length" class="h5 text-muted text-center font-weight-light" style="padding-top: 10vh; padding-bottom: 10vh">
-        No Category
-    </div>
 </div>
 <confirm-modal *ngIf="isRemoveCategoryConfirmationModalOpened" [(isOpened)]="isRemoveCategoryConfirmationModalOpened" id="confirmModal" [loading]="removeLoading.isRunning()" 
 [message]="'Are you sure to remove category?'" [action]="removeCategory.bind(this)">
@@ -89,7 +86,12 @@
 </ws-modal>
 
 <ng-template #loadingTemplate>
-    <ng-container *ngIf="loading.isRunning()">
+    <ng-container *ngIf="loading.isRunning(); else noCategoryTemplate">
         <ws-spinner class="text-center d-block w-100" style="padding-top: 10vh; padding-bottom: 10vh" [borderWidth]="1" [spinnerColor]="'#b71c1c'"></ws-spinner>
     </ng-container>
+</ng-template>
+<ng-template #noCategoryTemplate>
+    <div *ngIf="!categories.length" class="h5 text-muted text-center font-weight-light" style="padding-top: 10vh; padding-bottom: 10vh">
+        No Category
+    </div>
 </ng-template>

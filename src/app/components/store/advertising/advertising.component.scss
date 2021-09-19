@@ -1,0 +1,42 @@
+.fa-bullhorn{
+    font-size: 7rem;
+    transform: rotate(-20deg);
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: #b71c1c;
+}
+
+::ng-deep .mat-radio-label-content{
+    width: 100%;
+}
+
+.advertising {
+    transition: background-color ease .1s;
+    position: relative;
+
+    &:hover {
+        cursor: pointer;
+        background-color: #FFF5F5;
+        outline: none;
+    }
+
+    .advertising-banner {
+        width: 200px;
+        height: 200px;
+        box-sizing: content-box;
+        background-color: #f7f7f7;
+    }
+
+    .advertising-example-banner {
+        width: 60px;
+        height: 60px;
+        background-color: #f7f7f7;
+        padding: 0 .25rem;
+        transition: transform .1s ease;
+
+        &:hover {
+            transform: scale(1.1);
+        }
+    }
+}

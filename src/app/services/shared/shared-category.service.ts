@@ -56,11 +56,11 @@ export class SharedCategoryService {
         }))
             .subscribe(result => {
                 this.sharedItemService.editItems.next([]);
-                this.numberOfAllItems.next(result['number_of_all_items']);
+                this.numberOfAllItems.next(result['numberOfAllItems']);
                 this.numberOfNewItems.next(result['number_of_new_items']);
                 this.numberOfTodaySpecialItems.next(result['number_of_today_special_items']);
                 this.numberOfDiscountItems.next(result['number_of_discount_items']);
-                this.numberOfPublishedItems.next(result['number_of_published_items']);
+                this.numberOfPublishedItems.next(result['numberOfPublishedItems']);
                 this.numberOfUnpublishedItems.next(result['number_of_unpublished_items']);
                 this.numberOfUncategorizedItems.next(result['number_of_uncategorized_items']);
                 this.categories.next(result['categories']);

@@ -54,7 +54,7 @@ export class ProductsComponent implements OnInit {
           this.sharedStoreService.store_id = this.store._id;
           this.sharedStoreService.store_name = this.store.name;
           this.sharedStoreService.storeUsername = this.store.username;
-          this.numberOfAllItems = this.store.number_of_all_items;
+          this.numberOfAllItems = this.store.numberOfAllItems;
           this.storeUsername = this.store.username;
           
           // this.getUnrepliedRequests();

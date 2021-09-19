@@ -44,6 +44,8 @@ import { MenuItemComponent } from '@elements/menu-item/menu-item.component';
 import { MoveToCategoriesModalComponent } from '@components/modals/move-to-categories-modal/move-to-categories-modal.component';
 import { PipeModule } from '../pipe/pipe.module';
 import { SwiperModule } from 'swiper/angular';
+import { WsAdsPopoutComponent } from '@elements/ws-ads-popout/ws-ads-popout.component';
+import { WsAdsBannerComponent } from '@elements/ws-ads-banner/ws-ads-banner.component';
 
 
 @NgModule({
@@ -74,7 +76,9 @@ import { SwiperModule } from 'swiper/angular';
     WsPriceListComponent,
     WsStepperComponent,
     WsReviewComponent,
-    WsRatingComponent
+    WsRatingComponent,
+    WsAdsPopoutComponent,
+    WsAdsBannerComponent
   ],
   imports: [
     AgmCoreModule,
@@ -123,7 +127,9 @@ import { SwiperModule } from 'swiper/angular';
     WsStepperComponent,
     WsReviewComponent,
     MatTabsModule,
-    SwiperModule
+    SwiperModule,
+    WsAdsPopoutComponent,
+    WsAdsBannerComponent
   ]
 })
 export class ElementModule { }

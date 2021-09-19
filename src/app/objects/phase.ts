@@ -1,8 +1,10 @@
 export class Phase<T>{
+    initialStep: number = 0;
     step: T | number = 0;
     totalStep: number = 0;
 
     constructor(initialStep?, totalStep?) {
+        this.initialStep = initialStep;
         this.step = initialStep;
         this.totalStep = totalStep;
     }
@@ -32,5 +34,8 @@ export class Phase<T>{
         if (typeof this.step === "number" && this.hasPrevious()) {
             this.step--;
         }
+    }
+    reset() {
+        this.step = this.initialStep;
     }
 }

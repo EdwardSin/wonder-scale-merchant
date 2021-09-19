@@ -62,6 +62,18 @@ const routes: Routes = [{
       data: { title: 'cat', breadcrumb: 'Products' },
       loadChildren: () => import('./modules/store/products/products.module').then(m => m.ProductsModule)
     },
+    {
+      path: 'advertising',
+      canActivate: [StoreGuard],
+      data: { title: 'advertising', breadcrumb: 'Advertising' },
+      loadChildren: () => import('./modules/store/advertising/advertising.module').then(m => m.AdvertisingModule)
+    },
+    {
+      path: 'bills',
+      canActivate: [StoreGuard],
+      data: { title: 'bills', breadcrumb: 'Bills' },
+      loadChildren: () => import('./modules/store/bills/bills.module').then(m => m.BillsModule)
+    },
     // {
     //   path: 'package',
     //   canActivate: [StoreGuard],

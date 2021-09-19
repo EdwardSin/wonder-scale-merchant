@@ -1,1 +1,1 @@
-<input id="{{id}}" type="file" accept="{{accept}}" hidden multiple name="uploadImage" (change)="fileChangeEvent($event)" />
+<input id="{{id}}" type="file" accept="{{accept}}" hidden [multiple]="isMultiple" name="uploadImage" (change)="fileChangeEvent($event)" />
