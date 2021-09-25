@@ -61,26 +61,24 @@ export class WsUploaderComponent implements OnInit {
     }
     reader.readAsDataURL(file);
   }
-  validatePhoto(file) {
+  validatePhoto(file, isValidateSize=false, sizeInMb=15) {
       var fileTypes = [
-          'image/jpeg',
-          'image/jpeg',
-          'image/jpg',
-          'image/png'
-      ]
-      //let MB = 5;
-      //var OVER_SIZE_MB = MB * 1000 * 1000;
-      // if (file.size > OVER_SIZE_MB) {
-      //     WsToastService.toastSubject.next({ content: "File size limit " + MB + "mb!" });
-      //     return false;
-      // }
-      for (var i = 0; i < fileTypes.length; i++) {
-          if (file.type === fileTypes[i]) {
-              return true;
-          }
-      }
-
-      console.log("Upload file type is not in image format!");
-      return false;
+        'image/jpeg',
+        'image/jpeg',
+        'image/jpg',
+        'image/png'
+    ]
+    if (isValidateSize) {
+        var OVER_SIZE_MB = sizeInMb * 1024 * 1024;
+        if (file.size > OVER_SIZE_MB) {
+            return {result: false, error: `Max image size is ${sizeInMb}mb!`};
+        }
+    }
+    for (var i = 0; i < fileTypes.length; i++) {
+        if (file.type === fileTypes[i]) {
+            return {result: true};
+        }
+    }
+    return {result: false, error: 'Image format is not supported!'};
   }
 }

@@ -11,6 +11,7 @@ import { AuthStoreContributorService } from '@services/http/auth-store/contribut
 import { WsToastService } from '@elements/ws-toast/ws-toast.service';
 import { ImageHelper } from '@helpers/imagehelper/image.helper';
 import { DocumentHelper } from '@helpers/documenthelper/document.helper';
+import { UploadHelper } from '@helpers/uploadhelper/upload.helper';
 
 @Component({
   selector: 'app-quick-menu',
@@ -29,7 +30,9 @@ export class QuickMenuComponent implements OnInit {
   editedFlag: boolean = false;
   store: Store;
   private ngUnsubscribe: Subject<any> = new Subject;
-  constructor(private authStoreContributorService: AuthStoreContributorService, private sharedStoreService: SharedStoreService) { 
+  constructor(private authStoreContributorService: AuthStoreContributorService, 
+    private uploadHelper: UploadHelper,
+    private sharedStoreService: SharedStoreService) { 
     let storeUsername = this.sharedStoreService.storeUsername;
     this.loading.start();
     this.authStoreContributorService.getStoreByUsername(storeUsername).pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
@@ -124,17 +127,20 @@ export class QuickMenuComponent implements OnInit {
     moveItemInArray(this.allImages, event.previousIndex, event.currentIndex);
   }
   fileChangeEvent(event) {
-    event.forEach(item => {
-      ImageHelper.resizeImage(item.base64, null, null , .5).then(() => {
+    for (let item of event) {
+      const result = this.uploadHelper.validate(item.file, true, environment.MAX_IMAGE_SIZE_IN_MB);
+      if (result.result) {
         let exist = this.allImages.find(image => {
           return image.name == item.name && image.file.size == item.file.size;
-        })
+        });
         if (!exist) {
           this.allImages.push(item);
           this.editedFlag = true;
         }
-      });
-    });
+      } else {
+        WsToastService.toastSubject.next({ content: result.error, type: 'danger' });
+      }
+    }
   }
   onImagesOverflow() {
     WsToastService.toastSubject.next({ content: 'Max 10 images are uploaded!', type: 'danger'});

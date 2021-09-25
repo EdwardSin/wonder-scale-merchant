@@ -22,7 +22,7 @@
         <div class="all-item-container pb-2 ws-drag-list" cdkDropList
             cdkDropListOrientation="horizontal" (cdkDropListDropped)="drop($event)">
             <div class="ws-drag-box mx-1" *ngFor="let image of allImages; let i = index" cdkDrag>
-                <div [ngSwitch]="image?.type" class="position-relative">
+                <div [ngSwitch]="image?.type" class="position-relative" style="border-radius: 5px; overflow: hidden">
                     <ng-container *ngSwitchCase="'url'">
                         <div class="corner-setting">
                             <span class="corner-setting-item fas fa-times" (click)="openMenuModal(image)"></span>

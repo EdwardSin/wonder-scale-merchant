@@ -28,7 +28,7 @@
                                 </div>
                             </ngx-dropzone-label>
                         </ngx-dropzone>
-                        <div class="upload-profile-images" [sortablejs]="itemTypesForm.controls.itemTypes.value[i].images" [sortablejsOptions]="{ animation: 150, delay: 150, onChoose: onChoose, onUnchoose: onUnchoose }">
+                        <div class="upload-profile-images" [sortablejs]="itemTypesForm.controls.itemTypes.value[i].images" [sortablejsOptions]="{ animation: 150, delay: 50, onChoose: onChoose, onUnchoose: onUnchoose }">
                             <div class="upload-drag-item m-1" *ngFor="let image of itemTypesForm.controls.itemTypes.value[i].images">
                                 <div [ngSwitch]="image?.type">
                                     <div *ngSwitchCase="'url'">

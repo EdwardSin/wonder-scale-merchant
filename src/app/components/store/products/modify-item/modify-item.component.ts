@@ -286,14 +286,14 @@ export class ModifyItemComponent implements OnInit {
     if (!this.profileImageName) {
       this.profileImageName = event[0].name;
     }
-    event.forEach(item => {
-      ImageHelper.resizeImage(item.base64, null, null, .5).then(result => {
-        if (!this.allProfileItems.includes(item)) {
-          item.base64 = result;
-          this.allProfileItems.push(item);
-        }
-      });
-    });
+    for (let image of event) {
+      const result = this.uploadHelper.validate(image.file, true, environment.MAX_IMAGE_SIZE_IN_MB);
+      if (result.result) {
+        this.allProfileItems = this.allProfileItems.concat(event);
+      } else {
+        WsToastService.toastSubject.next({ content: result.error, type: 'danger'});
+      }
+    }
   }
   onProfileImageOverflow() {
     WsToastService.toastSubject.next({ content: 'Max 5 images are uploaded!', type: 'danger'});
