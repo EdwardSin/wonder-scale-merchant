@@ -68,28 +68,6 @@ export class UploadHelper {
     //     }
     //     return ableUploadProfileFiles;
     // }
-    // private static validatePhoto(file) {
-    //     var fileTypes = [
-    //         'image/jpeg',
-    //         'image/jpeg',
-    //         'image/jpg',
-    //         'image/png'
-    //     ]
-    //     //let MB = 5;
-    //     //var OVER_SIZE_MB = MB * 1000 * 1000;
-    //     // if (file.size > OVER_SIZE_MB) {
-    //     //     WsToastService.toastSubject.next({ content: "File size limit " + MB + "mb!" });
-    //     //     return false;
-    //     // }
-    //     for (var i = 0; i < fileTypes.length; i++) {
-    //         if (file.type === fileTypes[i]) {
-    //             return true;
-    //         }
-    //     }
-
-    //     console.log("Upload file type is not in image format!");
-    //     return false;
-    // }
     input = [];
     max = 5;
     accept = 'image/*';
@@ -137,26 +115,24 @@ export class UploadHelper {
             reader.readAsDataURL(file);
         });
     }
-    validatePhoto(file) {
+    validate(file, isValidateSize=false, sizeInMb=15) {
         var fileTypes = [
             'image/jpeg',
             'image/jpeg',
             'image/jpg',
             'image/png'
         ]
-        //let MB = 5;
-        //var OVER_SIZE_MB = MB * 1000 * 1000;
-        // if (file.size > OVER_SIZE_MB) {
-        //     WsToastService.toastSubject.next({ content: "File size limit " + MB + "mb!" });
-        //     return false;
-        // }
-        for (var i = 0; i < fileTypes.length; i++) {
-            if (file.type === fileTypes[i]) {
-                return true;
+        if (isValidateSize) {
+            var OVER_SIZE_MB = sizeInMb * 1024 * 1024;
+            if (file.size > OVER_SIZE_MB) {
+                return {result: false, error: `Max image size is ${sizeInMb}mb!`};
             }
         }
-
-        console.log("Upload file type is not in image format!");
-        return false;
+        for (var i = 0; i < fileTypes.length; i++) {
+            if (file.type === fileTypes[i]) {
+                return {result: true};
+            }
+        }
+        return {result: false, error: 'Image format is not supported!'};
     }
 }

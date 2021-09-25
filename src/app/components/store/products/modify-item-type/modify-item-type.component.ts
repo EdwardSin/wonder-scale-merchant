@@ -53,9 +53,16 @@ export class ModifyItemTypeComponent implements OnInit {
     document.getElementById(id).click();
   }
   onItemTypeImageUploaded(event, i) {
-    let formArray = this.itemTypesForm.get('itemTypes') as FormArray;
-    let formGroup = formArray.controls[i] as FormGroup;
-    formGroup.controls['images'].setValue(_.uniq([...formGroup.controls['images'].value, ...event]));
+    for (let image of event) {
+      const result = this.uploadHelper.validate(image.file, true, environment.MAX_IMAGE_SIZE_IN_MB);
+      if (result.result) {
+        let formArray = this.itemTypesForm.get('itemTypes') as FormArray;
+        let formGroup = formArray.controls[i] as FormGroup;
+        formGroup.controls['images'].setValue(_.uniq([...formGroup.controls['images'].value, ...event]));
+      } else {
+        WsToastService.toastSubject.next({ content: result.error, type: 'danger'});
+      }
+    }
   }
   onItemTypeImageOverflow() {
     WsToastService.toastSubject.next({ content: 'Max 3 images are uploaded!', type: 'danger'});
@@ -79,16 +86,8 @@ export class ModifyItemTypeComponent implements OnInit {
     images.forEach(image => image.loading = true);
     return from(images)
     .pipe(
-      mergeMap((image: any) => {
-        return of(ImageHelper.resizeImage(image['base64'], null, null , .5)).pipe(map(result => {
-          return {
-            base64: result,
-            ...image
-          }
-        }))
-      }),
       mergeMap(image => {
-      let index = allImages.findIndex(_image => _image.base64 === image.base64);
+      let index = allImages.findIndex(_image => _image.base64 === image['base64']);
       let obj = {
         id: image['id'],
         file: image['base64'],

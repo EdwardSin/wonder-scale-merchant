@@ -7,11 +7,11 @@
                 <span *ngIf="images?.length && !isEditable && isImageShown" class="menu-item__image-hint" (click)="isImagesOpened = true">
                     <span class="menu-item__image-hint-icon fas fa-images"></span>
                 </span>
-                <div *ngIf="!isEditable && isImageShown && isImagesOpened" class="images-fullscreen-container position-fixed pt-2">
+                <div *ngIf="!isEditable && isImageShown && isImagesOpened" class="images-fullscreen-container position-fixed">
                     <span class="images-fullscreen__icon fas fa-times" (click)="isImagesOpened = false"></span>
                     <swiper class="h-100" [index]="selectedImagesIndex" [slidesPerView]="'auto'" [spaceBetween]="10" [navigation]="false" [pagination]="true" [centeredSlides]="true" [direction]="'horizontal'" [mousewheel]="true"> 
                         <ng-template swiperSlide *ngFor="let image of images">
-                            <img class="h-100 w-100 mb-2" style="object-fit: contain;" [src]="environment.IMAGE_URL + image" alt="upload-image" />
+                            <img style="width: initial; height: initial; max-height:100%; max-width: 100%; object-fit: contain;" [src]="environment.IMAGE_URL + image" alt="upload-image" />
                         </ng-template>
                     </swiper>
                 </div>

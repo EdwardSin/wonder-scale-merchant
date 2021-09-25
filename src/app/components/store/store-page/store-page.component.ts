@@ -23,6 +23,7 @@ import { URLValidator } from '@validations/url.validator';
 import { DocumentHelper } from '@helpers/documenthelper/document.helper';
 import { ImageHelper } from '@helpers/imagehelper/image.helper';
 import { FAQ } from '@objects/faq';
+import { UploadHelper } from '@helpers/uploadhelper/upload.helper';
 
 @Component({
   selector: 'app-store-page',
@@ -84,6 +85,7 @@ export class StorePageComponent implements OnInit {
   isMediaMax: boolean;
   editingMedias = [];
   selectedMedia: string = '';
+  targetFAQ: FAQ;
   selectedContactButtonLabel: string = '';
   selectedContactButtonType: string = '';
   selectedContactButtonValue: string = '';
@@ -100,6 +102,7 @@ export class StorePageComponent implements OnInit {
     private ref: ChangeDetectorRef,
     private route: ActivatedRoute,
     private router: Router,
+    private uploadHelper: UploadHelper,
     private sanitization: DomSanitizer) {
   }
 
@@ -224,7 +227,6 @@ export class StorePageComponent implements OnInit {
     this.isWechatOpened = true;
     this.editingMedias = this.store.media.filter(media => media.type == 'wechat').map(media => media.value);
   }
-  targetFAQ: FAQ;
   onEditFAQClicked(faqIndex) {
     this.editingFAQ = new FAQ();
     this.faqIndex = -1;
@@ -586,30 +588,37 @@ export class StorePageComponent implements OnInit {
     event.target.value = "";
   }
   fileBannerChangeEvent(event) {
-    event.forEach(item => {
-      ImageHelper.resizeImage(item.base64, null, null, .5).then(result => {
+    for (let item of event) {
+      const result = this.uploadHelper.validate(item.file, true, environment.MAX_IMAGE_SIZE_IN_MB);
+      if (result.result) {
         let exist = this.editingAllBanners.find(image => {
           return image.name == item.name && image.file.size == item.file.size;
-        })
+        });
         if (!exist) {
-          item.base64 = result;
           this.editingAllBanners.push(item);
         }
-      });
-    });
+      } else {
+        WsToastService.toastSubject.next({ content: result.error, type: 'danger' });
+      }
+    }
   }
   onBannersOverflow() {
     WsToastService.toastSubject.next({ content: 'Max 10 images are uploaded!', type: 'danger'});
   }
   fileMenuImageChangeEvent(event) {
-    event.forEach(item => {
-      let exist = this.editingAllMenuImages.find(image => {
-        return image.name == item.name && image.file.size == item.file.size;
-      })
-      if (!exist) {
-        this.editingAllMenuImages.push(item);
+    for (let item of event) {
+      const result = this.uploadHelper.validate(item.file, true, environment.MAX_IMAGE_SIZE_IN_MB);
+      if (result.result) {
+        let exist = this.editingAllMenuImages.find(image => {
+          return image.name == item.name && image.file.size == item.file.size;
+        });
+        if (!exist) {
+          this.editingAllMenuImages.push(item);
+        }
+      } else {
+        WsToastService.toastSubject.next({ content: result.error, type: 'danger' });
       }
-    });
+    }
   }
   previewImageFunc(file, callback) {
     let reader = new FileReader;
