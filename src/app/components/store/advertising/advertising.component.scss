@@ -40,3 +40,22 @@
         }
     }
 }
+
+.analysis-figure {
+    display: block;
+    position: relative;
+    width: 100%;
+    background-color: rgba(127, 0, 0, 0.1);
+    border-radius: 5px;
+    padding: 1rem;
+
+    .analysis-figure__value {
+        font-size: 2rem;
+        margin-bottom: 0;
+        font-weight: bold;
+        padding: .5rem 1rem;
+        display: block;
+        text-align: right;
+        color: #b71c1c;
+    }
+}

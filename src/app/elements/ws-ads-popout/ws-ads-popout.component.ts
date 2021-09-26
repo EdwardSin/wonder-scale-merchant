@@ -40,7 +40,7 @@ export class WsAdsPopoutComponent implements OnInit {
     this.clicks.pipe(
       debounceTime(500), takeUntil(this.ngUnsubscribe)
     ).subscribe(e => {
-      this.service.clickAdvertisement(this.item._id)
+      this.service.clickAdvertisement(this.item._id).subscribe();
     });
   }
   ngOnChanges(changes: SimpleChanges) {

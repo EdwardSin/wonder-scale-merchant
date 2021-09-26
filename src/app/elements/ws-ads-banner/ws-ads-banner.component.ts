@@ -1,5 +1,7 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { environment } from '@environments/environment';
+import { Subject } from 'rxjs';
+import { debounceTime, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'ws-ads-banner',
@@ -15,7 +17,15 @@ export class WsAdsBannerComponent implements OnInit {
   environment = environment;
   uploadImages = [];
   imageUrl = '';
-  constructor(private ref: ChangeDetectorRef) { }
+  private clicks = new Subject;
+  private ngUnsubscribe: Subject<any> = new Subject;
+  constructor(private ref: ChangeDetectorRef) { 
+    this.clicks.pipe(
+      debounceTime(500), takeUntil(this.ngUnsubscribe)
+    ).subscribe(e => {
+      this.service.clickAdvertisement(this.item._id).subscribe();
+    })
+  }
   ngOnChanges(changes: SimpleChanges) {
     if (changes['item'] && this.item) {
       setTimeout(() => {
@@ -38,8 +48,7 @@ export class WsAdsBannerComponent implements OnInit {
       document.getElementById('imageAdsUploadInput').click();
     } else {
       if (this.service) {
-        this.service.clickAdvertisement(this.item._id).subscribe(result => {
-        });
+        this.clicks.next();
       }
     }
   }
