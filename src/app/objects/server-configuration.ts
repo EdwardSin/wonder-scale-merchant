@@ -8,4 +8,5 @@ export class AdsConfiguration {
     advertisementBannerSquareAmount: number;
     advertisementBannerFBAmount: number;
     advertisementBannerInstaAmount: number;
+    advertisementDiscountPercentage: number;
 }

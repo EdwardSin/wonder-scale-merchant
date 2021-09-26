@@ -153,23 +153,25 @@ export class AdvertisingComponent implements OnInit {
   createHostedFields(options) {
     braintree.hostedFields.create(options, (hostedFieldsErr, hostedFieldsInstance) => {
       if (hostedFieldsErr) {
-        WsToastService.toastSubject.next({ content: hostedFieldsErr.message, type: 'danger'});
+        // WsToastService.toastSubject.next({ content: hostedFieldsErr.message, type: 'danger'});
         console.error(hostedFieldsErr);
         return;
       }
-      this.submit.nativeElement.addEventListener('click', (event) => {
-        event.preventDefault();
-        this.submit.nativeElement.disabled = true;
-        hostedFieldsInstance.tokenize((tokenizeErr, payload) => {
-          if (tokenizeErr) {
-            this.submit.nativeElement.disabled = false;
-            WsToastService.toastSubject.next({ content: tokenizeErr.message, type: 'danger'});
-            return;
-          }
-          this.placeorder(payload);
-        });
-      }, false);
-      this.paymentLoading.stop();
+      if (this.submit.nativeElement) {
+        this.submit.nativeElement.addEventListener('click', (event) => {
+          event.preventDefault();
+          this.submit.nativeElement.disabled = true;
+          hostedFieldsInstance.tokenize((tokenizeErr, payload) => {
+            if (tokenizeErr) {
+              this.submit.nativeElement.disabled = false;
+              WsToastService.toastSubject.next({ content: tokenizeErr.message, type: 'danger'});
+              return;
+            }
+            this.placeorder(payload);
+          });
+        }, false);
+        this.paymentLoading.stop();
+      }
     });
   }
   placeorder(payload) {
@@ -223,23 +225,26 @@ export class AdvertisingComponent implements OnInit {
     let advertisementAmount = 0;
     switch (this.configuration.type) {
       case 'pop-out':
-        advertisementAmount = this.adsConfiguration.advertisementPopOutAmount; break;
+        advertisementAmount = this.adsConfiguration.advertisementPopOutAmount * (100 - this.adsConfiguration?.advertisementDiscountPercentage) / 100; break;
       case 'large':
-        advertisementAmount = this.adsConfiguration.advertisementBannerLargeAmount; break;
+        advertisementAmount = this.adsConfiguration.advertisementBannerLargeAmount * (100 - this.adsConfiguration?.advertisementDiscountPercentage) / 100; break;
       case 'medium':
-        advertisementAmount = this.adsConfiguration.advertisementBannerMediumAmount; break;
+        advertisementAmount = this.adsConfiguration.advertisementBannerMediumAmount * (100 - this.adsConfiguration?.advertisementDiscountPercentage) / 100; break;
       case 'small':
-        advertisementAmount = this.adsConfiguration.advertisementBannerSmallAmount; break;
+        advertisementAmount = this.adsConfiguration.advertisementBannerSmallAmount * (100 - this.adsConfiguration?.advertisementDiscountPercentage) / 100; break;
       case 'square':
-        advertisementAmount = this.adsConfiguration.advertisementBannerSquareAmount; break;
+        advertisementAmount = this.adsConfiguration.advertisementBannerSquareAmount * (100 - this.adsConfiguration?.advertisementDiscountPercentage) / 100; break;
     }
     advertisementAmount *= this.week;
+    this.configuration.adsAmount = advertisementAmount;
     if (this.configuration.type === 'pop-out' || this.configuration.type === 'square' || this.configuration.type === 'large') {
       if (!this.isAdsFree && this.configuration.isFbPromoting) {
         advertisementAmount += this.adsConfiguration.advertisementBannerFBAmount;
+        this.configuration.fbAmount = this.adsConfiguration.advertisementBannerFBAmount;
       }
       if (!this.isAdsFree && this.configuration.isInstaPromoting) {
         advertisementAmount += this.adsConfiguration.advertisementBannerInstaAmount;
+        this.configuration.instaAmount = this.adsConfiguration.advertisementBannerInstaAmount;
       }
     }
     return advertisementAmount;
@@ -267,9 +272,13 @@ export class AdvertisingComponent implements OnInit {
       imageUrl: '',
       image: null,
       url: '',
+      description: '',
       startDate: null,
       endDate: null,
-      reason: undefined
+      reason: undefined,
+      fbAmount: null,
+      instaAmount: null,
+      adsAmount: null
     }
   }
   getAdvertisementConfiguration() {
@@ -455,20 +464,27 @@ export class AdvertisingComponent implements OnInit {
       if (!this.isAdsFree) {
         this.createBraintreeClient();
       }
-    }, 2000);
+    }, 1000);
   }
   onEditAdsModalClicked(advertisement) {
     this.isEditAdvertisementOpened = true;
     this.selectedAdvertisement = null;
     this.configuration = null;
     this.editingAdsLoading.start();
+    this.paymentLoading.start();
     this.getAdvertisementConfiguration();
     this.authAdvertisementContributorService.getAdvertisement(advertisement._id).pipe(takeUntil(this.ngUnsubscribe), finalize(() => this.editingAdsLoading.stop())).subscribe(result => {
       this.selectedAdvertisement = result['result'];
-      this.isAdsFree = this.selectedAdvertisement.isAdsFree;
       this.configuration = this.selectedAdvertisement;
+      this.isAdsFree = this.selectedAdvertisement.isAdsFree;
       this.calculateWeek();
+      this.totalAmount = this.selectedAdvertisement.amount;
       this.getAvailableAdvertisements();
+      if (this.selectedAdvertisement?.status === 'rejected' && this.selectedAdvertisement?.reason === 'payment-error') {
+        _.delay(() => {
+          this.createBraintreeClient();
+        }, 1000);
+      }
     });
   }
   onEditAdsClicked(advertisement) {
