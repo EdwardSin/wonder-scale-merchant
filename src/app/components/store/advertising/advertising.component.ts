@@ -21,6 +21,7 @@ import { AdsConfiguration } from '@objects/server-configuration';
 import { Store } from '@objects/store';
 import { HttpClient } from '@angular/common/http';
 import { UploadHelper } from '@helpers/uploadhelper/upload.helper';
+import { AuthOnSellingCategoryContributorService } from '@services/http/auth-store/contributor/auth-on-selling-category-contributor.service';
 
 @Injectable()
 export class CustomDateAdapter extends NativeDateAdapter {
@@ -94,6 +95,7 @@ export class AdvertisingComponent implements OnInit {
     private http: HttpClient,
     private uploadHelper: UploadHelper,
     private sharedStoreService: SharedStoreService,
+    private authOnSellingCategoryContributorService: AuthOnSellingCategoryContributorService,
     private authAdvertisementContributorService: AuthAdvertisementContributorService) {
     this.sharedStoreService.store.pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(result => {
@@ -107,6 +109,11 @@ export class AdvertisingComponent implements OnInit {
     this.getAdvertisements(true);
     this.refreshAdvertisements();
     this.minDate = moment().startOf('isoWeek').add(1, 'week').toDate();
+  }
+  getNumberOfPublishedItems() {
+    this.authOnSellingCategoryContributorService.getNumberOfPublishedItems().pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
+      this.store.numberOfPublishedItems = result['result'];
+    });
   }
   createBraintreeClient() {
     this.ref.detectChanges();
@@ -259,6 +266,7 @@ export class AdvertisingComponent implements OnInit {
     this.isAdsFree = false;
     this.configuration = this.getConfiguration();
     this.getAdvertisementConfiguration();
+    this.getNumberOfPublishedItems();
   }
   onImageChange(event) {
     for (let item of event) {

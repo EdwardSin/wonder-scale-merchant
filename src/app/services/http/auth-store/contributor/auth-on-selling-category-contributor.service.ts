@@ -36,4 +36,7 @@ export class AuthOnSellingCategoryContributorService {
   removeCategories(categories) {
     return this.http.put(AuthOnSellingCategoryContributorUrl.removeCategoriesUrl, categories, this.accessTokenService.getAccessToken());
   }
+  getNumberOfPublishedItems() {
+    return this.http.get(AuthOnSellingCategoryContributorUrl.getNumberOfPublishedItemsUrl, this.accessTokenService.getAccessToken());
+  }
 }
