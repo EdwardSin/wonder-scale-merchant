@@ -289,7 +289,7 @@ export class ModifyItemComponent implements OnInit {
     for (let image of event) {
       const result = this.uploadHelper.validate(image.file, true, environment.MAX_IMAGE_SIZE_IN_MB);
       if (result.result) {
-        this.allProfileItems = this.allProfileItems.concat(event);
+        this.allProfileItems = _.uniq([...this.allProfileItems, image]);
       } else {
         WsToastService.toastSubject.next({ content: result.error, type: 'danger'});
       }
@@ -347,7 +347,6 @@ export class ModifyItemComponent implements OnInit {
   
   removeProfileImage(filename) {
     var file = ImageHelper.getUploadProfileItem(this.allProfileItems, filename);
-    
     if (file) {
       if(file.type == 'blob') {
         let removeIndex = this.allProfileItems.indexOf(file);
@@ -422,7 +421,12 @@ export class ModifyItemComponent implements OnInit {
     }
     for(let item of items) {
       if (!this.allProfileItems.includes(item) && this.allProfileItems.length < 5) {
-        this.allProfileItems.push(item);
+        const result = this.uploadHelper.validate(item.file, true, environment.MAX_IMAGE_SIZE_IN_MB);
+        if (result.result) {
+          this.allProfileItems.push(item);
+        } else {
+          WsToastService.toastSubject.next({ content: result.error, type: 'danger'});
+        }
       } else {
         WsToastService.toastSubject.next({ content: 'Max 5 images are uploaded!', type: 'danger'});
         break;
