@@ -20,6 +20,7 @@ import { DocumentHelper } from '@helpers/documenthelper/document.helper';
 import { AdsConfiguration } from '@objects/server-configuration';
 import { Store } from '@objects/store';
 import { HttpClient } from '@angular/common/http';
+import { UploadHelper } from '@helpers/uploadhelper/upload.helper';
 
 @Injectable()
 export class CustomDateAdapter extends NativeDateAdapter {
@@ -91,6 +92,7 @@ export class AdvertisingComponent implements OnInit {
   }
   constructor(private ref: ChangeDetectorRef,
     private http: HttpClient,
+    private uploadHelper: UploadHelper,
     private sharedStoreService: SharedStoreService,
     private authAdvertisementContributorService: AuthAdvertisementContributorService) {
     this.sharedStoreService.store.pipe(takeUntil(this.ngUnsubscribe))
@@ -259,8 +261,15 @@ export class AdvertisingComponent implements OnInit {
     this.getAdvertisementConfiguration();
   }
   onImageChange(event) {
-    this.configuration.imageUrl = event[0].base64;
-    this.configuration.image = event[0].base64.replace(/^data:image\/\w+;base64,/, '');
+    for (let item of event) {
+      const result = this.uploadHelper.validate(item.file, true, environment.MAX_IMAGE_SIZE_IN_MB);
+      if (result.result) {
+        this.configuration.imageUrl = item.base64;
+        this.configuration.image = item.base64.replace(/^data:image\/\w+;base64,/, '');
+      } else {
+        WsToastService.toastSubject.next({ content: result.error, type: 'danger' });
+      }
+    }
   }
   getConfiguration() {
     return {
