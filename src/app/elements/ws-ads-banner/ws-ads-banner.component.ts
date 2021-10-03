@@ -16,7 +16,7 @@ export class WsAdsBannerComponent implements OnInit {
   @Output() onImageChange: EventEmitter<any> = new EventEmitter();
   environment = environment;
   uploadImages = [];
-  imageUrl = '';
+  @Input() imageUrl = '';
   private clicks = new Subject;
   private ngUnsubscribe: Subject<any> = new Subject;
   constructor(private ref: ChangeDetectorRef) { 
@@ -40,7 +40,6 @@ export class WsAdsBannerComponent implements OnInit {
     }
   }
   onImageUpload(event){
-    this.imageUrl = event[0].url;
     this.onImageChange.emit(event);
   }
   onClickUpload() {

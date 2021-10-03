@@ -31,7 +31,7 @@ export class WsAdsPopoutComponent implements OnInit {
   @Input() service;
   @Output() onImageChange: EventEmitter<any> = new EventEmitter();
   @Output() onOpenChange: EventEmitter<boolean> = new EventEmitter();
-  imageUrl: string = '';
+  @Input() imageUrl: string = '';
   uploadImages = [];
   environment = environment;
   private clicks = new Subject;
@@ -57,7 +57,6 @@ export class WsAdsPopoutComponent implements OnInit {
     }
   }
   onImageUpload(event){
-    this.imageUrl = event[0].url;
     this.onImageChange.emit(event);
   }
   onClickUpload() {

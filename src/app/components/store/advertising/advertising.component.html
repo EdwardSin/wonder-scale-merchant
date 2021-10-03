@@ -389,8 +389,8 @@
 <confirm-modal *ngIf="isAdvertisementDisabledModalOpened" [(isOpened)]="isAdvertisementDisabledModalOpened" id="AdvertisementDisabledModal" [message]="'Are you sure to stop advertising?'" [action]="stopAdvertising.bind(this)">
 </confirm-modal>
 <ng-template #advertisementTemplate let-advertisement="advertisement" let-isUpload="isUpload">
-    <ws-ads-popout class="d-block" *ngIf="advertisement?.type === 'pop-out'" [item]="advertisement" (onImageChange)="onImageChange($event)" [isUpload]="isUpload"></ws-ads-popout>
-    <ws-ads-banner class="d-block" *ngIf="advertisement?.type !== 'pop-out'" [item]="advertisement" (onImageChange)="onImageChange($event)" [isUpload]="isUpload"></ws-ads-banner>
+    <ws-ads-popout class="d-block" *ngIf="advertisement?.type === 'pop-out'" [item]="advertisement" [imageUrl]="advertisement.imageUrl" (onImageChange)="onImageChange($event)" [isUpload]="isUpload"></ws-ads-popout>
+    <ws-ads-banner class="d-block" *ngIf="advertisement?.type !== 'pop-out'" [item]="advertisement" [imageUrl]="advertisement.imageUrl" (onImageChange)="onImageChange($event)" [isUpload]="isUpload"></ws-ads-banner>
 </ng-template>
 <ng-template #advertisementstatusTemplate let-status="status">
     <span class="badge badge-pill badge-secondary text-capitalize" *ngIf="status === 'wait-for-payment'">Wait For Payment</span>
