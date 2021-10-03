@@ -118,7 +118,7 @@
                                     </div>
                                 </div>
                                 <div class="text-center" style="position: absolute; top: 0rem; right: 0rem; border-radius: 0 0 0 20px; padding: .5rem 1rem; background-color: #f7f7f7">
-                                    <div *ngIf="!isAdsFree" class="font-weight-bold">
+                                    <div *ngIf="!isAdsFree && adsConfiguration" class="font-weight-bold">
                                         <span style="color: #b71c1c" class="mr-2" *ngIf="adsConfiguration.advertisementDiscountPercentage">RM{{ adsConfiguration.advertisementPopOutAmount * (100 - adsConfiguration.advertisementDiscountPercentage) / 100 }}</span>
                                         <span class="font-8"><span class="mr-1" [style.text-decoration]="adsConfiguration.advertisementDiscountPercentage ? 'line-through': ''" [style.color]="adsConfiguration.advertisementDiscountPercentage ? '' : '#b71c1c'">RM{{ adsConfiguration.advertisementPopOutAmount }}</span>/week</span>
                                     </div>
@@ -153,7 +153,7 @@
                                     </div>
                                 </div>
                                 <div class="text-center" style="position: absolute; top: 0rem; right: 0rem; border-radius: 0 0 0 20px; padding: .5rem 1rem; background-color: #f7f7f7">
-                                    <div *ngIf="!isAdsFree" class="font-weight-bold">
+                                    <div *ngIf="!isAdsFree && adsConfiguration" class="font-weight-bold">
                                         <span style="color: #b71c1c" class="mr-2" *ngIf="adsConfiguration.advertisementDiscountPercentage">RM{{ adsConfiguration.advertisementBannerLargeAmount * (100 - adsConfiguration.advertisementDiscountPercentage) / 100 }}</span>
                                         <span class="font-8"><span class="mr-1" [style.text-decoration]="adsConfiguration.advertisementDiscountPercentage ? 'line-through': ''" [style.color]="adsConfiguration.advertisementDiscountPercentage ? '' : '#b71c1c'">RM{{ adsConfiguration.advertisementBannerLargeAmount }}</span>/week</span>
                                     </div>
@@ -189,7 +189,7 @@
                                     </div>
                                 </div>
                                 <div class="text-center" style="position: absolute; top: 0rem; right: 0rem; border-radius: 0 0 0 20px; padding: .5rem 1rem; background-color: #f7f7f7">
-                                    <div *ngIf="!isAdsFree" class="font-weight-bold">
+                                    <div *ngIf="!isAdsFree && adsConfiguration" class="font-weight-bold">
                                         <span style="color: #b71c1c" class="mr-2" *ngIf="adsConfiguration.advertisementDiscountPercentage">RM{{ adsConfiguration.advertisementBannerMediumAmount * (100 - adsConfiguration.advertisementDiscountPercentage) / 100 }}</span>
                                         <span class="font-8"><span class="mr-1" [style.text-decoration]="adsConfiguration.advertisementDiscountPercentage ? 'line-through': ''" [style.color]="adsConfiguration.advertisementDiscountPercentage ? '' : '#b71c1c'">RM{{ adsConfiguration.advertisementBannerMediumAmount }}</span>/week</span>
                                     </div>
@@ -261,7 +261,7 @@
                                     </div>
                                 </div>
                                 <div class="text-center" style="position: absolute; top: 0rem; right: 0rem; border-radius: 0 0 0 20px; padding: .5rem 1rem; background-color: #f7f7f7">
-                                    <div *ngIf="!isAdsFree" class="font-weight-bold">
+                                    <div *ngIf="!isAdsFree && adsConfiguration" class="font-weight-bold">
                                         <span style="color: #b71c1c" class="mr-2" *ngIf="adsConfiguration.advertisementDiscountPercentage">RM{{ adsConfiguration.advertisementBannerSquareAmount * (100 - adsConfiguration.advertisementDiscountPercentage) / 100 }}</span>
                                         <span class="font-8"><span class="mr-1" [style.text-decoration]="adsConfiguration.advertisementDiscountPercentage ? 'line-through': ''" [style.color]="adsConfiguration.advertisementDiscountPercentage ? '' : '#b71c1c'">RM{{ adsConfiguration.advertisementBannerSquareAmount }}</span>/week</span>
                                     </div>
@@ -469,10 +469,10 @@
             <label class="w-100 mb-0 font-9">Extra:</label>
             <div class="px-3">
                 <mat-checkbox [color]="'primary'" [disabled]="isEdit" class="d-block font-9" [(ngModel)]="configuration.isFbPromoting">
-                    Promote on Facebook (1 time x <span *ngIf="!isAdsFree">RM{{ adsConfiguration.advertisementBannerFBAmount | number: '1.2-2'}}</span><span *ngIf="isAdsFree">RM 0.00</span>)
+                    Promote on Facebook (1 time x <span *ngIf="!isAdsFree">RM{{ adsConfiguration?.advertisementBannerFBAmount | number: '1.2-2'}}</span><span *ngIf="isAdsFree">RM 0.00</span>)
                 </mat-checkbox>
                 <mat-checkbox [color]="'primary'" [disabled]="isEdit" class="d-block font-9" [(ngModel)]="configuration.isInstaPromoting">
-                    Promote on Instagram (1 time x <span *ngIf="!isAdsFree">RM{{ adsConfiguration.advertisementBannerInstaAmount | number: '1.2-2'}}</span><span *ngIf="isAdsFree">RM 0.00</span>)
+                    Promote on Instagram (1 time x <span *ngIf="!isAdsFree">RM{{ adsConfiguration?.advertisementBannerInstaAmount | number: '1.2-2'}}</span><span *ngIf="isAdsFree">RM 0.00</span>)
                 </mat-checkbox>
                 <div class="mt-2" *ngIf="configuration.isFbPromoting || configuration.isInstaPromoting">
                     <textarea class="form-control form-control-sm" rows="5" maxlength="256" [(ngModel)]="configuration.description" placeholder="Advertisement message on Facebook / Instagram (Optional)"></textarea>
@@ -551,7 +551,7 @@
             <button class="btn btn-sm btn-danger float-right" [disabled]="!isAcceptAgreement" type="button" style="margin-left: auto" #submit>Place Order</button>
         </div>
         <div class="list-table col-lg font-9 p-3 mb-3 order-1 d-flex justify-content-between flex-column" style="background-color: #f7f7f7">
-            <div>
+            <div *ngIf="adsConfiguration">
                 <h4 class="h6">Payment Details:</h4>
                 <div class="mb-2" style="background-color: #eee; border-radius: 5px; padding: 5px 10px;">
                     <ng-container [ngSwitch]="configuration.type">
@@ -578,12 +578,12 @@
                     </ng-container>
                     <div class="clearfix"></div>
                 </div>
-                <div *ngIf="configuration?.isFbPromoting" class="mb-2" style="background-color: #eee; border-radius: 5px; padding: 5px 10px;">
+                <div *ngIf="configuration?.isFbPromoting && adsConfiguration" class="mb-2" style="background-color: #eee; border-radius: 5px; padding: 5px 10px;">
                     <p class="mb-0">Advertising on Facebook<br/><span class="font-8">(1 time x RM {{ (isAdsFree ? 0 : adsConfiguration.advertisementBannerFBAmount) | number: '1.2-2' }})</span></p>
                     <p class="mb-0 float-right">RM <span>{{ configuration.fbAmount || (isAdsFree ? 0 : adsConfiguration.advertisementBannerFBAmount) | number: '1.2-2'}}</span></p>
                     <div class="clearfix"></div>
                 </div>
-                <div *ngIf="configuration?.isInstaPromoting" class="mb-2" style="background-color: #eee; border-radius: 5px; padding: 5px 10px;">
+                <div *ngIf="configuration?.isInstaPromoting && adsConfiguration" class="mb-2" style="background-color: #eee; border-radius: 5px; padding: 5px 10px;">
                     <p class="mb-0">Advertising on Instagram<br/><span class="font-8">(1 time x RM {{ (isAdsFree ? 0 : adsConfiguration.advertisementBannerInstaAmount) | number: '1.2-2' }})</span></p>
                     <p class="mb-0 float-right">RM <span>{{ configuration.instaAmount || (isAdsFree ? 0 : adsConfiguration.advertisementBannerInstaAmount) | number: '1.2-2'}}</span></p>
                     <div class="clearfix"></div>

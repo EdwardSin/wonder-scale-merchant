@@ -1,6 +1,6 @@
 <div @openClose class="ads-card" [class.ads-modal]="isModal" *ngIf="!isModal || (isOpen && isModal)">
     <div class="ads-image-container"
-        [class.clickable]="isNavigable"
+        [class.clickable]="isNavigable || isUpload"
         [style.background-color]="!imageUrl ? '#f7f7f7': 'transparent'" 
         (click)="onClickUpload()">
         <ws-uploader *ngIf="isUpload" [id]="'imageAdsUploadInput'" [isMultiple]="false" [max]="1" (output)="onImageUpload($event)"></ws-uploader>

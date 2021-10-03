@@ -245,6 +245,9 @@ export class AdvertisingComponent implements OnInit {
         advertisementAmount = this.adsConfiguration.advertisementBannerSquareAmount * (100 - this.adsConfiguration?.advertisementDiscountPercentage) / 100; break;
     }
     advertisementAmount *= this.week;
+    if (this.isAdsFree) {
+      advertisementAmount = 0;
+    }
     this.configuration.adsAmount = advertisementAmount;
     if (this.configuration.type === 'pop-out' || this.configuration.type === 'square' || this.configuration.type === 'large') {
       if (!this.isAdsFree && this.configuration.isFbPromoting) {
