@@ -475,7 +475,7 @@
                     Promote on Instagram (1 time x <span *ngIf="!isAdsFree">RM{{ adsConfiguration.advertisementBannerInstaAmount | number: '1.2-2'}}</span><span *ngIf="isAdsFree">RM 0.00</span>)
                 </mat-checkbox>
                 <div class="mt-2" *ngIf="configuration.isFbPromoting || configuration.isInstaPromoting">
-                    <textarea class="form-control form-control-sm" rows="5" [(ngModel)]="configuration.description" placeholder="Advertisement message on Facebook / Instagram (Optional)"></textarea>
+                    <textarea class="form-control form-control-sm" rows="5" maxlength="256" [(ngModel)]="configuration.description" placeholder="Advertisement message on Facebook / Instagram (Optional)"></textarea>
                 </div>
             </div>
         </div>
@@ -508,6 +508,9 @@
                 <li class="mb-0" *ngIf="configuration.isFbPromoting">Advertising on Facebook</li>
                 <li class="mb-0" *ngIf="configuration.isInstaPromoting">Advertising on Instagram</li>
             </ul>
+            <div class="p-2">
+                <p class="mb-0 d-inline-block scrollbar w-100" style="white-space: pre-line; max-height: 80px" *ngIf="(configuration.isFbPromoting || configuration.isInstaPromoting) && configuration.description">{{configuration.description}}</p>
+            </div>
         </div>
     </div>
     <div class="font-9 alert alert-warning mb-3">
