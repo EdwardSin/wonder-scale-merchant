@@ -26,14 +26,12 @@ export class WsUploaderComponent implements OnInit {
   fileChangeEvent(event) {
     let files = <Array<File>>event.target.files;
     this.numberOfInput = this.input.length;
-    this.results = [];
     for(let file of files) {
       if (this.numberOfInput < this.max) {
         this.numberOfInput++;
         this.previewImage(file, (result) =>{
           result.url = this.sanitization.bypassSecurityTrustResourceUrl(result.url);
-          this.results.push(result);
-          this.output.emit(this.results);
+          this.output.emit([result]);
         });
       } else {
         console.log('Maximum files are uploaded!');

@@ -58,7 +58,7 @@ export class ModifyItemTypeComponent implements OnInit {
       if (result.result) {
         let formArray = this.itemTypesForm.get('itemTypes') as FormArray;
         let formGroup = formArray.controls[i] as FormGroup;
-        formGroup.controls['images'].setValue(_.uniq([...formGroup.controls['images'].value, ...event]));
+        formGroup.controls['images'].setValue(_.uniq([...formGroup.controls['images'].value, image]));
       } else {
         WsToastService.toastSubject.next({ content: result.error, type: 'danger'});
       }
@@ -252,7 +252,12 @@ export class ModifyItemTypeComponent implements OnInit {
     let items = await this.uploadHelper.fileChangeEvent(event.addedFiles);
     for(let item of items) {
       if (!itemTypeImages.includes(item) && itemTypeImages.length < 3) {
-        itemTypeImages.push(item);
+        const result = this.uploadHelper.validate(item.file, true, environment.MAX_IMAGE_SIZE_IN_MB);
+        if (result.result) {
+          itemTypeImages.push(item);
+        } else {
+          WsToastService.toastSubject.next({ content: result.error, type: 'danger'});
+        }
       } else {
         WsToastService.toastSubject.next({ content: 'Maximum images are uploaded!', type: 'danger'});
         break;

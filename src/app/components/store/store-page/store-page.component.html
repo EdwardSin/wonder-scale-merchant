@@ -201,7 +201,7 @@
         <div class="row no-gutters w-100 center">
             <div *ngIf="editingAllMenuImages?.length; else noImage" class="all-item-container pb-2" cdkDropList (cdkDropListDropped)="dropMenuImage($event)">
                 <div class="ws-drag-box " *ngFor="let image of editingAllMenuImages; let i = index" cdkDrag>
-                    <div [ngSwitch]="image?.type" class="position-relative">
+                    <div [ngSwitch]="image?.type" class="position-relative w-100" style="min-height: 300px; background-color: #f7f7f7">
                         <ng-container *ngSwitchCase="'url'">
                             <div class="corner-setting">
                                 <span class="corner-setting-item fas fa-times" (click)="removeMenuImage(image)"></span>
