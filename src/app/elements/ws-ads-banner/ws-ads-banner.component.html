@@ -1,7 +1,7 @@
 <div class="ads-card">
-    <div class="ads-image-container" [class.clickable]="isNavigable" [ngClass]="item?.type"
+    <div class="ads-image-container" [ngClass]="item?.type"
         [style.background-color]="!item?.imageUrl ? '#f7f7f7': 'transparent'" 
-        [class.clickable]="isUpload"
+        [class.clickable]="isNavigable || isUpload"
         (click)="onClickUpload()">
         <ws-uploader *ngIf="isUpload" [id]="'imageAdsUploadInput'" [isMultiple]="false" [max]="1" (output)="onImageUpload($event)"></ws-uploader>
         <a *ngIf="isNavigable && (item?.url || item?.store?.username) && !isUpload" [href]="item?.url || environment.URL + 'page/' + item?.store?.username">
