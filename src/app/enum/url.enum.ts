@@ -237,6 +237,7 @@ export class AuthOnSellingCategoryContributorUrl {
     static removeItemsFromCategoryUrl = URL.AUTH_ON_SELLING_CATEGORY_CONTRIBUTOR_URL + '/remove/itemsfromcategory';
     static moveCategoryUrl = URL.AUTH_ON_SELLING_CATEGORY_CONTRIBUTOR_URL + '/move';
     static rearrangeCategoriesUrl = URL.AUTH_ON_SELLING_CATEGORY_CONTRIBUTOR_URL + '/rearrange';
+    static getNumberOfPublishedItemsUrl = URL.AUTH_ON_SELLING_CATEGORY_CONTRIBUTOR_URL + '/number_of_published_items';
 }
 export class AuthOnSellingItemContributorUrl {
     static getItemById = URL.AUTH_ON_SELLING_ITEM_CONTRIBUTOR_URL + '';
