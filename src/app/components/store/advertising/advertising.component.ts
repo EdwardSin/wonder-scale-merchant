@@ -230,7 +230,8 @@ export class AdvertisingComponent implements OnInit {
   }
   getAvailableAdvertisements() {
     let obj = {
-      type: this.configuration.type
+      type: this.configuration.type,
+      timezone: new Date().getTimezoneOffset()
     }
     this.authAdvertisementContributorService.getAvailableAdvertisementDates(obj).pipe(takeUntil(this.ngUnsubscribe)).subscribe(result => {
       this.availableAdvertisementsDates = result['result'];
