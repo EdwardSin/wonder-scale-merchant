@@ -203,6 +203,8 @@ export class AdvertisingComponent implements OnInit {
         this.isModifyAdvertisingModalOpened = false;
         this.getAdvertisements();
         WsToastService.toastSubject.next({ content: 'Wait for the approval.<br/>It will take 1-2 days.<br/>Payment will not be proceed until it is approved.', type: 'success'});
+      } else if (result && !result['result'] && result['message']) {
+        WsToastService.toastSubject.next({ content: result['message'], type: 'danger'});
       } else {
         WsToastService.toastSubject.next({ content: 'The selected date is full, kindly select other date.', type: 'danger'});
       }
@@ -217,9 +219,13 @@ export class AdvertisingComponent implements OnInit {
         this.isEditAdvertisementOpened = false;
         this.getAdvertisements();
         WsToastService.toastSubject.next({ content: 'Wait for the approval.<br/>It will take 1-2 days.<br/>Payment will not be proceed until it is approved.', type: 'success'});
+      } else if (result && !result['result'] && result['message']) {
+        WsToastService.toastSubject.next({ content: result['message'], type: 'danger'});
       } else {
         WsToastService.toastSubject.next({ content: 'Server Error!<br/>Kindly contact the admin!', type: 'danger' });
       }
+    }, err => {
+      WsToastService.toastSubject.next({ content: err.error, type: 'danger' });
     });
   }
   getAvailableAdvertisements() {
