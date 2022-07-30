@@ -2,8 +2,9 @@
     <div class="menu-item">
         <div class="row no-gutters" [class.clickable]="!isEditable && hasDetails() && !isOpenedAuto">
             <span class="menu-item__image-container" [class.clickable]="!isEditable && !isOpenedAuto">
-                <img *ngIf="images?.length" [src]="environment.IMAGE_URL + images[imageIndex]" class="menu-item__image" alt="profile Image" />
-                <img *ngIf="!images?.length" src="/assets/images/png/profileImage.png" class="menu-item__image" alt="item detault profile image" />
+                <!-- <img *ngIf="images?.length" [src]="environment.IMAGE_URL + images[imageIndex]" class="menu-item__image" alt="profile Image" />
+                <img *ngIf="!images?.length" src="/assets/images/png/profileImage.png" class="menu-item__image" alt="item detault profile image" /> -->
+                <img src="/assets/images/png/profileImage.png" class="menu-item__image" alt="item detault profile image" />
                 <span *ngIf="images?.length && !isEditable && isImageShown" class="menu-item__image-hint" (click)="isImagesOpened = true">
                     <span class="menu-item__image-hint-icon fas fa-images"></span>
                 </span>
