@@ -5,7 +5,7 @@ Business can always be managed and monitored in the website.
 
 # Screenshots:
 Home Page:
-</kbd>![Home Page](./screenshots/01_home_page.png)</kbd>
+<kbd>![Home Page](./screenshots/01_home_page.png)</kbd>
 
 Login Page:
 <kbd>![Login Page](./screenshots/02_login_page.png)</kbd>
