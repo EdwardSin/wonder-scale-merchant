@@ -5,85 +5,85 @@ Business can always be managed and monitored in the website.
 
 # Screenshots:
 Home Page:
-![Home Page](./screenshots/01_home_page.png)
+</kbd>![Home Page](./screenshots/01_home_page.png)</kbd>
 
 Login Page:
-![Login Page](./screenshots/02_login_page.png)
+<kbd>![Login Page](./screenshots/02_login_page.png)</kbd>
 
 Register Page:
-![Register Page](./screenshots/03_register_page.png)
+<kbd>![Register Page](./screenshots/03_register_page.png)</kbd>
 
 Store List:
-![Store List](./screenshots/04_store_list.png)
+<kbd>![Store List](./screenshots/04_store_list.png)</kbd>
 
 Store Management Home Page:
-![Store Management Home](./screenshots/05_store_management_home_page.png)
+<kbd>![Store Management Home](./screenshots/05_store_management_home_page.png)</kbd>
 
 Product List:
-![Product Page](./screenshots/06_products.png)
+<kbd>![Product Page](./screenshots/06_products.png)</kbd>
 
 Add Product - Basic Details:
-![Add Product Basic Details](./screenshots/07_add_product_basic.png)
+<kbd>![Add Product Basic Details](./screenshots/07_add_product_basic.png)</kbd>
 
 Add Product - Optional Details:
-![Add Product Optional Details](./screenshots/07_add_product_optional.png)
+<kbd>![Add Product Optional Details](./screenshots/07_add_product_optional.png)</kbd>
 
 Add Product - Type Details:
-![Add Product Type Details](./screenshots/07_add_product_type.png)
+<kbd>![Add Product Type Details](./screenshots/07_add_product_type.png)</kbd>
 
 Upload Multiple Products from template:
-![Upload Multiplex Products from template](./screenshots/08_upload_multiple_products_by_template.png)
+<kbd>![Upload Multiplex Products from template](./screenshots/08_upload_multiple_products_by_template.png)</kbd>
 
 QR Code Provided:
-![QR Code Provided](./screenshots/12_qr_code_provided.png)
+<kbd>![QR Code Provided](./screenshots/12_qr_code_provided.png)</kbd>
 
 Store Page Website Configuration:
-![Store Page Website Configuration](./screenshots/09_store_page_01_website.png)
+<kbd>![Store Page Website Configuration](./screenshots/09_store_page_01_website.png)</kbd>
 
 Store Page Mobile Configuration:
-![Store Page Mobile Configuration](./screenshots/09_store_page_02_mobile.png)
+<kbd>![Store Page Mobile Configuration](./screenshots/09_store_page_02_mobile.png)</kbd>
 
 Store Page Edit Operating Hour Configuration:
-![Store Page Edit Operating Hour Configuration](./screenshots/09_store_page_03_edit_operatinghour.png)
+<kbd>![Store Page Edit Operating Hour Configuration](./screenshots/09_store_page_03_edit_operatinghour.png)</kbd>
 
 Invoice Quick Start Page:
-![Invoice Quick Start Page](./screenshots/13_invoice_01_quick_start_page.png)
+<kbd>![Invoice Quick Start Page](./screenshots/13_invoice_01_quick_start_page.png)</kbd>
 
 Invoice List:
-![Invoice List](./screenshots/13_invoice_02.png)
+<kbd>![Invoice List](./screenshots/13_invoice_02.png)</kbd>
 
 Invoice - Item Settings:
-![Invoice Item Settings](./screenshots/13_invoice_03_item_settings.png)
+<kbd>![Invoice Item Settings](./screenshots/13_invoice_03_item_settings.png)</kbd>
 
 Invoice - Delivery Settings:
-![Invoice Delivery Settings](./screenshots/13_invoice_04_delivery_settings.png)
+<kbd>![Invoice Delivery Settings](./screenshots/13_invoice_04_delivery_settings.png)</kbd>
 
 Invoice - Analysis Settings:
-![Invoice Analysis Settings](./screenshots/13_invoice_05_analysis.png)
+<kbd>![Invoice Analysis Settings](./screenshots/13_invoice_05_analysis.png)</kbd>
 
 Analysis General:
-![Analysis Delivery](./screenshots/10_analysis_general.png)
+<kbd>![Analysis Delivery](./screenshots/10_analysis_general.png)</kbd>
 
 Analysis Delivery:
-![Analysis Delivery](./screenshots/10_analysis_delivery.png)
+<kbd>![Analysis Delivery](./screenshots/10_analysis_delivery.png)</kbd>
 
 Analysis Page View:
-![Analysis Page View](./screenshots/10_analysis_pageview.png)
+<kbd>![Analysis Page View](./screenshots/10_analysis_pageview.png)</kbd>
 
 Analysis Sales:
-![Analysis Sales](./screenshots/10_analysis_sales.png)
+<kbd>![Analysis Sales](./screenshots/10_analysis_sales.png)</kbd>
 
 Settings:
-![Settings](./screenshots/11_settings.png)
+<kbd>![Settings](./screenshots/11_settings.png)</kbd>
 
 Settings - General:
-![Settings General](./screenshots/11_settings_general.png)
+<kbd>![Settings General](./screenshots/11_settings_general.png)</kbd>
 
 Settings - Advanced:
-![Settings Advanced](./screenshots/11_settings_advanced.png)
+<kbd>![Settings Advanced](./screenshots/11_settings_advanced.png)</kbd>
 
 Settings - Staff:
-![Settings Staff](./screenshots/11_settings_staff.png)
+<kbd>![Settings Staff](./screenshots/11_settings_staff.png)</kbd>
 
 
 # WonderScaleMerchant
