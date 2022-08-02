@@ -1,7 +1,7 @@
 # WonderScaleMerchant
 A platform for merchant to manage their online or physical stores.
 They can display their products and advertise through the website.
-Business can always be managed and monitored in the website.
+Business can always be managed and monitored in the website. (!)The App requires to function well with server, server is not shared in public.
 
 # Screenshots:
 Home Page:
